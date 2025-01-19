@@ -55,9 +55,9 @@ export function updateSkinStyle(skin, headerLogoLight, footerLogoLight) {
     var _skin_maintain_logo = document.getElementById("skin_maintain_logo");
     var _skin_header_inner_logo_12 = document.getElementById("skin_header_inner_logo_12");
     var _skin_header_inner_logo_15 = document.getElementById("skin_header_inner_logo_15");
-    const _logo = publicUrlFor('images/skins-logo/logo-skin-' + skin + '.png');
-    const _logo_light = publicUrlFor('images/logo-light-3.png');
-    const _logo_white = publicUrlFor('images/logo-white.png');
+    const _logo = publicUrlFor('images/yes-lg-2.png');
+    const _logo_light = publicUrlFor('images/yes-lg-2.png');
+    const _logo_white = publicUrlFor('images/yes-lg-2.png');
 
     if (_skin_style)
         _skin_style.href = publicUrlFor('css/skins-type/skin-' + skin + '.css');
@@ -81,8 +81,8 @@ export function updateSkinStyle(skin, headerLogoLight, footerLogoLight) {
         _skin_maintain_logo.src = publicUrlFor('images/skins-logo/mainten-logo-' + skin + '.png');
 
     if (_skin_header_inner_logo_12)
-        _skin_header_inner_logo_12.src = publicUrlFor('images/skins-logo/logo-all.png');
+        _skin_header_inner_logo_12.src = publicUrlFor('images/skins-logo/yes-lg-2.png');
 
     if (_skin_header_inner_logo_15)
-        _skin_header_inner_logo_15.src = publicUrlFor('images/skins-logo/logo-white.png');
+        _skin_header_inner_logo_15.src = publicUrlFor('images/skins-logo/yes-lg-2.png');
 }

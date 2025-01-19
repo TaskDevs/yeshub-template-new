@@ -8,7 +8,7 @@ function SectionProfile() {
                         <div className="twm-s-info-inner">
                             <i className="fas fa-money-bill-wave" />
                             <span className="twm-title">Offered Salary</span>
-                            <div className="twm-s-info-discription">$20 / Day</div>
+                            <div className="twm-s-info-discription">GHS20 / Day</div>
                         </div>
                     </li>
                     <li>
@@ -29,7 +29,7 @@ function SectionProfile() {
                         <div className="twm-s-info-inner">
                             <i className="fas fa-mobile-alt" />
                             <span className="twm-title">Phone</span>
-                            <div className="twm-s-info-discription">+291  560 56456</div>
+                            <div className="twm-s-info-discription">+233  560 56456</div>
                         </div>
                     </li>
                     <li>
@@ -50,7 +50,7 @@ function SectionProfile() {
                         <div className="twm-s-info-inner">
                             <i className="fas fa-map-marker-alt" />
                             <span className="twm-title">Address</span>
-                            <div className="twm-s-info-discription">1363-1385 Sunset Blvd Angeles, CA 90026 ,USA</div>
+                            <div className="twm-s-info-discription">P.O. Box 111 Adabraka, Accra</div>
                         </div>
                     </li>
                 </ul>

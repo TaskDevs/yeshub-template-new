@@ -12,9 +12,9 @@ function SectionEmployerInfo() {
                             <div className="twm-media">
                                 <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
                             </div>
-                            <h3 className="twm-job-title">Galaxy Software Development</h3>
-                            <p className="twm-employer-address"><i className="feather-map-pin" />1363-1385 Sunset Blvd Los Angeles, CA 90026, USA</p>
-                            <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-employer-websites">https://thewebmax.com</a>
+                            <h3 className="twm-job-title">VerifiBuy Inc.</h3>
+                            <p className="twm-employer-address"><i className="feather-map-pin" />2nd Floor - Block A, Provident Towers, Accra, Ghana</p>
+                            <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-employer-websites">https://verifibuy.com</a>
                             <div className="twm-ep-detail-tags">
                                 <button className="de-info twm-bg-green"><i className="fa fa-check" /> Verified</button>
                                 <button className="de-info twm-bg-brown"><i className="fa fa-heart" /> Add To Favorite</button>

@@ -19,24 +19,24 @@ function Header1({ _config }) {
                         <div className="container-fluid clearfix">
                             <div className="logo-header">
                                 <div className="logo-header-inner logo-header-one">
-                                    <NavLink to={publicUser.HOME1}>
+                                    <NavLink to={publicUser.HOME2}>
                                         {
                                             _config.withBlackLogo
                                                 ?
-                                                <JobZImage src="images/logo-12.png" alt="" />
+                                                <JobZImage src="images/yes-lg-2.png" alt="" />
                                                 :
                                                 (
                                                     _config.withWhiteLogo
                                                         ?
-                                                        <JobZImage src="images/logo-white.png" alt="" />
+                                                        <JobZImage src="images/yes-lg-2.png" alt="" />
                                                         :
                                                         (
                                                             _config.withLightLogo ?
                                                                 <>
-                                                                    <JobZImage id="skin_header_logo_light" src="images/logo-light-3.png" alt="" className="default-scroll-show" />
-                                                                    <JobZImage id="skin_header_logo" src="images/logo-dark.png" alt="" className="on-scroll-show" />
+                                                                    <JobZImage id="skin_header_logo_light" src="images/yes-lg-2.png" alt="" className="default-scroll-show" />
+                                                                    <JobZImage id="skin_header_logo" src="images/yes-lg-2.png" alt="" className="on-scroll-show" />
                                                                 </> :
-                                                                <JobZImage id="skin_header_logo" src="images/logo-dark.png" alt="" />
+                                                                <JobZImage id="skin_header_logo" src="images/yes-lg-2.png" alt="" />
                                                         )
                                                 )
                                         }
@@ -59,8 +59,9 @@ function Header1({ _config }) {
                             {/* MAIN Vav */}
                             <div className="nav-animation header-nav navbar-collapse collapse d-flex justify-content-center">
                                 <ul className=" nav navbar-nav">
-                                    <li className="has-mega-menu"><a href="#">Home</a>
-                                        <ul className="mega-menu">
+                                    <li>
+                                        <NavLink to={publicUser.HOME2}>Home</NavLink>
+                                        {/* <ul className="mega-menu">
                                             <li>
                                                 <ul>
                                                     <li><NavLink to={publicUser.HOME1}>Home-1</NavLink></li>
@@ -95,10 +96,11 @@ function Header1({ _config }) {
                                                     <li><NavLink to={publicUser.HOME18}>Home-18</NavLink></li>
                                                 </ul>
                                             </li>
-                                        </ul>
+                                        </ul> */}
                                     </li>
-                                    <li className="has-child"><a href="#">Jobs</a>
-                                        <ul className="sub-menu">
+                                    <li>
+                                        <NavLink to={publicUser.jobs.GRID_MAP}>Jobs</NavLink>
+                                        {/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.jobs.GRID}>Jobs Grid</NavLink></li>
                                             <li><NavLink to={publicUser.jobs.GRID_MAP}>Jobs Grid with Map</NavLink></li>
                                             <li><NavLink to={publicUser.jobs.LIST}>Jobs List</NavLink></li>
@@ -109,10 +111,11 @@ function Header1({ _config }) {
                                                     </li></ul>
                                             </li>
                                             <li><NavLink to={publicUser.jobs.APPLY}>Apply Jobs</NavLink></li>
-                                        </ul>
+                                        </ul> */}
                                     </li>
-                                    <li className="has-child"><a href="#">Employers</a>
-                                        <ul className="sub-menu">
+                                    <li>
+                                        <NavLink to={publicUser.employer.GRID}>Employers</NavLink>
+                                        {/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.employer.GRID}>Employers Grid</NavLink></li>
                                             <li><NavLink to={publicUser.employer.LIST}>Employers List</NavLink></li>
                                             <li className="has-child"><a href="#">Employers Detail</a>
@@ -121,10 +124,11 @@ function Header1({ _config }) {
                                                     </li><li><NavLink to={publicUser.employer.DETAIL2}>Detail 2</NavLink>
                                                     </li></ul>
                                             </li>
-                                        </ul>
+                                        </ul> */}
                                     </li>
-                                    <li className="has-child"><a href="#">Pages</a>
-                                        <ul className="sub-menu">
+                                    <li>
+                                        <NavLink to={publicUser.pages.COMING}>Assessment & Training</NavLink>
+                                        {/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.pages.ABOUT}>About Us</NavLink></li>
                                             <li><NavLink to={publicUser.pages.PRICING}>Pricing</NavLink></li>
                                             <li><NavLink to={publicUser.pages.ERROR404}>Error-404</NavLink></li>
@@ -135,10 +139,11 @@ function Header1({ _config }) {
                                             <li><NavLink to={publicUser.pages.LOGIN}>Login</NavLink></li>
                                             <li><NavLink to={publicUser.pages.AFTER_LOGIN}>After Login</NavLink></li>
                                             <li><NavLink to={publicUser.pages.ICONS}>Icons</NavLink></li>
-                                        </ul>
+                                        </ul> */}
                                     </li>
-                                    <li className="has-child"><a href="#">Candidates</a>
-                                        <ul className="sub-menu">
+                                    <li>
+                                        <NavLink to={publicUser.candidate.GRID}>Job Seekers</NavLink>
+                                        {/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.candidate.GRID}>Candidates Grid</NavLink></li>
                                             <li><NavLink to={publicUser.candidate.LIST}>Candidates List</NavLink></li>
                                             <li className="has-child"><a href="#">Candidate Detail</a>
@@ -147,16 +152,17 @@ function Header1({ _config }) {
                                                     </li><li><NavLink to={publicUser.candidate.DETAIL2}>Detail 2</NavLink>
                                                     </li></ul>
                                             </li>
-                                        </ul>
+                                        </ul> */}
                                     </li>
-                                    <li className="has-child"><a href="#">Blog</a>
-                                        <ul className="sub-menu">
+                                    <li>
+                                    <li><NavLink to={publicUser.pages.COMING}>Resources</NavLink></li>
+                                        {/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.blog.GRID1}>Blog</NavLink></li>
                                             <li><NavLink to={publicUser.blog.GRID2}>Blog Grid</NavLink></li>
                                             <li><NavLink to={publicUser.blog.GRID3}>Blog Grid-2</NavLink></li>
                                             <li><NavLink to={publicUser.blog.LIST}>Blog List</NavLink></li>
                                             <li><NavLink to={publicUser.blog.DETAIL}>Blog Detail</NavLink></li>
-                                        </ul>
+                                        </ul> */}
                                     </li>
                                 </ul>
                             </div>
@@ -176,7 +182,7 @@ function Header1({ _config }) {
                                         </div>
                                         <div className="twm-nav-btn-right">
                                             <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup2" role="button">
-                                                <i className="feather-log-in" /> Sign In
+                                                <i className="feather-briefcase" /> Post a Job
                                             </a>
                                         </div>
                                     </div>

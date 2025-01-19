@@ -20,11 +20,11 @@ function SectionAvailableJobsGrid() {
                                 <NavLink to={publicUser.jobs.DETAIL1} className="twm-job-title">
                                     <h4>Senior Web Designer , Developer</h4>
                                 </NavLink>
-                                <p className="twm-job-address">1363-1385 Sunset Blvd Los Angeles, CA 90026, USA</p>
-                                <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                <p className="twm-job-address">Block C, Accra Digital Center, Accra-Ghana</p>
+                                <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-job-websites site-text-primary">https://verifibuy.com</a>
                             </div>
                             <div className="twm-right-content">
-                                <div className="twm-jobs-amount">$2500 <span>/ Month</span></div>
+                                <div className="twm-jobs-amount">GHS4,500.00 <span>/ Month</span></div>
                                 <NavLink to={publicUser.jobs.DETAIL1} className="twm-jobs-browse site-text-primary">Browse Job</NavLink>
                             </div>
                         </div>
@@ -41,11 +41,11 @@ function SectionAvailableJobsGrid() {
                                 <NavLink to={publicUser.jobs.DETAIL1} className="twm-job-title">
                                     <h4>Senior Rolling Stock Technician</h4>
                                 </NavLink>
-                                <p className="twm-job-address">1363-1385 Sunset Blvd Los Angeles, CA 90026, USA</p>
+                                <p className="twm-job-address">House #23, Kuku-Hill, Osu, Accra-Ghana</p>
                                 <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-job-websites site-text-primary">https://thewebmax.com</a>
                             </div>
                             <div className="twm-right-content">
-                                <div className="twm-jobs-amount">$7 <span>/ Hour</span></div>
+                                <div className="twm-jobs-amount">GH5 <span>/ Hour</span></div>
                                 <NavLink to={publicUser.jobs.DETAIL1} className="twm-jobs-browse site-text-primary">Browse Job</NavLink>
                             </div>
                         </div>
@@ -63,10 +63,10 @@ function SectionAvailableJobsGrid() {
                                     <h4 className="twm-job-title">IT Department Manager</h4>
                                 </NavLink>
                                 <p className="twm-job-address">1363-1385 Sunset Blvd Los Angeles, CA 90026, USA</p>
-                                <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-job-websites site-text-primary">https://thewebmax.com</a>
+                                <a href="https://themeforest.net/user/thewebmax/portfolio" className="twm-job-websites site-text-primary">https://verifibuy.com</a>
                             </div>
                             <div className="twm-right-content">
-                                <div className="twm-jobs-amount">$2500 <span>/ Month</span></div>
+                                <div className="twm-jobs-amount">GHS15,000.00 <span>/ Month</span></div>
                                 <NavLink to={publicUser.jobs.DETAIL1} className="twm-jobs-browse site-text-primary">Browse Job</NavLink>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
 import { publicUrlFor } from "../../globals/constants";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 function InnerPageBanner({_data}) {
     return (

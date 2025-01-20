@@ -24,10 +24,10 @@ function ComingSoonPage() {
                                     </div>
                                 </form>
                                 <ul className="social-icons">
-                                <li><a href="https://www.facebook.com/" className="fab fa-facebook-f" /></li>
-                                <li><a href="https://www.twitter.com/" className="fab fa-twitter" /></li>
-                                <li><a href="https://www.instagram.com/" className="fab fa-instagram" /></li>
-                                <li><a href="https://www.youtube.com/" className="fab fa-youtube" /></li>
+                                <li><a href="https://www.facebook.com/" className="fab fa-facebook-f" >F</a></li>
+                                <li><a href="https://www.twitter.com/" className="fab fa-twitter" >T</a></li>
+                                <li><a href="https://www.instagram.com/" className="fab fa-instagram" >I</a></li>
+                                <li><a href="https://www.youtube.com/" className="fab fa-youtube" >Y</a></li>
                                 </ul>
                                 <div className="twm-countdown-wrap">
                                     <div id="timer" data-endtime="28 December 2023 02:15:00 GMT+01:00" />

@@ -1,6 +1,6 @@
 import Header1 from "../app/common/header/header1";
 import Header2 from "../app/common/header/header2";
-import Footer1 from "../app/common/footer/footer1";
+// import Footer1 from "../app/common/footer/footer1";
 import Footer2 from "../app/common/footer/footer2";
 import Footer3 from "../app/common/footer/footer3";
 import Footer4 from "../app/common/footer/footer4";

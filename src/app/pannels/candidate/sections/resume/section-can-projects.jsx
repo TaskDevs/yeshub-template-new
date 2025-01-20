@@ -9,7 +9,7 @@ function SectionCanProjects() {
             </div>
             <div className="panel-body wt-panel-body p-a20 ">
                 <div className="twm-panel-inner">
-                    <p><b>Jobzilla</b></p>
+                    <p><b>YesHub</b></p>
                     <p>Google INC</p>
                     <p>January 2023 to Present</p>
                     <p>Jobjilla Template</p>

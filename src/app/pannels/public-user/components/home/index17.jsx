@@ -36,7 +36,7 @@ function Home17Page() {
                                         <i className="fa fa-check" />
                                     </div>
                                     Stay connect to get upcoming job with
-                                    <span className="site-text-primary">Jobzilla</span>
+                                    <span className="site-text-primary">YesHub</span>
                                 </div>
                                 <div className="twm-bnr-title-large">
                                     Find Your Perfect  <span className="site-text-white">Job</span> Platform</div>
@@ -537,7 +537,7 @@ function Home17Page() {
                                         <div className="wt-small-separator site-text-primary">
                                             <div>Testimonials</div>
                                         </div>
-                                        <h2 className="wt-title">Jobseeker reviews through <span className="site-text-primary">Jobzilla</span></h2>
+                                        <h2 className="wt-title">Jobseeker reviews through <span className="site-text-primary">YesHub</span></h2>
                                     </div>
                                     {/* title="" END*/}
                                 </div>

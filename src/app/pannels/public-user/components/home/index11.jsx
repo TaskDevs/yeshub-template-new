@@ -659,7 +659,7 @@ function Home11Page() {
                         <div className="wt-small-separator site-text-primary">
                             <div>Testimonials</div>
                         </div>
-                        <h2 className="wt-title">Jobseeker reviews through Jobzilla.</h2>
+                        <h2 className="wt-title">Jobseeker reviews through YesHub.</h2>
                     </div>
                     {/* title="" END*/}
                     <div className="twm-testimonial-page8-section">

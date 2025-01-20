@@ -25,7 +25,7 @@ function Home6Page() {
                                         <i className="fa fa-check" />
                                     </div>
                                     Stay connect to get upcoming job with
-                                    <span className="site-text-primary">Jobzilla</span>
+                                    <span className="site-text-primary">YesHub</span>
                                 </div>
                                 <div className="twm-bnr-title-large">
                                     Find Your Perfect  <span className="site-text-white">Job</span> Platform</div>
@@ -1023,7 +1023,7 @@ function Home6Page() {
                                         </div>
                                         <div className="callus-content">
                                             <div className="callus-number">555-281-5426</div>
-                                            <div className="callus-email">Info@jobzilla.com</div>
+                                            <div className="callus-email">Info@YesHub.com</div>
                                         </div>
                                     </div>
                                 </div>

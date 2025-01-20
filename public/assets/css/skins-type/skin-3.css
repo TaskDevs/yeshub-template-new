@@ -1821,7 +1821,7 @@ ol.comment-list li.comment .reply .comment-reply-link {
 }
 
 /*Dashboard Message*/
-.jobzilla-admin-messange {
+.YesHub-admin-messange {
   color: #999;
   font-size: 18px;
   width: 40px;
@@ -1831,10 +1831,10 @@ ol.comment-list li.comment .reply .comment-reply-link {
   position: relative;
   top: 10px;
 }
-.jobzilla-admin-messange.dropdown-toggle:after {
+.YesHub-admin-messange.dropdown-toggle:after {
   display: none;
 }
-.jobzilla-admin-messange span {
+.YesHub-admin-messange span {
   position: absolute;
   top: -15px;
   right: -12px;
@@ -1849,7 +1849,7 @@ ol.comment-list li.comment .reply .comment-reply-link {
 }
 
 /*Dashboard Notification*/
-.jobzilla-admin-notification span {
+.YesHub-admin-notification span {
   background-color: #e47c3f;
 }
 

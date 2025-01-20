@@ -24,7 +24,7 @@ function EmpHeaderSection(props) {
                                 {/*Message*/}
                                 <li className="header-widget dashboard-message-dropdown">
                                     <div className="dropdown">
-                                        <a href="#" className="dropdown-toggle jobzilla-admin-messange" id="ID-MSG_dropdown" data-bs-toggle="dropdown">
+                                        <a href="#" className="dropdown-toggle YesHub-admin-messange" id="ID-MSG_dropdown" data-bs-toggle="dropdown">
                                             <i className="far fa-envelope" />
                                             <span className="notification-animate">4</span>
                                         </a>
@@ -90,7 +90,7 @@ function EmpHeaderSection(props) {
                                 {/*Notification*/}
                                 <li className="header-widget dashboard-noti-dropdown">
                                     <div className="dropdown">
-                                        <a href="#" className="dropdown-toggle jobzilla-admin-notification" id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
+                                        <a href="#" className="dropdown-toggle YesHub-admin-notification" id="ID-NOTI_dropdown" data-bs-toggle="dropdown">
                                             <i className="far fa-bell" />
                                             <span className="notification-animate">8</span>
                                         </a>

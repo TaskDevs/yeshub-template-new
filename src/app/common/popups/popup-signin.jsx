@@ -73,7 +73,7 @@ function SignInPopup() {
                         {/* <form> */}
                         <div className="modal-header">
                             <h2 className="modal-title" id="sign_up_popupLabel2">Login</h2>
-                            <p>Login and get access to all the features of Jobzilla</p>
+                            <p>Login and get access to all the features of YesHub</p>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
                         </div>
                         <div className="modal-body">

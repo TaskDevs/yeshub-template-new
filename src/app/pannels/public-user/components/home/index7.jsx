@@ -1101,7 +1101,7 @@ function Home7Page() {
                                         <div className="wt-small-separator site-text-primary">
                                             <div>Testimonials</div>
                                         </div>
-                                        <h2 className="wt-title">Jobseeker reviews through <span className="site-text-primary">Jobzilla</span></h2>
+                                        <h2 className="wt-title">Jobseeker reviews through <span className="site-text-primary">YesHub</span></h2>
                                     </div>
                                     {/* title="" END*/}
                                 </div>

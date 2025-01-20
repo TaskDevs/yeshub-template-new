@@ -22,8 +22,8 @@ export const banner = {
         },
         employer: {
             grid: {
-                title: "Employers Grid",
-                crumb: "Employers Grid"
+                title: "Employers",
+                crumb: "Employers"
             },
             list: {
                 title: "Employers List",
@@ -36,8 +36,8 @@ export const banner = {
         },
         candidate: {
             grid: {
-                title: "Candidate Grid",
-                crumb: "Candidate Grid"
+                title: " Verified Candidates",
+                crumb: "Candidates"
             },
             list: {
                 title: "Candidate List",

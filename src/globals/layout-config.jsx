@@ -76,7 +76,7 @@ export function setFooterType(currentpath) {
     } else if (currentpath === publicUser.HOME11) {
         return <Footer4 />
     } else {
-        return <Footer1 />
+        return <Footer2 />
     }
 }
 

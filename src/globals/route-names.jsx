@@ -6,8 +6,8 @@ export const base = {
 
 export const publicUser = {
     INITIAL: "/",
-    HOME1: "/index2",
-    HOME2: "/index",
+    HOME1: "/index",
+    HOME2: "/index2",
     HOME3: "/index3",
     HOME4: "/index4",
     HOME5: "/index5",

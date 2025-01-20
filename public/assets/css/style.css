@@ -9354,6 +9354,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 .twm-search-bar-2-wrap {
   position: relative;
   z-index: 2;
+  margin-top: 3rem;
 }
 .twm-search-bar-2-wrap .twm-search-bar-2-inner {
   padding: 20px;
@@ -10603,6 +10604,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 .twm-home2-banner-section .twm-bnr2-right-content .twm-bnr-blocks-3 .twm-content {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .twm-home2-banner-section .twm-bnr2-right-content .twm-bnr-blocks-3 .twm-content .tw-count-number {
   font-size: 38px;
@@ -14643,7 +14645,8 @@ strong {
 
 /* under Maintenance*/
 .twm-c-soon-area {
-  height: 100vh;
+  padding-top: 2rem;
+  height: 100%;
   display: flex;
   align-items: center;
   background-repeat: no-repeat;

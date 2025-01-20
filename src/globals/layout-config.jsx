@@ -60,7 +60,8 @@ export function showFooter(currentpath) {
 }
 
 export function setFooterType(currentpath) {
-    if (currentpath === publicUser.HOME2 ||
+    if (currentpath === publicUser.HOME1 ||
+        currentpath === publicUser.HOME2 ||
         currentpath === publicUser.HOME4 ||
         currentpath === publicUser.HOME8 ||
         currentpath === publicUser.HOME9 ||

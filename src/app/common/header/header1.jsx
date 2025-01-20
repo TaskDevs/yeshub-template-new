@@ -19,7 +19,7 @@ function Header1({ _config }) {
                         <div className="container-fluid clearfix">
                             <div className="logo-header">
                                 <div className="logo-header-inner logo-header-one">
-                                    <NavLink to={publicUser.HOME2}>
+                                    <NavLink to={publicUser.HOME1}>
                                         {
                                             _config.withBlackLogo
                                                 ?
@@ -60,7 +60,7 @@ function Header1({ _config }) {
                             <div className="nav-animation header-nav navbar-collapse collapse d-flex justify-content-center">
                                 <ul className=" nav navbar-nav">
                                     <li>
-                                        <NavLink to={publicUser.HOME2}>Home</NavLink>
+                                        <NavLink to={publicUser.HOME1}>Home</NavLink>
                                         {/* <ul className="mega-menu">
                                             <li>
                                                 <ul>

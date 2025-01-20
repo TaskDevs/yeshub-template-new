@@ -72,9 +72,9 @@ export function setFooterType(currentpath) {
         currentpath === publicUser.HOME6 ||
         currentpath === publicUser.HOME16 ||
         currentpath === publicUser.HOME18) {
-        return <Footer3 />
+        return <Footer2 />
     } else if (currentpath === publicUser.HOME11) {
-        return <Footer4 />
+        return <Footer2/>
     } else {
         return <Footer2 />
     }

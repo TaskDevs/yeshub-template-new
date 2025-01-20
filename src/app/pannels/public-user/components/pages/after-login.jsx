@@ -82,7 +82,7 @@ function AfterLoginPage() {
                             <div className="twm-log-reg-form-wrap">
                                 <div className="twm-log-reg-logo-head">
                                     <NavLink to={publicUser.HOME1}>
-                                        <JobZImage src="images/logo-dark.png" alt="" className="logo" />
+                                        <JobZImage src="images/yes-lg-2.png" alt="" className="logo" />
                                     </NavLink>
                                 </div>
                                 <div className="twm-log-reg-inner">
@@ -156,8 +156,9 @@ function AfterLoginPage() {
                                                     <div className="col-md-12">
                                                         <div className="form-group">
                                                             <button type="submit" className="log_with_facebook">
-                                                                <i className="fab fa-facebook" />
-                                                                Continue with Facebook
+                                                                {/* <i className="fab fa-facebook" /> */}
+                                                                <i class="fab fa-linkedin" color="blue"></i>
+                                                                Continue with LinkedIn
                                                             </button>
                                                         </div>
                                                     </div>

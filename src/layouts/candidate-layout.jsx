@@ -7,7 +7,7 @@ import InnerPageBanner from "../app/common/inner-page-banner";
 import Footer1 from "../app/common/footer/footer1";
 import { setBanner } from "../globals/banner-data";
 import { useLocation } from "react-router-dom";
-import { getHeaderConfig } from "../globals/layout-config";
+import { getHeaderConfig, setFooterType, showFooter } from "../globals/layout-config";
 
 function CandidateLayout() {
     const currentpath = useLocation().pathname;
@@ -39,7 +39,11 @@ function CandidateLayout() {
                 </div>
 
                 {/* Footer */}
-                <Footer1 />
+                {/* <Footer1 /> */}
+                {
+                                    showFooter(currentpath) &&
+                                    setFooterType(currentpath)
+                                }
 
                 {/* BUTTON TOP START */}
                 <button className="scroltop"><span className="fa fa-angle-up  relative" id="btn-vibrate" /></button>

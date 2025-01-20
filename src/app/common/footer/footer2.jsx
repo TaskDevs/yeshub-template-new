@@ -98,10 +98,10 @@ function Footer2() {
                                 <span className="copyrights-text">Copyright © 2025 Office Of The President - Republic Of Ghana - All Rights Reserved.</span>
                             </div>
                             <ul className="social-icons">
-                                <li><a href="https://www.facebook.com/" className="fab fa-facebook-f" >F</a></li>
-                                <li><a href="https://www.twitter.com/" className="fab fa-twitter" >T</a></li>
-                                <li><a href="https://www.instagram.com/" className="fab fa-instagram" >I</a></li>
-                                <li><a href="https://www.youtube.com/" className="fab fa-youtube" >Y</a></li>
+                                <li><a href="https://www.facebook.com/" className="fab fa-facebook-f" ></a></li>
+                                <li><a href="https://www.twitter.com/" className="fab fa-twitter" ></a></li>
+                                <li><a href="https://www.instagram.com/" className="fab fa-instagram" ></a></li>
+                                <li><a href="https://www.youtube.com/" className="fab fa-youtube" ></a></li>
                             </ul>
                         </div>
                     </div>

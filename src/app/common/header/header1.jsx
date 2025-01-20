@@ -155,7 +155,7 @@ function Header1({ _config }) {
                                         </ul> */}
                                     </li>
                                     <li>
-                                    <li><NavLink to={publicUser.pages.COMING}>Resources</NavLink></li>
+                                        <NavLink to={publicUser.pages.COMING}>Resources</NavLink>
                                         {/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.blog.GRID1}>Blog</NavLink></li>
                                             <li><NavLink to={publicUser.blog.GRID2}>Blog Grid</NavLink></li>

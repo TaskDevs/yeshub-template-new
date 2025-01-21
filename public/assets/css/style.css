@@ -15532,7 +15532,20 @@ strong {
   border-radius: 50px;
   padding: 5px 30px;
   border: 1px solid #e1e2e6;
-
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.w-role {
+  width: 45%;
+}
+@media (max-width: 575px) {
+  .w-role {
+  width: 75%;
+}
 }
 
 .pop-up-btn-logo {
@@ -15540,12 +15553,12 @@ strong {
 			height: 24px;
       margin-right: 10px;
 		}
-.log_with_google:hover {
+.log_with_linkedin:hover {
   background-color: blue !important;
   color: #fff !important;
   
 }
-.log_with_google:hover img {
+.log_with_linkedin:hover img {
   filter: invert(1) brightness(5) contrast(100%) hue-rotate(180deg);
 }
 

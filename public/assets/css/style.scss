@@ -10091,7 +10091,7 @@ h3.twm-title{
 			padding: 10px 30px;
 			cursor: pointer;
 			text-align: center;
-			background-color: #f7faff;
+			background-color: #fff;
 			transition: opacity 0.2s linear 0s;
 			width: 100%;
 			max-width: 270px;
@@ -10099,9 +10099,15 @@ h3.twm-title{
 			font-size: 14px;
 			font-weight: 500;
 			color: $clr-dark;
-			img{width: 24px; margin-right: 10px;}
-		
+			img{width: 30px; margin-right: 10px;};
+			transition: background 0.3s ease, color 0.3s ease;
 		}
+		.pop-up-btn-logo {
+			width: 24px;
+			height: 24px;
+		}
+
+
 		.center-text-or{
 			font-size: 15px;
 			font-weight: 600;

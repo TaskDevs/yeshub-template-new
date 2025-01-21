@@ -2,6 +2,7 @@ import RootLayout from "./layouts/root-layout";
 import Loader from "./app/common/loader";
 import ScrollToTop from "./globals/scroll-to-top";
 import { useState } from "react";
+import { AuthProvider } from "./app/context/auth/AuthContext";
 
 function App() {
 
@@ -12,12 +13,12 @@ function App() {
   }, 500);
 
   return (
-    <>
-      {isLoading && <Loader />}
-      <ScrollToTop />
-      <RootLayout />
-    </>
-  )
+		<AuthProvider>
+			{isLoading && <Loader />}
+			<ScrollToTop />
+			<RootLayout />
+		</AuthProvider>
+	);
 }
 
 export default App;

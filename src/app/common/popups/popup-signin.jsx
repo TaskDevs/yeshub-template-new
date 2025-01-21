@@ -4,67 +4,189 @@ import { useNavigate } from "react-router-dom";
 import { canRoute, candidate, empRoute, employer } from "../../../globals/route-names";
 import { useState } from "react";
 import JobZImage from "../jobz-img";
+import axios from "axios";
 
 function SignInPopup() {
 
     const navigate = useNavigate();
-    const [canusername, setCanUsername] = useState('guest');
-    const [empusername, setEmpUsername] = useState('admin');
-    const [password, setPassword] = useState('12345');
+    // const [canusername,  setCanEmail] = useState('guest');
+    // const [empusername,  setEmpEmail] = useState('admin');
+    // const [password, setPassword] = useState('12345');
 
-    const handleCandidateLogin = (event) => {
-        event.preventDefault();
-        loginCandidate();
-    }
+    // const handleCandidateLogin = (event) => {
+    //     event.preventDefault();
+    //     loginCandidate();
+    // }
 
-    const handleEmployerLogin = (event) => {
-        event.preventDefault();
-        loginEmployer();
-    }
+    // const handleEmployerLogin = (event) => {
+    //     event.preventDefault();
+    //     loginEmployer();
+    // }
 
-    const loginCandidate = () => {
-        processLogin(
-            {
-                type: formType.LOGIN_CANDIDATE,
-                username: canusername,
-                password: password
-            },
-            (valid) => {
-                if (valid) {
-                    moveToCandidate();
-                } else {
-                    // show error
-                    console.log('error');
-                }
-            }
-        );
-    }
+    // const loginCandidate = () => {
+    //     processLogin(
+    //         {
+    //             type: formType.LOGIN_CANDIDATE,
+    //             username: canusername,
+    //             password: password
+    //         },
+    //         (valid) => {
+    //             if (valid) {
+    //                 moveToCandidate();
+    //             } else {
+    //                 // show error
+    //                 console.log('error');
+    //             }
+    //         }
+    //     );
+    // }
 
-    const loginEmployer = () => {
-        processLogin(
-            {
-                type: formType.LOGIN_EMPLOYER,
-                username: empusername,
-                password: password
-            },
-            (valid) => {
-                if (valid) {
-                    moveToEmployer();
-                } else {
-                    // show error
-                    console.log('error');
-                }
-            }
-        );
-    }
+    // const loginEmployer = () => {
+    //     processLogin(
+    //         {
+    //             type: formType.LOGIN_EMPLOYER,
+    //             username: empusername,
+    //             password: password
+    //         },
+    //         (valid) => {
+    //             if (valid) {
+    //                 moveToEmployer();
+    //             } else {
+    //                 // show error
+    //                 console.log('error');
+    //             }
+    //         }
+    //     );
+    // }
 
-    const moveToCandidate = () => {
-        navigate(canRoute(candidate.DASHBOARD));
-    }
+    // const moveToCandidate = () => {
+    //     navigate(canRoute(candidate.DASHBOARD));
+    // }
 
-    const moveToEmployer = () => {
-        navigate(empRoute(employer.DASHBOARD));
-    }
+    // const moveToEmployer = () => {
+    //     navigate(empRoute(employer.DASHBOARD));
+	// }
+	
+
+	    const [canEmail, setCanEmail] = useState("guest@gmail.com");
+			const [empEmail, setEmpEmail] = useState("admin@gmail.com");
+			const [password, setPassword] = useState("12345");
+			const [isSubmitting, setIsSubmitting] = useState(false);
+
+			const url = `${process.env.REACT_APP_BASE_URL}/login`;
+			console.log("url", url);
+
+			const handleCandidateLogin = (event) => {
+				event.preventDefault();
+				loginCandidate();
+			};
+
+			const handleEmployerLogin = (event) => {
+				event.preventDefault();
+				loginEmployer();
+			};
+
+			const loginCandidate = async () => {
+				if (!canEmail || !password) {
+					setIsSubmitting(false);
+					return;
+				}
+				try {
+					setIsSubmitting(true);
+					const response = await axios.post(
+						url,
+						{
+							email: canEmail,
+							password: password,
+						},
+						{
+							headers: {
+								"Content-type": "application/json",
+							},
+						}
+					);
+					const data = response.data;
+					console.log("data", data);
+
+					if (response.status === 200) {
+						moveToCandidate();
+					}
+				} catch (error) {
+					setCanEmail("");
+					setPassword("");
+				} finally {
+					setIsSubmitting(false);
+				}
+
+				// processLogin(
+				//     {
+				//         type: formType.LOGIN_CANDIDATE,
+				//         email: canEmail,
+				//         password: password
+				//     },
+				//     (valid) => {
+				//         if (valid) {
+				//             moveToCandidate();
+				//         } else {
+				//             // show error
+				//             console.log('error');
+				//         }
+				//     }
+				// );
+			};
+
+			const loginEmployer = async () => {
+				try {
+					const response = await axios.post(
+						url,
+						{
+							email: empEmail,
+							password: password,
+						},
+						{
+							headers: {
+								"Content-type": "application/json",
+							},
+						}
+					);
+					const data = response.data;
+					console.log("data", data);
+
+					if (response.status === 200) {
+						moveToEmployer();
+					}
+				} catch (error) {
+					setEmpEmail("");
+					setPassword("");
+				} finally {
+					setIsSubmitting(false);
+				}
+
+				// processLogin(
+				//     {
+				//         type: formType.LOGIN_EMPLOYER,
+				//         email: empEmail,
+				//         password: password
+				//     },
+				//     (valid) => {
+				//         if (valid) {
+				//             moveToEmployer();
+				//         } else {
+				//             // show error
+				//             console.log('error');
+				//         }
+				//     }
+				// );
+			};
+
+			const moveToCandidate = () => {
+				navigate(canRoute(candidate.DASHBOARD));
+			};
+
+			const moveToEmployer = () => {
+				navigate(empRoute(employer.DASHBOARD));
+			};
+
 
     return (
 			<>
@@ -129,14 +251,14 @@ function SignInPopup() {
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
-															name="username"
+															name="email"
 															type="text"
 															required
 															className="form-control"
-															placeholder="Usearname*"
-															value={canusername}
+															placeholder="Email*"
+															value={canEmail}
 															onChange={(event) => {
-																setCanUsername(event.target.value);
+																setCanEmail(event.target.value);
 															}}
 														/>
 													</div>
@@ -178,6 +300,7 @@ function SignInPopup() {
 														type="submit"
 														className="site-button"
 														data-bs-dismiss="modal"
+														disabled={isSubmitting}
 													>
 														Log in
 													</button>
@@ -206,14 +329,14 @@ function SignInPopup() {
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
-															name="username"
+															name="email"
 															type="text"
 															required
 															className="form-control"
-															placeholder="Usearname*"
-															value={empusername}
+															placeholder="Email*"
+															value={empEmail}
 															onChange={(event) => {
-																setEmpUsername(event.target.value);
+																setEmpEmail(event.target.value);
 															}}
 														/>
 													</div>
@@ -255,6 +378,7 @@ function SignInPopup() {
 														type="submit"
 														className="site-button"
 														data-bs-dismiss="modal"
+														disabled={isSubmitting}
 													>
 														Log in
 													</button>
@@ -298,6 +422,14 @@ function SignInPopup() {
 										</div>
 									</div>
 								</ul>
+							</div>
+							<div className="col-md-12">
+								<div className="form-group">
+									<button type="submit" className="log_with_google">
+										<JobZImage src="images/google-icon.png" alt="" />
+										Continue with Google
+									</button>
+								</div>
 							</div>
 							{/* </form> */}
 						</div>

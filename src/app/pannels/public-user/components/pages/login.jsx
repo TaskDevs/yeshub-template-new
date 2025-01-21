@@ -4,13 +4,20 @@ import { canRoute, candidate, empRoute, employer, publicUser } from "../../../..
 import { useState } from "react";
 import processLogin from "../../../../form-processing/login";
 import { formType } from "../../../../../globals/constants";
+import axios from "axios";
 
 function LoginPage() {
 
     const navigate = useNavigate();
-    const [canusername, setCanUsername] = useState('guest');
-    const [empusername, setEmpUsername] = useState('admin');
+    const [canEmail, setCanEmail] = useState('guest@gmail.com');
+    const [empEmail, setEmpEmail] = useState('admin@gmail.com');
     const [password, setPassword] = useState('12345');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+    const url = `${process.env.REACT_APP_BASE_URL}/login`;
+    console.log("url", url);
+    
 
     const handleCandidateLogin = (event) => {
         event.preventDefault();
@@ -22,40 +29,98 @@ function LoginPage() {
         loginEmployer();
     }
 
-    const loginCandidate = () => {
-        processLogin(
-            {
-                type: formType.LOGIN_CANDIDATE,
-                username: canusername,
-                password: password
-            },
-            (valid) => {
-                if (valid) {
-                    moveToCandidate();
-                } else {
-                    // show error
-                    console.log('error');
-                }
-            }
-        );
+    const loginCandidate = async () => {
+        if (!canEmail || !password) {
+					setIsSubmitting(false);
+					return;
+				}
+        try {
+                setIsSubmitting(true);
+					const response = await axios.post(
+						url,
+						{
+							email: canEmail,
+							password: password,
+						},
+						{
+							headers: {
+								"Content-type": "application/json",
+							},
+						}
+					);
+					const data = response.data;
+					console.log("data", data);
+
+					if (response.status === 200) {
+						moveToCandidate();
+					}
+				} catch (error) {
+					setCanEmail("");
+					setPassword("");
+				} finally {
+					setIsSubmitting(false);
+				}    
+
+        // processLogin(
+        //     {
+        //         type: formType.LOGIN_CANDIDATE,
+        //         email: canEmail,
+        //         password: password
+        //     },
+        //     (valid) => {
+        //         if (valid) {
+        //             moveToCandidate();
+        //         } else {
+        //             // show error
+        //             console.log('error');
+        //         }
+        //     }
+        // );
     }
 
-    const loginEmployer = () => {
-        processLogin(
-            {
-                type: formType.LOGIN_EMPLOYER,
-                username: empusername,
-                password: password
-            },
-            (valid) => {
-                if (valid) {
-                    moveToEmployer();
-                } else {
-                    // show error
-                    console.log('error');
-                }
-            }
-        );
+    const loginEmployer = async () => {
+        try {
+					const response = await axios.post(
+						url,
+						{
+							email: empEmail,
+							password: password,
+						},
+						{
+							headers: {
+								"Content-type": "application/json",
+							},
+						}
+					);
+					const data = response.data;
+					console.log("data", data);
+
+					if (response.status === 200) {
+						moveToEmployer();
+					}
+				} catch (error) {
+					setEmpEmail("");
+					setPassword("");
+				} finally {
+					setIsSubmitting(false);
+				}  
+
+
+        // processLogin(
+        //     {
+        //         type: formType.LOGIN_EMPLOYER,
+        //         email: empEmail,
+        //         password: password
+        //     },
+        //     (valid) => {
+        //         if (valid) {
+        //             moveToEmployer();
+        //         } else {
+        //             // show error
+        //             console.log('error');
+        //         }
+        //     }
+        // );
     }
 
     const moveToCandidate = () => {
@@ -133,14 +198,14 @@ function LoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="username"
+																	name="email"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="Usearname*"
-																	value={canusername}
+																	placeholder="Email"
+																	value={canEmail}
 																	onChange={(event) => {
-																		setCanUsername(event.target.value);
+																		setCanEmail(event.target.value);
 																	}}
 																/>
 															</div>
@@ -184,7 +249,7 @@ function LoginPage() {
 														</div>
 														<div className="col-md-12">
 															<div className="form-group">
-																<button type="submit" className="site-button">
+																<button type="submit" className="site-button" disabled={isSubmitting}>
 																	Log in
 																</button>
 															</div>
@@ -209,7 +274,7 @@ function LoginPage() {
 															<div className="form-group">
 																<button
 																	type="submit"
-																	className="log_with_google"
+																	className="log_with_google log_with_linkedin"
 																>
 																	<JobZImage
 																		src="images/linkedin-logo-1a.png"
@@ -219,8 +284,23 @@ function LoginPage() {
 																</button>
 															</div>
 														</div>
+														<div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google"
+																>
+																	<JobZImage
+																		src="images/google-icon.png"
+																		alt=""
+																	/>
+																	Continue with Google
+																</button>
+															</div>
+														</div>
 													</div>
-												</form>
+                                            </form>
+                                            
 												{/*Login Employer Content*/}
 												<form
 													onSubmit={handleEmployerLogin}
@@ -231,14 +311,14 @@ function LoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="username"
+																	name="email"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="Usearname*"
-																	value={empusername}
+																	placeholder="Email"
+																	value={empEmail}
 																	onChange={(event) => {
-																		setEmpUsername(event.target.value);
+																		setEmpEmail(event.target.value);
 																	}}
 																/>
 															</div>
@@ -282,7 +362,7 @@ function LoginPage() {
 														</div>
 														<div className="col-md-12">
 															<div className="form-group">
-																<button type="submit" className="site-button">
+																<button type="submit" className="site-button" disabled={isSubmitting}>
 																	Log in
 																</button>
 															</div>
@@ -296,7 +376,7 @@ function LoginPage() {
 															<div className="form-group">
 																<button
 																	type="submit"
-																	className="log_with_google"
+																	className="log_with_google log_with_linkedin"
 																>
 																	<JobZImage
 																		src="images/linkedin-logo-1a.png"
@@ -306,14 +386,20 @@ function LoginPage() {
 																</button>
 															</div>
 														</div>
-														{/* <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_google">
-                                                                <JobZImage src="images/google-icon.png" alt="" />
-                                                                Continue with Google
-                                                            </button>
-                                                        </div>
-                                                    </div> */}
+														<div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google"
+																>
+																	<JobZImage
+																		src="images/google-icon.png"
+																		alt=""
+																	/>
+																	Continue with Google
+																</button>
+															</div>
+														</div>
 													</div>
 												</form>
 											</div>

@@ -210,13 +210,27 @@ function AfterLoginPage() {
 															<div className="form-group">
 																<button
 																	type="submit"
-																	className="log_with_google"
+																	className="log_with_google log_with_linkedin"
 																>
 																	<JobZImage
 																		src="images/linkedin-logo-1a.png"
 																		alt=""
 																	/>
 																	Continue with LinkedIn
+																</button>
+															</div>
+														</div>
+														<div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google"
+																>
+																	<JobZImage
+																		src="images/google-icon.png"
+																		alt=""
+																	/>
+																	Continue with Google
 																</button>
 															</div>
 														</div>
@@ -305,7 +319,7 @@ function AfterLoginPage() {
 															<div className="form-group">
 																<button
 																	type="submit"
-																	className="log_with_google"
+																	className="log_with_google log_with_linkedin"
 																>
 																	<JobZImage
 																		src="images/linkedin-logo-1a.png"

@@ -4,67 +4,84 @@ import { canRoute, candidate, empRoute, employer, publicUser } from "../../../..
 import { useState } from "react";
 import processLogin from "../../../../form-processing/login";
 import { formType } from "../../../../../globals/constants";
+import useAuth from "../../../../context/auth/useAuth";
 
 function AfterLoginPage() {
 
-    const navigate = useNavigate();
-    const [canusername, setCanUsername] = useState('guest');
-    const [empusername, setEmpUsername] = useState('admin');
-    const [password, setPassword] = useState('12345');
+    // const navigate = useNavigate();
+    // const [canusername, setCanUsername] = useState('guest');
+    // const [empusername, setEmpUsername] = useState('admin');
+    // const [password, setPassword] = useState('12345');
 
-    const handleCandidateLogin = (event) => {
-        event.preventDefault();
-        loginCandidate();
-    }
+    // const handleCandidateLogin = (event) => {
+    //     event.preventDefault();
+    //     loginCandidate();
+    // }
 
-    const handleEmployerLogin = (event) => {
-        event.preventDefault();
-        loginEmployer();
-    }
+    // const handleEmployerLogin = (event) => {
+    //     event.preventDefault();
+    //     loginEmployer();
+    // }
 
-    const loginCandidate = () => {
-        processLogin(
-            {
-                type: formType.LOGIN_CANDIDATE,
-                username: canusername,
-                password: password
-            },
-            (valid) => {
-                if (valid) {
-                    moveToCandidate();
-                } else {
-                    // show error
-                    console.log('error');
-                }
-            }
-        );
-    }
+    // const loginCandidate = () => {
+    //     processLogin(
+    //         {
+    //             type: formType.LOGIN_CANDIDATE,
+    //             username: canusername,
+    //             password: password
+    //         },
+    //         (valid) => {
+    //             if (valid) {
+    //                 moveToCandidate();
+    //             } else {
+    //                 // show error
+    //                 console.log('error');
+    //             }
+    //         }
+    //     );
+    // }
 
-    const loginEmployer = () => {
-        processLogin(
-            {
-                type: formType.LOGIN_EMPLOYER,
-                username: empusername,
-                password: password
-            },
-            (valid) => {
-                if (valid) {
-                    moveToEmployer();
-                } else {
-                    // show error
-                    console.log('error');
-                }
-            }
-        );
-    }
+    // const loginEmployer = () => {
+    //     processLogin(
+    //         {
+    //             type: formType.LOGIN_EMPLOYER,
+    //             username: empusername,
+    //             password: password
+    //         },
+    //         (valid) => {
+    //             if (valid) {
+    //                 moveToEmployer();
+    //             } else {
+    //                 // show error
+    //                 console.log('error');
+    //             }
+    //         }
+    //     );
+    // }
 
-    const moveToCandidate = () => {
-        navigate(canRoute(candidate.DASHBOARD));
-    }
+    // const moveToCandidate = () => {
+    //     navigate(canRoute(candidate.DASHBOARD));
+    // }
 
-    const moveToEmployer = () => {
-        navigate(empRoute(employer.DASHBOARD));
-    }
+    // const moveToEmployer = () => {
+	//     navigate(empRoute(employer.DASHBOARD));
+	// }
+	
+	
+	const {
+		handleCandidateLogin,
+		handleEmployerLogin,
+		isSubmitting,
+		password,
+		setPassword,
+		canUsername,
+		setCanUsername,
+		empUsername,
+		setEmpUsername,
+		loginWithLinkedIn,
+		setRole,
+	} = useAuth();
+
 
     return (
 			<>
@@ -104,6 +121,7 @@ function AfterLoginPage() {
 														data-bs-toggle="tab"
 														data-bs-target="#twm-login-candidate"
 														type="button"
+														onClick={() => setRole("1")}
 													>
 														<i className="fas fa-user-tie" />
 														Candidate
@@ -116,6 +134,7 @@ function AfterLoginPage() {
 														data-bs-toggle="tab"
 														data-bs-target="#twm-login-Employer"
 														type="button"
+														onClick={() => setRole("2")}
 													>
 														<i className="fas fa-building" />
 														Employer
@@ -138,7 +157,7 @@ function AfterLoginPage() {
 																	required
 																	className="form-control"
 																	placeholder="Usearname*"
-																	value={canusername}
+																	value={canUsername}
 																	onChange={(event) => {
 																		setCanUsername(event.target.value);
 																	}}
@@ -206,7 +225,12 @@ function AfterLoginPage() {
 																</button>
 															</div>
 														</div> */}
-														<div className="col-md-12">
+														{/* <div
+															className="col-md-12"
+															onClick={() => {
+																loginWithLinkedIn();
+															}}
+														>
 															<div className="form-group">
 																<button
 																	type="submit"
@@ -219,8 +243,8 @@ function AfterLoginPage() {
 																	Continue with LinkedIn
 																</button>
 															</div>
-														</div>
-														<div className="col-md-12">
+														</div> */}
+														{/* <div className="col-md-12">
 															<div className="form-group">
 																<button
 																	type="submit"
@@ -233,9 +257,30 @@ function AfterLoginPage() {
 																	Continue with Google
 																</button>
 															</div>
-														</div>
+														</div> */}
 													</div>
 												</form>
+
+												{/* <div
+													className="col-md-12"
+													onClick={() => {
+														loginWithLinkedIn();
+													}}
+												>
+													<div className="form-group">
+														<button
+															type="submit"
+															className="log_with_google log_with_linkedin"
+														>
+															<JobZImage
+																src="images/linkedin-logo-1a.png"
+																alt=""
+															/>
+															Continue with LinkedIn
+														</button>
+													</div>
+											</div> */}
+
 												{/*Login Employer Content*/}
 												<form
 													onSubmit={handleEmployerLogin}
@@ -251,7 +296,7 @@ function AfterLoginPage() {
 																	required
 																	className="form-control"
 																	placeholder="Usearname*"
-																	value={empusername}
+																	value={empUsername}
 																	onChange={(event) => {
 																		setEmpUsername(event.target.value);
 																	}}
@@ -297,8 +342,12 @@ function AfterLoginPage() {
 														</div>
 														<div className="col-md-12">
 															<div className="form-group">
-																<button type="submit" className="site-button">
-																	Log in
+																<button
+																	type="submit"
+																	className="site-button"
+																	disabled={isSubmitting}
+																>
+																	{isSubmitting ? "Submitting" : "Log in"}
 																</button>
 															</div>
 														</div>
@@ -315,7 +364,7 @@ function AfterLoginPage() {
                                                             </button>
                                                         </div>
                                                     </div> */}
-														<div className="col-md-12">
+														{/* <div className="col-md-12">
 															<div className="form-group">
 																<button
 																	type="submit"
@@ -328,9 +377,29 @@ function AfterLoginPage() {
 																	Continue with LinkedIn
 																</button>
 															</div>
-														</div>
+														</div> */}
 													</div>
 												</form>
+
+												<div
+													className="col-md-12"
+													onClick={() => {
+														loginWithLinkedIn();
+													}}
+												>
+													<div className="form-group">
+														<button
+															type="submit"
+															className="log_with_google log_with_linkedin"
+														>
+															<JobZImage
+																src="images/linkedin-logo-1a.png"
+																alt=""
+															/>
+															Continue with LinkedIn
+														</button>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>

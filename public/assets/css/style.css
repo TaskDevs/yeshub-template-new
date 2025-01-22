@@ -15553,12 +15553,20 @@ strong {
 			height: 24px;
       margin-right: 10px;
 		}
-.log_with_linkedin:hover {
-  background-color: blue !important;
+.log_with_linkedin {
+  background-color: #0A66C2 !important;
   color: #fff !important;
+  border: #0A66C2 !important;
+  padding: 10px 30px;
   
 }
-.log_with_linkedin:hover img {
+
+.log_with_linkedin:hover {
+  background-color: #084f97!important;
+  
+  
+}
+.log_with_linkedin img {
   filter: invert(1) brightness(5) contrast(100%) hue-rotate(180deg);
 }
 

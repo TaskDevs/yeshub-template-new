@@ -1,44 +1,40 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
-import {
-	publicUser,
-} from "../../../../../globals/route-names";
+import { publicUser } from "../../../../../globals/route-names";
 import { useState } from "react";
 import useAuth from "../../../../context/auth/useAuth";
 import axios from "axios";
 
 function ResetPasswordPage() {
-	
 	const {
 		handleCandidateLogin,
 		isSubmitting,
 		password,
 		setPassword,
-        setConfirmPassword,
-        setIsSubmitting,
+		setConfirmPassword,
+		setIsSubmitting,
 		setRole,
-    } = useAuth();
-    const navigate = useNavigate();
+	} = useAuth();
+	const navigate = useNavigate();
 
-    const url = `${process.env.REACT_APP_BASE_URL}`;
-    
-    const handleResetPassword = async (e) => {
-        e.preventDefault();
-        try {
-             setIsSubmitting(true);
-            const response = await axios.post(url); 
-            console.log("res", response);
-            if (response.status === 200) {
-                navigate("/login")
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setPassword("");
-            setConfirmPassword("");
-        }
-       
-    }
+	const url = `${process.env.REACT_APP_BASE_URL}`;
+
+	const handleResetPassword = async (e) => {
+		e.preventDefault();
+		try {
+			setIsSubmitting(true);
+			const response = await axios.post(url);
+			console.log("res", response);
+			if (response.status === 200) {
+				navigate("/login");
+			}
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setPassword("");
+			setConfirmPassword("");
+		}
+	};
 
 	return (
 		<>

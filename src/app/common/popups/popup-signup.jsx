@@ -11,44 +11,91 @@ import {
 import useAuth from "../../context/auth/useAuth";
 
 function SignUpPopup() {
-	const [isEmailValid, setIsEmailValid] = useState(true);
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
-	const [email, setEmail] = useState("");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [country, setCountry] = useState("");
-	const [phone, setPhone] = useState("");
-	const [city, setCity] = useState("");
-	const [address, setAddress] = useState("");
-	const [location, setLocation] = useState("");
-	const [role, setRole] = useState("1");
-	const [isSubmitting, setIsSubmitting] = useState(false);
-
-	const formData = {
-		username,
-		password,
-		password_confirmation: confirmPassword,
-		role,
-		firstName,
-		lastName,
-		phoneNo: phone,
-		country,
-		city,
-		address,
-		location,
-	}
-	const { handleAuthError, loginWithLinkedIn } = useAuth();
-
 	const navigate = useNavigate();
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [isEmailValid, setIsEmailValid] = useState(true);
+	const [email, setEmail] = useState("");
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
+	const [formData, setFormData] = useState({
+		username: "",
+		password: "",
+		password_confirmation: "",
+		firstName: "",
+		lastName: "",
+		phoneNo: "",
+		country: "",
+		city: "",
+		address: "",
+		location: "",
+		role: "1",
+	});
+
+	useEffect(() => {
+		console.log("role-eef", formData.role);
+	}, [formData.role])
+
+	const url = `${process.env.REACT_APP_BASE_URL}register`;
+
+	const handleChange = (e) => {
+		setFormData({
+			...formData,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setError("");
+		setSuccess("");
+		 console.log("Submitting with role:", formData.role);
+			if (!formData.role) {
+				setError("Please select a role (Candidate or Employer)");
+				return;
+			}
+		if (formData.password !== formData.password_confirmation) {
+			setIsSubmitting(false);
+			return;
+		}
+
+		try {
+			setIsSubmitting(true);
+			console.log("formdata", formData);
+
+			const response = await axios.post(url, formData);
+			setSuccess("User registered successfully!");
+			const data = response.data;
+			console.log("data", data);
+
+			if (response.status === 200) {
+				if (formData.role === "1") {
+					return moveToCandidate();
+				} else {
+					return moveToEmployer();
+				}
+			}
+			setFormData("");
+			setEmail("")
+		} catch (err) {
+			setError(err.response?.data?.message || "An error occurred");
+		} finally {
+			setIsSubmitting(false);
+			setEmail("")
+			setFormData("");
+		}
+	};
+
+	const { handleAuthError, loginWithLinkedIn } = useAuth();
 
 	const validateEmail = (input) => {
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 		return emailRegex.test(input);
 	};
 
-	const handleInputChange = (value) => {
+	const handleInputChange = (event) => {
+		const value = event.target.value; 
 		setEmail(value);
 		if (!validateEmail(value)) {
 			setIsEmailValid(false);
@@ -59,98 +106,6 @@ function SignUpPopup() {
 		}
 	};
 
-	const url = `${process.env.REACT_APP_BASE_URL}register`;
-	const baseUrl = `${process.env.REACT_APP_BASE_URL}`;
-
-	// const csrfToken = document.cookie
-	// 	.split("; ")
-	// 	.find((row) => row.startsWith("XSRF-TOKEN"))
-	// 	?.split("=")[1];
-	// console.log("csrf", csrfToken);
-
-	// const csrfToken = document.cookie
-	// 	.split("; ")
-	// 	.find((row) => row.startsWith("XSRF-TOKEN"))
-	// 	?.split("=")[1];
-
-	// if (csrfToken) {
-	// 	axios.defaults.headers.common["X-XSRF-TOKEN"] = csrfToken;
-	// }
-
-	// console.log("token",csrfToken)
-	
-	const handleSignup = async (event) => {
-		event.preventDefault();
-		if (password !==confirmPassword)
-		{
-			setIsSubmitting(false)
-			return;
-		}
-
-		try { 
-			setIsSubmitting(true)
-			const res = await axios.post(`${baseUrl}register`, formData)
-			console.log(res)
-		} catch (err) {
-			console.log(err);
-		} finally {
-			setIsSubmitting(false)
-		}
-	};
-
-
-	// const signup = async () => {
-	// 	if (password !== confirmPassword) {
-	// 		setIsSubmitting(false);
-	// 		return;
-	// 	}
-	// 	try {
-	// 		setIsSubmitting(true);
-	// 		const response = await axios.post(
-	// 			url,
-	// 			{
-	// 				username,
-	// 				password,
-	// 				password_confirmation: confirmPassword,
-	// 				role,
-	// 				firstName,
-	// 				lastName,
-	// 				phoneNo: phone,
-	// 				country,
-	// 				city,
-	// 				address,
-	// 				location,
-	// 			},
-	// 		);
-	// 		const data = response.data;
-	// 		console.log("data", data);
-
-	// 		if (response.status === 200) {
-	// 			if (role === "1") {
-	// 				return moveToCandidate();
-	// 			} else {
-	// 				return moveToEmployer();
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	} finally {
-	// 		setIsSubmitting(false);
-	// 		setUsername("");
-	// 		setEmail("");
-	// 		setPassword("");
-	// 		setConfirmPassword("");
-	// 		setFirstName("");
-	// 		setLastName("");
-	// 		setPhone("");
-	// 		setCountry("");
-	// 		setLocation("");
-	// 		setAddress("");
-	// 		setCity("");
-	// 		setRole("");
-	// 	}
-	// };
-
 	const moveToCandidate = () => {
 		navigate(canRoute(candidate.DASHBOARD));
 	};
@@ -158,10 +113,6 @@ function SignUpPopup() {
 	const moveToEmployer = () => {
 		navigate(empRoute(employer.DASHBOARD));
 	};
-
-	useEffect(() => {
-		console.log("role", role);
-	}, [role]);
 
 	return (
 		<>
@@ -174,7 +125,7 @@ function SignUpPopup() {
 			>
 				<div className="modal-dialog modal-dialog-centered">
 					<div className="modal-content">
-						<form onSubmit={handleSignup}>
+						<form onSubmit={handleSubmit}>
 							<div className="modal-header">
 								<h2 className="modal-title" id="sign_up_popupLabel">
 									Sign Up
@@ -193,13 +144,19 @@ function SignUpPopup() {
 										{/*Signup Candidate*/}
 										<li className="nav-item" role="presentation">
 											<button
-												className="nav-link active"
+												// className="nav-link active"
+												className={`nav-link ${
+													formData.role === "1" ? "active" : ""
+												}`}
 												data-bs-toggle="tab"
-												data-bs-target="#sign-candidate"
+												// data-bs-target="#sign-candidate"
 												type="button"
-												onClick={() => {
-													setRole("1");
-												}}
+												onClick={() =>
+													setFormData((prevFormData) => ({
+														...prevFormData,
+														role: "1",
+													}))
+												}
 											>
 												<i className="fas fa-user-tie" />
 												Candidate
@@ -208,24 +165,31 @@ function SignUpPopup() {
 										{/*Signup Employer*/}
 										<li className="nav-item" role="presentation">
 											<button
-												className="nav-link"
+												// className="nav-link"
+												className={`nav-link ${
+													formData.role === "2" ? "active" : ""
+												}`}
 												data-bs-toggle="tab"
-												data-bs-target="#sign-Employer"
+												// data-bs-target="#sign-Employer"
 												type="button"
-												onClick={() => {
-													setRole("2");
-												}}
+												onClick={() =>
+													setFormData((prevFormData) => ({
+														...prevFormData,
+														role: "2",
+													}))
+												}
 											>
 												<i className="fas fa-building" />
 												Employer
 											</button>
 										</li>
 									</ul>
+
 									<div className="tab-content" id="myTabContent">
 										{/*Signup Candidate Content*/}
 										<div
 											className="tab-pane fade show active"
-											id="sign-candidate"
+											// id="sign-candidate"
 										>
 											<div className="row">
 												<div className="col-lg-12">
@@ -238,10 +202,8 @@ function SignUpPopup() {
 															placeholder="Username*"
 															minLength={3}
 															maxLength={50}
-															value={username}
-															onChange={(event) => {
-																setUsername(event.target.value);
-															}}
+															value={formData.username}
+															onChange={handleChange}
 														/>
 													</div>
 												</div>
@@ -254,9 +216,7 @@ function SignUpPopup() {
 															className="form-control"
 															value={email}
 															placeholder="Email*"
-															onChange={(event) => {
-																handleInputChange(event.target.value);
-															}}
+															onChange={handleInputChange}
 														/>
 
 														{isEmailValid === false && (
@@ -278,10 +238,8 @@ function SignUpPopup() {
 															required
 															className="form-control"
 															placeholder="First Name*"
-															value={firstName}
-															onChange={(event) => {
-																setFirstName(event.target.value);
-															}}
+															value={formData.firstName}
+															onChange={handleChange}
 														/>
 													</div>
 												</div>
@@ -293,10 +251,8 @@ function SignUpPopup() {
 															required
 															className="form-control"
 															placeholder="Last Name*"
-															value={lastName}
-															onChange={(event) => {
-																setLastName(event.target.value);
-															}}
+															value={formData.lastName}
+															onChange={handleChange}
 														/>
 													</div>
 												</div>
@@ -307,45 +263,39 @@ function SignUpPopup() {
 															type="text"
 															required
 															className="form-control"
-															value={password}
+															value={formData.password}
 															minLength={8}
 															maxLength={20}
 															placeholder="Password*"
-															onChange={(event) => {
-																setPassword(event.target.value);
-															}}
+															onChange={handleChange}
 														/>
 													</div>
 												</div>
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
-															name="confirmPassword"
+															name="password_confirmation"
 															type="text"
 															required
 															className="form-control"
-															value={confirmPassword}
+															value={formData.password_confirmation}
+															onChange={handleChange}
 															minLength={8}
 															maxLength={20}
 															placeholder="Confirm Password*"
-															onChange={(event) => {
-																setConfirmPassword(event.target.value);
-															}}
 														/>
 													</div>
 												</div>
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
-															name="phone"
+															name="phoneNo"
 															type="text"
 															className="form-control"
 															required
 															placeholder="Phone*"
-															value={phone}
-															onChange={(event) => {
-																setPhone(event.target.value);
-															}}
+															value={formData.phoneNo}
+															onChange={handleChange}
 														/>
 													</div>
 												</div>
@@ -359,10 +309,8 @@ function SignUpPopup() {
 																className="form-control"
 																required
 																placeholder="Country*"
-																value={country}
-																onChange={(event) => {
-																	setCountry(event.target.value);
-																}}
+																value={formData.country}
+																onChange={handleChange}
 															/>
 														</div>
 
@@ -373,10 +321,8 @@ function SignUpPopup() {
 																className="form-control"
 																required
 																placeholder="City*"
-																value={city}
-																onChange={(event) => {
-																	setCity(event.target.value);
-																}}
+																value={formData.city}
+																onChange={handleChange}
 															/>
 														</div>
 													</div>
@@ -391,10 +337,8 @@ function SignUpPopup() {
 																className="form-control"
 																required
 																placeholder="address*"
-																value={address}
-																onChange={(event) => {
-																	setAddress(event.target.value);
-																}}
+																value={formData.address}
+																onChange={handleChange}
 															/>
 														</div>
 														<div className="form-group mb-3">
@@ -404,49 +348,12 @@ function SignUpPopup() {
 																className="form-control"
 																required
 																placeholder="Location*"
-																value={location}
-																onChange={(event) => {
-																	setLocation(event.target.value);
-																}}
+																value={formData.location}
+																onChange={handleChange}
 															/>
 														</div>
 													</div>
 												</div>
-
-												{/* <div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="phone"
-																type="text"
-																className="form-control"
-																required
-																placeholder="Phone*"
-																value={phone}
-																onChange={(event) => {
-																	setPhone(event.target.value);
-																}}
-															/>
-														</div>
-														<div className="flex">
-														<div className="form-group mb-3 w-role">
-																<select
-																	name="role"
-																	className="form-control"
-																	required
-																	value={role}
-																	onChange={(event) =>
-																		setRole(event.target.value)
-																	}
-																>
-																	<option value="" disabled>
-																		Select Role*
-																	</option>
-																	<option value="1">Candidate</option>
-																	<option value="2">Employer</option>
-																</select>
-															</div>
-														</div>
-													</div> */}
 
 												<div className="col-lg-12">
 													<div className="form-group mb-3">

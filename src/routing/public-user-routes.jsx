@@ -76,8 +76,8 @@ function PublicUserRoutes() {
 				<Route path={publicUser.HOME16} element={<Home16Page />} />
 				<Route path={publicUser.HOME17} element={<Home17Page />} />
 				<Route path={publicUser.HOME18} element={<Home18Page />} />
-				<Route path={publicUser.jobs.GRID} element={<JobsGridPage />} />
-				<Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} />
+				{/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
+				{/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
 				<Route path={publicUser.jobs.LIST} element={<JobsListPage />} />
 				<Route path={publicUser.jobs.DETAIL1} element={<JobDetail1Page />} />
 				<Route path={publicUser.jobs.DETAIL2} element={<JobDetail2Page />} />

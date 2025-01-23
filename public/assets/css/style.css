@@ -8170,6 +8170,33 @@ ol.comment-list li.comment .comment-respond .comment-form p {
     width: auto;
   }
 }
+
+/* .ul-skills{
+  background: red;
+  width: 100%;
+  display: flex;
+  color: white;
+  list-style: underline;
+}
+.ul-skills>li {
+  font-size: 14px;
+
+} */
+
+.ul-skills {
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    list-style-type: circle;
+    padding: 0; 
+    margin: 0; 
+}
+
+.ul-skills li {
+    text-transform: capitalize;
+    list-style-type: circle;
+}
+
 .twm-jobs-list-style1 .twm-right-content .twm-job-address {
   margin-bottom: 0px;
 }

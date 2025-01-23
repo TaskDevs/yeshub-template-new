@@ -113,7 +113,7 @@ function Header1({ _config }) {
                                         </ul> */}
 										</li>
 										<li>
-											<NavLink to={publicUser.jobs.GRID_MAP}>Jobs</NavLink>
+											<NavLink to={publicUser.jobs.LIST}>Jobs</NavLink>
 											{/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.jobs.GRID}>Jobs Grid</NavLink></li>
                                             <li><NavLink to={publicUser.jobs.GRID_MAP}>Jobs Grid with Map</NavLink></li>

@@ -54,11 +54,14 @@ export function setHeaderType(currentpath) {
 }
 
 export function showFooter(currentpath) {
-    if (currentpath === publicUser.pages.MAINTENANCE ||
-        currentpath === publicUser.pages.COMING ||
-        currentpath === publicUser.jobs.GRID_MAP) {
-        return false;
-    }
+    if (
+			currentpath === publicUser.pages.MAINTENANCE ||
+			currentpath === publicUser.pages.COMING ||
+			// currentpath === publicUser.jobs.GRID_MAP ||
+			currentpath === publicUser.jobs.LIST
+		) {
+			return false;
+		}
     return true;
 }
 
@@ -84,108 +87,108 @@ export function setFooterType(currentpath) {
 }
 
 export function getHeaderConfig(currentpath) {
-
-    switch (currentpath) {
-        case publicUser.jobs.GRID_MAP:
-        case publicUser.jobs.DETAIL2:
-        case publicUser.employer.DETAIL2:
-            return {
-                style: 'header-full-width',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME3:
-        case publicUser.HOME7:
-            return {
-                style: 'header-style-light',
-                nav_button_style: '',
-                withLightLogo: true,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME4:
-        case publicUser.HOME5:
-        case publicUser.HOME9:
-            return {
-                style: 'header-style-3 no-fixed',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME11:
-            return {
-                style: 'header-style-3 h-page-11-hdr',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME12:
-            return {
-                style: 'header-style-3 h-page-12-hdr',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: true,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME13:
-            return {
-                style: 'header-style-3 h-page-13-hdr no-fixed',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME14:
-            return {
-                style: 'header-style-3 h-page-14-hdr',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME15:
-            return {
-                style: 'header-style-3 h-page-15-hdr',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: true
-            }
-        case publicUser.HOME16:
-            return {
-                style: 'header-style-3 h-page-16-hdr',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME17:
-            return {
-                style: 'header-style-3 h-page-14-hdr',
-                nav_button_style: 'dark',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        case publicUser.HOME18:
-            return {
-                style: 'header-style-3 h-page-18-hdr',
-                nav_button_style: 'dark',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-        default:
-            return {
-                style: 'header-style-3',
-                nav_button_style: '',
-                withLightLogo: false,
-                withBlackLogo: false,
-                withWhiteLogo: false
-            }
-    }
+	// case publicUser.jobs.GRID_MAP:
+	switch (currentpath) {
+		case publicUser.jobs.LIST:
+		case publicUser.jobs.DETAIL1:
+		case publicUser.employer.DETAIL2:
+			return {
+				style: "header-full-width",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME3:
+		case publicUser.HOME7:
+			return {
+				style: "header-style-light",
+				nav_button_style: "",
+				withLightLogo: true,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME4:
+		case publicUser.HOME5:
+		case publicUser.HOME9:
+			return {
+				style: "header-style-3 no-fixed",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME11:
+			return {
+				style: "header-style-3 h-page-11-hdr",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME12:
+			return {
+				style: "header-style-3 h-page-12-hdr",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: true,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME13:
+			return {
+				style: "header-style-3 h-page-13-hdr no-fixed",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME14:
+			return {
+				style: "header-style-3 h-page-14-hdr",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME15:
+			return {
+				style: "header-style-3 h-page-15-hdr",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: true,
+			};
+		case publicUser.HOME16:
+			return {
+				style: "header-style-3 h-page-16-hdr",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME17:
+			return {
+				style: "header-style-3 h-page-14-hdr",
+				nav_button_style: "dark",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		case publicUser.HOME18:
+			return {
+				style: "header-style-3 h-page-18-hdr",
+				nav_button_style: "dark",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+		default:
+			return {
+				style: "header-style-3",
+				nav_button_style: "",
+				withLightLogo: false,
+				withBlackLogo: false,
+				withWhiteLogo: false,
+			};
+	}
 }

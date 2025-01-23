@@ -5,162 +5,117 @@ import { canRoute, candidate, empRoute, employer } from "../../../globals/route-
 import { useState } from "react";
 import JobZImage from "../jobz-img";
 import axios from "axios";
+import useAuth from "../../context/auth/useAuth";
 
 function SignInPopup() {
 
-    const navigate = useNavigate();
-    // const [canusername,  setCanEmail] = useState('guest');
-    // const [empusername,  setEmpEmail] = useState('admin');
-    // const [password, setPassword] = useState('12345');
+      const {
+				handleCandidateLogin,
+				handleEmployerLogin,
+				isSubmitting,
+				password,
+				setPassword,
+				canUsername,
+				setCanUsername,
+				empUsername,
+				setEmpUsername,
+				loginWithLinkedIn,
+				setRole,
+			} = useAuth();
 
-    // const handleCandidateLogin = (event) => {
-    //     event.preventDefault();
-    //     loginCandidate();
-    // }
 
-    // const handleEmployerLogin = (event) => {
-    //     event.preventDefault();
-    //     loginEmployer();
-    // }
+	  
 
-    // const loginCandidate = () => {
-    //     processLogin(
-    //         {
-    //             type: formType.LOGIN_CANDIDATE,
-    //             username: canusername,
-    //             password: password
-    //         },
-    //         (valid) => {
-    //             if (valid) {
-    //                 moveToCandidate();
-    //             } else {
-    //                 // show error
-    //                 console.log('error');
-    //             }
-    //         }
-    //     );
-    // }
+	const url = `${process.env.REACT_APP_BASE_URL}login`;
+	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
+	console.log("url", url);
+	console.log("linkedinUrl", linkedinUrl);
 
-    // const loginEmployer = () => {
-    //     processLogin(
-    //         {
-    //             type: formType.LOGIN_EMPLOYER,
-    //             username: empusername,
-    //             password: password
-    //         },
-    //         (valid) => {
-    //             if (valid) {
-    //                 moveToEmployer();
-    //             } else {
-    //                 // show error
-    //                 console.log('error');
-    //             }
-    //         }
-    //     );
-    // }
+			// const handleCandidateLogin = (event) => {
+			// 	event.preventDefault();
+			// 	loginCandidate();
+			// };
 
-    // const moveToCandidate = () => {
-    //     navigate(canRoute(candidate.DASHBOARD));
-    // }
+			// const handleEmployerLogin = (event) => {
+			// 	event.preventDefault();
+			// 	loginEmployer();
+			// };
 
-    // const moveToEmployer = () => {
-    //     navigate(empRoute(employer.DASHBOARD));
-	// }
-	
+			// const loginCandidate = async () => {
+			// 	if (!canEmail || !password) {
+			// 		setIsSubmitting(false);
+			// 		return;
+			// 	}
+			// 	try {
+			// 		setIsSubmitting(true);
+			// 		const response = await axios.post(
+			// 			url,
+			// 			{
+			// 				email: canEmail,
+			// 				password: password,
+			// 			},
+			// 			{
+			// 				headers: {
+			// 					"Content-type": "application/json",
+			// 				},
+			// 			}
+			// 		);
+			// 		const data = response.data;
+			// 		console.log("data", data);
 
-	    const [canEmail, setCanEmail] = useState("guest@gmail.com");
-			const [empEmail, setEmpEmail] = useState("admin@gmail.com");
-			const [password, setPassword] = useState("12345");
-			const [isSubmitting, setIsSubmitting] = useState(false);
+			// 		if (response.status === 200) {
+			// 			moveToCandidate();
+			// 		}
+			// 	} catch (error) {
+			// 		setCanEmail("");
+			// 		setPassword("");
+			// 	} finally {
+			// 		setIsSubmitting(false);
+			// 	}
 
-			const url = `${process.env.REACT_APP_BASE_URL}/login`;
-			console.log("url", url);
+			// 	// processLogin(
+			// 	//     {
+			// 	//         type: formType.LOGIN_CANDIDATE,
+			// 	//         email: canEmail,
+			// 	//         password: password
+			// 	//     },
+			// 	//     (valid) => {
+			// 	//         if (valid) {
+			// 	//             moveToCandidate();
+			// 	//         } else {
+			// 	//             // show error
+			// 	//             console.log('error');
+			// 	//         }
+			// 	//     }
+			// 	// );
+			// };
 
-			const handleCandidateLogin = (event) => {
-				event.preventDefault();
-				loginCandidate();
-			};
+			// const loginEmployer = async () => {
+			// 	try {
+			// 		const response = await axios.post(
+			// 			url,
+			// 			{
+			// 				email: empEmail,
+			// 				password: password,
+			// 			},
+			// 			{
+			// 				headers: {
+			// 					"Content-type": "application/json",
+			// 				},
+			// 			}
+			// 		);
+			// 		const data = response.data;
+			// 		console.log("data", data);
 
-			const handleEmployerLogin = (event) => {
-				event.preventDefault();
-				loginEmployer();
-			};
-
-			const loginCandidate = async () => {
-				if (!canEmail || !password) {
-					setIsSubmitting(false);
-					return;
-				}
-				try {
-					setIsSubmitting(true);
-					const response = await axios.post(
-						url,
-						{
-							email: canEmail,
-							password: password,
-						},
-						{
-							headers: {
-								"Content-type": "application/json",
-							},
-						}
-					);
-					const data = response.data;
-					console.log("data", data);
-
-					if (response.status === 200) {
-						moveToCandidate();
-					}
-				} catch (error) {
-					setCanEmail("");
-					setPassword("");
-				} finally {
-					setIsSubmitting(false);
-				}
-
-				// processLogin(
-				//     {
-				//         type: formType.LOGIN_CANDIDATE,
-				//         email: canEmail,
-				//         password: password
-				//     },
-				//     (valid) => {
-				//         if (valid) {
-				//             moveToCandidate();
-				//         } else {
-				//             // show error
-				//             console.log('error');
-				//         }
-				//     }
-				// );
-			};
-
-			const loginEmployer = async () => {
-				try {
-					const response = await axios.post(
-						url,
-						{
-							email: empEmail,
-							password: password,
-						},
-						{
-							headers: {
-								"Content-type": "application/json",
-							},
-						}
-					);
-					const data = response.data;
-					console.log("data", data);
-
-					if (response.status === 200) {
-						moveToEmployer();
-					}
-				} catch (error) {
-					setEmpEmail("");
-					setPassword("");
-				} finally {
-					setIsSubmitting(false);
-				}
+			// 		if (response.status === 200) {
+			// 			moveToEmployer();
+			// 		}
+			// 	} catch (error) {
+			// 		setEmpEmail("");
+			// 		setPassword("");
+			// 	} finally {
+			// 		setIsSubmitting(false);
+			// 	}
 
 				// processLogin(
 				//     {
@@ -177,16 +132,34 @@ function SignInPopup() {
 				//         }
 				//     }
 				// );
-			};
+			
 
-			const moveToCandidate = () => {
-				navigate(canRoute(candidate.DASHBOARD));
-			};
+	// 		const moveToCandidate = () => {
+	// 			navigate(canRoute(candidate.DASHBOARD));
+	// 		};
 
-			const moveToEmployer = () => {
-				navigate(empRoute(employer.DASHBOARD));
-			};
+	// 		const moveToEmployer = () => {
+	// 			navigate(empRoute(employer.DASHBOARD));
+	// 		};
 
+	// const loginWithLinkedIn = async () => {
+		
+	// 			try {
+	// 				const response = await axios.get(
+	// 					url,
+	// 				);
+	// 				const data = response.data;
+	// 				console.log("data", data);
+
+	// 				if (response.status === 200) {
+	// 					moveToEmployer();
+	// 				}
+	// 			} catch (error) {
+					
+	// 			} finally {
+	// 				setIsSubmitting(false);
+	// 			}
+	// 		}
 
     return (
 			<>
@@ -222,6 +195,7 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-candidate"
 												type="button"
+												onClick={() => setRole("1")}
 											>
 												<i className="fas fa-user-tie" />
 												Candidate
@@ -234,6 +208,7 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-Employer"
 												type="button"
+												onClick={() => setRole("2")}
 											>
 												<i className="fas fa-building" />
 												Employer
@@ -256,9 +231,9 @@ function SignInPopup() {
 															required
 															className="form-control"
 															placeholder="Email*"
-															value={canEmail}
+															value={canUsername}
 															onChange={(event) => {
-																setCanEmail(event.target.value);
+																setCanUsername(event.target.value);
 															}}
 														/>
 													</div>
@@ -290,7 +265,8 @@ function SignInPopup() {
 																className="form-check-label rem-forgot"
 																htmlFor="Password3"
 															>
-																Remember me <a href="#">Forgot Password</a>
+																Remember me{" "}
+																<a href="/reset-password">Forgot Password</a>
 															</label>
 														</div>
 													</div>
@@ -334,9 +310,9 @@ function SignInPopup() {
 															required
 															className="form-control"
 															placeholder="Email*"
-															value={empEmail}
+															value={empUsername}
 															onChange={(event) => {
-																setEmpEmail(event.target.value);
+																setEmpUsername(event.target.value);
 															}}
 														/>
 													</div>
@@ -368,7 +344,8 @@ function SignInPopup() {
 																className="form-check-label rem-forgot"
 																htmlFor="Password4"
 															>
-																Remember me <a href="#">Forgot Password</a>
+																Remember me{" "}
+																<a href="/reset-password">Forgot Password</a>
 															</label>
 														</div>
 													</div>
@@ -408,11 +385,15 @@ function SignInPopup() {
                                     <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
                                     <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
                                  */}
-									<div className="col-md-12">
+									<div
+										className="col-md-12"
+										onClick={() => loginWithLinkedIn()}
+									>
 										<div className="form-group">
 											<button
 												type="submit"
-												className="log_with_google flex-center"
+												className="log_with_google flex-center log_with_linkedin"
+												onClick={() => loginWithLinkedIn()}
 											>
 												<div className="pop-up-btn-logo">
 													<JobZImage src="images/linkedin-logo-1a.png" alt="" />
@@ -423,14 +404,14 @@ function SignInPopup() {
 									</div>
 								</ul>
 							</div>
-							<div className="col-md-12">
+							{/* <div className="col-md-12">
 								<div className="form-group">
 									<button type="submit" className="log_with_google">
 										<JobZImage src="images/google-icon.png" alt="" />
 										Continue with Google
 									</button>
 								</div>
-							</div>
+							</div> */}
 							{/* </form> */}
 						</div>
 					</div>

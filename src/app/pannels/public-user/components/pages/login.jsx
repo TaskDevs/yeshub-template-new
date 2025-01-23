@@ -2,134 +2,28 @@ import { NavLink, useNavigate } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
 import { canRoute, candidate, empRoute, employer, publicUser } from "../../../../../globals/route-names";
 import { useState } from "react";
-import processLogin from "../../../../form-processing/login";
-import { formType } from "../../../../../globals/constants";
-import axios from "axios";
+// import processLogin from "../../../../form-processing/login";
+// import { formType } from "../../../../../globals/constants";
+// import axios from "axios";
+import useAuth from "../../../../context/auth/useAuth";
 
 function LoginPage() {
 
-    const navigate = useNavigate();
-    const [canEmail, setCanEmail] = useState('guest@gmail.com');
-    const [empEmail, setEmpEmail] = useState('admin@gmail.com');
-    const [password, setPassword] = useState('12345');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+	const {
+		handleCandidateLogin,
+		handleEmployerLogin,
+		isSubmitting,
+		password,
+		setPassword,
+		canUsername,
+		setCanUsername,
+		empUsername,
+		setEmpUsername,
+		setRole,
+	} = useAuth();
 
-
-    const url = `${process.env.REACT_APP_BASE_URL}/login`;
+    const url = `${process.env.REACT_APP_BASE_URL}login`;
     console.log("url", url);
-    
-
-    const handleCandidateLogin = (event) => {
-        event.preventDefault();
-        loginCandidate();
-    }
-
-    const handleEmployerLogin = (event) => {
-        event.preventDefault();
-        loginEmployer();
-    }
-
-    const loginCandidate = async () => {
-        if (!canEmail || !password) {
-					setIsSubmitting(false);
-					return;
-				}
-        try {
-                setIsSubmitting(true);
-					const response = await axios.post(
-						url,
-						{
-							email: canEmail,
-							password: password,
-						},
-						{
-							headers: {
-								"Content-type": "application/json",
-							},
-						}
-					);
-					const data = response.data;
-					console.log("data", data);
-
-					if (response.status === 200) {
-						moveToCandidate();
-					}
-				} catch (error) {
-					setCanEmail("");
-					setPassword("");
-				} finally {
-					setIsSubmitting(false);
-				}    
-
-        // processLogin(
-        //     {
-        //         type: formType.LOGIN_CANDIDATE,
-        //         email: canEmail,
-        //         password: password
-        //     },
-        //     (valid) => {
-        //         if (valid) {
-        //             moveToCandidate();
-        //         } else {
-        //             // show error
-        //             console.log('error');
-        //         }
-        //     }
-        // );
-    }
-
-    const loginEmployer = async () => {
-        try {
-					const response = await axios.post(
-						url,
-						{
-							email: empEmail,
-							password: password,
-						},
-						{
-							headers: {
-								"Content-type": "application/json",
-							},
-						}
-					);
-					const data = response.data;
-					console.log("data", data);
-
-					if (response.status === 200) {
-						moveToEmployer();
-					}
-				} catch (error) {
-					setEmpEmail("");
-					setPassword("");
-				} finally {
-					setIsSubmitting(false);
-				}  
-
-
-        // processLogin(
-        //     {
-        //         type: formType.LOGIN_EMPLOYER,
-        //         email: empEmail,
-        //         password: password
-        //     },
-        //     (valid) => {
-        //         if (valid) {
-        //             moveToEmployer();
-        //         } else {
-        //             // show error
-        //             console.log('error');
-        //         }
-        //     }
-        // );
-    }
-
-    const moveToCandidate = () => {
-        navigate(canRoute(candidate.DASHBOARD));
-    }
-
-    const moveToEmployer = () => {
-        navigate(empRoute(employer.DASHBOARD));
-    }
 
     return (
 			<>
@@ -148,7 +42,7 @@ function LoginPage() {
 									<div className="twm-log-reg-logo-head">
 										<NavLink to={publicUser.HOME1}>
 											<JobZImage
-												src="images/logo-dark.png"
+												src="images/yes-lg-2.png"
 												alt=""
 												className="logo"
 											/>
@@ -169,6 +63,9 @@ function LoginPage() {
 														data-bs-toggle="tab"
 														data-bs-target="#twm-login-candidate"
 														type="button"
+														onClick={() => {
+															setRole("1");
+														}}
 													>
 														<i className="fas fa-user-tie" />
 														Candidate
@@ -181,6 +78,9 @@ function LoginPage() {
 														data-bs-toggle="tab"
 														data-bs-target="#twm-login-Employer"
 														type="button"
+														onClick={() => {
+															setRole("2");
+														}}
 													>
 														<i className="fas fa-building" />
 														Employer
@@ -198,14 +98,14 @@ function LoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="email"
+																	name="username"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="Email"
-																	value={canEmail}
+																	placeholder="username"
+																	value={canUsername}
 																	onChange={(event) => {
-																		setCanEmail(event.target.value);
+																		setCanUsername(event.target.value);
 																	}}
 																/>
 															</div>
@@ -239,7 +139,7 @@ function LoginPage() {
 																			htmlFor="Password4"
 																		>
 																			Remember me{" "}
-																			<a href="#" className="site-text-primary">
+																			<a href="/reset-password" className="site-text-primary">
 																				Forgot Password
 																			</a>
 																		</label>
@@ -249,58 +149,18 @@ function LoginPage() {
 														</div>
 														<div className="col-md-12">
 															<div className="form-group">
-																<button type="submit" className="site-button" disabled={isSubmitting}>
-																	Log in
-																</button>
-															</div>
-														</div>
-														<div className="col-md-12">
-															<div className="form-group">
-																<span className="center-text-or">Or</span>
-															</div>
-														</div>
-														{/* <div className="col-md-12">
-															<div className="form-group">
 																<button
 																	type="submit"
-																	className="log_with_facebook"
+																	className="site-button"
+																	disabled={isSubmitting}
 																>
-																	<i className="fab fa-facebook" />
-																	Continue with Facebook
-																</button>
-															</div>
-														</div> */}
-														<div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google log_with_linkedin"
-																>
-																	<JobZImage
-																		src="images/linkedin-logo-1a.png"
-																		alt=""
-																	/>
-																	Continue with LinkedIn
-																</button>
-															</div>
-														</div>
-														<div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google"
-																>
-																	<JobZImage
-																		src="images/google-icon.png"
-																		alt=""
-																	/>
-																	Continue with Google
+																	{isSubmitting ? "Submitting" : "Log in"}
 																</button>
 															</div>
 														</div>
 													</div>
-                                            </form>
-                                            
+												</form>
+
 												{/*Login Employer Content*/}
 												<form
 													onSubmit={handleEmployerLogin}
@@ -311,14 +171,14 @@ function LoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="email"
+																	name="username"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="Email"
-																	value={empEmail}
+																	placeholder="username"
+																	value={empUsername}
 																	onChange={(event) => {
-																		setEmpEmail(event.target.value);
+																		setEmpUsername(event.target.value);
 																	}}
 																/>
 															</div>
@@ -362,7 +222,11 @@ function LoginPage() {
 														</div>
 														<div className="col-md-12">
 															<div className="form-group">
-																<button type="submit" className="site-button" disabled={isSubmitting}>
+																<button
+																	type="submit"
+																	className="site-button"
+																	disabled={isSubmitting}
+																>
 																	Log in
 																</button>
 															</div>
@@ -372,21 +236,8 @@ function LoginPage() {
 																<span className="center-text-or">Or</span>
 															</div>
 														</div>
-														<div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google log_with_linkedin"
-																>
-																	<JobZImage
-																		src="images/linkedin-logo-1a.png"
-																		alt=""
-																	/>
-																	Continue with LinkedIn
-																</button>
-															</div>
-														</div>
-														<div className="col-md-12">
+
+														{/* <div className="col-md-12">
 															<div className="form-group">
 																<button
 																	type="submit"
@@ -399,9 +250,24 @@ function LoginPage() {
 																	Continue with Google
 																</button>
 															</div>
-														</div>
+														</div> */}
 													</div>
 												</form>
+
+												<div className="col-md-12">
+													<div className="form-group">
+														<button
+															type="submit"
+															className="log_with_google log_with_linkedin"
+														>
+															<JobZImage
+																src="images/linkedin-logo-1a.png"
+																alt=""
+															/>
+															Continue with LinkedIn
+														</button>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -415,3 +281,177 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+
+
+
+
+
+
+														
+															/* <div className="col-md-12">
+															<div className="form-group">
+																<span className="center-text-or">Or</span>
+															</div>
+														</div> */
+														
+														
+															/* <div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_facebook"
+																>
+																	<i className="fab fa-facebook" />
+																	Continue with Facebook
+																</button>
+															</div>
+														</div> */
+														
+
+														
+															/*
+														<div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google log_with_linkedin"
+																>
+																	<JobZImage
+																		src="images/linkedin-logo-1a.png"
+																		alt=""
+																	/>
+																	Continue with LinkedIn
+																</button>
+															</div>
+													</div>
+													 */
+														
+
+														
+															/* <div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google"
+																>
+																	<JobZImage
+																		src="images/google-icon.png"
+																		alt=""
+																	/>
+																	Continue with Google
+																</button>
+															</div>
+														</div> */
+
+    // const handleCandidateLogin = (event) => {
+    //     event.preventDefault();
+    //     loginCandidate();
+    // }
+
+    // const handleEmployerLogin = (event) => {
+    //     event.preventDefault();
+    //     loginEmployer();
+    // }
+
+    // const loginCandidate = async () => {
+    //     if (!canUsername || !password) {
+	// 				setIsSubmitting(false);
+	// 				return;
+	// 			}
+    //     try {
+    //             setIsSubmitting(true);
+	// 				const response = await axios.post(
+	// 					url,
+	// 					{
+	// 						username: canUsername,
+	// 						password: password,
+	// 					},
+	// 					{
+	// 						headers: {
+	// 							"Content-type": "application/json",
+	// 						},
+	// 					}
+	// 				);
+	// 				const data = response.data;
+	// 				console.log("data", data);
+
+	// 				if (response.status === 200) {
+	// 					moveToCandidate();
+	// 				}
+	// 			} catch (error) {
+	// 				setCanUsername("");
+	// 				setPassword("");
+	// 			} finally {
+	// 				setIsSubmitting(false);
+	// 			}    
+
+    //     // processLogin(
+    //     //     {
+    //     //         type: formType.LOGIN_CANDIDATE,
+    //     //         username: canUsername,
+    //     //         password: password
+    //     //     },
+    //     //     (valid) => {
+    //     //         if (valid) {
+    //     //             moveToCandidate();
+    //     //         } else {
+    //     //             // show error
+    //     //             console.log('error');
+    //     //         }
+    //     //     }
+    //     // );
+    // }
+
+    // const loginEmployer = async () => {
+    //     try {
+	// 				const response = await axios.post(
+	// 					url,
+	// 					{
+	// 						username: empUsername,
+	// 						password: password,
+	// 					},
+	// 					{
+	// 						headers: {
+	// 							"Content-type": "application/json",
+	// 						},
+	// 					}
+	// 				);
+	// 				const data = response.data;
+	// 				console.log("data", data);
+
+	// 				if (response.status === 200) {
+	// 					moveToEmployer();
+	// 				}
+	// 			} catch (error) {
+	// 				setEmpUsername("");
+	// 				setPassword("");
+	// 			} finally {
+	// 				setIsSubmitting(false);
+	// 			}  
+
+
+    //     // processLogin(
+    //     //     {
+    //     //         type: formType.LOGIN_EMPLOYER,
+    //     //         username: empUsername,
+    //     //         password: password
+    //     //     },
+    //     //     (valid) => {
+    //     //         if (valid) {
+    //     //             moveToEmployer();
+    //     //         } else {
+    //     //             // show error
+    //     //             console.log('error');
+    //     //         }
+    //     //     }
+    //     // );
+    // }
+
+    // const moveToCandidate = () => {
+    //     navigate(canRoute(candidate.DASHBOARD));
+    // }
+
+    // const moveToEmployer = () => {
+    //     navigate(empRoute(employer.DASHBOARD));
+    // }

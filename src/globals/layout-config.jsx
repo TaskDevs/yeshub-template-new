@@ -33,11 +33,14 @@ export function showFloatingMenus(currentpath) {
 }
 
 export function showHeader(currentpath) {
-    if (currentpath === publicUser.pages.MAINTENANCE ||
-        currentpath === publicUser.pages.LOGIN ||
-        currentpath === publicUser.pages.AFTER_LOGIN) {
-        return false;
-    }
+    if (
+			currentpath === publicUser.pages.MAINTENANCE ||
+			currentpath === publicUser.pages.LOGIN ||
+			currentpath === publicUser.pages.AFTER_LOGIN ||
+			currentpath === publicUser.pages.RESET_PASSWORD
+		) {
+			return false;
+		}
     return true;
 }
 

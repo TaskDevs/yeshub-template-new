@@ -1,26 +1,33 @@
 import axios from "axios";
 import { createContext, useState } from "react";
-import { candidate, canRoute, employer, empRoute } from "../../../globals/route-names";
+import {
+	candidate,
+	canRoute,
+	employer,
+	empRoute,
+} from "../../../globals/route-names";
 import { useNavigate } from "react-router-dom";
-
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState(null);
-		const [auth, setAuth] = useState(false) ;
-		const [errorMessage, setErrorMessage] = useState("");
+	const [currentUser, setCurrentUser] = useState(null);
+	const [auth, setAuth] = useState(false);
+	const [errorMessage, setErrorMessage] = useState("");
 	const [canUsername, setCanUsername] = useState("johndoe");
 	const [empUsername, setEmpUsername] = useState("johndoe");
 	const [password, setPassword] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [role, setRole] = useState("1");
-	
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState(false);
+	const [showTopMessage, setShowTopMessage] = useState(false);
+
 	const navigate = useNavigate();
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
 	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
-	
+
 	console.log("url", url);
 	console.log("linkedinUrl", linkedinUrl);
 
@@ -33,6 +40,7 @@ export const AuthProvider = ({ children }) => {
 		event.preventDefault();
 		loginEmployer();
 	};
+
 
     const handleCandidateLogin = (event) => {
         event.preventDefault();
@@ -78,29 +86,22 @@ export const AuthProvider = ({ children }) => {
 					setIsSubmitting(false);
 				}    
 
-        // processLogin(
-        //     {
-        //         type: formType.LOGIN_CANDIDATE,
-        //         username: canUsername,
-        //         password: password
-        //     },
-        //     (valid) => {
-        //         if (valid) {
-        //             moveToCandidate();
-        //         } else {
-        //             // show error
-        //             console.log('error');
-        //         }
-        //     }
-        // );
-    }
+	// const handleEmployerLogin = (event) => {
+	//     event.preventDefault();
+	//     loginEmployer();
+	// }
 
-	const loginEmployer = async () => {
+	const loginCandidate = async () => {
+		if (!canUsername || !password) {
+			setIsSubmitting(false);
+			return;
+		}
 		try {
+			setIsSubmitting(true);
 			const response = await axios.post(
 				url,
 				{
-					username: empUsername,
+					username: canUsername,
 					password: password,
 				},
 				{
@@ -112,63 +113,109 @@ export const AuthProvider = ({ children }) => {
 			const data = response.data;
 			console.log("data", data);
 
+
 			if (response.status === 201) {
 				if (role === "2") {
 					moveToEmployer();
 				}
-				
 			}
 		} catch (error) {
-			setEmpUsername("");
+			setCanUsername("");
 			setPassword("");
 		} finally {
 			setIsSubmitting(false);
 		}
-	}
 
+		// processLogin(
+		//     {
+		//         type: formType.LOGIN_CANDIDATE,
+		//         username: canUsername,
+		//         password: password
+		//     },
+		//     (valid) => {
+		//         if (valid) {
+		//             moveToCandidate();
+		//         } else {
+		//             // show error
+		//             console.log('error');
+		//         }
+		//     }
+		// );
+	};
 
-        // processLogin(
-        //     {
-        //         type: formType.LOGIN_EMPLOYER,
-        //         username: empUsername,
-        //         password: password
-        //     },
-        //     (valid) => {
-        //         if (valid) {
-        //             moveToEmployer();
-        //         } else {
-        //             // show error
-        //             console.log('error');
-        //         }
-        //     }
-        // );
-    
+	const loginEmployer = async () => {
+		setError("");
+		setSuccess("");
 
-    // const moveToCandidate = () => {
-    //     navigate(canRoute(candidate.DASHBOARD));
-    // }
+		try {
+			const response = await axios.post(
+				url,
+				{
+					username: empUsername,
+					password: password,
+				},
+				
+			);
+			const data = response.data;
+			console.log("data", data);
+			setSuccess(true);
 
-    // const moveToEmployer = () => {
-    //     navigate(empRoute(employer.DASHBOARD));
-    // }
+			if (response.status === 200) {
+				if (role === "2") {
+					moveToEmployer();
+				}
+			}
+		} catch (err) {
+			setError(err.response?.data?.message || "An error occurred");
+			setShowTopMessage(true);
 
+		} finally {
+			setIsSubmitting(false);
+			setShowTopMessage(true);
+			setEmpUsername("");
+			setPassword("");
+		}
+	};
 
-				// processLogin(
-				//     {
-				//         type: formType.LOGIN_CANDIDATE,
-				//         email: canEmail,
-				//         password: password
-				//     },
-				//     (valid) => {
-				//         if (valid) {
-				//             moveToCandidate();
-				//         } else {
-				//             // show error
-				//             console.log('error');
-				//         }
-				//     }
-				// );
-			
+	// processLogin(
+	//     {
+	//         type: formType.LOGIN_EMPLOYER,
+	//         username: empUsername,
+	//         password: password
+	//     },
+	//     (valid) => {
+	//         if (valid) {
+	//             moveToEmployer();
+	//         } else {
+	//             // show error
+	//             console.log('error');
+	//         }
+	//     }
+	// );
+
+	// const moveToCandidate = () => {
+	//     navigate(canRoute(candidate.DASHBOARD));
+	// }
+
+	// const moveToEmployer = () => {
+	//     navigate(empRoute(employer.DASHBOARD));
+	// }
+
+	// processLogin(
+	//     {
+	//         type: formType.LOGIN_CANDIDATE,
+	//         email: canEmail,
+	//         password: password
+	//     },
+	//     (valid) => {
+	//         if (valid) {
+	//             moveToCandidate();
+	//         } else {
+	//             // show error
+	//             console.log('error');
+	//         }
+	//     }
+	// );
 
 	// const loginEmployer = async () => {
 	// 	try {
@@ -224,57 +271,51 @@ export const AuthProvider = ({ children }) => {
 			setIsSubmitting(false);
 		}
 	};
-	
 
-
-
-
-    
-    //   const login = async (user) => {
+	//   const login = async (user) => {
 	// 			setCurrentUser(user);
 	// 	  setAuth(true);
-		  
+
 	// 			setIsLoggedIn(true);
-    // };
-    //      const signup = async (user) => {
+	// };
+	//      const signup = async (user) => {
 	// 					setCurrentUser(user);
 	// 		 setAuth(true);
 	// 		        localStorage.setItem("user", JSON.stringify(user));
 	// 					setIsSignUp(true);
 	// };
 
-			const logout = () => {
-				setCurrentUser(null);
-				setAuth(false);
-				localStorage.removeItem("user");
-			};
+	const logout = () => {
+		setCurrentUser(null);
+		setAuth(false);
+		localStorage.removeItem("user");
+	};
 
-			const details = {
-				auth,
-				setAuth,
-				currentUser,
-				errorMessage,
-				setErrorMessage,		
-				logout,
-				isSubmitting,
-				handleCandidateLogin,
-				handleEmployerLogin,
-				loginWithLinkedIn,
-				canUsername,
-				setCanUsername,
-				empUsername,
-				setEmpUsername,
-				password,
-				setPassword,
-				role,
-				setRole,
-			};
-    
-    return (
-        <AuthContext.Provider value={details}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+	const details = {
+		auth,
+		setAuth,
+		currentUser,
+		errorMessage,
+		setErrorMessage,
+		logout,
+		isSubmitting,
+		handleCandidateLogin,
+		handleEmployerLogin,
+		loginWithLinkedIn,
+		canUsername,
+		setCanUsername,
+		empUsername,
+		setEmpUsername,
+		password,
+		setPassword,
+		role,
+		setRole,
+		error,
+		success,
+		showTopMessage
+	};
 
-
+	return (
+		<AuthContext.Provider value={details}>{children}</AuthContext.Provider>
+	);
+};

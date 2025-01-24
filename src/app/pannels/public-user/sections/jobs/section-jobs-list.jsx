@@ -120,12 +120,15 @@ function SectionJobsList() {
 							<p className="twm-job-address">
 								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
 							</p>
-							<ul className="ul-skills">
-								<li>ux writing</li>
-								<li>wire framing</li>
-								<li>prototyping</li>
-								<li>information architecture</li>
-							</ul>
+							<div className="skills">
+								
+								<ul className="ul-skills">
+									<li>ux writing</li>
+									<li>wire framing</li>
+									<li>prototyping</li>
+									<li>information architecture</li>
+								</ul>
+							</div>
 						</div>
 						<div className="twm-right-content">
 							<div className="twm-jobs-category brown">

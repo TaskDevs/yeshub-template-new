@@ -15,11 +15,12 @@ function SignUpPopup() {
 
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isEmailValid, setIsEmailValid] = useState(true);
+	const [showTopMessage, setShowTopMessage] = useState(false);
 	const [email, setEmail] = useState("");
 	const [error, setError] = useState("");
-	const [success, setSuccess] = useState("");
+	const [success, setSuccess] = useState(false);
 
-	const [formData, setFormData] = useState({
+	const initialFormData = {
 		username: "",
 		password: "",
 		password_confirmation: "",
@@ -31,7 +32,9 @@ function SignUpPopup() {
 		address: "",
 		location: "",
 		role: "1",
-	});
+	};
+
+	const [formData, setFormData] = useState(initialFormData);
 
 	useEffect(() => {
 		console.log("role-eef", formData.role);
@@ -65,25 +68,30 @@ function SignUpPopup() {
 			console.log("formdata", formData);
 
 			const response = await axios.post(url, formData);
-			setSuccess("User registered successfully!");
+			setSuccess(true);
 			const data = response.data;
 			console.log("data", data);
 
 			if (response.status === 200) {
+				showTopMessage(true)
 				if (formData.role === "1") {
 					return moveToCandidate();
 				} else {
 					return moveToEmployer();
 				}
 			}
-			setFormData("");
-			setEmail("")
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
+			setShowTopMessage(true);
+			setTimeout(() => {}, 10000);
 		} finally {
 			setIsSubmitting(false);
 			setEmail("")
-			setFormData("");
+			setShowTopMessage(true);
+			setFormData(initialFormData);
+			setSuccess("");
+			setError("");
+
 		}
 	};
 
@@ -116,6 +124,24 @@ function SignUpPopup() {
 
 	return (
 		<>
+			{showTopMessage && (
+			
+				<div className="errorAlert">
+					<div className="inner">
+						{success && "User registered successfully"}
+						{!success && error && "Oops!, An error ocurred while signing up. Try again"}
+					</div>
+
+					<button
+						type="button"
+						className="btn-close"
+						aria-label="Close"
+						onClick={() => setShowTopMessage(false)}
+					/>
+				
+				</div>
+			)}
+			
 			<div
 				className="modal fade twm-sign-up"
 				id="sign_up_popup"
@@ -138,6 +164,7 @@ function SignUpPopup() {
 									aria-label="Close"
 								/>
 							</div>
+
 							<div className="modal-body">
 								<div className="twm-tabs-style-2">
 									<ul className="nav nav-tabs" id="myTab" role="tablist">

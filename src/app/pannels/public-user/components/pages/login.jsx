@@ -20,6 +20,10 @@ function LoginPage() {
 		empUsername,
 		setEmpUsername,
 		setRole,
+		showTopMessage,
+		setShowTopMessage,
+		success,
+		error
 	} = useAuth();
 
     const url = `${process.env.REACT_APP_BASE_URL}login`;
@@ -27,6 +31,23 @@ function LoginPage() {
 
     return (
 			<>
+				{showTopMessage && (
+					<div className="errorAlert">
+						<div className="inner">
+							{success && "User logged in successfully"}
+							{!success &&
+								error &&
+								"Oops!, An error ocurred while logging in. Try again"}
+						</div>
+
+						<button
+							type="button"
+							className="btn-close"
+							aria-label="Close"
+							onClick={() => setShowTopMessage(false)}
+						/>
+					</div>
+				)}
 				<div className="section-full site-bg-white">
 					<div className="container-fluid">
 						<div className="row">
@@ -139,7 +160,10 @@ function LoginPage() {
 																			htmlFor="Password4"
 																		>
 																			Remember me{" "}
-																			<a href="/reset-password" className="site-text-primary">
+																			<a
+																				href="/reset-password"
+																				className="site-text-primary"
+																			>
 																				Forgot Password
 																			</a>
 																		</label>

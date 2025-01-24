@@ -80,11 +80,33 @@ function AfterLoginPage() {
 		setEmpUsername,
 		loginWithLinkedIn,
 		setRole,
+		showTopMessage,
+		setShowTopMessage,
+		error,
+		success
 	} = useAuth();
 
 
     return (
 			<>
+				{showTopMessage && (
+					<div className="errorAlert">
+						<div className="inner">
+							{success && "User logged in successfully"}
+							{!success &&
+								error &&
+								"Oops!, An error ocurred while logging in. Try again"}
+						</div>
+
+						<button
+							type="button"
+							className="btn-close"
+							aria-label="Close"
+							onClick={() => setShowTopMessage(false)}
+						/>
+					</div>
+			)}
+			
 				<div className="section-full site-bg-white">
 					<div className="container-fluid">
 						<div className="row">

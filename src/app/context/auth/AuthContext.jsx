@@ -29,10 +29,10 @@ export const AuthProvider = ({ children }) => {
 	// 			loginCandidate();
 	// 		};
 
-			const handleEmployerLogin = (event) => {
-				event.preventDefault();
-				loginEmployer();
-			};
+	const handleEmployerLogin = (event) => {
+		event.preventDefault();
+		loginEmployer();
+	};
 
     const handleCandidateLogin = (event) => {
         event.preventDefault();
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 					const data = response.data;
 					console.log("data", data);
 
-					if (response.status === 200) {
+					if (response.status === 201) {
 						if (role === "1") {
 							moveToCandidate();
 						}
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
 			const data = response.data;
 			console.log("data", data);
 
-			if (response.status === 200) {
+			if (response.status === 201) {
 				if (role === "2") {
 					moveToEmployer();
 				}
@@ -212,7 +212,7 @@ export const AuthProvider = ({ children }) => {
 			const data = response.data;
 			console.log("data", data);
 
-			if (response.status === 200) {
+			if (response.status === 201) {
 				if (role === "1") {
 					moveToCandidate();
 				} else {

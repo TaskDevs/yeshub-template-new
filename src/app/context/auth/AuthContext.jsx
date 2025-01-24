@@ -41,49 +41,91 @@ export const AuthProvider = ({ children }) => {
 		loginEmployer();
 	};
 
-	const handleCandidateLogin = (event) => {
-		event.preventDefault();
-		loginCandidate();
-	};
 
+    const handleCandidateLogin = (event) => {
+        event.preventDefault();
+        loginCandidate();
+    }
+
+    // const handleEmployerLogin = (event) => {
+    //     event.preventDefault();
+    //     loginEmployer();
+    // }
+
+    const loginCandidate = async () => {
+        if (!canUsername || !password) {
+					setIsSubmitting(false);
+					return;
+				}
+        try {
+                setIsSubmitting(true);
+					const response = await axios.post(
+						url,
+						{
+							username: canUsername,
+							password: password,
+						},
+						{
+							headers: {
+								"Content-type": "application/json",
+							},
+						}
+					);
+					const data = response.data;
+					console.log("data", data);
+
+					if (response.status === 201) {
+						if (role === "1") {
+							moveToCandidate();
+						}
+					}
+				} catch (error) {
+					setCanUsername("");
+					setPassword("");
+				} finally {
+					setIsSubmitting(false);
+				}    
+
+    }
 	// const handleEmployerLogin = (event) => {
 	//     event.preventDefault();
 	//     loginEmployer();
 	// }
 
-	const loginCandidate = async () => {
-		if (!canUsername || !password) {
-			setIsSubmitting(false);
-			return;
-		}
-		try {
-			setIsSubmitting(true);
-			const response = await axios.post(
-				url,
-				{
-					username: canUsername,
-					password: password,
-				},
-				{
-					headers: {
-						"Content-type": "application/json",
-					},
-				}
-			);
-			const data = response.data;
-			console.log("data", data);
+	// const loginCandidate = async () => {
+	// 	if (!canUsername || !password) {
+	// 		setIsSubmitting(false);
+	// 		return;
+	// 	}
+	// 	try {
+	// 		setIsSubmitting(true);
+	// 		const response = await axios.post(
+	// 			url,
+	// 			{
+	// 				username: canUsername,
+	// 				password: password,
+	// 			},
+	// 			{
+	// 				headers: {
+	// 					"Content-type": "application/json",
+	// 				},
+	// 			}
+	// 		);
+	// 		const data = response.data;
+	// 		console.log("data", data);
 
-			if (response.status === 200) {
-				if (role === "1") {
-					moveToCandidate();
-				}
-			}
-		} catch (error) {
-			setCanUsername("");
-			setPassword("");
-		} finally {
-			setIsSubmitting(false);
-		}
+
+	// 		if (response.status === 201) {
+	// 			if (role === "2") {
+	// 				moveToEmployer();
+	// 			}
+	// 		}
+	// 	} catch (error) {
+	// 		setCanUsername("");
+	// 		setPassword("");
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
 
 		// processLogin(
 		//     {
@@ -100,7 +142,7 @@ export const AuthProvider = ({ children }) => {
 		//         }
 		//     }
 		// );
-	};
+	// };
 
 	const loginEmployer = async () => {
 		setError("");
@@ -119,7 +161,7 @@ export const AuthProvider = ({ children }) => {
 			console.log("data", data);
 			setSuccess(true);
 
-			if (response.status === 200) {
+			if (response.status === 201) {
 				if (role === "2") {
 					moveToEmployer();
 				}
@@ -218,7 +260,7 @@ export const AuthProvider = ({ children }) => {
 			const data = response.data;
 			console.log("data", data);
 
-			if (response.status === 200) {
+			if (response.status === 201) {
 				if (role === "1") {
 					moveToCandidate();
 				} else {

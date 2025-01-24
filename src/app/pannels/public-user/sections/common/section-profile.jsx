@@ -7,8 +7,8 @@ function SectionProfile() {
                     <li>
                         <div className="twm-s-info-inner">
                             <i className="fas fa-money-bill-wave" />
-                            <span className="twm-title">Offered Salary</span>
-                            <div className="twm-s-info-discription">GHS20 / Day</div>
+                            <span className="twm-title">Rate</span>
+                            <div className="twm-s-info-discription">GHS100 / Day</div>
                         </div>
                     </li>
                     <li>
@@ -18,13 +18,13 @@ function SectionProfile() {
                             <div className="twm-s-info-discription">6 Year</div>
                         </div>
                     </li>
-                    <li>
+                    {/* <li>
                         <div className="twm-s-info-inner">
                             <i className="fas fa-venus-mars" />
                             <span className="twm-title">Gender</span>
                             <div className="twm-s-info-discription">Male</div>
                         </div>
-                    </li>
+                    </li> */}
                     <li>
                         <div className="twm-s-info-inner">
                             <i className="fas fa-mobile-alt" />

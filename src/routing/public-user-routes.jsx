@@ -53,6 +53,7 @@ import BlogGrid3Page from "../app/pannels/public-user/components/blogs/blogs-gri
 import BlogListPage from "../app/pannels/public-user/components/blogs/blogs-list";
 import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-detail";
 import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset-password";
+import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 
 function PublicUserRoutes() {
     return (
@@ -129,6 +130,10 @@ function PublicUserRoutes() {
 				<Route
 					path={publicUser.candidate.DETAIL1}
 					element={<CandidateDetail1Page />}
+				/>
+				<Route
+					path={publicUser.candidate.PORTFOLIO}
+					element={<CandidatePortfolioPage />}
 				/>
 				<Route
 					path={publicUser.candidate.DETAIL2}

@@ -9,6 +9,9 @@ import SectionShareProfile from "../../sections/common/section-share-profile";
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import SectionJobTerms from "../../sections/jobs/detail/section-job-terms";
 import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-letter";
+import ApplyJobPage from "./apply-job";
+import { NavLink } from "react-router-dom";
+import { publicUser } from "../../../../../globals/route-names";
 
 function JobDetail1Page() {
 
@@ -22,13 +25,25 @@ function JobDetail1Page() {
 
     return (
 			<>
+				{/* <div className="container">
+					<div className="wt-bnr-inr overlay-wraper bg-center">
+						<div className="twm-media-bg">
+							<JobZImage src="images/job-detail-bg.jpg" alt="#" />
+							<div className="twm-jobs-category green">
+								<span className="twm-bg-green">New</span>
+							</div>
+							<div className="twm-media">
+								<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
+							</div>
+						</div>
+						<div className="overlay-main site-bg-white opacity-01" />
+					</div>
+				</div> */}
+
 				<div className="section-full  p-t120 p-b90 bg-white">
 					<div className="container">
 						{/* BLOG SECTION START */}
 						<div className="section-content">
-							<div className="">
-								<h1 className="proposal-heading">submit a proposal</h1>
-							</div>
 							<div className="row d-flex justify-content-center">
 								<div className="col-lg-8 col-md-12">
 									{/* Candidate detail START */}
@@ -73,22 +88,25 @@ function JobDetail1Page() {
 																</div>
 															</div>
 															<div className="twm-job-apllication-area">
-																Application ends: {" "}
+																Application ends:{" "}
 																<span className="twm-job-apllication-date">
 																	October 1, 2025
 																</span>
 															</div>
 														</div>
-														{/* <div className="twm-job-self-bottom">
-															<a
+														<div className="twm-job-self-bottom">
+															<NavLink
 																className="site-button"
-																data-bs-toggle="modal"
-																href="#apply_job_popup"
-																role="button"
+																// data-bs-toggle="modal"
+																// href="#apply_job_popup"
+																// href={publicUser.jobs.APPLY}
+																to={publicUser.jobs.APPLY}
+																// role="button"
 															>
 																Apply Now
-															</a>
-														</div> */}
+															</NavLink>
+														</div>
+														<div className=""></div>
 													</div>
 												</div>
 											</div>
@@ -175,8 +193,8 @@ function JobDetail1Page() {
 
 										{/* <SectionShareProfile />
 										<SectionJobLocation /> */}
-										<SectionJobTerms />
-										<SectionJobCoverLetter />
+										{/* <SectionJobTerms />
+										<SectionJobCoverLetter /> */}
 
 										{/* <div className="twm-two-part-section">
 											<div className="twm-nav-btn-left">

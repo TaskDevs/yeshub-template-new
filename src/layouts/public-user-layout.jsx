@@ -21,10 +21,10 @@ function PublicUserLayout() {
                 }
 
                 <div className="page-content">
-                    {
+                    {/* {
                         showBanner(currentpath) &&
                         <InnerPageBanner _data={setBanner(currentpath)} />
-                    }
+                    } */}
                     <PublicUserRoutes />
                 </div>
 

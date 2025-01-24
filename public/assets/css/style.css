@@ -2590,6 +2590,31 @@ ol li {
 .header-style-3 .header-nav-btn-section .twm-nav-btn-left {
   margin-right: 10px;
 }
+.proposal-heading {
+  text-transform: capitalize;
+  font-size: 3rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+.errorAlert{
+  position: absolute;
+  background: #FECDCA;
+  transform: translateY(-37vh) translateX(2rem);
+  position: absolute;
+  width: 27rem;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  border: 1px solid #FDA29B
+}
+.inner{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
 .header-style-3 .header-nav-btn-section .twm-nav-btn-left .twm-nav-sign-up {
   background-color: #e0eeff;
   color: #305718;
@@ -8113,6 +8138,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  transition: all 0.3s ease !important;
 }
 @media (max-width: 767px) {
   .twm-jobs-list-style1 {
@@ -8183,19 +8209,24 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 
 } */
 
+
 .ul-skills {
     display: flex; 
     flex-wrap: wrap;
     gap: 0.75rem;
-    list-style-type: circle;
+    list-style: circle;
     padding: 0; 
     margin: 0; 
 }
 
 .ul-skills li {
     text-transform: capitalize;
-    list-style-type: circle;
+    color: #1ca5e3;
+    font-size: 16px;
 }
+.twm-jobs-list-style1:hover {
+  background: #f0f0f0;
+} 
 
 .twm-jobs-list-style1 .twm-right-content .twm-job-address {
   margin-bottom: 0px;
@@ -16789,6 +16820,95 @@ strong {
     padding: 20px;
   }
 }
+
+
+.twm-s-title-text {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.twm-pay-terms {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+.terms-radio {
+  cursor: pointer;
+}
+.twm-sec-main {
+  margin: 1rem 0;
+  font-size: 16px;
+}
+.twm-terms-one {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+.twm-sec-timelines {
+  /* background: blue; */
+  display: flex;
+  gap: 1rem; 
+  justify-content: space-between;
+}
+@media (max-width: 768px) {
+  .twm-sec-timelines {
+    flex-direction: column;
+}
+}
+.timelines-input-desc {
+  /* background: green; */
+  /* max-width: 80rem; */
+  width: 100%;
+  padding: 0 1.5rem;
+}
+.twm-select-duration {
+  /* background: blue; */
+  max-width: 250px;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.twm-timelines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+/* .twm-sec-text-area {
+  background: green;
+} */
+
+.twm-text-area {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+.twm-text-area:focus {
+  outline: none; 
+  background-color: transparent; 
+}
+.twm-sec-add {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border-radius: 10px;
+  height: 100px;
+}
+
 .twm-new-sub-section-wrap .twm-sub-2-section .twm-sub-title {
   font-size: 28px;
   color: #fff;

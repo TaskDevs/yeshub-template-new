@@ -128,7 +128,7 @@ function Header1({ _config }) {
                                         </ul> */}
 										</li>
 										<li>
-											<NavLink to={publicUser.employer.GRID}>Employers</NavLink>
+											{/* <NavLink to={publicUser.employer.GRID}>Employers</NavLink> */}
 											{/* <ul className="sub-menu">
                                             <li><NavLink to={publicUser.employer.GRID}>Employers Grid</NavLink></li>
                                             <li><NavLink to={publicUser.employer.LIST}>Employers List</NavLink></li>
@@ -158,7 +158,8 @@ function Header1({ _config }) {
                                         </ul> */}
 										</li>
 										<li>
-											<NavLink to={publicUser.candidate.GRID}>
+											{/* {publicUser.candidate.GRID} */}
+											<NavLink to={publicUser.candidate.LIST}>
 												Job Seekers
 											</NavLink>
 											{/* <ul className="sub-menu">
@@ -172,6 +173,7 @@ function Header1({ _config }) {
                                             </li>
                                         </ul> */}
 										</li>
+
 										<li>
 											<NavLink to={publicUser.pages.COMING}>Resources</NavLink>
 											{/* <ul className="sub-menu">

@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { employer } from "../globals/route-names";
+import { employer, withId } from "../globals/route-names";
 import EmpDashboardPage from "../app/pannels/employer/components/emp-dashboard";
 import EmpCompanyProfilePage from "../app/pannels/employer/components/emp-company-profile";
 import EmpPostAJobPage from "../app/pannels/employer/components/jobs/emp-post-a-job";
@@ -11,8 +11,32 @@ import EmpMessages1Page from "../app/pannels/employer/components/messages/emp-me
 import EmpMessages2Page from "../app/pannels/employer/components/messages/emp-messages2";
 import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-alerts";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
+import { useUser } from "../app/context/auth/UserContext";
+import { useEffect, useState } from "react";
 
 function EmployerRoutes() {
+    
+     const { user } = useUser(); 
+    const [routes, setRoutes] = useState({});
+    
+    // if (!user) {
+    //     alert("user doesn't exist")
+    // }
+
+  useEffect(() => {
+    if (user?.id) {
+      // Pass the user id dynamically to withId
+      const updatedRoutes = withId(user.id, employer);
+      setRoutes(updatedRoutes); // Set the updated routes in the state
+    }
+  }, [user]);
+    
+    // if (!routes.dashboard) {
+    //     return <div>
+    //         User doesn't exist; either sign up or login
+    //     </div>
+    // }
+
     return (
         <Routes>
             <Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />

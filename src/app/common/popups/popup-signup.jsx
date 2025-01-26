@@ -83,7 +83,7 @@ function SignUpPopup() {
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
 			setShowTopMessage(true);
-			setTimeout(() => {}, 10000);
+			setTimeout(() => {}, 1000);
 		} finally {
 			setIsSubmitting(false);
 			setEmail("")
@@ -287,7 +287,7 @@ function SignUpPopup() {
 													<div className="form-group mb-3">
 														<input
 															name="password"
-															type="text"
+															type="password"
 															required
 															className="form-control"
 															value={formData.password}
@@ -302,7 +302,7 @@ function SignUpPopup() {
 													<div className="form-group mb-3">
 														<input
 															name="password_confirmation"
-															type="text"
+															type="password"
 															required
 															className="form-control"
 															value={formData.password_confirmation}

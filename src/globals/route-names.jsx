@@ -1,8 +1,11 @@
+
+
 export const base = {
     PUBLIC_PRE: "",
-    CANDIDATE_PRE: "/candidate",
-    EMPLOYER_PRE: "/employer"
+    CANDIDATE_PRE: "/dashboard-candidate",
+    EMPLOYER_PRE: "/dashboard-employer"
 }
+
 
 export const publicUser = {
 	INITIAL: "/",
@@ -69,7 +72,7 @@ export const publicUser = {
 
 export const candidate = {
     INITIAL:        "/",
-    DASHBOARD:      "/dashboard",
+    DASHBOARD:      "/",
     PROFILE:        "/profile",
     APPLIED_JOBS:   "/applied-jobs",
     RESUME:         "/my-resume",
@@ -82,7 +85,7 @@ export const candidate = {
 
 export const employer = {
     INITIAL:        "/",
-    DASHBOARD:      "/dashboard",
+    DASHBOARD:      "/",
     PROFILE:        "/profile",
     POST_A_JOB:     "/post-a-job",
     MANAGE_JOBS:    "/manage-jobs",
@@ -94,14 +97,37 @@ export const employer = {
     RESUME_ALERTS:  "/resume-alerts"
 }
 
+
+
 export function pubRoute(_route) {
     return base.PUBLIC_PRE + _route;
 }
 
-export function empRoute(_route) {
-    return base.EMPLOYER_PRE + _route;
+// export function empRoute(_route) {
+// 	return base.EMPLOYER_PRE + _route;
+	
+// }
+export function empRoute(_route, id = "") {
+	return `${base.EMPLOYER_PRE}${_route}${id ? `/${id}` : ""}`;
 }
 
-export function canRoute(_route) {
-    return base.CANDIDATE_PRE + _route;
+// export function canRoute(_route) {
+//     return base.CANDIDATE_PRE + _route;
+// 	// return _route + base.CANDIDATE_PRE;
+// }
+
+export function canRoute(_route, id = "") {
+	return `${base.CANDIDATE_PRE}${_route}${id ? `/${id}` : ""}`;
 }
+
+
+
+export const withId = (id, routes) => {
+	const updatedRoutes = {};
+	for (const key in routes) {
+		updatedRoutes[key] = `${routes[key].startsWith("/") ? "" : "/"}${id}${
+			routes[key]
+		}`;
+	}
+	return updatedRoutes;
+};

@@ -7,6 +7,7 @@ import {
 	empRoute,
 } from "../../../globals/route-names";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "./UserContext";
 
 export const AuthContext = createContext(null);
 
@@ -22,14 +23,17 @@ export const AuthProvider = ({ children }) => {
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
 	const [showTopMessage, setShowTopMessage] = useState(false);
+	
 
 	const navigate = useNavigate();
+	const { updateUser } = useUser();
+
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
 	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
 
-	console.log("url", url);
-	console.log("linkedinUrl", linkedinUrl);
+	// console.log("url", url);
+	// console.log("linkedinUrl", linkedinUrl);
 
 	// 		const handleCandidateLogin = (event) => {
 	// 			event.preventDefault();
@@ -72,8 +76,9 @@ export const AuthProvider = ({ children }) => {
 						}
 					);
 					const data = response.data;
-					console.log("data", data);
-
+			console.log("data", data);
+			updateUser(data);
+			
 					if (response.status === 201) {
 						if (role === "1") {
 							moveToCandidate();
@@ -313,7 +318,8 @@ export const AuthProvider = ({ children }) => {
 		setRole,
 		error,
 		success,
-		showTopMessage
+		showTopMessage,
+		
 	};
 
 	return (

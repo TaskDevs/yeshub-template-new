@@ -1,15 +1,15 @@
-import processLogin from "../../form-processing/login";
-import { formType } from "../../../globals/constants";
-import { useNavigate } from "react-router-dom";
-import {
-	canRoute,
-	candidate,
-	empRoute,
-	employer,
-} from "../../../globals/route-names";
-import { useState } from "react";
+// import processLogin from "../../form-processing/login";
+// import { formType } from "../../../globals/constants";
+// import { useNavigate } from "react-router-dom";
+// import {
+// 	canRoute,
+// 	candidate,
+// 	empRoute,
+// 	employer,
+// } from "../../../globals/route-names";
+// import { useState } from "react";
 import JobZImage from "../jobz-img";
-import axios from "axios";
+// import axios from "axios";
 import useAuth from "../../context/auth/useAuth";
 
 function SignInPopup() {
@@ -137,11 +137,11 @@ function SignInPopup() {
 											<div className="col-lg-12">
 												<div className="form-group mb-3">
 													<input
-														name="email"
+														name="canUsername"
 														type="text"
 														required
 														className="form-control"
-														placeholder="Email*"
+														placeholder="Username*"
 														value={canUsername}
 														onChange={(event) => {
 															setCanUsername(event.target.value);
@@ -216,11 +216,11 @@ function SignInPopup() {
 											<div className="col-lg-12">
 												<div className="form-group mb-3">
 													<input
-														name="email"
+														name="empUsername"
 														type="text"
 														required
 														className="form-control"
-														placeholder="Email*"
+														placeholder="Username*"
 														value={empUsername}
 														onChange={(event) => {
 															setEmpUsername(event.target.value);

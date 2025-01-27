@@ -6,6 +6,7 @@ import { useState } from "react";
 // import { formType } from "../../../../../globals/constants";
 // import axios from "axios";
 import useAuth from "../../../../context/auth/useAuth";
+import Loader from "../../../../common/loader";
 
 function LoginPage() {
 
@@ -23,7 +24,8 @@ function LoginPage() {
 		showTopMessage,
 		setShowTopMessage,
 		success,
-		error
+		error,
+		isLoading,
 	} = useAuth();
 
     const url = `${process.env.REACT_APP_BASE_URL}login`;
@@ -31,6 +33,7 @@ function LoginPage() {
 
     return (
 			<>
+				{isLoading && <Loader />}
 				{showTopMessage && (
 					<div className="errorAlert">
 						<div className="inner">
@@ -255,6 +258,30 @@ function LoginPage() {
 																</button>
 															</div>
 														</div>
+														<div className="mt-3 mb-3">
+															Don't have an account ?
+															<button
+																className="twm-backto-login"
+																data-bs-target="#sign_up_popup"
+																data-bs-toggle="modal"
+																data-bs-dismiss="modal"
+															>
+																Sign Up
+															</button>
+														</div>
+
+														{/* <p>
+															Don't have an account ?
+															<button
+																className="twm-backto-login"
+																data-bs-target="#sign_up_popup"
+																data-bs-toggle="modal"
+																data-bs-dismiss="modal"
+															>
+																Sign up
+															</button>
+														</p> */}
+
 														<div className="col-md-12">
 															<div className="form-group">
 																<span className="center-text-or">Or</span>

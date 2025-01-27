@@ -32,12 +32,12 @@ function SectionJobsList() {
 						</div>
 						<div className="twm-right-content">
 							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">New</span>
+								<span className="twm-bg-green">Bid Now</span>
 							</div>
 							<div className="twm-jobs-amount">
-								$2500 <span>/ Month</span>
+								₵200 <span>/ daily</span>
 							</div>
-							<p className="twm-jobs-browse site-text-primary"> Browse Job</p>
+							<p className="twm-jobs-browse bids"> 10 bids</p>
 						</div>
 					</NavLink>
 
@@ -65,14 +65,15 @@ function SectionJobsList() {
 						</div>
 						<div className="twm-right-content">
 							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">New</span>
+								<span className="twm-bg-green">Bid Now</span>
 							</div>
 							<div className="twm-jobs-amount">
-								$2500 <span>/ Month</span>
+								₵200 <span>/ daily</span>
 							</div>
-							<p className="twm-jobs-browse site-text-primary"> Browse Job</p>
+							<p className="twm-jobs-browse bids"> 10 bids</p>
 						</div>
 					</NavLink>
+
 					<NavLink
 						to={publicUser.jobs.DETAIL1}
 						className="twm-jobs-list-style1 mb-5"
@@ -97,14 +98,15 @@ function SectionJobsList() {
 						</div>
 						<div className="twm-right-content">
 							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">New</span>
+								<span className="twm-bg-green">Bid Now</span>
 							</div>
 							<div className="twm-jobs-amount">
-								$2500 <span>/ Month</span>
+								₵200 <span>/ daily</span>
 							</div>
-							<p className="twm-jobs-browse site-text-primary"> Browse Job</p>
+							<p className="twm-jobs-browse bids"> 10 bids</p>
 						</div>
 					</NavLink>
+					
 					<NavLink
 						to={publicUser.jobs.DETAIL1}
 						className="twm-jobs-list-style1 mb-5"
@@ -120,24 +122,21 @@ function SectionJobsList() {
 							<p className="twm-job-address">
 								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
 							</p>
-							<div className="skills">
-								
-								<ul className="ul-skills">
-									<li>ux writing</li>
-									<li>wire framing</li>
-									<li>prototyping</li>
-									<li>information architecture</li>
-								</ul>
-							</div>
+							<ul className="ul-skills">
+								<li>ux writing</li>
+								<li>wire framing</li>
+								<li>prototyping</li>
+								<li>information architecture</li>
+							</ul>
 						</div>
 						<div className="twm-right-content">
-							<div className="twm-jobs-category brown">
-								<span className="twm-bg-green">Internship</span>
+							<div className="twm-jobs-category green">
+								<span className="twm-bg-green">Bid Now</span>
 							</div>
 							<div className="twm-jobs-amount">
-								$2500 <span>/ Month</span>
+								₵200 <span>/ daily</span>
 							</div>
-							<p className="twm-jobs-browse site-text-primary"> Browse Job</p>
+							<p className="twm-jobs-browse bids"> 10 bids</p>
 						</div>
 					</NavLink>
 				</div>

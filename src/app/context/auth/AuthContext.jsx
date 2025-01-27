@@ -7,6 +7,8 @@ import {
 	empRoute,
 } from "../../../globals/route-names";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "./UserContext";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext(null);
 
@@ -20,16 +22,22 @@ export const AuthProvider = ({ children }) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [role, setRole] = useState("1");
 	const [error, setError] = useState("");
-	const [success, setSuccess] = useState(false);
+	const [success, setSuccess] = useState("");
 	const [showTopMessage, setShowTopMessage] = useState(false);
+	const [isLoading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
+	const { updateUser } = useUser();
+
+	const loginSuccess = () => toast("User successfully logged in!");
+	const loginError = () => toast("Error!, Failed to login");
+
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
 	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
 
-	console.log("url", url);
-	console.log("linkedinUrl", linkedinUrl);
+	// console.log("url", url);
+	// console.log("linkedinUrl", linkedinUrl);
 
 	// 		const handleCandidateLogin = (event) => {
 	// 			event.preventDefault();
@@ -65,23 +73,25 @@ export const AuthProvider = ({ children }) => {
 							username: canUsername,
 							password: password,
 						},
-						{
-							headers: {
-								"Content-type": "application/json",
-							},
-						}
+						
 					);
 					const data = response.data;
-					console.log("data", data);
-
-					if (response.status === 201) {
+			console.log("data", data);
+			updateUser(data);
+			
+			if (response.status === 201) {
+				loginSuccess();
+						setTimeout(() => {
+							setLoading(true);
+						}, 2000);
 						if (role === "1") {
 							moveToCandidate();
 						}
 					}
 				} catch (error) {
 					setCanUsername("");
-					setPassword("");
+			setPassword("");
+			loginError();
 				} finally {
 					setIsSubmitting(false);
 				}    
@@ -159,9 +169,13 @@ export const AuthProvider = ({ children }) => {
 			);
 			const data = response.data;
 			console.log("data", data);
-			setSuccess(true);
+			setSuccess("user logged in successfully");
+			loginSuccess();
 
 			if (response.status === 201) {
+				setTimeout(() => {
+					setLoading(true);
+				}, 2000);
 				if (role === "2") {
 					moveToEmployer();
 				}
@@ -169,6 +183,7 @@ export const AuthProvider = ({ children }) => {
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
 			setShowTopMessage(true);
+			loginError();
 
 		} finally {
 			setIsSubmitting(false);
@@ -259,8 +274,12 @@ export const AuthProvider = ({ children }) => {
 			const response = await axios.get(linkedinUrl);
 			const data = response.data;
 			console.log("data", data);
+			loginSuccess();
 
 			if (response.status === 201) {
+				setTimeout(() => {
+					setLoading(true);
+				}, 2000);
 				if (role === "1") {
 					moveToCandidate();
 				} else {
@@ -268,6 +287,8 @@ export const AuthProvider = ({ children }) => {
 				}
 			}
 		} catch (error) {
+			setError(error || "")
+			loginError();
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -289,7 +310,8 @@ export const AuthProvider = ({ children }) => {
 	const logout = () => {
 		setCurrentUser(null);
 		setAuth(false);
-		localStorage.removeItem("user");
+		updateUser(null)
+		
 	};
 
 	const details = {
@@ -313,7 +335,9 @@ export const AuthProvider = ({ children }) => {
 		setRole,
 		error,
 		success,
-		showTopMessage
+		showTopMessage,
+		// isLoading,
+		
 	};
 
 	return (

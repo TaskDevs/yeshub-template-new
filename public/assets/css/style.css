@@ -6426,6 +6426,13 @@ button.scroltop span {
   gap: 1.25rem;
 
 }
+@media (max-width: 480px) {
+  .sec-reviews-skills {
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
 
 .tw-sidebar-tags-wrap .tagcloud {
   margin-top: -10px;
@@ -6443,6 +6450,12 @@ button.scroltop span {
 .tw-sidebar-tags-wrap .tagcloud a:hover {
   background-color: #305718;
   color: #fff;
+}
+@media (max-width: 480px) {
+  .reviews-wrapper {
+    padding-bottom: 3rem;
+    /* background: green; */
+  }
 }
 
 /*Comment list section*/
@@ -8230,18 +8243,6 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   }
 }
 
-/* .ul-skills{
-  background: red;
-  width: 100%;
-  display: flex;
-  color: white;
-  list-style: underline;
-}
-.ul-skills>li {
-  font-size: 14px;
-
-} */
-
 
 .ul-skills {
     display: flex; 
@@ -8250,6 +8251,12 @@ ol.comment-list li.comment .comment-respond .comment-form p {
     list-style: circle;
     padding: 0; 
     margin: 0; 
+}
+@media (max-width: 480px) {
+  .ul-skills {
+    flex-direction: column;
+    padding-bottom: 0.75rem;
+  }
 }
 
 .ul-skills li {
@@ -8279,6 +8286,9 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 .twm-jobs-list-style1 .twm-right-content .twm-jobs-browse {
   font-weight: 600;
   font-size: 15px;
+}
+.bids:hover {
+  text-decoration: none;
 }
 .twm-jobs-list-style1 .twm-job-title .twm-job-post-duration {
   color: #2db346;
@@ -9837,6 +9847,31 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   display: flex;
   align-items: center;
   gap: 1rem;
+  padding-top: 1rem;
+}
+.can-insights {
+  justify-content: space-between;
+  /* background: purple; */
+}
+@media (max-width: 480px) {
+  .twm-can-sec-one {
+    justify-content: center;
+  }
+  .twm-can-pro-info {
+    /* gap: 0.5rem; */
+    /* background: green; */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+   .star-icon:not(.star-1) {
+    display: none;
+   
+  }
+  .pro-info-lists {
+    gap: 0.25rem;
+    
+    /* background: yellow; */
+  }
 }
 .pro-info-lists {
   display: flex;
@@ -9844,6 +9879,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   justify-content: center;
   gap: 0.5rem;
 }
+
 .twm-candidates-list-style1 {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -9979,6 +10015,10 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   list-style-type: circle; /* Use circular dots */
       margin: 20px;
       padding: 0;
+}
+.start-reviews {
+  font-size: 1.25rem;
+  /* font-weight: 400; */
 }
 
 .twm-candidates-grid-style1 p {
@@ -13168,6 +13208,7 @@ strong {
 .view-btn {
   display: flex;
   justify-content: flex-end;
+  padding: 0.75rem 0;
 }
 .twm-dashboard-candidates-wrap .twm-dash-candidates-list .twm-fot-content .twm-candidate-address {
   font-size: 14px;
@@ -15931,11 +15972,12 @@ strong {
   transition: opacity 0.35s, transform 0.35s;
   transform: scale(0, 1);
 }
-.twm-jobs-browse:hover:after,
+
 .twm-view-prifile:hover:after {
   opacity: 1;
   transform: scale(1);
 }
+/* .twm-jobs-browse:hover:after, */
 
 .twm-ac-fresher-wrap {
   position: relative;

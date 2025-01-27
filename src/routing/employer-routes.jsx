@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom";
-import { employer } from "../globals/route-names";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { employer, withId } from "../globals/route-names";
 import EmpDashboardPage from "../app/pannels/employer/components/emp-dashboard";
 import EmpCompanyProfilePage from "../app/pannels/employer/components/emp-company-profile";
 import EmpPostAJobPage from "../app/pannels/employer/components/jobs/emp-post-a-job";
@@ -11,8 +11,34 @@ import EmpMessages1Page from "../app/pannels/employer/components/messages/emp-me
 import EmpMessages2Page from "../app/pannels/employer/components/messages/emp-messages2";
 import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-alerts";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
+import { useUser } from "../app/context/auth/UserContext";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function EmployerRoutes() {
+    
+     const { user } = useUser(); 
+    const [routes, setRoutes] = useState({});
+    const errorMessage = () =>
+            toast(" User Unauthenticated!, login");
+    
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.id) {  
+      const updatedRoutes = withId(user.id, employer);
+      setRoutes(updatedRoutes); 
+    }
+  }, [user]);
+    
+    if (!routes.dashboard) {
+        
+            errorMessage()
+			navigate("/login")
+			
+        
+    }
+
     return (
         <Routes>
             <Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />

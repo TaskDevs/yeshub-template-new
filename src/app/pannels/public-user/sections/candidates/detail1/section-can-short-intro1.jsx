@@ -29,9 +29,25 @@ function SectionCandidateShortIntro1() {
 							</div>
 						</div>
 						<div className="twm-candi-self-bottom">
-							<a href="#" className="site-button outline-white">
+							<a
+								// href="#contract_up_popup"
+								className="site-button outline-white"
+								// className="twm-nav-sign-up"
+								data-bs-toggle="modal"
+								href="#contract_up_popup"
+								role="button"
+							>
 								Hire Me Now
 							</a>
+
+							{/* <button
+								className="twm-backto-login"
+								data-bs-target="#sign_up_popup"
+								data-bs-toggle="modal"
+								data-bs-dismiss="modal"
+							>
+								Hire Me Now
+							</button> */}
 							{/* <a href="#" className="site-button secondry">Download CV</a> */}
 						</div>
 					</div>

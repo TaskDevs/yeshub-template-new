@@ -3,10 +3,14 @@ import { publicUser } from "../../../../globals/route-names";
 import JobZImage from "../../../common/jobz-img";
 import SectionRecordsFilter from "../../public-user/sections/common/section-records-filter";
 import SectionPagination from "../../public-user/sections/common/section-pagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadScript } from "../../../../globals/constants";
+import axios from "axios";
 
 function CanAppliedJobsPage() {
+    const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
+    const [showTopMessage, setShowTopMessage] = useState(false);
 
     const _filterConfig = {
         prefix: "Applied",
@@ -20,7 +24,34 @@ function CanAppliedJobsPage() {
         loadScript("js/custom.js")
     })
 
+     const allApplicationsUrl = `${process.env.REACT_APP_BASE_URL}all-application`
+       
+
+	useEffect(() => {
+		const postedJobsByEmployer = async () => {
+			try {
+                const res = await
+                    axios.get(allApplicationsUrl);
+                setData(res);
+                
+                console.log("res", res);
+								const data = res;
+			} catch (error) {
+				setError(error);
+				setShowTopMessage(true);
+				setTimeout(() => {}, 1000);
+			}
+		};
+
+		postedJobsByEmployer();
+	}, [allApplicationsUrl]);
+
+
+
+
+
     return (
+
         <>
             <div className="twm-right-section-panel candidate-save-job site-bg-gray">
                 {/*Filter Short By*/}

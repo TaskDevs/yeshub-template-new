@@ -5,7 +5,7 @@ function SectionReview() {
   return (
 		<>
 			<h4 className="twm-s-title">Reviews</h4>
-			<div className="tw-sidebar-tags-wrap">
+			<div className="tw-sidebar-tags-wrap reviews-wrapper">
 				<div className="twm-s-info">
 					<div className="twm-sec-reviews">
 						<div className="twm-media">

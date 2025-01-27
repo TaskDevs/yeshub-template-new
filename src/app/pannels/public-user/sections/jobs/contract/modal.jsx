@@ -3,20 +3,26 @@ import React from "react";
 function Modal() {
 	return (
 		<div
+			// className="modal fade twm-sign-up"
+			// id="contract_up_popup"
+			// aria-hidden="true"
+			// aria-labelledby="sign_up_popupLabel"
+			// tabIndex={-1}
 			className="modal fade twm-sign-up"
+			// id="sign_up_popup"
 			id="contract_up_popup"
 			aria-hidden="true"
 			aria-labelledby="sign_up_popupLabel"
 			tabIndex={-1}
 		>
-			{/* <div className="modal-dialog modal-dialog-centered">
+			<div className="modal-dialog-centered modal-dialog">
 				<div className="modal-content">
-					<form >
+					<form>
 						<div className="modal-header">
 							<h2 className="modal-title" id="sign_up_popupLabel">
 								New Contract
 							</h2>
-							
+
 							<button
 								type="button"
 								className="btn-close"
@@ -188,10 +194,22 @@ function Modal() {
 								</div>
 							</div>
 						</div>
+
+						<div className="modal-footer">
+							<button
+								type="button"
+								className="btn btn-secondary"
+								data-bs-dismiss="modal"
+							>
+								Cancel
+							</button>
+							<button type="button" className="btn btn-primary">
+								Save changes
+							</button>
+						</div>
 					</form>
 				</div>
-			</div> */}
-			<p>hello</p>
+			</div>
 		</div>
 	);
 }

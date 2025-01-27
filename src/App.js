@@ -4,6 +4,7 @@ import ScrollToTop from "./globals/scroll-to-top";
 import { useState } from "react";
 import { AuthProvider } from "./app/context/auth/AuthContext";
 import { UserProvider } from "./app/context/auth/UserContext";
+import { ToastContainer } from "react-toastify";
 
 function App() {
 
@@ -18,7 +19,8 @@ function App() {
 			<AuthProvider>
 				{isLoading && <Loader />}
 				<ScrollToTop />
-				<RootLayout />
+			  <RootLayout />
+			  <ToastContainer />
 			</AuthProvider>
 		</UserProvider>
 	);

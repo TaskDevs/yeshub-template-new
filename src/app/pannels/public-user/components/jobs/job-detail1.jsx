@@ -84,7 +84,7 @@ function JobDetail1Page() {
 																	https://thewebmax.com
 																</a> */}
 																<div className="twm-jobs-amount">
-																	$2000 - $2500 <span>/ Month</span>
+																	Budget: ₵200 - ₵250 <span>/ daily</span>
 																</div>
 															</div>
 															<div className="twm-job-apllication-area">

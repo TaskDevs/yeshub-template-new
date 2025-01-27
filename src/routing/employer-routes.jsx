@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { employer, withId } from "../globals/route-names";
 import EmpDashboardPage from "../app/pannels/employer/components/emp-dashboard";
 import EmpCompanyProfilePage from "../app/pannels/employer/components/emp-company-profile";
@@ -13,29 +13,31 @@ import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-a
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import { useUser } from "../app/context/auth/UserContext";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function EmployerRoutes() {
     
      const { user } = useUser(); 
     const [routes, setRoutes] = useState({});
+    const errorMessage = () =>
+            toast(" User Unauthenticated!, login");
     
-    // if (!user) {
-    //     alert("user doesn't exist")
-    // }
+    const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.id) {
-      // Pass the user id dynamically to withId
+    if (user?.id) {  
       const updatedRoutes = withId(user.id, employer);
-      setRoutes(updatedRoutes); // Set the updated routes in the state
+      setRoutes(updatedRoutes); 
     }
   }, [user]);
     
-    // if (!routes.dashboard) {
-    //     return <div>
-    //         User doesn't exist; either sign up or login
-    //     </div>
-    // }
+    if (!routes.dashboard) {
+        
+            errorMessage()
+			navigate("/login")
+			
+        
+    }
 
     return (
         <Routes>

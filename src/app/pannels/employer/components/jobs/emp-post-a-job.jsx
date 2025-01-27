@@ -1,4 +1,30 @@
+import { useEffect, useState } from "react";
+import { useUser } from "../../../../context/auth/UserContext";
+import { useNavigate } from "react-router-dom";
+
 function EmpPostAJobPage() {
+    const [error, setError] = useState(null);
+       
+        // const [showTopMessage, setShowTopMessage] = useState(false);
+        const { user } = useUser();
+    
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (!user || !user.id ) {
+            
+            navigate("/login");
+			return;
+        }
+        
+        if (user.role !== "2") {
+            setError ("Unauthorized, you are not allowed to post a job")
+        }
+    }, [user, navigate])
+
+    
+
+
     return (
         <>
             <div className="wt-admin-right-page-header clearfix">

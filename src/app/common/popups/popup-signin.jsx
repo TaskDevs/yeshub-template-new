@@ -11,6 +11,7 @@
 import JobZImage from "../jobz-img";
 // import axios from "axios";
 import useAuth from "../../context/auth/useAuth";
+import Loader from "../loader";
 
 function SignInPopup() {
 	const {
@@ -29,6 +30,7 @@ function SignInPopup() {
 		error,
 		showTopMessage,
 		setShowTopMessage,
+		isLoading
 	} = useAuth();
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
@@ -57,6 +59,7 @@ function SignInPopup() {
 
 	return (
 		<>
+			{isLoading && <Loader />}
 			{showTopMessage && (
 				<div className="errorAlert">
 					<div className="inner">

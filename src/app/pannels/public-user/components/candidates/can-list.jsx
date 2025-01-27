@@ -56,7 +56,25 @@ function CandidateListPage() {
 													</div>
 
 													<div className="twm-mid-content">
-														<h4 className="twm-job-title">Wanda Montgomery </h4>
+														<div className="d-flex justify-content-between align-items-center">
+															<h4 className="twm-job-title">
+																Wanda Montgomery{" "}
+															</h4>
+															<div className="">
+																<div className="">
+																	{/* twm-candi-self-bottom */}
+																	<a
+																		href="#"
+																		className="site-button"
+																		site-button
+																		// outline-white
+																	>
+																		Hire Me Now
+																	</a>
+																	{/* <a href="#" className="site-button secondry">Download CV</a> */}
+																</div>
+															</div>
+														</div>
 
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
@@ -64,31 +82,51 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
-														<ul className="twm-can-pro-info">
-															<li className="pro-info-lists">
+
+														<ul className="twm-can-pro-info can-insights">
+															<li className="pro-info-lists list-rate">
 																<div className="">
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
+																	<MdOutlineStarRate
+																		className="star-icon star-1"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-2"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-3"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-4"
+																		size={20}
+																		color="red"
+																	/>
 																</div>
 
-																<span>5.0</span>
+																<span className="start-reviews">5.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<LuMessageSquare size={20} color="brown" />
-																<span>300</span>
+																<span className="start-reviews">100</span>{" "}
+																Reviews
 															</li>
-															<li className="pro-info-lists">
+															{/* <li className="pro-info-lists">
 																<FaCediSign size={20} color="green" />
 																<span>10.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<MdDonutLarge size={20} color="blue" />
 																<span>100%</span>
-															</li>
+															</li> */}
 															<li className="pro-info-lists">
-																<span className="twm-candidates-tag-rate">
+																{/* pro-info-lists */}
+																{/* twm-candidates-tag-rate */}
+																<span className=" twm-candidates-tag-rate">
 																	₵20
 																</span>
 																/ per hour
@@ -125,6 +163,7 @@ function CandidateListPage() {
 													</div>
 												</NavLink>
 											</li>
+
 											<li>
 												<NavLink
 													to={publicUser.candidate.DETAIL1}
@@ -148,31 +187,50 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
-														<ul className="twm-can-pro-info">
-															<li className="pro-info-lists">
+														<ul className="twm-can-pro-info can-insights">
+															<li className="pro-info-lists list-rate">
 																<div className="">
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
+																	<MdOutlineStarRate
+																		className="star-icon star-1"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-2"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-3"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-4"
+																		size={20}
+																		color="red"
+																	/>
 																</div>
 
-																<span>5.0</span>
+																<span className="start-reviews">5.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<LuMessageSquare size={20} color="brown" />
-																<span>300</span>
+																<span className="start-reviews">100</span>{" "}
+																Reviews
 															</li>
-															<li className="pro-info-lists">
+															{/* <li className="pro-info-lists">
 																<FaCediSign size={20} color="green" />
 																<span>10.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<MdDonutLarge size={20} color="blue" />
 																<span>100%</span>
-															</li>
+															</li> */}
 															<li className="pro-info-lists">
-																<span className="twm-candidates-tag-rate">
+																{/* pro-info-lists */}
+																{/* twm-candidates-tag-rate */}
+																<span className=" twm-candidates-tag-rate">
 																	₵20
 																</span>
 																/ per hour
@@ -209,6 +267,7 @@ function CandidateListPage() {
 													</div>
 												</NavLink>
 											</li>
+
 											<li>
 												<NavLink
 													to={publicUser.candidate.DETAIL1}
@@ -232,31 +291,50 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
-														<ul className="twm-can-pro-info">
-															<li className="pro-info-lists">
+														<ul className="twm-can-pro-info can-insights">
+															<li className="pro-info-lists list-rate">
 																<div className="">
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
+																	<MdOutlineStarRate
+																		className="star-icon star-1"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-2"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-3"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-4"
+																		size={20}
+																		color="red"
+																	/>
 																</div>
 
-																<span>5.0</span>
+																<span className="start-reviews">5.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<LuMessageSquare size={20} color="brown" />
-																<span>300</span>
+																<span className="start-reviews">100</span>{" "}
+																Reviews
 															</li>
-															<li className="pro-info-lists">
+															{/* <li className="pro-info-lists">
 																<FaCediSign size={20} color="green" />
 																<span>10.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<MdDonutLarge size={20} color="blue" />
 																<span>100%</span>
-															</li>
+															</li> */}
 															<li className="pro-info-lists">
-																<span className="twm-candidates-tag-rate">
+																{/* pro-info-lists */}
+																{/* twm-candidates-tag-rate */}
+																<span className=" twm-candidates-tag-rate">
 																	₵20
 																</span>
 																/ per hour
@@ -293,6 +371,7 @@ function CandidateListPage() {
 													</div>
 												</NavLink>
 											</li>
+
 											<li>
 												<NavLink
 													to={publicUser.candidate.DETAIL1}
@@ -316,31 +395,50 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
-														<ul className="twm-can-pro-info">
-															<li className="pro-info-lists">
+														<ul className="twm-can-pro-info can-insights">
+															<li className="pro-info-lists list-rate">
 																<div className="">
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
-																	<MdOutlineStarRate size={20} color="red" />
+																	<MdOutlineStarRate
+																		className="star-icon star-1"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-2"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-3"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-4"
+																		size={20}
+																		color="red"
+																	/>
 																</div>
 
-																<span>5.0</span>
+																<span className="start-reviews">5.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<LuMessageSquare size={20} color="brown" />
-																<span>300</span>
+																<span className="start-reviews">100</span>{" "}
+																Reviews
 															</li>
-															<li className="pro-info-lists">
+															{/* <li className="pro-info-lists">
 																<FaCediSign size={20} color="green" />
 																<span>10.0</span>
 															</li>
 															<li className="pro-info-lists">
 																<MdDonutLarge size={20} color="blue" />
 																<span>100%</span>
-															</li>
+															</li> */}
 															<li className="pro-info-lists">
-																<span className="twm-candidates-tag-rate">
+																{/* pro-info-lists */}
+																{/* twm-candidates-tag-rate */}
+																<span className=" twm-candidates-tag-rate">
 																	₵20
 																</span>
 																/ per hour

@@ -5,6 +5,7 @@ import { useState } from "react";
 import processLogin from "../../../../form-processing/login";
 import { formType } from "../../../../../globals/constants";
 import useAuth from "../../../../context/auth/useAuth";
+import Loader from "../../../../common/loader";
 
 function AfterLoginPage() {
 
@@ -83,12 +84,14 @@ function AfterLoginPage() {
 		showTopMessage,
 		setShowTopMessage,
 		error,
-		success
+		success,
+		isLoading,
 	} = useAuth();
 
 
     return (
 			<>
+				{isLoading && <Loader />}
 				{showTopMessage && (
 					<div className="errorAlert">
 						<div className="inner">
@@ -105,8 +108,8 @@ function AfterLoginPage() {
 							onClick={() => setShowTopMessage(false)}
 						/>
 					</div>
-			)}
-			
+				)}
+
 				<div className="section-full site-bg-white">
 					<div className="container-fluid">
 						<div className="row">

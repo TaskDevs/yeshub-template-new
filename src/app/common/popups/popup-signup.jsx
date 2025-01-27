@@ -9,6 +9,9 @@ import {
 	empRoute,
 } from "../../../globals/route-names";
 import useAuth from "../../context/auth/useAuth";
+import { toast } from "react-toastify";
+import Loader from "../loader";
+import { useUser } from "../../context/auth/UserContext";
 
 function SignUpPopup() {
 	const navigate = useNavigate();
@@ -19,6 +22,8 @@ function SignUpPopup() {
 	const [email, setEmail] = useState("");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
+	const [isLoading, setLoading] = useState(false);
+	const { updateUser } = useUser();
 
 	const initialFormData = {
 		username: "",
@@ -35,10 +40,12 @@ function SignUpPopup() {
 	};
 
 	const [formData, setFormData] = useState(initialFormData);
+	const loginSuccess = () => toast("User successfully sign up!");
+	const loginError = () => toast("Error!, Failed to sign up!");
 
-	useEffect(() => {
-		console.log("role-eef", formData.role);
-	}, [formData.role])
+	// useEffect(() => {
+	// 	console.log("role-eef", formData.role);
+	// }, [formData.role])
 
 	const url = `${process.env.REACT_APP_BASE_URL}register`;
 
@@ -71,10 +78,16 @@ function SignUpPopup() {
 			setSuccess(true);
 			const data = response.data;
 			console.log("data", data);
+			updateUser(data)
 
-			if (response.status === 200) {
+			if (response.status === 201) {
 				showTopMessage(true)
 				if (formData.role === "1") {
+					loginSuccess();
+					setTimeout(() => {
+						setLoading(true);
+					}, 200)
+					
 					return moveToCandidate();
 				} else {
 					return moveToEmployer();
@@ -83,7 +96,8 @@ function SignUpPopup() {
 		} catch (err) {
 			setError(err.response?.data?.message || "An error occurred");
 			setShowTopMessage(true);
-			setTimeout(() => {}, 1000);
+			loginError();
+			setTimeout(() => {}, 2000);
 		} finally {
 			setIsSubmitting(false);
 			setEmail("")
@@ -124,12 +138,14 @@ function SignUpPopup() {
 
 	return (
 		<>
+			{isLoading && <Loader />}
 			{showTopMessage && (
-			
 				<div className="errorAlert">
 					<div className="inner">
 						{success && "User registered successfully"}
-						{!success && error && "Oops!, An error ocurred while signing up. Try again"}
+						{!success &&
+							error &&
+							"Oops!, An error ocurred while signing up. Try again"}
 					</div>
 
 					<button
@@ -138,10 +154,9 @@ function SignUpPopup() {
 						aria-label="Close"
 						onClick={() => setShowTopMessage(false)}
 					/>
-				
 				</div>
 			)}
-			
+
 			<div
 				className="modal fade twm-sign-up"
 				id="sign_up_popup"

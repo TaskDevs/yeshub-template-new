@@ -53,9 +53,9 @@ function JobDetail1Page() {
 												<div className="twm-job-self-top">
 													<div className="twm-media-bg">
 														<JobZImage src="images/job-detail-bg.jpg" alt="#" />
-														<div className="twm-jobs-category green">
+														{/* <div className="twm-jobs-category green">
 															<span className="twm-bg-green">New</span>
-														</div>
+														</div> */}
 													</div>
 													<div className="twm-mid-content">
 														<div className="twm-media">
@@ -66,9 +66,9 @@ function JobDetail1Page() {
 														</div>
 														<h4 className="twm-job-title">
 															Senior Web Designer , Developer{" "}
-															<span className="twm-job-post-duration">
+															{/* <span className="twm-job-post-duration">
 																/ 1 days ago
-															</span>
+															</span> */}
 														</h4>
 														<p className="twm-job-address">
 															<i className="feather-map-pin" />
@@ -84,7 +84,8 @@ function JobDetail1Page() {
 																	https://thewebmax.com
 																</a> */}
 																<div className="twm-jobs-amount">
-																	Budget: ₵200 - ₵250 <span>/ daily</span>
+																	Budget: ₵2000 - ₵3000
+																	{/* <span>/ daily</span> */}
 																</div>
 															</div>
 															<div className="twm-job-apllication-area">
@@ -101,6 +102,7 @@ function JobDetail1Page() {
 																// href="#apply_job_popup"
 																// href={publicUser.jobs.APPLY}
 																to={publicUser.jobs.APPLY}
+																// to="#apply_job_pop"
 																// role="button"
 															>
 																Apply Now

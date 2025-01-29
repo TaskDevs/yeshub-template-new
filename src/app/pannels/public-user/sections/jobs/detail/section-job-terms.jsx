@@ -6,7 +6,7 @@ function SectionJobTerms() {
 			<div className="">
 				<h4 className="twm-s-title">Terms</h4>
 			</div>
-			<div className="">
+			<form >
 				<div className="">
 					<p className="twm-s-title-text">How do you want to be paid?</p>
 					<div className="">
@@ -65,7 +65,33 @@ function SectionJobTerms() {
 					</div>
 				</div>
 
-				{/* <div className="">
+
+				<div className="twm-terms-one">
+					<p className="twm-s-title-text">How long will this project take?</p>
+					<select
+						name=""
+						id=""
+						value="Select a duration"
+						placeholder="Select a duration"
+						className="twm-select-duration form-control"
+					>
+						<option value="">more than 8 months</option>
+						<option value="">3 to 6 months</option>
+						<option value="">1 to 3 months</option>
+						<option value="">less than 1 month</option>
+					</select>
+				</div>
+			</form>
+		</div>
+	);
+}
+
+export default SectionJobTerms
+
+
+
+	
+		/* <div className="">
 					<div className="twm-timelines">
 						<label htmlFor="date"> Due date</label>
 						<input type="date" />
@@ -89,26 +115,5 @@ function SectionJobTerms() {
 					<div className="">
 						<input type="number" placeholder="₵0.00" />
 					</div>
-				</div> */}
-
-				<div className="twm-terms-one">
-					<p className="twm-s-title-text">How long will this project take?</p>
-					<select
-						name=""
-						id=""
-						value="Select a duration"
-						placeholder="Select a duration"
-						className="twm-select-duration form-control"
-					>
-						<option value="">more than 8 months</option>
-						<option value="">3 to 6 months</option>
-						<option value="">1 to 3 months</option>
-						<option value="">less than 1 month</option>
-					</select>
-				</div>
-			</div>
-		</div>
-	);
-}
-
-export default SectionJobTerms
+				</div> */
+	

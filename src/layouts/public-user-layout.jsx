@@ -5,6 +5,7 @@ import PublicUserRoutes from "../routing/public-user-routes";
 import InnerPageBanner from "../app/common/inner-page-banner";
 import { showBanner, setBanner } from "../globals/banner-data";
 import { showHeader, showFooter, setFooterType, setHeaderType } from "../globals/layout-config";
+import ContractPopup from "../app/common/popups/popup-contract";
 
 function PublicUserLayout() {
     const currentpath = useLocation().pathname;
@@ -39,6 +40,7 @@ function PublicUserLayout() {
 
                 <SignUpPopup />
                 <SignInPopup />
+                <ContractPopup />
 
             </div>
         </>

@@ -20,7 +20,7 @@ function App() {
 				{isLoading && <Loader />}
 				<ScrollToTop />
 			  <RootLayout />
-			  <ToastContainer />
+			  <ToastContainer position="top-center"  />
 			</AuthProvider>
 		</UserProvider>
 	);

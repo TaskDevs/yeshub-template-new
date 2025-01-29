@@ -9,17 +9,17 @@ function Modal() {
 			// aria-labelledby="sign_up_popupLabel"
 			// tabIndex={-1}
 			className="modal fade twm-sign-up"
-			// id="sign_up_popup"
-			id="contract_up_popup"
+			id="sign_up_popup"
+			// id="contract_popup"
 			aria-hidden="true"
-			aria-labelledby="sign_up_popupLabel"
+			aria-labelledby="contract_popupLabel"
 			tabIndex={-1}
 		>
 			<div className="modal-dialog-centered modal-dialog">
 				<div className="modal-content">
 					<form>
 						<div className="modal-header">
-							<h2 className="modal-title" id="sign_up_popupLabel">
+							<h2 className="modal-title" id="contract_popupLabel">
 								New Contract
 							</h2>
 

@@ -211,7 +211,8 @@ function Header1({ _config }) {
 												<a
 													className="twm-nav-post-a-job"
 													data-bs-toggle="modal"
-													href="#sign_up_popup2"
+													// href="#sign_up_popup2"
+													href="#apply_job_popup"
 													role="button"
 												>
 													<i className="feather-briefcase" /> Post a Job

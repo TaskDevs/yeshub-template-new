@@ -179,7 +179,25 @@ function CandidateListPage() {
 													</div>
 
 													<div className="twm-mid-content">
-														<h4 className="twm-job-title">Wanda Montgomery </h4>
+														<div className="d-flex justify-content-between align-items-center">
+															<h4 className="twm-job-title">
+																Wanda Montgomery{" "}
+															</h4>
+															<div className="">
+																<div className="">
+																	{/* twm-candi-self-bottom */}
+																	<a
+																		href="#"
+																		className="site-button"
+																		site-button
+																		// outline-white
+																	>
+																		Hire Me Now
+																	</a>
+																	{/* <a href="#" className="site-button secondry">Download CV</a> */}
+																</div>
+															</div>
+														</div>
 
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
@@ -187,6 +205,7 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
+
 														<ul className="twm-can-pro-info can-insights">
 															<li className="pro-info-lists list-rate">
 																<div className="">
@@ -283,7 +302,25 @@ function CandidateListPage() {
 													</div>
 
 													<div className="twm-mid-content">
-														<h4 className="twm-job-title">Wanda Montgomery </h4>
+														<div className="d-flex justify-content-between align-items-center">
+															<h4 className="twm-job-title">
+																Wanda Montgomery{" "}
+															</h4>
+															<div className="">
+																<div className="">
+																	{/* twm-candi-self-bottom */}
+																	<a
+																		href="#"
+																		className="site-button"
+																		site-button
+																		// outline-white
+																	>
+																		Hire Me Now
+																	</a>
+																	{/* <a href="#" className="site-button secondry">Download CV</a> */}
+																</div>
+															</div>
+														</div>
 
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
@@ -291,6 +328,7 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
+
 														<ul className="twm-can-pro-info can-insights">
 															<li className="pro-info-lists list-rate">
 																<div className="">
@@ -387,7 +425,25 @@ function CandidateListPage() {
 													</div>
 
 													<div className="twm-mid-content">
-														<h4 className="twm-job-title">Wanda Montgomery </h4>
+														<div className="d-flex justify-content-between align-items-center">
+															<h4 className="twm-job-title">
+																Wanda Montgomery{" "}
+															</h4>
+															<div className="">
+																<div className="">
+																	{/* twm-candi-self-bottom */}
+																	<a
+																		href="#"
+																		className="site-button"
+																		site-button
+																		// outline-white
+																	>
+																		Hire Me Now
+																	</a>
+																	{/* <a href="#" className="site-button secondry">Download CV</a> */}
+																</div>
+															</div>
+														</div>
 
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
@@ -395,6 +451,7 @@ function CandidateListPage() {
 																<i className="feather-map-pin" /> Ghana
 															</p>
 														</div>
+
 														<ul className="twm-can-pro-info can-insights">
 															<li className="pro-info-lists list-rate">
 																<div className="">

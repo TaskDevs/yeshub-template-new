@@ -10,7 +10,7 @@ function CanProfilePage() {
                 <SectionCandicateBasicInfo />
 
                 {/*Social Network*/}
-                <SectionCandidateSocialInfo />
+                {/* <SectionCandidateSocialInfo /> */}
                 
             </div>
         </>

@@ -17,7 +17,7 @@ function SectionJobCoverLetter() {
 						abilities and experience. Up to four highlights are possible.
 					</p>
 
-					<div className="twm-pay-terms">
+					<div className="twm-pay-terms image-upload">
 						<div className="twm-sec-add">
 							<label htmlFor="project">Add portfolio project</label>
 							<input type="file" name="project" accept="image/*" />

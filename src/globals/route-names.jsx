@@ -53,6 +53,7 @@ export const publicUser = {
 		AFTER_LOGIN: "/after-login",
 		RESET_PASSWORD: "/reset-password",
 		ICONS: "/icons",
+		CONTRACT: "/contract"
 	},
 	candidate: {
 		GRID: "/can-grid",

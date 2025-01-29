@@ -277,7 +277,7 @@ export const AuthProvider = ({ children }) => {
 			setLoading(true);
 		}, 200);
 		try {
-			const response = await axios.get(linkedinUrl);
+			const response = await axios.post(linkedinUrl);
 			const data = response.data;
 			console.log("data", data);
 			loginSuccess();

@@ -201,13 +201,13 @@ function Header1({ _config }) {
 												<a
 													className="twm-nav-sign-up"
 													data-bs-toggle="modal"
-													href="#sign_up_popup2"
+													href="#sign_up_popup"
 													role="button"
 												>
 													<i className="feather-log-in" /> Log In
 												</a>
 											</div>
-											<div className="twm-nav-btn-right">
+											{/* <div className="twm-nav-btn-right">
 												<a
 													className="twm-nav-post-a-job"
 													data-bs-toggle="modal"
@@ -217,7 +217,7 @@ function Header1({ _config }) {
 												>
 													<i className="feather-briefcase" /> Post a Job
 												</a>
-											</div>
+											</div> */}
 										</div>
 									</div>
 								</div>

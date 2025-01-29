@@ -12,6 +12,9 @@ import useAuth from "../../context/auth/useAuth";
 import { toast } from "react-toastify";
 import Loader from "../loader";
 import { useUser } from "../../context/auth/UserContext";
+import { IoMdEye } from "react-icons/io";
+import { IoIosEyeOff } from "react-icons/io";
+import { FcGoogle } from "react-icons/fc";
 
 function SignUpPopup() {
 	const navigate = useNavigate();
@@ -23,6 +26,7 @@ function SignUpPopup() {
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
 	const [isLoading, setLoading] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
 	const { updateUser } = useUser();
 
 	const initialFormData = {
@@ -64,11 +68,11 @@ function SignUpPopup() {
 				setError("Please select a role (Candidate or Employer)");
 				return;
 			}
-		if (formData.password !== formData.password_confirmation) {
-			setIsSubmitting(false);
-			passwordError();
-			return;
-		}
+		// if (formData.password !== formData.password_confirmation) {
+		// 	setIsSubmitting(false);
+		// 	passwordError();
+		// 	return;
+		// }
 
 		setTimeout(() => {
 			setLoading(true);
@@ -83,31 +87,30 @@ function SignUpPopup() {
 			const data = response.data;
 			console.log("data", data);
 			updateUser(data)
+			setShowTopMessage(true)
 
 			if (response.status === 201) {
 				loginSuccess();
-				showTopMessage(true)
-				if (formData.role === "1") {
-					
-					
-					
+				
+				if (formData.role === "1") {			
 					return moveToCandidate();
 				} else {
 					return moveToEmployer();
 				}
 			}
 		} catch (err) {
+			setShowTopMessage(true);
 			loginError();
 			setError(err.response?.data?.message || "An error occurred");
-			setShowTopMessage(true);
+			
 			
 		} finally {
 			setIsSubmitting(false);
 			setEmail("")
-			setShowTopMessage(true);
+			// setShowTopMessage(true);
 			setFormData(initialFormData);
-			setSuccess("");
-			setError("");
+			// setSuccess("");
+			// setError("");
 			setTimeout(() => {
 				setLoading(false);
 			}, 4000);
@@ -145,7 +148,8 @@ function SignUpPopup() {
 	return (
 		<>
 			{isLoading && <Loader />}
-			{showTopMessage && (
+			{console.log("showTopMessage", showTopMessage)}
+			{showTopMessage === true && isLoading && (
 				<div className="errorAlert">
 					<div className="inner">
 						{success && "User registered successfully"}
@@ -279,7 +283,7 @@ function SignUpPopup() {
 															)}
 														</div>
 													</div>
-													<div className="col-lg-12">
+													{/* <div className="col-lg-12">
 														<div className="form-group mb-3">
 															<input
 																name="firstName"
@@ -304,23 +308,40 @@ function SignUpPopup() {
 																onChange={handleChange}
 															/>
 														</div>
-													</div>
+													</div> */}
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
-															<input
-																name="password"
-																type="password"
-																required
-																className="form-control"
-																value={formData.password}
-																minLength={8}
-																maxLength={20}
-																placeholder="Password*"
-																onChange={handleChange}
-															/>
+															<div className="ls-inputicon-box-signup ls-inputicon-box">
+																<input
+																	name="password"
+																	type={isVisible ? "text" : "password"}
+																	required
+																	className="form-control"
+																	value={formData.password}
+																	minLength={8}
+																	maxLength={20}
+																	placeholder="Password*"
+																	onChange={handleChange}
+																/>
+																{isVisible ? (
+																	<div
+																		className=" eye-icon"
+																		onClick={() => setIsVisible(false)}
+																	>
+																		<IoMdEye size={25} />
+																	</div>
+																) : (
+																	<div
+																		className=" eye-icon"
+																		onClick={() => setIsVisible(true)}
+																	>
+																		<IoIosEyeOff size={25} />
+																	</div>
+																)}
+															</div>
 														</div>
 													</div>
-													<div className="col-lg-12">
+													{/* <div className="col-lg-12">
 														<div className="form-group mb-3">
 															<input
 																name="password_confirmation"
@@ -402,7 +423,7 @@ function SignUpPopup() {
 																/>
 															</div>
 														</div>
-													</div>
+													</div> */}
 
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
@@ -559,6 +580,28 @@ function SignUpPopup() {
 											</button>
 										</div>
 									</div>
+
+									<div
+										className="col-md-12"
+										// onClick={() => {
+										// 	loginWithLinkedIn();
+										// }}
+									>
+										<div className="form-group">
+											<button
+												type="submit"
+												className="log_with_google flex-center btn-google"
+											>
+												<div className="pop-up-btn-logo">
+													{/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
+													<FcGoogle size={20} />
+												</div>
+												{/* <i className="fab fa-google" /> */}
+												Continue with Google
+											</button>
+										</div>
+									</div>
+									
 								</ul>
 							</div>
 						</div>

@@ -563,8 +563,8 @@ function EmpPostAJobPage() {
 										<input
 											className="form-control datepicker"
 											data-provide="datepicker"
-											name="company_since"
-											type="text"
+											name="start_date"
+											type="date"
 											placeholder="mm/dd/yyyy"
 										/>
 										<i className="fs-input-icon far fa-calendar" />
@@ -579,8 +579,8 @@ function EmpPostAJobPage() {
 										<input
 											className="form-control datepicker"
 											data-provide="datepicker"
-											name="company_since"
-											type="text"
+											name="end_date"
+											type="date"
 											placeholder="mm/dd/yyyy"
 										/>
 										<i className="fs-input-icon far fa-calendar" />

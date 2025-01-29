@@ -35,7 +35,8 @@ function SectionJobsList() {
 								<span className="twm-bg-green">Bid Now</span>
 							</div>
 							<div className="twm-jobs-amount">
-								₵200 <span>/ daily</span>
+								₵2000 - ₵3000
+								{/* <span>/ daily</span> */}
 							</div>
 							<p className="twm-jobs-browse bids"> 10 bids</p>
 						</div>
@@ -51,7 +52,7 @@ function SectionJobsList() {
 						<div className="twm-mid-content">
 							<h4 className="twm-job-title">
 								Senior Web Designer
-								<span className="twm-job-post-duration">/ 1 days ago</span>
+								{/* <span className="twm-job-post-duration">/ 1 days ago</span> */}
 							</h4>
 							<p className="twm-job-address">
 								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
@@ -106,7 +107,7 @@ function SectionJobsList() {
 							<p className="twm-jobs-browse bids"> 10 bids</p>
 						</div>
 					</NavLink>
-					
+
 					<NavLink
 						to={publicUser.jobs.DETAIL1}
 						className="twm-jobs-list-style1 mb-5"

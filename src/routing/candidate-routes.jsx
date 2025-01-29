@@ -12,6 +12,7 @@ import CanChatPage from "../app/pannels/candidate/components/can-chat";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import { useUser } from "../app/context/auth/UserContext";
 import { useEffect, useState } from "react";
+import ProtectedRoute from "../app/context/ProtectedRoute";
 
 function CandidateRoutes() {
 	const { user } = useUser();
@@ -36,21 +37,23 @@ function CandidateRoutes() {
 	// 	}
 
 	return (
-		<Routes>
-			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
-			<Route path={candidate.PROFILE} element={<CanProfilePage />} />
-			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
-			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
-			<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />
-			<Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
-			<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
-			<Route
-				path={candidate.CHANGE_PASSWORD}
-				element={<CanChangePasswordPage />}
-			/>
-			<Route path={candidate.CHAT} element={<CanChatPage />} />
-			<Route path="*" element={<Error404Page />} />
-		</Routes>
+		// <ProtectedRoute roleProp="1"></ProtectedRoute>
+			<Routes>
+				<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
+				<Route path={candidate.PROFILE} element={<CanProfilePage />} />
+				<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
+				<Route path={candidate.RESUME} element={<CanMyResumePage />} />
+				<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />
+				<Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
+				<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
+				<Route
+					path={candidate.CHANGE_PASSWORD}
+					element={<CanChangePasswordPage />}
+				/>
+				<Route path={candidate.CHAT} element={<CanChatPage />} />
+				<Route path="*" element={<Error404Page />} />
+			</Routes>
+		
 	);
 }
 

@@ -17,18 +17,18 @@ function EmpDashboardPage() {
     
      const jobsCountUrl = `${process.env.REACT_APP_BASE_URL}posted-jobs/count/${user?.id}`;
 
-	const errorMessage = () =>
-		toast(" User Unauthenticated!, Either sign up or login");
+	// const errorMessage = () =>
+	// 	toast(" User Unauthenticated!, Either sign up or login");
 
     
 	useEffect(() => {
-		if (!user || !user.id) {
-			setError("User Unauthenticated! Please log in.");
-			setShowTopMessage(true);
-            errorMessage();
-			navigate("/login");
-			return;
-		}
+		// if (!user || !user.id) {
+		// 	// setError("User Unauthenticated! Please log in.");
+		// 	// setShowTopMessage(true);
+        //     // errorMessage();
+		// 	// navigate("/login");
+		// 	return;
+		// }
 
 		let isMounted = true;
 
@@ -50,7 +50,7 @@ function EmpDashboardPage() {
 			}
 		};
 
-		postedJobsByEmployer();
+		// postedJobsByEmployer();
 		return () => {
 			isMounted = false;
 		};
@@ -58,7 +58,7 @@ function EmpDashboardPage() {
 
 	return (
 		<>
-			{user && (
+			
 				<div className="">
 					<div className="wt-admin-right-page-header clearfix">
 						<h2>Hello, Nikola Tesla</h2>
@@ -649,7 +649,7 @@ function EmpDashboardPage() {
 						</div>
 					</div>
 				</div>
-			)}
+		
 		</>
 	);
 }

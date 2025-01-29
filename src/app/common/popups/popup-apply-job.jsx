@@ -1,6 +1,8 @@
 import SectionApplyJob from "../../pannels/public-user/sections/jobs/section-apply-job";
 
 function ApplyJobPopup() {
+    console.log("apply-job-id", document.getElementById("apply_job_popup"));
+
     return (
         <>
             <div className="modal fade" id="apply_job_popup" aria-hidden="true" tabIndex={-1}>

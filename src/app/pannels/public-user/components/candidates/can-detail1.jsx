@@ -8,6 +8,7 @@ import { loadScript, publicUrlFor } from "../../../../../globals/constants";
 import SectionEmployersCandidateSidebar from "../../sections/common/section-emp-can-sidebar";
 import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
 import SectionReview from "../../sections/common/section-review";
+import ContractPopup from "../../../../common/popups/popup-contract";
 
 function CandidateDetail1Page() {
 
@@ -50,7 +51,6 @@ function CandidateDetail1Page() {
 
 										<SectionCandidatePortfolio />
 										<SectionReview />
-										
 
 										{/* <SectionCandidateExperience /> */}
 
@@ -64,6 +64,9 @@ function CandidateDetail1Page() {
 								<div className=" col-lg-4 rightSidebar">
 									<SectionEmployersCandidateSidebar type="1" />
 								</div>
+
+								{/* popup-contract */}
+								<ContractPopup />
 							</div>
 						</div>
 					</div>

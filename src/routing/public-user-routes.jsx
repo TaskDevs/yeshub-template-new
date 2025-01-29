@@ -54,6 +54,7 @@ import BlogListPage from "../app/pannels/public-user/components/blogs/blogs-list
 import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-detail";
 import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset-password";
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
+import ContractPopup from "../app/common/popups/popup-contract";
 
 function PublicUserRoutes() {
     return (
@@ -104,6 +105,7 @@ function PublicUserRoutes() {
 				<Route path={publicUser.pages.ERROR404} element={<Error404Page />} />
 				<Route path={publicUser.pages.FAQ} element={<FaqPage />} />
 				<Route path={publicUser.pages.CONTACT} element={<ContactUsPage />} />
+				<Route path={publicUser.pages.CONTRACT} element={<ContractPopup />} />
 				<Route
 					path={publicUser.pages.MAINTENANCE}
 					element={<UnderMaintenancePage />}

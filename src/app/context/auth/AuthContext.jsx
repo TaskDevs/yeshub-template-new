@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
 	const loginSuccess = () => toast("User successfully logged in!");
 	const loginError = () => toast("Error!, Failed to login");
 
-
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
 	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
 
@@ -49,54 +48,57 @@ export const AuthProvider = ({ children }) => {
 		loginEmployer();
 	};
 
+	const handleCandidateLogin = (event) => {
+		event.preventDefault();
+		loginCandidate();
+	};
 
-    const handleCandidateLogin = (event) => {
-        event.preventDefault();
-        loginCandidate();
-    }
+	// const handleEmployerLogin = (event) => {
+	//     event.preventDefault();
+	//     loginEmployer();
+	// }
 
-    // const handleEmployerLogin = (event) => {
-    //     event.preventDefault();
-    //     loginEmployer();
-    // }
-
-    const loginCandidate = async () => {
-        if (!canUsername || !password) {
-					setIsSubmitting(false);
-					return;
-				}
-        try {
-                setIsSubmitting(true);
-					const response = await axios.post(
-						url,
-						{
-							username: canUsername,
-							password: password,
-						},
-						
-					);
-					const data = response.data;
+	const loginCandidate = async () => {
+		if (!canUsername || !password) {
+			setIsSubmitting(false);
+			return;
+		}
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+		try {
+			setIsSubmitting(true);
+			const response = await axios.post(url, {
+				username: canUsername,
+				password: password,
+			});
+			const data = response.data;
 			console.log("data", data);
 			updateUser(data);
-			
+
 			if (response.status === 201) {
 				loginSuccess();
-						setTimeout(() => {
-							setLoading(true);
-						}, 2000);
-						if (role === "1") {
-							moveToCandidate();
-						}
-					}
-				} catch (error) {
-					setCanUsername("");
+				// setTimeout(() => {
+				// 	setLoading(false);
+				// }, 2000);
+				if (role === "1") {
+					moveToCandidate();
+				}
+			}
+		} catch (error) {
+			// setTimeout(() => {
+			// 	setLoading(true);
+			// }, 2000);
+			setCanUsername("");
 			setPassword("");
 			loginError();
-				} finally {
-					setIsSubmitting(false);
-				}    
-
-    }
+		} finally {
+			setIsSubmitting(false);
+		}
+		setTimeout(() => {
+			setLoading(false);
+		}, 5000);
+	};
 	// const handleEmployerLogin = (event) => {
 	//     event.preventDefault();
 	//     loginEmployer();
@@ -124,7 +126,6 @@ export const AuthProvider = ({ children }) => {
 	// 		const data = response.data;
 	// 		console.log("data", data);
 
-
 	// 		if (response.status === 201) {
 	// 			if (role === "2") {
 	// 				moveToEmployer();
@@ -137,45 +138,45 @@ export const AuthProvider = ({ children }) => {
 	// 		setIsSubmitting(false);
 	// 	}
 
-		// processLogin(
-		//     {
-		//         type: formType.LOGIN_CANDIDATE,
-		//         username: canUsername,
-		//         password: password
-		//     },
-		//     (valid) => {
-		//         if (valid) {
-		//             moveToCandidate();
-		//         } else {
-		//             // show error
-		//             console.log('error');
-		//         }
-		//     }
-		// );
+	// processLogin(
+	//     {
+	//         type: formType.LOGIN_CANDIDATE,
+	//         username: canUsername,
+	//         password: password
+	//     },
+	//     (valid) => {
+	//         if (valid) {
+	//             moveToCandidate();
+	//         } else {
+	//             // show error
+	//             console.log('error');
+	//         }
+	//     }
+	// );
 	// };
 
 	const loginEmployer = async () => {
 		setError("");
 		setSuccess("");
 
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+
 		try {
-			const response = await axios.post(
-				url,
-				{
-					username: empUsername,
-					password: password,
-				},
-				
-			);
+			const response = await axios.post(url, {
+				username: empUsername,
+				password: password,
+			});
 			const data = response.data;
 			console.log("data", data);
 			setSuccess("user logged in successfully");
 			loginSuccess();
 
 			if (response.status === 201) {
-				setTimeout(() => {
-					setLoading(true);
-				}, 2000);
+				// setTimeout(() => {
+				// 	setLoading(true);
+				// }, 2000);
 				if (role === "2") {
 					moveToEmployer();
 				}
@@ -184,12 +185,14 @@ export const AuthProvider = ({ children }) => {
 			setError(err.response?.data?.message || "An error occurred");
 			setShowTopMessage(true);
 			loginError();
-
 		} finally {
 			setIsSubmitting(false);
 			setShowTopMessage(true);
 			setEmpUsername("");
 			setPassword("");
+			setTimeout(() => {
+				setLoading(false);
+			}, 5000);
 		}
 	};
 
@@ -270,6 +273,9 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const loginWithLinkedIn = async () => {
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
 		try {
 			const response = await axios.get(linkedinUrl);
 			const data = response.data;
@@ -277,9 +283,9 @@ export const AuthProvider = ({ children }) => {
 			loginSuccess();
 
 			if (response.status === 201) {
-				setTimeout(() => {
-					setLoading(true);
-				}, 2000);
+				// setTimeout(() => {
+				// 	setLoading(true);
+				// }, 2000);
 				if (role === "1") {
 					moveToCandidate();
 				} else {
@@ -287,10 +293,16 @@ export const AuthProvider = ({ children }) => {
 				}
 			}
 		} catch (error) {
-			setError(error || "")
+			// setTimeout(() => {
+			// 	setLoading(true);
+			// }, 2000);
+			setError(error || "");
 			loginError();
 		} finally {
 			setIsSubmitting(false);
+			setTimeout(() => {
+				setLoading(false);
+			}, 5000);
 		}
 	};
 
@@ -310,8 +322,7 @@ export const AuthProvider = ({ children }) => {
 	const logout = () => {
 		setCurrentUser(null);
 		setAuth(false);
-		updateUser(null)
-		
+		updateUser(null);
 	};
 
 	const details = {
@@ -336,8 +347,7 @@ export const AuthProvider = ({ children }) => {
 		error,
 		success,
 		showTopMessage,
-		// isLoading,
-		
+		isLoading,
 	};
 
 	return (

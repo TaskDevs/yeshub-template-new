@@ -50,7 +50,7 @@ function SectionJobsSidebar2({ _config }) {
 									<div className="twm-s-info-inner">
 										<i className="fas fa-clock" />
 										<span className="twm-title">Experience</span>
-										<div className="twm-s-info-discription">3 Year</div>
+										<div className="twm-s-info-discription">3 Years</div>
 									</div>
 								</li>
 								<li>
@@ -120,7 +120,9 @@ function SectionJobsSidebar2({ _config }) {
 									<div className="twm-s-info-inner">
 										<i className="fas fa-mobile-alt" />
 										<span className="twm-title">Phone</span>
-										<div className="twm-s-info-discription">+291 560 56456</div>
+										<div className="twm-s-info-discription">
+											+233 560 564561
+										</div>
 									</div>
 								</li>
 								<li>
@@ -146,7 +148,8 @@ function SectionJobsSidebar2({ _config }) {
 										<i className="fas fa-map-marker-alt" />
 										<span className="twm-title">Address</span>
 										<div className="twm-s-info-discription">
-											1363-1385 Sunset Blvd Angeles, CA 90026 ,USA
+											Independence Avenue No. 10, Accra, Greater Accra Region,
+											Ghana
 										</div>
 									</div>
 								</li>
@@ -163,8 +166,8 @@ function SectionJobsSidebar2({ _config }) {
 					description="Stand out from the crowd—apply now and showcase your skills "
 					link={`${publicUser.jobs.APPLY}`}
 					action="Bid Now"
-            />
-            {console.log("link- ", `${publicUser.jobs.APPLY}`)}
+				/>
+				
 			</>
 		);
 }

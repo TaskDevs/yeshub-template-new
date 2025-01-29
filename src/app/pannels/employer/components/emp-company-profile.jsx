@@ -15,61 +15,92 @@ function EmpCompanyProfilePage() {
 		postUrl: "upload.php",
 	};
 
-	const [youtubeFields, setYoutubeFields] = useState(0);
-	const [vimeoFields, setVimeoFields] = useState(0);
-	const [profileData, setProfileData] = useState(null);
+	// const [youtubeFields, setYoutubeFields] = useState(0);
+	// const [vimeoFields, setVimeoFields] = useState(0);
+	const [success, setSuccess] = useState("");
 	const [showTopMessage, setShowTopMessage] = useState(false);
 	const [error, setError] = useState(false);
+	const [loading, setLoading] = useState(false);
 	const { user } = useUser();
-	const errorMessage = () =>
-		toast(" User Unauthenticated!, Either sign up or login");
+	
+const initialFormData = {
+	id: "",
+	description: "",
+	user_id: "",
+	sector: "",
+	email: "",
+	phone_no: "",
+	website: "",
+	address: "",
+	est_date: "",
+	longitude: "",
+	latitude: "",
+	company_name: "",
+};
 
-	const profileUrl = `${process.env.REACT_APP_BASE_URL}employers/${user?.id}`;
-	console.log("url", profileUrl);
+const [formData, setFormData] = useState(initialFormData);
+const postProfile = `${process.env.REACT_APP_BASE_URL}`;
 
-    useEffect(() => {
-        let isMounted = true;
-		const EmployerProfile = async () => {
-			try {
-				const res = await axios.get(profileUrl);
+const postSuccess = () => toast("Job posted successfully!");
+const postError = () => toast("Error!, Failed to post job!");
 
-				console.log("employer-details", res);
-                const jobsData = res;
-                if (isMounted) {
+const handleChange = (e) => {
+	setFormData({
+		...formData,
+		[e.target.name]: e.target.value,
+	});
+};
 
-                    setProfileData(jobsData)
-                };
-            } catch (error) {
-                if (isMounted) {
-                    setError(error || "An error occurred while getting data");
-                    setShowTopMessage(true);
-                    setTimeout(() => { }, 1000);
-                }
-			}
-		};
+const handleSubmitProfile = async (e) => {
+	e.preventDefault();
+	setError("");
+	setSuccess("");
 
-		EmployerProfile();
-	}, [profileUrl]);
-	if (!user) {
-		return errorMessage();
+	setTimeout(() => {
+		setLoading(true);
+	}, 200);
+
+	try {
+		const res = axios.post(postProfile, formData);
+		postSuccess();
+
+		console.log("post-job", res);
+
+		const jobsData = res.data;
+		setFormData(jobsData);
+	} catch (error) {
+		postError();
+		setError(error || "An error occurred, try again");
+		setShowTopMessage(true);
+		setTimeout(() => {}, 1000);
+	} finally {
+		setError("");
+		setSuccess("");
+		setFormData(initialFormData);
+		setTimeout(() => {
+			setLoading(false);
+		}, 2000);
 	}
+};
+  
+	
 
-	function handleYoutubeClick() {
-		setYoutubeFields(youtubeFields + 1);
-	}
+	// function handleYoutubeClick() {
+	// 	setYoutubeFields(youtubeFields + 1);
+	// }
 
-	function handleVimeoClick() {
-		setVimeoFields(vimeoFields + 1);
-	}
+	// function handleVimeoClick() {
+	// 	setVimeoFields(vimeoFields + 1);
+	// }
 
 	return (
 		<>
-            { showTopMessage &&
+			{/* { showTopMessage &&
                 error && (
                 <div className="">
                     Error! Failed to load data
                 </div>
-            )}
+            )} */}
 			<div className="">
 				<div className="wt-admin-right-page-header clearfix">
 					<h2>Company Profile!</h2>
@@ -131,7 +162,7 @@ function EmpCompanyProfilePage() {
 						<h4 className="panel-tittle m-a0">Basic Informations</h4>
 					</div>
 					<div className="panel-body wt-panel-body p-a20 m-b30 ">
-						<form>
+						<form onSubmit={handleSubmitProfile}>
 							<div className="row">
 								<div className="col-xl-4 col-lg-12 col-md-12">
 									<div className="form-group">
@@ -189,13 +220,52 @@ function EmpCompanyProfilePage() {
 										</div>
 									</div>
 								</div>
+
+								<div className="col-xl-4 col-lg-12 col-md-12">
+									<div className="form-group city-outer-bx has-feedback">
+										<label>Sector</label>
+										<div className="ls-inputicon-box">
+											<select
+												className="wt-select-box selectpicker"
+												name="sector"
+												data-live-search="true"
+												title="sector"
+												id="city"
+												data-bv-field="sector"
+											>
+												<option className="bs-title-option" value>
+													Software engineering
+												</option>
+												<option value>Education</option>
+												<option value>Health</option>
+												<option value>Finance</option>
+											</select>
+											<i className="fs-input-icon fa fa-sort-numeric-up" />
+										</div>
+									</div>
+								</div>
+
 								<div className="col-xl-4 col-lg-12 col-md-12">
 									<div className="form-group">
-										<label>Est. Since</label>
+										<label>Address</label>
 										<div className="ls-inputicon-box">
 											<input
 												className="form-control"
-												name="company_since"
+												name="Address"
+												type="text"
+												placeholder="Boulevard street"
+											/>
+											<i className="fs-input-icon fa fa-globe-americas" />
+										</div>
+									</div>
+								</div>
+								<div className="col-xl-4 col-lg-12 col-md-12">
+									<div className="form-group">
+										<label>Est. Date</label>
+										<div className="ls-inputicon-box">
+											<input
+												className="form-control"
+												name="est_date"
 												type="text"
 												placeholder="Since..."
 											/>
@@ -204,28 +274,35 @@ function EmpCompanyProfilePage() {
 									</div>
 								</div>
 								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group city-outer-bx has-feedback">
-										<label>Team Size</label>
+									<div className="form-group">
+										<label>Longitude</label>
 										<div className="ls-inputicon-box">
-											<select
-												className="wt-select-box selectpicker"
-												name="team-size"
-												data-live-search="true"
-												title="team-size"
-												id="city"
-												data-bv-field="size"
-											>
-												<option className="bs-title-option" value>
-													5-10
-												</option>
-												<option value>10+</option>
-												<option value>20+</option>
-												<option value>50+</option>
-											</select>
-											<i className="fs-input-icon fa fa-sort-numeric-up" />
+											<input
+												className="form-control"
+												name="longitude"
+												type="text"
+												placeholder="1.0232° W"
+											/>
+											<i className="fs-input-icon fa fa-globe-americas" />
 										</div>
 									</div>
 								</div>
+
+								<div className="col-xl-4 col-lg-12 col-md-12">
+									<div className="form-group">
+										<label>Latitude</label>
+										<div className="ls-inputicon-box">
+											<input
+												className="form-control"
+												name="Latitude"
+												type="text"
+												placeholder="7.9465° N"
+											/>
+											<i className="fs-input-icon fa fa-globe-americas" />
+										</div>
+									</div>
+								</div>
+
 								<div className="col-md-12">
 									<div className="form-group">
 										<label>Description</label>
@@ -271,7 +348,7 @@ function EmpCompanyProfilePage() {
 					</div>
 				</div>
 				{/*Video gallery*/}
-				<div className="panel panel-default">
+				{/* <div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
 						<h4 className="panel-tittle m-a0">Video Gallery</h4>
 					</div>
@@ -368,9 +445,9 @@ function EmpCompanyProfilePage() {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> */}
 				{/*Social Network*/}
-				<div className="panel panel-default">
+				{/* <div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
 						<h4 className="panel-tittle m-a0">Social Network</h4>
 					</div>
@@ -499,10 +576,43 @@ function EmpCompanyProfilePage() {
 							</div>
 						</form>
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</>
 	);
 }
 
 export default EmpCompanyProfilePage;
+
+
+
+
+
+
+
+
+
+
+
+//   useEffect(() => {
+// 		let isMounted = true;
+// 		const EmployerProfile = async () => {
+// 			try {
+// 				const res = await axios.get(profileUrl);
+
+// 				console.log("employer-details", res);
+// 				const jobsData = res;
+// 				if (isMounted) {
+// 					setProfileData(jobsData);
+// 				}
+// 			} catch (error) {
+// 				if (isMounted) {
+// 					setError(error || "An error occurred while getting data");
+// 					setShowTopMessage(true);
+// 					setTimeout(() => {}, 1000);
+// 				}
+// 			}
+// 		};
+
+// 		EmployerProfile();
+// 	}, [profileUrl]);

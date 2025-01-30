@@ -4,11 +4,13 @@ import JobZImage from "../../../../common/jobz-img";
 import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-letter";
 import SectionJobTerms from "../../sections/jobs/detail/section-job-terms";
 import SectionApplyJob from "../../sections/jobs/section-apply-job";
+import SectionMilestone from "../../sections/jobs/section-milestone";
+import { FaPlus } from "react-icons/fa6";
+
 
 function ApplyJobPage() {
-
-	const [checked, setChecked] = useState(null);
-
+	const [selectedOption, setSelectedOption] = useState("milestone");
+	const [showMilestone, setShowMilestone] = useState(0);
 
 
 
@@ -47,7 +49,9 @@ function ApplyJobPage() {
 														type="radio"
 														className="terms-radio"
 														name="group1"
-														value="by_milestone"
+														value="milestone"
+														checked={selectedOption === "milestone"}
+														onChange={(e) => setSelectedOption(e.target.value)}
 													/>
 												</div>
 
@@ -66,7 +70,9 @@ function ApplyJobPage() {
 													<input
 														type="radio"
 														name="group1"
-														value="by_project"
+														value="project"
+														checked={selectedOption === "project"}
+														onChange={(e) => setSelectedOption(e.target.value)}
 													/>
 												</div>
 												<div className="twm-terms-one">
@@ -80,55 +86,94 @@ function ApplyJobPage() {
 										</div>
 									</div>
 
-									<div className="twm-sec-main">
-										<p className="twm-s-title-text">
-											How many milestones do you want to include?
-										</p>
+									{/* {selectedOption === "milestone" && (
+										<>
+											<div className="twm-sec-main">
+												<p className="twm-s-title-text">
+													How many milestones do you want to include?
+												</p>
+												<SectionMilestone />
+												{showMilestone && <SectionMilestone />}
 
-										<div className="twm-sec-timelines">
-											<div className="twm-timelines">
-												<label htmlFor="desc">Description</label>
-												<input
-													type="text"
-													className=" form-control milestone-options"
-												/>
+												<div className="milestone-add-options">
+													<div
+														className="milestone-plus"
+														onClick={() => {
+															setShowMilestone((prev) => prev + 1);
+														}}
+													>
+														<FaPlus />
+														Add more milestones
+													</div>
+
+													<button
+														type="button"
+														className="site-button outline-primary"
+														onClick={() => setShowMilestone((prev) => prev - 1)}
+													>
+														Cancel
+													</button>
+												</div>
 											</div>
-											<div className="twm-timelines">
-												<label htmlFor="date"> Due date</label>
-												<input
-													type="date"
-													className=" form-control milestone-options"
-												/>
-											</div>
-											<div className="twm-timelines">
-												<label htmlFor="amount">Amount</label>
-												<input
-													type="number"
-													placeholder="₵0.00"
-													className="form-control milestone-options"
-												/>
+										</>
+									)} */}
+
+									{selectedOption === "milestone" && (
+										<div className="twm-sec-main">
+											<p className="twm-s-title-text">
+												How many milestones do you want to include?
+											</p>
+											<SectionMilestone />
+
+											{/* Dynamically render multiple SectionMilestone components */}
+											{Array.from({ length: showMilestone }, (_, index) => (
+												<SectionMilestone key={index} />
+											))}
+
+											<div className="milestone-add-options">
+												<div
+													className="milestone-plus"
+													onClick={() => setShowMilestone((prev) => prev + 1)}
+												>
+													<FaPlus />
+													Add more milestones
+												</div>
+
+												{showMilestone > 1 && (
+													<button
+														type="button"
+														className="site-button outline-primary"
+														onClick={() =>
+															setShowMilestone((prev) => Math.max(1, prev - 1))
+														}
+													>
+														Cancel
+													</button>
+												)}
 											</div>
 										</div>
-									</div>
+									)}
 
-									<div className="twm-terms-one">
-										<p className="twm-s-title-text">
-											How long will this project take?
-										</p>
-										<select
-											name=""
-											id=""
-											value="Select a duration"
-											placeholder="Select a duration"
-											className="twm-select-duration form-control milestone-options"
-										>
-											<option value="">Select a duration</option>
-											<option value="">more than 8 months</option>
-											<option value="">3 to 6 months</option>
-											<option value="">1 to 3 months</option>
-											<option value="">less than 1 month</option>
-										</select>
-									</div>
+									{selectedOption === "project" && (
+										<div className="twm-terms-one">
+											<p className="twm-s-title-text">
+												How long will this project take?
+											</p>
+											<select
+												name=""
+												id=""
+												value="Select a duration"
+												placeholder="Select a duration"
+												className="twm-select-duration form-control milestone-options"
+											>
+												<option value="">Select a duration</option>
+												<option value="">more than 8 months</option>
+												<option value="">3 to 6 months</option>
+												<option value="">1 to 3 months</option>
+												<option value="">less than 1 month</option>
+											</select>
+										</div>
+									)}
 
 									<div className="">
 										<div className="">

@@ -15,7 +15,7 @@ function SectionCandidateShortIntro1() {
 					<div className="overlay-main site-bg-primary opacity-01" />
 					<div className="twm-candi-self-info">
 						<div className="twm-candi-self-top">
-							<div className="twm-candi-fee">₵20 / Day</div>
+							<div className="twm-candi-fee">₵200 / Day</div>
 							<div className="twm-media can-banner-logo">
 								<JobZImage src="images/candidates/pic2.jpg" alt="#" />
 							</div>

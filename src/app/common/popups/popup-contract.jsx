@@ -223,14 +223,14 @@ function ContractPopup() {
 												<div className="d-flex justify-end gap-3">
 													<button
 														type="button"
-														className="site-button"
+														className="site-button outline-primary"
 														data-bs-dismiss="modal"
 													>
 														Cancel
 													</button>
 													<button
 														type="button"
-														className="site-button outline-primary"
+														className="site-button "
 														data-bs-dismiss="modal"
 														// onClick={yesHandler}
 													>

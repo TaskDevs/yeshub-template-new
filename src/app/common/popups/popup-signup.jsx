@@ -440,17 +440,6 @@ function SignUpPopup() {
 																	I agree to the{" "}
 																	<a href="#">Terms and conditions</a>
 																</label>
-																<p>
-																	Already registered?
-																	<button
-																		className="twm-backto-login"
-																		data-bs-target="#sign_up_popup2"
-																		data-bs-toggle="modal"
-																		data-bs-dismiss="modal"
-																	>
-																		Log in here
-																	</button>
-																</p>
 															</div>
 														</div>
 													</div>
@@ -463,6 +452,20 @@ function SignUpPopup() {
 														>
 															{isSubmitting ? "Submitting..." : "Sign Up"}
 														</button>
+													</div>
+
+													<div className="mt-4">
+														<p>
+															Already registered?
+															<button
+																className="twm-backto-login"
+																data-bs-target="#sign_up_popup2"
+																data-bs-toggle="modal"
+																data-bs-dismiss="modal"
+															>
+																Log in here
+															</button>
+														</p>
 													</div>
 												</div>
 											</div>
@@ -601,7 +604,6 @@ function SignUpPopup() {
 											</button>
 										</div>
 									</div>
-									
 								</ul>
 							</div>
 						</div>

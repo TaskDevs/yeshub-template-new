@@ -5,7 +5,8 @@ import SectionSideAdvert from "./section-side-advert";
 function SectionJobsSidebar1() {
     const location = useLocation();
     const pathname = location.pathname
-    console.log("path", pathname)
+
+
 
     return (
 			<>
@@ -25,19 +26,243 @@ function SectionJobsSidebar1() {
 									<option>Acountant</option>
 								</select>
 							</div>
+
+							<div className="twm-sidebar-ele-filter">
+								<h4 className="section-head-small mb-4">Project Type</h4>
+								<ul>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck1"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck1"
+											>
+												Hourly
+											</label>
+
+											<div className="d-flex ps-2  align-items-center gap-2">
+												<input
+													type="checkbox"
+													className="form-check-input"
+													id="exampleCheck3"
+												/>
+
+												<div className=" form-check d-flex align-items-center">
+													<input
+														type="text"
+														className="form-check-input checkbox-large"
+														id="exampleCheck3"
+														placeholder="min"
+														inputmode="numeric"
+														oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+													/>
+													<span>/hr</span>
+												</div>
+
+												<div className=" form-check d-flex align-items-center">
+													<input
+														type="text"
+														className="form-check-input checkbox-large"
+														id="exampleCheck3"
+														placeholder="max"
+													/>
+													<span>/hr</span>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck2"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck2"
+											>
+												Fixed
+											</label>
+
+											<div className="d-flex ps-2  align-items-center gap-2">
+												<input
+													type="checkbox"
+													className="form-check-input"
+													id="exampleCheck3"
+												/>
+
+												<div className=" form-check">
+													<input
+														type="text"
+														className="form-check-input checkbox-large"
+														id="exampleCheck3"
+														placeholder="min"
+														// type="text"
+														inputmode="numeric"
+														oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+													/>
+												</div>
+
+												<div className=" form-check">
+													<input
+														type="text"
+														className="form-check-input checkbox-large"
+														id="exampleCheck3"
+														placeholder="max"
+													/>
+													{/* <label
+															className="form-check-label"
+															htmlFor="exampleCheck3"
+														>
+															Max
+														</label> */}
+												</div>
+											</div>
+										</div>
+										{/* <span className="twm-job-type-count">07</span> */}
+									</li>
+									{/* <li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck3"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck3"
+											>
+												Internship
+											</label>
+										</div>
+										<span className="twm-job-type-count">15</span>
+									</li> */}
+									{/* <li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck4"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck4"
+											>
+												Part Time
+											</label>
+										</div>
+										<span className="twm-job-type-count">20</span>
+									</li>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck5"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck5"
+											>
+												Temporary
+											</label>
+										</div>
+										<span className="twm-job-type-count">22</span>
+									</li>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck6"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck6"
+											>
+												Volunteer
+											</label>
+										</div>
+										<span className="twm-job-type-count">25</span>
+									</li> */}
+								</ul>
+							</div>
+
+							<div className="twm-sidebar-ele-filter">
+								<h4 className="section-head-small mb-4">Experience</h4>
+								<ul>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck1"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck1"
+											>
+												Entry Level
+											</label>
+										</div>
+										{/* <span className="twm-job-type-count">09</span> */}
+									</li>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck2"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck2"
+											>
+												Intermediate
+											</label>
+										</div>
+										{/* <span className="twm-job-type-count">07</span> */}
+									</li>
+									<li>
+										<div className=" form-check">
+											<input
+												type="checkbox"
+												className="form-check-input"
+												id="exampleCheck3"
+											/>
+											<label
+												className="form-check-label"
+												htmlFor="exampleCheck3"
+											>
+												Expert
+											</label>
+										</div>
+										
+									</li>
+									
+								</ul>
+							</div>
+
 							<div className="form-group mb-4">
-								<h4 className="section-head-small mb-4">Keyword</h4>
+								{/* <h4 className="section-head-small mb-4">Keyword</h4> */}
+								<h4 className="section-head-small mb-4">Skills</h4>
 								<div className="input-group">
 									<input
 										type="text"
 										className="form-control"
-										placeholder="Job title or Keyword"
+										placeholder="Search skills"
 									/>
 									<button className="btn" type="button">
 										<i className="feather-search" />
 									</button>
 								</div>
 							</div>
+
 							<div className="form-group mb-4">
 								<h4 className="section-head-small mb-4">Location</h4>
 								<div className="input-group">
@@ -51,7 +276,7 @@ function SectionJobsSidebar1() {
 									</button>
 								</div>
 							</div>
-							<div className="twm-sidebar-ele-filter">
+							{/* <div className="twm-sidebar-ele-filter">
 								<h4 className="section-head-small mb-4">Job Type</h4>
 								<ul>
 									<li>
@@ -151,8 +376,8 @@ function SectionJobsSidebar1() {
 										<span className="twm-job-type-count">25</span>
 									</li>
 								</ul>
-							</div>
-							<div className="twm-sidebar-ele-filter">
+							</div> */}
+							{/* <div className="twm-sidebar-ele-filter">
 								<h4 className="section-head-small mb-4">Date Posts</h4>
 								<ul>
 									<li>
@@ -246,8 +471,8 @@ function SectionJobsSidebar1() {
 										</div>
 									</li>
 								</ul>
-							</div>
-							<div className="twm-sidebar-ele-filter">
+							</div> */}
+							{/* <div className="twm-sidebar-ele-filter">
 								<h4 className="section-head-small mb-4">Type of employment</h4>
 								<ul>
 									<li>
@@ -299,7 +524,7 @@ function SectionJobsSidebar1() {
 										</div>
 									</li>
 								</ul>
-							</div>
+							</div> */}
 						</form>
 					</div>
 					<div className="widget tw-sidebar-tags-wrap">

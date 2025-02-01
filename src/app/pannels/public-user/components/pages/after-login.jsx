@@ -6,6 +6,8 @@ import processLogin from "../../../../form-processing/login";
 import { formType } from "../../../../../globals/constants";
 import useAuth from "../../../../context/auth/useAuth";
 import Loader from "../../../../common/loader";
+import { IoIosEyeOff, IoMdEye } from "react-icons/io";
+import { FcGoogle } from "react-icons/fc";
 
 function AfterLoginPage() {
 
@@ -86,6 +88,8 @@ function AfterLoginPage() {
 		error,
 		success,
 		isLoading,
+		isVisible,
+		setIsVisible
 	} = useAuth();
 
 
@@ -191,7 +195,7 @@ function AfterLoginPage() {
 														</div>
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
-																<input
+																{/* <input
 																	name="password"
 																	type="password"
 																	className="form-control"
@@ -201,7 +205,38 @@ function AfterLoginPage() {
 																	onChange={(event) => {
 																		setPassword(event.target.value);
 																	}}
-																/>
+																/> */}
+
+																<div className="ls-inputicon-box-signup ls-inputicon-box">
+																	<input
+																		name="password"
+																		type={isVisible ? "text" : "password"}
+																		required
+																		className="form-control"
+																		value={password}
+																		minLength={8}
+																		maxLength={20}
+																		placeholder="Password*"
+																		onChange={(event) => {
+																			setPassword(event.target.value);
+																		}}
+																	/>
+																	{isVisible ? (
+																		<div
+																			className=" eye-icon"
+																			onClick={() => setIsVisible(false)}
+																		>
+																			<IoMdEye size={25} />
+																		</div>
+																	) : (
+																		<div
+																			className=" eye-icon"
+																			onClick={() => setIsVisible(true)}
+																		>
+																			<IoIosEyeOff size={25} />
+																		</div>
+																	)}
+																</div>
 															</div>
 														</div>
 														<div className="col-lg-12">
@@ -330,7 +365,7 @@ function AfterLoginPage() {
 														</div>
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
-																<input
+																{/* <input
 																	name="password"
 																	type="password"
 																	className="form-control"
@@ -340,7 +375,38 @@ function AfterLoginPage() {
 																	onChange={(event) => {
 																		setPassword(event.target.value);
 																	}}
-																/>
+																/> */}
+
+																<div className="ls-inputicon-box-signup ls-inputicon-box">
+																	<input
+																		name="password"
+																		type={isVisible ? "text" : "password"}
+																		required
+																		className="form-control"
+																		value={password}
+																		minLength={8}
+																		maxLength={20}
+																		placeholder="Password*"
+																		onChange={(event) => {
+																			setPassword(event.target.value);
+																		}}
+																	/>
+																	{isVisible ? (
+																		<div
+																			className=" eye-icon"
+																			onClick={() => setIsVisible(false)}
+																		>
+																			<IoMdEye size={25} />
+																		</div>
+																	) : (
+																		<div
+																			className=" eye-icon"
+																			onClick={() => setIsVisible(true)}
+																		>
+																			<IoIosEyeOff size={25} />
+																		</div>
+																	)}
+																</div>
 															</div>
 														</div>
 														<div className="col-lg-12">
@@ -381,38 +447,12 @@ function AfterLoginPage() {
 																<span className="center-text-or">Or</span>
 															</div>
 														</div>
-														{/* <div className="col-md-12">
-                                                        <div className="form-group">
-                                                            <button type="submit" className="log_with_facebook">
-                                                                <i className="fab fa-facebook" />
-                                                                Continue with Facebook
-                                                            </button>
-                                                        </div>
-                                                    </div> */}
-														{/* <div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google log_with_linkedin"
-																>
-																	<JobZImage
-																		src="images/linkedin-logo-1a.png"
-																		alt=""
-																	/>
-																	Continue with LinkedIn
-																</button>
-															</div>
-														</div> */}
+														
 													</div>
 												</form>
 
-												<div
-													className="col-md-12"
-													onClick={() => {
-														loginWithLinkedIn();
-													}}
-												>
-													<div className="form-group">
+												<div className="col-md-12">
+													<div className="form-group ">
 														<button
 															type="submit"
 															className="log_with_google log_with_linkedin"
@@ -422,6 +462,18 @@ function AfterLoginPage() {
 																alt=""
 															/>
 															Continue with LinkedIn
+														</button>
+													</div>
+												</div>
+
+												<div className="col-md-12 ">
+													<div className="form-group">
+														<button
+															type="submit"
+															className=" log_with_google  d-flex flex-center gap-3 btn-google-login"
+														>
+															<FcGoogle size={20} />
+															Continue with Google
 														</button>
 													</div>
 												</div>

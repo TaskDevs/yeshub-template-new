@@ -12,6 +12,8 @@ import JobZImage from "../jobz-img";
 // import axios from "axios";
 import useAuth from "../../context/auth/useAuth";
 import Loader from "../loader";
+import { FcGoogle } from "react-icons/fc";
+import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 
 function SignInPopup() {
 	const {
@@ -30,7 +32,9 @@ function SignInPopup() {
 		error,
 		showTopMessage,
 		setShowTopMessage,
-		isLoading
+		isLoading,
+		isVisible,
+		setIsVisible,
 	} = useAuth();
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
@@ -156,7 +160,7 @@ function SignInPopup() {
 												</div>
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<input
+														{/* <input
 															name="password"
 															type="password"
 															className="form-control"
@@ -166,7 +170,38 @@ function SignInPopup() {
 															onChange={(event) => {
 																setPassword(event.target.value);
 															}}
-														/>
+														/> */}
+
+														<div className="ls-inputicon-box-signup ls-inputicon-box">
+															<input
+																name="password"
+																type={isVisible ? "text" : "password"}
+																required
+																className="form-control"
+																value={password}
+																minLength={8}
+																maxLength={20}
+																placeholder="Password*"
+																onChange={(event) => {
+																	setPassword(event.target.value);
+																}}
+															/>
+															{isVisible ? (
+																<div
+																	className=" eye-icon"
+																	onClick={() => setIsVisible(false)}
+																>
+																	<IoMdEye size={25} />
+																</div>
+															) : (
+																<div
+																	className=" eye-icon"
+																	onClick={() => setIsVisible(true)}
+																>
+																	<IoIosEyeOff size={25} />
+																</div>
+															)}
+														</div>
 													</div>
 												</div>
 												<div className="col-lg-12">
@@ -234,7 +269,7 @@ function SignInPopup() {
 												</div>
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														<input
+														{/* <input
 															name="password"
 															type="password"
 															className="form-control"
@@ -244,7 +279,38 @@ function SignInPopup() {
 															onChange={(event) => {
 																setPassword(event.target.value);
 															}}
-														/>
+														/> */}
+
+														<div className="ls-inputicon-box-signup ls-inputicon-box">
+															<input
+																name="password"
+																type={isVisible ? "text" : "password"}
+																required
+																className="form-control"
+																value={password}
+																minLength={8}
+																maxLength={20}
+																placeholder="Password*"
+																onChange={(event) => {
+																	setPassword(event.target.value);
+																}}
+															/>
+															{isVisible ? (
+																<div
+																	className=" eye-icon"
+																	onClick={() => setIsVisible(false)}
+																>
+																	<IoMdEye size={25} />
+																</div>
+															) : (
+																<div
+																	className=" eye-icon"
+																	onClick={() => setIsVisible(true)}
+																>
+																	<IoIosEyeOff size={25} />
+																</div>
+															)}
+														</div>
 													</div>
 												</div>
 												<div className="col-lg-12">
@@ -316,6 +382,20 @@ function SignInPopup() {
 												Continue with LinkedIn
 											</button>
 										</div>
+									</div>
+
+									<div className="form-group">
+										<button
+											type="submit"
+											className="log_with_google flex-center btn-google"
+										>
+											<div className="pop-up-btn-logo">
+												{/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
+												<FcGoogle size={20} />
+											</div>
+											{/* <i className="fab fa-google" /> */}
+											Continue with Google
+										</button>
 									</div>
 								</ul>
 							</div>

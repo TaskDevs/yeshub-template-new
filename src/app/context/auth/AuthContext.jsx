@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
 	const [role, setRole] = useState("1");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+	const [isVisible, setIsVisible] = useState(false);
 	const [showTopMessage, setShowTopMessage] = useState(false);
 	const [isLoading, setLoading] = useState(false);
 
@@ -348,6 +349,8 @@ export const AuthProvider = ({ children }) => {
 		success,
 		showTopMessage,
 		isLoading,
+		isVisible,
+		setIsVisible
 	};
 
 	return (

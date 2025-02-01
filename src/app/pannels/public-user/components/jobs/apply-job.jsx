@@ -139,16 +139,16 @@ function ApplyJobPage() {
 													Add more milestones
 												</div>
 
-												{showMilestone > 1 && (
-													<button
+												{showMilestone >= 1 && (
+													<div
 														type="button"
-														className="site-button outline-primary"
+														className="milestone-cancel"
 														onClick={() =>
-															setShowMilestone((prev) => Math.max(1, prev - 1))
+															setShowMilestone((prev) => ( prev - 1))
 														}
 													>
 														Cancel
-													</button>
+													</div>
 												)}
 											</div>
 										</div>
@@ -201,11 +201,11 @@ function ApplyJobPage() {
 													{/* <button type="submit">Add Portfolio projects</button> */}
 												</div>
 
-												<div className="twm-sec-add">
+												{/* <div className="twm-sec-add">
 													<label htmlFor="cert">Add a certificate</label>
 													<input name="cert" type="file" accept="image/*" />
-													{/* <button type="submit">Add a Certificate</button> */}
-												</div>
+													{/* <button type="submit">Add a Certificate</button> 
+												</div> */}
 											</div>
 										</div>
 									</div>

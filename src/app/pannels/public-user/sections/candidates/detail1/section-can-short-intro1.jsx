@@ -24,7 +24,7 @@ function SectionCandidateShortIntro1() {
 								<p>Senior UI / UX Designer and Developer at Google INC</p>
 								<p className="twm-candidate-address">
 									<i className="feather-map-pin" />
-									Ghana
+									Kumasi
 								</p>
 							</div>
 						</div>

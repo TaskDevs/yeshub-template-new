@@ -201,23 +201,25 @@ function Header1({ _config }) {
 												<a
 													className="twm-nav-sign-up"
 													data-bs-toggle="modal"
-													href="#sign_up_popup"
+													href="#sign_up_popup2"
 													role="button"
 												>
 													<i className="feather-log-in" /> Log In
 												</a>
 											</div>
-											{/* <div className="twm-nav-btn-right">
+											<div className="twm-nav-btn-right">
 												<a
 													className="twm-nav-post-a-job"
 													data-bs-toggle="modal"
-													// href="#sign_up_popup2"
-													href="#apply_job_popup"
+													href="#sign_up_popup"
+													// href="#apply_job_popup"
 													role="button"
 												>
-													<i className="feather-briefcase" /> Post a Job
+													{/* <i className="feather-briefcase" /> */}
+													<i className="feather-log-in" />
+													Sign up
 												</a>
-											</div> */}
+											</div>
 										</div>
 									</div>
 								</div>

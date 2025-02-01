@@ -15,6 +15,8 @@ import { useUser } from "../app/context/auth/UserContext";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ProtectedRoute from "../app/context/ProtectedRoute";
+import  { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
+import FinancesPage from "../app/common/payment/accounts/finances-page";
 
 function EmployerRoutes() {
     
@@ -42,23 +44,21 @@ function EmployerRoutes() {
 
   return (
 		// <ProtectedRoute roleProp="2"></ProtectedRoute>
-			<Routes>
-				<Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
-				<Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
-				<Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
-				<Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
-				<Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
-				<Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />
-				<Route path={employer.PACKAGES} element={<EmpPackagesPage />} />
-				<Route path={employer.MESSAGES1} element={<EmpMessages1Page />} />
-				<Route path={employer.MESSAGES2} element={<EmpMessages2Page />} />
-				<Route
-					path={employer.RESUME_ALERTS}
-					element={<EmpResumeAlertsPage />}
-				/>
-				<Route path="*" element={<Error404Page />} />
-			</Routes>
-		
+		<Routes>
+			<Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
+			<Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
+			<Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
+			<Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
+			<Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
+			<Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />
+			<Route path={employer.PACKAGES} element={<EmpPackagesPage />} />
+			<Route path={employer.MESSAGES1} element={<EmpMessages1Page />} />
+			{/* <Route path={employer.MESSAGES2} element={<EmpMessages2Page />} /> */}
+			<Route path={employer.RESUME_ALERTS} element={<EmpResumeAlertsPage />} />
+			<Route path={employer.ACCOUNTS} element={<FinancesPage />} />
+			<Route path={employer.REVIEWS} element={<EmpReviewsPage />} />
+			<Route path="*" element={<Error404Page />} />
+		</Routes>
 	);
 }
 

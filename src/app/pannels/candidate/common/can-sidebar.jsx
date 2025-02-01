@@ -76,14 +76,25 @@ function CanSidebarSection() {
 							</a>
 						</li>
 						<li>
+							<a href="candidate-job-alert.html">
+								<i className="fa fa-bell" /> Accounts
+							</a>
+						</li>
+						<li>
 							<a href="candidate-change-password.html">
-								<i className="fa fa-fingerprint" /> Change Passeord
+								<i className="fa fa-fingerprint" /> Change Password
 							</a>
 						</li>
 						<li>
 							<a href="candidate-chat.html">
 								<i className="fa fa-comments" />
 								Chat
+							</a>
+						</li>
+						<li>
+							<a href="candidate-chat.html">
+								<i className="fa fa-comments" />
+								Review
 							</a>
 						</li>
 						<li>

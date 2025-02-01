@@ -13,6 +13,9 @@ import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import { useUser } from "../app/context/auth/UserContext";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "../app/context/ProtectedRoute";
+import SectionReviews from "../app/pannels/public-user/sections/common/section-reviews";
+import  { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
+import FinancesPage from "../app/common/payment/accounts/finances-page";
 
 function CandidateRoutes() {
 	const { user } = useUser();
@@ -38,22 +41,23 @@ function CandidateRoutes() {
 
 	return (
 		// <ProtectedRoute roleProp="1"></ProtectedRoute>
-			<Routes>
-				<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
-				<Route path={candidate.PROFILE} element={<CanProfilePage />} />
-				<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
-				<Route path={candidate.RESUME} element={<CanMyResumePage />} />
-				<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />
-				<Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
-				<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
-				<Route
-					path={candidate.CHANGE_PASSWORD}
-					element={<CanChangePasswordPage />}
-				/>
-				<Route path={candidate.CHAT} element={<CanChatPage />} />
-				<Route path="*" element={<Error404Page />} />
-			</Routes>
-		
+		<Routes>
+			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
+			<Route path={candidate.PROFILE} element={<CanProfilePage />} />
+			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
+			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
+			<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />
+			<Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
+			<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
+			<Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
+			<Route
+				path={candidate.CHANGE_PASSWORD}
+				element={<CanChangePasswordPage />}
+			/>
+			<Route path={candidate.CHAT} element={<CanChatPage />} />
+			<Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
+			<Route path="*" element={<Error404Page />} />
+		</Routes>
 	);
 }
 

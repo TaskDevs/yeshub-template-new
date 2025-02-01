@@ -69,7 +69,15 @@ export const publicUser = {
 		LIST: "/blog-list",
 		DETAIL: "/blog-detail",
 	},
+	payment: {
+	   CHECKOUT: "/checkout",
+	   COMPLETE: "/complete",
+    }
 };
+
+
+
+
 
 export const candidate = {
     INITIAL:        "/",
@@ -81,22 +89,28 @@ export const candidate = {
     CV_MANAGER:     "/cv-manager",
     ALERTS:         "/job-alerts",
     CHANGE_PASSWORD:"/change-password",
-    CHAT:           "/chat"
+	CHAT: "/chat",
+	REVIEWS: "/reviews",
+	ACCOUNTS: "/accounts"
 }
 
 export const employer = {
-    INITIAL:        "/",
-    DASHBOARD:      "/",
-    PROFILE:        "/profile",
-    POST_A_JOB:     "/post-a-job",
-    MANAGE_JOBS:    "/manage-jobs",
-    CANDIDATES:     "/candidates-list",
-    BOOKMARKS:      "/bookmarked-resumes",
-    PACKAGES:       "/packages",
-    MESSAGES1:      "/messages-style-1",
-    MESSAGES2:      "/messages-style-2",
-    RESUME_ALERTS:  "/resume-alerts"
-}
+	INITIAL: "/",
+	DASHBOARD: "/",
+	PROFILE: "/profile",
+	POST_A_JOB: "/post-a-job",
+	MANAGE_JOBS: "/manage-jobs",
+	CANDIDATES: "/candidates-list",
+	BOOKMARKS: "/bookmarked-resumes",
+	PACKAGES: "/packages",
+	MESSAGES1: "/messages-style-1",
+	MESSAGES2: "/messages-style-2",
+	RESUME_ALERTS: "/resume-alerts",
+	REVIEWS: "/reviews",
+	ACCOUNTS: "/accounts",
+};
+
+
 
 
 

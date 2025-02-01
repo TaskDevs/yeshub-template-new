@@ -9722,6 +9722,14 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   margin-right: 3px;
 }
 
+.checkbox-large {
+  /* transform: scaleX(2);  */
+  width: 5rem;
+  height: 30px;
+  border-radius: 0.25rem;
+
+}
+
 .form-check-input:checked[type=radio] {
   background-image: none;
   position: relative;
@@ -12328,9 +12336,10 @@ strong {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -70px;
+  margin-top: 4rem;
   margin-bottom: 1rem;
 }
+
 
 .sub-sec-add-portfolio {
   display: flex;
@@ -15817,22 +15826,35 @@ strong {
   background: #c2c2c2;
 }
 
+.w-50px {
+  width: 100%;
+  max-width: 150rem;
+}
+
 .log_with_linkedin {
   background-color: #0A66C2 !important;
   color: #fff !important;
   border: #0A66C2 !important;
-  padding: 10px 30px;
   transition: 0.5s all ease;
   
 }
 
 .log_with_linkedin:hover {
-  background-color: #084f97!important;
-  
-  
+  background-color: #084f97!important; 
 }
 .log_with_linkedin img {
   filter: invert(1) brightness(5) contrast(100%) hue-rotate(180deg);
+}
+
+.bg-red {
+  background: red;
+}
+.btn-google-login {
+  padding: 0.5rem 1.5rem!important;
+  transition: 0.5s all ease;
+}
+.btn-google-login:hover {
+  background: #f2f2f2!important;
 }
 
 .twm-log-reg-form-wrap .twm-log-reg-inner .log_with_google img {
@@ -17073,17 +17095,20 @@ strong {
   display: flex;
   justify-content: space-between; 
   align-items: center; 
-  /* background: red; */
   padding-top: 1rem;
+  cursor: pointer;
 }
 .milestone-plus {
-  cursor: pointer;
+  
   display: flex;
   gap: 0.75rem;
   align-items: center;
 }
-.milestone-plus:hover {
-  /* text-decoration: underline; */
+
+.milestone-plus:hover  {
+  border-bottom: 1px solid #000;
+}
+.milestone-cancel:hover {
   border-bottom: 1px solid #000;
 }
 
@@ -17147,6 +17172,14 @@ strong {
   width: 100%;
   border-radius: 10px;
   height: 100px;
+}
+.sec-port-add-btn {
+  background: #fff;
+  border: none;
+
+}
+.sec-port-add-btn:hover {
+  border-bottom: 1px solid #000;
 }
 
 .twm-new-sub-section-wrap .twm-sub-2-section .twm-sub-title {

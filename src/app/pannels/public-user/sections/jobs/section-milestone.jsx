@@ -12,7 +12,8 @@ function SectionMilestone () {
 													<label htmlFor="desc">Description</label>
 													<input
 														type="text"
-														className=" form-control milestone-options"
+					className=" form-control milestone-options"
+					required
 													/>
 												</div>
 												<div className="twm-timelines">
@@ -20,6 +21,7 @@ function SectionMilestone () {
 													<input
 														type="date"
 														className=" form-control milestone-options"
+														required
 													/>
 												</div>
 												<div className="twm-timelines">
@@ -28,6 +30,7 @@ function SectionMilestone () {
 														type="number"
 														placeholder="₵0.00"
 														className="form-control milestone-options"
+														required
 													/>
 												</div>
 											</div>

@@ -12,8 +12,8 @@ import { FcGoogle } from "react-icons/fc";
 function AfterLoginPage() {
 
     // const navigate = useNavigate();
-    // const [canusername, setCanUsername] = useState('guest');
-    // const [empusername, setEmpUsername] = useState('admin');
+    // const [canemail, setCanEmail] = useState('guest');
+    // const [empemail, setEmpEmail] = useState('admin');
     // const [password, setPassword] = useState('12345');
 
     // const handleCandidateLogin = (event) => {
@@ -30,7 +30,7 @@ function AfterLoginPage() {
     //     processLogin(
     //         {
     //             type: formType.LOGIN_CANDIDATE,
-    //             username: canusername,
+    //             email: canemail,
     //             password: password
     //         },
     //         (valid) => {
@@ -48,7 +48,7 @@ function AfterLoginPage() {
     //     processLogin(
     //         {
     //             type: formType.LOGIN_EMPLOYER,
-    //             username: empusername,
+    //             email: empemail,
     //             password: password
     //         },
     //         (valid) => {
@@ -77,10 +77,10 @@ function AfterLoginPage() {
 		isSubmitting,
 		password,
 		setPassword,
-		canUsername,
-		setCanUsername,
-		empUsername,
-		setEmpUsername,
+		canEmail,
+		setCanEmail,
+		empEmail,
+		setEmpEmail,
 		loginWithLinkedIn,
 		setRole,
 		showTopMessage,
@@ -181,14 +181,14 @@ function AfterLoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="username"
+																	name="email"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="Usearname*"
-																	value={canUsername}
+																	placeholder="Email*"
+																	value={canEmail}
 																	onChange={(event) => {
-																		setCanUsername(event.target.value);
+																		setCanEmail(event.target.value);
 																	}}
 																/>
 															</div>
@@ -351,14 +351,14 @@ function AfterLoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="username"
+																	name="email"
 																	type="text"
 																	required
 																	className="form-control"
 																	placeholder="Usearname*"
-																	value={empUsername}
+																	value={empEmail}
 																	onChange={(event) => {
-																		setEmpUsername(event.target.value);
+																		setEmpEmail(event.target.value);
 																	}}
 																/>
 															</div>

@@ -5,14 +5,16 @@ import JobZImage from "../../../../common/jobz-img";
 import SectionPagination from "../../sections/common/section-pagination";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { MdOutlineStarRate } from "react-icons/md";
 import { LuMessageSquare } from "react-icons/lu";
 import { MdDonutLarge } from "react-icons/md";
 import { FaCediSign } from "react-icons/fa6";
+import axios from "axios";
 
 function CandidateListPage() {
+	
 
     const _filterConfig = {
         prefix: "Showing",
@@ -24,7 +26,9 @@ function CandidateListPage() {
 
     useEffect(()=>{
         loadScript("js/custom.js")
-    })
+	})
+	
+	
 
     return (
 			<>
@@ -79,7 +83,7 @@ function CandidateListPage() {
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
 															<p className="twm-candidate-address">
-																<i className="feather-map-pin" /> Ghana
+																<i className="feather-map-pin" /> Kumasi
 															</p>
 														</div>
 
@@ -202,7 +206,138 @@ function CandidateListPage() {
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
 															<p className="twm-candidate-address">
-																<i className="feather-map-pin" /> Ghana
+																<i className="feather-map-pin" /> Kumasi
+															</p>
+														</div>
+
+														<ul className="twm-can-pro-info can-insights">
+															<li className="pro-info-lists list-rate">
+																<div className="">
+																	<MdOutlineStarRate
+																		className="star-icon star-1"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-2"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-3"
+																		size={20}
+																		color="red"
+																	/>
+																	<MdOutlineStarRate
+																		className="star-icon star-4"
+																		size={20}
+																		color="red"
+																	/>
+																</div>
+
+																<span className="start-reviews">5.0</span>
+															</li>
+															<li className="pro-info-lists">
+																<LuMessageSquare size={20} color="brown" />
+																<span className="start-reviews">100</span>{" "}
+																Reviews
+															</li>
+															{/* <li className="pro-info-lists">
+																<FaCediSign size={20} color="green" />
+																<span>10.0</span>
+															</li>
+															<li className="pro-info-lists">
+																<MdDonutLarge size={20} color="blue" />
+																<span>100%</span>
+															</li> */}
+															<li className="pro-info-lists">
+																{/* pro-info-lists */}
+																{/* twm-candidates-tag-rate */}
+																<span className=" twm-candidates-tag-rate">
+																	₵20
+																</span>
+																/ per hour
+															</li>
+														</ul>
+
+														<div className="twm-fot-content">
+															<div className="twm-left-info sec-pro-desc">
+																<p className="twm-exp-profile fs-6">
+																	I am a Chartered Accountant specializing in
+																	financial reporting, tax planning, auditing,
+																	and budgeting. With expertise in IFRS and
+																	GAAP, I provide accurate and reliable services
+																	to businesses across various industries,
+																	ensuring their financial success.
+																</p>
+
+																<ul className="twm-can-pro-info">
+																	<li>Graphic design</li>
+																	<li>Internet marketing</li>
+																	<li>SEO</li>
+																	<li>Java</li>
+																</ul>
+																{/* <div className="twm-jobs-vacancies">
+																₵20<span>/ Day</span>
+															</div> */}
+																<div className="twm-right-btn view-btn">
+																	<p className="twm-view-prifile site-text-primary">
+																		View Profile
+																	</p>
+																</div>
+															</div>
+														</div>
+													</div>
+												</NavLink>
+											</li>
+
+											<li>
+												<NavLink
+													to={publicUser.candidate.DETAIL1}
+													className="twm-candidates-list-style1 mb-5"
+												>
+													<div className="twm-media">
+														<div className="twm-media-pic">
+															<JobZImage
+																src="images/candidates/pic1.jpg"
+																alt="#"
+															/>
+														</div>
+													</div>
+
+													<div className="twm-mid-content">
+														<div className="d-flex justify-content-between align-items-center">
+															<h4 className="twm-job-title">
+																Wanda Montgomery{" "}
+															</h4>
+															<div className="">
+																<div className="">
+																	{/* twm-candi-self-bottom */}
+																	<button
+																		className="site-button"
+																		data-bs-target="#"
+																		data-bs-toggle="modal"
+																		data-bs-dismiss="modal"
+																	>
+																		Hire Me Now
+																	</button>
+																	{/* <a
+																		href="#"
+																		className="site-button"
+																		site-button
+																		// outline-white
+																	>
+																		Hire Me Now
+																	</a> */}
+																	{/* <a href="#" className="site-button secondry">Download CV</a> */}
+																</div>
+															</div>
+														</div>
+
+														<div className="twm-can-sec-one">
+															<p>Charted Accountant</p>
+															<p className="twm-candidate-address">
+																<i className="feather-map-pin" /> Kumasi
 															</p>
 														</div>
 
@@ -325,130 +460,7 @@ function CandidateListPage() {
 														<div className="twm-can-sec-one">
 															<p>Charted Accountant</p>
 															<p className="twm-candidate-address">
-																<i className="feather-map-pin" /> Ghana
-															</p>
-														</div>
-
-														<ul className="twm-can-pro-info can-insights">
-															<li className="pro-info-lists list-rate">
-																<div className="">
-																	<MdOutlineStarRate
-																		className="star-icon star-1"
-																		size={20}
-																		color="red"
-																	/>
-																	<MdOutlineStarRate
-																		className="star-icon star-2"
-																		size={20}
-																		color="red"
-																	/>
-																	<MdOutlineStarRate
-																		className="star-icon star-3"
-																		size={20}
-																		color="red"
-																	/>
-																	<MdOutlineStarRate
-																		className="star-icon star-4"
-																		size={20}
-																		color="red"
-																	/>
-																</div>
-
-																<span className="start-reviews">5.0</span>
-															</li>
-															<li className="pro-info-lists">
-																<LuMessageSquare size={20} color="brown" />
-																<span className="start-reviews">100</span>{" "}
-																Reviews
-															</li>
-															{/* <li className="pro-info-lists">
-																<FaCediSign size={20} color="green" />
-																<span>10.0</span>
-															</li>
-															<li className="pro-info-lists">
-																<MdDonutLarge size={20} color="blue" />
-																<span>100%</span>
-															</li> */}
-															<li className="pro-info-lists">
-																{/* pro-info-lists */}
-																{/* twm-candidates-tag-rate */}
-																<span className=" twm-candidates-tag-rate">
-																	₵20
-																</span>
-																/ per hour
-															</li>
-														</ul>
-
-														<div className="twm-fot-content">
-															<div className="twm-left-info sec-pro-desc">
-																<p className="twm-exp-profile fs-6">
-																	I am a Chartered Accountant specializing in
-																	financial reporting, tax planning, auditing,
-																	and budgeting. With expertise in IFRS and
-																	GAAP, I provide accurate and reliable services
-																	to businesses across various industries,
-																	ensuring their financial success.
-																</p>
-
-																<ul className="twm-can-pro-info">
-																	<li>Graphic design</li>
-																	<li>Internet marketing</li>
-																	<li>SEO</li>
-																	<li>Java</li>
-																</ul>
-																{/* <div className="twm-jobs-vacancies">
-																₵20<span>/ Day</span>
-															</div> */}
-																<div className="twm-right-btn view-btn">
-																	<p className="twm-view-prifile site-text-primary">
-																		View Profile
-																	</p>
-																</div>
-															</div>
-														</div>
-													</div>
-												</NavLink>
-											</li>
-
-											<li>
-												<NavLink
-													to={publicUser.candidate.DETAIL1}
-													className="twm-candidates-list-style1 mb-5"
-												>
-													<div className="twm-media">
-														<div className="twm-media-pic">
-															<JobZImage
-																src="images/candidates/pic1.jpg"
-																alt="#"
-															/>
-														</div>
-													</div>
-
-													<div className="twm-mid-content">
-														<div className="d-flex justify-content-between align-items-center">
-															<h4 className="twm-job-title">
-																Wanda Montgomery{" "}
-															</h4>
-															<div className="">
-																<div className="">
-																	{/* twm-candi-self-bottom */}
-																	<a
-																		href="#"
-																		className="site-button"
-																		site-button
-																		// outline-white
-																	>
-																		Hire Me Now
-																	</a>
-																	{/* <a href="#" className="site-button secondry">Download CV</a> */}
-																</div>
-															</div>
-														</div>
-
-														<div className="twm-can-sec-one">
-															<p>Charted Accountant</p>
-															<p className="twm-candidate-address">
-																<i className="feather-map-pin" /> Ghana
+																<i className="feather-map-pin" /> Kumasi
 															</p>
 														</div>
 

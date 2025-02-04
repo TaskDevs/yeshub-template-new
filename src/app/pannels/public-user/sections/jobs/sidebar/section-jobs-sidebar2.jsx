@@ -74,7 +74,7 @@ function SectionJobsSidebar2({ _config }) {
 										<i className="fas fa-money-bill-wave" />
 										<span className="twm-title">Budget</span>
 										<div className="twm-s-info-discription">
-											₵200-₵250 / daily
+											₵2000-₵3000 
 										</div>
 									</div>
 								</li>

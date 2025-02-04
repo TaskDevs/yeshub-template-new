@@ -68,7 +68,7 @@ function CanCVManagerPage() {
                                     <NavLink to={publicUser.candidate.DETAIL1} className="twm-job-title">
                                         <h4>Peter Hawkins</h4>
                                     </NavLink>
-                                    <p>Medical Professed</p>
+                                    <p>Medical Professor</p>
                                     <div className="twm-fot-content">
                                         <div className="twm-left-info">
                                             <p className="twm-candidate-address"><i className="feather-map-pin" />New York</p>

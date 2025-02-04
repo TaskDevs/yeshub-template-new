@@ -173,6 +173,8 @@ const handleSubmitProfile = async (e) => {
 												name="company_name"
 												type="text"
 												placeholder="Devid Smith"
+												value={formData.company_name}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-user " />
 										</div>
@@ -187,6 +189,8 @@ const handleSubmitProfile = async (e) => {
 												name="company_phone"
 												type="text"
 												placeholder="(251) 1234-456-7890"
+												value={formData.phone_no}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-phone-alt" />
 										</div>
@@ -198,9 +202,11 @@ const handleSubmitProfile = async (e) => {
 										<div className="ls-inputicon-box">
 											<input
 												className="form-control"
-												name="company_Email"
-												type="email"
+												name="email"
+												type="text"
 												placeholder="Devid@example.com"
+												value={formData.email}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-envelope" />
 										</div>
@@ -212,9 +218,11 @@ const handleSubmitProfile = async (e) => {
 										<div className="ls-inputicon-box">
 											<input
 												className="form-control"
-												name="company_website"
+												name="website"
 												type="text"
 												placeholder="https://..."
+												value={formData.website}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-globe-americas" />
 										</div>
@@ -232,6 +240,8 @@ const handleSubmitProfile = async (e) => {
 												title="sector"
 												id="city"
 												data-bv-field="sector"
+												value={formData.sector}
+												onChange={handleChange}
 											>
 												<option className="bs-title-option" value>
 													Software engineering
@@ -254,6 +264,8 @@ const handleSubmitProfile = async (e) => {
 												name="Address"
 												type="text"
 												placeholder="Boulevard street"
+												value={formData.address}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-globe-americas" />
 										</div>
@@ -268,6 +280,8 @@ const handleSubmitProfile = async (e) => {
 												name="est_date"
 												type="text"
 												placeholder="Since..."
+												value={formData.est_date}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-globe-americas" />
 										</div>
@@ -282,6 +296,8 @@ const handleSubmitProfile = async (e) => {
 												name="longitude"
 												type="text"
 												placeholder="1.0232° W"
+												value={formData.longitude}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-globe-americas" />
 										</div>
@@ -294,9 +310,11 @@ const handleSubmitProfile = async (e) => {
 										<div className="ls-inputicon-box">
 											<input
 												className="form-control"
-												name="Latitude"
+												name="latitude"
 												type="text"
 												placeholder="7.9465° N"
+												value={formData.latitude}
+												onChange={handleChange}
 											/>
 											<i className="fs-input-icon fa fa-globe-americas" />
 										</div>
@@ -311,6 +329,8 @@ const handleSubmitProfile = async (e) => {
 											rows={3}
 											placeholder="Greetings! We are Galaxy Software Development Company."
 											defaultValue={""}
+											value={formData.description}
+											onChange={handleChange}
 										/>
 									</div>
 								</div>

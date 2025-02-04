@@ -28,13 +28,15 @@ export const AuthProvider = ({ children }) => {
 	const [isLoading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
-	const { updateUser } = useUser();
+	const { user, updateUser } = useUser();
 
 	const loginSuccess = () => toast("User successfully logged in!");
 	const loginError = () => toast("Error!, Failed to login");
+	const roleError = () => toast("Error!, you must be an employer to login");
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
 	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
+	const logoutUrl = `${process.env.REACT_APP_BASE_URL}logout/{user.id}`
 
 	// console.log("url", url);
 	// console.log("linkedinUrl", linkedinUrl);
@@ -79,17 +81,13 @@ export const AuthProvider = ({ children }) => {
 
 			if (response.status === 201) {
 				loginSuccess();
-				// setTimeout(() => {
-				// 	setLoading(false);
-				// }, 2000);
+				
 				if (role === "1") {
 					moveToCandidate();
 				}
 			}
 		} catch (error) {
-			// setTimeout(() => {
-			// 	setLoading(true);
-			// }, 2000);
+			
 			setCanUsername("");
 			setPassword("");
 			loginError();
@@ -127,7 +125,7 @@ export const AuthProvider = ({ children }) => {
 	// 		const data = response.data;
 	// 		console.log("data", data);
 
-	// 		if (response.status === 201) {
+	// 		if (response.status === 200) {
 	// 			if (role === "2") {
 	// 				moveToEmployer();
 	// 			}
@@ -157,12 +155,19 @@ export const AuthProvider = ({ children }) => {
 	// };
 
 	const loginEmployer = async () => {
+
+		if (role === "2") {
+		   roleError();
+			return;
+		}
+
 		setError("");
 		setSuccess("");
 
 		setTimeout(() => {
 			setLoading(true);
 		}, 200);
+
 
 		try {
 			const response = await axios.post(url, {
@@ -175,9 +180,6 @@ export const AuthProvider = ({ children }) => {
 			loginSuccess();
 
 			if (response.status === 201) {
-				// setTimeout(() => {
-				// 	setLoading(true);
-				// }, 2000);
 				if (role === "2") {
 					moveToEmployer();
 				}
@@ -224,7 +226,7 @@ export const AuthProvider = ({ children }) => {
 	// processLogin(
 	//     {
 	//         type: formType.LOGIN_CANDIDATE,
-	//         email: canEmail,
+	//         username: canUsername,
 	//         password: password
 	//     },
 	//     (valid) => {
@@ -242,7 +244,7 @@ export const AuthProvider = ({ children }) => {
 	// 		const response = await axios.post(
 	// 			url,
 	// 			{
-	// 				email: empEmail,
+	// 				username: empUsername,
 	// 				password: password,
 	// 			},
 	// 			{
@@ -258,7 +260,7 @@ export const AuthProvider = ({ children }) => {
 	// 			moveToEmployer();
 	// 		}
 	// 	} catch (error) {
-	// 		setEmpEmail("");
+	// 		setEmpUsername("");
 	// 		setPassword("");
 	// 	} finally {
 	// 		setIsSubmitting(false);
@@ -278,12 +280,12 @@ export const AuthProvider = ({ children }) => {
 			setLoading(true);
 		}, 200);
 		try {
-			const response = await axios.post(linkedinUrl);
+			const response = await axios.get(linkedinUrl);
 			const data = response.data;
 			console.log("data", data);
 			loginSuccess();
 
-			if (response.status === 201) {
+			if (response.status === 200) {
 				// setTimeout(() => {
 				// 	setLoading(true);
 				// }, 2000);
@@ -320,10 +322,20 @@ export const AuthProvider = ({ children }) => {
 	// 					setIsSignUp(true);
 	// };
 
-	const logout = () => {
-		setCurrentUser(null);
-		setAuth(false);
-		updateUser(null);
+	const logout = async () => {
+        
+		try {
+			const res = await axios.delete(logoutUrl)
+			console.log("logout", res)
+
+		} catch (error) {
+			setError( error.message || "Failed to logout")
+		} finally {
+			setCurrentUser(null);
+			setAuth(false);
+			updateUser(null);
+
+		}
 	};
 
 	const details = {

@@ -18,10 +18,10 @@ function LoginPage() {
 		isSubmitting,
 		password,
 		setPassword,
-		canUsername,
-		setCanUsername,
-		empUsername,
-		setEmpUsername,
+		canEmail,
+		setCanEmail,
+		empEmail,
+		setEmpEmail,
 		setRole,
 		showTopMessage,
 		setShowTopMessage,
@@ -126,14 +126,14 @@ function LoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="username"
+																	name="email"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="username"
-																	value={canUsername}
+																	placeholder="email"
+																	value={canEmail}
 																	onChange={(event) => {
-																		setCanUsername(event.target.value);
+																		setCanEmail(event.target.value);
 																	}}
 																/>
 															</div>
@@ -233,14 +233,14 @@ function LoginPage() {
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
 																<input
-																	name="username"
+																	name="email"
 																	type="text"
 																	required
 																	className="form-control"
-																	placeholder="username"
-																	value={empUsername}
+																	placeholder="email"
+																	value={empEmail}
 																	onChange={(event) => {
-																		setEmpUsername(event.target.value);
+																		setEmpEmail(event.target.value);
 																	}}
 																/>
 															</div>
@@ -488,7 +488,7 @@ export default LoginPage;
     // }
 
     // const loginCandidate = async () => {
-    //     if (!canUsername || !password) {
+    //     if (!canEmail || !password) {
 	// 				setIsSubmitting(false);
 	// 				return;
 	// 			}
@@ -497,7 +497,7 @@ export default LoginPage;
 	// 				const response = await axios.post(
 	// 					url,
 	// 					{
-	// 						username: canUsername,
+	// 						email: canEmail,
 	// 						password: password,
 	// 					},
 	// 					{
@@ -513,7 +513,7 @@ export default LoginPage;
 	// 					moveToCandidate();
 	// 				}
 	// 			} catch (error) {
-	// 				setCanUsername("");
+	// 				setCanEmail("");
 	// 				setPassword("");
 	// 			} finally {
 	// 				setIsSubmitting(false);
@@ -522,7 +522,7 @@ export default LoginPage;
     //     // processLogin(
     //     //     {
     //     //         type: formType.LOGIN_CANDIDATE,
-    //     //         username: canUsername,
+    //     //         email: canEmail,
     //     //         password: password
     //     //     },
     //     //     (valid) => {
@@ -541,7 +541,7 @@ export default LoginPage;
 	// 				const response = await axios.post(
 	// 					url,
 	// 					{
-	// 						username: empUsername,
+	// 						email: empEmail,
 	// 						password: password,
 	// 					},
 	// 					{
@@ -557,7 +557,7 @@ export default LoginPage;
 	// 					moveToEmployer();
 	// 				}
 	// 			} catch (error) {
-	// 				setEmpUsername("");
+	// 				setEmpEmail("");
 	// 				setPassword("");
 	// 			} finally {
 	// 				setIsSubmitting(false);
@@ -567,7 +567,7 @@ export default LoginPage;
     //     // processLogin(
     //     //     {
     //     //         type: formType.LOGIN_EMPLOYER,
-    //     //         username: empUsername,
+    //     //         email: empEmail,
     //     //         password: password
     //     //     },
     //     //     (valid) => {

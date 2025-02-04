@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AuthProvider } from "./app/context/auth/AuthContext";
 import { UserProvider } from "./app/context/auth/UserContext";
 import { ToastContainer } from "react-toastify";
+import { MilestoneProvider } from "./app/context/candidates/MilestoneContext";
 
 function App() {
 
@@ -18,10 +19,12 @@ function App() {
   return (
 		<UserProvider>
 			<AuthProvider>
-				{isLoading && <Loader />}
-				<ScrollToTop />
-			  <RootLayout />
-			  <ToastContainer position="top-center"  />
+				<MilestoneProvider>
+					{isLoading && <Loader />}
+					<ScrollToTop />
+					<RootLayout />
+					<ToastContainer position="top-center" />
+				</MilestoneProvider>
 			</AuthProvider>
 		</UserProvider>
 	);

@@ -17080,14 +17080,24 @@ strong {
 }
 
 .twm-sec-timelines {
+  width: 100%;
   /* background: blue; */
   display: flex;
   gap: 1rem; 
   justify-content: space-between;
+  align-items: flex-end;
 }
-@media (max-width: 768px) {
+.timeliness-desc {
+  /* background: red; */
+  display: flex;
+  flex: 1;
+  /* max-width: 50rem; */
+  width: 100%;
+}
+@media (max-width: 480px) {
   .twm-sec-timelines {
     flex-direction: column;
+    align-items: flex-start;
 }
 }
 

@@ -14,6 +14,7 @@ import useAuth from "../../context/auth/useAuth";
 import Loader from "../loader";
 import { FcGoogle } from "react-icons/fc";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
+import { useEffect } from "react";
 
 function SignInPopup() {
 	const {
@@ -27,6 +28,7 @@ function SignInPopup() {
 		empUsername,
 		setEmpUsername,
 		loginWithLinkedIn,
+		role,
 		setRole,
 		success,
 		error,
@@ -60,6 +62,11 @@ function SignInPopup() {
 	// 				setIsSubmitting(false);
 	// 			}
 	// 		}
+
+
+	useEffect(() => {
+		console.log("role-1", role)
+	})
 
 	return (
 		<>
@@ -128,7 +135,10 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-Employer"
 												type="button"
-												onClick={() => setRole("2")}
+												onClick={() => {
+													setRole("2");
+													
+												}}
 											>
 												<i className="fas fa-building" />
 												Employer

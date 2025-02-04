@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
 	candidate,
 	canRoute,
@@ -45,6 +45,10 @@ export const AuthProvider = ({ children }) => {
 	// 			event.preventDefault();
 	// 			loginCandidate();
 	// 		};
+
+	useEffect(() => {
+			console.log("role-1", role)
+		})
 
 	const handleEmployerLogin = (event) => {
 		event.preventDefault();
@@ -155,15 +159,17 @@ export const AuthProvider = ({ children }) => {
 	// };
 
 	const loginEmployer = async () => {
+		console.log("role-authCtx", role)
+		console.log("ctx-emp", role === "2");
 
-		if (role === "2") {
+		if (role !== "2") {
 		   roleError();
 			return;
 		}
 
 		setError("");
 		setSuccess("");
-
+		
 		setTimeout(() => {
 			setLoading(true);
 		}, 200);
@@ -173,6 +179,7 @@ export const AuthProvider = ({ children }) => {
 			const response = await axios.post(url, {
 				username: empUsername,
 				password: password,
+				
 			});
 			const data = response.data;
 			console.log("data", data);
@@ -199,73 +206,6 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	// processLogin(
-	//     {
-	//         type: formType.LOGIN_EMPLOYER,
-	//         username: empUsername,
-	//         password: password
-	//     },
-	//     (valid) => {
-	//         if (valid) {
-	//             moveToEmployer();
-	//         } else {
-	//             // show error
-	//             console.log('error');
-	//         }
-	//     }
-	// );
-
-	// const moveToCandidate = () => {
-	//     navigate(canRoute(candidate.DASHBOARD));
-	// }
-
-	// const moveToEmployer = () => {
-	//     navigate(empRoute(employer.DASHBOARD));
-	// }
-
-	// processLogin(
-	//     {
-	//         type: formType.LOGIN_CANDIDATE,
-	//         username: canUsername,
-	//         password: password
-	//     },
-	//     (valid) => {
-	//         if (valid) {
-	//             moveToCandidate();
-	//         } else {
-	//             // show error
-	//             console.log('error');
-	//         }
-	//     }
-	// );
-
-	// const loginEmployer = async () => {
-	// 	try {
-	// 		const response = await axios.post(
-	// 			url,
-	// 			{
-	// 				username: empUsername,
-	// 				password: password,
-	// 			},
-	// 			{
-	// 				headers: {
-	// 					"Content-type": "application/json",
-	// 				},
-	// 			}
-	// 		);
-	// 		const data = response.data;
-	// 		console.log("data", data);
-
-	// 		if (response.status === 200) {
-	// 			moveToEmployer();
-	// 		}
-	// 	} catch (error) {
-	// 		setEmpUsername("");
-	// 		setPassword("");
-	// 	} finally {
-	// 		setIsSubmitting(false);
-	// 	}
-	// }
 
 	const moveToCandidate = () => {
 		navigate(canRoute(candidate.DASHBOARD));
@@ -369,3 +309,76 @@ export const AuthProvider = ({ children }) => {
 		<AuthContext.Provider value={details}>{children}</AuthContext.Provider>
 	);
 };
+
+
+
+
+
+
+	// processLogin(
+	//     {
+	//         type: formType.LOGIN_EMPLOYER,
+	//         username: empUsername,
+	//         password: password
+	//     },
+	//     (valid) => {
+	//         if (valid) {
+	//             moveToEmployer();
+	//         } else {
+	//             // show error
+	//             console.log('error');
+	//         }
+	//     }
+	// );
+
+	// const moveToCandidate = () => {
+	//     navigate(canRoute(candidate.DASHBOARD));
+	// }
+
+	// const moveToEmployer = () => {
+	//     navigate(empRoute(employer.DASHBOARD));
+	// }
+
+	// processLogin(
+	//     {
+	//         type: formType.LOGIN_CANDIDATE,
+	//         username: canUsername,
+	//         password: password
+	//     },
+	//     (valid) => {
+	//         if (valid) {
+	//             moveToCandidate();
+	//         } else {
+	//             // show error
+	//             console.log('error');
+	//         }
+	//     }
+	// );
+
+	// const loginEmployer = async () => {
+	// 	try {
+	// 		const response = await axios.post(
+	// 			url,
+	// 			{
+	// 				username: empUsername,
+	// 				password: password,
+	// 			},
+	// 			{
+	// 				headers: {
+	// 					"Content-type": "application/json",
+	// 				},
+	// 			}
+	// 		);
+	// 		const data = response.data;
+	// 		console.log("data", data);
+
+	// 		if (response.status === 200) {
+	// 			moveToEmployer();
+	// 		}
+	// 	} catch (error) {
+	// 		setEmpUsername("");
+	// 		setPassword("");
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
+	// }

@@ -143,9 +143,7 @@ function ApplyJobPage() {
 													<div
 														type="button"
 														className="milestone-cancel"
-														onClick={() =>
-															setShowMilestone((prev) => ( prev - 1))
-														}
+														onClick={() => setShowMilestone((prev) => prev - 1)}
 													>
 														Cancel
 													</div>
@@ -159,7 +157,7 @@ function ApplyJobPage() {
 											<p className="twm-s-title-text">
 												How long will this project take?
 											</p>
-											<select
+											{/* <select
 												name=""
 												id=""
 												value="Select a duration"
@@ -171,7 +169,44 @@ function ApplyJobPage() {
 												<option value="">3 to 6 months</option>
 												<option value="">1 to 3 months</option>
 												<option value="">less than 1 month</option>
-											</select>
+											</select> */}
+
+											<div className="twm-sec-timelines">
+												<div className="twm-timelines">
+													<label htmlFor="">Project Duration</label>
+													<select
+														name=""
+														id=""
+														value="Select a duration"
+														placeholder="Select a duration"
+														className="twm-select-duration form-control milestone-options"
+													>
+														<option value="">Select a duration</option>
+														<option value="">more than 8 months</option>
+														<option value="">3 to 6 months</option>
+														<option value="">1 to 3 months</option>
+														<option value="">less than 1 month</option>
+													</select>
+												</div>
+
+												<div className="twm-timelines">
+													<label htmlFor="amount">Amount</label>
+													<input
+														type="number"
+														placeholder="₵0.00"
+														className="form-control milestone-options"
+														required
+													/>
+												</div>
+
+												<div className="twm-timelines">
+													<label htmlFor="desc">Description</label>
+													<input
+														type="text"
+														className=" form-control milestone-options timeliness-desc"
+													/>
+												</div>
+											</div>
 										</div>
 									)}
 

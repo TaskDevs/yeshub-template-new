@@ -162,10 +162,10 @@ export const AuthProvider = ({ children }) => {
 		console.log("role-authCtx", role)
 		console.log("ctx-emp", role === "2");
 
-		if (role !== "2") {
-		   roleError();
-			return;
-		}
+		// if (role !== "2") {
+		//    roleError();
+		// 	return;
+		// }
 
 		setError("");
 		setSuccess("");

@@ -37,10 +37,10 @@ function SignInPopup() {
 		setIsVisible,
 	} = useAuth();
 
-	const url = `${process.env.REACT_APP_BASE_URL}login`;
-	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
-	console.log("url", url);
-	console.log("linkedinUrl", linkedinUrl);
+	// const url = `${process.env.REACT_APP_BASE_URL}login`;
+	// const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
+	// console.log("url", url);
+	// console.log("linkedinUrl", linkedinUrl);
 
 	// const loginWithLinkedIn = async () => {
 

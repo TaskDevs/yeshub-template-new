@@ -1,6 +1,69 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useState } from 'react'
+import { LuAsterisk } from 'react-icons/lu';
 
 function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
+
+
+	const [error, setError] = useState("");
+	const [loading, setLoading] = useState("");
+	const [success, setSuccess] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const initialData = {
+		firstName: "",
+		LastName: "",
+		email: "",
+		linkedIn_url: "",
+		client_title: "",
+		project_type: "",
+		description: ""
+
+	}
+
+	const [formData, setFormData] = useState(initialData);
+
+
+	const reviewUrl = `${process.env.REACT_APP_BASE_URL}`
+	
+
+	const handleSubmitReview = async (e) => {
+		e.preventDefault();
+		setError("")
+		setSuccess("");
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+
+		try {
+			setIsSubmitting(true);
+			const res = await axios.post(reviewUrl, formData);
+
+			console.log("submit-review", res);
+			setSuccess("Review successfully submitted")
+			
+			
+		} catch (error) {
+			setError(error.message || "Error submitting review")
+		} finally {
+			setSuccess("");
+			setError("");
+			setFormData(initialData)
+			setIsSubmitting(false);
+			setTimeout(() => {
+				setLoading(true);
+			}, 2000);
+		}
+
+	};
+
+
+
+
+
+
+
+
 	return (
 		<>
 			<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -41,7 +104,7 @@ function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 			>
 				<div className="modal-dialog modal-dialog-centered">
 					<div className="modal-content">
-						<form onSubmit={"handleAddEducation"}>
+						<form onSubmit={handleSubmitReview}>
 							<div className="modal-header">
 								<h2 className="modal-title">Reviews</h2>
 								<button
@@ -110,7 +173,7 @@ function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 													className="form-control"
 													type="text"
 													placeholder="Enter Url"
-													name="linkedin_Url"
+													name="linkedIn_url"
 												/>
 												{/* <i className="fs-input-icon fa fa-globe-americas" /> */}
 											</div>
@@ -119,7 +182,7 @@ function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 									{/*Start Date*/}
 									<div className="col-xl-12 col-lg-12">
 										<div className="form-group">
-											<label>Client</label>
+											<label>Client Title</label>
 											<div className="ls-inputicon-box">
 												<input
 													className="form-control"

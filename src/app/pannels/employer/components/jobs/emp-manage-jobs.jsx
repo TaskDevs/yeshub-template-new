@@ -1,6 +1,19 @@
+import { useEffect, useState } from "react";
 import JobZImage from "../../../../common/jobz-img";
+import { useApify } from "../../../../context/work-data/useApify";
 
 function EmpManageJobsPage() {
+
+
+    // const { postedJobsData, error } = useApify();
+
+ 
+
+
+
+
+
+
     return (
         <>
             <div className="wt-admin-right-page-header clearfix">

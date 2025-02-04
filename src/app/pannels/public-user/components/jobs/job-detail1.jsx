@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import JobZImage from "../../../../common/jobz-img";
 import ApplyJobPopup from "../../../../common/popups/popup-apply-job";
@@ -12,9 +12,20 @@ import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-
 import ApplyJobPage from "./apply-job";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../../../globals/route-names";
+import axios from "axios";
+import { useUser } from "../../../../context/auth/UserContext";
 
 function JobDetail1Page() {
 
+	const [empListData, setEmpListData] = useState([]);
+	const [error, setError] = useState(null);
+	
+	const { user } = useUser();
+    
+     const getEmpListUrl = `${process.env.REACT_APP_BASE_URL}`;
+
+
+    
     const sidebarConfig = {
         showJobInfo: true
     }
@@ -22,6 +33,23 @@ function JobDetail1Page() {
     useEffect(()=>{
         loadScript("js/custom.js");
     })
+
+	useEffect(() => {
+		const fetchEmployerData = async () => {
+			try {
+				const res = await axios.get(getEmpListUrl);
+				console.log("emp-list", res);
+
+				setEmpListData(res.data);
+			} catch (error) {
+				setError(
+					error?.message || "Oops, An error occurred while fetching data"
+				);
+			}
+		};
+		fetchEmployerData();
+	}, [getEmpListUrl]);
+
 
     return (
 			<>

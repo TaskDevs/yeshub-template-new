@@ -4,6 +4,11 @@ import { publicUser } from "../../../../../globals/route-names";
 import SectionPagination from "../common/section-pagination";
 
 function SectionJobsList() {
+
+	//TODO: EXTRACT UNIQUE JOB IDS, ADD TO LINK AND ROUTE EACH JOB TO ITS PAGE
+
+
+
 	return (
 		<>
 			<div>

@@ -27,24 +27,27 @@ function SignUpPopup() {
 	const [success, setSuccess] = useState(false);
 	const [isLoading, setLoading] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
+	const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 	const { updateUser } = useUser();
 
 	const initialFormData = {
-		username: "",
+		// username: "",
+		email: "",
 		password: "",
 		password_confirmation: "",
-		firstName: "",
-		lastName: "",
-		phoneNo: "",
-		country: "",
-		city: "",
-		address: "",
-		location: "",
+		// firstName: "",
+		// lastName: "",
+		// phoneNo: "",
+		// country: "",
+		// city: "",
+		// address: "",
+		// location: "",
 		role: "1",
 	};
 
 	const [formData, setFormData] = useState(initialFormData);
-	
+
 	const loginSuccess = () => toast("User successfully sign up!");
 	const loginError = () => toast("Error!, Failed to sign up!");
 	const passwordError = () => toast("Error!, Passwords do not match!");
@@ -62,17 +65,17 @@ function SignUpPopup() {
 		e.preventDefault();
 		setError("");
 		setSuccess("");
-		
-		 console.log("Submitting with role:", formData.role);
-			if (!formData.role) {
-				setError("Please select a role (Candidate or Employer)");
-				return;
-			}
-		// if (formData.password !== formData.password_confirmation) {
-		// 	setIsSubmitting(false);
-		// 	passwordError();
-		// 	return;
-		// }
+
+		console.log("Submitting with role:", formData.role);
+		if (!formData.role) {
+			setError("Please select a role (Candidate or Employer)");
+			return;
+		}
+		if (formData.password !== formData.password_confirmation) {
+			setIsSubmitting(false);
+			passwordError();
+			return;
+		}
 
 		setTimeout(() => {
 			setLoading(true);
@@ -86,13 +89,13 @@ function SignUpPopup() {
 			setSuccess(true);
 			const data = response.data;
 			console.log("data", data);
-			updateUser(data)
-			setShowTopMessage(true)
+			updateUser(data);
+			setShowTopMessage(true);
 
 			if (response.status === 201) {
 				loginSuccess();
-				
-				if (formData.role === "1") {			
+
+				if (formData.role === "1") {
 					return moveToCandidate();
 				} else {
 					return moveToEmployer();
@@ -102,11 +105,9 @@ function SignUpPopup() {
 			setShowTopMessage(true);
 			loginError();
 			setError(err.response?.data?.message || "An error occurred");
-			
-			
 		} finally {
 			setIsSubmitting(false);
-			setEmail("")
+			setEmail("");
 			// setShowTopMessage(true);
 			setFormData(initialFormData);
 			// setSuccess("");
@@ -114,7 +115,6 @@ function SignUpPopup() {
 			setTimeout(() => {
 				setLoading(false);
 			}, 4000);
-
 		}
 	};
 
@@ -126,7 +126,7 @@ function SignUpPopup() {
 	};
 
 	const handleInputChange = (event) => {
-		const value = event.target.value; 
+		const value = event.target.value;
 		setEmail(value);
 		if (!validateEmail(value)) {
 			setIsEmailValid(false);
@@ -314,7 +314,12 @@ function SignUpPopup() {
 															<div className="ls-inputicon-box-signup ls-inputicon-box">
 																<input
 																	name="password"
-																	type={isVisible ? "text" : "password"}
+																
+																	type={
+																		showPassword
+																			? "text"
+																			: "password"
+																	}
 																	required
 																	className="form-control"
 																	value={formData.password}
@@ -323,17 +328,22 @@ function SignUpPopup() {
 																	placeholder="Password*"
 																	onChange={handleChange}
 																/>
-																{isVisible ? (
+																
+																{showPassword ? (
 																	<div
 																		className=" eye-icon"
-																		onClick={() => setIsVisible(false)}
+																		
+																		onClick={() =>
+																			setShowPassword(false)
+																		}
 																	>
 																		<IoMdEye size={25} />
 																	</div>
 																) : (
 																	<div
 																		className=" eye-icon"
-																		onClick={() => setIsVisible(true)}
+																		
+																		onClick={() => setShowPassword(true)}
 																	>
 																		<IoIosEyeOff size={25} />
 																	</div>
@@ -341,9 +351,9 @@ function SignUpPopup() {
 															</div>
 														</div>
 													</div>
-													{/* <div className="col-lg-12">
+													<div className="col-lg-12">
 														<div className="form-group mb-3">
-															<input
+															{/* <input
 																name="password_confirmation"
 																type="password"
 																required
@@ -353,9 +363,49 @@ function SignUpPopup() {
 																minLength={8}
 																maxLength={20}
 																placeholder="Confirm Password*"
-															/>
+															/> */}
+
+															<div className="ls-inputicon-box-signup ls-inputicon-box">
+																<input
+																	name="password_confirmation"
+																	
+																	type={
+																		showPasswordConfirmation
+																			? "text"
+																			: "password"
+																	}
+																	required
+																	className="form-control"
+																	value={formData.password_confirmation}
+																	minLength={8}
+																	maxLength={20}
+																	placeholder="Confirm Password*"
+																	onChange={handleChange}
+																/>
+																{showPasswordConfirmation ? (
+																	<div
+																		className=" eye-icon"
+																		
+																		onClick={() =>
+																			setShowPasswordConfirmation(false)
+																		}
+																	>
+																		<IoMdEye size={25} />
+																	</div>
+																) : (
+																	<div
+																		className=" eye-icon"
+																			
+																			onClick={() => setShowPasswordConfirmation(true)}
+																	>
+																		<IoIosEyeOff size={25} />
+																	</div>
+																)}
+															</div>
 														</div>
 													</div>
+
+													{/*
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
 															<input

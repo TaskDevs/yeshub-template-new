@@ -1,31 +1,43 @@
 import React, { useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 // import { DropzoneComponent } from 'react-dropzone-component';
 
 function SectionCandidatePortfolio() {
+    const currentpath = useLocation().pathname;
+	const location = currentpath.split("/")[1];
+		console.log("currentpath", location);
+	
+
 	const ref = useRef(null);
 	const fileInputRef = useRef(null);
 	const [preview, setPreview] = useState(null);
 
-	// toast.promise({
-	// 	loading: "Creating post...",
-	// 	success: "Post created!",
-	// 	error: "Failed to create post",
-	// });
+
+	 const handleImageChange = (event) => {
+			const file = event.target.files?.[0];
+
+			if (file) {
+				setPreview(URL.createObjectURL(file));
+			}
+		};
 
 	return (
 		<>
-			<h4 className="twm-s-title">Portfolio</h4>
+			{/* <h4 className="twm-s-title">Portfolio</h4> */}
+			<h4 className="twm-s-title">Profile Highlights</h4>
+			{location === "apply-job" && (
+				<p className="twm-s-title-text">
+					Emphasise the most relevant data from your profile to highlight your
+					abilities and experience. Up to four highlights are possible.
+				</p>
+			)}
 			<div className="tw-sidebar-tags-wrap">
 				<div className="">
-					
 					<div className="mb-5">
-
 						<form
 							ref={ref}
-							action={(formData) => {
-								// const promise = handlePostAction(formData);
-							}}
+							
 						>
 							<div className="twm-sec-add">
 								<input
@@ -34,7 +46,7 @@ function SectionCandidatePortfolio() {
 									name="image"
 									accept="image/*"
 									hidden
-									// onChange={handleImageChange}
+									onChange={handleImageChange}
 								/>
 								<div className="">
 									<button
@@ -68,15 +80,63 @@ function SectionCandidatePortfolio() {
 											/>
 										</div>
 									)} */}
-
-							
 						</form>
 
 						{/* show images */}
 
-					
 						<div className="mt-5">
-							{/* <div className="">
+							
+
+							<div className="sec-add-portfolio">
+								<div className="sub-sec-add-portfolio">
+									<div className="">
+										<div className="img-portfolio">
+											<img src="/assets/images/portfolio/homepage.png" alt="" />
+										</div>
+
+										{/* <p className="img-portfolio-link">Link: </p> */}
+										<input
+											type="text"
+											className="img-portfolio-link"
+											placeholder="Add link"
+										/>
+									</div>
+									<div className="">
+										<div className="img-portfolio">
+											<img src="/assets/images/portfolio/homepage.png" alt="" />
+										</div>
+
+										{/* <p className="img-portfolio-link">Link: </p> */}
+										<input
+											type="text"
+											className="img-portfolio-link"
+											placeholder="Add link"
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{location === "can-detail" && (
+					<div className="btn-show-more">
+						<a href="/can-portfolio" className="site-button ">
+							Show more
+						</a>
+						{/* <a href="#" className="site-button secondry">Download CV</a> */}
+					</div>
+				)}
+			</div>
+		</>
+	);
+}
+
+export default SectionCandidatePortfolio;
+
+
+
+	/* <div className="">
 								<img
 									src={""}
 									width={500}
@@ -84,7 +144,11 @@ function SectionCandidatePortfolio() {
 									height={500}
 									className="w-full mx-auto"
 								/>
-							</div> */}
+							</div> */
+
+	/* <div className="">
+								<img src="/assets/images/portfolio/homepage.png" alt="" />
+							</div>
 							<div className="">
 								<img src="/assets/images/portfolio/homepage.png" alt="" />
 							</div>
@@ -93,25 +157,11 @@ function SectionCandidatePortfolio() {
 								type="text"
 								placeholder="Add link"
 								className="img-portfolio-link"
-							/>
-						</div>
-					</div>
-				</div>
+							/> */
 
-				{/* twm-candi-self-button */}
-				<div className="btn-show-more">
-					<a href="/can-portfolio" className="site-button ">
-						Show more
-					</a>
-					{/* <a href="#" className="site-button secondry">Download CV</a> */}
-				</div>
-			</div>
-		</>
-	);
-}
 
-export default SectionCandidatePortfolio;
 
+	/* new app-job-pg */
 
 
 
@@ -174,7 +224,7 @@ export default SectionCandidatePortfolio;
 
 
 
-{/* flex justify-end mt-2 space-x-2 */}
+/* flex justify-end mt-2 space-x-2 */
 							// <div className="">
 							// 	<button
 							// 		type="button"

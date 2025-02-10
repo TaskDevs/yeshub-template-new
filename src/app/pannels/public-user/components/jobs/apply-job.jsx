@@ -29,11 +29,12 @@ function ApplyJobPage() {
 	console.log("initialData", initialData);
 
 	const data = {
+		
 		duration: "",
 		amount: 0,
 		date: "",
 		selectedOption: "milestone",
-		...initialData,
+		cover_letter: "",
 	}
 
 	const [formData, setFormData] = useState(data);
@@ -51,7 +52,7 @@ function ApplyJobPage() {
 	//TODO: EXTRACT JOB IDS FROM THE LINK AND ADD TO THE PAYLOAD TO SUBMIT A JOB
 	const applyJoburl = `${process.env.REACT_APP_BASE_URL}`;
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setSuccess("");
 		setError("");
@@ -61,7 +62,20 @@ function ApplyJobPage() {
 		}, 200);
 
 		try {
-			const res = axios.post(applyJoburl, {});
+			const res =
+				selectedOption === "milestone" ? (
+					await axios.post(applyJoburl, {
+				 data
+			 })
+			) : (
+						await axios.post(applyJoburl, {
+							...initialData,
+							cover_letter: formData.cover_letter,
+							
+
+				})
+			)
+			
 			console.log("res", res);
 			
 
@@ -243,8 +257,8 @@ function ApplyJobPage() {
 													// value="Select a duration"
 													placeholder="Select a duration"
 													className="twm-select-duration form-control milestone-options"
-													value={"duration"}
-													onChange={() => {}}
+													value={formData.duration}
+													onChange={handleFormChange}
 												>
 													<option value="">Select a duration</option>
 													<option value="">more than 8 months</option>
@@ -262,8 +276,8 @@ function ApplyJobPage() {
 													className="form-control milestone-options"
 													required
 													name=""
-													value={"amount"}
-													onChange={() => {}}
+													value={formData.amount}
+													onChange={handleFormChange}
 												/>
 											</div>
 
@@ -272,8 +286,8 @@ function ApplyJobPage() {
 												<input
 													type="text"
 													className=" form-control milestone-options timeliness-desc"
-													value={"description"}
-													onChange={() => {}}
+													value={formData.description}
+													onChange={handleFormChange}
 												/>
 											</div>
 										</div>
@@ -288,8 +302,8 @@ function ApplyJobPage() {
 												name=""
 												id=""
 												className="twm-text-area"
-												value={"cover_letter"}
-												onChange={() => {}}
+												value={formData.cover_letter}
+												onChange={handleFormChange}
 											></textarea>
 										</div>
 									</div>

@@ -28,6 +28,7 @@ function SignInPopup() {
 		empUsername,
 		setEmpUsername,
 		loginWithLinkedIn,
+		loginWithGoogle,
 		role,
 		setRole,
 		success,
@@ -137,7 +138,6 @@ function SignInPopup() {
 												type="button"
 												onClick={() => {
 													setRole("2");
-													
 												}}
 											>
 												<i className="fas fa-building" />
@@ -394,16 +394,14 @@ function SignInPopup() {
 										</div>
 									</div>
 
-									<div className="form-group">
+									<div className="form-group" onClick={loginWithGoogle}>
 										<button
 											type="submit"
 											className="log_with_google flex-center btn-google"
 										>
 											<div className="pop-up-btn-logo">
-												{/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
 												<FcGoogle size={20} />
 											</div>
-											{/* <i className="fab fa-google" /> */}
 											Continue with Google
 										</button>
 									</div>

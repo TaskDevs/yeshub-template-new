@@ -33,22 +33,19 @@ export const AuthProvider = ({ children }) => {
 	const loginSuccess = () => toast("User successfully logged in!");
 	const loginError = () => toast("Error!, Failed to login");
 	const roleError = () => toast("Error!, you must be an employer to login");
+	const redirectMsg = () => toast("Please check your email to continue");
 
 	const url = `${process.env.REACT_APP_BASE_URL}login`;
-	const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
-	const logoutUrl = `${process.env.REACT_APP_BASE_URL}logout/{user.id}`
+	const linkedinUrl = "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/auth/redirect/linkedin";
+	const googleUrl = "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/auth/google/redirect";
+	const logoutUrl = `${process.env.REACT_APP_BASE_URL}logout/{user.id}`;
 
-	// console.log("url", url);
-	// console.log("linkedinUrl", linkedinUrl);
+	console.log("lur", linkedinUrl);
+	console.log("gurl", googleUrl);
+	console.log("authurl", process.env.REACT_APP_AUTH_BASE_URL);
 
-	// 		const handleCandidateLogin = (event) => {
-	// 			event.preventDefault();
-	// 			loginCandidate();
-	// 		};
 
-	useEffect(() => {
-			console.log("role-1", role)
-		})
+	
 
 	const handleEmployerLogin = (event) => {
 		event.preventDefault();
@@ -60,10 +57,6 @@ export const AuthProvider = ({ children }) => {
 		loginCandidate();
 	};
 
-	// const handleEmployerLogin = (event) => {
-	//     event.preventDefault();
-	//     loginEmployer();
-	// }
 
 	const loginCandidate = async () => {
 		if (!canUsername || !password) {
@@ -102,6 +95,167 @@ export const AuthProvider = ({ children }) => {
 			setLoading(false);
 		}, 5000);
 	};
+
+
+
+	const loginEmployer = async () => {
+		
+
+		setError("");
+		setSuccess("");
+		
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+
+
+		try {
+			const response = await axios.post(url, {
+				username: empUsername,
+				password: password,
+				
+			});
+			const data = response.data;
+			console.log("data", data);
+			setSuccess("user logged in successfully");
+			loginSuccess();
+
+			if (response.status === 201) {
+				if (role === "2") {
+					moveToEmployer();
+				}
+			}
+		} catch (err) {
+			setError(err.response?.data?.message || "An error occurred");
+			setShowTopMessage(true);
+			loginError();
+		} finally {
+			setIsSubmitting(false);
+			setShowTopMessage(true);
+			setEmpUsername("");
+			setPassword("");
+			setTimeout(() => {
+				setLoading(false);
+			}, 5000);
+		}
+	};
+
+
+	const moveToCandidate = () => {
+		navigate(canRoute(candidate.DASHBOARD));
+	};
+
+	const moveToEmployer = () => {
+		navigate(empRoute(employer.DASHBOARD));
+	};
+
+
+	const loginWithLinkedIn = async () => {
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+		try {
+			window.location.href = linkedinUrl;
+		} catch (error) {
+			setError(error || "");
+			loginError();
+		} finally {
+			setIsSubmitting(false);
+			setTimeout(() => {
+				setLoading(false);
+			}, 5000);
+		}
+	};
+
+	const loginWithGoogle = async () => {
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+		try {
+			window.location.href = googleUrl;
+			
+
+		} catch (error) {
+			setError(error || "");
+			loginError();
+		} finally {
+			setIsSubmitting(false);
+			setTimeout(() => {
+				setLoading(false);
+			}, 5000);
+		}
+	};
+
+
+	
+	const logout = async () => {
+        
+		try {
+			const res = await axios.delete(logoutUrl)
+			console.log("logout", res)
+
+		} catch (error) {
+			setError( error.message || "Failed to logout")
+		} finally {
+			setCurrentUser(null);
+			setAuth(false);
+			updateUser(null);
+
+		}
+	};
+
+	const details = {
+		auth,
+		setAuth,
+		currentUser,
+		errorMessage,
+		setErrorMessage,
+		logout,
+		isSubmitting,
+		handleCandidateLogin,
+		handleEmployerLogin,
+		loginWithLinkedIn,
+		loginWithGoogle,
+		canUsername,
+		setCanUsername,
+		empUsername,
+		setEmpUsername,
+		password,
+		setPassword,
+		role,
+		setRole,
+		error,
+		success,
+		showTopMessage,
+		isLoading,
+		isVisible,
+		setIsVisible
+	};
+
+	return (
+		<AuthContext.Provider value={details}>{children}</AuthContext.Provider>
+	);
+};
+
+
+
+	//   const login = async (user) => {
+	// 			setCurrentUser(user);
+	// 	  setAuth(true);
+
+	// 			setIsLoggedIn(true);
+	// };
+	//      const signup = async (user) => {
+	// 					setCurrentUser(user);
+	// 		 setAuth(true);
+	// 		        localStorage.setItem("user", JSON.stringify(user));
+	// 					setIsSignUp(true);
+	// };
+
+	
+	
+
+
 	// const handleEmployerLogin = (event) => {
 	//     event.preventDefault();
 	//     loginEmployer();
@@ -157,158 +311,6 @@ export const AuthProvider = ({ children }) => {
 	//     }
 	// );
 	// };
-
-	const loginEmployer = async () => {
-		console.log("role-authCtx", role)
-		console.log("ctx-emp", role === "2");
-
-		// if (role !== "2") {
-		//    roleError();
-		// 	return;
-		// }
-
-		setError("");
-		setSuccess("");
-		
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-
-
-		try {
-			const response = await axios.post(url, {
-				username: empUsername,
-				password: password,
-				
-			});
-			const data = response.data;
-			console.log("data", data);
-			setSuccess("user logged in successfully");
-			loginSuccess();
-
-			if (response.status === 201) {
-				if (role === "2") {
-					moveToEmployer();
-				}
-			}
-		} catch (err) {
-			setError(err.response?.data?.message || "An error occurred");
-			setShowTopMessage(true);
-			loginError();
-		} finally {
-			setIsSubmitting(false);
-			setShowTopMessage(true);
-			setEmpUsername("");
-			setPassword("");
-			setTimeout(() => {
-				setLoading(false);
-			}, 5000);
-		}
-	};
-
-
-	const moveToCandidate = () => {
-		navigate(canRoute(candidate.DASHBOARD));
-	};
-
-	const moveToEmployer = () => {
-		navigate(empRoute(employer.DASHBOARD));
-	};
-
-	const loginWithLinkedIn = async () => {
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-		try {
-			const response = await axios.get(linkedinUrl);
-			const data = response.data;
-			console.log("data", data);
-			loginSuccess();
-
-			if (response.status === 200) {
-				// setTimeout(() => {
-				// 	setLoading(true);
-				// }, 2000);
-				if (role === "1") {
-					moveToCandidate();
-				} else {
-					moveToEmployer();
-				}
-			}
-		} catch (error) {
-			// setTimeout(() => {
-			// 	setLoading(true);
-			// }, 2000);
-			setError(error || "");
-			loginError();
-		} finally {
-			setIsSubmitting(false);
-			setTimeout(() => {
-				setLoading(false);
-			}, 5000);
-		}
-	};
-
-	//   const login = async (user) => {
-	// 			setCurrentUser(user);
-	// 	  setAuth(true);
-
-	// 			setIsLoggedIn(true);
-	// };
-	//      const signup = async (user) => {
-	// 					setCurrentUser(user);
-	// 		 setAuth(true);
-	// 		        localStorage.setItem("user", JSON.stringify(user));
-	// 					setIsSignUp(true);
-	// };
-
-	const logout = async () => {
-        
-		try {
-			const res = await axios.delete(logoutUrl)
-			console.log("logout", res)
-
-		} catch (error) {
-			setError( error.message || "Failed to logout")
-		} finally {
-			setCurrentUser(null);
-			setAuth(false);
-			updateUser(null);
-
-		}
-	};
-
-	const details = {
-		auth,
-		setAuth,
-		currentUser,
-		errorMessage,
-		setErrorMessage,
-		logout,
-		isSubmitting,
-		handleCandidateLogin,
-		handleEmployerLogin,
-		loginWithLinkedIn,
-		canUsername,
-		setCanUsername,
-		empUsername,
-		setEmpUsername,
-		password,
-		setPassword,
-		role,
-		setRole,
-		error,
-		success,
-		showTopMessage,
-		isLoading,
-		isVisible,
-		setIsVisible
-	};
-
-	return (
-		<AuthContext.Provider value={details}>{children}</AuthContext.Provider>
-	);
-};
 
 
 

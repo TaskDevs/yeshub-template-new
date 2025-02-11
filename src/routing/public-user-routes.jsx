@@ -55,7 +55,7 @@ import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-det
 import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset-password";
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 import ContractPopup from "../app/common/popups/popup-contract";
-
+import GoogleCallback from "../app/context/auth/GoogleCallback";
 
 // import { loadStripe } from "@stripe/stripe-js";
 // import { Elements } from "@stripe/react-stripe-js";
@@ -97,6 +97,7 @@ function PublicUserRoutes() {
     return (
 			<>
 				<Routes>
+					<Route path="/auth/google/callback" element={<GoogleCallback />} />
 					<Route path={publicUser.INITIAL} element={<Home1Page />} />
 					<Route path={publicUser.HOME1} element={<Home1Page />} />
 					<Route path={publicUser.HOME2} element={<Home2Page />} />

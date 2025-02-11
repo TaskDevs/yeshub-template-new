@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
 	candidate,
 	canRoute,
@@ -11,6 +11,17 @@ import { useUser } from "./UserContext";
 import { toast } from "react-toastify";
 
 export const AuthContext = createContext(null);
+
+// useAuth hook
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    
+    if (context === null) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+
+	return context;
+};
 
 export const AuthProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState(null);

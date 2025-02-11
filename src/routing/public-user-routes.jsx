@@ -97,7 +97,6 @@ function PublicUserRoutes() {
     return (
 			<>
 				<Routes>
-					
 					<Route path={publicUser.INITIAL} element={<Home1Page />} />
 					<Route path={publicUser.HOME1} element={<Home1Page />} />
 					<Route path={publicUser.HOME2} element={<Home2Page />} />
@@ -117,6 +116,7 @@ function PublicUserRoutes() {
 					<Route path={publicUser.HOME16} element={<Home16Page />} />
 					<Route path={publicUser.HOME17} element={<Home17Page />} />
 					<Route path={publicUser.HOME18} element={<Home18Page />} />
+					<Route path={publicUser.TEST} element={<test-login />} />
 					{/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
 					{/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
 					<Route path={publicUser.jobs.LIST} element={<JobsListPage />} />
@@ -190,9 +190,8 @@ function PublicUserRoutes() {
 				{/* PAYMENTS */}
 				{/* {clientSecret && ( */}
 				{/* options={{ clientSecret, appearance, loader }} */}
-				
-			
-			{/* <Elements
+
+				{/* <Elements
 					options={{
 						mode: "payment",
 						amount: 345,

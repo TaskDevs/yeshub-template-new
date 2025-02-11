@@ -32,7 +32,7 @@ function SignUpPopup() {
 	const { updateUser } = useUser();
 
 	const initialFormData = {
-		// username: "",
+		username: "",
 		email: "",
 		password: "",
 		password_confirmation: "",
@@ -47,6 +47,7 @@ function SignUpPopup() {
 	};
 
 	const [formData, setFormData] = useState(initialFormData);
+	const { loginWithGoogle, loginWithLinkedIn, handleAuthError } = useAuth();
 
 	const loginSuccess = () => toast("User successfully sign up!");
 	const loginError = () => toast("Error!, Failed to sign up!");
@@ -118,7 +119,7 @@ function SignUpPopup() {
 		}
 	};
 
-	const { handleAuthError, loginWithLinkedIn } = useAuth();
+	// const { handleAuthError, loginWithLinkedIn } = useAuth();
 
 	const validateEmail = (input) => {
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -144,6 +145,9 @@ function SignUpPopup() {
 	const moveToEmployer = () => {
 		navigate(empRoute(employer.DASHBOARD));
 	};
+
+	
+	
 
 	return (
 		<>
@@ -519,8 +523,78 @@ function SignUpPopup() {
 													</div>
 												</div>
 											</div>
-											{/*Signup Employer Content*/}
-											{/* <div className="tab-pane fade" id="sign-Employer">
+										
+										</div>
+									</div>
+								</div>
+							</form>
+
+							<div className="modal-footer">
+								<span className="modal-f-title">Login or Sign up with</span>
+								<ul className="twm-modal-social">
+									{/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
+                                    <li><a href="https://www.twitter.com/" className="twitter-clr"><i className="fab fa-twitter" /></a></li>
+                                    <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
+                                    <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
+                                 */}
+									<div
+										className="col-md-12"
+										onClick={() => {
+											loginWithLinkedIn();
+										}}
+									>
+										<div className="form-group">
+											<button
+												type="submit"
+												className="log_with_google flex-center log_with_linkedin"
+											>
+												<div className="pop-up-btn-logo">
+													<JobZImage src="images/linkedin-logo-1a.png" alt="" />
+												</div>
+												Continue with LinkedIn
+											</button>
+										</div>
+									</div>
+
+									<div
+										className="col-md-12"
+										onClick={() => {
+											loginWithGoogle();
+										}}
+									>
+										<div className="form-group">
+											<button
+												type="submit"
+												className="log_with_google flex-center btn-google"
+											>
+												<div className="pop-up-btn-logo">
+													{/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
+													<FcGoogle size={20} />
+												</div>
+												{/* <i className="fab fa-google" /> */}
+												Continue with Google
+											</button>
+										</div>
+									</div>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+		</>
+	);
+}
+
+export default SignUpPopup;
+
+
+
+	
+		/*Signup Employer Content*/
+	
+	
+		/* <div className="tab-pane fade" id="sign-Employer">
 												<div className="row">
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
@@ -601,67 +675,5 @@ function SignUpPopup() {
 														</button>
 													</div>
 												</div>
-											</div> */}
-										</div>
-									</div>
-								</div>
-							</form>
-
-							<div className="modal-footer">
-								<span className="modal-f-title">Login or Sign up with</span>
-								<ul className="twm-modal-social">
-									{/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
-                                    <li><a href="https://www.twitter.com/" className="twitter-clr"><i className="fab fa-twitter" /></a></li>
-                                    <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
-                                    <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
-                                 */}
-									<div
-										className="col-md-12"
-										onClick={() => {
-											loginWithLinkedIn();
-										}}
-									>
-										<div className="form-group">
-											<button
-												type="submit"
-												className="log_with_google flex-center log_with_linkedin"
-											>
-												<div className="pop-up-btn-logo">
-													<JobZImage src="images/linkedin-logo-1a.png" alt="" />
-												</div>
-												Continue with LinkedIn
-											</button>
-										</div>
-									</div>
-
-									<div
-										className="col-md-12"
-										// onClick={() => {
-										// 	loginWithLinkedIn();
-										// }}
-									>
-										<div className="form-group">
-											<button
-												type="submit"
-												className="log_with_google flex-center btn-google"
-											>
-												<div className="pop-up-btn-logo">
-													{/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
-													<FcGoogle size={20} />
-												</div>
-												{/* <i className="fab fa-google" /> */}
-												Continue with Google
-											</button>
-										</div>
-									</div>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			)}
-		</>
-	);
-}
-
-export default SignUpPopup;
+											</div> */
+	

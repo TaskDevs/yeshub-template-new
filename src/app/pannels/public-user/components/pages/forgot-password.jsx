@@ -32,7 +32,7 @@ function ForgotPassword() {
 							<div className="twm-log-reg-inner">
 								<div className="twm-log-reg-head">
 									<div className="twm-log-reg-logo">
-                                      <span className="log-reg-form-title">Change Password</span>
+                                      <span className="log-reg-form-title">Forgot Password</span>
                                       <span className='fs-6 mb-5'>Enter your email address</span>
 									</div>
 								</div>

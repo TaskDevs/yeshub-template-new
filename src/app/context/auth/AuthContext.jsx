@@ -167,22 +167,44 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	const loginWithGoogle = async () => {
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-		try {
-			window.location.href = googleUrl;
+	// const loginWithGoogle = async () => {
+	// 	setTimeout(() => {
+	// 		setLoading(true);
+	// 	}, 200);
+	// 	try {
+	// 		window.location.href = googleUrl;
 			
 
+	// 	} catch (error) {
+	// 		setError(error || "");
+	// 		loginError();
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 		setTimeout(() => {
+	// 			setLoading(false);
+	// 		}, 5000);
+	// 	}
+	// };
+
+	const loginWithGoogle = async () => {
+		if (!navigator.onLine) {
+			toast.error("No internet connection");
+			return;
+		}
+	
+		try {
+			setLoading(true);
+			setError(null);
+	
+			const redirectUrl = process.env.REACT_APP_GOOGLE_OAUTH_URL;
+			window.location.href = redirectUrl;
 		} catch (error) {
-			setError(error || "");
-			loginError();
+			console.error('Google Login Error:', error);
+			toast.error("Failed to initiate Google login");
+			setError(error.message || "Login failed");
 		} finally {
 			setIsSubmitting(false);
-			setTimeout(() => {
-				setLoading(false);
-			}, 5000);
+			setTimeout(() => setLoading(false), 5000);
 		}
 	};
 

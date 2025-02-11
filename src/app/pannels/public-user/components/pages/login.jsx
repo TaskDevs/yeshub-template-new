@@ -10,16 +10,18 @@ import Loader from "../../../../common/loader";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
+
+
 function LoginPage() {
 
 	const {
-		handleCandidateLogin,
+		handleSubmit,
 		handleEmployerLogin,
 		isSubmitting,
 		password,
 		setPassword,
-		canEmail,
-		setCanEmail,
+		email,
+		setEmail,
 		empEmail,
 		setEmpEmail,
 		setRole,
@@ -29,7 +31,7 @@ function LoginPage() {
 		error,
 		isLoading,
 		isVisible,
-		setIsVisible
+		setIsVisible,
 	} = useAuth();
 
     const url = `${process.env.REACT_APP_BASE_URL}login`;
@@ -92,7 +94,7 @@ function LoginPage() {
 														data-bs-target="#twm-login-candidate"
 														type="button"
 														onClick={() => {
-															setRole("1");
+															setRole("user");
 														}}
 													>
 														<i className="fas fa-user-tie" />
@@ -107,7 +109,7 @@ function LoginPage() {
 														data-bs-target="#twm-login-Employer"
 														type="button"
 														onClick={() => {
-															setRole("2");
+															setRole("employer");
 														}}
 													>
 														<i className="fas fa-building" />
@@ -118,9 +120,9 @@ function LoginPage() {
 											<div className="tab-content" id="myTab2Content">
 												{/*Login Candidate Content*/}
 												<form
-													onSubmit={handleCandidateLogin}
+													onSubmit={handleSubmit}
 													className="tab-pane fade show active"
-													id="twm-login-candidate"
+													// id="twm-login-candidate"
 												>
 													<div className="row">
 														<div className="col-lg-12">
@@ -131,9 +133,9 @@ function LoginPage() {
 																	required
 																	className="form-control"
 																	placeholder="email"
-																	value={canEmail}
+																	value={email}
 																	onChange={(event) => {
-																		setCanEmail(event.target.value);
+																		setEmail(event.target.value);
 																	}}
 																/>
 															</div>
@@ -199,7 +201,7 @@ function LoginPage() {
 																		>
 																			Remember me{" "}
 																			<a
-																				href="/reset-password"
+																				href="/forgot-password"
 																				className="site-text-primary"
 																			>
 																				Forgot Password
@@ -224,152 +226,6 @@ function LoginPage() {
 												</form>
 
 												{/*Login Employer Content*/}
-												<form
-													onSubmit={handleEmployerLogin}
-													className="tab-pane fade"
-													id="twm-login-Employer"
-												>
-													<div className="row">
-														<div className="col-lg-12">
-															<div className="form-group mb-3">
-																<input
-																	name="email"
-																	type="text"
-																	required
-																	className="form-control"
-																	placeholder="email"
-																	value={empEmail}
-																	onChange={(event) => {
-																		setEmpEmail(event.target.value);
-																	}}
-																/>
-															</div>
-														</div>
-														<div className="col-lg-12">
-															<div className="form-group mb-3">
-																{/* <input
-																	name="password"
-																	type="password"
-																	className="form-control"
-																	required
-																	placeholder="Password*"
-																	value={password}
-																	onChange={(event) => {
-																		setPassword(event.target.value);
-																	}}
-																/> */}
-
-																<div className="ls-inputicon-box-signup ls-inputicon-box">
-																	<input
-																		name="password"
-																		type={isVisible ? "text" : "password"}
-																		required
-																		className="form-control"
-																		value={password}
-																		minLength={8}
-																		maxLength={20}
-																		placeholder="Password*"
-																		onChange={(event) => {
-																			setPassword(event.target.value);
-																		}}
-																	/>
-																	{isVisible ? (
-																		<div
-																			className=" eye-icon"
-																			onClick={() => setIsVisible(false)}
-																		>
-																			<IoMdEye size={25} />
-																		</div>
-																	) : (
-																		<div
-																			className=" eye-icon"
-																			onClick={() => setIsVisible(true)}
-																		>
-																			<IoIosEyeOff size={25} />
-																		</div>
-																	)}
-																</div>
-															</div>
-														</div>
-														<div className="col-lg-12">
-															<div className="twm-forgot-wrap">
-																<div className="form-group mb-3">
-																	<div className="form-check">
-																		<input
-																			type="checkbox"
-																			className="form-check-input"
-																			id="Password4"
-																		/>
-																		<label
-																			className="form-check-label rem-forgot"
-																			htmlFor="Password4"
-																		>
-																			Remember me{" "}
-																			<a href="#" className="site-text-primary">
-																				Forgot Password
-																			</a>
-																		</label>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="site-button"
-																	disabled={isSubmitting}
-																>
-																	Log in
-																</button>
-															</div>
-														</div>
-														<div className="mt-3 mb-3">
-															Don't have an account ?
-															<button
-																className="twm-backto-login"
-																data-bs-target="#sign_up_popup"
-																data-bs-toggle="modal"
-																data-bs-dismiss="modal"
-															>
-																Sign Up
-															</button>
-														</div>
-
-														{/* <p>
-															Don't have an account ?
-															<button
-																className="twm-backto-login"
-																data-bs-target="#sign_up_popup"
-																data-bs-toggle="modal"
-																data-bs-dismiss="modal"
-															>
-																Sign up
-															</button>
-														</p> */}
-
-														<div className="col-md-12">
-															<div className="form-group">
-																<span className="center-text-or">Or</span>
-															</div>
-														</div>
-
-														{/* <div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google"
-																>
-																	<JobZImage
-																		src="images/google-icon.png"
-																		alt=""
-																	/>
-																	Continue with Google
-																</button>
-															</div>
-														</div> */}
-													</div>
-												</form>
 
 												<div className="col-md-12">
 													<div className="form-group ">
@@ -390,17 +246,13 @@ function LoginPage() {
 													<div className="form-group">
 														<button
 															type="submit"
-									
 															className=" log_with_google  d-flex flex-center gap-3 btn-google-login"
 														>
-															
 															<FcGoogle size={20} />
 															Continue with Google
 														</button>
 													</div>
 												</div>
-
-												
 											</div>
 										</div>
 									</div>
@@ -414,6 +266,144 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+
+
+
+
+/*<form
+	onSubmit={handleEmployerLogin}
+	className="tab-pane fade"
+	id="twm-login-Employer"
+>
+	<div className="row">
+		<div className="col-lg-12">
+			<div className="form-group mb-3">
+				<input
+					name="email"
+					type="text"
+					required
+					className="form-control"
+					placeholder="email"
+					value={empEmail}
+					onChange={(event) => {
+						setEmpEmail(event.target.value);
+					}}
+				/>
+			</div>
+		</div>
+		<div className="col-lg-12">
+			<div className="form-group mb-3">
+				{/* <input
+																	name="password"
+																	type="password"
+																	className="form-control"
+																	required
+																	placeholder="Password*"
+																	value={password}
+																	onChange={(event) => {
+																		setPassword(event.target.value);
+																	}}
+																/> *
+
+				<div className="ls-inputicon-box-signup ls-inputicon-box">
+					<input
+						name="password"
+						type={isVisible ? "text" : "password"}
+						required
+						className="form-control"
+						value={password}
+						minLength={8}
+						maxLength={20}
+						placeholder="Password*"
+						onChange={(event) => {
+							setPassword(event.target.value);
+						}}
+					/>
+					{isVisible ? (
+						<div className=" eye-icon" onClick={() => setIsVisible(false)}>
+							<IoMdEye size={25} />
+						</div>
+					) : (
+						<div className=" eye-icon" onClick={() => setIsVisible(true)}>
+							<IoIosEyeOff size={25} />
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+		<div className="col-lg-12">
+			<div className="twm-forgot-wrap">
+				<div className="form-group mb-3">
+					<div className="form-check">
+						<input
+							type="checkbox"
+							className="form-check-input"
+							id="Password4"
+						/>
+						<label className="form-check-label rem-forgot" htmlFor="Password4">
+							Remember me{" "}
+							<a href="#" className="site-text-primary">
+								Forgot Password
+							</a>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div className="col-md-12">
+			<div className="form-group">
+				<button type="submit" className="site-button" disabled={isSubmitting}>
+					Log in
+				</button>
+			</div>
+		</div>
+		<div className="mt-3 mb-3">
+			Don't have an account ?
+			<button
+				className="twm-backto-login"
+				data-bs-target="#sign_up_popup"
+				data-bs-toggle="modal"
+				data-bs-dismiss="modal"
+			>
+				Sign Up
+			</button>
+		</div>
+
+		 <p>
+															Don't have an account ?
+															<button
+																className="twm-backto-login"
+																data-bs-target="#sign_up_popup"
+																data-bs-toggle="modal"
+																data-bs-dismiss="modal"
+															>
+																Sign up
+															</button>
+														</p> *
+
+		<div className="col-md-12">
+			<div className="form-group">
+				<span className="center-text-or">Or</span>
+			</div>
+		</div>
+
+		 <div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google"
+																>
+																	<JobZImage
+																		src="images/google-icon.png"
+																		alt=""
+																	/>
+																	Continue with Google
+																</button>
+															</div>
+														</div> 
+	</div>
+</form>*/
 
 
 
@@ -488,7 +478,7 @@ export default LoginPage;
     // }
 
     // const loginCandidate = async () => {
-    //     if (!canEmail || !password) {
+    //     if (!email || !password) {
 	// 				setIsSubmitting(false);
 	// 				return;
 	// 			}
@@ -497,7 +487,7 @@ export default LoginPage;
 	// 				const response = await axios.post(
 	// 					url,
 	// 					{
-	// 						email: canEmail,
+	// 						email: email,
 	// 						password: password,
 	// 					},
 	// 					{
@@ -513,7 +503,7 @@ export default LoginPage;
 	// 					moveToCandidate();
 	// 				}
 	// 			} catch (error) {
-	// 				setCanEmail("");
+	// 				setEmail("");
 	// 				setPassword("");
 	// 			} finally {
 	// 				setIsSubmitting(false);
@@ -522,7 +512,7 @@ export default LoginPage;
     //     // processLogin(
     //     //     {
     //     //         type: formType.LOGIN_CANDIDATE,
-    //     //         email: canEmail,
+    //     //         email: email,
     //     //         password: password
     //     //     },
     //     //     (valid) => {

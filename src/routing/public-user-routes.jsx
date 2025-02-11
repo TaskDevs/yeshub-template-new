@@ -62,6 +62,9 @@ import ContractPopup from "../app/common/popups/popup-contract";
 import { useEffect, useState } from "react";
 import CompletePage from "../app/common/payment/stripe/complete-page";
 import CheckoutPage from "../app/common/payment/stripe/checkout-page";
+import TestLogin from "../app/common/test-login";
+import ChangePassword from "../app/pannels/public-user/components/pages/forgot-password";
+import ForgotPassword from "../app/pannels/public-user/components/pages/forgot-password";
 
 
 // const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
@@ -73,21 +76,21 @@ function PublicUserRoutes() {
 
 	const [clientSecret, setClientSecret] = useState("");
 
-	useEffect(() => {
-		// Create PaymentIntent as soon as the page loads
-		fetch("", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ items: [{ id: "xl-tshirt", amount: 1000 }] }),
-		})
-			.then((res) => res.json())
-			.then((data) => setClientSecret(data.clientSecret));
-	}, []);
+	// useEffect(() => {
+		
+	// 	fetch("", {
+	// 		method: "POST",
+	// 		headers: { "Content-Type": "application/json" },
+	// 		body: JSON.stringify({ items: [{ id: "xl-tshirt", amount: 1000 }] }),
+	// 	})
+	// 		.then((res) => res.json())
+	// 		.then((data) => setClientSecret(data.clientSecret));
+	// }, []);
 
-	const appearance = {
-		theme: "stripe",
-	};
-	const loader = "auto";
+	// const appearance = {
+	// 	theme: "stripe",
+	// };
+	// const loader = "auto";
 
 
 
@@ -116,7 +119,7 @@ function PublicUserRoutes() {
 					<Route path={publicUser.HOME16} element={<Home16Page />} />
 					<Route path={publicUser.HOME17} element={<Home17Page />} />
 					<Route path={publicUser.HOME18} element={<Home18Page />} />
-					<Route path={publicUser.TEST} element={<test-login />} />
+					<Route path={publicUser.TEST} element={<TestLogin />} />
 					{/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
 					{/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
 					<Route path={publicUser.jobs.LIST} element={<JobsListPage />} />
@@ -155,9 +158,15 @@ function PublicUserRoutes() {
 						path={publicUser.pages.AFTER_LOGIN}
 						element={<AfterLoginPage />}
 					/>
+					
 					<Route
 						path={publicUser.pages.RESET_PASSWORD}
 						element={<ResetPasswordPage />}
+					/>
+					<Route
+						path={publicUser.pages.FORGOT_PASSWORD}
+					element={< ForgotPassword  />}
+					// ChangePassword
 					/>
 					<Route path={publicUser.pages.ICONS} element={<IconsPage />} />
 					<Route

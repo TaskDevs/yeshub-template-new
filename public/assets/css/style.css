@@ -15836,7 +15836,7 @@ strong {
   color: #fff !important;
   border: #0A66C2 !important;
   transition: 0.5s all ease;
-  
+  padding: 10px 30px;
 }
 
 .log_with_linkedin:hover {

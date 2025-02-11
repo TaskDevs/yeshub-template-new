@@ -26,7 +26,6 @@ function SignUpPopup() {
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
 	const [isLoading, setLoading] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 	const { updateUser } = useUser();
@@ -36,14 +35,7 @@ function SignUpPopup() {
 		email: "",
 		password: "",
 		password_confirmation: "",
-		// firstName: "",
-		// lastName: "",
-		// phoneNo: "",
-		// country: "",
-		// city: "",
-		// address: "",
-		// location: "",
-		role: "1",
+		role: "user",
 	};
 
 	const [formData, setFormData] = useState(initialFormData);
@@ -68,10 +60,7 @@ function SignUpPopup() {
 		setSuccess("");
 
 		console.log("Submitting with role:", formData.role);
-		if (!formData.role) {
-			setError("Please select a role (Candidate or Employer)");
-			return;
-		}
+
 		if (formData.password !== formData.password_confirmation) {
 			setIsSubmitting(false);
 			passwordError();
@@ -93,15 +82,14 @@ function SignUpPopup() {
 			updateUser(data);
 			setShowTopMessage(true);
 
-			if (response.status === 201) {
-				loginSuccess();
+			loginSuccess();
 
-				if (formData.role === "1") {
-					return moveToCandidate();
-				} else {
-					return moveToEmployer();
-				}
+			if (formData.role === "1") {
+				return moveToCandidate();
+			} else {
+				return moveToEmployer();
 			}
+
 		} catch (err) {
 			setShowTopMessage(true);
 			loginError();
@@ -109,17 +97,15 @@ function SignUpPopup() {
 		} finally {
 			setIsSubmitting(false);
 			setEmail("");
-			// setShowTopMessage(true);
+			
 			setFormData(initialFormData);
-			// setSuccess("");
-			// setError("");
+			
 			setTimeout(() => {
 				setLoading(false);
 			}, 4000);
 		}
 	};
 
-	// const { handleAuthError, loginWithLinkedIn } = useAuth();
 
 	const validateEmail = (input) => {
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

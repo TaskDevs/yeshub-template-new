@@ -53,6 +53,7 @@ export const publicUser = {
 		LOGIN: "/login",
 		AFTER_LOGIN: "/after-login",
 		RESET_PASSWORD: "/reset-password",
+		FORGOT_PASSWORD: "/forgot-password",
 		ICONS: "/icons",
 		CONTRACT: "/contract"
 	},

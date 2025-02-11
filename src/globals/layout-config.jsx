@@ -37,7 +37,8 @@ export function showHeader(currentpath) {
 			currentpath === publicUser.pages.MAINTENANCE ||
 			currentpath === publicUser.pages.LOGIN ||
 			currentpath === publicUser.pages.AFTER_LOGIN ||
-			currentpath === publicUser.pages.RESET_PASSWORD
+			currentpath === publicUser.pages.RESET_PASSWORD ||
+			currentpath === publicUser.pages.CHANGE_PASSWORD
 		) {
 			return false;
 		}

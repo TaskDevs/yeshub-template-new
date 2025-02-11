@@ -1,15 +1,5 @@
-// import processLogin from "../../form-processing/login";
-// import { formType } from "../../../globals/constants";
-// import { useNavigate } from "react-router-dom";
-// import {
-// 	canRoute,
-// 	candidate,
-// 	empRoute,
-// 	employer,
-// } from "../../../globals/route-names";
-// import { useState } from "react";
+
 import JobZImage from "../jobz-img";
-// import axios from "axios";
 import useAuth from "../../context/auth/useAuth";
 import Loader from "../loader";
 import { FcGoogle } from "react-icons/fc";
@@ -19,14 +9,12 @@ import { useEffect } from "react";
 function SignInPopup() {
 	const {
 		handleCandidateLogin,
-		handleEmployerLogin,
+		handleSubmit,
 		isSubmitting,
 		password,
 		setPassword,
-		canUsername,
-		setCanUsername,
-		empUsername,
-		setEmpUsername,
+		email,
+		setEmail,	
 		loginWithLinkedIn,
 		loginWithGoogle,
 		role,
@@ -40,29 +28,6 @@ function SignInPopup() {
 		setIsVisible,
 	} = useAuth();
 
-	// const url = `${process.env.REACT_APP_BASE_URL}login`;
-	// const linkedinUrl = `${process.env.REACT_APP_BASE_URL}auth/linkedin`;
-	// console.log("url", url);
-	// console.log("linkedinUrl", linkedinUrl);
-
-	// const loginWithLinkedIn = async () => {
-
-	// 			try {
-	// 				const response = await axios.get(
-	// 					url,
-	// 				);
-	// 				const data = response.data;
-	// 				console.log("data", data);
-
-	// 				if (response.status === 200) {
-	// 					moveToEmployer();
-	// 				}
-	// 			} catch (error) {
-
-	// 			} finally {
-	// 				setIsSubmitting(false);
-	// 			}
-	// 		}
 
 
 	useEffect(() => {
@@ -123,7 +88,7 @@ function SignInPopup() {
 												data-bs-toggle="tab"
 												data-bs-target="#login-candidate"
 												type="button"
-												onClick={() => setRole("1")}
+												onClick={() => setRole("user")}
 											>
 												<i className="fas fa-user-tie" />
 												Candidate
@@ -137,7 +102,7 @@ function SignInPopup() {
 												data-bs-target="#login-Employer"
 												type="button"
 												onClick={() => {
-													setRole("2");
+													setRole("employer");
 												}}
 											>
 												<i className="fas fa-building" />
@@ -148,22 +113,22 @@ function SignInPopup() {
 									<div className="tab-content" id="myTab2Content">
 										{/*Login Candidate Content*/}
 										<form
-											onSubmit={handleCandidateLogin}
+											onSubmit={handleSubmit}
 											className="tab-pane fade show active"
-											id="login-candidate"
+											// id="login-candidate"
 										>
 											<div className="row">
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
 														<input
-															name="canUsername"
+															name="email"
 															type="text"
 															required
 															className="form-control"
 															placeholder="Username*"
-															value={canUsername}
+															value={email}
 															onChange={(event) => {
-																setCanUsername(event.target.value);
+																setEmail(event.target.value);
 															}}
 														/>
 													</div>
@@ -227,7 +192,7 @@ function SignInPopup() {
 																htmlFor="Password3"
 															>
 																Remember me{" "}
-																<a href="/reset-password">Forgot Password</a>
+																<a href="/forgot-password">Forgot Password</a>
 															</label>
 														</div>
 													</div>
@@ -256,126 +221,12 @@ function SignInPopup() {
 											</div>
 										</form>
 										{/*Login Employer Content*/}
-										<form
-											onSubmit={handleEmployerLogin}
-											className="tab-pane fade"
-											id="login-Employer"
-										>
-											<div className="row">
-												<div className="col-lg-12">
-													<div className="form-group mb-3">
-														<input
-															name="empUsername"
-															type="text"
-															required
-															className="form-control"
-															placeholder="Username*"
-															value={empUsername}
-															onChange={(event) => {
-																setEmpUsername(event.target.value);
-															}}
-														/>
-													</div>
-												</div>
-												<div className="col-lg-12">
-													<div className="form-group mb-3">
-														{/* <input
-															name="password"
-															type="password"
-															className="form-control"
-															required
-															placeholder="Password*"
-															value={password}
-															onChange={(event) => {
-																setPassword(event.target.value);
-															}}
-														/> */}
-
-														<div className="ls-inputicon-box-signup ls-inputicon-box">
-															<input
-																name="password"
-																type={isVisible ? "text" : "password"}
-																required
-																className="form-control"
-																value={password}
-																minLength={8}
-																maxLength={20}
-																placeholder="Password*"
-																onChange={(event) => {
-																	setPassword(event.target.value);
-																}}
-															/>
-															{isVisible ? (
-																<div
-																	className=" eye-icon"
-																	onClick={() => setIsVisible(false)}
-																>
-																	<IoMdEye size={25} />
-																</div>
-															) : (
-																<div
-																	className=" eye-icon"
-																	onClick={() => setIsVisible(true)}
-																>
-																	<IoIosEyeOff size={25} />
-																</div>
-															)}
-														</div>
-													</div>
-												</div>
-												<div className="col-lg-12">
-													<div className="form-group mb-3">
-														<div className=" form-check">
-															<input
-																type="checkbox"
-																className="form-check-input"
-																id="Password4"
-															/>
-															<label
-																className="form-check-label rem-forgot"
-																htmlFor="Password4"
-															>
-																Remember me{" "}
-																<a href="/reset-password">Forgot Password</a>
-															</label>
-														</div>
-													</div>
-												</div>
-												<div className="col-md-12">
-													<button
-														type="submit"
-														className="site-button"
-														data-bs-dismiss="modal"
-														disabled={isSubmitting}
-													>
-														Log in
-													</button>
-
-													<div className="mt-3 mb-3">
-														Don't have an account ?
-														<button
-															className="twm-backto-login"
-															data-bs-target="#sign_up_popup"
-															data-bs-toggle="modal"
-															data-bs-dismiss="modal"
-														>
-															Sign Up
-														</button>
-													</div>
-												</div>
-											</div>
-										</form>
 									</div>
 								</div>
 							</div>
 							<div className="modal-footer">
 								<span className="modal-f-title">Login or Sign up with</span>
 								<ul className="twm-modal-social">
-									{/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
-                                    <li><a href="https://www.twitter.com/" className="twitter-clr"><i className="fab fa-twitter" /></a></li>
-                                    <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
-                                    <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
-                                 */}
 									<div
 										className="col-md-12"
 										onClick={() => loginWithLinkedIn()}
@@ -407,15 +258,6 @@ function SignInPopup() {
 									</div>
 								</ul>
 							</div>
-							{/* <div className="col-md-12">
-								<div className="form-group">
-									<button type="submit" className="log_with_google">
-										<JobZImage src="images/google-icon.png" alt="" />
-										Continue with Google
-									</button>
-								</div>
-							</div> */}
-							{/* </form> */}
 						</div>
 					</div>
 				</div>
@@ -425,3 +267,101 @@ function SignInPopup() {
 }
 
 export default SignInPopup;
+
+
+
+/* <form
+	onSubmit={handleEmployerLogin}
+	className="tab-pane fade"
+	id="login-Employer"
+>
+	<div className="row">
+		<div className="col-lg-12">
+			<div className="form-group mb-3">
+				<input
+					name="empUsername"
+					type="text"
+					required
+					className="form-control"
+					placeholder="Username*"
+					value={empUsername}
+					onChange={(event) => {
+						setEmpUsername(event.target.value);
+					}}
+				/>
+			</div>
+		</div>
+		<div className="col-lg-12">
+			<div className="form-group mb-3">
+				{/* <input
+															name="password"
+															type="password"
+															className="form-control"
+															required
+															placeholder="Password*"
+															value={password}
+															onChange={(event) => {
+																setPassword(event.target.value);
+															}}
+														/> 
+
+				<div className="ls-inputicon-box-signup ls-inputicon-box">
+					<input
+						name="password"
+						type={isVisible ? "text" : "password"}
+						required
+						className="form-control"
+						value={password}
+						minLength={8}
+						maxLength={20}
+						placeholder="Password*"
+						onChange={(event) => {
+							setPassword(event.target.value);
+						}}
+					/>
+					{isVisible ? (
+						<div className=" eye-icon" onClick={() => setIsVisible(false)}>
+							<IoMdEye size={25} />
+						</div>
+					) : (
+						<div className=" eye-icon" onClick={() => setIsVisible(true)}>
+							<IoIosEyeOff size={25} />
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+		<div className="col-lg-12">
+			<div className="form-group mb-3">
+				<div className=" form-check">
+					<input type="checkbox" className="form-check-input" id="Password4" />
+					<label className="form-check-label rem-forgot" htmlFor="Password4">
+						Remember me <a href="/reset-password">Forgot Password</a>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div className="col-md-12">
+			<button
+				type="submit"
+				className="site-button"
+				data-bs-dismiss="modal"
+				disabled={isSubmitting}
+			>
+				Log in
+			</button>
+
+			<div className="mt-3 mb-3">
+				Don't have an account ?
+				<button
+					className="twm-backto-login"
+					data-bs-target="#sign_up_popup"
+					data-bs-toggle="modal"
+					data-bs-dismiss="modal"
+				>
+					Sign Up
+				</button>
+			</div>
+		</div>
+	</div>
+</form>; */

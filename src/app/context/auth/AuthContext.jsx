@@ -16,11 +16,11 @@ export const AuthProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState(null);
 	const [auth, setAuth] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [canUsername, setCanUsername] = useState("johndoe");
+	const [email, setEmail] = useState("johndoe");
 	const [empUsername, setEmpUsername] = useState("johndoe");
 	const [password, setPassword] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [role, setRole] = useState("1");
+	const [role, setRole] = useState("user");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
 	const [isVisible, setIsVisible] = useState(false);
@@ -35,16 +35,51 @@ export const AuthProvider = ({ children }) => {
 	const roleError = () => toast("Error!, you must be an employer to login");
 	const redirectMsg = () => toast("Please check your email to continue");
 
-	const url = `${process.env.REACT_APP_BASE_URL}login`;
+	
 	const linkedinUrl = "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/auth/redirect/linkedin";
 	const googleUrl = "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/auth/google/redirect";
 	const logoutUrl = `${process.env.REACT_APP_BASE_URL}logout/{user.id}`;
+	const url = `${process.env.REACT_APP_BASE_URL}login`;
+	const forgotPasswordUrl = `${process.env.REACT_APP_BASE_URL}forgot-password`;
+	const changePasswordUrl = `${process.env.REACT_APP_BASE_URL}change-password`;
 
 	console.log("lur", linkedinUrl);
 	console.log("gurl", googleUrl);
 	console.log("authurl", process.env.REACT_APP_AUTH_BASE_URL);
 
 
+	const handleSubmit = async(e) => {
+		e.preventDefault();
+		if (!email || !password) {
+			setIsSubmitting(false);
+			return;
+		}
+		setTimeout(() => {
+			setLoading(true);
+		}, 200);
+		try {
+			setIsSubmitting(true);
+			const response = await axios.post(url, {
+				role,
+				email,
+				password,
+			});
+			const data = response.data;
+			console.log("data", data);
+			updateUser(data);
+
+			loginSuccess();
+		} catch (error) {
+			setEmail("");
+			setPassword("");
+			loginError();
+		} finally {
+			setIsSubmitting(false);
+		}
+		setTimeout(() => {
+			setLoading(false);
+		}, 5000);
+	}
 	
 
 	const handleEmployerLogin = (event) => {
@@ -59,7 +94,7 @@ export const AuthProvider = ({ children }) => {
 
 
 	const loginCandidate = async () => {
-		if (!canUsername || !password) {
+		if (!email || !password) {
 			setIsSubmitting(false);
 			return;
 		}
@@ -69,23 +104,23 @@ export const AuthProvider = ({ children }) => {
 		try {
 			setIsSubmitting(true);
 			const response = await axios.post(url, {
-				username: canUsername,
-				password: password,
+				 email,
+				 password,
 			});
 			const data = response.data;
 			console.log("data", data);
 			updateUser(data);
 
-			if (response.status === 201) {
+			
 				loginSuccess();
 				
-				if (role === "1") {
+				if (role === "user") {
 					moveToCandidate();
 				}
-			}
+			
 		} catch (error) {
 			
-			setCanUsername("");
+			setEmail("");
 			setPassword("");
 			loginError();
 		} finally {
@@ -163,7 +198,7 @@ export const AuthProvider = ({ children }) => {
 			setIsSubmitting(false);
 			setTimeout(() => {
 				setLoading(false);
-			}, 5000);
+			}, 3000);
 		}
 	};
 
@@ -182,9 +217,11 @@ export const AuthProvider = ({ children }) => {
 			setIsSubmitting(false);
 			setTimeout(() => {
 				setLoading(false);
-			}, 5000);
+			}, 3000);
 		}
 	};
+
+
 
 
 	
@@ -216,8 +253,8 @@ export const AuthProvider = ({ children }) => {
 		handleEmployerLogin,
 		loginWithLinkedIn,
 		loginWithGoogle,
-		canUsername,
-		setCanUsername,
+		email,
+		setEmail,
 		empUsername,
 		setEmpUsername,
 		password,
@@ -229,7 +266,8 @@ export const AuthProvider = ({ children }) => {
 		showTopMessage,
 		isLoading,
 		isVisible,
-		setIsVisible
+		setIsVisible,
+		handleSubmit,
 	};
 
 	return (
@@ -262,7 +300,7 @@ export const AuthProvider = ({ children }) => {
 	// }
 
 	// const loginCandidate = async () => {
-	// 	if (!canUsername || !password) {
+	// 	if (!email || !password) {
 	// 		setIsSubmitting(false);
 	// 		return;
 	// 	}
@@ -271,7 +309,7 @@ export const AuthProvider = ({ children }) => {
 	// 		const response = await axios.post(
 	// 			url,
 	// 			{
-	// 				username: canUsername,
+	// 				username: email,
 	// 				password: password,
 	// 			},
 	// 			{
@@ -289,7 +327,7 @@ export const AuthProvider = ({ children }) => {
 	// 			}
 	// 		}
 	// 	} catch (error) {
-	// 		setCanUsername("");
+	// 		setEmail("");
 	// 		setPassword("");
 	// 	} finally {
 	// 		setIsSubmitting(false);
@@ -298,7 +336,7 @@ export const AuthProvider = ({ children }) => {
 	// processLogin(
 	//     {
 	//         type: formType.LOGIN_CANDIDATE,
-	//         username: canUsername,
+	//         username: email,
 	//         password: password
 	//     },
 	//     (valid) => {
@@ -344,7 +382,7 @@ export const AuthProvider = ({ children }) => {
 	// processLogin(
 	//     {
 	//         type: formType.LOGIN_CANDIDATE,
-	//         username: canUsername,
+	//         username: email,
 	//         password: password
 	//     },
 	//     (valid) => {

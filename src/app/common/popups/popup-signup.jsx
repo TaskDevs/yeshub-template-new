@@ -43,7 +43,7 @@ function SignUpPopup() {
 		// city: "",
 		// address: "",
 		// location: "",
-		role: "1",
+		role: "user",
 	};
 
 	const [formData, setFormData] = useState(initialFormData);
@@ -93,15 +93,15 @@ function SignUpPopup() {
 			updateUser(data);
 			setShowTopMessage(true);
 
-			if (response.status === 201) {
-				loginSuccess();
+			// if (response.status === 201) {
+			// 	loginSuccess();
 
-				if (formData.role === "1") {
-					return moveToCandidate();
-				} else {
-					return moveToEmployer();
-				}
-			}
+			// 	if (formData.role === "1") {
+			// 		return moveToCandidate();
+			// 	} else {
+			// 		return moveToEmployer();
+			// 	}
+			// }
 		} catch (err) {
 			setShowTopMessage(true);
 			loginError();
@@ -203,7 +203,7 @@ function SignUpPopup() {
 												<button
 													// className="nav-link active"
 													className={`nav-link ${
-														formData.role === "1" ? "active" : ""
+														formData.role === "user" ? "active" : ""
 													}`}
 													data-bs-toggle="tab"
 													// data-bs-target="#sign-candidate"
@@ -211,7 +211,7 @@ function SignUpPopup() {
 													onClick={() =>
 														setFormData((prevFormData) => ({
 															...prevFormData,
-															role: "1",
+															role: "user",
 														}))
 													}
 												>
@@ -224,7 +224,7 @@ function SignUpPopup() {
 												<button
 													// className="nav-link"
 													className={`nav-link ${
-														formData.role === "2" ? "active" : ""
+														formData.role === "employer" ? "active" : ""
 													}`}
 													data-bs-toggle="tab"
 													// data-bs-target="#sign-Employer"
@@ -232,7 +232,7 @@ function SignUpPopup() {
 													onClick={() =>
 														setFormData((prevFormData) => ({
 															...prevFormData,
-															role: "2",
+															role: "employer",
 														}))
 													}
 												>

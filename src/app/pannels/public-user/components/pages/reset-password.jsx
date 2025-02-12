@@ -4,37 +4,44 @@ import { publicUser } from "../../../../../globals/route-names";
 import { useState } from "react";
 import useAuth from "../../../../context/auth/useAuth";
 import axios from "axios";
+import OtpForm from "./Otp-form";
 
 function ResetPasswordPage() {
 	const {
-		handleCandidateLogin,
+		
 		isSubmitting,
 		password,
 		setPassword,
-		setConfirmPassword,
-		setIsSubmitting,
-		setRole,
+		confirmPassword,
+		setConfirmPassword,	
+	    handleResetPassword,
+		setOtp,
 	} = useAuth();
-	const navigate = useNavigate();
 
-	const url = `${process.env.REACT_APP_BASE_URL}`;
+	// const navigate = useNavigate();
 
-	const handleResetPassword = async (e) => {
-		e.preventDefault();
-		try {
-			setIsSubmitting(true);
-			const response = await axios.post(url);
-			console.log("res", response);
-			if (response.status === 200) {
-				navigate("/login");
-			}
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setPassword("");
-			setConfirmPassword("");
-		}
-	};
+	// const url = `${process.env.REACT_APP_BASE_URL}change-password`;
+
+	// const handleResetPassword = async (e) => {
+	// 	e.preventDefault();
+	// 	try {
+	// 		setIsSubmitting(true);
+	// 		const response = await axios.post(url, {
+	// 			otp,
+	// 			password,
+	// 			confirm_password: ""
+	// 		});
+	// 		console.log("res", response);
+	// 		if (response.status === 200) {
+	// 			navigate("/login");
+	// 		}
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 	} finally {
+	// 		setPassword("");
+	// 		setConfirmPassword("");
+	// 	}
+	// };
 
 	return (
 		<>
@@ -66,8 +73,8 @@ function ResetPasswordPage() {
 										</div>
 									</div>
 									<div className="twm-tabs-style-2">
-										<ul className="nav nav-tabs" id="myTab2" role="tablist">
-											{/*Login Candidate*/}
+										{/* <ul className="nav nav-tabs" id="myTab2" role="tablist">
+											
 											<li className="nav-item">
 												<button
 													className="nav-link active"
@@ -80,7 +87,7 @@ function ResetPasswordPage() {
 													Candidate
 												</button>
 											</li>
-											{/*Login Employer*/}
+											
 											<li className="nav-item">
 												<button
 													className="nav-link"
@@ -93,19 +100,26 @@ function ResetPasswordPage() {
 													Employer
 												</button>
 											</li>
-										</ul>
+										</ul> */}
 										<div className="tab-content" id="myTab2Content">
-											{/*Login Candidate Content*/}
 											<form
-												onSubmit={handleCandidateLogin}
+												onSubmit={handleResetPassword}
 												className="tab-pane fade show active"
-												id="twm-login-candidate"
+												
 											>
+												<div className="">
+													<div className="">
+														<div className=" mb-3">
+															<OtpForm setOtp={setOtp}/>
+														</div>
+													</div>
+												</div>
+
 												<div className="row">
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
 															<input
-																name="password1"
+																name="password"
 																type="password"
 																required
 																className="form-control"
@@ -120,97 +134,25 @@ function ResetPasswordPage() {
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
 															<input
-																name="password2"
+																name="confirmPassword"
 																type="password"
 																className="form-control"
 																required
 																placeholder="Confirm Password*"
-																value={password}
+																value={confirmPassword}
 																onChange={(event) => {
 																	setConfirmPassword(event.target.value);
 																}}
 															/>
 														</div>
 													</div>
-													{/* <div className="col-lg-12">
-														<div className="twm-forgot-wrap">
-															<div className="form-group mb-3">
-																<div className="form-check">
-																	<input
-																		type="checkbox"
-																		className="form-check-input"
-																		id="Password4"
-																	/>
-																	<label
-																		className="form-check-label rem-forgot"
-																		htmlFor="Password4"
-																	>
-																		Remember me{" "}
-																		<a href="#" className="site-text-primary">
-																			Forgot Password
-																		</a>
-																	</label>
-																</div>
-															</div>
-														</div>
-													</div> */}
-
-													{/* <div className="col-md-12">
-														<div className="form-group">
-															<span className="center-text-or">Or</span>
-														</div>
-													</div> */}
-													{/* <div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_facebook"
-																>
-																	{/* <i className="fab fa-facebook" /> *
-																	<i class="fab fa-linkedin" color="blue"></i>
-																	Continue with LinkedIn
-																</button>
-															</div>
-														</div> */}
-													{/* <div
-															className="col-md-12"
-															onClick={() => {
-																loginWithLinkedIn();
-															}}
-														>
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google log_with_linkedin"
-																>
-																	<JobZImage
-																		src="images/linkedin-logo-1a.png"
-																		alt=""
-																	/>
-																	Continue with LinkedIn
-																</button>
-															</div>
-														</div> */}
-													{/* <div className="col-md-12">
-															<div className="form-group">
-																<button
-																	type="submit"
-																	className="log_with_google"
-																>
-																	<JobZImage
-																		src="images/google-icon.png"
-																		alt=""
-																	/>
-																	Continue with Google
-																</button>
-															</div>
-														</div> */}
+													
 												</div>
 											</form>
 
 											<div
 												className="col-md-12"
-												onClick={() => handleResetPassword()}
+												disabled={isSubmitting}
 											>
 												<div className="form-group">
 													<button type="submit" className="site-button">
@@ -231,3 +173,105 @@ function ResetPasswordPage() {
 }
 
 export default ResetPasswordPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/* <div className="col-lg-12">
+														<div className="twm-forgot-wrap">
+															<div className="form-group mb-3">
+																<div className="form-check">
+																	<input
+																		type="checkbox"
+																		className="form-check-input"
+																		id="Password4"
+																	/>
+																	<label
+																		className="form-check-label rem-forgot"
+																		htmlFor="Password4"
+																	>
+																		Remember me{" "}
+																		<a href="#" className="site-text-primary">
+																			Forgot Password
+																		</a>
+																	</label>
+																</div>
+															</div>
+														</div>
+													</div> */
+
+
+
+	/* <div className="col-md-12">
+														<div className="form-group">
+															<span className="center-text-or">Or</span>
+														</div>
+													</div> */
+
+
+	/* <div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_facebook"
+																>
+																	{/* <i className="fab fa-facebook" /> *
+																	<i class="fab fa-linkedin" color="blue"></i>
+																	Continue with LinkedIn
+																</button>
+															</div>
+														</div> */
+
+	/* <div
+															className="col-md-12"
+															onClick={() => {
+																loginWithLinkedIn();
+															}}
+														>
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google log_with_linkedin"
+																>
+																	<JobZImage
+																		src="images/linkedin-logo-1a.png"
+																		alt=""
+																	/>
+																	Continue with LinkedIn
+																</button>
+															</div>
+														</div> */
+
+	/* <div className="col-md-12">
+															<div className="form-group">
+																<button
+																	type="submit"
+																	className="log_with_google"
+																>
+																	<JobZImage
+																		src="images/google-icon.png"
+																		alt=""
+																	/>
+																	Continue with Google
+																</button>
+															</div>
+														</div> */

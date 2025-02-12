@@ -38,7 +38,8 @@ export function showHeader(currentpath) {
 			currentpath === publicUser.pages.LOGIN ||
 			currentpath === publicUser.pages.AFTER_LOGIN ||
 			currentpath === publicUser.pages.RESET_PASSWORD ||
-			currentpath === publicUser.pages.CHANGE_PASSWORD
+			currentpath === publicUser.pages.CHANGE_PASSWORD ||
+			currentpath === publicUser.pages.VERIFY_OTP
 		) {
 			return false;
 		}

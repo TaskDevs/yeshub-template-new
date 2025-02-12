@@ -125,7 +125,7 @@ function SignInPopup() {
 															type="text"
 															required
 															className="form-control"
-															placeholder="Username*"
+															placeholder="Email*"
 															value={email}
 															onChange={(event) => {
 																setEmail(event.target.value);
@@ -135,17 +135,7 @@ function SignInPopup() {
 												</div>
 												<div className="col-lg-12">
 													<div className="form-group mb-3">
-														{/* <input
-															name="password"
-															type="password"
-															className="form-control"
-															required
-															placeholder="Password*"
-															value={password}
-															onChange={(event) => {
-																setPassword(event.target.value);
-															}}
-														/> */}
+														
 
 														<div className="ls-inputicon-box-signup ls-inputicon-box">
 															<input

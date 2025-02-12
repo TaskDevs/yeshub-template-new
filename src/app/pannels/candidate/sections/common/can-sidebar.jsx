@@ -1,10 +1,39 @@
 import JobZImage from "../../../../common/jobz-img";
 import { NavLink, useLocation } from "react-router-dom";
 import { setMenuActive } from "../../../../../globals/constants";
-import { candidate, canRoute, publicUser } from "../../../../../globals/route-names";
+import { candidate, canRoute, publicUser, withId } from "../../../../../globals/route-names";
+import { useEffect, useState } from "react";
+import { useUser } from "../../../../context/auth/UserContext";
+import { useAuth } from "../../../../context/auth/AuthContext";
 
 function CanSidebarSection() {
-    const currentpath = useLocation().pathname;
+	const currentpath = useLocation().pathname;
+	// const { user } = useUser();
+	const { userData } = useAuth();
+	const [routes, setRoutes] = useState({});
+		
+	
+		// /dashboard-candidate/${user?.id}
+	// console.log("userdata-side", userData);
+	// console.log("routes-cs", routes);
+		
+	
+	useEffect(() => {
+			
+			if (userData?.id) {
+				const updatedRoutes = withId(userData?.id, candidate);
+				setRoutes(updatedRoutes);
+			}
+
+			// console.log("routes-cs2", routes);
+		}, [userData?.id]);
+		
+
+
+	
+
+
+
     return (
 			<>
 				<div className="twm-candidate-profile-pic">
@@ -34,7 +63,7 @@ function CanSidebarSection() {
 						<li
 							className={setMenuActive(
 								currentpath,
-								canRoute(candidate.DASHBOARD)
+								canRoute(routes.DASHBOARD)
 							)}
 						>
 							<NavLink to={canRoute(candidate.DASHBOARD)}>
@@ -45,10 +74,10 @@ function CanSidebarSection() {
 						<li
 							className={setMenuActive(
 								currentpath,
-								canRoute(candidate.PROFILE)
+								canRoute(routes.PROFILE)
 							)}
 						>
-							<NavLink to={canRoute(candidate.PROFILE)}>
+							<NavLink to={canRoute(routes.PROFILE)}>
 								<i className="fa fa-user" />
 								My Profile
 							</NavLink>
@@ -56,18 +85,18 @@ function CanSidebarSection() {
 						<li
 							className={setMenuActive(
 								currentpath,
-								canRoute(candidate.APPLIED_JOBS)
+								canRoute(routes.APPLIED_JOBS)
 							)}
 						>
-							<NavLink to={canRoute(candidate.APPLIED_JOBS)}>
+							<NavLink to={canRoute(routes.APPLIED_JOBS)}>
 								<i className="fa fa-suitcase" />
 								Applied Jobs
 							</NavLink>
 						</li>
 						<li
-							className={setMenuActive(currentpath, canRoute(candidate.RESUME))}
+							className={setMenuActive(currentpath, canRoute(routes.RESUME))}
 						>
-							<NavLink to={canRoute(candidate.RESUME)}>
+							<NavLink to={canRoute(routes.RESUME)}>
 								<i className="fa fa-receipt" />
 								My Resume
 							</NavLink>
@@ -75,10 +104,10 @@ function CanSidebarSection() {
 						<li
 							className={setMenuActive(
 								currentpath,
-								canRoute(candidate.SAVED_JOBS)
+								canRoute(routes.SAVED_JOBS)
 							)}
 						>
-							<NavLink to={canRoute(candidate.SAVED_JOBS)}>
+							<NavLink to={canRoute(routes.SAVED_JOBS)}>
 								<i className="fa fa-file-download" />
 								Saved Jobs
 							</NavLink>
@@ -86,26 +115,26 @@ function CanSidebarSection() {
 						<li
 							className={setMenuActive(
 								currentpath,
-								canRoute(candidate.CV_MANAGER)
+								canRoute(routes.CV_MANAGER)
 							)}
 						>
-							<NavLink to={canRoute(candidate.CV_MANAGER)}>
+							<NavLink to={canRoute(routes.CV_MANAGER)}>
 								<i className="fa fa-paperclip" />
 								CV Manager
 							</NavLink>
 						</li>
 						<li
-							className={setMenuActive(currentpath, canRoute(candidate.ALERTS))}
+							className={setMenuActive(currentpath, canRoute(routes.ALERTS))}
 						>
-							<NavLink to={canRoute(candidate.ALERTS)}>
+							<NavLink to={canRoute(routes.ALERTS)}>
 								<i className="fa fa-bell" />
 								Job Alerts
 							</NavLink>
 						</li>
 						<li
-							className={setMenuActive(currentpath, canRoute(candidate.ACCOUNTS))}
+							className={setMenuActive(currentpath, canRoute(routes.ACCOUNTS))}
 						>
-							<NavLink to={canRoute(candidate.ACCOUNTS)}>
+							<NavLink to={canRoute(routes.ACCOUNTS)}>
 								<i className="fa fa-bell" />
 								Accounts
 							</NavLink>
@@ -113,10 +142,10 @@ function CanSidebarSection() {
 						<li
 							className={setMenuActive(
 								currentpath,
-								canRoute(candidate.CHANGE_PASSWORD)
+								canRoute(routes.CHANGE_PASSWORD)
 							)}
 						>
-							<NavLink to={canRoute(candidate.CHANGE_PASSWORD)}>
+							<NavLink to={canRoute(routes.CHANGE_PASSWORD)}>
 								<i className="fa fa-fingerprint" />
 								Change Password
 							</NavLink>
@@ -158,3 +187,26 @@ function CanSidebarSection() {
 }
 
 export default CanSidebarSection;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/* <li className={setMenuActive(currentpath, canRoute(candidate.APPLIED_JOBS))}>
+	<NavLink to={canRoute(candidate.APPLIED_JOBS)}>
+		<i className="fa fa-suitcase" />
+		Applied Jobs
+	</NavLink>
+</li>; */
+
+
+

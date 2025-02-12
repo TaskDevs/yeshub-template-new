@@ -2,8 +2,8 @@
 
 export const base = {
     PUBLIC_PRE: "",
-    CANDIDATE_PRE: "/dashboard-candidate",
-    EMPLOYER_PRE: "/dashboard-employer"
+    CANDIDATE_PRE: "/dashboard-candidate/",
+    EMPLOYER_PRE: "/dashboard-employer/"
 }
 
 
@@ -54,15 +54,18 @@ export const publicUser = {
 		AFTER_LOGIN: "/after-login",
 		RESET_PASSWORD: "/reset-password",
 		FORGOT_PASSWORD: "/forgot-password",
+		GOOGLE_CALLBACK: "/auth/google/callback",
+		LINKEDIN_CALLBACK: "/auth/linkedin/callback",
 		ICONS: "/icons",
-		CONTRACT: "/contract"
+		CONTRACT: "/contract",
+		VERIFY_OTP: "/verify-otp"
 	},
 	candidate: {
 		GRID: "/can-grid",
 		LIST: "/can-list",
 		DETAIL1: "/can-detail/1",
 		DETAIL2: "/can-detail/2",
-		PORTFOLIO: "/can-portfolio"
+		PORTFOLIO: "/can-portfolio",
 	},
 	blog: {
 		GRID1: "/blog-grid/1",
@@ -72,9 +75,9 @@ export const publicUser = {
 		DETAIL: "/blog-detail",
 	},
 	payment: {
-	   CHECKOUT: "/checkout",
-	   COMPLETE: "/complete",
-    }
+		CHECKOUT: "/checkout",
+		COMPLETE: "/complete",
+	},
 };
 
 
@@ -90,7 +93,7 @@ export const candidate = {
     SAVED_JOBS:     "/saved-jobs",
     CV_MANAGER:     "/cv-manager",
     ALERTS:         "/job-alerts",
-    CHANGE_PASSWORD:"/change-password",
+    CHANGE_PASSWORD: "/change-password",
 	CHAT: "/chat",
 	REVIEWS: "/reviews",
 	ACCOUNTS: "/accounts"
@@ -125,7 +128,7 @@ export function pubRoute(_route) {
 	
 // }
 export function empRoute(_route, id = "") {
-	return `${base.EMPLOYER_PRE}${_route}${id ? `/${id}` : ""}`;
+	return `${base.EMPLOYER_PRE}${id ? `/${id}` : ""}${_route}`;
 }
 
 // export function canRoute(_route) {
@@ -134,7 +137,10 @@ export function empRoute(_route, id = "") {
 // }
 
 export function canRoute(_route, id = "") {
-	return `${base.CANDIDATE_PRE}${_route}${id ? `/${id}` : ""}`;
+	// if (_route === "" || _route === "/dashboard-candidate") {
+	// 	return;
+	// }
+	return `${base.CANDIDATE_PRE}${id ? `/${id}` : ""}${_route}`;
 }
 
 
@@ -142,6 +148,9 @@ export function canRoute(_route, id = "") {
 export const withId = (id, routes) => {
 	const updatedRoutes = {};
 	for (const key in routes) {
+		// if (routes[key] === "" || routes[key] === "/dashboard-candidate") {
+		// 	return;
+		// }
 		updatedRoutes[key] = `${routes[key].startsWith("/") ? "" : "/"}${id}${
 			routes[key]
 		}`;

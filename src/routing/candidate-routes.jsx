@@ -16,46 +16,51 @@ import ProtectedRoute from "../app/context/ProtectedRoute";
 import SectionReviews from "../app/pannels/public-user/sections/common/section-reviews";
 import  { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
+import { useAuth } from "../app/context/auth/AuthContext";
 
 function CandidateRoutes() {
 	const { user } = useUser();
+	// const [routes, setRoutes] = useState({});
+
+	// /dashboard-candidate/${user?.id}
+
+
+	// const { routes, setRoutes } = useAuth();
+	const { userData } = useAuth();
+
 	const [routes, setRoutes] = useState({});
 
-	// if (!user) {
-	// 	alert("user doesn't exist");
-    // }
-    
+	// console.log("routes-canR", routes);
+
 	
 
 	useEffect(() => {
-		if (user?.id) {
-			// Pass the user id dynamically to withId
-			const updatedRoutes = withId(user.id, candidate);
-			setRoutes(updatedRoutes); // Set the updated routes in the state
+		if (userData?.id) {
+			const updatedRoutes = withId(userData.id, candidate);
+			setRoutes(updatedRoutes);
 		}
-    }, [user]);
+
+		// console.log("routes-canR2", routes);
+	}, [userData?.id]);
     
-    // if (!routes.APPLIED_JOBS) {
-	// 		return <div>User doesn't exist; Log in to continue</div>;
-	// 	}
 
 	return (
-		// <ProtectedRoute roleProp="1"></ProtectedRoute>
+		// <ProtectedRoute roleProp="user"></ProtectedRoute>
 		<Routes>
-			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
-			<Route path={candidate.PROFILE} element={<CanProfilePage />} />
-			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
-			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
-			<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />
-			<Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
-			<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
-			<Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
+			<Route path={routes.DASHBOARD} element={<CanDashboardPage />} />
+			<Route path={routes.PROFILE} element={<CanProfilePage />} />
+			<Route path={routes.APPLIED_JOBS} element={<CanAppliedJobs />} />
+			<Route path={routes.RESUME} element={<CanMyResumePage />} />
+			<Route path={routes.SAVED_JOBS} element={<CanSavedJobsPage />} />
+			<Route path={routes.CV_MANAGER} element={<CanCVManagerPage />} />
+			<Route path={routes.ALERTS} element={<CanJobAlertsPage />} />
+			<Route path={routes.ACCOUNTS} element={<FinancesPage />} />
 			<Route
-				path={candidate.CHANGE_PASSWORD}
+				path={routes.CHANGE_PASSWORD}
 				element={<CanChangePasswordPage />}
 			/>
-			<Route path={candidate.CHAT} element={<CanChatPage />} />
-			<Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
+			<Route path={routes.CHAT} element={<CanChatPage />} />
+			<Route path={routes.REVIEWS} element={<CanReviewsPage />} />
 			<Route path="*" element={<Error404Page />} />
 		</Routes>
 	);

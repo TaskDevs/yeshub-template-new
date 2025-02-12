@@ -55,7 +55,7 @@ import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-det
 import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset-password";
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 import ContractPopup from "../app/common/popups/popup-contract";
-
+// import GoogleCallback from "../app/context/auth/GoogleCallback";
 
 // import { loadStripe } from "@stripe/stripe-js";
 // import { Elements } from "@stripe/react-stripe-js";
@@ -65,6 +65,8 @@ import CheckoutPage from "../app/common/payment/stripe/checkout-page";
 import TestLogin from "../app/common/test-login";
 import ChangePassword from "../app/pannels/public-user/components/pages/forgot-password";
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgot-password";
+import AuthCallback from "../app/context/auth/AuthCallback";
+import VerifyOtp from "../app/pannels/public-user/components/pages/verify-otp";
 
 
 // const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
@@ -100,6 +102,7 @@ function PublicUserRoutes() {
     return (
 			<>
 				<Routes>
+					{/* <Route path="/auth/google/callback" element={<GoogleCallback />} /> */}
 					<Route path={publicUser.INITIAL} element={<Home1Page />} />
 					<Route path={publicUser.HOME1} element={<Home1Page />} />
 					<Route path={publicUser.HOME2} element={<Home2Page />} />
@@ -158,15 +161,26 @@ function PublicUserRoutes() {
 						path={publicUser.pages.AFTER_LOGIN}
 						element={<AfterLoginPage />}
 					/>
-					
+					<Route
+						path={publicUser.pages.VERIFY_OTP}
+						element={<VerifyOtp />}
+					/>
+					<Route
+						path={publicUser.pages.GOOGLE_CALLBACK}
+						element={<AuthCallback />}
+					/>
+					<Route
+						path={publicUser.pages.LINKEDIN_CALLBACK}
+						element={<AuthCallback />}
+					/>
 					<Route
 						path={publicUser.pages.RESET_PASSWORD}
 						element={<ResetPasswordPage />}
 					/>
 					<Route
 						path={publicUser.pages.FORGOT_PASSWORD}
-					element={< ForgotPassword  />}
-					// ChangePassword
+						element={<ForgotPassword />}
+						// ChangePassword
 					/>
 					<Route path={publicUser.pages.ICONS} element={<IconsPage />} />
 					<Route

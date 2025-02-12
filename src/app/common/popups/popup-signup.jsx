@@ -22,7 +22,6 @@ function SignUpPopup() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [isEmailValid, setIsEmailValid] = useState(true);
 	const [showTopMessage, setShowTopMessage] = useState(false);
-	const [email, setEmail] = useState("");
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
 	const [isLoading, setLoading] = useState(false);
@@ -41,9 +40,7 @@ function SignUpPopup() {
 	const [formData, setFormData] = useState(initialFormData);
 	const { loginWithGoogle, loginWithLinkedIn, handleAuthError } = useAuth();
 
-	const loginSuccess = () => toast("User successfully sign up!");
-	const loginError = () => toast("Error!, Failed to sign up!");
-	const passwordError = () => toast("Error!, Passwords do not match!");
+	// console.log("formData", formData);
 
 	const url = `${process.env.REACT_APP_BASE_URL}register`;
 
@@ -63,7 +60,7 @@ function SignUpPopup() {
 
 		if (formData.password !== formData.password_confirmation) {
 			setIsSubmitting(false);
-			passwordError();
+			toast.error("Error!, Passwords do not match!")
 			return;
 		}
 
@@ -78,26 +75,23 @@ function SignUpPopup() {
 			const response = await axios.post(url, formData);
 			setSuccess(true);
 			const data = response.data;
-			console.log("data", data);
-			updateUser(data);
+			console.log("res", response);
+			updateUser(formData);
 			setShowTopMessage(true);
 
-			loginSuccess();
+			toast.success("Check your email for Otp notifications")
 
-			if (formData.role === "1") {
-				return moveToCandidate();
-			} else {
-				return moveToEmployer();
-			}
+			navigate("/verify-otp")
+			// window.location.href("/verify-otp")
 
-		} catch (err) {
-			setShowTopMessage(true);
-			loginError();
-			setError(err.response?.data?.message || "An error occurred");
+		} catch (error) {
+			setSuccess(false);
+			setError(error.response?.data?.message || "An error occurred");
+			console.error("error", error);
+			toast.error("Failed to register, try again")
+			
 		} finally {
 			setIsSubmitting(false);
-			setEmail("");
-			
 			setFormData(initialFormData);
 			
 			setTimeout(() => {
@@ -108,20 +102,30 @@ function SignUpPopup() {
 
 
 	const validateEmail = (input) => {
+		
 		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 		return emailRegex.test(input);
 	};
 
 	const handleInputChange = (event) => {
-		const value = event.target.value;
-		setEmail(value);
-		if (!validateEmail(value)) {
-			setIsEmailValid(false);
-			handleAuthError("");
-		} else {
-			setIsEmailValid(true);
-			handleAuthError("");
+		const { name, value } = event.target;
+		setFormData({
+			...formData,
+			
+			[name]: value,
+		});
+
+		if (name === "email") {
+			if (!validateEmail(value)) {
+				setIsEmailValid(false);
+				handleAuthError("");
+			} else {
+				setIsEmailValid(true);
+				handleAuthError("");
+			}
 		}
+		
+		
 	};
 
 	const moveToCandidate = () => {
@@ -189,7 +193,7 @@ function SignUpPopup() {
 												<button
 													// className="nav-link active"
 													className={`nav-link ${
-														formData.role === "1" ? "active" : ""
+														formData.role === "user" ? "active" : ""
 													}`}
 													data-bs-toggle="tab"
 													// data-bs-target="#sign-candidate"
@@ -197,7 +201,7 @@ function SignUpPopup() {
 													onClick={() =>
 														setFormData((prevFormData) => ({
 															...prevFormData,
-															role: "1",
+															role: "user",
 														}))
 													}
 												>
@@ -210,7 +214,7 @@ function SignUpPopup() {
 												<button
 													// className="nav-link"
 													className={`nav-link ${
-														formData.role === "2" ? "active" : ""
+														formData.role === "employer" ? "active" : ""
 													}`}
 													data-bs-toggle="tab"
 													// data-bs-target="#sign-Employer"
@@ -218,7 +222,7 @@ function SignUpPopup() {
 													onClick={() =>
 														setFormData((prevFormData) => ({
 															...prevFormData,
-															role: "2",
+															role: "employer",
 														}))
 													}
 												>
@@ -257,7 +261,7 @@ function SignUpPopup() {
 																type="text"
 																required
 																className="form-control"
-																value={email}
+																value={formData.email}
 																placeholder="Email*"
 																onChange={handleInputChange}
 															/>

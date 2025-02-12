@@ -12,41 +12,53 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({ children }) => {
-	const navigate = useNavigate();
+	
 	const [user, setUser] = useState(() => {
 		const savedUser = sessionStorage.getItem("user");
 		return savedUser ? JSON.parse(savedUser) : null;
-    });
+	});
+
+	const [token, setToken] = useState(() => sessionStorage.getItem("authToken"));
     
+
+	console.log("user1", user)
   
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		console.log("urlParams", urlParams);
-		const token = urlParams.get("token");
-
-		console.log("token", token);
-		console.log("urlParams-token", urlParams.has("token"));
-
-
-// token && user;
-		if (token) {
-			sessionStorage.setItem("authToken", JSON.stringify(token));
-			// sessionStorage.setItem("user", JSON.stringify(user));
-			navigate("/dashboard-employer")
+		
+		if (user) {
+			
+			sessionStorage.setItem("user", JSON.stringify(user));
+			// sessionStorage.setItem("authToken", JSON.stringify(user.token));
+			
+			console.log("user2", user)
+			
 		} else {
-			// sessionStorage.removeItem("user");
+			sessionStorage.removeItem("user");
 			sessionStorage.removeItem("authToken");
-			// navigate("/")
+			setToken(null)
+			
 		}
-	}, [navigate]);
+		
+        setToken(sessionStorage.getItem("authToken"));
+	}, [user]);
 
 	const updateUser = (userData) => {
-		setUser(userData); 
+		console.log("updateUser", userData)
+		if (userData) {
+			setUser(userData);
+			sessionStorage.setItem("user", JSON.stringify(userData));
+			sessionStorage.setItem("authToken", JSON.stringify(token));
+		} else {
+			setUser(null);
+			sessionStorage.removeItem("user");
+			sessionStorage.removeItem("authToken"); 
+		}
 	};
 
+
 	return (
-		<UserContext.Provider value={{ user, updateUser }}>
+		<UserContext.Provider value={{ user, updateUser, token }}>
 			{children}
 		</UserContext.Provider>
 	);

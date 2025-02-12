@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import JobZImage from '../../../../common/jobz-img';
 import { NavLink } from 'react-router-dom';
 import { publicUser } from '../../../../../globals/route-names';
+import { useAuth } from '../../../../context/auth/AuthContext';
 
 function ForgotPassword() {
-    const [email, setEmail] = useState("")
+	
+	
+	const { email, setEmail, handleForgotPassword } = useAuth();
 
 
   return (
@@ -32,16 +35,14 @@ function ForgotPassword() {
 							<div className="twm-log-reg-inner">
 								<div className="twm-log-reg-head">
 									<div className="twm-log-reg-logo">
-                                      <span className="log-reg-form-title">Forgot Password</span>
-                                      <span className='fs-6 mb-5'>Enter your email address</span>
+										<span className="log-reg-form-title">Forgot Password</span>
+										<span className="fs-6 mb-5">Enter your email address</span>
 									</div>
 								</div>
 								<div className="twm-tabs-style-2">
-									
 									<div className="tab-content" id="myTab2Content">
-										
 										<form
-											onSubmit={"handleCandidateLogin"}
+											onSubmit={handleForgotPassword}
 											className="tab-pane fade show active"
 											// id="twm-login-candidate"
 										>
@@ -61,7 +62,7 @@ function ForgotPassword() {
 														/>
 													</div>
 												</div>
-												
+
 												<div className="col-md-12">
 													<div className="form-group">
 														<button type="submit" className="site-button">
@@ -76,12 +77,6 @@ function ForgotPassword() {
 												</div> */}
 											</div>
 										</form>
-
-										
-
-										
-
-										
 									</div>
 								</div>
 							</div>

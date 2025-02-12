@@ -7400,6 +7400,20 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   opacity: 1;
 }
 
+.character {
+  border-radius: 0.25rem;
+  border-color: #ccc;
+  background: "#f0f6fe";
+}
+.character--selected {
+  background: "#f0f6fe";
+  border: "#f5f5f5"
+}
+.character--inactive {
+    border-color: #ccc;
+    background-color: #f9f9f9;
+}
+
 .tw-sidebar-gallery-2 .row {
   list-style: none;
   display: flex;

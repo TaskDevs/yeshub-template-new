@@ -16,7 +16,8 @@ function LoginPage() {
 
 	const {
 		handleSubmit,
-		handleEmployerLogin,
+		loginWithGoogle,
+		loginWithLinkedIn,
 		isSubmitting,
 		password,
 		setPassword,
@@ -227,7 +228,10 @@ function LoginPage() {
 
 												{/*Login Employer Content*/}
 
-												<div className="col-md-12">
+												<div
+													className="col-md-12"
+													onClick={() => loginWithLinkedIn()}
+												>
 													<div className="form-group ">
 														<button
 															type="submit"
@@ -242,7 +246,10 @@ function LoginPage() {
 													</div>
 												</div>
 
-												<div className="col-md-12 ">
+												<div
+													className="col-md-12 "
+													onClick={() => loginWithGoogle()}
+												>
 													<div className="form-group">
 														<button
 															type="submit"

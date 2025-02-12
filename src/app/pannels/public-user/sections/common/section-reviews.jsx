@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { LuAsterisk } from 'react-icons/lu';
+// import { LuAsterisk } from 'react-icons/lu';
 
 function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 
@@ -59,8 +59,21 @@ function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 
 
 
+	if(loading) {
+		return <div>Loading...</div>
+	}
 
+	if (error) {
+		return <div>Error: {error}</div>
+	}
 
+	if (success) {
+		return <div>Success: {success}</div>
+	}
+
+	if (isSubmitting) {
+		return <div>Submitting...</div>
+	}
 
 
 

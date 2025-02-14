@@ -36,9 +36,23 @@ function App() {
               <HistoryApiDataProvider>
                 <EmployerApiDataProvider>
                   <FreelanceApiDataProvider>
-                    {isLoading && <Loader />}
-                    <ScrollToTop />
-                    <RootLayout />
+                    <JobApiDataProvider>
+                      <PaymentApiDataProvider>
+                        <PortfolioApiDataProvider>
+                          <SkillsApiDataProvider>
+                            <TestimonialApiDataProvider>
+                              <ProfileApiDataProvider>
+                                <WalletApiDataProvider>
+                                  {isLoading && <Loader />}
+                                  <ScrollToTop />
+                                  <RootLayout />
+                                </WalletApiDataProvider>
+                              </ProfileApiDataProvider>
+                            </TestimonialApiDataProvider>
+                          </SkillsApiDataProvider>
+                        </PortfolioApiDataProvider>
+                      </PaymentApiDataProvider>
+                    </JobApiDataProvider>
                   </FreelanceApiDataProvider>
                 </EmployerApiDataProvider>
               </HistoryApiDataProvider>

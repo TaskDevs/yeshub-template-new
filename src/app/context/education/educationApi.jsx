@@ -9,6 +9,7 @@ export const addEducation = async (data) => {
       {
         /**Add Create Education API URL here**/
       },
+      `/api/v1/create-education-profile`,
       data
     );
     if (responseOnAddEducation.status === SUCCESS_STATUS) {
@@ -59,9 +60,12 @@ export const educationList = async (pageNo) => {
 // VIEW Education
 export const educationProfile = async (id) => {
   try {
-    let responseOnEducationProfile = await axios.get({
-      /**Add View Education API URL here like ${URL}api/getEducationProfile/${id}**/
-    });
+    let responseOnEducationProfile = await axios.get(
+			{
+				/**Add View Education API URL here like ${URL}api/getEducationProfile/${id}**/
+			},
+			`/api/v1/get-education-profile/${id}`
+		);
 
     if (responseOnEducationProfile.status === SUCCESS_STATUS) {
       return responseOnEducationProfile.data;
@@ -77,9 +81,13 @@ export const educationProfile = async (id) => {
 // UPDATE EDUCATION
 export const updateEducation = async (data) => {
   try {
-    let responseOnUpdateEducation = await axios.put({
-      /**Add Update Education API URL here like  `${URL}api/updateEducation/${data.id}` **/
-    });
+    let responseOnUpdateEducation = await axios.put(
+			{
+				/**Add Update Education API URL here like  `${URL}api/updateEducation/${data.id}` **/
+			},
+      `/api/v1/update-education-profile/{id}`,
+      data
+		);
     if (responseOnUpdateEducation.status === SUCCESS_STATUS) {
       return responseOnUpdateEducation.data;
     } else {
@@ -91,11 +99,13 @@ export const updateEducation = async (data) => {
 };
 
 // DELETE EDUCATION
-export const deleteEducation = async (data) => {
+export const deleteEducation = async (id) => {
   try {
     let responseOnDeleteEducation = await axios.delete({
       /**Add Delete Education API URL here like  `/api/deleteEducation/${data}` **/
-    });
+    },
+    `/api/v1/delete-education-profile/${id}`
+    );
     if (responseOnDeleteEducation.status === SUCCESS_STATUS) {
       return responseOnDeleteEducation.data;
     } else {

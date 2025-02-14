@@ -1,23 +1,22 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseUrl } from "../../../globals/constants";
 
 // ADD Profile
 export const addProfile = async (data) => {
   try {
     let responseOnAddProfile = await axios.post(
-      {
-        /**Add Create Profile API URL here**/
-      },
-      data
-    );
+     
+       "/api/v1/create-profile",
+			data
+		);
     if (responseOnAddProfile.status === SUCCESS_STATUS) {
       return responseOnAddProfile.data;
     } else {
       return false;
     }
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return false;
   }
 };
@@ -61,7 +60,10 @@ export const profileProfile = async (id) => {
   try {
     let responseOnProfile = await axios.get({
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
-    });
+     
+    },
+         "/api/v1/get-profile/{id}"
+    );
 
     if (responseOnProfile.status === SUCCESS_STATUS) {
       return responseOnProfile.data;
@@ -75,11 +77,14 @@ export const profileProfile = async (id) => {
 };
 
 // UPDATE Profile
-export const updateProfile = async (data) => {
+export const updateProfile = async (id) => {
   try {
-    let responseOnUpdateProfile = await axios.put({
-      /**Add Update Profile API URL here like  `${URL}api/updateProfile/${data.id}` **/
-    });
+    let responseOnUpdateProfile = await axios.put(
+			{
+				/**Add Update Profile API URL here like  `${URL}api/updateProfile/${data.id}` **/
+			},
+			`/api/v1/update-profile/${id}`
+		);
     if (responseOnUpdateProfile.status === SUCCESS_STATUS) {
       return responseOnUpdateProfile.data;
     } else {
@@ -91,11 +96,14 @@ export const updateProfile = async (data) => {
 };
 
 // DELETE Profile
-export const deleteProfile = async (data) => {
+export const deleteProfile = async (id) => {
   try {
-    let responseOnDeleteProfile = await axios.delete({
-      /**Add Delete Profile API URL here like  `/api/deleteProfile/${data}` **/
-    });
+    let responseOnDeleteProfile = await axios.delete(
+			{
+				/**Add Delete Profile API URL here like  `/api/deleteProfile/${data}` **/
+			},
+			`api/v1/delete-profile/${id}`
+		);
     if (responseOnDeleteProfile.status === SUCCESS_STATUS) {
       return responseOnDeleteProfile.data;
     } else {

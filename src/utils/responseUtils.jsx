@@ -6,11 +6,11 @@ export const notify = (
     success_mssg = "Operation Successful", 
     fail_mssg = "Operation failed") => {
     if(status === SUCCESS_STATUS){ 
-        toast(success_mssg, {
+        toast.success(success_mssg, {
             position: "top-center"
         })
     } else {
-        toast(fail_mssg)
+        toast.error(fail_mssg)
     }
 }
 

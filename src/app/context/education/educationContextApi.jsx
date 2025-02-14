@@ -6,6 +6,7 @@ import {
   addEducation,
   searchEducation,
   eductionList,
+  // educationEducation,
   educationProfile,
   updateEducation,
   deleteEducation,
@@ -14,24 +15,61 @@ import {
 export const EducationApiData = createContext();
 
 const EducationApiDataProvider = (props) => {
-  const processAddEducation = async (data) => {};
+  
+
+  const processAddEducation = async (data) => {
+    const res = await addEducation(data);
+    console.log("add-education", res);
+    
+       notify(res.status, "Education added successfully", "Failed to add education");
+
+  };
 
   const processGetAllEducation = async (id) => {};
-
-  const processEducationProfile = async (id) => {};
-
   const processSearchEducation = async (data) => {};
 
-  const processUpdateEducation = async (data) => {};
+  const processEducationEducation = async (id) => {
 
-  const processDeleteEducation = async (id) => {};
+    const res = await educationProfile(id);
+		console.log("get-education", res);
+
+		notify(
+			res.status,
+			"Education added successfully",
+			"Failed to add education"
+		);
+  };
+
+
+
+  const processUpdateEducation = async (data) => {
+    const res = await updateEducation(data);
+		console.log("update-education", res);
+
+		notify(
+			res.status,
+			"Education updated successfully",
+			"Failed to add education"
+		);
+  };
+
+  const processDeleteEducation = async (id) => {
+    const res = await deleteEducation(id);
+		console.log("delete-education", res);
+
+		notify(
+			res.status,
+			"Education added successfully",
+			"Failed to add education"
+		);
+  };
 
   return (
     <EducationApiData.Provider
       value={{
         processAddEducation,
         processGetAllEducation,
-        processEducationProfile,
+        processEducationEducation,
         processSearchEducation,
         processUpdateEducation,
         processDeleteEducation,

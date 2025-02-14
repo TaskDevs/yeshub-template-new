@@ -1,23 +1,57 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import InputField from "../../../../common/input-field";
+import { USERPROFILEFIELD } from "../../../../../globals/user-profile-data";
+import TextAreaField from "../../../../common/text-area-field";
+import SelectField from "../../../../common/select-field";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+
+const skills = [
+	{ id: 1, name: "HTML" },
+	{ id: 2, name: "CSS" },
+	{ id: 3, name: "JavaScript" },
+	{ id: 4, name: "React" },
+];
+
+// processSearchProfile,
+// 	processUpdateProfile,
+// 	processDeleteProfile,
+//processGetAllProfile
 
 function SectionCandicateBasicInfo() {
-  // id,skills_id   yet to be added
-  const [formData, setFormData] = useState({});
+	
 
-  const handleChange = (field, data) => {
-    setFormData({
-      ...formData,
-      [field]: data,
-    });
-  };
+	const [formData, setFormData] = useState(
+		USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
+			acc[field.name] = "";
+			return acc;
+		}, {})
+	);
+	console.log("formData", { ...formData, id: "1" });
 
-  const handleSubmitProfile = async (e) => {
-    e.preventDefault();
-  };
+	const { processAddProfile } = useContext(ProfileApiData);
 
-  return (
+	const handleChange = (field, data) => {
+		setFormData({
+			...formData,
+			[field]: data,
+		});
+	};
+
+	const handleSubmitProfile = async (e) => {
+		e.preventDefault();
+		const response = await processAddProfile({ ...formData, id: "1" });
+		console.log("Profile added successfully", response);
+
+		if (response) {
+			console.log("Profile added successfully", response);
+		} else {
+			console.error("Failed to add profile");
+		}
+	};
+
+	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmitProfile}>
 				<div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
 						<h4 className="panel-tittle m-a0">Basic Informations</h4>
@@ -28,13 +62,12 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group">
 									<label>First Name</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="firstname"
-											type="text"
-											placeholder="David"
-											value={formData.firstname}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[0]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fa fa-user " />
 									</div>
@@ -44,14 +77,14 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group">
 									<label>Last Name</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="lastname"
-											type="text"
-											placeholder=" Smith"
-											value={formData.lastname}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[1]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
+
 										<i className="fs-input-icon fa fa-user " />
 									</div>
 								</div>
@@ -60,45 +93,40 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group">
 									<label>Phone</label>
 									<div className="ls-inputicon-box">
-										<input
+										{/* <input
 											className="form-control"
 											name="telephone"
 											type="text"
 											placeholder="(+233) 554-456-789"
-											value={formData.telephone}
-											onChange={handleChange}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
+										/> */}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[2]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fa fa-phone-alt" />
 									</div>
 								</div>
 							</div>
-							{/* <div className="col-xl-6 col-lg-6 col-md-12">
-									<div className="form-group">
-										<label>Email Address</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="company_Email"
-												type="email"
-												placeholder="Devid@example.com"
-											/>
-											<i className="fs-input-icon fas fa-at" />
-										</div>
-									</div>
-                            </div> */}
 
 							<div className="col-xl-6 col-lg-6 col-md-12">
 								<div className="form-group city-outer-bx has-feedback">
 									<label>Experience</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="experience"
-											type="text"
-											placeholder="05 Years"
-											value={formData.experience}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[3]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
+
 										<i className="fs-input-icon fa fa-user-edit" />
 									</div>
 								</div>
@@ -107,13 +135,12 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group">
 									<label>Address</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="address"
-											type="text"
-											placeholder="till street"
-											value={formData.address}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[4]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fa fa-globe-americas" />
 									</div>
@@ -124,13 +151,12 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group city-outer-bx has-feedback">
 									<label>Country</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="country"
-											type="text"
-											placeholder="Ghana"
-											value={formData.country}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[5]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fa fa-globe-americas" />
 									</div>
@@ -156,13 +182,12 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group city-outer-bx has-feedback">
 									<label>Region</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="region"
-											type="text"
-											placeholder="Greater Region"
-											value={formData.region}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[6]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fa fa-globe-americas" />
 									</div>
@@ -187,13 +212,12 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group city-outer-bx has-feedback">
 									<label>GPS Address</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="gps_address"
-											type="text"
-											placeholder="GA1826363"
-											value={formData.gps_address}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[7]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fas fa-map-pin" />
 									</div>
@@ -203,13 +227,12 @@ function SectionCandicateBasicInfo() {
 								<div className="form-group city-outer-bx has-feedback">
 									<label>Postal Code</label>
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="postal_code"
-											type="text"
-											placeholder="GT 560 AB0252"
-											value={formData.postal_code}
-											onChange={handleChange}
+										<InputField
+											field={USERPROFILEFIELD.fieldDetail[8]}
+											value={formData}
+											change={(data, field) => {
+												handleChange(data, field);
+											}}
 										/>
 										<i className="fs-input-icon fas fa-map-marker-alt" />
 									</div>
@@ -217,41 +240,48 @@ function SectionCandicateBasicInfo() {
 							</div>
 
 							<div className="col-xl-6 col-lg-12 col-md-12">
-								<div className="form-group">
+								{/* <div className="form-group">
 									<label>Skills</label>
+
 									<div className="ls-inputicon-box">
-										<input
-											className="form-control"
-											name="skills_id"
-											type="text"
-											placeholder="123"
-										/>
-										{/* <i className="fs-input-icon fa fa-map-pin" /> */}
+										<select
+											className="wt-select-box selectpicker form-control"
+											data-live-search="true"
+											id="j-category"
+											data-bv-field="size"
+											name="skill_id"
+											value={formData.skill_id}
+											onChange={handleChange}
+										>
+											<option className="bs-title-option" value>
+												Select Skills
+											</option>
+											{/* {skills.map((s, i) => (
+												<option key={i} value={s.id}>
+													{s.skill}
+												</option>
+											))} *
+											<option value={"s.id"}>html</option>
+											<option value={"s.id"}>css</option>
+											<option value={"s.id"}>js</option>
+										</select>
 									</div>
-								</div>
+								</div> */}
+
+								<SelectField
+									field={USERPROFILEFIELD.fieldDetail[9]}
+									value={formData}
+									options={skills}
+									change={handleChange}
+								/>
 							</div>
 
 							<div className="col-md-12">
-								<div className="form-group">
-									<label>Experience</label>
-									<textarea
-										className="form-control"
-										rows={3}
-										value={formData.experience}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
-							<div className="col-md-12">
-								<div className="form-group">
-									<label>Bio</label>
-									<textarea
-										className="form-control"
-										rows={3}
-										value={formData.bio}
-										onChange={handleChange}
-									/>
-								</div>
+								<TextAreaField
+									field={USERPROFILEFIELD.fieldDetail[10]}
+									value={formData}
+									change={handleChange}
+								/>
 							</div>
 
 							<div className="col-lg-12 col-md-12">

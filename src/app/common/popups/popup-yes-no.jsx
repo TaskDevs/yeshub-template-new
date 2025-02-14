@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { popupType } from "../../../globals/constants";
 import { publicUser } from "../../../globals/route-names";
-import React from "react";
+import React, { useContext } from "react";
+import { EducationApiData } from "../../context/education/educationContextApi";
 // import useAuth from "../../context/auth/useAuth";
 
 function YesNoPopup(props) {
+
+	const { processDeleteEducation, selectedId } = useContext(EducationApiData);
+
+	const handleDelete = async () => {
+		const response = await processDeleteEducation(selectedId);
+		console.log("Education added successfully", response);
+	};
 
     const navigate = useNavigate();
     // const { logout } = useAuth();
@@ -13,7 +21,11 @@ function YesNoPopup(props) {
         if (props.type === popupType.LOGOUT) {
             // logout();
             navigateToAfterLogin();
-        }
+		}
+		
+		if (props.type === popupType.DELETE_EDUCATION) {
+			handleDelete();
+		}
     }
 
     const navigateToAfterLogin = () => {

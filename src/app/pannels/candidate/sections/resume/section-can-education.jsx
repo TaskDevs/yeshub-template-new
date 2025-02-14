@@ -3,31 +3,33 @@ import { EducationApiData } from "../../../../context/education/educationContext
 import { EDUCATIONFIELD } from "../../../../../globals/education-data";
 import InputField from "../../../../common/input-field";
 import TextAreaField from "../../../../common/text-area-field";
+import { MdOutlineEdit } from "react-icons/md";
+import { FaRegTrashCan } from "react-icons/fa6";
+import SectionEducationForm from "./section-education-form";
 
 function SectionCanEducation() {
-
 	const {
 		processAddEducation,
-		
 		processEducationEducation,
-		
 		processUpdateEducation,
-		processDeleteEducation,
+		selectedId,
+		setSelectedId,
 	} = useContext(EducationApiData);
 
-	const [educationData, setEducationData] = useState([]);
+	const [educationData, setEducationData] = useState({});
 
 	console.log("educationData", educationData);
-	
-	  useEffect(() => {
-			const fetchEducationData = async () => {
-				const res = await processEducationEducation("id");
-				console.log("get-education", res);
-				const data = res.data.data;
-				setEducationData(data);
-			};
-			fetchEducationData();
-		}, [processEducationEducation]);
+	//map the education data to the various fields and add the selectedId if the education is selected 
+
+	useEffect(() => {
+		const fetchEducationData = async () => {
+			const res = await processEducationEducation("userid");
+			console.log("get-education", res);
+			const data = res.data.data;
+			setEducationData(data);
+		};
+		fetchEducationData();
+	}, [processEducationEducation]);
 
 	const [formData, setFormData] = useState(
 		EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
@@ -35,7 +37,6 @@ function SectionCanEducation() {
 			return acc;
 		}, {})
 	);
-
 
 	const handleChange = (field, data) => {
 		setFormData({
@@ -67,66 +68,82 @@ function SectionCanEducation() {
 		} else {
 			console.error("Failed to add education");
 		}
+	};
 
-	}
+	return (
+		<>
+			<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+				<h4 className="panel-tittle m-a0">Education</h4>
+				<a
+					data-bs-toggle="modal"
+					href="#Education"
+					role="button"
+					title="Edit"
+					className="site-text-primary"
+				>
+					<span className="fa fa-edit" />
+				</a>
+			</div>
+			<div className="panel-body wt-panel-body p-a20 ">
+				<div className="twm-panel-inner">
+					<div className="">
+						<div className="actions">
+							<button
+								className="site-button  actions"
+								data-bs-target="#delete-education"
+								data-bs-toggle="modal"
+								data-bs-dismiss="modal"
+							>
+								<FaRegTrashCan color="white" />
+								<span className="admin-nav-text">Delete</span>
+							</button>
 
-	const handleDelete = async () => {
-		const response = await processDeleteEducation({ ...formData, id: "1" });
-		console.log("Education added successfully", response);
-	}
-
-
-    return (
-			<>
-				<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-					<h4 className="panel-tittle m-a0">Education</h4>
-					<a
-						data-bs-toggle="modal"
-						href="#Education"
-						role="button"
-						title="Edit"
-						className="site-text-primary"
-					>
-						<span className="fa fa-edit" />
-					</a>
-				</div>
-				<div className="panel-body wt-panel-body p-a20 ">
-					<div className="twm-panel-inner">
-						<p>
-							Mention your employment details including your current and
-							previous company work experience
-						</p>
-						<p>2004 to 2006</p>
-						<p>
-							<b>BCA - Bachelor of Computer Applications</b>
-						</p>
-						<p>2006 to 2008</p>
-						<p>
-							<b>MCA - Master of Computer Application</b>
-						</p>
-						<p>2008 to 20011</p>
-						<p>
-							<b>Design Communication Visual</b>
-						</p>
-						<p>
-							<a className="site-text-primary" href="#">
-								Add Doctorate/PhD
-							</a>
-						</p>
-						<p>
-							<a className="site-text-primary" href="#">
-								Add Masters/Post-Graduation
-							</a>
-						</p>
-						<p>
-							<a className="site-text-primary" href="#">
-								Add Graduation/Diploma
-							</a>
-						</p>
+							<button
+								className="site-button  actions "
+								data-bs-target="#edit-category"
+								data-bs-toggle="modal"
+								data-bs-dismiss="modal"
+								onClick={() => {
+									handleUpdate();
+								}}
+							>
+								<MdOutlineEdit color="white" />
+								<span>Edit</span>
+							</button>
+						</div>
 					</div>
+					<p>Mention your education details.</p>
+					<p>2004 to 2006</p>
+					<p>
+						<b>BCA - Bachelor of Computer Applications</b>
+					</p>
+					<p>2006 to 2008</p>
+					<p>
+						<b>MCA - Master of Computer Application</b>
+					</p>
+					<p>2008 to 20011</p>
+					<p>
+						<b>Design Communication Visual</b>
+					</p>
+					<p>
+						<a className="site-text-primary" href="#">
+							Add Doctorate/PhD
+						</a>
+					</p>
+					<p>
+						<a className="site-text-primary" href="#">
+							Add Masters/Post-Graduation
+						</a>
+					</p>
+					<p>
+						<a className="site-text-primary" href="#">
+							Add Graduation/Diploma
+						</a>
+					</p>
 				</div>
-				{/*Education */}
-				<div
+			</div>
+			{/*Education Form*/}
+			{/* <div
 					className="modal fade twm-saved-jobs-view"
 					id="Education"
 					tabIndex={-1}
@@ -166,7 +183,7 @@ function SectionCanEducation() {
 														maxLength={50}
 														// value={""}
 														// onChange={""}
-													/> */}
+													/> 
 													<i className="fs-input-icon fas fa-book-reader" />
 												</div>
 											</div>
@@ -194,7 +211,7 @@ function SectionCanEducation() {
                                                     <option>BBA- Bachelor of Business Administration</option>
                                                     <option>BFA- Bachelor of Fine Arts</option>
                                                     <option>BSW- Bachelor of Social Work</option>
-                                                </select> */}
+                                                </select> 
 													<InputField
 														field={EDUCATIONFIELD.fieldDetail[2]}
 														value={formData}
@@ -264,8 +281,11 @@ function SectionCanEducation() {
 							</form>
 						</div>
 					</div>
-				</div>
-			</>
-		);
+				</div> */}
+
+			<SectionEducationForm submit={handleSubmitEducation} id="Education" />
+			<SectionEducationForm submit={handleUpdate} id="Edit-Education" />
+		</>
+	);
 }
 export default SectionCanEducation;

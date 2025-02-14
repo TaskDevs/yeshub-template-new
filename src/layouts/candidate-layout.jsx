@@ -10,10 +10,15 @@ import { useLocation } from "react-router-dom";
 import { getHeaderConfig, setFooterType, showFooter } from "../globals/layout-config";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
+import { useContext } from "react";
+import { EducationApiData } from "../app/context/education/educationContextApi";
 // import SectionReviews from "../app/pannels/public-user/sections/common/section-reviews";
 
 function CandidateLayout() {
-    const currentpath = useLocation().pathname;
+	const currentpath = useLocation().pathname;
+
+	
+
     return (
 			<>
 				<div className="page-wraper">
@@ -58,7 +63,12 @@ function CandidateLayout() {
 						id="logout-dash-profile"
 						type={popupType.LOGOUT}
 						msg={"Do you want to Logout your profile?"}
-                />
+					/>
+					<YesNoPopup
+						id="delete-education"
+						type={popupType.DELETE_EDUCATION}
+						msg={"Are you sure you want to delete your education?"}
+					/>
 				</div>
 			</>
 		);

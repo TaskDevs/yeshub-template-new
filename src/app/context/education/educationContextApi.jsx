@@ -15,13 +15,15 @@ import {
 export const EducationApiData = createContext();
 
 const EducationApiDataProvider = (props) => {
+  const [selectedId, setSelected] = useState("");
   
 
   const processAddEducation = async (data) => {
     const res = await addEducation(data);
     console.log("add-education", res);
     
-       notify(res.status, "Education added successfully", "Failed to add education");
+    notify(res.status, "Education added successfully", "Failed to add education");
+    
 
   };
 
@@ -65,19 +67,21 @@ const EducationApiDataProvider = (props) => {
   };
 
   return (
-    <EducationApiData.Provider
-      value={{
-        processAddEducation,
-        processGetAllEducation,
-        processEducationEducation,
-        processSearchEducation,
-        processUpdateEducation,
-        processDeleteEducation,
-      }}
-    >
-      {props.children}
-    </EducationApiData.Provider>
-  );
+		<EducationApiData.Provider
+			value={{
+				processAddEducation,
+				processGetAllEducation,
+				processEducationEducation,
+				processSearchEducation,
+				processUpdateEducation,
+				processDeleteEducation,
+        setSelected,
+        selectedId
+			}}
+		>
+			{props.children}
+		</EducationApiData.Provider>
+	);
 };
 
 export default EducationApiDataProvider;

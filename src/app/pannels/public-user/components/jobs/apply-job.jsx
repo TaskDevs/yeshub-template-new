@@ -23,7 +23,7 @@ function ApplyJobPage() {
 	}
 
 
-	const [formData, setFormData] = useState(data);
+	const [formData, setFormData] = useState("data");
 
 
 	const handleFormChange = (field, data) => {

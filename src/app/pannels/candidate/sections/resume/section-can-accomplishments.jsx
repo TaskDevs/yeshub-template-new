@@ -9,7 +9,7 @@ function SectionCanAccomplishments() {
 
 		const [showTopMessage, setShowTopMessage] = useState(false);
 		const [isLoading, setLoading] = useState(false);
-		const { user } = useUser();
+		// const { user } = useUser();
 
 		const [formData, setFormData] = useState({});
 

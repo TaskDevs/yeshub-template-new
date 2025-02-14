@@ -3,7 +3,7 @@ import {SUCCESS_STATUS} from "../globals/constants"
 
 export const notify = (
     status, 
-    success_mssg = "Operation Successfil", 
+    success_mssg = "Operation Successful", 
     fail_mssg = "Operation failed") => {
     if(status === SUCCESS_STATUS){ 
         toast(success_mssg, {

@@ -14,6 +14,7 @@ import {
 export const ProfileApiData = createContext();
 
 const ProfileApiDataProvider = (props) => {
+
   const processAddProfile = async (data) => {};
 
   const processGetAllProfile = async (id) => {};

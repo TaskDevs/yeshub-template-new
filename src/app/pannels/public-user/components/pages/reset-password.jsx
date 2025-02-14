@@ -51,7 +51,7 @@ function ResetPasswordPage() {
 													data-bs-toggle="tab"
 													data-bs-target="#twm-login-candidate"
 													type="button"
-													onClick={() => setRole("1")}
+													// onClick={() => setRole("1")}
 												>
 													<i className="fas fa-user-tie" />
 													Candidate
@@ -64,7 +64,7 @@ function ResetPasswordPage() {
 													data-bs-toggle="tab"
 													data-bs-target="#twm-login-Employer"
 													type="button"
-													onClick={() => setRole("2")}
+													// onClick={() => setRole("2")}
 												>
 													<i className="fas fa-building" />
 													Employer
@@ -74,7 +74,7 @@ function ResetPasswordPage() {
 										<div className="tab-content" id="myTab2Content">
 											{/*Login Candidate Content*/}
 											<form
-												onSubmit={handleCandidateLogin}
+												// onSubmit={handleCandidateLogin}
 												className="tab-pane fade show active"
 												id="twm-login-candidate"
 											>
@@ -87,10 +87,10 @@ function ResetPasswordPage() {
 																required
 																className="form-control"
 																placeholder="Password*"
-																value={password}
-																onChange={(event) => {
-																	setPassword(event.target.value);
-																}}
+																// value={password}
+																// onChange={(event) => {
+																// 	setPassword(event.target.value);
+																// }}
 															/>
 														</div>
 													</div>
@@ -102,10 +102,10 @@ function ResetPasswordPage() {
 																className="form-control"
 																required
 																placeholder="Confirm Password*"
-																value={password}
-																onChange={(event) => {
-																	setConfirmPassword(event.target.value);
-																}}
+																// value={password}
+																// onChange={(event) => {
+																// 	setConfirmPassword(event.target.value);
+																// }}
 															/>
 														</div>
 													</div>
@@ -191,7 +191,7 @@ function ResetPasswordPage() {
 											>
 												<div className="form-group">
 													<button type="submit" className="site-button">
-														{isSubmitting ? "Submitting" : "Reset Password"}
+														{/* {isSubmitting ? "Submitting" : "Reset Password"} */}
 													</button>
 												</div>
 											</div>

@@ -20,7 +20,7 @@ function EmpCompanyProfilePage() {
 	const [showTopMessage, setShowTopMessage] = useState(false);
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const { user } = useUser();
+	// const { user } = useUser();
 	
 
 

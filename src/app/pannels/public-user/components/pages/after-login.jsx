@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 function AfterLoginPage() {	
     return (
 			<>
-				{isLoading && <Loader />}
+				{/* {isLoading && <Loader />} */}
 				<div className="section-full site-bg-white">
 					<div className="container-fluid">
 						<div className="row">
@@ -45,7 +45,7 @@ function AfterLoginPage() {
 														data-bs-toggle="tab"
 														data-bs-target="#twm-login-candidate"
 														type="button"
-														onClick={() => setRole("1")}
+														// onClick={() => setRole("1")}
 													>
 														<i className="fas fa-user-tie" />
 														Candidate
@@ -58,7 +58,7 @@ function AfterLoginPage() {
 														data-bs-toggle="tab"
 														data-bs-target="#twm-login-Employer"
 														type="button"
-														onClick={() => setRole("2")}
+														// onClick={() => setRole("2")}
 													>
 														<i className="fas fa-building" />
 														Employer
@@ -68,7 +68,7 @@ function AfterLoginPage() {
 											<div className="tab-content" id="myTab2Content">
 												{/*Login Candidate Content*/}
 												<form
-													onSubmit={handleCandidateLogin}
+													// onSubmit={handleCandidateLogin}
 													className="tab-pane fade show active"
 													id="twm-login-candidate"
 												>
@@ -81,10 +81,10 @@ function AfterLoginPage() {
 																	required
 																	className="form-control"
 																	placeholder="Email*"
-																	value={canEmail}
-																	onChange={(event) => {
-																		setCanEmail(event.target.value);
-																	}}
+																	// value={canEmail}
+																	// onChange={(event) => {
+																	// 	setCanEmail(event.target.value);
+																	// }}
 																/>
 															</div>
 														</div>
@@ -105,18 +105,18 @@ function AfterLoginPage() {
 																<div className="ls-inputicon-box-signup ls-inputicon-box">
 																	<input
 																		name="password"
-																		type={isVisible ? "text" : "password"}
+																		// type={isVisible ? "text" : "password"}
 																		required
 																		className="form-control"
-																		value={password}
+																		// value={password}
 																		minLength={8}
 																		maxLength={20}
 																		placeholder="Password*"
-																		onChange={(event) => {
-																			setPassword(event.target.value);
-																		}}
+																		// onChange={(event) => {
+																		// 	setPassword(event.target.value);
+																		// }}
 																	/>
-																	{isVisible ? (
+																	{/* {isVisible ? (
 																		<div
 																			className=" eye-icon"
 																			onClick={() => setIsVisible(false)}
@@ -130,7 +130,7 @@ function AfterLoginPage() {
 																		>
 																			<IoIosEyeOff size={25} />
 																		</div>
-																	)}
+																	)} */}
 																</div>
 															</div>
 														</div>
@@ -238,7 +238,7 @@ function AfterLoginPage() {
 
 												{/*Login Employer Content*/}
 												<form
-													onSubmit={handleEmployerLogin}
+													onSubmit={""}
 													className="tab-pane fade"
 													id="twm-login-Employer"
 												>
@@ -251,10 +251,10 @@ function AfterLoginPage() {
 																	required
 																	className="form-control"
 																	placeholder="Usearname*"
-																	value={empEmail}
-																	onChange={(event) => {
-																		setEmpEmail(event.target.value);
-																	}}
+																	value={""}
+																	// onChange={(event) => {
+																	// 	setEmpEmail(event.target.value);
+																	// }}
 																/>
 															</div>
 														</div>
@@ -275,18 +275,18 @@ function AfterLoginPage() {
 																<div className="ls-inputicon-box-signup ls-inputicon-box">
 																	<input
 																		name="password"
-																		type={isVisible ? "text" : "password"}
+																		type={  "password"}
 																		required
 																		className="form-control"
-																		value={password}
+																		value={"password"}
 																		minLength={8}
 																		maxLength={20}
 																		placeholder="Password*"
-																		onChange={(event) => {
-																			setPassword(event.target.value);
-																		}}
+																		// onChange={(event) => {
+																		// 	setPassword(event.target.value);
+																		// }}
 																	/>
-																	{isVisible ? (
+																	{/* {isVisible ? (
 																		<div
 																			className=" eye-icon"
 																			onClick={() => setIsVisible(false)}
@@ -300,7 +300,7 @@ function AfterLoginPage() {
 																		>
 																			<IoIosEyeOff size={25} />
 																		</div>
-																	)}
+																	)} */}
 																</div>
 															</div>
 														</div>
@@ -331,9 +331,9 @@ function AfterLoginPage() {
 																<button
 																	type="submit"
 																	className="site-button"
-																	disabled={isSubmitting}
+																	disabled={"isSubmitting"}
 																>
-																	{isSubmitting ? "Submitting" : "Log in"}
+																	{ "Log in"}
 																</button>
 															</div>
 														</div>

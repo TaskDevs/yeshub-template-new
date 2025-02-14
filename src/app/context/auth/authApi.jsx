@@ -54,8 +54,8 @@ export const changePassword = async () => console.log("Not yet implemented")
 // Logout 
 export const logout = async () => {
     try {
-        if(responseOnLogout.status === SUCCESS_STATUS){
-            return responseOnLogout.data
+        if("responseOnLogout.status" === SUCCESS_STATUS){
+            return "responseOnLogout.data"
         } else {
             return false
         }

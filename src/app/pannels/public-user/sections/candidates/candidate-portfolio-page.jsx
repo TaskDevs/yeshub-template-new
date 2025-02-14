@@ -1,43 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom';
-import { useUser } from '../../../../context/auth/UserContext';
 import SectionCandidateShortIntro1 from './detail1/section-can-short-intro1';
 import SectionCandidateSkills from './section-can-skills';
 
 function CandidatePortfolioPage() {
-
-	
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState("");
-	const { user } = useUser();
-
-
-	const initialData = {
-		portfolio_id: "",
-		url: ""
-	}
-
-	const [formData, setFormData] = useState(initialData);
-	const url = `${process.env.REACT_APP_BASE_URL}`
+	const [formData, setFormData] = useState({});
 	
 	const handleSubmitPortfolio = async (e) => {
 		e.preventDefault();
-		setError("");
-		setSuccess("");
-
-		try {
-
-			const res = await axios.post(url, formData)
-			console.log("portfolio", res);
-			setFormData(res)
-		} catch (err) {
-			setError(err || "An error occurred");
-		} finally { 
-			setError("");
-			setSuccess("");
-			setFormData(initialData);
-		}
 		
 	 }
 

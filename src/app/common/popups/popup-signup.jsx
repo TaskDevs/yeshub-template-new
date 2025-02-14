@@ -1,600 +1,301 @@
 import { useNavigate } from "react-router-dom";
 import JobZImage from "../jobz-img";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import {
-	candidate,
-	canRoute,
-	employer,
-	empRoute,
+  candidate,
+  canRoute,
+  employer,
+  empRoute,
 } from "../../../globals/route-names";
-import useAuth from "../../context/auth/useAuth";
-import { toast } from "react-toastify";
 import Loader from "../loader";
-import { useUser } from "../../context/auth/UserContext";
-import { IoMdEye } from "react-icons/io";
-import { IoIosEyeOff } from "react-icons/io";
+import { topMessage } from "../../../utils/responseUtils";
+
 import { FcGoogle } from "react-icons/fc";
+import { GlobalApiData } from "../../context/global/globalContextApi";
+import { SIGNUPFIELD } from "../../../globals/sign-up-data";
+import InputField from "../input-field";
+import PasswordField from "../password-field";
 
 function SignUpPopup() {
-	const navigate = useNavigate();
+  const {
+    isLoading,
+    setIsLoading,
+    roleOption,
+    setRoleOption,
+    isVisible,
+    setIsVisible,
+    isSubmitting,
+    setIsSubmitting,
+  } = useContext(GlobalApiData);
 
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [isEmailValid, setIsEmailValid] = useState(true);
-	const [showTopMessage, setShowTopMessage] = useState(false);
-	const [email, setEmail] = useState("");
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState(false);
-	const [isLoading, setLoading] = useState(false);
-	const [isVisible, setIsVisible] = useState(false);
-	const [showPassword, setShowPassword] = useState(false);
-	const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
-	const { updateUser } = useUser();
+  const navigate = useNavigate();
 
-	const initialFormData = {
-		username: "",
-		email: "",
-		password: "",
-		password_confirmation: "",
-		// firstName: "",
-		// lastName: "",
-		// phoneNo: "",
-		// country: "",
-		// city: "",
-		// address: "",
-		// location: "",
-		role: "user",
-	};
+  const [formData, setFormData] = useState({});
 
-	const [formData, setFormData] = useState(initialFormData);
-	const { loginWithGoogle, loginWithLinkedIn, handleAuthError } = useAuth();
+  const handleInputChange = (data, field) => {
+    setFormData({
+      ...formData,
+      [field]: data,
+    });
+  };
 
-	const loginSuccess = () => toast("User successfully sign up!");
-	const loginError = () => toast("Error!, Failed to sign up!");
-	const passwordError = () => toast("Error!, Passwords do not match!");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
 
-	const url = `${process.env.REACT_APP_BASE_URL}register`;
+  // const { handleAuthError, loginWithLinkedIn } = useAuth();
 
-	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		});
-	};
+  const moveToCandidate = () => {
+    navigate(canRoute(candidate.DASHBOARD));
+  };
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setError("");
-		setSuccess("");
+  const moveToEmployer = () => {
+    navigate(empRoute(employer.DASHBOARD));
+  };
 
-		console.log("Submitting with role:", formData.role);
-		if (!formData.role) {
-			setError("Please select a role (Candidate or Employer)");
-			return;
-		}
-		if (formData.password !== formData.password_confirmation) {
-			setIsSubmitting(false);
-			passwordError();
-			return;
-		}
-
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-
-		try {
-			setIsSubmitting(true);
-			console.log("formdata", formData);
-
-			const response = await axios.post(url, formData);
-			setSuccess(true);
-			const data = response.data;
-			console.log("data", data);
-			updateUser(data);
-			setShowTopMessage(true);
-
-			// if (response.status === 201) {
-			// 	loginSuccess();
-
-			// 	if (formData.role === "1") {
-			// 		return moveToCandidate();
-			// 	} else {
-			// 		return moveToEmployer();
-			// 	}
-			// }
-		} catch (err) {
-			setShowTopMessage(true);
-			loginError();
-			setError(err.response?.data?.message || "An error occurred");
-		} finally {
-			setIsSubmitting(false);
-			setEmail("");
-			// setShowTopMessage(true);
-			setFormData(initialFormData);
-			// setSuccess("");
-			// setError("");
-			setTimeout(() => {
-				setLoading(false);
-			}, 4000);
-		}
-	};
-
-	// const { handleAuthError, loginWithLinkedIn } = useAuth();
-
-	const validateEmail = (input) => {
-		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		return emailRegex.test(input);
-	};
-
-	const handleInputChange = (event) => {
-		const value = event.target.value;
-		setEmail(value);
-		if (!validateEmail(value)) {
-			setIsEmailValid(false);
-			handleAuthError("");
-		} else {
-			setIsEmailValid(true);
-			handleAuthError("");
-		}
-	};
-
-	const moveToCandidate = () => {
-		navigate(canRoute(candidate.DASHBOARD));
-	};
-
-	const moveToEmployer = () => {
-		navigate(empRoute(employer.DASHBOARD));
-	};
-
-	
-	
-
-	return (
-		<>
-			{isLoading && <Loader />}
-			{console.log("showTopMessage", showTopMessage)}
+  return (
+    <>
+      {isLoading && <Loader />}
+      {/* {console.log("showTopMessage", showTopMessage)}
 			{showTopMessage === true && isLoading && (
-				<div className="errorAlert">
-					<div className="inner">
-						{success && "User registered successfully"}
-						{!success &&
-							error &&
-							"Oops!, An error ocurred while signing up. Try again"}
-					</div>
+			<topMessage />
+			)} */}
 
-					<button
-						type="button"
-						className="btn-close"
-						aria-label="Close"
-						onClick={() => setShowTopMessage(false)}
-					/>
-				</div>
-			)}
+      {!isLoading && (
+        <div
+          className="modal fade twm-sign-up"
+          id="sign_up_popup"
+          aria-hidden="true"
+          aria-labelledby="sign_up_popupLabel"
+          tabIndex={-1}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <form onSubmit={handleSubmit}>
+                <div className="modal-header">
+                  <h2 className="modal-title" id="sign_up_popupLabel">
+                    Sign Up
+                  </h2>
+                  <p>Sign Up and get access to all the features of YesHub</p>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  />
+                </div>
 
-			{!isLoading && (
-				<div
-					className="modal fade twm-sign-up"
-					id="sign_up_popup"
-					aria-hidden="true"
-					aria-labelledby="sign_up_popupLabel"
-					tabIndex={-1}
-				>
-					<div className="modal-dialog modal-dialog-centered">
-						<div className="modal-content">
-							<form onSubmit={handleSubmit}>
-								<div className="modal-header">
-									<h2 className="modal-title" id="sign_up_popupLabel">
-										Sign Up
-									</h2>
-									<p>Sign Up and get access to all the features of YesHub</p>
-									<button
-										type="button"
-										className="btn-close"
-										data-bs-dismiss="modal"
-										aria-label="Close"
-									/>
-								</div>
+                <div className="modal-body">
+                  <div className="twm-tabs-style-2">
+                    <ul className="nav nav-tabs" id="myTab" role="tablist">
+                      {/*Signup Candidate*/}
+                      <li className="nav-item" role="presentation">
+                        <button
+                          // className="nav-link active"
+                          className={`nav-link ${
+                            formData.role === "1" ? "active" : ""
+                          }`}
+                          data-bs-toggle="tab"
+                          // data-bs-target="#sign-candidate"
+                          type="button"
+                          onClick={() =>
+                            setFormData((prevFormData) => ({
+                              ...prevFormData,
+                              role: "1",
+                            }))
+                          }
+                        >
+                          <i className="fas fa-user-tie" />
+                          Candidate
+                        </button>
+                      </li>
+                      {/*Signup Employer*/}
+                      <li className="nav-item" role="presentation">
+                        <button
+                          // className="nav-link"
+                          className={`nav-link ${
+                            formData.role === "2" ? "active" : ""
+                          }`}
+                          data-bs-toggle="tab"
+                          // data-bs-target="#sign-Employer"
+                          type="button"
+                          onClick={() =>
+                            setFormData((prevFormData) => ({
+                              ...prevFormData,
+                              role: "2",
+                            }))
+                          }
+                        >
+                          <i className="fas fa-building" />
+                          Employer
+                        </button>
+                      </li>
+                    </ul>
 
-								<div className="modal-body">
-									<div className="twm-tabs-style-2">
-										<ul className="nav nav-tabs" id="myTab" role="tablist">
-											{/*Signup Candidate*/}
-											<li className="nav-item" role="presentation">
-												<button
-													// className="nav-link active"
-													className={`nav-link ${
-														formData.role === "user" ? "active" : ""
-													}`}
-													data-bs-toggle="tab"
-													// data-bs-target="#sign-candidate"
-													type="button"
-													onClick={() =>
-														setFormData((prevFormData) => ({
-															...prevFormData,
-															role: "user",
-														}))
-													}
-												>
-													<i className="fas fa-user-tie" />
-													Candidate
-												</button>
-											</li>
-											{/*Signup Employer*/}
-											<li className="nav-item" role="presentation">
-												<button
-													// className="nav-link"
-													className={`nav-link ${
-														formData.role === "employer" ? "active" : ""
-													}`}
-													data-bs-toggle="tab"
-													// data-bs-target="#sign-Employer"
-													type="button"
-													onClick={() =>
-														setFormData((prevFormData) => ({
-															...prevFormData,
-															role: "employer",
-														}))
-													}
-												>
-													<i className="fas fa-building" />
-													Employer
-												</button>
-											</li>
-										</ul>
+                    <div className="tab-content" id="myTabContent">
+                      {/*Signup Candidate Content*/}
+                      <div
+                        className="tab-pane fade show active"
+                        // id="sign-candidate"
+                      >
+                        <div className="row">
+                          <div className="col-lg-12">
+                            <InputField
+                              field={SIGNUPFIELD.fieldDetail[0]}
+                              value={formData}
+                              change={(data, field) => {
+                                handleInputChange(data, field);
+                              }}
+                            />
+                          </div>
+                          <div className="col-lg-12">
+                            <InputField
+                              field={SIGNUPFIELD.fieldDetail[1]}
+                              value={formData}
+                              change={(data, field) => {
+                                handleInputChange(data, field);
+                              }}
+                            />
+                          </div>
 
-										<div className="tab-content" id="myTabContent">
-											{/*Signup Candidate Content*/}
-											<div
-												className="tab-pane fade show active"
-												// id="sign-candidate"
-											>
-												<div className="row">
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="username"
-																type="text"
-																required
-																className="form-control"
-																placeholder="Username*"
-																minLength={3}
-																maxLength={50}
-																value={formData.username}
-																onChange={handleChange}
-															/>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="email"
-																type="text"
-																required
-																className="form-control"
-																value={email}
-																placeholder="Email*"
-																onChange={handleInputChange}
-															/>
+                          <div className="col-lg-12">
+                            <div className="form-group mb-3">
+                              <div className="ls-inputicon-box-signup ls-inputicon-box">
+                                <PasswordField
+                                  field={SIGNUPFIELD.fieldDetail[2]}
+                                  value={formData}
+                                  change={(data, field) => {
+                                    handleInputChange(data, field);
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-lg-12">
+                            <div className="form-group mb-3">
+                              <div className="ls-inputicon-box-signup ls-inputicon-box">
+                                <PasswordField
+                                  field={SIGNUPFIELD.fieldDetail[3]}
+                                  value={formData}
+                                  change={(data, field) => {
+                                    handleInputChange(data, field);
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
 
-															{isEmailValid === false && (
-																<div className="">
-																	<div className="">
-																		<strong>
-																			Please enter a valid email address
-																		</strong>
-																	</div>
-																</div>
-															)}
-														</div>
-													</div>
-													{/* <div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="firstName"
-																type="text"
-																required
-																className="form-control"
-																placeholder="First Name*"
-																value={formData.firstName}
-																onChange={handleChange}
-															/>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="lastName"
-																type="text"
-																required
-																className="form-control"
-																placeholder="Last Name*"
-																value={formData.lastName}
-																onChange={handleChange}
-															/>
-														</div>
-													</div> */}
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<div className="ls-inputicon-box-signup ls-inputicon-box">
-																<input
-																	name="password"
-																
-																	type={
-																		showPassword
-																			? "text"
-																			: "password"
-																	}
-																	required
-																	className="form-control"
-																	value={formData.password}
-																	minLength={8}
-																	maxLength={20}
-																	placeholder="Password*"
-																	onChange={handleChange}
-																/>
-																
-																{showPassword ? (
-																	<div
-																		className=" eye-icon"
-																		
-																		onClick={() =>
-																			setShowPassword(false)
-																		}
-																	>
-																		<IoMdEye size={25} />
-																	</div>
-																) : (
-																	<div
-																		className=" eye-icon"
-																		
-																		onClick={() => setShowPassword(true)}
-																	>
-																		<IoIosEyeOff size={25} />
-																	</div>
-																)}
-															</div>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															{/* <input
-																name="password_confirmation"
-																type="password"
-																required
-																className="form-control"
-																value={formData.password_confirmation}
-																onChange={handleChange}
-																minLength={8}
-																maxLength={20}
-																placeholder="Confirm Password*"
-															/> */}
+                          <div className="col-lg-12">
+                            <div className="form-group mb-3">
+                              <div className=" form-check">
+                                <input
+                                  type="checkbox"
+                                  className="form-check-input"
+                                  id="agree2"
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor="agree2"
+                                >
+                                  I agree to the{" "}
+                                  <a href="#">Terms and conditions</a>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
 
-															<div className="ls-inputicon-box-signup ls-inputicon-box">
-																<input
-																	name="password_confirmation"
-																	
-																	type={
-																		showPasswordConfirmation
-																			? "text"
-																			: "password"
-																	}
-																	required
-																	className="form-control"
-																	value={formData.password_confirmation}
-																	minLength={8}
-																	maxLength={20}
-																	placeholder="Confirm Password*"
-																	onChange={handleChange}
-																/>
-																{showPasswordConfirmation ? (
-																	<div
-																		className=" eye-icon"
-																		
-																		onClick={() =>
-																			setShowPasswordConfirmation(false)
-																		}
-																	>
-																		<IoMdEye size={25} />
-																	</div>
-																) : (
-																	<div
-																		className=" eye-icon"
-																			
-																			onClick={() => setShowPasswordConfirmation(true)}
-																	>
-																		<IoIosEyeOff size={25} />
-																	</div>
-																)}
-															</div>
-														</div>
-													</div>
+                          <div className="col-md-12">
+                            <button
+                              type="submit"
+                              className="site-button"
+                              disabled={isSubmitting}
+                            >
+                              {isSubmitting ? "Submitting..." : "Sign Up"}
+                            </button>
+                          </div>
 
-													{/*
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="phoneNo"
-																type="text"
-																className="form-control"
-																required
-																placeholder="Phone*"
-																value={formData.phoneNo}
-																onChange={handleChange}
-															/>
-														</div>
-													</div>
+                          <div className="mt-4">
+                            <p>
+                              Already registered?
+                              <button
+                                className="twm-backto-login"
+                                data-bs-target="#sign_up_popup2"
+                                data-bs-toggle="modal"
+                                data-bs-dismiss="modal"
+                              >
+                                Log in here
+                              </button>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
 
-													<div className="col-lg-12">
-														<div className="flex">
-															<div className="form-group mb-3">
-																<input
-																	name="country"
-																	type="text"
-																	className="form-control"
-																	required
-																	placeholder="Country*"
-																	value={formData.country}
-																	onChange={handleChange}
-																/>
-															</div>
-
-															<div className="form-group mb-3">
-																<input
-																	name="city"
-																	type="text"
-																	className="form-control"
-																	required
-																	placeholder="City*"
-																	value={formData.city}
-																	onChange={handleChange}
-																/>
-															</div>
-														</div>
-													</div>
-
-													<div className="col-lg-12">
-														<div className="flex">
-															<div className="form-group mb-3">
-																<input
-																	name="address"
-																	type="text"
-																	className="form-control"
-																	required
-																	placeholder="address*"
-																	value={formData.address}
-																	onChange={handleChange}
-																/>
-															</div>
-															<div className="form-group mb-3">
-																<input
-																	name="location"
-																	type="text"
-																	className="form-control"
-																	required
-																	placeholder="Location*"
-																	value={formData.location}
-																	onChange={handleChange}
-																/>
-															</div>
-														</div>
-													</div> */}
-
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<div className=" form-check">
-																<input
-																	type="checkbox"
-																	className="form-check-input"
-																	id="agree2"
-																/>
-																<label
-																	className="form-check-label"
-																	htmlFor="agree2"
-																>
-																	I agree to the{" "}
-																	<a href="#">Terms and conditions</a>
-																</label>
-															</div>
-														</div>
-													</div>
-
-													<div className="col-md-12">
-														<button
-															type="submit"
-															className="site-button"
-															disabled={isSubmitting}
-														>
-															{isSubmitting ? "Submitting..." : "Sign Up"}
-														</button>
-													</div>
-
-													<div className="mt-4">
-														<p>
-															Already registered?
-															<button
-																className="twm-backto-login"
-																data-bs-target="#sign_up_popup2"
-																data-bs-toggle="modal"
-																data-bs-dismiss="modal"
-															>
-																Log in here
-															</button>
-														</p>
-													</div>
-												</div>
-											</div>
-										
-										</div>
-									</div>
-								</div>
-							</form>
-
-							<div className="modal-footer">
-								<span className="modal-f-title">Login or Sign up with</span>
-								<ul className="twm-modal-social">
-									{/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
+              <div className="modal-footer">
+                <span className="modal-f-title">Login or Sign up with</span>
+                <ul className="twm-modal-social">
+                  {/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
                                     <li><a href="https://www.twitter.com/" className="twitter-clr"><i className="fab fa-twitter" /></a></li>
                                     <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
                                     <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
                                  */}
-									<div
-										className="col-md-12"
-										onClick={() => {
-											loginWithLinkedIn();
-										}}
-									>
-										<div className="form-group">
-											<button
-												type="submit"
-												className="log_with_google flex-center log_with_linkedin"
-											>
-												<div className="pop-up-btn-logo">
-													<JobZImage src="images/linkedin-logo-1a.png" alt="" />
-												</div>
-												Continue with LinkedIn
-											</button>
-										</div>
-									</div>
+                  <div
+                    className="col-md-12"
+                    onClick={() => {
+                      console.log("Login with LinkedIn");
+                    }}
+                  >
+                    <div className="form-group">
+                      <button
+                        type="submit"
+                        className="log_with_google flex-center log_with_linkedin"
+                      >
+                        <div className="pop-up-btn-logo">
+                          <JobZImage src="images/linkedin-logo-1a.png" alt="" />
+                        </div>
+                        Continue with LinkedIn
+                      </button>
+                    </div>
+                  </div>
 
-									<div
-										className="col-md-12"
-										onClick={() => {
-											loginWithGoogle();
-										}}
-									>
-										<div className="form-group">
-											<button
-												type="submit"
-												className="log_with_google flex-center btn-google"
-											>
-												<div className="pop-up-btn-logo">
-													{/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
-													<FcGoogle size={20} />
-												</div>
-												{/* <i className="fab fa-google" /> */}
-												Continue with Google
-											</button>
-										</div>
-									</div>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			)}
-		</>
-	);
+                  <div
+                    className="col-md-12"
+                    onClick={() => {
+                      console.log("Login with gmail");
+                    }}
+                  >
+                    <div className="form-group">
+                      <button
+                        type="submit"
+                        className="log_with_google flex-center btn-google"
+                      >
+                        <div className="pop-up-btn-logo">
+                          {/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
+                          <FcGoogle size={20} />
+                        </div>
+                        {/* <i className="fab fa-google" /> */}
+                        Continue with Google
+                      </button>
+                    </div>
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 export default SignUpPopup;
 
+/*Signup Employer Content*/
 
-
-	
-		/*Signup Employer Content*/
-	
-	
-		/* <div className="tab-pane fade" id="sign-Employer">
+/* <div className="tab-pane fade" id="sign-Employer">
 												<div className="row">
 													<div className="col-lg-12">
 														<div className="form-group mb-3">
@@ -676,4 +377,3 @@ export default SignUpPopup;
 													</div>
 												</div>
 											</div> */
-	

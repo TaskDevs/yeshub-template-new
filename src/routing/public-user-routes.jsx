@@ -55,7 +55,6 @@ import BlogDetailPage from "../app/pannels/public-user/components/blogs/blog-det
 import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset-password";
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 import ContractPopup from "../app/common/popups/popup-contract";
-import GoogleCallback from "../app/context/auth/GoogleCallback";
 
 // import { loadStripe } from "@stripe/stripe-js";
 // import { Elements } from "@stripe/react-stripe-js";
@@ -63,136 +62,126 @@ import { useEffect, useState } from "react";
 import CompletePage from "../app/common/payment/stripe/complete-page";
 import CheckoutPage from "../app/common/payment/stripe/checkout-page";
 
-
 // const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
-
-
 function PublicUserRoutes() {
+  const [clientSecret, setClientSecret] = useState("");
 
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    fetch("", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items: [{ id: "xl-tshirt", amount: 1000 }] }),
+    })
+      .then((res) => res.json())
+      .then((data) => setClientSecret(data.clientSecret));
+  }, []);
 
-	const [clientSecret, setClientSecret] = useState("");
+  const appearance = {
+    theme: "stripe",
+  };
+  const loader = "auto";
 
-	useEffect(() => {
-		// Create PaymentIntent as soon as the page loads
-		fetch("", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ items: [{ id: "xl-tshirt", amount: 1000 }] }),
-		})
-			.then((res) => res.json())
-			.then((data) => setClientSecret(data.clientSecret));
-	}, []);
+  return (
+    <>
+      <Routes>
+        {/* <Route path="/auth/google/callback" element={<GoogleCallback />} /> */}
+        <Route path={publicUser.INITIAL} element={<Home1Page />} />
+        <Route path={publicUser.HOME1} element={<Home1Page />} />
+        <Route path={publicUser.HOME2} element={<Home2Page />} />
+        <Route path={publicUser.HOME3} element={<Home3Page />} />
+        <Route path={publicUser.HOME4} element={<Home4Page />} />
+        <Route path={publicUser.HOME5} element={<Home5Page />} />
+        <Route path={publicUser.HOME6} element={<Home6Page />} />
+        <Route path={publicUser.HOME7} element={<Home7Page />} />
+        <Route path={publicUser.HOME8} element={<Home8Page />} />
+        <Route path={publicUser.HOME9} element={<Home9Page />} />
+        <Route path={publicUser.HOME10} element={<Home10Page />} />
+        <Route path={publicUser.HOME11} element={<Home11Page />} />
+        <Route path={publicUser.HOME12} element={<Home12Page />} />
+        <Route path={publicUser.HOME13} element={<Home13Page />} />
+        <Route path={publicUser.HOME14} element={<Home14Page />} />
+        <Route path={publicUser.HOME15} element={<Home15Page />} />
+        <Route path={publicUser.HOME16} element={<Home16Page />} />
+        <Route path={publicUser.HOME17} element={<Home17Page />} />
+        <Route path={publicUser.HOME18} element={<Home18Page />} />
+        <Route path={publicUser.TEST} element={<test-login />} />
+        {/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
+        {/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
+        <Route path={publicUser.jobs.LIST} element={<JobsListPage />} />
+        <Route path={publicUser.jobs.DETAIL1} element={<JobDetail1Page />} />
+        <Route path={publicUser.jobs.DETAIL2} element={<JobDetail2Page />} />
+        <Route path={publicUser.jobs.APPLY} element={<ApplyJobPage />} />
+        <Route
+          path={publicUser.employer.GRID}
+          element={<EmployersGridPage />}
+        />
+        <Route
+          path={publicUser.employer.LIST}
+          element={<EmployersListPage />}
+        />
+        <Route
+          path={publicUser.employer.DETAIL1}
+          element={<EmployersDetail1Page />}
+        />
+        <Route
+          path={publicUser.employer.DETAIL2}
+          element={<EmployersDetail2Page />}
+        />
+        <Route path={publicUser.pages.ABOUT} element={<AboutUsPage />} />
+        <Route path={publicUser.pages.PRICING} element={<PricingPage />} />
+        <Route path={publicUser.pages.ERROR404} element={<Error404Page />} />
+        <Route path={publicUser.pages.FAQ} element={<FaqPage />} />
+        <Route path={publicUser.pages.CONTACT} element={<ContactUsPage />} />
+        <Route path={publicUser.pages.CONTRACT} element={<ContractPopup />} />
+        <Route
+          path={publicUser.pages.MAINTENANCE}
+          element={<UnderMaintenancePage />}
+        />
+        <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
+        <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
+        <Route
+          path={publicUser.pages.AFTER_LOGIN}
+          element={<AfterLoginPage />}
+        />
+        <Route
+          path={publicUser.pages.RESET_PASSWORD}
+          element={<ResetPasswordPage />}
+        />
+        <Route path={publicUser.pages.ICONS} element={<IconsPage />} />
+        <Route
+          path={publicUser.candidate.GRID}
+          element={<CandidateGridPage />}
+        />
+        <Route
+          path={publicUser.candidate.LIST}
+          element={<CandidateListPage />}
+        />
+        <Route
+          path={publicUser.candidate.DETAIL1}
+          element={<CandidateDetail1Page />}
+        />
+        <Route
+          path={publicUser.candidate.PORTFOLIO}
+          element={<CandidatePortfolioPage />}
+        />
+        <Route
+          path={publicUser.candidate.DETAIL2}
+          element={<CandidateDetail2Page />}
+        />
+        <Route path={publicUser.blog.GRID1} element={<BlogGrid1Page />} />
+        <Route path={publicUser.blog.GRID2} element={<BlogGrid2Page />} />
+        <Route path={publicUser.blog.GRID3} element={<BlogGrid3Page />} />
+        <Route path={publicUser.blog.LIST} element={<BlogListPage />} />
+        <Route path={publicUser.blog.DETAIL} element={<BlogDetailPage />} />
+        <Route path="*" element={<Error404Page />} />
+      </Routes>
+      {/* PAYMENTS */}
+      {/* {clientSecret && ( */}
+      {/* options={{ clientSecret, appearance, loader }} */}
 
-	const appearance = {
-		theme: "stripe",
-	};
-	const loader = "auto";
-
-
-
-
-
-
-    return (
-			<>
-				<Routes>
-					<Route path="/auth/google/callback" element={<GoogleCallback />} />
-					<Route path={publicUser.INITIAL} element={<Home1Page />} />
-					<Route path={publicUser.HOME1} element={<Home1Page />} />
-					<Route path={publicUser.HOME2} element={<Home2Page />} />
-					<Route path={publicUser.HOME3} element={<Home3Page />} />
-					<Route path={publicUser.HOME4} element={<Home4Page />} />
-					<Route path={publicUser.HOME5} element={<Home5Page />} />
-					<Route path={publicUser.HOME6} element={<Home6Page />} />
-					<Route path={publicUser.HOME7} element={<Home7Page />} />
-					<Route path={publicUser.HOME8} element={<Home8Page />} />
-					<Route path={publicUser.HOME9} element={<Home9Page />} />
-					<Route path={publicUser.HOME10} element={<Home10Page />} />
-					<Route path={publicUser.HOME11} element={<Home11Page />} />
-					<Route path={publicUser.HOME12} element={<Home12Page />} />
-					<Route path={publicUser.HOME13} element={<Home13Page />} />
-					<Route path={publicUser.HOME14} element={<Home14Page />} />
-					<Route path={publicUser.HOME15} element={<Home15Page />} />
-					<Route path={publicUser.HOME16} element={<Home16Page />} />
-					<Route path={publicUser.HOME17} element={<Home17Page />} />
-					<Route path={publicUser.HOME18} element={<Home18Page />} />
-					<Route path={publicUser.TEST} element={<test-login />} />
-					{/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
-					{/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
-					<Route path={publicUser.jobs.LIST} element={<JobsListPage />} />
-					<Route path={publicUser.jobs.DETAIL1} element={<JobDetail1Page />} />
-					<Route path={publicUser.jobs.DETAIL2} element={<JobDetail2Page />} />
-					<Route path={publicUser.jobs.APPLY} element={<ApplyJobPage />} />
-					<Route
-						path={publicUser.employer.GRID}
-						element={<EmployersGridPage />}
-					/>
-					<Route
-						path={publicUser.employer.LIST}
-						element={<EmployersListPage />}
-					/>
-					<Route
-						path={publicUser.employer.DETAIL1}
-						element={<EmployersDetail1Page />}
-					/>
-					<Route
-						path={publicUser.employer.DETAIL2}
-						element={<EmployersDetail2Page />}
-					/>
-					<Route path={publicUser.pages.ABOUT} element={<AboutUsPage />} />
-					<Route path={publicUser.pages.PRICING} element={<PricingPage />} />
-					<Route path={publicUser.pages.ERROR404} element={<Error404Page />} />
-					<Route path={publicUser.pages.FAQ} element={<FaqPage />} />
-					<Route path={publicUser.pages.CONTACT} element={<ContactUsPage />} />
-					<Route path={publicUser.pages.CONTRACT} element={<ContractPopup />} />
-					<Route
-						path={publicUser.pages.MAINTENANCE}
-						element={<UnderMaintenancePage />}
-					/>
-					<Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
-					<Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
-					<Route
-						path={publicUser.pages.AFTER_LOGIN}
-						element={<AfterLoginPage />}
-					/>
-					<Route
-						path={publicUser.pages.RESET_PASSWORD}
-						element={<ResetPasswordPage />}
-					/>
-					<Route path={publicUser.pages.ICONS} element={<IconsPage />} />
-					<Route
-						path={publicUser.candidate.GRID}
-						element={<CandidateGridPage />}
-					/>
-					<Route
-						path={publicUser.candidate.LIST}
-						element={<CandidateListPage />}
-					/>
-					<Route
-						path={publicUser.candidate.DETAIL1}
-						element={<CandidateDetail1Page />}
-					/>
-					<Route
-						path={publicUser.candidate.PORTFOLIO}
-						element={<CandidatePortfolioPage />}
-					/>
-					<Route
-						path={publicUser.candidate.DETAIL2}
-						element={<CandidateDetail2Page />}
-					/>
-					<Route path={publicUser.blog.GRID1} element={<BlogGrid1Page />} />
-					<Route path={publicUser.blog.GRID2} element={<BlogGrid2Page />} />
-					<Route path={publicUser.blog.GRID3} element={<BlogGrid3Page />} />
-					<Route path={publicUser.blog.LIST} element={<BlogListPage />} />
-					<Route path={publicUser.blog.DETAIL} element={<BlogDetailPage />} />
-					<Route path="*" element={<Error404Page />} />
-				</Routes>
-				{/* PAYMENTS */}
-				{/* {clientSecret && ( */}
-				{/* options={{ clientSecret, appearance, loader }} */}
-
-				{/* <Elements
+      {/* <Elements
 					options={{
 						mode: "payment",
 						amount: 345,
@@ -212,8 +201,8 @@ function PublicUserRoutes() {
 						/>
 					</Routes>
 				</Elements> */}
-			</>
-		);
+    </>
+  );
 }
 
 export default PublicUserRoutes;

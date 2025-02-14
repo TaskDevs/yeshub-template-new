@@ -1,119 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
 import { canRoute, candidate, empRoute, employer, publicUser } from "../../../../../globals/route-names";
-import { useState } from "react";
-import processLogin from "../../../../form-processing/login";
-import { formType } from "../../../../../globals/constants";
-import useAuth from "../../../../context/auth/useAuth";
 import Loader from "../../../../common/loader";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
-function AfterLoginPage() {
-
-    // const navigate = useNavigate();
-    // const [canemail, setCanEmail] = useState('guest');
-    // const [empemail, setEmpEmail] = useState('admin');
-    // const [password, setPassword] = useState('12345');
-
-    // const handleCandidateLogin = (event) => {
-    //     event.preventDefault();
-    //     loginCandidate();
-    // }
-
-    // const handleEmployerLogin = (event) => {
-    //     event.preventDefault();
-    //     loginEmployer();
-    // }
-
-    // const loginCandidate = () => {
-    //     processLogin(
-    //         {
-    //             type: formType.LOGIN_CANDIDATE,
-    //             email: canemail,
-    //             password: password
-    //         },
-    //         (valid) => {
-    //             if (valid) {
-    //                 moveToCandidate();
-    //             } else {
-    //                 // show error
-    //                 console.log('error');
-    //             }
-    //         }
-    //     );
-    // }
-
-    // const loginEmployer = () => {
-    //     processLogin(
-    //         {
-    //             type: formType.LOGIN_EMPLOYER,
-    //             email: empemail,
-    //             password: password
-    //         },
-    //         (valid) => {
-    //             if (valid) {
-    //                 moveToEmployer();
-    //             } else {
-    //                 // show error
-    //                 console.log('error');
-    //             }
-    //         }
-    //     );
-    // }
-
-    // const moveToCandidate = () => {
-    //     navigate(canRoute(candidate.DASHBOARD));
-    // }
-
-    // const moveToEmployer = () => {
-	//     navigate(empRoute(employer.DASHBOARD));
-	// }
-	
-	
-	const {
-		handleCandidateLogin,
-		handleEmployerLogin,
-		isSubmitting,
-		password,
-		setPassword,
-		canEmail,
-		setCanEmail,
-		empEmail,
-		setEmpEmail,
-		loginWithLinkedIn,
-		setRole,
-		showTopMessage,
-		setShowTopMessage,
-		error,
-		success,
-		isLoading,
-		isVisible,
-		setIsVisible
-	} = useAuth();
-
-
+function AfterLoginPage() {	
     return (
 			<>
 				{isLoading && <Loader />}
-				{showTopMessage && (
-					<div className="errorAlert">
-						<div className="inner">
-							{success && "User logged in successfully"}
-							{!success &&
-								error &&
-								"Oops!, An error ocurred while logging in. Try again"}
-						</div>
-
-						<button
-							type="button"
-							className="btn-close"
-							aria-label="Close"
-							onClick={() => setShowTopMessage(false)}
-						/>
-					</div>
-				)}
-
 				<div className="section-full site-bg-white">
 					<div className="container-fluid">
 						<div className="row">

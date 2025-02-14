@@ -1,76 +1,18 @@
 import { useEffect, useState } from "react";
-import { useUser } from "../../../../context/auth/UserContext";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
 
 function EmpPostAJobPage() {
-	const [error, setError] = useState(null);
-	const [success, setSuccess] = useState("");
+	const [formData, setFormData] = useState({});
 
-	const [showTopMessage, setShowTopMessage] = useState(false);
-	const [isLoading, setLoading] = useState(false);
-	const { user } = useUser();
-
-	const initialFormData = {
-		job_title: "",
-		Description: "",
-		experience: "",
-		salary: "",
-		job_type: "",
-		budget: "",
-		qualification: "",
-		duty: "",
-		company_id: "",
-		start_date: "",
-		end_date: "",
-		job_category_id: "",
-		skills_id: "",
-	};
-
-		const [formData, setFormData] = useState(initialFormData);
-	const postJobUrl = `${process.env.REACT_APP_BASE_URL}`;
-
-	const postSuccess = () => toast("Job posted successfully!");
-	const postError = () => toast("Error!, Failed to post job!");
-
-	const handleChange = (e) => {
+	const handleChange = (field, data) => {
 		setFormData({
 			...formData,
-			[e.target.name]: e.target.value,
+			[field]: data,
 		});
 	};
 
 	const handlePostAJob = async (e) => {
 		e.preventDefault();
-		setError("");
-		setSuccess("");
-
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-
-		try {
-			const res = axios.post(postJobUrl, formData);
-			postSuccess();
-
-			console.log("post-job", res);
-
-			const jobsData = res.data;
-			setFormData(jobsData);
-		} catch (error) {
-			postError();
-			setError(error || "An error occurred, try again");
-			setShowTopMessage(true);
-			setTimeout(() => {}, 1000);
-		} finally {
-			setError("");
-			setSuccess("");
-			setFormData(initialFormData);
-			setTimeout(() => {
-				setLoading(false);
-			}, 2000);
-		}
+		
 	};
 
 	return (
@@ -117,30 +59,6 @@ function EmpPostAJobPage() {
 								<div className="form-group city-outer-bx has-feedback">
 									<label>Job Category Id</label>
 									<div className="ls-inputicon-box">
-										{/* <select
-											className="wt-select-box selectpicker"
-											data-live-search="true"
-											title=""
-											id="j-category"
-											data-bv-field="size"
-											value={formData.job_category_id}
-											onChange={handleChange}
-										>
-											<option disabled value="">
-												Select Category
-											</option>
-											<option>Accounting and Finance</option>
-											<option>Clerical &amp; Data Entry</option>
-											<option>Counseling</option>
-											<option>Court Administration</option>
-											<option>Human Resources</option>
-											<option>Investigative</option>
-											<option>IT and Computers</option>
-											<option>Law Enforcement</option>
-											<option>Management</option>
-											<option>Miscellaneous</option>
-											<option>Public Relations</option>
-										</select> */}
 										<input
 											className="form-control"
 											name="job_category_id"

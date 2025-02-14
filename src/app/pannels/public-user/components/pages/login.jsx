@@ -1,60 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
 import { canRoute, candidate, empRoute, employer, publicUser } from "../../../../../globals/route-names";
-import { useState } from "react";
-// import processLogin from "../../../../form-processing/login";
-// import { formType } from "../../../../../globals/constants";
-// import axios from "axios";
-import useAuth from "../../../../context/auth/useAuth";
 import Loader from "../../../../common/loader";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
 
 function LoginPage() {
-
-	const {
-		handleCandidateLogin,
-		handleEmployerLogin,
-		isSubmitting,
-		password,
-		setPassword,
-		canEmail,
-		setCanEmail,
-		empEmail,
-		setEmpEmail,
-		setRole,
-		showTopMessage,
-		setShowTopMessage,
-		success,
-		error,
-		isLoading,
-		isVisible,
-		setIsVisible
-	} = useAuth();
-
-    const url = `${process.env.REACT_APP_BASE_URL}login`;
-    console.log("url", url);
-
     return (
 			<>
 				{isLoading && <Loader />}
-				{showTopMessage && (
-					<div className="errorAlert">
-						<div className="inner">
-							{success && "User logged in successfully"}
-							{!success &&
-								error &&
-								"Oops!, An error ocurred while logging in. Try again"}
-						</div>
-
-						<button
-							type="button"
-							className="btn-close"
-							aria-label="Close"
-							onClick={() => setShowTopMessage(false)}
-						/>
-					</div>
-				)}
+				
 				<div className="section-full site-bg-white">
 					<div className="container-fluid">
 						<div className="row">

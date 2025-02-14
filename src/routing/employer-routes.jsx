@@ -11,28 +11,25 @@ import EmpMessages1Page from "../app/pannels/employer/components/messages/emp-me
 import EmpMessages2Page from "../app/pannels/employer/components/messages/emp-messages2";
 import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-alerts";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
-import { useUser } from "../app/context/auth/UserContext";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ProtectedRoute from "../app/context/ProtectedRoute";
 import  { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 
-function EmployerRoutes() {
-    
-     const { user } = useUser(); 
+function EmployerRoutes() { 
     const [routes, setRoutes] = useState({});
     // const errorMessage = () =>
     //         toast(" User Unauthenticated!, login");
     
     // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user?.id) {  
-      const updatedRoutes = withId(user.id, employer);
-      setRoutes(updatedRoutes); 
-    }
-  }, [user]);
+//   useEffect(() => {
+//     if (user?.id) {  
+//       const updatedRoutes = withId(user.id, employer);
+//       setRoutes(updatedRoutes); 
+//     }
+//   }, [user]);
     
     // if (!routes.dashboard) {
         

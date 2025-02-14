@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useUser } from "../../../../context/auth/UserContext";
 
 function SectionCandicateBasicInfo() {
 	// id,skills_id   yet to be added
@@ -13,67 +12,17 @@ function SectionCandicateBasicInfo() {
 	const [isLoading, setLoading] = useState(false);
 	const { user } = useUser();
 
-	const initialFormData = {
-		id: "",
-		user_id: "",
-		skills_id: "",
-		firstname: "",
-		lastname: "",
-		telephone: "",
-		bio: "",
-		experience: "",
-		job_category_id: "",
-		country: "",
-		region: "",
-		address: "",
-        postal_code: "",
-        gps_address: "",
-       
-	};
 
-	const [formData, setFormData] = useState(initialFormData);
-	const postProfileUrl = `${process.env.REACT_APP_BASE_URL}`;
-
-	const postSuccess = () => toast("Job posted successfully!");
-	const postError = () => toast("Error!, Failed to post job!");
-
-	const handleChange = (e) => {
+	const handleChange = (field, data) => {
 		setFormData({
 			...formData,
-			[e.target.name]: e.target.value,
+			[field]: data,
 		});
 	};
 
 	const handleSubmitProfile = async (e) => {
 		e.preventDefault();
-		setError("");
-		setSuccess("");
-
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-
-		try {
-			const res = axios.post(postProfileUrl, formData);
-			postSuccess();
-
-			console.log("post-job", res);
-
-			const jobsData = res.data;
-			setFormData(jobsData);
-		} catch (error) {
-			postError();
-			setError(error || "An error occurred, try again");
-			setShowTopMessage(true);
-			// setTimeout(() => {}, 1000);
-		} finally {
-			setError("");
-			setSuccess("");
-			setFormData(initialFormData);
-			setTimeout(() => {
-				setLoading(false);
-			}, 2000);
-		}
+		
 	};
 
 	return (

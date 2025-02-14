@@ -3,7 +3,6 @@ import JobZImage from "../../../common/jobz-img";
 import { loadScript } from "../../../../globals/constants";
 import { DropzoneComponent } from "react-dropzone-component";
 import axios from "axios";
-import { useUser } from "../../../context/auth/UserContext";
 import { toast } from "react-toastify";
 
 function EmpCompanyProfilePage() {
@@ -23,84 +22,28 @@ function EmpCompanyProfilePage() {
 	const [loading, setLoading] = useState(false);
 	const { user } = useUser();
 	
-const initialFormData = {
-	id: "",
-	description: "",
-	user_id: "",
-	sector: "",
-	email: "",
-	phone_no: "",
-	website: "",
-	address: "",
-	est_date: "",
-	longitude: "",
-	latitude: "",
-	company_name: "",
-};
 
-const [formData, setFormData] = useState(initialFormData);
-const postProfile = `${process.env.REACT_APP_BASE_URL}`;
 
-const postSuccess = () => toast("Job posted successfully!");
-const postError = () => toast("Error!, Failed to post job!");
+const [formData, setFormData] = useState({});
 
-const handleChange = (e) => {
+
+const handleChange = (field, data) => {
 	setFormData({
 		...formData,
-		[e.target.name]: e.target.value,
+		[field]: data,
 	});
 };
 
 const handleSubmitProfile = async (e) => {
 	e.preventDefault();
-	setError("");
-	setSuccess("");
-
-	setTimeout(() => {
-		setLoading(true);
-	}, 200);
-
-	try {
-		const res = axios.post(postProfile, formData);
-		postSuccess();
-
-		console.log("post-job", res);
-
-		const jobsData = res.data;
-		setFormData(jobsData);
-	} catch (error) {
-		postError();
-		setError(error || "An error occurred, try again");
-		setShowTopMessage(true);
-		setTimeout(() => {}, 1000);
-	} finally {
-		setError("");
-		setSuccess("");
-		setFormData(initialFormData);
-		setTimeout(() => {
-			setLoading(false);
-		}, 2000);
-	}
+	
 };
   
 	
 
-	// function handleYoutubeClick() {
-	// 	setYoutubeFields(youtubeFields + 1);
-	// }
-
-	// function handleVimeoClick() {
-	// 	setVimeoFields(vimeoFields + 1);
-	// }
 
 	return (
 		<>
-			{/* { showTopMessage &&
-                error && (
-                <div className="">
-                    Error! Failed to load data
-                </div>
-            )} */}
 			<div className="">
 				<div className="wt-admin-right-page-header clearfix">
 					<h2>Company Profile!</h2>

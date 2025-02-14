@@ -1,20 +1,9 @@
 import { useContext } from "react";
-import { MilestoneContext } from "../../../../context/candidates/MilestoneContext";
 
 function SectionMilestone() {
-	const context = useContext(MilestoneContext)
-
 	if (!context) { 
 		throw new Error("Context not found")
 	}
-
-	const { handleChange, ...initialData } = context; 
-
-
-		
-		
-
-
 
 	return (
 		<div className="twm-sec-timelines">

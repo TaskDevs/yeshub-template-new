@@ -1,8 +1,6 @@
 import JobZImage from "../../../common/jobz-img";
 import CountUp from "react-countup";
 import SectionCandidateProfileViews from "../../candidate/sections/dashboard/section-can-profile-views";
-import { useUser } from "../../../context/auth/UserContext";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -14,47 +12,8 @@ function EmpDashboardPage() {
     const { user } = useUser();
 
     const navigate = useNavigate();
-    
-     const jobsCountUrl = `${process.env.REACT_APP_BASE_URL}posted-jobs/count/${user?.id}`;
 
-	// const errorMessage = () =>
-	// 	toast(" User Unauthenticated!, Either sign up or login");
-
-    
-	useEffect(() => {
-		// if (!user || !user.id) {
-		// 	// setError("User Unauthenticated! Please log in.");
-		// 	// setShowTopMessage(true);
-        //     // errorMessage();
-		// 	// navigate("/login");
-		// 	return;
-		// }
-
-		let isMounted = true;
-
-		const postedJobsByEmployer = async () => {
-			try {
-				const res = axios.get(jobsCountUrl);
-
-				console.log("res-count-jobs", res);
-				if (isMounted) {
-					const jobsData = res.data;
-					setPostedJobs(jobsData);
-				}
-			} catch (error) {
-				if (isMounted) {
-					setError(error || "An error occurred, try again");
-					setShowTopMessage(true);
-					setTimeout(() => {}, 1000);
-				}
-			}
-		};
-
-		// postedJobsByEmployer();
-		return () => {
-			isMounted = false;
-		};
-	}, [user, navigate, jobsCountUrl]);
+		
 
 	return (
 		<>

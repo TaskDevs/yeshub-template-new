@@ -10,34 +10,25 @@ import CanJobAlertsPage from "../app/pannels/candidate/components/can-job-alerts
 import CanChangePasswordPage from "../app/pannels/candidate/components/can-change-password";
 import CanChatPage from "../app/pannels/candidate/components/can-chat";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
-import { useUser } from "../app/context/auth/UserContext";
 import { useEffect, useState } from "react";
-import ProtectedRoute from "../app/context/ProtectedRoute";
-import SectionReviews from "../app/pannels/public-user/sections/common/section-reviews";
 import  { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 
 function CandidateRoutes() {
-	const { user } = useUser();
 	const [routes, setRoutes] = useState({});
 
-	// if (!user) {
-	// 	alert("user doesn't exist");
-    // }
     
 	
 
-	useEffect(() => {
-		if (user?.id) {
-			// Pass the user id dynamically to withId
-			const updatedRoutes = withId(user.id, candidate);
-			setRoutes(updatedRoutes); // Set the updated routes in the state
-		}
-    }, [user]);
-    
-    // if (!routes.APPLIED_JOBS) {
-	// 		return <div>User doesn't exist; Log in to continue</div>;
+	// useEffect(() => {
+	// 	if (user?.id) {
+	// 		// Pass the user id dynamically to withId
+	// 		const updatedRoutes = withId(user.id, candidate);
+	// 		setRoutes(updatedRoutes); // Set the updated routes in the state
 	// 	}
+    // }, [user]);
+    
+  
 
 	return (
 		// <ProtectedRoute roleProp="1"></ProtectedRoute>

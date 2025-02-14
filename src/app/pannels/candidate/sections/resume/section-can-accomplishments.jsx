@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { useUser } from "../../../../context/auth/UserContext";
 
 function SectionCanAccomplishments() {
 
@@ -12,25 +11,12 @@ function SectionCanAccomplishments() {
 		const [isLoading, setLoading] = useState(false);
 		const { user } = useUser();
 
-		const initialFormData = {
-			work_title: "",
-			description: "",
-			role: "",
-			skills: "",
-			project_start_date: "",
-			project_end_date: "",
-		};
+		const [formData, setFormData] = useState({});
 
-		const [formData, setFormData] = useState(initialFormData);
-		const addEducationUrl = `${process.env.REACT_APP_BASE_URL}`;
-
-		const postSuccess = () => toast("Education added successfully!");
-		const postError = () => toast("Oops!, Failed to add education!");
-
-		const handleChange = (e) => {
+		const handleChange = (field, data) => {
 			setFormData({
 				...formData,
-				[e.target.name]: e.target.value,
+				[field]: data,
 			});
 		};
 
@@ -43,27 +29,7 @@ function SectionCanAccomplishments() {
 				setLoading(true);
 			}, 200);
 
-			try {
-				const res = axios.post(addEducationUrl, formData);
-				postSuccess();
-
-				console.log("post-job", res);
-
-				const jobsData = res.data;
-				setFormData(jobsData);
-			} catch (error) {
-				postError();
-				setError(error || "An error occurred, try again");
-				setShowTopMessage(true);
-				setTimeout(() => {}, 1000);
-			} finally {
-				setError("");
-				setSuccess("");
-				setFormData(initialFormData);
-				setTimeout(() => {
-					setLoading(false);
-				}, 2000);
-			}
+			
 		};
 
 

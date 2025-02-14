@@ -7,16 +7,12 @@ import SectionApplyJob from "../../sections/jobs/section-apply-job";
 import SectionMilestone from "../../sections/jobs/section-milestone";
 import { FaPlus } from "react-icons/fa6";
 import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
-import { MilestoneContext } from "../../../../context/candidates/MilestoneContext";
-import axios from "axios";
+
 
 
 function ApplyJobPage() {
 	const [selectedOption, setSelectedOption] = useState("milestone");
 	const [showMilestone, setShowMilestone] = useState(0);
-	const [success, setSuccess] = useState("");
-	const [error, setError] = useState("");
-	const [loading, setLoading] = useState(false);
 
 	const context = useContext(MilestoneContext);
 
@@ -24,70 +20,22 @@ function ApplyJobPage() {
 		throw new Error("Context not found");
 	}
 
-	const {  ...initialData } = context;
-
-	console.log("initialData", initialData);
-
-	const data = {
-		
-		duration: "",
-		amount: 0,
-		date: "",
-		selectedOption: "milestone",
-		cover_letter: "",
-	}
 
 	const [formData, setFormData] = useState(data);
 
 
-	const handleFormChange = (e) => {
+	const handleFormChange = (field, data) => {
 		setFormData({
 			...formData,
-			[e.target.name] : e.target.value,
+			[field] : data,
 		})
 	}
 	
 
 
-	//TODO: EXTRACT JOB IDS FROM THE LINK AND ADD TO THE PAYLOAD TO SUBMIT A JOB
-	const applyJoburl = `${process.env.REACT_APP_BASE_URL}`;
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setSuccess("");
-		setError("");
-
-		setTimeout(() => {
-			setLoading(true);
-		}, 200);
-
-		try {
-			const res =
-				selectedOption === "milestone" ? (
-					await axios.post(applyJoburl, {
-				 data
-			 })
-			) : (
-						await axios.post(applyJoburl, {
-							...initialData,
-							cover_letter: formData.cover_letter,
-							
-
-				})
-			)
-			
-			console.log("res", res);
-			
-
-			setSuccess("Application sent successfully");
-			setFormData(res.data)
-		} catch (error) {
-			setError("Failed to send application");
-		} finally {
-			setError("");
-			setSuccess("");
-			setFormData(data)
-		}
+		
 
 	};
 

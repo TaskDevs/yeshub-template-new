@@ -12,19 +12,14 @@ import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-
 import ApplyJobPage from "./apply-job";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../../../globals/route-names";
-import axios from "axios";
-import { useUser } from "../../../../context/auth/UserContext";
+
 
 function JobDetail1Page() {
 
 	const [empListData, setEmpListData] = useState([]);
 	const [error, setError] = useState(null);
 	
-	const { user } = useUser();
     
-     const getEmpListUrl = `${process.env.REACT_APP_BASE_URL}`;
-
-
     
     const sidebarConfig = {
         showJobInfo: true
@@ -35,39 +30,12 @@ function JobDetail1Page() {
     })
 
 	useEffect(() => {
-		const fetchEmployerData = async () => {
-			try {
-				const res = await axios.get(getEmpListUrl);
-				console.log("emp-list", res);
-
-				setEmpListData(res.data);
-			} catch (error) {
-				setError(
-					error?.message || "Oops, An error occurred while fetching data"
-				);
-			}
-		};
-		fetchEmployerData();
+		console.log("Holding Up")
 	}, [getEmpListUrl]);
 
 
     return (
 			<>
-				{/* <div className="container">
-					<div className="wt-bnr-inr overlay-wraper bg-center">
-						<div className="twm-media-bg">
-							<JobZImage src="images/job-detail-bg.jpg" alt="#" />
-							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">New</span>
-							</div>
-							<div className="twm-media">
-								<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-							</div>
-						</div>
-						<div className="overlay-main site-bg-white opacity-01" />
-					</div>
-				</div> */}
-
 				<div className="section-full  p-t120 p-b90 bg-white">
 					<div className="container">
 						{/* BLOG SECTION START */}

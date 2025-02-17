@@ -6,6 +6,7 @@ import SelectField from "../../../../common/select-field";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
+import { useLocation } from "react-router-dom";
 
 const skills = [
 	{
@@ -30,8 +31,11 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
 	console.log("selectedItems", selectedItems);
 
+	const currentpath = useLocation().pathname;
+		const location = currentpath.split("/")[1];
+		console.log("currentpath", location);
+
 	const handleSelectChange = (selectedOptions) => {
-		// setSelectedItems(selectedOptions || []);
 		setSelectedItems(selectedOptions);
 		const selectedSkillsIds = selectedOptions
 			? selectedOptions.map((item) => item.id)
@@ -85,37 +89,58 @@ function SectionCandicateBasicInfo({ submit, id }) {
 							</div>
 							<div className="modal-body">
 								<div className="row">
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group">
-											<label>First Name</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[0]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fa fa-user " />
+									{location === "dashboard-employer" ? (
+										<div className="col-xl-6 col-lg-6 col-md-12">
+											<div className="form-group">
+												<label>Company Name</label>
+												<div className="ls-inputicon-box">
+													<InputField
+														field={USERPROFILEFIELD.fieldDetail[11]}
+														value={formData}
+														change={(data, field) => {
+															handleChange(data, field);
+														}}
+													/>
+													<i className="fs-input-icon fa fa-user " />
+												</div>
 											</div>
 										</div>
-									</div>
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group">
-											<label>Last Name</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[1]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
+									) : (
+										<>
+											<div className="col-xl-6 col-lg-6 col-md-12">
+												<div className="form-group">
+													<label>First Name</label>
+													<div className="ls-inputicon-box">
+														<InputField
+															field={USERPROFILEFIELD.fieldDetail[0]}
+															value={formData}
+															change={(data, field) => {
+																handleChange(data, field);
+															}}
+														/>
+														<i className="fs-input-icon fa fa-user " />
+													</div>
+												</div>
+											</div>
+											<div className="col-xl-6 col-lg-6 col-md-12">
+												<div className="form-group">
+													<label>Last Name</label>
+													<div className="ls-inputicon-box">
+														<InputField
+															field={USERPROFILEFIELD.fieldDetail[1]}
+															value={formData}
+															change={(data, field) => {
+																handleChange(data, field);
+															}}
+														/>
 
-												<i className="fs-input-icon fa fa-user " />
+														<i className="fs-input-icon fa fa-user " />
+													</div>
+												</div>
 											</div>
-										</div>
-									</div>
+										</>
+									)}
+
 									<div className="col-xl-6 col-lg-6 col-md-12">
 										<div className="form-group">
 											<label>Phone</label>

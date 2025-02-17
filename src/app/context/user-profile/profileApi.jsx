@@ -1,7 +1,7 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, baseUrl } from "../../../globals/constants";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, } from "../../../globals/constants";
 
 // ADD Profile
 export const addProfile = async (data) => {

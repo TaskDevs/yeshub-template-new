@@ -10,13 +10,14 @@ function AddSkills() {
 			
     const {
 			skills,
-			filteredData,
+			setSkills,
 			setFormData,
 			processAddSkills,
 			formData,
 			processGetAllSkills,
 			handleAddSkills,
-		} = useContext(SkillsApiData);
+	} = useContext(SkillsApiData);
+	
 	
 
    

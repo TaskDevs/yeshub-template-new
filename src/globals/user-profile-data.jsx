@@ -12,6 +12,7 @@ export const USERPROFILEFIELD = {
 			type: "text",
 			placeholder: "Smith",
 		},
+
 		{
 			name: "telephone",
 			label: "Phone",
@@ -60,12 +61,18 @@ export const USERPROFILEFIELD = {
 			type: "text",
 			placeholder: "Select Skill",
 		},
-		
+
 		{
 			name: "bio",
 			label: "Bio",
 			type: "text",
 			placeholder: "",
+		},
+		{
+			name: "company_name",
+			label: "Company Name",
+			type: "text",
+			placeholder: "Tratra.co",
 		},
 	],
 };

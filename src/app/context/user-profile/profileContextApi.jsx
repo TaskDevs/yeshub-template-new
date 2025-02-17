@@ -12,7 +12,7 @@ import {
 } from "./profileApi";
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
-import { userId } from "../../../globals/dummy-users";
+import { userId, role } from "../../../globals/dummy-users";
 import { toast } from "react-toastify";
 
 export const ProfileApiData = createContext();
@@ -23,24 +23,26 @@ const ProfileApiDataProvider = (props) => {
 	const [imageURL, setImageURL] = useState(null);
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [profileUpdated, setProfileUpdated] = useState(false);
-
-	const initialFormData = USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
+    
+	const initialFormData = role === "employer"? (USERPROFILEFIELD.fieldDetail.splice(2,).reduce((acc, field) => {
 		acc[field.name] = "";
 		return acc;
-	}, {});
+	}, {})) : (USERPROFILEFIELD.fieldDetail.slice(0,11 ).reduce((acc, field) => {
+		acc[field.name] = "";
+		return acc;
+	}, {}))
+		
 
 	const [formData, setFormData] = useState(initialFormData);
 
 	
-	// "profile_image": selectedFile
-
 	console.log("formData-ctx", formData);
-	console.log("selectedFile", selectedFile);
-	console.log("selectedFilename", selectedFile?.name);
+	// console.log("selectedFile", selectedFile);
+	// console.log("selectedFilename", selectedFile?.name);
 
 
 	useEffect(() => {
-		if (!userId) return;
+		// if (!profileData) return;
 
 		setIsSubmitting(true);
 		const fetchProfile = async () => {
@@ -54,7 +56,6 @@ const ProfileApiDataProvider = (props) => {
 				console.error("Failed Fetching profile", error);
 			} finally {
 				setIsSubmitting(false);
-				
 			}
 		};
 		fetchProfile();
@@ -131,6 +132,7 @@ const ProfileApiDataProvider = (props) => {
 	const handleSubmitProfile = async (e) => {
 		e.preventDefault();
 		setIsSubmitting(true);
+		console.log("setIsSubmitting");
 
 		if (!selectedFile) {
 			notify("Please select a profile image before submitting.");
@@ -140,7 +142,7 @@ const ProfileApiDataProvider = (props) => {
 
 		const profileFormData = new FormData();
 		profileFormData.append("user_id", "1");
-		profileFormData.append("profile_image", selectedFile); // Append file
+		profileFormData.append("profile_image", selectedFile); 
 		Object.entries(formData).forEach(([key, value]) => {
 			profileFormData.append(key, value);
 		});
@@ -148,7 +150,7 @@ const ProfileApiDataProvider = (props) => {
 		console.log("profileFormData", Object.fromEntries(profileFormData));
 
 		try {
-			const response = await processAddProfile(profileFormData); // Ensure this handles FormData properly
+			const response = await processAddProfile(profileFormData); 
 			console.log("add-profile-res", response);
 			toast.success("Profile added successfully");
 			return response;
@@ -157,15 +159,11 @@ const ProfileApiDataProvider = (props) => {
 			notify("An error occurred while adding the profile");
 		} finally {
 			setIsSubmitting(false);
+			setFormData(initialFormData);
 		}
 	};
 
-	
-	
-	
-	
-	
-	
+		
 	
 	
 	const handleUpdateProfile = async (e) => {

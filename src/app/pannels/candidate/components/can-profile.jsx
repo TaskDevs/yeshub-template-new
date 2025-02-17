@@ -55,7 +55,7 @@ function CanProfilePage() {
 													type="file"
 													name="myfile"
 													id="file-uploader"
-													accept=".jpg, .jpeg, .png"
+													accept="/*"
 													onChange={handleImageChange}
 												/>
 											</div>

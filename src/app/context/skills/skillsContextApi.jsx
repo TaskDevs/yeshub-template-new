@@ -63,7 +63,7 @@ const SkillsApiDataProvider = (props) => {
 	useEffect(() => {
 		const fetchAllSkills = async () => {
 			try {
-				const res = await skillsList();
+				const res = await processGetAllSkills();
 
 				console.log("get-all-skills", res);
 				const data = res?.data.data;
@@ -177,6 +177,7 @@ const SkillsApiDataProvider = (props) => {
 				skills,
 				formData,
 				filteredData,
+				setSkills,
 				processAddSkills,
 				processGetAllSkills,
 				processSkillsProfile,

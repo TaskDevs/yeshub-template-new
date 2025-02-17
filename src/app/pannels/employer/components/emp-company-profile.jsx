@@ -32,9 +32,7 @@ function EmpCompanyProfilePage() {
 
 	const { isSubmitting } = useContext(GlobalApiData)
 
-	// if (!imageURL) {
-	// 	return false;
-	// }
+	
 		return (
 			<>
 				<div className="">

@@ -1,11 +1,12 @@
 import { toast } from "react-toastify";
-import {SUCCESS_STATUS} from "../globals/constants"
+import { SUCCESS_STATUS } from "../globals/constants";
 
 export const notify = (
-    status, 
-    success_mssg = "Operation Successful", 
-    fail_mssg = "Operation failed") => {
-    if(status === SUCCESS_STATUS){ 
+    status,
+    success_mssg = "Operation Successful",
+    fail_mssg = "Operation failed"
+) => {
+    if (status === SUCCESS_STATUS) {
         toast.success(success_mssg, {
             position: "top-center"
         })

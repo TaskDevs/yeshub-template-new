@@ -66,7 +66,7 @@ const SkillsApiDataProvider = (props) => {
 				const res = await skillsList();
 
 				console.log("get-all-skills", res);
-				const data = res?.data.data;
+				const data = res?.data;
 				setSkills(data);
 			} catch (error) {
 				console.error("get-all-skills-failed", error);
@@ -85,21 +85,43 @@ const SkillsApiDataProvider = (props) => {
 		try {
 			const res = await addSkills(data);
 			console.log("processAddSkills", res);
-			setSkills((prevSkills) => [...prevSkills, res.data]);
+			
+			// Safely add new skill
+			if (res && res.data) {
+				setSkills((prevSkills) => [...prevSkills, res.data]);
+				notify('Skill added successfully', 'success');
+			} else {
+				notify('Failed to add skill', 'error');
+			}
 		} catch (error) {
-			console.error("", error);
+			console.error("Add Skills Error:", error);
+			notify('Error adding skill', 'error');
 		}
 	};
 
-	const processGetAllSkills = async () => {
-		try {
-			const res = await skillsList();
-
-			return res;
-		} catch (error) {
-			console.error("get-all-skills-failed", error);
-		}
-	};
+	useEffect(() => {
+		const processGetAllSkills = async () => {
+			try {
+				const res = await skillsList();
+				console.log("get all skills:", res)
+				
+				const skills = res.data;
+				console.log("skills data:", skills)
+				// Safely set skills
+				if (Array.isArray(skills)) {
+					setSkills(skills);
+				} else {
+				setSkills([]);
+				notify('No skills found', 'warning');
+				}
+			} catch (error) {
+				console.error("get-all-skills-failed", error);
+				setSkills([]);
+				notify('Failed to fetch skills', 'error');
+			}
+		};
+		processGetAllSkills();
+	}, []);
 
 	const processSkillsProfile = async (id) => {
 		try {
@@ -178,7 +200,6 @@ const SkillsApiDataProvider = (props) => {
 				formData,
 				filteredData,
 				processAddSkills,
-				processGetAllSkills,
 				processSkillsProfile,
 				processSearchSkills,
 				processUpdateSkills,

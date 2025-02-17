@@ -25,36 +25,31 @@ export const addSkills = async (data) => {
 };
 
 // SEARCH Skills
-export const searchSkills = async (data) => {
+export const searchSkills = async (keyword) => {
   try {
-    let responseOnSearchSkills = await axios.get({
-      /**Add Search Skills API URL here like /searchEmployer?keyword=${data}**/
-    });
-    if (responseOnSearchSkills.status === SUCCESS_STATUS) {
-      return responseOnSearchSkills.data;
-    } else {
-      return false;
-    }
+    const responseOnSearchSkills = await axios.get(
+      `${baseURL}skills?keyword=${keyword}`
+    );
+
+    console.log("search-skills", responseOnSearchSkills);
+
+    return responseOnSearchSkills.data || [];
   } catch (err) {
-    console.log(err);
+    console.error("search skills error:", err);
+    return [];
   }
 };
 
 // LIST Skills
 export const skillsList = async () => {
   try {
-    let responseOnSkillsList = await axios.get(
-		
+    const responseOnSkillsList = await axios.get(
 			`${baseURL}skills`
 		);
-    return responseOnSkillsList;
-    // if (responseOnSkillsList.status === SUCCESS_STATUS) {
-    //   return responseOnSkillsList.data;
-    // } else {
-    //   return false;
-    // }
+    console.log("get-all-skills", responseOnSkillsList);
+    return responseOnSkillsList.data || [];
   } catch (err) {
-    console.log(err);
+    console.error("failed to get all skills", err);
     return false;
   }
 };
@@ -67,14 +62,9 @@ export const skillsProfile = async (id) => {
 			`${baseURL}skills/${id}`
 		);
 
-    // if (responseOnSkillsProfile.status === SUCCESS_STATUS) {
-    //   return responseOnSkillsProfile.data;
-    // } else {
-    //   return false;
-    // }
-    return responseOnSkillsProfile;
+    return responseOnSkillsProfile.data || null;
   } catch (err) {
-    console.log(err);
+    console.error(`Skills Profile Error for ID ${id}`, err);
     return false;
   }
 };
@@ -86,14 +76,11 @@ export const updateSkills = async (id, data) => {
       `${baseURL}skills/${id}`,
       data
 		);
-    // if (responseOnUpdateSkills.status === SUCCESS_STATUS) {
-    //   return responseOnUpdateSkills.data;
-    // } else {
-    //   return false;
-    // }
-    return responseOnUpdateSkills;
+    
+    return responseOnUpdateSkills.data || [];
   } catch (err) {
-    console.log(err);
+    console.error(`failed to update skills for ID ${id}`, err);
+    return false;
   }
 };
 
@@ -103,13 +90,11 @@ export const deleteSkills = async (id) => {
     let responseOnDeleteSkills = await axios.delete(
 			`${baseURL}skills/${id}`
 		);
-    if (responseOnDeleteSkills.status === SUCCESS_STATUS) {
-      return responseOnDeleteSkills.data;
-    } else {
-      return false;
-    }
+    
+    return responseOnDeleteSkills.data || [];
   } catch (err) {
-    console.error(err);
+    console.error(`failed to delete skills for ID ${id}`, err);
+    return false;
   }
 };
 

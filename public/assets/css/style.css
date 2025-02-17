@@ -121,6 +121,18 @@ This files [Table of contents] are outlined below
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 /*===GENERAL===*/
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  /* background: red; */
+  width: 100%;
+}
+.actions button {
+  width: 20%;
+}
+
 .site-text-primary {
   color: #305718;
 }

@@ -1,21 +1,23 @@
 import axios from "axios";
 import cookieMethods from "./cookieUtils";
 import {
-  baseUrl,
-  timeOut,
-  SUCCESS_STATUS,
-  BAD_REQUEST_STATUS,
+	baseURL,
+	timeOut,
+	SUCCESS_STATUS,
+	BAD_REQUEST_STATUS,
 } from "../globals/constants";
 
+// console.log("baseUrl-constants", baseURL);
+
 const instance = axios.create({
-  baseUrl,
-  timeOut,
-  withCredentials: true,
-  crossDomain: true,
-  headers: {
-    "x-Requested-with": "XMLHttpRequest",
-    Accept: "application/json",
-  },
+	baseURL,
+	timeOut,
+	withCredentials: true,
+	crossDomain: true,
+	headers: {
+		"x-Requested-with": "XMLHttpRequest",
+		Accept: "application/json",
+	},
 });
 
 let accessToken;

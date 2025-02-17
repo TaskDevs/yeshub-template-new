@@ -1,19 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import InputField from '../../../../common/input-field';
 import { EDUCATIONFIELD } from '../../../../../globals/education-data';
 import TextAreaField from '../../../../common/text-area-field';
+import { EducationApiData } from '../../../../context/education/educationContextApi';
 
-// handleSubmitEducation;
-// Education;
 
 function SectionEducationForm({ submit, id }) {
 
-    const [formData, setFormData] = useState(
-            EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
-                acc[field.name] = "";
-                return acc;
-            }, {})
-    );
+   
+	
+	const { formData, setFormData } = useContext(EducationApiData);
+	
     
     const handleChange = (field, data) => {
 			setFormData({
@@ -55,17 +52,7 @@ function SectionEducationForm({ submit, id }) {
 													handleChange(data, field);
 												}}
 											/>
-											{/* <input
-														name="education"
-														type="text"
-														required
-														className="form-control"
-														placeholder="University of Ghana"
-														minLength={3}
-														maxLength={50}
-														// value={""}
-														// onChange={""}
-													/> */}
+											
 											<i className="fs-input-icon fas fa-book-reader" />
 										</div>
 									</div>
@@ -88,12 +75,7 @@ function SectionEducationForm({ submit, id }) {
 									<div className="form-group">
 										<label>Course</label>
 										<div className="ls-inputicon-box">
-											{/* <select className="wt-select-box selectpicker" data-live-search="true" title="" data-bv-field="size">
-                                                    <option className="bs-title-option" value>Select Course</option>
-                                                    <option>BBA- Bachelor of Business Administration</option>
-                                                    <option>BFA- Bachelor of Fine Arts</option>
-                                                    <option>BSW- Bachelor of Social Work</option>
-                                                </select> */}
+											
 											<InputField
 												field={EDUCATIONFIELD.fieldDetail[2]}
 												value={formData}

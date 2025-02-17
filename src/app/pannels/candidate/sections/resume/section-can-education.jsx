@@ -6,15 +6,18 @@ import TextAreaField from "../../../../common/text-area-field";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import SectionEducationForm from "./section-education-form";
+import { GlobalApiData } from "../../../../context/global/globalContextApi";
 
 function SectionCanEducation() {
 	const {
 		processAddEducation,
 		processEducationEducation,
 		processUpdateEducation,
-		selectedId,
-		setSelectedId,
+		formData,
 	} = useContext(EducationApiData);
+
+	const { selectedId, setSelectedId } = useContext(GlobalApiData);
+
 
 	const [educationData, setEducationData] = useState({});
 
@@ -23,50 +26,46 @@ function SectionCanEducation() {
 
 	useEffect(() => {
 		const fetchEducationData = async () => {
-			const res = await processEducationEducation("userid");
-			console.log("get-education", res);
-			const data = res.data.data;
-			setEducationData(data);
+			try {
+				const res = await processEducationEducation("userid");
+				console.log("get-education", res);
+				const data = res.data.data;
+				setEducationData(data);
+			 } catch (err) {
+				console.error("Failed to get education", err);
+			}
+			
 		};
 		fetchEducationData();
 	}, [processEducationEducation]);
 
-	const [formData, setFormData] = useState(
-		EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
-			acc[field.name] = "";
-			return acc;
-		}, {})
-	);
-
-	const handleChange = (field, data) => {
-		setFormData({
-			...formData,
-			[field]: data,
-		});
-	};
+	
 
 	const handleSubmitEducation = async (e) => {
 		e.preventDefault();
-		const response = await processAddEducation({ ...formData, id: "1" });
-		console.log("Education added successfully", response);
-
-		if (response) {
+		try { 
+			const response = await processAddEducation({ ...formData, id: "1" });
 			console.log("Education added successfully", response);
-		} else {
-			console.error("Failed to add education");
+
+			if (response) {
+				console.log("Education added successfully", response);
+			} else {
+				console.error("Failed to add education");
+			}
+		} catch (err) {
+			console.error("failed to add education", err)
 		}
 	};
 
 	const handleUpdate = async (e) => {
 		e.preventDefault();
 
-		const response = await processUpdateEducation({ ...formData, id: "1" });
-		console.log("Education added successfully", response);
+		try { 
+			const response = await processUpdateEducation({ ...formData, id: "1" });
+			console.log("Education updated successfully", response);
 
-		if (response) {
-			console.log("Education added successfully", response);
-		} else {
-			console.error("Failed to add education");
+		} catch (err) {
+			console.error("Failed to update education")
 		}
 	};
 
@@ -86,32 +85,6 @@ function SectionCanEducation() {
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
-					<div className="">
-						<div className="actions">
-							<button
-								className="site-button  actions"
-								data-bs-target="#delete-education"
-								data-bs-toggle="modal"
-								data-bs-dismiss="modal"
-							>
-								<FaRegTrashCan color="white" />
-								<span className="admin-nav-text">Delete</span>
-							</button>
-
-							<button
-								className="site-button  actions "
-								data-bs-target="#edit-category"
-								data-bs-toggle="modal"
-								data-bs-dismiss="modal"
-								onClick={() => {
-									handleUpdate();
-								}}
-							>
-								<MdOutlineEdit color="white" />
-								<span>Edit</span>
-							</button>
-						</div>
-					</div>
 					<p>Mention your education details.</p>
 					<p>2004 to 2006</p>
 					<p>
@@ -142,8 +115,47 @@ function SectionCanEducation() {
 					</p>
 				</div>
 			</div>
-			{/*Education Form*/}
-			{/* <div
+
+			<div className="p-a20">
+				<div className="actions">
+					<button
+						className="site-button  actions"
+						data-bs-target="#delete-education"
+						data-bs-toggle="modal"
+						data-bs-dismiss="modal"
+					>
+						<FaRegTrashCan color="white" />
+						<span className="admin-nav-text">Delete</span>
+					</button>
+
+					<button
+						className="site-button  actions "
+						data-bs-target="#Edit-Education"
+						data-bs-toggle="modal"
+						data-bs-dismiss="modal"
+					>
+						<MdOutlineEdit color="white" />
+						<span>Edit</span>
+					</button>
+				</div>
+			</div>
+
+			<SectionEducationForm submit={handleSubmitEducation} id="Education" />
+			<SectionEducationForm submit={handleUpdate} id="Edit-Education" />
+		</>
+	);
+}
+export default SectionCanEducation;
+
+
+
+
+
+
+	/*Education Form*/
+
+
+	/* <div
 					className="modal fade twm-saved-jobs-view"
 					id="Education"
 					tabIndex={-1}
@@ -281,11 +293,6 @@ function SectionCanEducation() {
 							</form>
 						</div>
 					</div>
-				</div> */}
+				</div> */
 
-			<SectionEducationForm submit={handleSubmitEducation} id="Education" />
-			<SectionEducationForm submit={handleUpdate} id="Edit-Education" />
-		</>
-	);
-}
-export default SectionCanEducation;
+

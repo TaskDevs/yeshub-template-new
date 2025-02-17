@@ -11,11 +11,20 @@ import {
   updateEducation,
   deleteEducation,
 } from "./educationApi";
+import { EDUCATIONFIELD } from "../../../globals/education-data";
 
 export const EducationApiData = createContext();
 
 const EducationApiDataProvider = (props) => {
-  const [selectedId, setSelected] = useState("");
+  
+	 const [formData, setFormData] = useState(
+			EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
+				acc[field.name] = "";
+				return acc;
+			}, {})
+		);
+
+	
   
 
   const processAddEducation = async (data) => {
@@ -44,8 +53,8 @@ const EducationApiDataProvider = (props) => {
 
 
 
-  const processUpdateEducation = async (data) => {
-    const res = await updateEducation(data);
+  const processUpdateEducation = async (id,data) => {
+    const res = await updateEducation(id,data);
 		console.log("update-education", res);
 
 		notify(
@@ -66,6 +75,20 @@ const EducationApiDataProvider = (props) => {
 		);
   };
 
+	const handleAddEducation = async (e) => {
+		e.preventDefault();
+		const res = await processAddEducation(formData);
+		console.log("add-edu",res);
+	}
+
+	const handleUpdateEducation = async (e) => {
+		e.preventDefault();
+		const res = await processUpdateEducation(formData);
+		console.log("update-edu", res);
+	};
+
+
+
   return (
 		<EducationApiData.Provider
 			value={{
@@ -75,8 +98,10 @@ const EducationApiDataProvider = (props) => {
 				processSearchEducation,
 				processUpdateEducation,
 				processDeleteEducation,
-        setSelected,
-        selectedId
+				handleAddEducation,
+			  handleUpdateEducation,
+			  formData,
+			  setFormData
 			}}
 		>
 			{props.children}

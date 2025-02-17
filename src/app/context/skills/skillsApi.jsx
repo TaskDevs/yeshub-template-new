@@ -1,21 +1,23 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config";
+import axios from "axios";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL } from "../../../globals/constants";
 
 // ADD Skills
+/**Add Create Education API URL here**/
 export const addSkills = async (data) => {
   try {
     let responseOnAddSkills = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+    
+      `${baseURL}skills`,
       data
     );
-    if (responseOnAddSkills.status === SUCCESS_STATUS) {
-      return responseOnAddSkills.data;
-    } else {
-      return false;
-    }
+    return responseOnAddSkills;
+    // if (responseOnAddSkills.status === SUCCESS_STATUS) {
+    //   return responseOnAddSkills.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -39,17 +41,18 @@ export const searchSkills = async (data) => {
 };
 
 // LIST Skills
-export const skillsList = async (pageNo) => {
+export const skillsList = async () => {
   try {
-    let responseOnSkillsList = await axios.get({
-      /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
-
-    if (responseOnSkillsList.status === SUCCESS_STATUS) {
-      return responseOnSkillsList.data;
-    } else {
-      return false;
-    }
+    let responseOnSkillsList = await axios.get(
+		
+			`${baseURL}skills`
+		);
+    return responseOnSkillsList;
+    // if (responseOnSkillsList.status === SUCCESS_STATUS) {
+    //   return responseOnSkillsList.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -57,17 +60,19 @@ export const skillsList = async (pageNo) => {
 };
 
 // VIEW Skills
+/**Add View History API URL here like ${URL}api/getSkillsProfile/${id}**/
 export const skillsProfile = async (id) => {
   try {
-    let responseOnSkillsProfile = await axios.get({
-      /**Add View History API URL here like ${URL}api/getSkillsProfile/${id}**/
-    });
+    let responseOnSkillsProfile = await axios.get(
+			`${baseURL}skills/${id}`
+		);
 
-    if (responseOnSkillsProfile.status === SUCCESS_STATUS) {
-      return responseOnSkillsProfile.data;
-    } else {
-      return false;
-    }
+    // if (responseOnSkillsProfile.status === SUCCESS_STATUS) {
+    //   return responseOnSkillsProfile.data;
+    // } else {
+    //   return false;
+    // }
+    return responseOnSkillsProfile;
   } catch (err) {
     console.log(err);
     return false;
@@ -75,27 +80,29 @@ export const skillsProfile = async (id) => {
 };
 
 // UPDATE Skills
-export const updateSkills = async (data) => {
+export const updateSkills = async (id, data) => {
   try {
-    let responseOnUpdateSkills = await axios.put({
-      /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
-    });
-    if (responseOnUpdateSkills.status === SUCCESS_STATUS) {
-      return responseOnUpdateSkills.data;
-    } else {
-      return false;
-    }
+    let responseOnUpdateSkills = await axios.put(
+      `${baseURL}skills/${id}`,
+      data
+		);
+    // if (responseOnUpdateSkills.status === SUCCESS_STATUS) {
+    //   return responseOnUpdateSkills.data;
+    // } else {
+    //   return false;
+    // }
+    return responseOnUpdateSkills;
   } catch (err) {
     console.log(err);
   }
 };
 
 // DELETE Skills
-export const deleteSkills = async (data) => {
+export const deleteSkills = async (id) => {
   try {
-    let responseOnDeleteSkills = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteSkills/${data}` **/
-    });
+    let responseOnDeleteSkills = await axios.delete(
+			`${baseURL}skills/${id}`
+		);
     if (responseOnDeleteSkills.status === SUCCESS_STATUS) {
       return responseOnDeleteSkills.data;
     } else {
@@ -105,3 +112,7 @@ export const deleteSkills = async (data) => {
     console.error(err);
   }
 };
+
+
+
+

@@ -1,20 +1,17 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseUrl } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config";
+import axios from "axios";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, baseUrl } from "../../../globals/constants";
 
 // ADD Profile
 export const addProfile = async (data) => {
   try {
     let responseOnAddProfile = await axios.post(
-     
-       "/api/v1/create-profile",
+			`${baseURL}create-profile`,
 			data
 		);
-    if (responseOnAddProfile.status === SUCCESS_STATUS) {
-      return responseOnAddProfile.data;
-    } else {
-      return false;
-    }
+  
+    return responseOnAddProfile;
   } catch (err) {
     console.error(err);
     return false;
@@ -38,7 +35,7 @@ export const searchProfile = async (data) => {
 };
 
 // LIST Profile
-export const profileList = async (pageNo) => {
+export const profileList = async (id) => {
   try {
     let responseOnProfileList = await axios.get({
       /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
@@ -55,21 +52,18 @@ export const profileList = async (pageNo) => {
   }
 };
 
+
 // VIEW Profile
+ /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
 export const profileProfile = async (id) => {
   try {
-    let responseOnProfile = await axios.get({
-      /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
-     
-    },
-         "/api/v1/get-profile/{id}"
+    let responseOnProfile = await axios.get(
+      `${baseURL}get-profile/${id}`
+      
     );
-
-    if (responseOnProfile.status === SUCCESS_STATUS) {
-      return responseOnProfile.data;
-    } else {
-      return false;
-    }
+    console.log(responseOnProfile)
+    return responseOnProfile;
+  
   } catch (err) {
     console.log(err);
     return false;
@@ -77,19 +71,15 @@ export const profileProfile = async (id) => {
 };
 
 // UPDATE Profile
-export const updateProfile = async (id) => {
+/**Add Update Profile API URL here like  `${URL}api/updateProfile/${data.id}` **/
+export const updateProfile = async (id, data) => {
   try {
     let responseOnUpdateProfile = await axios.put(
-			{
-				/**Add Update Profile API URL here like  `${URL}api/updateProfile/${data.id}` **/
-			},
-			`/api/v1/update-profile/${id}`
+			
+      `${baseURL}update-profile/${id}`,
+      data
 		);
-    if (responseOnUpdateProfile.status === SUCCESS_STATUS) {
-      return responseOnUpdateProfile.data;
-    } else {
-      return false;
-    }
+   return responseOnUpdateProfile;
   } catch (err) {
     console.log(err);
   }
@@ -98,17 +88,10 @@ export const updateProfile = async (id) => {
 // DELETE Profile
 export const deleteProfile = async (id) => {
   try {
-    let responseOnDeleteProfile = await axios.delete(
-			{
-				/**Add Delete Profile API URL here like  `/api/deleteProfile/${data}` **/
-			},
-			`api/v1/delete-profile/${id}`
+    let responseOnDeleteProfile = await axios.delete(	
+			`${baseURL}delete-profile/${id}`
 		);
-    if (responseOnDeleteProfile.status === SUCCESS_STATUS) {
-      return responseOnDeleteProfile.data;
-    } else {
-      return false;
-    }
+   return responseOnDeleteProfile;
   } catch (err) {
     console.error(err);
   }

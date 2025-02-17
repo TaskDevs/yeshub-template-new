@@ -1,83 +1,172 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
 import { notify } from "../../../utils/responseUtils";
 
 import {
-  addProfile,
-  searchProfile,
-  profileList,
-  profileProfile,
-  updateProfile,
-  deleteProfile,
+	addProfile,
+	searchProfile,
+	profileList,
+	profileProfile,
+	updateProfile,
+	deleteProfile,
 } from "./profileApi";
+import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
+import { GlobalApiData } from "../global/globalContextApi";
+import { userId } from "../../../globals/dummy-users";
 
 export const ProfileApiData = createContext();
 
-// status, (success_mssg = "Operation Successful"), fail_mssg;
 const ProfileApiDataProvider = (props) => {
+	const [profileData, setProfileData] = useState({});
+	const { setIsSubmitting } = useContext(GlobalApiData);
+	const [imageURL, setImageURL] = useState(null); 
+	const [selectedFile, setSelectedFile] = useState(null);
+	const [formData, setFormData] = useState(
+		USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
+			acc[field.name] = "";
+			return acc;
+		}, {"profile_image": selectedFile})
+	);
 
-  const processAddProfile = async (data) => {
-    const res = await addProfile(data);
-    console.log("add-profile", res);
+	
 
-   notify(res.status, "Profile added successfully", "Failed to add profile");
-    
-  };
+	
+	
 
-  const processGetAllProfile = async (id) => {
-    const res = await profileList(id);
-    console.log("profile-list", res);
-    notify(res.status, "Profile fetched successfully", "Failed to fetch profile");
+	useEffect(() => {
+		if (!userId) {
+			return;
+		}
+		setIsSubmitting(true);
+		const fetchProfile = async () => {
+			try {
+				const res = await processProfileProfile(userId);
+				console.log("Fetching profile", res);
+
+				const data = res.data.data;
+				setProfileData(data);
+			} catch (error) {
+				console.error("failed Fetching profile", error);
+			} finally {
+				setIsSubmitting(false);
+			}
+		};
+		fetchProfile();
+	}, [setIsSubmitting]);
+
+	const processAddProfile = async (data) => {
+		try {
+			const res = await addProfile(data);
+			console.log("add-profile", res);
+			return res;
+		} catch (err) {
+			console.error("add-profile", err);
+		}
 	};
 
-  const processProfileProfile = async (id) => {
-     const res = await profileProfile(id);
+	const processGetAllProfile = async (id) => {
+		
+		
+		
+	};
+
+	const processProfileProfile = async (id) => {
+		try {
+			const res = await profileProfile(id);
 			console.log("profile", res);
-			notify(
-				res.status,
-				"Profile fetched successfully",
-				"Failed to fetch profile"
-			);
-  };
+			return res;
+		} catch (err) {
+			console.error("profile-profile-err", err);
+		}
+	};
 
-  const processSearchProfile = async (data) => {
-   
-  };
+	const processSearchProfile = async (data) => {};
 
-  const processUpdateProfile = async (id) => {
-     const res = await updateProfile(id);
-			console.log("profile", res);
-			notify(
-				res.status,
-				"Profile fetched successfully",
-				"Failed to fetch profile"
-			);
-  };
-
-  const processDeleteProfile = async (id) => {
-    const res = await deleteProfile(id);
+	const processUpdateProfile = async (id, data) => {
+		const res = await updateProfile(id, data);
 		console.log("profile", res);
-		notify(
-			res.status,
-			"Profile fetched successfully",
-			"Failed to fetch profile"
-		);
-  };
+		return res;
+	};
 
-  return (
-    <ProfileApiData.Provider
-      value={{
-        processAddProfile,
-        processGetAllProfile,
-        processProfileProfile,
-        processSearchProfile,
-        processUpdateProfile,
-        processDeleteProfile,
-      }}
-    >
-      {props.children}
-    </ProfileApiData.Provider>
-  );
+	const processDeleteProfile = async (id) => {
+		const res = await deleteProfile(id);
+		console.log("profile", res);
+		return res;
+	};
+
+	const handleSubmitProfile = async (e) => {
+		e.preventDefault();
+		try {
+			const response = await processAddProfile({ ...formData, user_id: "1" });
+			console.log("add-profile-res", response);
+			return response;
+		} catch(e) {
+			console.error(e)
+		}
+	};
+
+	const handleUpdateProfile = async (e) => {
+		e.preventDefault();
+		console.log({
+			...formData,
+			id: "1",
+		});
+
+		try {
+			const response = await processUpdateProfile(1, {
+				...formData,
+				id: "1",
+			});
+			console.log("add-profile-res", response);
+		} catch (e) {
+			console.error(e);
+		}
+	};
+
+	const handleEditClick = () => {
+		setFormData(profileData);
+	};
+
+	const handleImageChange = (event) => {
+		const file = event.target.files[0];
+		setSelectedFile(file); 
+
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onloadend = () => {
+				setImageURL(reader.result); 
+			};
+
+			reader.readAsDataURL(file); 
+		} else {
+			setImageURL(null);
+		}
+	};
+
+	return (
+		<ProfileApiData.Provider
+			value={{
+				profileData,
+				formData,
+				imageURL,
+				processAddProfile,
+				processGetAllProfile,
+				processProfileProfile,
+				processSearchProfile,
+				processUpdateProfile,
+				processDeleteProfile,
+				handleSubmitProfile,
+				handleUpdateProfile,
+
+				setFormData,
+				handleEditClick,
+				handleImageChange,
+			}}
+		>
+			{props.children}
+		</ProfileApiData.Provider>
+	);
 };
 
 export default ProfileApiDataProvider;

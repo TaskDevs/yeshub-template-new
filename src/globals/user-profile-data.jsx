@@ -1,13 +1,13 @@
 export const USERPROFILEFIELD = {
 	fieldDetail: [
 		{
-			name: "first_name",
+			name: "firstname",
 			label: "First Name",
 			type: "text",
 			placeholder: "David",
 		},
 		{
-			name: "last_name",
+			name: "lastname",
 			label: "Last Name",
 			type: "text",
 			placeholder: "Smith",
@@ -65,7 +65,7 @@ export const USERPROFILEFIELD = {
 			name: "bio",
 			label: "Bio",
 			type: "text",
-			placeholder: "Enter Password",
+			placeholder: "",
 		},
 	],
 };

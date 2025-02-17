@@ -16,34 +16,39 @@ import { toast } from "react-toastify";
 import ProtectedRoute from "../app/context/ProtectedRoute";
 import  { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
+import CategoryPage from "../app/pannels/employer/components/category/category-page";
+import SkillsPage from "../app/pannels/employer/components/skills/skills-page";
 
-function EmployerRoutes() { 
-    const [routes, setRoutes] = useState({});
-    // const errorMessage = () =>
-    //         toast(" User Unauthenticated!, login");
-    
-    // const navigate = useNavigate();
 
-//   useEffect(() => {
-//     if (user?.id) {  
-//       const updatedRoutes = withId(user.id, employer);
-//       setRoutes(updatedRoutes); 
-//     }
-//   }, [user]);
-    
-    // if (!routes.dashboard) {
-        
-    //         errorMessage()
-		// 	navigate("/login")
-			
-        
-    // }
+function EmployerRoutes() {
+	const [routes, setRoutes] = useState({});
+	// const errorMessage = () =>
+	//         toast(" User Unauthenticated!, login");
 
-  return (
+	// const navigate = useNavigate();
+
+	//   useEffect(() => {
+	//     if (user?.id) {
+	//       const updatedRoutes = withId(user.id, employer);
+	//       setRoutes(updatedRoutes);
+	//     }
+	//   }, [user]);
+
+	// if (!routes.dashboard) {
+
+	//         errorMessage()
+	// 	navigate("/login")
+
+	// }
+	// SkillsPage
+
+	return (
 		// <ProtectedRoute roleProp="2"></ProtectedRoute>
 		<Routes>
 			<Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
 			<Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
+			<Route path={employer.ADD_CATEGORY} element={<CategoryPage />} />
+			<Route path={employer.ADD_SKILL} element={< SkillsPage />} />
 			<Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
 			<Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
 			<Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />

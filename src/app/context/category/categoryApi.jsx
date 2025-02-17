@@ -1,21 +1,24 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config"
+import axios from "axios";
+import { SUCCESS_STATUS, LIST_ON_PAGES , baseURL} from "../../../globals/constants";
 
 // ADD CATEGORY
 export const addCategory = async (data) => {
+  console.log("data-category", data)
   try {
     let responseOnAddCategory = await axios.post(
-      {
-        /**Add Create Category API URL here**/
-      },
-      data
+      
+      `${baseURL}job-categories`,
+     { ...data, category_name: data.title}
     );
-    if (responseOnAddCategory.status === SUCCESS_STATUS) {
-      return responseOnAddCategory.data;
-    } else {
-      return false;
-    }
+     console.log(responseOnAddCategory);
+			return responseOnAddCategory;
+    // if (responseOnAddCategory.status === SUCCESS_STATUS) {
+    //   return responseOnAddCategory.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -39,17 +42,21 @@ export const searchCategory = async (data) => {
 };
 
 // LIST CATEGORY
-export const catgoryList = async (pageNo) => {
-  try {
-    let responseOnCategoryList = await axios.get({
-      /**Add Get Category API URL here like /api/getCategory?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
 
-    if (responseOnCategoryList.status === SUCCESS_STATUS) {
-      return responseOnCategoryList.data;
-    } else {
-      return false;
-    }
+				/**Add Get Category API URL here like /api/getCategory?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
+			
+export const catgoryList = async () => {
+  try {
+    let responseOnCategoryList = await axios.get(`${baseURL}job-categories`);
+
+   console.log(responseOnCategoryList);
+		return responseOnCategoryList;
+
+    // if (responseOnCategoryList.status === SUCCESS_STATUS) {
+    //   return responseOnCategoryList.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -57,17 +64,23 @@ export const catgoryList = async (pageNo) => {
 };
 
 // VIEW CATEGORY
+
+				/**Add View Category API URL here like ${URL}api/getCategoryProfile/${id}**/
+			
 export const categoryProfile = async (id) => {
   try {
-    let responseOnCategoryProfile = await axios.get({
-      /**Add View Category API URL here like ${URL}api/getCategoryProfile/${id}**/
-    });
+    let responseOnCategoryProfile = await axios.get(
+			
+			`${baseURL}job-categories/${id}`
+    );
+    console.log(responseOnCategoryProfile);
+    return responseOnCategoryProfile;
 
-    if (responseOnCategoryProfile.status === SUCCESS_STATUS) {
-      return responseOnCategoryProfile.data;
-    } else {
-      return false;
-    }
+    // if (responseOnCategoryProfile.status === SUCCESS_STATUS) {
+    //   return responseOnCategoryProfile.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -75,32 +88,43 @@ export const categoryProfile = async (id) => {
 };
 
 // UPDATE CATEGORY
-export const updateCategory = async (data) => {
+
+				/**Add Update Category API URL here like  `${URL}api/updateCategory/${data.id}` **/
+			
+export const updateCategory = async (id, data) => {
+  
   try {
-    let responseOnUpdateCategory = await axios.put({
-      /**Add Update Category API URL here like  `${URL}api/updateCategory/${data.id}` **/
-    });
-    if (responseOnUpdateCategory.status === SUCCESS_STATUS) {
-      return responseOnUpdateCategory.data;
-    } else {
-      return false;
-    }
+    
+    let responseOnUpdateCategory = await axios.put(
+			`${baseURL}job-categories/${id}`,
+			data
+		);
+    
+    return responseOnUpdateCategory;
+    // if (responseOnUpdateCategory.status === SUCCESS_STATUS) {
+    //   return responseOnUpdateCategory.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }
 };
 
 // DELETE CATEGORY
-export const deleteCategory = async (data) => {
+/**Add Delete Category API URL here like  `/api/deleteCategory/${data}` **/
+export const deleteCategory = async (id) => {
   try {
-    let responseOnDeleteCategory = await axios.delete({
-      /**Add Delete Category API URL here like  `/api/deleteCategory/${data}` **/
-    });
-    if (responseOnDeleteCategory.status === SUCCESS_STATUS) {
-      return responseOnDeleteCategory.data;
-    } else {
-      return false;
-    }
+    let responseOnDeleteCategory = await axios.delete(	
+			`${baseURL}job-categories/${id}`
+    );
+    console.log(responseOnDeleteCategory);
+		return responseOnDeleteCategory;
+    // if (responseOnDeleteCategory.status === SUCCESS_STATUS) {
+    //   return responseOnDeleteCategory.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.error(err);
   }

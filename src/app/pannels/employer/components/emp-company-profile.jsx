@@ -57,7 +57,7 @@ function EmpCompanyProfilePage() {
 												</button>
 												<input
 													type="file"
-													name="myfile"
+													name="profile_image"
 													id="file-uploader"
 													accept=".jpg, .jpeg, .png"
 													onChange={handleImageChange}

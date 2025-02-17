@@ -10,6 +10,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import SectionProfileData from "../../candidate/common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
+import { GlobalApiData } from "../../../context/global/globalContextApi";
 
 function EmpCompanyProfilePage() {
 	useEffect(() => {
@@ -26,6 +27,8 @@ function EmpCompanyProfilePage() {
 		handleEditClick,
 		handleImageChange,
 	} = useContext(ProfileApiData);
+
+	const { isSubmitting } = useContext(GlobalApiData)
 
 	return (
 		<>
@@ -82,15 +85,17 @@ function EmpCompanyProfilePage() {
 						{/* <div className="panel-heading-with-btn"> */}
 						<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
 							<h4 className="panel-tittle m-a0"> Profile</h4>
-							<a
-								data-bs-toggle="modal"
-								href="#AddProfile"
-								role="button"
-								title="Edit"
-								className="site-text-primary"
-							>
-								<span className="fa fa-edit" />
-							</a>
+							{!isSubmitting && (
+								<a
+									data-bs-toggle="modal"
+									href="#AddProfile"
+									role="button"
+									title="Edit"
+									className="site-text-primary"
+								>
+									<span className="fa fa-edit" />
+								</a>
+							)}
 						</div>
 
 						<div className="panel-body wt-panel-body  ">

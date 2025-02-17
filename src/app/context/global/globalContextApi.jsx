@@ -20,9 +20,7 @@ const GlobalApiDataProvider = (props) => {
 		}, 3000);
 	}, [isSubmitting]);
 
-	const handleEditClick = () => {
-		setFormData(profileData);
-	};
+	
 
     const handleClicked = (id) => {
 			console.log("id-clicked", id);

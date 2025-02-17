@@ -26,7 +26,7 @@ function App() {
     setLoading(false);
   }, 500);
 
-  // add apifyprovider, candidateProvider, employerprovider
+
   return (
     
     <GlobalApiDataProvider>

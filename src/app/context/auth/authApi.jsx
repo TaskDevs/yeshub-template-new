@@ -150,7 +150,6 @@ export const loginWithGoogle = (data) => {
 // Logout 
 export const logout = async () => {
     try {
-        let responseOnLogout = await axios.post(`${process.env.REACT_APP_BASE_URL}`)
         if(responseOnLogout.status === SUCCESS_STATUS){
             return responseOnLogout.data
         } else {

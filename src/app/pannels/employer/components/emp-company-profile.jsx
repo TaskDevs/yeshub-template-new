@@ -1,46 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import JobZImage from "../../../common/jobz-img";
-import { loadScript } from "../../../../globals/constants";
+import { loadScript, popupType } from "../../../../globals/constants";
 import { DropzoneComponent } from "react-dropzone-component";
 import axios from "axios";
 import { toast } from "react-toastify";
+import SectionCandicateBasicInfo from "../../candidate/sections/profile/section-can-basic-info";
+import { MdOutlineEdit } from "react-icons/md";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
+import SectionProfileData from "../../candidate/common/section-profile-data";
+import YesNoPopup from "../../../common/popups/popup-yes-no";
 
 function EmpCompanyProfilePage() {
 	useEffect(() => {
 		loadScript("js/custom.js");
 	});
 
-	var componentConfig = {
-		postUrl: "upload.php",
-	};
-
-	// const [youtubeFields, setYoutubeFields] = useState(0);
-	// const [vimeoFields, setVimeoFields] = useState(0);
-	const [success, setSuccess] = useState("");
-	const [showTopMessage, setShowTopMessage] = useState(false);
-	const [error, setError] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const { user } = useUser();
+	
 	
 
-
-const [formData, setFormData] = useState({});
-
-
-const handleChange = (field, data) => {
-	setFormData({
-		...formData,
-		[field]: data,
-	});
-};
-
-const handleSubmitProfile = async (e) => {
-	e.preventDefault();
-	
-};
-  
-	
-
+	const {
+		imageURL,
+		handleSubmitProfile,
+		handleUpdateProfile,
+		handleEditClick,
+		handleImageChange,
+	} = useContext(ProfileApiData);
 
 	return (
 		<>
@@ -48,9 +33,9 @@ const handleSubmitProfile = async (e) => {
 				<div className="wt-admin-right-page-header clearfix">
 					<h2>Company Profile!</h2>
 					<div className="breadcrumbs">
-						<a href="#">Home</a>
-						<a href="#">Dasboard</a>
-						<span>Company Profile!</span>
+						<a href="/">Home</a>
+						{/* <a href="#">Dasboard</a> */}
+						<span>Company Profile</span>
 					</div>
 				</div>
 				{/*Logo and Cover image*/}
@@ -64,7 +49,7 @@ const handleSubmitProfile = async (e) => {
 								<div className="form-group">
 									<div className="dashboard-profile-pic">
 										<div className="dashboard-profile-photo">
-											<JobZImage src="images/jobs-company/pic1.jpg" alt="" />
+											<JobZImage src={imageURL || ""} alt="" />
 											<div className="upload-btn-wrapper">
 												<div id="upload-image-grid" />
 												<button className="site-button button-sm">
@@ -72,9 +57,10 @@ const handleSubmitProfile = async (e) => {
 												</button>
 												<input
 													type="file"
-													name="myfile"
+													name="profile_image"
 													id="file-uploader"
 													accept=".jpg, .jpeg, .png"
+													onChange={handleImageChange}
 												/>
 											</div>
 										</div>
@@ -86,21 +72,104 @@ const handleSubmitProfile = async (e) => {
 									</div>
 								</div>
 							</div>
-							<div className="col-lg-12 col-md-12">
-								<div className="dashboard-cover-pic">
-									<DropzoneComponent config={componentConfig} />
-									<p>
-										<b>Background Banner Image :- </b> Max file size is 1MB,
-										Minimum dimension: 770 x 310 And Suitable files are .jpg
-										&amp; .png
-									</p>
+						</div>
+					</div>
+				</div>
+
+				<div className=" panel panel-default m-b30 ">
+					{/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
+					<div className=" p-a20 ">
+						{/* <div className="panel-heading-with-btn"> */}
+						<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+							<h4 className="panel-tittle m-a0"> Profile</h4>
+							<a
+								data-bs-toggle="modal"
+								href="#AddProfile"
+								role="button"
+								title="Edit"
+								className="site-text-primary"
+							>
+								<span className="fa fa-edit" />
+							</a>
+						</div>
+
+						<div className="panel-body wt-panel-body  ">
+							<div className="twm-panel-inner">
+								<SectionProfileData />
+							</div>
+
+							{/* actions */}
+							<div className="">
+								<div className="actions">
+									<button
+										className="site-button  actions"
+										data-bs-target="#delete-profile"
+										data-bs-toggle="modal"
+										data-bs-dismiss="modal"
+									>
+										<FaRegTrashCan color="white" />
+										<span className="admin-nav-text">Delete</span>
+									</button>
+
+									<button
+										className="site-button  actions "
+										data-bs-target="#EditProfile"
+										data-bs-toggle="modal"
+										data-bs-dismiss="modal"
+										onClick={() => {
+											handleEditClick();
+										}}
+									>
+										<MdOutlineEdit color="white" />
+										<span>Edit</span>
+									</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				{/*Basic Information*/}
+
+				<SectionCandicateBasicInfo
+					submit={handleSubmitProfile}
+					id="AddProfile"
+				/>
+
+				<SectionCandicateBasicInfo
+					submit={handleUpdateProfile}
+					id="EditProfile"
+				/>
+
+				{/*Photo gallery*/}
 				<div className="panel panel-default">
+					<div className="panel-heading wt-panel-heading p-a20">
+						<h4 className="panel-tittle m-a0">Photo Gallery</h4>
+					</div>
+					<div className="panel-body wt-panel-body p-a20 m-b30 ">
+						<div className="row">
+							<div className="col-lg-12 col-md-12">
+								<div className="form-group">
+									{/* <DropzoneComponent config={componentConfig} /> */}
+								</div>
+							</div>
+							<div className="col-lg-12 col-md-12">
+								<div className="text-left">
+									<button type="submit" className="site-button">
+										Save Changes
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+}
+
+export default EmpCompanyProfilePage;
+
+/*Basic Information*/
+/* <div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
 						<h4 className="panel-tittle m-a0">Basic Informations</h4>
 					</div>
@@ -287,31 +356,34 @@ const handleSubmitProfile = async (e) => {
 							</div>
 						</form>
 					</div>
-				</div>
-				{/*Photo gallery*/}
-				<div className="panel panel-default">
-					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Photo Gallery</h4>
-					</div>
-					<div className="panel-body wt-panel-body p-a20 m-b30 ">
-						<div className="row">
-							<div className="col-lg-12 col-md-12">
-								<div className="form-group">
-									<DropzoneComponent config={componentConfig} />
-								</div>
-							</div>
-							<div className="col-lg-12 col-md-12">
-								<div className="text-left">
-									<button type="submit" className="site-button">
-										Save Changes
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				{/*Video gallery*/}
-				{/* <div className="panel panel-default">
+				</div> */
+
+//   useEffect(() => {
+// 		let isMounted = true;
+// 		const EmployerProfile = async () => {
+// 			try {
+// 				const res = await axios.get(profileUrl);
+
+// 				console.log("employer-details", res);
+// 				const jobsData = res;
+// 				if (isMounted) {
+// 					setProfileData(jobsData);
+// 				}
+// 			} catch (error) {
+// 				if (isMounted) {
+// 					setError(error || "An error occurred while getting data");
+// 					setShowTopMessage(true);
+// 					setTimeout(() => {}, 1000);
+// 				}
+// 			}
+// 		};
+
+// 		EmployerProfile();
+// 	}, [profileUrl]);
+
+/*Video gallery*/
+
+/* <div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
 						<h4 className="panel-tittle m-a0">Video Gallery</h4>
 					</div>
@@ -408,9 +480,11 @@ const handleSubmitProfile = async (e) => {
 							</div>
 						</div>
 					</div>
-				</div> */}
-				{/*Social Network*/}
-				{/* <div className="panel panel-default">
+				</div> */
+
+/*Social Network*/
+
+/* <div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
 						<h4 className="panel-tittle m-a0">Social Network</h4>
 					</div>
@@ -539,43 +613,4 @@ const handleSubmitProfile = async (e) => {
 							</div>
 						</form>
 					</div>
-				</div> */}
-			</div>
-		</>
-	);
-}
-
-export default EmpCompanyProfilePage;
-
-
-
-
-
-
-
-
-
-
-
-//   useEffect(() => {
-// 		let isMounted = true;
-// 		const EmployerProfile = async () => {
-// 			try {
-// 				const res = await axios.get(profileUrl);
-
-// 				console.log("employer-details", res);
-// 				const jobsData = res;
-// 				if (isMounted) {
-// 					setProfileData(jobsData);
-// 				}
-// 			} catch (error) {
-// 				if (isMounted) {
-// 					setError(error || "An error occurred while getting data");
-// 					setShowTopMessage(true);
-// 					setTimeout(() => {}, 1000);
-// 				}
-// 			}
-// 		};
-
-// 		EmployerProfile();
-// 	}, [profileUrl]);
+				</div> */

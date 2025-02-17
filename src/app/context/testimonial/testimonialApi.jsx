@@ -1,21 +1,23 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config";
+import axios from "axios";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, baseUrl } from "../../../globals/constants";
+
 
 // ADD Testimonial
 export const addTestimonial = async (data) => {
   try {
     let responseOnAddTestimonial = await axios.post(
-      {
-        /**Add Create Testimonial API URL here**/
-      },
+     
+      `${baseURL}create-testimonial`,
       data
     );
-    if (responseOnAddTestimonial.status === SUCCESS_STATUS) {
-      return responseOnAddTestimonial.data;
-    } else {
-      return false;
-    }
+    return responseOnAddTestimonial;
+    // if (responseOnAddTestimonial.status === SUCCESS_STATUS) {
+    //   return responseOnAddTestimonial.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -39,17 +41,19 @@ export const searchTestimonial = async (data) => {
 };
 
 // LIST Testimonial
-export const testimonialList = async (pageNo) => {
+/**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
+export const testimonialList = async (id) => {
   try {
-    let responseOnTestimonialList = await axios.get({
-      /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnTestimonialList = await axios.get(
+			`${baseURL}get-testimonial-by-user-id/${id}`
+    );
+    return responseOnTestimonialList;
 
-    if (responseOnTestimonialList.status === SUCCESS_STATUS) {
-      return responseOnTestimonialList.data;
-    } else {
-      return false;
-    }
+    // if (responseOnTestimonialList.status === SUCCESS_STATUS) {
+    //   return responseOnTestimonialList.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -62,12 +66,13 @@ export const testimonialProfile = async (id) => {
     let responseOnTestimonialProfile = await axios.get({
       /**Add View Testimonial API URL here like ${URL}api/getEmployerProfile/${id}**/
     });
+    return responseOnTestimonialProfile;
 
-    if (responseOnTestimonialProfile.status === SUCCESS_STATUS) {
-      return responseOnTestimonialProfile.data;
-    } else {
-      return false;
-    }
+    // if (responseOnTestimonialProfile.status === SUCCESS_STATUS) {
+    //   return responseOnTestimonialProfile.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -75,32 +80,36 @@ export const testimonialProfile = async (id) => {
 };
 
 // UPDATE Testimonial
-export const updateTestimonial = async (data) => {
+export const updateTestimonial = async (id, data) => {
   try {
-    let responseOnUpdateTestimonial = await axios.put({
-      /**Add Update Testimonial API URL here like  `${URL}api/updateTestimonial/${data.id}` **/
-    });
-    if (responseOnUpdateTestimonial.status === SUCCESS_STATUS) {
-      return responseOnUpdateTestimonial.data;
-    } else {
-      return false;
-    }
+    let responseOnUpdateTestimonial = await axios.put(
+      `${baseURL}update-testimonial/${id}`,
+      data
+    );
+    return responseOnUpdateTestimonial;
+    // if (responseOnUpdateTestimonial.status === SUCCESS_STATUS) {
+    //   return responseOnUpdateTestimonial.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }
 };
 
 // DELETE Testimonial
-export const deleteTestimonial = async (data) => {
+/**Add Delete Testimonial API URL here like  `/api/deleteHistory/${data}` **/
+export const deleteTestimonial = async (id) => {
   try {
-    let responseOnDeleteTestimonial = await axios.delete({
-      /**Add Delete Testimonial API URL here like  `/api/deleteHistory/${data}` **/
-    });
-    if (responseOnDeleteTestimonial.status === SUCCESS_STATUS) {
-      return responseOnDeleteTestimonial.data;
-    } else {
-      return false;
-    }
+    let responseOnDeleteTestimonial = await axios.delete(
+			`${baseURL}delete-testimonial/${id}`
+    );
+    return responseOnDeleteTestimonial;
+    // if (responseOnDeleteTestimonial.status === SUCCESS_STATUS) {
+    //   return responseOnDeleteTestimonial.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.error(err);
   }

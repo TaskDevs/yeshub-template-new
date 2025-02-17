@@ -11,6 +11,7 @@ import SectionCanProfileSummary from "../sections/resume/section-can-profile-sum
 import SectionCanProjects from "../sections/resume/section-can-projects";
 import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
 import { loadScript } from "../../../../globals/constants";
+import SectionCanWorkSample from "../sections/resume/section-can-work-sample";
 
 function CanMyResumePage() {
     
@@ -19,55 +20,56 @@ function CanMyResumePage() {
     })
 
     return (
-        <>
-            <div className="twm-right-section-panel site-bg-gray">
-                {/*Resume Headline*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanResumeHeadline />
-                </div>
-                {/*Key Skills*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanKeySkills />
-                </div>
-                {/*Employment*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanEmployment />
-                </div>
-                {/*Education*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanEducation />
-                </div>
-                {/*IT Skills*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanITSkills />
-                </div>
-                {/*Project*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanProjects />
-                </div>
-                {/*Desired Career Profile*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanDesiredProfile />
-                </div>
-                {/*Personal Details*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanPersonalDetail />
-                </div>
-                {/*Attach Resume*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanAttachment />
-                </div>
-                {/*Accomplishments*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanAccomplishments />
-                </div>
-                {/*Profile Summary*/}
-                <div className="panel panel-default mb-3">
-                    <SectionCanProfileSummary />
-                </div>
-            </div>
-        </>
-    )
+			<>
+				<div className="twm-right-section-panel site-bg-gray">
+					{/*Resume Headline*/}
+					<div className="panel panel-default mb-3">
+						<SectionCanResumeHeadline />
+					</div>
+					{/*Key Skills*/}
+					<div className="panel panel-default mb-3">
+						<SectionCanWorkSample />
+					</div>
+					{/*Employment*/}
+					<div className="panel panel-default mb-3">
+						{/* <SectionCanEmployment /> */}
+						<SectionCanKeySkills />
+					</div>
+					{/*Education*/}
+					<div className="panel panel-default mb-3">
+						<SectionCanEducation />
+					</div>
+					{/*IT Skills*/}
+					<div className="panel panel-default mb-3">
+						{/* <SectionCanITSkills /> */}
+					</div>
+					{/*Project*/}
+					<div className="panel panel-default mb-3">
+						<SectionCanProjects />
+					</div>
+					{/*Desired Career Profile*/}
+					<div className="panel panel-default mb-3">
+						{/* <SectionCanDesiredProfile /> */}
+					</div>
+					{/*Personal Details*/}
+					<div className="panel panel-default mb-3">
+						{/* <SectionCanPersonalDetail /> */}
+					</div>
+					{/*Attach Resume*/}
+					<div className="panel panel-default mb-3">
+						<SectionCanAttachment />
+					</div>
+					{/*Accomplishments*/}
+					<div className="panel panel-default mb-3">
+						<SectionCanAccomplishments />
+					</div>
+					{/*Profile Summary*/}
+					<div className="panel panel-default mb-3">
+						{/* <SectionCanProfileSummary /> */}
+					</div>
+				</div>
+			</>
+		);
 }
 
 export default CanMyResumePage;

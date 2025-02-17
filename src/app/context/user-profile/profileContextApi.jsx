@@ -1,45 +1,195 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
 import { notify } from "../../../utils/responseUtils";
 
 import {
-  addProfile,
-  searchProfile,
-  profileList,
-  profileProfile,
-  updateProfile,
-  deleteProfile,
+	addProfile,
+	searchProfile,
+	profileList,
+	profileProfile,
+	updateProfile,
+	deleteProfile,
 } from "./profileApi";
+import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
+import { GlobalApiData } from "../global/globalContextApi";
+import { userId } from "../../../globals/dummy-users";
 
 export const ProfileApiData = createContext();
 
 const ProfileApiDataProvider = (props) => {
-  const processAddProfile = async (data) => {};
+	const [profileData, setProfileData] = useState({});
+	const { setIsSubmitting } = useContext(GlobalApiData);
+	const [imageURL, setImageURL] = useState(null);
+	const [selectedFile, setSelectedFile] = useState(null);
+	const [profileUpdated, setProfileUpdated] = useState(false);
 
-  const processGetAllProfile = async (id) => {};
+	const initialFormData = USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
+		acc[field.name] = "";
+		return acc;
+	}, {});
 
-  const processProfileProfile = async (id) => {};
+	const [formData, setFormData] = useState(initialFormData);
 
-  const processSearchProfile = async (data) => {};
+	
+	// "profile_image": selectedFile
 
-  const processUpdateProfile = async (data) => {};
+	console.log("formData", formData);
+	console.log("selectedFile", selectedFile);
 
-  const processDeleteProfile = async (id) => {};
 
-  return (
-    <ProfileApiData.Provider
-      value={{
-        processAddProfile,
-        processGetAllProfile,
-        processProfileProfile,
-        processSearchProfile,
-        processUpdateProfile,
-        processDeleteProfile,
-      }}
-    >
-      {props.children}
-    </ProfileApiData.Provider>
-  );
+	useEffect(() => {
+		if (!userId) return;
+
+		setIsSubmitting(true);
+		const fetchProfile = async () => {
+			try {
+				const res = await processProfileProfile(userId);
+				console.log("Fetching profile", res);
+
+				const data = res.data.data;
+				setProfileData(data);
+			} catch (error) {
+				console.error("Failed Fetching profile", error);
+			} finally {
+				setIsSubmitting(false);
+				
+			}
+		};
+		fetchProfile();
+	}, [profileUpdated, setIsSubmitting]); 
+
+	const processAddProfile = async (data) => {
+		try {
+			const res = await addProfile(data);
+			console.log("add-profile", res);
+			return res;
+		} catch (err) {
+			console.error("add-profile", err);
+		}
+	};
+
+	const processGetAllProfile = async (id) => {};
+
+	const processProfileProfile = async (id) => {
+		try {
+			const res = await profileProfile(id);
+			console.log("profile", res);
+			return res;
+		} catch (err) {
+			console.error("profile-profile-err", err);
+		}
+	};
+
+	const processSearchProfile = async (data) => {};
+
+	const processUpdateProfile = async (id, data) => {
+		const res = await updateProfile(id, data);
+		console.log("profile", res);
+		return res;
+	};
+
+	const processDeleteProfile = async (id) => {
+		const res = await deleteProfile(id);
+		console.log("profile", res);
+		return res;
+	};
+
+	const handleSubmitProfile = async (e) => {
+		e.preventDefault();
+		setIsSubmitting(true);
+		const profileFormData = new FormData();
+
+		for (const key in formData) {
+			profileFormData.append(key, formData[key]);
+		}
+
+		if (selectedFile) {
+			profileFormData.append("profile_image", selectedFile);
+		}
+
+		console.log("profileFormData", profileFormData);
+
+		try {
+			const response = await processAddProfile({ ...formData, user_id: "1" });
+			console.log("add-profile-res", response);
+			notify("Profile added successfully");
+			return response;
+			
+		} catch (e) {
+			console.error(e);
+			notify("An error occurred while adding the profile");
+		} finally {
+			setIsSubmitting(false);
+			
+		}
+	};
+
+	const handleUpdateProfile = async (e) => {
+		e.preventDefault();
+		console.log({
+			...formData,
+			id: userId,
+		});
+
+		try {
+			const response = await processUpdateProfile(6, {
+				...formData,
+				id: userId,
+			});
+			console.log("add-profile-res", response);
+		} catch (e) {
+			console.error(e);
+			notify("An error occurred while updating the profile", "error");
+			 setFormData(initialFormData); 
+				setSelectedFile(null); 
+				setImageURL(null);
+		}
+	};
+
+	const handleEditClick = () => {
+		setFormData(profileData);
+	};
+
+	const handleImageChange = (event) => {
+		const file = event.target.files[0];
+		setSelectedFile(file);
+		console.log("file-img", file);
+
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onloadend = () => {
+				setImageURL(reader.result);
+			};
+
+			reader.readAsDataURL(file);
+		} else {
+			setImageURL(null);
+		}
+	};
+
+	return (
+		<ProfileApiData.Provider
+			value={{
+				profileData,
+				formData,
+				imageURL,
+				processAddProfile,
+				processGetAllProfile,
+				processProfileProfile,
+				processSearchProfile,
+				processUpdateProfile,
+				processDeleteProfile,
+				handleSubmitProfile,
+				handleUpdateProfile,
+				setFormData,
+				handleEditClick,
+				handleImageChange,
+			}}
+		>
+			{props.children}
+		</ProfileApiData.Provider>
+	);
 };
 
 export default ProfileApiDataProvider;

@@ -49,18 +49,15 @@
 import axios from "axios";
 import cookieMethods from "./cookieUtils";
 import {
-  baseUrl,
-  timeOut,
-  SUCCESS_STATUS,
-  BAD_REQUEST_STATUS,
+	baseURL,
+	timeOut,
+	SUCCESS_STATUS,
+	BAD_REQUEST_STATUS,
 } from "../globals/constants";
 
-// Helper function to always get the latest token
-const getAccessToken = () => cookieMethods.getCookies()?.accessToken || null;
-
 const instance = axios.create({
-  baseURL: baseUrl, 
-  timeout: timeOut, 
+  baseUrl,
+  timeOut,
   withCredentials: true,
   crossDomain: true,
   headers: {

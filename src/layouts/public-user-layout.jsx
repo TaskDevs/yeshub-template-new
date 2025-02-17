@@ -6,6 +6,8 @@ import PublicUserRoutes from "../routing/public-user-routes";
 // import { showBanner, setBanner } from "../globals/banner-data";
 import { showHeader, showFooter, setFooterType, setHeaderType } from "../globals/layout-config";
 import ContractPopup from "../app/common/popups/popup-contract";
+import YesNoPopup from "../app/common/popups/popup-yes-no";
+import { popupType } from "../globals/constants";
 
 function PublicUserLayout() {
     const currentpath = useLocation().pathname;
@@ -41,6 +43,11 @@ function PublicUserLayout() {
                 <SignUpPopup />
                 <SignInPopup />
                 <ContractPopup />
+                <YesNoPopup
+				id="delete-profile"
+				type={popupType.DELETE_PROFILE}
+				msg={"Are you sure you want to delete this profile?"}
+			/>
 
             </div>
         </>

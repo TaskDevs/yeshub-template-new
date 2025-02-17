@@ -5,6 +5,7 @@ import TextAreaField from "../../../../common/text-area-field";
 import SelectField from "../../../../common/select-field";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
+import Select from "react-select";
 
 const skills = [
 	{
@@ -21,24 +22,51 @@ const skills = [
 	}
 ]
 
-
-function SectionCandicateBasicInfo({ submit, id  }) {
-	
-
+function SectionCandicateBasicInfo({ submit, id }) {
+	const [selectedItems, setSelectedItems] = useState([]);
 	const { formData, setFormData, profileData } = useContext(ProfileApiData);
-	// const { skills } = useContext(SkillsApiData)
-	console.log("skills-profile", skills)
-	
+	// const { skills } = useContext(SkillsApiData);
+	console.log("skills-profile", skills);
 
-	
-	const handleChange = (field, data) => {
+	console.log("selectedItems", selectedItems);
+
+	const handleSelectChange = (selectedOptions) => {
+		// setSelectedItems(selectedOptions || []);
+		setSelectedItems(selectedOptions);
+		const selectedSkillsIds = selectedOptions
+			? selectedOptions.map((item) => item.id)
+			: []; 
+		setFormData({
+			...formData,
+			skills_id: selectedSkillsIds.join(","),
+		});
+	};
+
+
+ const handleChange = (field, data) => {
 		setFormData({
 			...formData,
 			[field]: data,
 		});
-	};
-
+ };
 	
+
+	// const handleChange = (data, field) => {
+	// 	if (field) {
+	// 		setFormData({
+	// 			...formData,
+	// 			[field]: data,
+	// 		});
+	// 	} else {
+			
+	// 		setSelectedItems(data); 
+	// 		const selectedSkillsIds = data ? data.map((item) => item.id) : []; // Extract IDs
+	// 		setFormData({
+	// 			...formData,
+	// 			skills_id: selectedSkillsIds.join(","), 
+	// 		});
+	// 	}
+	// };
 
 	return (
 		<>
@@ -200,14 +228,36 @@ function SectionCandicateBasicInfo({ submit, id  }) {
 									</div>
 
 									<div className="col-xl-6 col-lg-12 col-md-12">
-										<SelectField
+										{/* <SelectField
 											field={USERPROFILEFIELD.fieldDetail[9]}
 											value={formData}
 											options={skills}
 											change={handleChange}
-											labelKey = "skill"
-										/>
-										
+											labelKey="skill"
+										/> */}
+										<div className="ls-inputicon-box ">
+											<div className="form-group">
+												<label>Skills</label>
+												<div className="wt-select-box selectpicker form-control">
+													<Select
+														isMulti
+														options={skills}
+														value={selectedItems}
+														onChange={(data) => handleSelectChange(data)}
+														placeholder="Search and select items..."
+														classNames="select-react"
+														classNamePrefix="select"
+														styles={{
+															control: (baseStyles, state) => ({
+																...baseStyles,
+																border: 0,
+																borderColor: state.isFocused ? "" : "",
+															}),
+														}}
+													/>
+												</div>
+											</div>
+										</div>
 									</div>
 
 									<div className="col-md-12">
@@ -242,13 +292,7 @@ function SectionCandicateBasicInfo({ submit, id  }) {
 
 export default SectionCandicateBasicInfo;
 
-
-
-
-
-
-
-	/* <div className="form-group">
+/* <div className="form-group">
 									<label>Skills</label>
 
 									<div className="ls-inputicon-box">
@@ -276,9 +320,6 @@ export default SectionCandicateBasicInfo;
 									</div>
 								</div> */
 
-
-
-
 /* <div className="col-lg-12 col-md-12">
 												<div className="text-left">
 													<button type="submit" className="site-button">
@@ -287,22 +328,13 @@ export default SectionCandicateBasicInfo;
 												</div>
 											</div> */
 
-
-
-
-
-	/* <div className="panel panel-default">
+/* <div className="panel panel-default">
 								<div className="panel-heading wt-panel-heading p-a20">
 									<h4 className="panel-tittle m-a0">Basic Informations</h4>
 								</div>
 								<div className="panel-body wt-panel-body p-a20 m-b30 ">
 								
 							</div> */
-
-
-
-
-
 
 /* <div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
 	<div className="modal-dialog modal-dialog-centered">

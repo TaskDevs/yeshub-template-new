@@ -132,6 +132,9 @@ This files [Table of contents] are outlined below
 .actions button {
   width: 20%;
 }
+.select-react {
+  border:none;
+}
 
 .site-text-primary {
   color: #305718;

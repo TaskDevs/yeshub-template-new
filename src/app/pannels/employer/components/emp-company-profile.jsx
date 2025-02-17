@@ -17,6 +17,8 @@ function EmpCompanyProfilePage() {
 		loadScript("js/custom.js");
 	});
 
+// https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1739799400_select-img.png
+
 	
 	
 
@@ -30,145 +32,148 @@ function EmpCompanyProfilePage() {
 
 	const { isSubmitting } = useContext(GlobalApiData)
 
-	return (
-		<>
-			<div className="">
-				<div className="wt-admin-right-page-header clearfix">
-					<h2>Company Profile!</h2>
-					<div className="breadcrumbs">
-						<a href="/">Home</a>
-						{/* <a href="#">Dasboard</a> */}
-						<span>Company Profile</span>
+	// if (!imageURL) {
+	// 	return false;
+	// }
+		return (
+			<>
+				<div className="">
+					<div className="wt-admin-right-page-header clearfix">
+						<h2>Company Profile!</h2>
+						<div className="breadcrumbs">
+							<a href="/">Home</a>
+							{/* <a href="#">Dasboard</a> */}
+							<span>Company Profile</span>
+						</div>
 					</div>
-				</div>
-				{/*Logo and Cover image*/}
-				<div className="panel panel-default">
-					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Logo and Cover image</h4>
-					</div>
-					<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
-						<div className="row">
-							<div className="col-lg-12 col-md-12">
-								<div className="form-group">
-									<div className="dashboard-profile-pic">
-										<div className="dashboard-profile-photo">
-											<JobZImage src={imageURL || ""} alt="" />
-											<div className="upload-btn-wrapper">
-												<div id="upload-image-grid" />
-												<button className="site-button button-sm">
-													Upload Photo
-												</button>
-												<input
-													type="file"
-													name="profile_image"
-													id="file-uploader"
-													accept=".jpg, .jpeg, .png"
-													onChange={handleImageChange}
-												/>
+					{/*Logo and Cover image*/}
+					<div className="panel panel-default">
+						<div className="panel-heading wt-panel-heading p-a20">
+							<h4 className="panel-tittle m-a0">Logo and Cover image</h4>
+						</div>
+						<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
+							<div className="row">
+								<div className="col-lg-12 col-md-12">
+									<div className="form-group">
+										<div className="dashboard-profile-pic">
+											<div className="dashboard-profile-photo">
+												<JobZImage src={imageURL || ""} alt="" />
+												<div className="upload-btn-wrapper">
+													<div id="upload-image-grid" />
+													<button className="site-button button-sm">
+														Upload Photo
+													</button>
+													<input
+														type="file"
+														name="profile_image"
+														id="file-uploader"
+														accept="/*"
+														onChange={handleImageChange}
+													/>
+												</div>
 											</div>
+											<p>
+												<b>Company Logo :- </b> Max file size is 1MB, Minimum
+												dimension: 136 x 136 And Suitable files are .jpg &amp;
+												.png
+											</p>
 										</div>
-										<p>
-											<b>Company Logo :- </b> Max file size is 1MB, Minimum
-											dimension: 136 x 136 And Suitable files are .jpg &amp;
-											.png
-										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div className=" panel panel-default m-b30 ">
+						{/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
+						<div className=" p-a20 ">
+							{/* <div className="panel-heading-with-btn"> */}
+							<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+								<h4 className="panel-tittle m-a0"> Profile</h4>
+								{!isSubmitting && (
+									<a
+										data-bs-toggle="modal"
+										href="#AddProfile"
+										role="button"
+										title="Edit"
+										className="site-text-primary"
+									>
+										<span className="fa fa-edit" />
+									</a>
+								)}
+							</div>
+
+							<div className="panel-body wt-panel-body  ">
+								<div className="twm-panel-inner">
+									<SectionProfileData />
+								</div>
+
+								{/* actions */}
+								<div className="">
+									<div className="actions">
+										<button
+											className="site-button  actions"
+											data-bs-target="#delete-profile"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+										>
+											<FaRegTrashCan color="white" />
+											<span className="admin-nav-text">Delete</span>
+										</button>
+
+										<button
+											className="site-button  actions "
+											data-bs-target="#EditProfile"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+											onClick={() => {
+												handleEditClick();
+											}}
+										>
+											<MdOutlineEdit color="white" />
+											<span>Edit</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<SectionCandicateBasicInfo
+						submit={handleSubmitProfile}
+						id="AddProfile"
+					/>
+
+					<SectionCandicateBasicInfo
+						submit={handleUpdateProfile}
+						id="EditProfile"
+					/>
+
+					{/*Photo gallery*/}
+					<div className="panel panel-default">
+						<div className="panel-heading wt-panel-heading p-a20">
+							<h4 className="panel-tittle m-a0">Photo Gallery</h4>
+						</div>
+						<div className="panel-body wt-panel-body p-a20 m-b30 ">
+							<div className="row">
+								<div className="col-lg-12 col-md-12">
+									<div className="form-group">
+										{/* <DropzoneComponent config={componentConfig} /> */}
+									</div>
+								</div>
+								<div className="col-lg-12 col-md-12">
+									<div className="text-left">
+										<button type="submit" className="site-button">
+											Save Changes
+										</button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<div className=" panel panel-default m-b30 ">
-					{/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
-					<div className=" p-a20 ">
-						{/* <div className="panel-heading-with-btn"> */}
-						<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-							<h4 className="panel-tittle m-a0"> Profile</h4>
-							{!isSubmitting && (
-								<a
-									data-bs-toggle="modal"
-									href="#AddProfile"
-									role="button"
-									title="Edit"
-									className="site-text-primary"
-								>
-									<span className="fa fa-edit" />
-								</a>
-							)}
-						</div>
-
-						<div className="panel-body wt-panel-body  ">
-							<div className="twm-panel-inner">
-								<SectionProfileData />
-							</div>
-
-							{/* actions */}
-							<div className="">
-								<div className="actions">
-									<button
-										className="site-button  actions"
-										data-bs-target="#delete-profile"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-									>
-										<FaRegTrashCan color="white" />
-										<span className="admin-nav-text">Delete</span>
-									</button>
-
-									<button
-										className="site-button  actions "
-										data-bs-target="#EditProfile"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-										onClick={() => {
-											handleEditClick();
-										}}
-									>
-										<MdOutlineEdit color="white" />
-										<span>Edit</span>
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<SectionCandicateBasicInfo
-					submit={handleSubmitProfile}
-					id="AddProfile"
-				/>
-
-				<SectionCandicateBasicInfo
-					submit={handleUpdateProfile}
-					id="EditProfile"
-				/>
-
-				{/*Photo gallery*/}
-				<div className="panel panel-default">
-					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Photo Gallery</h4>
-					</div>
-					<div className="panel-body wt-panel-body p-a20 m-b30 ">
-						<div className="row">
-							<div className="col-lg-12 col-md-12">
-								<div className="form-group">
-									{/* <DropzoneComponent config={componentConfig} /> */}
-								</div>
-							</div>
-							<div className="col-lg-12 col-md-12">
-								<div className="text-left">
-									<button type="submit" className="site-button">
-										Save Changes
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</>
-	);
+			</>
+		);
 }
 
 export default EmpCompanyProfilePage;

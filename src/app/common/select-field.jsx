@@ -27,7 +27,7 @@ function SelectField({
 					</option>
 					{options.map((option) => (
 						<option key={option.id} value={option[valueKey] || ""}>
-							
+							{console.log("labelkey", option[labelKey])}
 							{option[labelKey] || option[valueKey]}
 						</option>
 					))}

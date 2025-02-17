@@ -13,6 +13,7 @@ import {
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import { userId } from "../../../globals/dummy-users";
+import { toast } from "react-toastify";
 
 export const ProfileApiData = createContext();
 
@@ -33,8 +34,9 @@ const ProfileApiDataProvider = (props) => {
 	
 	// "profile_image": selectedFile
 
-	console.log("formData", formData);
+	console.log("formData-ctx", formData);
 	console.log("selectedFile", selectedFile);
+	console.log("selectedFilename", selectedFile?.name);
 
 
 	useEffect(() => {
@@ -94,36 +96,78 @@ const ProfileApiDataProvider = (props) => {
 		return res;
 	};
 
+	// const handleSubmitProfile = async (e) => {
+	// 	e.preventDefault();
+	// 	setIsSubmitting(true);
+	// 	// const profileFormData = new FormData();
+	// 	console.log("selectedFile-submit", selectedFile?.name);
+
+		
+	// 	console.log("profileFormData", {
+	// 		...formData,
+	// 		user_id: "1",
+	// 		profile_image: selectedFile?.name,
+	// 	});
+    //      console.log("image selected", selectedFile)
+	// 	try {
+	// 		const response = await processAddProfile({
+	// 			...formData,
+	// 			user_id: "1",
+	// 			"profile_image": selectedFile.name
+	// 		});
+	// 		console.log("add-profile-res", response);
+	// 		toast.success("Profile added successfully");
+	// 		return response;
+			
+	// 	} catch (e) {
+	// 		console.error("adding profile error",e);
+	// 		notify("An error occurred while adding the profile");
+	// 	} finally {
+	// 		setIsSubmitting(false);
+			
+	// 	}
+	// };
+
 	const handleSubmitProfile = async (e) => {
 		e.preventDefault();
 		setIsSubmitting(true);
+
+		if (!selectedFile) {
+			notify("Please select a profile image before submitting.");
+			setIsSubmitting(false);
+			return;
+		}
+
 		const profileFormData = new FormData();
+		profileFormData.append("user_id", "1");
+		profileFormData.append("profile_image", selectedFile); // Append file
+		Object.entries(formData).forEach(([key, value]) => {
+			profileFormData.append(key, value);
+		});
 
-		for (const key in formData) {
-			profileFormData.append(key, formData[key]);
-		}
-
-		if (selectedFile) {
-			profileFormData.append("profile_image", selectedFile);
-		}
-
-		console.log("profileFormData", profileFormData);
+		console.log("profileFormData", Object.fromEntries(profileFormData));
 
 		try {
-			const response = await processAddProfile({ ...formData, user_id: "1" });
+			const response = await processAddProfile(profileFormData); // Ensure this handles FormData properly
 			console.log("add-profile-res", response);
-			notify("Profile added successfully");
+			toast.success("Profile added successfully");
 			return response;
-			
 		} catch (e) {
-			console.error(e);
+			console.error("adding profile error", e);
 			notify("An error occurred while adding the profile");
 		} finally {
 			setIsSubmitting(false);
-			
 		}
 	};
 
+	
+	
+	
+	
+	
+	
+	
+	
 	const handleUpdateProfile = async (e) => {
 		e.preventDefault();
 		console.log({
@@ -152,20 +196,29 @@ const ProfileApiDataProvider = (props) => {
 
 	const handleImageChange = (event) => {
 		const file = event.target.files[0];
-		setSelectedFile(file);
 		console.log("file-img", file);
+		setSelectedFile(file);
 
-		if (file) {
-			const reader = new FileReader();
+		const reader = new FileReader();
+		console.log("reader", reader);
 
-			reader.onloadend = () => {
-				setImageURL(reader.result);
-			};
+		reader.onloadend = () => {
+			setImageURL(reader.result);
+		};
+		
 
-			reader.readAsDataURL(file);
-		} else {
-			setImageURL(null);
-		}
+		// if (file) {
+		// 	const reader = new FileReader();
+		// 	console.log("reader", reader)
+
+		// 	reader.onloadend = () => {
+		// 		setImageURL(reader.result);
+		// 	};
+
+		// 	reader.readAsDataURL(file);
+		// } else {
+		// 	setImageURL(null);
+		// }
 	};
 
 	return (

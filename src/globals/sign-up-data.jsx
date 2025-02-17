@@ -10,19 +10,19 @@ export const SIGNUPFIELD = {
         name: "email",
         label: "Email",
         type: "text",
-        placeholder: "Username",
+        placeholder: "Email",
       },
       {
         name: "password",
         label: "Password",
         type: "password",
-        placeholder: "Email",
+        placeholder: "password",
       },
       {
       name: "password_confirmation",
       label: "Password",
       type: "password",
-      placeholder: "Email",
+      placeholder: "confirm password",
       }
     ],
   }

@@ -28,6 +28,7 @@ export const publicUser = {
 	HOME17: "/index17",
 	HOME18: "/index18",
 	TEST: "/test",
+	
 	jobs: {
 		GRID: "/job-grid",
 		GRID_MAP: "/job-grid-with-map",
@@ -53,8 +54,10 @@ export const publicUser = {
 		LOGIN: "/login",
 		AFTER_LOGIN: "/after-login",
 		RESET_PASSWORD: "/reset-password",
+		VERIFYOTP:"/verify-otp",
 		ICONS: "/icons",
-		CONTRACT: "/contract"
+		CONTRACT: "/contract",
+		GOOGLECALLBACK:"/google/auth/callback"
 	},
 	candidate: {
 		GRID: "/can-grid",

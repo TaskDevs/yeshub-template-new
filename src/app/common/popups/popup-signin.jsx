@@ -1,60 +1,107 @@
 import { useEffect, useState, useContext } from "react";
-import JobZImage from "../jobz-img";
-import Loader from "../loader";
-import { topMessage } from "../../../utils/responseUtils";
-import { GlobalApiData } from "../../context/global/globalContextApi";
-import { AuthApiData } from "../../context/auth/authContextApi";
-import { SIGNINFIELD } from "../../../globals/sign-in-data";
-import InputField from "../input-field";
-import PasswordField from "../password-field";
+import { useNavigate } from "react-router-dom";
+import { IoMdEye, IoIosEyeOff } from "react-icons/io";
 import { FcGoogle } from "react-icons/fc";
-import { IoIosEyeOff, IoMdEye } from "react-icons/io";
-
+import Loader from "../loader";
+import { GlobalApiData } from "../../context/global/globalContextApi";
+import { SIGNINFIELD } from "../../../globals/sign-in-data";
+import { login } from "../../context/auth/authApi";
+import JobZImage from "../jobz-img";
 function SignInPopup() {
   const {
     isLoading,
     setIsLoading,
     roleOption,
     setRoleOption,
-    isVisible,
-    setIsVisible,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
 
-  const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // console.log("role-1", role)
+  const [formData, setFormData] = useState(() => {
+    const savedUser = JSON.parse(localStorage.getItem("rememberedUser"));
+    return (
+      savedUser ||
+      SIGNINFIELD.fieldDetail.reduce(
+        (acc, field) => {
+          acc[field.name] = "";
+          return acc;
+        },
+        { rememberMe: false }
+      )
+    );
   });
 
-  const handleInputChange = (data, field) => {
-    setFormData({
-      ...formData,
-      [field]: data,
-    });
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!formData.role) {
+      setFormData((prev) => ({ ...prev, role: "user" }));
+    }
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const handleCandidateLogin = () => {
-    console.log("We are working");
-  };
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  const handleEmployerLogin = () => {
-    console.log("We are working");
-  };
+    try {
+      const response = await login(formData);
+      if (response && response.token) {
+        // Store token and user role
+        sessionStorage.setItem("authToken", response.token);
+        sessionStorage.setItem("userRole", response.role);
 
-  const loginWithLinkedIn = () => {
-    console.log("Login with LinkedIn");
-  };
+        if (formData.rememberMe) {
+          sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
+        } else {
+          sessionStorage.removeItem("rememberedUser");
+        }
 
-  const loginWithGoogle = () => {
-    console.log("Login with LinkedIn");
+        // Redirect based on role
+        switch (response.role) {
+          case "admin":
+            navigate("/admin");
+            break;
+          case "employer":
+            navigate("/");
+            break;
+          case "user":
+          default:
+            navigate("/");
+            break;
+        }
+
+        setFormData(
+          SIGNINFIELD.fieldDetail.reduce(
+            (acc, field) => {
+              acc[field.name] = "";
+              return acc;
+            },
+            { rememberMe: false }
+          )
+        );
+      } else {
+        console.error("Login failed: No token received");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <>
       {isLoading && <Loader />}
-      {<topMessage />}
 
       {!isLoading && (
         <div
@@ -66,7 +113,6 @@ function SignInPopup() {
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
-              {/* <form> */}
               <div className="modal-header">
                 <h2 className="modal-title" id="sign_up_popupLabel2">
                   Login
@@ -79,83 +125,83 @@ function SignInPopup() {
                   aria-label="Close"
                 />
               </div>
+
               <div className="modal-body">
                 <div className="twm-tabs-style-2">
-                  <ul className="nav nav-tabs" id="myTab2" role="tablist">
-                    {/*Login Candidate*/}
-                    <li className="nav-item">
-                      <button
-                        className="nav-link active"
-                        data-bs-toggle="tab"
-                        data-bs-target="#login-candidate"
-                        type="button"
-                        onClick={() => setRoleOption("1")}
-                      >
-                        <i className="fas fa-user-tie" />
-                        Candidate
-                      </button>
-                    </li>
-                    {/*Login Employer*/}
-                    <li className="nav-item">
-                      <button
-                        className="nav-link"
-                        data-bs-toggle="tab"
-                        data-bs-target="#login-Employer"
-                        type="button"
-                        onClick={() => {
-                          setRoleOption("2");
-                        }}
-                      >
-                        <i className="fas fa-building" />
-                        Employer
-                      </button>
-                    </li>
-                  </ul>
-                  <div className="tab-content" id="myTab2Content">
-                    {/*Login Candidate Content*/}
+                  <div className="tab-content">
                     <form
-                      onSubmit={handleCandidateLogin}
+                      onSubmit={handleLogin}
                       className="tab-pane fade show active"
-                      id="login-candidate"
                     >
                       <div className="row">
-                        <div className="col-lg-12">
-                          <InputField
-                            field={SIGNINFIELD.fieldDetail[0]}
-                            value={formData}
-                            change={(data, field) => {
-                              handleInputChange(data, field);
-                            }}
-                          />
-                        </div>
-                        <div className="col-lg-12">
-                          <div className="form-group mb-3">
-                            <div className="ls-inputicon-box-signup ls-inputicon-box">
-                              <PasswordField
-                                field={SIGNINFIELD.fieldDetail[1]}
-                                value={formData}
-                                isVisible={isVisible}
-                                change={(data, field) => {
-                                  handleInputChange(data, field);
-                                }}
-                              />
+                        {SIGNINFIELD?.fieldDetail?.map((field) => (
+                          <div className="col-lg-12" key={field.name}>
+                            <div className="form-group mb-3">
+                              {field.type === "password" ? (
+                                <div className="ls-inputicon-box-signup ls-inputicon-box">
+                                  <input
+                                    name={field.name}
+                                    type={isVisible ? "text" : "password"}
+                                    required
+                                    className="form-control"
+                                    placeholder={field.placeholder}
+                                    value={formData[field.name] || ""}
+                                    onChange={handleInputChange}
+                                    minLength={8}
+                                    maxLength={20}
+                                  />
+                                  <div
+                                    className="eye-icon"
+                                    onClick={() =>
+                                      setIsVisible((prev) => !prev)
+                                    }
+                                    style={{
+                                      position: "absolute",
+                                      right: "10px",
+                                      top: "50%",
+                                      transform: "translateY(-50%)",
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    {isVisible ? (
+                                      <IoMdEye size={20} />
+                                    ) : (
+                                      <IoIosEyeOff size={20} />
+                                    )}
+                                  </div>
+                                </div>
+                              ) : (
+                                <input
+                                  name={field.name}
+                                  type={field.type}
+                                  required
+                                  className="form-control"
+                                  placeholder={field.placeholder}
+                                  value={formData[field.name] || ""}
+                                  onChange={handleInputChange}
+                                />
+                              )}
                             </div>
                           </div>
-                        </div>
+                        ))}
+
                         <div className="col-lg-12">
                           <div className="form-group mb-3">
-                            <div className=" form-check">
+                            <div className="form-check">
                               <input
                                 type="checkbox"
                                 className="form-check-input"
-                                id="Password3"
+                                id="rememberMe"
+                                name="rememberMe"
+                                checked={formData.rememberMe}
+                                onChange={handleInputChange}
                               />
                               <label
                                 className="form-check-label rem-forgot"
-                                htmlFor="Password3"
+                                htmlFor="rememberMe"
                               >
                                 Remember me{" "}
-                                <a href="/reset-password">Forgot Password</a>
+                                <a href="/reset-password">Forgot Password?</a>
                               </label>
                             </div>
                           </div>
@@ -171,7 +217,7 @@ function SignInPopup() {
                           </button>
                         </div>
                         <div className="mt-3 mb-3">
-                          Don't have an account ?
+                          Don't have an account?
                           <button
                             className="twm-backto-login"
                             data-bs-target="#sign_up_popup"
@@ -183,130 +229,31 @@ function SignInPopup() {
                         </div>
                       </div>
                     </form>
-                    {/*Login Employer Content*/}
-                    <form
-                      onSubmit={handleEmployerLogin}
-                      className="tab-pane fade"
-                      id="login-Employer"
-                    >
-                      <div className="row">
-                        <div className="col-lg-12">
-                          <div className="form-group mb-3">
-                            <InputField
-                              field={SIGNINFIELD.fieldDetail[0]}
-                              value={formData}
-                              change={(data, field) => {
-                                handleInputChange(data, field);
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-lg-12">
-                          <div className="form-group mb-3">
-                            <div className="ls-inputicon-box-signup ls-inputicon-box">
-                              <PasswordField
-                                field={SIGNINFIELD.fieldDetail[1]}
-                                value={formData}
-                                change={(data, field) => {
-                                  handleInputChange(data, field);
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-lg-12">
-                          <div className="form-group mb-3">
-                            <div className=" form-check">
-                              <input
-                                type="checkbox"
-                                className="form-check-input"
-                                id="Password4"
-                              />
-                              <label
-                                className="form-check-label rem-forgot"
-                                htmlFor="Password4"
-                              >
-                                Remember me{" "}
-                                <a href="/reset-password">Forgot Password</a>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-12">
-                          <button
-                            type="submit"
-                            className="site-button"
-                            data-bs-dismiss="modal"
-                            disabled={isSubmitting}
-                          >
-                            Log in
-                          </button>
-
-                          <div className="mt-3 mb-3">
-                            Don't have an account ?
-                            <button
-                              className="twm-backto-login"
-                              data-bs-target="#sign_up_popup"
-                              data-bs-toggle="modal"
-                              data-bs-dismiss="modal"
-                            >
-                              Sign Up
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
                   </div>
                 </div>
               </div>
+
               <div className="modal-footer">
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
-                  {/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
-                                    <li><a href="https://www.twitter.com/" className="twitter-clr"><i className="fab fa-twitter" /></a></li>
-                                    <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
-                                    <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
-                                 */}
-                  <div
-                    className="col-md-12"
-                    onClick={() => loginWithLinkedIn()}
-                  >
-                    <div className="form-group">
-                      <button
-                        type="submit"
-                        className="log_with_google flex-center log_with_linkedin"
-                        onClick={() => loginWithLinkedIn()}
-                      >
-                        <div className="pop-up-btn-logo">
-                          <JobZImage src="images/linkedin-logo-1a.png" alt="" />
-                        </div>
-                        Continue with LinkedIn
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="form-group" onClick={loginWithGoogle}>
-                    <button
-                      type="submit"
-                      className="log_with_google flex-center btn-google"
+                  <li>
+                    <a
+                      href="https://in.linkedin.com/"
+                      className="linkedin-clr m-2"
                     >
-                      <div className="pop-up-btn-logo">
-                        <FcGoogle size={20} />
-                      </div>
-                      Continue with Google
-                    </button>
-                  </div>
+                      <i className="fab fa-linkedin-in" />
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.google.com/"
+                      className="google-clr m-2"
+                    >
+                      <i className="fab fa-google" />
+                    </a>
+                  </li>
                 </ul>
               </div>
-              {/* <div className="col-md-12">
-								<div className="form-group">
-									<button type="submit" className="log_with_google">
-										<JobZImage src="images/google-icon.png" alt="" />
-										Continue with Google
-									</button>
-								</div>
-							</div> */}
-              {/* </form> */}
             </div>
           </div>
         </div>

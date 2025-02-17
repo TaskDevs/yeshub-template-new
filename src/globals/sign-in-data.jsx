@@ -1,17 +1,16 @@
 export const SIGNINFIELD = {
-    fieldDetail: [
-      {
-        name: "username",
-        label: "Username",
-        type: "text",
-        placeholder: "Username",
-      },
-      {
-        name: "password",
-        label: "Password",
-        type: "password",
-        placeholder: "Enter Password",
-      }
-    ],
-  }
-  
+  fieldDetail: [
+    {
+      name: "identifier",
+      label: "identifier",
+      type: "text",
+      placeholder: "Username or Email",
+    },
+    {
+      name: "password",
+      label: "Password",
+      type: "password",
+      placeholder: "Enter Password",
+    }
+  ],
+}

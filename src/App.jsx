@@ -28,6 +28,7 @@ function App() {
 
   // add apifyprovider, candidateProvider, employerprovider
   return (
+    
     <GlobalApiDataProvider>
       <AuthApiDataProvider>
         <ApplicationApiDataProvider>

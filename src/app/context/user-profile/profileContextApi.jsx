@@ -96,38 +96,9 @@ const ProfileApiDataProvider = (props) => {
 		return res;
 	};
 
-	// const handleSubmitProfile = async (e) => {
-	// 	e.preventDefault();
-	// 	setIsSubmitting(true);
-	// 	// const profileFormData = new FormData();
-	// 	console.log("selectedFile-submit", selectedFile?.name);
-
-		
-	// 	console.log("profileFormData", {
-	// 		...formData,
-	// 		user_id: "1",
-	// 		profile_image: selectedFile?.name,
-	// 	});
-    //      console.log("image selected", selectedFile)
-	// 	try {
-	// 		const response = await processAddProfile({
-	// 			...formData,
-	// 			user_id: "1",
-	// 			"profile_image": selectedFile.name
-	// 		});
-	// 		console.log("add-profile-res", response);
-	// 		toast.success("Profile added successfully");
-	// 		return response;
-			
-	// 	} catch (e) {
-	// 		console.error("adding profile error",e);
-	// 		notify("An error occurred while adding the profile");
-	// 	} finally {
-	// 		setIsSubmitting(false);
-			
-	// 	}
-	// };
-
+	
+	
+	
 	const handleSubmitProfile = async (e) => {
 		e.preventDefault();
 		setIsSubmitting(true);
@@ -140,7 +111,7 @@ const ProfileApiDataProvider = (props) => {
 
 		const profileFormData = new FormData();
 		profileFormData.append("user_id", "1");
-		profileFormData.append("profile_image", selectedFile); // Append file
+		profileFormData.append("profile_image", selectedFile); 
 		Object.entries(formData).forEach(([key, value]) => {
 			profileFormData.append(key, value);
 		});
@@ -148,7 +119,7 @@ const ProfileApiDataProvider = (props) => {
 		console.log("profileFormData", Object.fromEntries(profileFormData));
 
 		try {
-			const response = await processAddProfile(profileFormData); // Ensure this handles FormData properly
+			const response = await processAddProfile(profileFormData); 
 			console.log("add-profile-res", response);
 			toast.success("Profile added successfully");
 			return response;
@@ -157,6 +128,7 @@ const ProfileApiDataProvider = (props) => {
 			notify("An error occurred while adding the profile");
 		} finally {
 			setIsSubmitting(false);
+			setFormData(initialFormData);
 		}
 	};
 
@@ -176,7 +148,7 @@ const ProfileApiDataProvider = (props) => {
 		});
 
 		try {
-			const response = await processUpdateProfile(6, {
+			const response = await processUpdateProfile(userId, {
 				...formData,
 				id: userId,
 			});

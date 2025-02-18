@@ -94,7 +94,7 @@ export const categoryProfile = async (id) => {
 export const updateCategory = async (id, data) => {
   
   try {
-    
+    console.log("data-p-update", data)
     let responseOnUpdateCategory = await axios.put(
 			`${baseURL}job-categories/${id}`,
 			data

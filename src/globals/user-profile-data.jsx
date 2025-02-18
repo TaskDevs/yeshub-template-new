@@ -1,5 +1,5 @@
 export const USERPROFILEFIELD = {
-	fieldDetail: [
+	fieldDetail: [		
 		{
 			name: "firstname",
 			label: "First Name",
@@ -67,12 +67,6 @@ export const USERPROFILEFIELD = {
 			label: "Bio",
 			type: "text",
 			placeholder: "",
-		},
-		{
-			name: "company_name",
-			label: "Company Name",
-			type: "text",
-			placeholder: "Tratra.co",
 		},
 	],
 };

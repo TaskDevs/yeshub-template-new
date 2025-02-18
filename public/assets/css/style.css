@@ -126,11 +126,14 @@ This files [Table of contents] are outlined below
   display: flex;
   gap: 0.5rem;
   justify-content: flex-start;
-  /* background: red; */
+  cursor: pointer;
   width: 100%;
 }
 .actions button {
   width: 20%;
+}
+.category {
+  cursor: pointer;
 }
 .select-react {
   border:none;

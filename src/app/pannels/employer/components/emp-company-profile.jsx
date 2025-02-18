@@ -366,6 +366,14 @@ export default EmpCompanyProfilePage;
 					</div>
 				</div> */
 
+
+
+
+
+
+
+
+				
 //   useEffect(() => {
 // 		let isMounted = true;
 // 		const EmployerProfile = async () => {

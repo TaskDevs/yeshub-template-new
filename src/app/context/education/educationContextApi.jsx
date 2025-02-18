@@ -6,12 +6,12 @@ import {
   addEducation,
   searchEducation,
   eductionList,
-  // educationEducation,
   educationProfile,
   updateEducation,
   deleteEducation,
 } from "./educationApi";
 import { EDUCATIONFIELD } from "../../../globals/education-data";
+import { toast } from "react-toastify";
 
 export const EducationApiData = createContext();
 
@@ -28,10 +28,15 @@ const EducationApiDataProvider = (props) => {
   
 
   const processAddEducation = async (data) => {
-    const res = await addEducation(data);
+	  try {
+		const res = await addEducation(data);
     console.log("add-education", res);
     
     notify(res.status, "Education added successfully", "Failed to add education");
+	  } catch (e) {
+		  throw new Error("Error adding education", e)
+		  toast.error("")
+	}
     
 
   };

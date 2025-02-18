@@ -1,7 +1,7 @@
 export const  CATEGORYFIELD = {
     fieldDetail: [
         {
-            name: "title",
+            name: "category_name",
             label: "Title",
             type: "text",
             placeholder: "Finance",

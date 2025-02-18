@@ -30,16 +30,18 @@ function CategoryDetails() {
 				console.log("category", res);
 				const data = res.data.data;
 				setCategory(data);
-				
 			} catch (error) {
 				console.error("could not fetch category", error);
 			}
 		};
 		fetchCategory();
-	}, [showDetailsId]);
+	}, [showDetailsId, processCategoryProfile]);
 
 	const handleEditClick = () => {
-		setFormData(category);
+		setFormData({
+			category_name: category.category_name,
+			description: category.description,
+		});
 	}
 	
 

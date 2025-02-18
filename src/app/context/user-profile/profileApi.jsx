@@ -36,11 +36,12 @@ export const searchProfile = async (data) => {
 };
 
 // LIST Profile
-export const profileList = async (id) => {
+/**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
+export const profileList = async () => {
   try {
-    let responseOnProfileList = await axios.get({
-      /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnProfileList = await axios.get(
+			 `${baseURL}get-profile`
+		);
 
     if (responseOnProfileList.status === SUCCESS_STATUS) {
       return responseOnProfileList.data;

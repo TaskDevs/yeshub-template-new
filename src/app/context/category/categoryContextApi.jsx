@@ -19,18 +19,17 @@ const CategoryApiDataProvider = (props) => {
 
   const { selectedId } = useContext(GlobalApiData)
  
+	const initialData = CATEGORYFIELD.fieldDetail.reduce((acc, field) => {
+		acc[field.name] = "";
+		return acc;
+	}, {});
 
-	const [formData, setFormData] = useState(
-		CATEGORYFIELD.fieldDetail.reduce((acc, field) => {
-			acc[field.name] = "";
-			return acc;
-		}, {})
-  );
-  
-  const { title, ...filteredData } = {
-		...formData,
-		category_name: formData.title,
-	};
+	const [formData, setFormData] = useState(initialData);
+
+	console.log("form-cat", formData);
+
+
+	
 
 
 
@@ -40,13 +39,13 @@ const CategoryApiDataProvider = (props) => {
 	const processAddCategory = async (data) => {
 		try {
 			const res = await addCategory(data);
-			console.log("add-category", res);
-
-			
+			console.log("add-category", res);		
 				return res;
 			
 		} catch (error) {
 			console.error("Error adding categories:", error);
+		} finally {
+			setFormData(initialData)
 		}
 	};
 
@@ -89,7 +88,7 @@ const CategoryApiDataProvider = (props) => {
 	const processUpdateCategory = async (id, data) => {
 		try {
 			const res = await updateCategory(id, data);
-			console.log("update-category", res);
+		
 			if (res) {
 				notify(
 					res.data.status,
@@ -100,6 +99,9 @@ const CategoryApiDataProvider = (props) => {
 			}
 		} catch (error) {
 			console.error("Error fetching category:", error);
+			
+		} finally {
+			setFormData(initialData)
 		}
 	};
 
@@ -124,7 +126,7 @@ const CategoryApiDataProvider = (props) => {
 	const handleAddCategory = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await processAddCategory(filteredData);
+			const res = await processAddCategory(formData);
 			console.log("add-category", res);
 		} catch (err) {
 			console.error("failed to add-category", err);
@@ -135,11 +137,13 @@ const CategoryApiDataProvider = (props) => {
     e.preventDefault();
      console.log("selectedId-ctx", selectedId);
     try {
-      
-			const res = await processAddCategory(selectedId, filteredData);
+       console.log("updateCategory-form", formData);
+			const res = await processUpdateCategory(selectedId, formData);
 			console.log("add-category", res);
 		} catch (err) {
 			console.error("failed to update-category", err);
+	} finally {
+		setFormData(initialData)
 		}
   };
   

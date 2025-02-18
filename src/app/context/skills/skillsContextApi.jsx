@@ -12,24 +12,21 @@ import {
 } from "./skillsApi";
 import { SKILLSFIELD } from "../../../globals/skills-data";
 import { GlobalApiData } from "../global/globalContextApi";
+import { toast } from "react-toastify";
 
 
 export const SkillsApiData = createContext();
 
 const SkillsApiDataProvider = (props) => {
-	const [formData, setFormData] = useState(
-		SKILLSFIELD.fieldDetail.reduce((acc, field) => {
-			acc[field.name] = "";
-			return acc;
-		}, {})
-	);
+
+	const initialData = SKILLSFIELD.fieldDetail.reduce((acc, field) => {
+		acc[field.name] = "";
+		return acc;
+	}, {});
+	const [formData, setFormData] = useState(initialData);
 	
 
-	const { title, ...filteredData } = {
-		...formData,
-		skill: formData.title,
-	};
-	console.log("filteredData-skills", filteredData);
+	
 
 	const { selectedId } = useContext(GlobalApiData);
 
@@ -85,7 +82,8 @@ const SkillsApiDataProvider = (props) => {
 		try {
 			const res = await addSkills(data);
 			console.log("processAddSkills", res);
-			setSkills((prevSkills) => [...prevSkills, res.data]);
+			return res;
+			
 		} catch (error) {
 			console.error("", error);
 		}
@@ -137,34 +135,31 @@ const SkillsApiDataProvider = (props) => {
   };
   
 	const handleAddSkills = async (e) => {
-	   console.log("submitting skills", filteredData);
+	   console.log("submitting skills", formData);
 		e.preventDefault();
 		try {
-			const res = await processAddSkills(filteredData);
+			const res = await processAddSkills(formData);
 			console.log("add-skills", res);
+			return res;
 		} catch (e) {
 			console.error("failed to add skills", e);
 		} finally {			
-			setFormData({
-				skill: "",	
-			});
+			setFormData(initialData);
 		}
   };
   
-
-	 const handleUpdateSkills = async (e) => {
+	
+		const handleUpdateSkills = async (e) => {
 			e.preventDefault();
 			try {
-				const res = await processUpdateSkills("1",filteredData);
-				console.log("add-skills", res);
+				const res = await processUpdateSkills(selectedId, formData);
+				toast.success("Skills updated successfully");
+				return res;
 			} catch (e) {
-				console.error("failed to add skills", e);
+				console.error("error updating skill", e);
+				toast.error("Failed to updat skill");
 			} finally {
-				// setFormData(filteredData);
-				setFormData({
-					skill: "",
-					description: "",
-				});
+				setFormData(initialData);
 			}
 		};
 
@@ -176,7 +171,7 @@ const SkillsApiDataProvider = (props) => {
 				skill,
 				skills,
 				formData,
-				filteredData,
+				
 				setSkills,
 				processAddSkills,
 				processGetAllSkills,
@@ -184,7 +179,6 @@ const SkillsApiDataProvider = (props) => {
 				processSearchSkills,
 				processUpdateSkills,
 				processDeleteSkills,
-
 				setFormData,
 				handleChange,
 				handleAddSkills,

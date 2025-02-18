@@ -7,6 +7,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import SectionEducationForm from "./section-education-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
+import { userId } from "../../../../../globals/dummy-users";
 
 function SectionCanEducation() {
 	const {
@@ -27,7 +28,7 @@ function SectionCanEducation() {
 	useEffect(() => {
 		const fetchEducationData = async () => {
 			try {
-				const res = await processEducationEducation("userid");
+				const res = await processEducationEducation(userId);
 				console.log("get-education", res);
 				const data = res.data.data;
 				setEducationData(data);

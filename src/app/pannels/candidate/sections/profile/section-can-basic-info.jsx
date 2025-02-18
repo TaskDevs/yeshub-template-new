@@ -9,7 +9,6 @@ import Select from "react-select";
 import { useLocation } from "react-router-dom";
 import { role } from "../../../../../globals/dummy-users";
 
-
 const skills = [
 	{
 		id: "1",
@@ -22,42 +21,41 @@ const skills = [
 	{
 		id: "3",
 		skill: "research",
-	}
-]
+	},
+];
 
 function SectionCandicateBasicInfo({ submit, id }) {
 	const [selectedItems, setSelectedItems] = useState([]);
-	const { formData, setFormData, profileData } = useContext(ProfileApiData);
+	const { formData, setFormData } = useContext(ProfileApiData);
 	// const { skills } = useContext(SkillsApiData);
-	console.log("skills-profile", skills);
+	// console.log("skills-profile", skills);
 
-	// console.log("selectedItems", selectedItems);
+	
+	const currentpath = useLocation().pathname;
+	const location = currentpath.split("/")[1];
 	
 
-	const currentpath = useLocation().pathname;
-		const location = currentpath.split("/")[1];
-		console.log("currentpath", location);
 
 	const handleSelectChange = (selectedOptions) => {
 		setSelectedItems(selectedOptions);
 		const selectedSkillsIds = selectedOptions
 			? selectedOptions.map((item) => item.id)
-			: []; 
+			: [];
 		setFormData({
 			...formData,
 			skills_id: selectedSkillsIds.join(","),
 		});
 	};
 
+	 const handleChange = (data, field) => {
+			setFormData({
+				...formData,
+				[data]: field,
+			});
+		};
 
- const handleChange = (data, field) => {
-		setFormData({
-			...formData,
-			[data]: field,
-		});
- };
+		// console.log("USERPROFILEFIELD.fieldDetail", USERPROFILEFIELD.fieldDetail);
 	
-
 	return (
 		<>
 			<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
@@ -75,24 +73,8 @@ function SectionCandicateBasicInfo({ submit, id }) {
 							</div>
 							<div className="modal-body">
 								<div className="row">
-									{role === "employer" ? (
-										<div className="col-xl-6 col-lg-6 col-md-12">
-											<div className="form-group">
-												<label>Company Name</label>
-												<div className="ls-inputicon-box">
-													<InputField
-														field={USERPROFILEFIELD.fieldDetail[11]}
-														value={formData}
-														change={(data, field) => {
-															handleChange(data, field);
-														}}
-													/>
-													<i className="fs-input-icon fa fa-user " />
-												</div>
-											</div>
-										</div>
-									) : (
-										<>
+									
+										
 											<div className="col-xl-6 col-lg-6 col-md-12">
 												<div className="form-group">
 													<label>First Name</label>
@@ -124,8 +106,8 @@ function SectionCandicateBasicInfo({ submit, id }) {
 													</div>
 												</div>
 											</div>
-										</>
-									)}
+										
+									
 
 									<div className="col-xl-6 col-lg-6 col-md-12">
 										<div className="form-group">
@@ -159,6 +141,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
 											</div>
 										</div>
 									</div>
+
 									<div className="col-xl-6 col-lg-6 col-md-12">
 										<div className="form-group">
 											<label>Address</label>
@@ -222,6 +205,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
 											</div>
 										</div>
 									</div>
+
 									<div className="col-xl-6 col-lg-12 col-md-12">
 										<div className="form-group city-outer-bx has-feedback">
 											<label>Postal Code</label>
@@ -239,13 +223,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
 									</div>
 
 									<div className="col-xl-6 col-lg-12 col-md-12">
-										{/* <SelectField
-											field={USERPROFILEFIELD.fieldDetail[9]}
-											value={formData}
-											options={skills}
-											change={handleChange}
-											labelKey="skill"
-										/> */}
 										<div className="ls-inputicon-box ">
 											<div className="form-group">
 												<label>Skills</label>

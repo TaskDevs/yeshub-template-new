@@ -39,6 +39,9 @@ function AddSkills() {
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
+					{skills.length === 0 ? (
+						<p>No skills created</p>
+					) : (
 					<ul>
 					
 						{skills?.map((s) => (
@@ -54,6 +57,8 @@ function AddSkills() {
 							</li>
 						))}
 					</ul>
+					)}
+					
 				</div>
 			</div>
 

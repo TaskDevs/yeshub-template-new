@@ -6,22 +6,17 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useContext, useEffect, useState } from "react";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
+import { toast } from "react-toastify";
 
 function SkillsDetails() {
 	const { selectedId } = useContext(GlobalApiData);
 	const {
 		skill,
-
-		processUpdateSkills,
-
-		formData,
+        handleUpdateSkills,
+		
 	} = useContext(SkillsApiData);
 
-	const handleUpdateSkills = async (e) => {
-		e.preventDefault();
-		const res = await processUpdateSkills(selectedId, formData);
-		console.log("update-skill", res);
-	};
+
 
 	return (
 		<>
@@ -31,35 +26,37 @@ function SkillsDetails() {
 
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
-					<p></p>
+					{!skill.id ? (
+						<p>No skills selected.</p>
+					) : (
+						selectedId === skill.id && (
+							<>
+								<div className="skills">
+									<p>{skill?.skill}</p>
+									<div className="actions">
+										<button
+											className="site-button  actions"
+											data-bs-target="#delete-skill"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+										>
+											<FaRegTrashCan color="white" />
+											<span className="admin-nav-text">Delete</span>
+										</button>
 
-					{selectedId === skill.id && (
-						<>
-							<div className="skills">
-								<p>{skill?.skill}</p>
-								<div className="actions">
-									<button
-										className="site-button  actions"
-										data-bs-target="#delete-skill"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-									>
-										<FaRegTrashCan color="white" />
-										<span className="admin-nav-text">Delete</span>
-									</button>
-
-									<button
-										className="site-button  actions "
-										data-bs-target="#edit-skill"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-									>
-										<MdOutlineEdit color="white" />
-										<span>Edit</span>
-									</button>
+										<button
+											className="site-button  actions "
+											data-bs-target="#edit-skill"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+										>
+											<MdOutlineEdit color="white" />
+											<span>Edit</span>
+										</button>
+									</div>
 								</div>
-							</div>
-						</>
+							</>
+						)
 					)}
 				</div>
 			</div>

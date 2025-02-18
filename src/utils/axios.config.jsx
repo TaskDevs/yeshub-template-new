@@ -49,7 +49,7 @@
 import axios from "axios";
 import cookieMethods from "./cookieUtils";
 import {
-	baseURL,
+	baseUrl,
 	timeOut,
 	SUCCESS_STATUS,
 	BAD_REQUEST_STATUS,

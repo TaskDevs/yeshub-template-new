@@ -18,20 +18,14 @@ export const CategoryApiData = createContext();
 const CategoryApiDataProvider = (props) => {
 
   const { selectedId } = useContext(GlobalApiData)
- 
+  const initialData = CATEGORYFIELD.fieldDetail.reduce((acc, field) => {
+		acc[field.name] = "";
+		return acc;
+	}, {});
 
-	const [formData, setFormData] = useState(
-		CATEGORYFIELD.fieldDetail.reduce((acc, field) => {
-			acc[field.name] = "";
-			return acc;
-		}, {})
-  );
+	const [formData, setFormData] = useState(initialData);
   
-  const { title, ...filteredData } = {
-		...formData,
-		category_name: formData.title,
-	};
-
+     console.log("form-cat", formData)
 
 
 
@@ -124,10 +118,12 @@ const CategoryApiDataProvider = (props) => {
 	const handleAddCategory = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await processAddCategory(filteredData);
+			const res = await processAddCategory(formData);
 			console.log("add-category", res);
 		} catch (err) {
 			console.error("failed to add-category", err);
+		} finally {
+			setFormData(initialData);
 		}
 	};
 
@@ -136,7 +132,7 @@ const CategoryApiDataProvider = (props) => {
      console.log("selectedId-ctx", selectedId);
     try {
       
-			const res = await processAddCategory(selectedId, filteredData);
+			const res = await processAddCategory(selectedId, formData);
 			console.log("add-category", res);
 		} catch (err) {
 			console.error("failed to update-category", err);
@@ -148,14 +144,14 @@ const CategoryApiDataProvider = (props) => {
 	return (
 		<CategoryApiData.Provider
 			value={{
+				formData,
+				setFormData,
 				processAddCategory,
 				processGetAllCategory,
 				processCategoryProfile,
 				processSearchCategory,
 				processUpdateCategory,
 				processDeleteCategory,
-				formData,
-				setFormData,
 				handleAddCategory,
 				handleUpdateCategory,
 			}}

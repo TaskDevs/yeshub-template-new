@@ -56,14 +56,14 @@ import {
 } from "../globals/constants";
 
 const instance = axios.create({
-  baseUrl,
-  timeOut,
-  withCredentials: true,
-  crossDomain: true,
-  headers: {
-    "x-Requested-with": "XMLHttpRequest",
-    Accept: "application/json",
-  },
+	baseURL,
+	timeOut,
+	withCredentials: true,
+	crossDomain: true,
+	headers: {
+		"x-Requested-with": "XMLHttpRequest",
+		Accept: "application/json",
+	},
 });
 
 // Axios response interceptor
@@ -72,9 +72,9 @@ instance.interceptors.response.use(
   async (error) => {
     if (error.response && error.response.status === BAD_REQUEST_STATUS) {
       try {
-        const response = await axios.post(`${baseUrl}/auth/refreshToken`, {
-          accessToken: getAccessToken(),
-        });
+        const response = await axios.post(`${baseURL}/auth/refreshToken`, {
+					accessToken: getAccessToken(),
+				});
 
         if (response.status === SUCCESS_STATUS) {
           const newToken = response.data.accessToken;

@@ -5,6 +5,7 @@ import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, baseUrl } from "../../../global
 
 // ADD Profile
 export const addProfile = async (data) => {
+  console.log("p-data", data)
   try {
     let responseOnAddProfile = await axios.post(
 			`${baseURL}create-profile`,

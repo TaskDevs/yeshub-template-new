@@ -6,7 +6,7 @@ function PasswordField({ field, value, change }) {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleInputChange = (e) => {
-    change(field.name, e.target.value);
+    change(e);
   };
 
   return (

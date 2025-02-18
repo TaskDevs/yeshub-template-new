@@ -1,16 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import JobZImage from "../jobz-img";
 import { useContext, useEffect, useState } from "react";
-import {
-  candidate,
-  canRoute,
-  employer,
-  empRoute,
-} from "../../../globals/route-names";
+
 import Loader from "../loader";
-import { topMessage } from "../../../utils/responseUtils";
+import { register, loginWithGoogle, loginWithLinkedIn} from "../../context/auth/authApi";
 
 import { FcGoogle } from "react-icons/fc";
+import { IoLogoLinkedin } from "react-icons/io5";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNUPFIELD } from "../../../globals/sign-up-data";
 import InputField from "../input-field";
@@ -28,39 +24,112 @@ function SignUpPopup() {
     setIsSubmitting,
   } = useContext(GlobalApiData);
 
+  const [message, setMessage] = useState(null); // State for success/error message
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(
+    SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
+      acc[field.name] = "";
+      return acc;
+    }, {})
+  );
+
+  useEffect(() => {
+    if (!formData.role) {
+      setFormData((prev) => ({ ...prev, role: "user" }));
+    }
+  }, []);
 
   const handleInputChange = (data, field) => {
-    setFormData({
-      ...formData,
-      [field]: data,
-    });
+    if (data?.target) {
+      // Handles standard input fields
+      const { name, value } = data.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    } else if (field?.name) {
+      // Handles custom components like PasswordField
+      setFormData((prev) => ({ ...prev, [field.name]: data }));
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting form data:", formData);
+
+    setIsSubmitting(true); // Set submitting state to true
+
+    try {
+      const res = await register(formData);
+
+      if (res) {
+        console.log("Registration successful:", res);
+        setMessage({ type: "success", text: "Registration successful!" });
+
+        // Reset form data after successful submission
+        setFormData(
+          SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
+            acc[field.name] = ""; // Reset all fields to an empty string
+            return acc;
+          }, {})
+        );
+
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          navigate("/verify-otp", { state: { email: formData.email } });
+        }, 2000);
+      }
+    } catch (err) {
+      console.error("Registration failed:", err);
+
+      setMessage({
+        type: "error",
+        text: "Registration failed. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false); // Reset submitting state after request completes
+    }
   };
 
-  // const { handleAuthError, loginWithLinkedIn } = useAuth();
-
-  const moveToCandidate = () => {
-    navigate(canRoute(candidate.DASHBOARD));
+  const googleLogin = (e) => {
+    try {
+      // Assuming you have a method that actually handles Google login (e.g., googleAuth)
+      const res = loginWithGoogle(formData.role);  // Correct function for Google login
+  
+      if (res) {
+        console.log("Registration successful:", res);
+        setMessage({ type: "success", text: "Registration successful!" });
+  
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
+    } catch (err) {
+      console.error("Registration failed:", err);
+  
+      setMessage({
+        type: "error",
+        text: "Registration failed. Please try again.",
+      });
+    }
   };
+  
 
-  const moveToEmployer = () => {
-    navigate(empRoute(employer.DASHBOARD));
+  const LinkedinLogin = async (e) => {
+    e.preventDefault();
+    console.log("role", formData.role);
   };
 
   return (
     <>
       {isLoading && <Loader />}
-      {/* {console.log("showTopMessage", showTopMessage)}
-			{showTopMessage === true && isLoading && (
-			<topMessage />
-			)} */}
-
       {!isLoading && (
         <div
           className="modal fade twm-sign-up"
@@ -87,148 +156,108 @@ function SignUpPopup() {
 
                 <div className="modal-body">
                   <div className="twm-tabs-style-2">
+                    {message && (
+                      <div
+                        className={`alert ${
+                          message.type === "success"
+                            ? "alert-success"
+                            : "alert-danger"
+                        }`}
+                        role="alert"
+                      >
+                        {message.text}
+                      </div>
+                    )}
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
-                      {/*Signup Candidate*/}
+                      {/* Signup Candidate */}
                       <li className="nav-item" role="presentation">
                         <button
-                          // className="nav-link active"
                           className={`nav-link ${
-                            formData.role === "1" ? "active" : ""
+                            formData.role === "user" ? "active" : ""
                           }`}
                           data-bs-toggle="tab"
-                          // data-bs-target="#sign-candidate"
                           type="button"
+                          aria-selected={formData.role === "user"}
                           onClick={() =>
-                            setFormData((prevFormData) => ({
-                              ...prevFormData,
-                              role: "1",
-                            }))
+                            handleChange({
+                              target: { name: "role", value: "user" },
+                            })
                           }
                         >
-                          <i className="fas fa-user-tie" />
-                          Candidate
+                          <i className="fas fa-user-tie" /> Candidate
                         </button>
                       </li>
-                      {/*Signup Employer*/}
+                      {/* Signup Employer */}
                       <li className="nav-item" role="presentation">
                         <button
-                          // className="nav-link"
                           className={`nav-link ${
-                            formData.role === "2" ? "active" : ""
+                            formData.role === "employer" ? "active" : ""
                           }`}
                           data-bs-toggle="tab"
-                          // data-bs-target="#sign-Employer"
                           type="button"
+                          aria-selected={formData.role === "employer"}
                           onClick={() =>
-                            setFormData((prevFormData) => ({
-                              ...prevFormData,
-                              role: "2",
-                            }))
+                            handleChange({
+                              target: { name: "role", value: "employer" },
+                            })
                           }
                         >
-                          <i className="fas fa-building" />
-                          Employer
+                          <i className="fas fa-building" /> Employer
                         </button>
                       </li>
                     </ul>
 
-                    <div className="tab-content" id="myTabContent">
-                      {/*Signup Candidate Content*/}
-                      <div
-                        className="tab-pane fade show active"
-                        // id="sign-candidate"
-                      >
-                        <div className="row">
-                          <div className="col-lg-12">
-                            <InputField
-                              field={SIGNUPFIELD.fieldDetail[0]}
-                              value={formData}
-                              change={(data, field) => {
-                                handleInputChange(data, field);
-                              }}
-                            />
-                          </div>
-                          <div className="col-lg-12">
-                            <InputField
-                              field={SIGNUPFIELD.fieldDetail[1]}
-                              value={formData}
-                              change={(data, field) => {
-                                handleInputChange(data, field);
-                              }}
-                            />
-                          </div>
-
-                          <div className="col-lg-12">
+                    {SIGNUPFIELD.fieldDetail.map((field, index) =>
+                      field.name !== "role" ? ( // Exclude role from the mapped fields
+                        <div className="col-lg-12" key={index}>
+                          {field.type === "password" ? (
                             <div className="form-group mb-3">
                               <div className="ls-inputicon-box-signup ls-inputicon-box">
                                 <PasswordField
-                                  field={SIGNUPFIELD.fieldDetail[2]}
-                                  value={formData}
-                                  change={(data, field) => {
-                                    handleInputChange(data, field);
-                                  }}
+                                  field={field}
+                                  value={formData[field.name] || ""}
+                                  change={(value) =>
+                                    handleInputChange(value, field)
+                                  }
                                 />
                               </div>
                             </div>
-                          </div>
-                          <div className="col-lg-12">
-                            <div className="form-group mb-3">
-                              <div className="ls-inputicon-box-signup ls-inputicon-box">
-                                <PasswordField
-                                  field={SIGNUPFIELD.fieldDetail[3]}
-                                  value={formData}
-                                  change={(data, field) => {
-                                    handleInputChange(data, field);
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
+                          ) : (
+                            <InputField
+                              field={field}
+                              value={formData[field.name] || ""}
+                              change={(e) => handleInputChange(e, field)}
+                            />
+                          )}
+                        </div>
+                      ) : null
+                    )}
 
-                          <div className="col-lg-12">
-                            <div className="form-group mb-3">
-                              <div className=" form-check">
-                                <input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  id="agree2"
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor="agree2"
-                                >
-                                  I agree to the{" "}
-                                  <a href="#">Terms and conditions</a>
-                                </label>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-12">
-                            <button
-                              type="submit"
-                              className="site-button"
-                              disabled={isSubmitting}
-                            >
-                              {isSubmitting ? "Submitting..." : "Sign Up"}
-                            </button>
-                          </div>
-
-                          <div className="mt-4">
-                            <p>
-                              Already registered?
-                              <button
-                                className="twm-backto-login"
-                                data-bs-target="#sign_up_popup2"
-                                data-bs-toggle="modal"
-                                data-bs-dismiss="modal"
-                              >
-                                Log in here
-                              </button>
-                            </p>
-                          </div>
+                    {/* Terms and Conditions Checkbox */}
+                    <div className="col-lg-12">
+                      <div className="form-group mb-3">
+                        <div className="form-check">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id="agree2"
+                          />
+                          <label className="form-check-label" htmlFor="agree2">
+                            I agree to the <a href="#">Terms and conditions</a>
+                          </label>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="col-md-12">
+                      <button
+                        type="submit"
+                        className="site-button"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Submitting..." : "Sign Up"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -237,51 +266,18 @@ function SignUpPopup() {
               <div className="modal-footer">
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
-                  {/* <li><a href="https://www.facebook.com/" className="facebook-clr"><i className="fab fa-facebook-f" /></a></li>
-                                    <li><a href="https://www.twitter.com/" className="twitter-clr"><i className="fab fa-twitter" /></a></li>
-                                    <li><a href="https://in.linkedin.com/" className="linkedin-clr"><i className="fab fa-linkedin-in" /></a></li>
-                                    <li><a href="https://www.google.com/" className="google-clr"><i className="fab fa-google" /></a></li>
-                                 */}
-                  <div
-                    className="col-md-12"
-                    onClick={() => {
-                      console.log("Login with LinkedIn");
-                    }}
-                  >
-                    <div className="form-group">
-                      <button
-                        type="submit"
-                        className="log_with_google flex-center log_with_linkedin"
-                      >
-                        <div className="pop-up-btn-logo">
-                          <JobZImage src="images/linkedin-logo-1a.png" alt="" />
-                        </div>
-                        Continue with LinkedIn
-                      </button>
-                    </div>
-                  </div>
+  <li onClick={googleLogin}>
+    <a href="#" className="google-clr m-2">
+      <i className="fab fa-google" />
+    </a>
+  </li>
+  <li onClick={LinkedinLogin}>
+    <a href="#" className="linkedin-clr m-2">
+      <i className="fab fa-linkedin-in" />
+    </a>
+  </li>
+</ul>
 
-                  <div
-                    className="col-md-12"
-                    onClick={() => {
-                      console.log("Login with gmail");
-                    }}
-                  >
-                    <div className="form-group">
-                      <button
-                        type="submit"
-                        className="log_with_google flex-center btn-google"
-                      >
-                        <div className="pop-up-btn-logo">
-                          {/* <JobZImage src="images/linkedin-logo-1a.png" alt="" /> */}
-                          <FcGoogle size={20} />
-                        </div>
-                        {/* <i className="fab fa-google" /> */}
-                        Continue with Google
-                      </button>
-                    </div>
-                  </div>
-                </ul>
               </div>
             </div>
           </div>
@@ -292,88 +288,3 @@ function SignUpPopup() {
 }
 
 export default SignUpPopup;
-
-/*Signup Employer Content*/
-
-/* <div className="tab-pane fade" id="sign-Employer">
-												<div className="row">
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="username"
-																type="text"
-																required
-																className="form-control"
-																placeholder="Usearname*"
-															/>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="email"
-																type="text"
-																className="form-control"
-																required
-																placeholder="Password*"
-															/>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="phone"
-																type="text"
-																className="form-control"
-																required
-																placeholder="Email*"
-															/>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<input
-																name="phone"
-																type="text"
-																className="form-control"
-																required
-																placeholder="Phone*"
-															/>
-														</div>
-													</div>
-													<div className="col-lg-12">
-														<div className="form-group mb-3">
-															<div className=" form-check">
-																<input
-																	type="checkbox"
-																	className="form-check-input"
-																	id="agree2"
-																/>
-																<label
-																	className="form-check-label"
-																	htmlFor="agree2"
-																>
-																	I agree to the{" "}
-																	<a href="#">Terms and conditions</a>
-																</label>
-																<p>
-																	Already registered?
-																	<button
-																		className="twm-backto-login"
-																		data-bs-target="#sign_up_popup2"
-																		data-bs-toggle="modal"
-																		data-bs-dismiss="modal"
-																	>
-																		Log in here
-																	</button>
-																</p>
-															</div>
-														</div>
-													</div>
-													<div className="col-md-12">
-														<button type="submit" className="site-button">
-															Sign Up
-														</button>
-													</div>
-												</div>
-											</div> */

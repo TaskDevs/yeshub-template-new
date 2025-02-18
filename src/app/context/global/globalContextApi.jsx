@@ -20,6 +20,8 @@ const GlobalApiDataProvider = (props) => {
 		}, 3000);
 	}, [isSubmitting]);
 
+	
+
     const handleClicked = (id) => {
 			console.log("id-clicked", id);
 			setSelectedId(id);

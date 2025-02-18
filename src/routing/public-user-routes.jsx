@@ -61,6 +61,8 @@ import ContractPopup from "../app/common/popups/popup-contract";
 import { useEffect, useState } from "react";
 import CompletePage from "../app/common/payment/stripe/complete-page";
 import CheckoutPage from "../app/common/payment/stripe/checkout-page";
+import VerifyOtp from "../app/pannels/public-user/components/pages/verify-otp";
+import GoogleCallback from "../app/pannels/public-user/components/pages/GoogleCallback";
 
 // const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
@@ -107,6 +109,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.HOME17} element={<Home17Page />} />
         <Route path={publicUser.HOME18} element={<Home18Page />} />
         <Route path={publicUser.TEST} element={<test-login />} />
+      
         {/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
         {/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
         <Route path={publicUser.jobs.LIST} element={<JobsListPage />} />
@@ -141,6 +144,8 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
+        <Route path={publicUser.pages.GOOGLECALLBACK} element={GoogleCallback}/>
+        <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp/>}/>
         <Route
           path={publicUser.pages.AFTER_LOGIN}
           element={<AfterLoginPage />}

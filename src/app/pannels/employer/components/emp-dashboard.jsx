@@ -9,7 +9,11 @@ function EmpDashboardPage() {
 	const [error, setError] = useState(null);
 	const [postedJobs, setPostedJobs] = useState(null);
 	const [showTopMessage, setShowTopMessage] = useState(false);
+<<<<<<< HEAD
+   
+=======
     // const { user } = useUser();
+>>>>>>> 1dbaa30db3f1aab1753c18e1a6ada1fb4bc2c1fe
 
     const navigate = useNavigate();
 

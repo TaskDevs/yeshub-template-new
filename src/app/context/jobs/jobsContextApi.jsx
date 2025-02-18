@@ -5,8 +5,8 @@ import { notify } from "../../../utils/responseUtils";
 import {
   addJob,
   searchJob,
-  JobList,
-  JobProfile,
+  jobList,
+  jobProfile,
   updateJob,
   deleteJob,
 } from "./jobsApi";
@@ -14,9 +14,23 @@ import {
 export const JobApiData = createContext();
 
 const JobApiDataProvider = (props) => {
-  const processAddJob = async (data) => {};
+  const [jobListData, setJobListData] = useState([]);
 
-  const processGetAllJob = async (id) => {};
+  const processAddJob = async (data) => {
+    let response = await addJob(data);
+    console.log(response);
+    if (response) {
+      notify(SUCCESS_STATUS, "Job Added Successfully");
+    }
+  };
+
+  const processGetAllJob = async () => {
+    let response = await jobList();
+    if (response) {
+      //console.log(response);
+      setJobListData(response);
+    }
+  };
 
   const processJobProfile = async (id) => {};
 
@@ -35,6 +49,8 @@ const JobApiDataProvider = (props) => {
         processSearchJob,
         processUpdateJob,
         processDeleteJob,
+        jobListData,
+        setJobListData,
       }}
     >
       {props.children}

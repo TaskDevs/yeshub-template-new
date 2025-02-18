@@ -1,14 +1,17 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config";
+import axios from "axios";
+import {
+  SUCCESS_STATUS,
+  // LIST_ON_PAGES,
+  // baseUrl,
+} from "../../../globals/constants";
 
 // ADD Job
 export const addJob = async (data) => {
   try {
     let responseOnAddJob = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+      `http://127.0.0.1:8000/api/v1/posted-jobs`,
       data
     );
     if (responseOnAddJob.status === SUCCESS_STATUS) {
@@ -39,14 +42,13 @@ export const searchJob = async (data) => {
 };
 
 // LIST Job
-export const jobList = async (pageNo) => {
+export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get({
-      /**Add Get Job API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
-
-    if (responseOnJobList.status === SUCCESS_STATUS) {
-      return responseOnJobList.data;
+    let responseOnJobList = await axios.get(
+      `http://127.0.0.1:8000/api/v1/get-posted-jobs`
+    );
+    if (responseOnJobList.status == SUCCESS_STATUS) {
+      return responseOnJobList.data.data;
     } else {
       return false;
     }

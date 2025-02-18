@@ -7,6 +7,8 @@ import { ProfileApiData } from "../../../../context/user-profile/profileContextA
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
 import { useLocation } from "react-router-dom";
+import { role } from "../../../../../globals/dummy-users";
+
 
 const skills = [
 	{
@@ -29,7 +31,8 @@ function SectionCandicateBasicInfo({ submit, id }) {
 	// const { skills } = useContext(SkillsApiData);
 	console.log("skills-profile", skills);
 
-	console.log("selectedItems", selectedItems);
+	// console.log("selectedItems", selectedItems);
+	
 
 	const currentpath = useLocation().pathname;
 		const location = currentpath.split("/")[1];
@@ -47,30 +50,13 @@ function SectionCandicateBasicInfo({ submit, id }) {
 	};
 
 
- const handleChange = (field, data) => {
+ const handleChange = (data, field) => {
 		setFormData({
 			...formData,
-			[field]: data,
+			[data]: field,
 		});
  };
 	
-
-	// const handleChange = (data, field) => {
-	// 	if (field) {
-	// 		setFormData({
-	// 			...formData,
-	// 			[field]: data,
-	// 		});
-	// 	} else {
-			
-	// 		setSelectedItems(data); 
-	// 		const selectedSkillsIds = data ? data.map((item) => item.id) : []; // Extract IDs
-	// 		setFormData({
-	// 			...formData,
-	// 			skills_id: selectedSkillsIds.join(","), 
-	// 		});
-	// 	}
-	// };
 
 	return (
 		<>
@@ -89,7 +75,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
 							</div>
 							<div className="modal-body">
 								<div className="row">
-									{location === "dashboard-employer" ? (
+									{role === "employer" ? (
 										<div className="col-xl-6 col-lg-6 col-md-12">
 											<div className="form-group">
 												<label>Company Name</label>

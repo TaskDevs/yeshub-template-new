@@ -2,6 +2,8 @@ export const baseUrl = process.env.PUBLIC_URL;
 export const baseURL = process.env.REACT_APP_BASE_URL;
 export const timeOut = { timeout: 10000 };
 
+console.log("baseURL-constants", "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/");
+
 
 //STATUS CODE
 export const SUCCESS_STATUS = 201;

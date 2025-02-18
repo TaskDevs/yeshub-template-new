@@ -18,6 +18,7 @@ import { SIGNINFIELD } from "../../../../../globals/sign-in-data";
 import InputField from "../../../../common/input-field";
 import PasswordField from "../../../../common/password-field";
 import { login } from "../../../../context/auth/authApi";
+import cookieMethods from "../../../../../utils/cookieUtils";
 
 function LoginPage() {
   const {
@@ -65,44 +66,48 @@ function LoginPage() {
 
 
 
+
   const handleLogin = async (e) => {
-	e.preventDefault();
-	setIsSubmitting(true);
+    e.preventDefault();
+    setIsSubmitting(true);
   
-	try {
-	  const response = await login(formData);
-	  if (response && response.token) {
-		// Store token and user role
-		sessionStorage.setItem("authToken", response.token);
-		sessionStorage.setItem("userRole", response.role);
+    try {
+      const response = await login(formData);
+      if (response && response.token && response.refresh_token) {
+        const { token, refresh_token, role } = response;
   
-		if (formData.rememberMe) {
-		  sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
-		} else {
-		  sessionStorage.removeItem("rememberedUser");
-		}
+        // Store both tokens in sessionStorage and cookies
+        sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("userRole", role);
+        cookieMethods.setCookies(token, refresh_token);  // Store both access and refresh tokens
   
-		// Redirect based on role
-		switch (response.role) {
-		  case "admin":
-			navigate('/admin');
-			break;
-		  case "employer":
-			navigate(base.EMPLOYER_PRE);
-			break;
-		  case "user":
-		  default:
-			navigate(base.CANDIDATE_PRE);
-			break;
-		}
-	  } else {
-		console.error("Login failed: No token received");
-	  }
-	} catch (error) {
-	  console.error("Login failed", error);
-	} finally {
-	  setIsSubmitting(false);
-	}
+        if (formData.rememberMe) {
+          sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
+        } else {
+          sessionStorage.removeItem("rememberedUser");
+        }
+  
+        // Redirect based on role
+        switch (role) {
+          case "admin":
+            navigate('/admin');
+            break;
+          case "employer":
+            navigate(base.EMPLOYER_PRE);
+            break;
+          case "user":
+          default:
+            navigate(base.CANDIDATE_PRE);
+            break;
+        }
+      } else {
+        console.error("Login failed: No token received");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
 
@@ -208,7 +213,7 @@ function LoginPage() {
                               />
                               <label className="form-check-label rem-forgot " htmlFor="rememberMe">
                                 Remember me
-                                <NavLink to="/reset-password" className="site-text-primary p-3">Forgot Password?</NavLink>
+                                <NavLink to="/forgotton-password" className="site-text-primary p-3">Forgot Password?</NavLink>
                               </label>
                             </div>
                           </div>
@@ -236,6 +241,8 @@ function LoginPage() {
                                 
                   
                 </ul>
+
+               
                     </div>
                   </div>
                 </div>

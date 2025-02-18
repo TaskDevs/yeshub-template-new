@@ -7,6 +7,8 @@ import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
 import { login } from "../../context/auth/authApi";
 import JobZImage from "../jobz-img";
+import cookieMethods from "../../../utils/cookieUtils";
+
 function SignInPopup() {
   const {
     isLoading,
@@ -49,46 +51,90 @@ function SignInPopup() {
     }));
   };
 
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     const response = await login(formData);
+  //     if (response && response.token) {
+  //       // Store token and user role
+  //       sessionStorage.setItem("authToken", response.token);
+  //       sessionStorage.setItem("userRole", response.role);
+
+  //       if (formData.rememberMe) {
+  //         sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
+  //       } else {
+  //         sessionStorage.removeItem("rememberedUser");
+  //       }
+
+  //       // Redirect based on role
+  //       switch (response.role) {
+  //         case "admin":
+  //           navigate("/admin");
+  //           break;
+  //         case "employer":
+  //           navigate("/");
+  //           break;
+  //         case "user":
+  //         default:
+  //           navigate("/");
+  //           break;
+  //       }
+
+  //       setFormData(
+  //         SIGNINFIELD.fieldDetail.reduce(
+  //           (acc, field) => {
+  //             acc[field.name] = "";
+  //             return acc;
+  //           },
+  //           { rememberMe: false }
+  //         )
+  //       );
+  //     } else {
+  //       console.error("Login failed: No token received");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed", error);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+  
     try {
       const response = await login(formData);
-      if (response && response.token) {
-        // Store token and user role
-        sessionStorage.setItem("authToken", response.token);
-        sessionStorage.setItem("userRole", response.role);
-
+      if (response && response.token && response.refresh_token) {
+        const { token, refresh_token, role } = response;
+  
+        // Store both tokens in sessionStorage and cookies
+        sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("userRole", role);
+        cookieMethods.setCookies(token, refresh_token);  // Store both access and refresh tokens
+  
         if (formData.rememberMe) {
           sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
         } else {
           sessionStorage.removeItem("rememberedUser");
         }
-
+  
         // Redirect based on role
-        switch (response.role) {
+        switch (role) {
           case "admin":
-            navigate("/admin");
+            navigate('/admin');
             break;
           case "employer":
-            navigate("/");
+            navigate('/');
             break;
           case "user":
           default:
-            navigate("/");
+            navigate('/');
             break;
         }
-
-        setFormData(
-          SIGNINFIELD.fieldDetail.reduce(
-            (acc, field) => {
-              acc[field.name] = "";
-              return acc;
-            },
-            { rememberMe: false }
-          )
-        );
       } else {
         console.error("Login failed: No token received");
       }
@@ -98,7 +144,6 @@ function SignInPopup() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <>
       {isLoading && <Loader />}
@@ -201,7 +246,7 @@ function SignInPopup() {
                                 htmlFor="rememberMe"
                               >
                                 Remember me{" "}
-                                <a href="/reset-password">Forgot Password?</a>
+                                <a href="/forgotton-password">Forgot Password?</a>
                               </label>
                             </div>
                           </div>

@@ -50,11 +50,9 @@ function AddCategories() {
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
+					{allcategories.length === 0 && <p> No categories created.</p>}
 					<ul>
-						<li>
-							<p>Title</p>
-							<p>Description</p>
-						</li>
+						
 						{allcategories?.map((category) => (
 							<li key={category.id} className="category">
 								<div className="" onClick={() => handleClicked(category.id)}>

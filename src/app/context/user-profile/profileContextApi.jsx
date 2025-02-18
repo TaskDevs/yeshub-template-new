@@ -36,10 +36,6 @@ const ProfileApiDataProvider = (props) => {
 	const [formData, setFormData] = useState(initialFormData);
 
 	
-	console.log("formData-ctx", formData);
-	// console.log("selectedFile", selectedFile);
-	// console.log("selectedFilename", selectedFile?.name);
-
 
 	useEffect(() => {
 		// if (!profileData) return;
@@ -97,37 +93,7 @@ const ProfileApiDataProvider = (props) => {
 		return res;
 	};
 
-	// const handleSubmitProfile = async (e) => {
-	// 	e.preventDefault();
-	// 	setIsSubmitting(true);
-	// 	// const profileFormData = new FormData();
-	// 	console.log("selectedFile-submit", selectedFile?.name);
 
-		
-	// 	console.log("profileFormData", {
-	// 		...formData,
-	// 		user_id: "1",
-	// 		profile_image: selectedFile?.name,
-	// 	});
-    //      console.log("image selected", selectedFile)
-	// 	try {
-	// 		const response = await processAddProfile({
-	// 			...formData,
-	// 			user_id: "1",
-	// 			"profile_image": selectedFile.name
-	// 		});
-	// 		console.log("add-profile-res", response);
-	// 		toast.success("Profile added successfully");
-	// 		return response;
-			
-	// 	} catch (e) {
-	// 		console.error("adding profile error",e);
-	// 		notify("An error occurred while adding the profile");
-	// 	} finally {
-	// 		setIsSubmitting(false);
-			
-	// 	}
-	// };
 
 	const handleSubmitProfile = async (e) => {
 		e.preventDefault();

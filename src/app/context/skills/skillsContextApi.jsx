@@ -86,7 +86,6 @@ const SkillsApiDataProvider = (props) => {
 			const res = await addSkills(data);
 			console.log("processAddSkills", res);
 			
-			// Safely add new skill
 			if (res && res.data) {
 				setSkills((prevSkills) => [...prevSkills, res.data]);
 				notify('Skill added successfully', 'success');

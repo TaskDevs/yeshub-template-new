@@ -7,7 +7,7 @@ import { ProfileApiData } from "../../../../context/user-profile/profileContextA
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
 import { useLocation } from "react-router-dom";
-import { role } from "../../../../../globals/dummy-users";
+// import { role } from "../../../../../globals/dummy-users";
 
 const skills = [
 	{

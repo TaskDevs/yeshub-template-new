@@ -28,10 +28,9 @@ function SectionCandicateBasicInfo({ submit, id }) {
 	// const { skills } = useContext(SkillsApiData);
 	console.log("skills-profile", skills);
 
-	console.log("selectedItems", selectedItems);
+	console.log("selectedItems-skills", selectedItems);
 
 	const handleSelectChange = (selectedOptions) => {
-		// setSelectedItems(selectedOptions || []);
 		setSelectedItems(selectedOptions);
 		const selectedSkillsIds = selectedOptions
 			? selectedOptions.map((item) => item.id)
@@ -50,23 +49,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
 		});
  };
 	
-
-	// const handleChange = (data, field) => {
-	// 	if (field) {
-	// 		setFormData({
-	// 			...formData,
-	// 			[field]: data,
-	// 		});
-	// 	} else {
-			
-	// 		setSelectedItems(data); 
-	// 		const selectedSkillsIds = data ? data.map((item) => item.id) : []; // Extract IDs
-	// 		setFormData({
-	// 			...formData,
-	// 			skills_id: selectedSkillsIds.join(","), 
-	// 		});
-	// 	}
-	// };
 
 	return (
 		<>

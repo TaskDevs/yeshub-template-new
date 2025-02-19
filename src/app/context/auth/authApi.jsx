@@ -8,7 +8,7 @@ export const login = async (data) => {
     console.log("Login function called with data:", data);
     try {
         let responseOnLogin = await axios.post(`${process.env.REACT_APP_BASE_URL}login`, data);
-        console.log("Response received:", responseOnLogin); // Check the response
+        console.log("Response received:", responseOnLogin.data); // Check the response
 
         if (responseOnLogin.status === SUCCESS_STATUS) {
             return responseOnLogin.data;

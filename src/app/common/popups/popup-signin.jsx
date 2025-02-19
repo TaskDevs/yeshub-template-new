@@ -1,20 +1,16 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoIosEyeOff } from "react-icons/io";
-import { FcGoogle } from "react-icons/fc";
 import Loader from "../loader";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
 import { login } from "../../context/auth/authApi";
-import JobZImage from "../jobz-img";
 import cookieMethods from "../../../utils/cookieUtils";
 
 function SignInPopup() {
   const {
     isLoading,
     setIsLoading,
-    roleOption,
-    setRoleOption,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
@@ -36,6 +32,7 @@ function SignInPopup() {
   });
 
   const [isVisible, setIsVisible] = useState(false);
+  const [serverResponse, setServerResponse] = useState(null); // State for messages
 
   useEffect(() => {
     if (!formData.role) {
@@ -51,110 +48,76 @@ function SignInPopup() {
     }));
   };
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-
-  //   try {
-  //     const response = await login(formData);
-  //     if (response && response.token) {
-  //       // Store token and user role
-  //       sessionStorage.setItem("authToken", response.token);
-  //       sessionStorage.setItem("userRole", response.role);
-
-  //       if (formData.rememberMe) {
-  //         sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
-  //       } else {
-  //         sessionStorage.removeItem("rememberedUser");
-  //       }
-
-  //       // Redirect based on role
-  //       switch (response.role) {
-  //         case "admin":
-  //           navigate("/admin");
-  //           break;
-  //         case "employer":
-  //           navigate("/");
-  //           break;
-  //         case "user":
-  //         default:
-  //           navigate("/");
-  //           break;
-  //       }
-
-  //       setFormData(
-  //         SIGNINFIELD.fieldDetail.reduce(
-  //           (acc, field) => {
-  //             acc[field.name] = "";
-  //             return acc;
-  //           },
-  //           { rememberMe: false }
-  //         )
-  //       );
-  //     } else {
-  //       console.error("Login failed: No token received");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed", error);
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
-
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-  
+    setServerResponse(null); // Reset previous messages
+
     try {
       const response = await login(formData);
       if (response && response.token && response.refresh_token) {
         const { token, refresh_token, role } = response;
-  
+
         // Store both tokens in sessionStorage and cookies
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
-        cookieMethods.setCookies(token, refresh_token);  // Store both access and refresh tokens
-  
+        cookieMethods.setCookies(token, refresh_token);
+
         if (formData.rememberMe) {
           sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
         } else {
           sessionStorage.removeItem("rememberedUser");
         }
-  
+
+        // Show success message
+        setServerResponse({ type: "success", message: "Login successful!" });
+
         // Redirect based on role
-        switch (role) {
-          case "admin":
-            navigate('/admin');
-            break;
-          case "employer":
-            navigate('/');
-            break;
-          case "user":
-          default:
-            navigate('/');
-            break;
-        }
+        setTimeout(() => {
+          switch (role) {
+            case "admin":
+              navigate("/admin");
+              break;
+            case "employer":
+              navigate("/");
+              break;
+            case "user":
+            default:
+              navigate("/");
+              break;
+          }
+        }, 2000);
       } else {
-        console.error("Login failed: No token received");
+        setServerResponse({ type: "error", message: "Login failed: No token received" });
       }
     } catch (error) {
       console.error("Login failed", error);
+      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+      setServerResponse({ type: "error", message: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
     <>
       {isLoading && <Loader />}
+
+      {/* Server Response Message */}
+      {serverResponse && (
+        <div className={`alert ${serverResponse.type === "success" ? "alert-success" : "alert-danger"} text-center`} role="alert">
+          {serverResponse.message}
+        </div>
+      )}
 
       {!isLoading && (
         <div
           className="modal fade twm-sign-up"
           id="sign_up_popup2"
           aria-hidden="true"
-          aria-labelledby="sign_up_popupLabel2"
+          aria-labelledby="sign_up_popupLabel"
           tabIndex={-1}
+           data-bs-backdrop="static"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -174,10 +137,7 @@ function SignInPopup() {
               <div className="modal-body">
                 <div className="twm-tabs-style-2">
                   <div className="tab-content">
-                    <form
-                      onSubmit={handleLogin}
-                      className="tab-pane fade show active"
-                    >
+                    <form onSubmit={handleLogin} className="tab-pane fade show active">
                       <div className="row">
                         {SIGNINFIELD?.fieldDetail?.map((field) => (
                           <div className="col-lg-12" key={field.name}>
@@ -197,9 +157,7 @@ function SignInPopup() {
                                   />
                                   <div
                                     className="eye-icon"
-                                    onClick={() =>
-                                      setIsVisible((prev) => !prev)
-                                    }
+                                    onClick={() => setIsVisible((prev) => !prev)}
                                     style={{
                                       position: "absolute",
                                       right: "10px",
@@ -208,11 +166,7 @@ function SignInPopup() {
                                       cursor: "pointer",
                                     }}
                                   >
-                                    {isVisible ? (
-                                      <IoMdEye size={20} />
-                                    ) : (
-                                      <IoIosEyeOff size={20} />
-                                    )}
+                                    {isVisible ? <IoMdEye size={20} /> : <IoIosEyeOff size={20} />}
                                   </div>
                                 </div>
                               ) : (
@@ -241,12 +195,8 @@ function SignInPopup() {
                                 checked={formData.rememberMe}
                                 onChange={handleInputChange}
                               />
-                              <label
-                                className="form-check-label rem-forgot"
-                                htmlFor="rememberMe"
-                              >
-                                Remember me{" "}
-                                <a href="/forgotton-password">Forgot Password?</a>
+                              <label className="form-check-label rem-forgot" htmlFor="rememberMe">
+                                Remember me <a href="/forgotton-password">Forgot Password?</a>
                               </label>
                             </div>
                           </div>
@@ -282,18 +232,12 @@ function SignInPopup() {
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
                   <li>
-                    <a
-                      href="https://in.linkedin.com/"
-                      className="linkedin-clr m-2"
-                    >
+                    <a href="https://in.linkedin.com/" className="linkedin-clr m-2">
                       <i className="fab fa-linkedin-in" />
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="https://www.google.com/"
-                      className="google-clr m-2"
-                    >
+                    <a href="https://www.google.com/" className="google-clr m-2">
                       <i className="fab fa-google" />
                     </a>
                   </li>

@@ -137,6 +137,7 @@ function SignUpPopup() {
           aria-hidden="true"
           aria-labelledby="sign_up_popupLabel"
           tabIndex={-1}
+          data-bs-backdrop="static"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">

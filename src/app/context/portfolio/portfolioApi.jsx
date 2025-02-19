@@ -40,10 +40,10 @@ export const searchPortfolio = async (data) => {
 
 // LIST Portfolio
 /**Add Get Portfolio API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-export const portfolioList = async (userid) => {
+export const portfolioList = async (id) => {
   try {
     let responseOnPortfolioList = await axios.get(
-      `${baseURL}}get-portfolio/${userid}`
+      `${baseURL}get-portfolio/${id}`
     );
 
     return responseOnPortfolioList;

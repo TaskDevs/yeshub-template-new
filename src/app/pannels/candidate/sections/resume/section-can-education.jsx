@@ -10,17 +10,19 @@ import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { userId } from "../../../../../globals/dummy-users";
 
 function SectionCanEducation() {
-	const {
-		processAddEducation,
+	const {	
 		processEducationEducation,
-		processUpdateEducation,
-		formData,
+		handleAddEducation,
+		handleUpdateEducation,
+		initialFormData,
+		setFormData
 	} = useContext(EducationApiData);
 
-	const { selectedId, setSelectedId } = useContext(GlobalApiData);
+	const { selectedId, setSelectedId, handleClicked } =
+		useContext(GlobalApiData);
 
 
-	const [educationData, setEducationData] = useState({});
+	const [educationData, setEducationData] = useState([]);
 
 	console.log("educationData", educationData);
 	//map the education data to the various fields and add the selectedId if the education is selected 
@@ -40,35 +42,81 @@ function SectionCanEducation() {
 		fetchEducationData();
 	}, [processEducationEducation]);
 
+	// const handleEditClick = (id) => {
+	// 	setSelectedId(id);
+	// 	const educationToEdit = educationData.find((e) => {
+	// 		e.id === id;
+	// 		return e.id;
+	// 	});
+	// 	console.log("educationToEdit", educationToEdit);
+	// 	educationToEdit === selectedId &&
+	// 		educationData.map((e) =>
+	// 			setFormData({
+	// 				school: e.school,
+	// 				qualification: e.qualification,
+	// 				area_of_study: e.area_of_study,
+	// 				date_attended: e.date_attended,
+	// 				date_completed: e.date_completed,
+	// 				description: e.description,
+	// 			})
+	// 		);
+		
+	// }
+
+
+
+
+	const handleEditClick = (id) => {
+		setSelectedId(id);
+		const educationToEdit = educationData.find((e) => e.id === id);
+
+		console.log("educationToEdit", educationToEdit);
+		if (educationToEdit) {
+			setFormData({
+				school: educationToEdit.school,
+				qualification: educationToEdit.qualification,
+				area_of_study: educationToEdit.area_of_study,
+				date_attended: educationToEdit.date_attended,
+				date_completed: educationToEdit.date_completed,
+				description: educationToEdit.description,
+			});
+		}
+	};
+
+
+	const handleResetForm = () => {
+		setFormData(initialFormData);
+	}
+
 	
 
-	const handleSubmitEducation = async (e) => {
-		e.preventDefault();
-		try { 
-			const response = await processAddEducation({ ...formData, id: "1" });
-			console.log("Education added successfully", response);
+	// const handleSubmitEducation = async (e) => {
+	// 	e.preventDefault();
+	// 	try { 
+	// 		const response = await processAddEducation({ ...formData, id: "1" });
+	// 		console.log("Education added successfully", response);
 
-			if (response) {
-				console.log("Education added successfully", response);
-			} else {
-				console.error("Failed to add education");
-			}
-		} catch (err) {
-			console.error("failed to add education", err)
-		}
-	};
+	// 		if (response) {
+	// 			console.log("Education added successfully", response);
+	// 		} else {
+	// 			console.error("Failed to add education");
+	// 		}
+	// 	} catch (err) {
+	// 		console.error("failed to add education", err)
+	// 	}
+	// };
 
-	const handleUpdate = async (e) => {
-		e.preventDefault();
+	// const handleUpdate = async (e) => {
+	// 	e.preventDefault();
 
-		try { 
-			const response = await processUpdateEducation({ ...formData, id: "1" });
-			console.log("Education updated successfully", response);
+	// 	try { 
+	// 		const response = await processUpdateEducation({ ...formData, id: "1" });
+	// 		console.log("Education updated successfully", response);
 
-		} catch (err) {
-			console.error("Failed to update education")
-		}
-	};
+	// 	} catch (err) {
+	// 		console.error("Failed to update education")
+	// 	}
+	// };
 
 	return (
 		<>
@@ -80,69 +128,76 @@ function SectionCanEducation() {
 					role="button"
 					title="Edit"
 					className="site-text-primary"
+					onClick={handleResetForm}
 				>
 					<span className="fa fa-edit" />
 				</a>
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
-					<p>Mention your education details.</p>
-					<p>2004 to 2006</p>
-					<p>
-						<b>BCA - Bachelor of Computer Applications</b>
-					</p>
-					<p>2006 to 2008</p>
-					<p>
-						<b>MCA - Master of Computer Application</b>
-					</p>
-					<p>2008 to 20011</p>
-					<p>
-						<b>Design Communication Visual</b>
-					</p>
-					<p>
-						<a className="site-text-primary" href="#">
-							Add Doctorate/PhD
-						</a>
-					</p>
-					<p>
-						<a className="site-text-primary" href="#">
-							Add Masters/Post-Graduation
-						</a>
-					</p>
-					<p>
-						<a className="site-text-primary" href="#">
-							Add Graduation/Diploma
-						</a>
-					</p>
+					{educationData.length === 0 ? (
+						<p>Add your education profile.</p>
+					) : (
+						educationData.map((education, i) => (
+							<div key={i} className="mb-4">
+								<div className="">
+									school : <span>{education.school} </span>
+								</div>
+								<div className="">
+									Area of study : <span>{education.area_of_study} </span>
+								</div>
+								<div className="">
+									qualification : <span>{education.qualification} </span>
+								</div>
+								<div className="">
+									date attended : <span>{education.date_attended} </span>
+								</div>
+								<div className="">
+									date completed : <span>{education.date_completed} </span>
+								</div>
+								<div className="">
+									description : <span>{education.description} </span>
+								</div>
+
+								<div className="p-a20">
+									<div className="actions">
+										<button
+											className="site-button  actions"
+											data-bs-target="#delete-education"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+										>
+											<FaRegTrashCan color="white" />
+											<span className="admin-nav-text">Delete</span>
+										</button>
+
+										<button
+											className="site-button  actions "
+											data-bs-target="#Edit-Education"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+											onClick={() => {
+												console.log("edit-sch-id", education.id);
+												
+												handleEditClick(education.id);
+											}}
+										>
+											<MdOutlineEdit color="white" />
+											<span>Edit</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						))
+					)}
 				</div>
 			</div>
 
-			<div className="p-a20">
-				<div className="actions">
-					<button
-						className="site-button  actions"
-						data-bs-target="#delete-education"
-						data-bs-toggle="modal"
-						data-bs-dismiss="modal"
-					>
-						<FaRegTrashCan color="white" />
-						<span className="admin-nav-text">Delete</span>
-					</button>
-
-					<button
-						className="site-button  actions "
-						data-bs-target="#Edit-Education"
-						data-bs-toggle="modal"
-						data-bs-dismiss="modal"
-					>
-						<MdOutlineEdit color="white" />
-						<span>Edit</span>
-					</button>
-				</div>
-			</div>
-
-			<SectionEducationForm submit={handleSubmitEducation} id="Education" />
-			<SectionEducationForm submit={handleUpdate} id="Edit-Education" />
+			<SectionEducationForm submit={handleAddEducation} id="Education" />
+			<SectionEducationForm
+				submit={handleUpdateEducation}
+				id="Edit-Education"
+			/>
 		</>
 	);
 }

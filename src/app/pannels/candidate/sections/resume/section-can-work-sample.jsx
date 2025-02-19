@@ -1,55 +1,69 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 // import { PortfolioPopup } from '../../../../common/popups/popup-portfoio';
 import { PortfolioApiData } from '../../../../context/portfolio/portfolioContextApi';
 import { PortfolioPopup } from '../../../../common/popups/popup-portfolio';
+import { userId } from '../../../../../globals/dummy-users';
+import { MdOutlineEdit } from 'react-icons/md';
+import { GlobalApiData } from '../../../../context/global/globalContextApi';
+import { FaRegTrashCan } from 'react-icons/fa6';
 
 function SectionCanWorkSample() {
 
+	const [portfolios, setPortfolios] = useState([])
     const {
-			processAddPortfolio,
+			handleAddPortfolio,
 			processGetAllPortfolio,
-			processUpdatePortfolio,
-        processDeletePortfolio,
-            formData
-    } = useContext(PortfolioApiData);
+			handleUpdatePortfolio,
+			handleResetForm,
+        // processDeletePortfolio,
+            // formData
+			setFormData
+	} = useContext(PortfolioApiData);
+	const { setSelectedId } = useContext(GlobalApiData)
+	
+	console.log("portfolios-data", portfolios);
 
     useEffect(() => {
         const fetchAllPortfolio = async () => {
-            try {
-           
-                const res = await processGetAllPortfolio("userid")
-                console.log("get portfolio", res)
+            try {          
+                const res = await processGetAllPortfolio(userId)
+				if (res) {
+					console.log("get portfolio", res);
+					const data = res?.data.data;
+					setPortfolios(data);
+				}
+                
             }
             catch (err) {
               console.error("failed to get portfolio", err);
             }
         }
         fetchAllPortfolio()
-    })
+	}, [processGetAllPortfolio])
+	
+
+
+	const handleEditClick = (id) => {
+		setSelectedId(id);
+		const potfolioToEdit = portfolios.find((e) => e.id === id);
+
+		console.log("potfolioToEdit", potfolioToEdit);
+		if (potfolioToEdit) {
+			setFormData({
+				school: potfolioToEdit.project_title,
+				qualification: potfolioToEdit.role,
+				area_of_study: potfolioToEdit.skills,
+				date_attended: potfolioToEdit.project_start_date,
+				date_completed: potfolioToEdit.project_end_date,
+				description: potfolioToEdit.description,
+			});
+		}
+	};
+
+	
     
 
-    const handleAddPortfolio = async (e) => {
-        e.preventDefault();
-
-        try {
-            const res = await processAddPortfolio(formData);
-            console.log("add-portfolio", res);
-        } catch (err) {
-            console.error("failed to add portfolio",err);
-        }
-    }
-
-     const handleUpdatePortfolio = async (e) => {
-				e.preventDefault();
-
-				try {
-					const res = await processUpdatePortfolio(formData);
-					console.log("update-portfolio", res);
-				} catch (err) {
-					console.error("failed to update portfolio",err);
-				}
-			};
-
+   
 
 
   return (
@@ -77,6 +91,7 @@ function SectionCanWorkSample() {
 					role="button"
 					title="Edit"
 					className="site-text-primary"
+					onClick={handleResetForm}
 				>
 					<span className="fa fa-edit" />
 				</a>
@@ -86,6 +101,62 @@ function SectionCanWorkSample() {
 				<div className=" p-a20 ">
 					<div className="panel-body wt-panel-body  ">
 						<div className="twm-panel-inner">
+							{portfolios.length === 0 ? (
+								<p>No portfolio added yet</p>
+							) : (
+								portfolios.map((portfolio, i) => (
+									<div key={i} className="mb-4">
+										<div className="">
+											Project Title : <span>{portfolio.porject_title} </span>
+										</div>
+										<div className="">
+											Role : <span>{portfolio.role} </span>
+										</div>
+										<div className="">
+											skills : <span>{portfolio.skills} </span>
+										</div>
+										<div className="">
+											date started :{" "}
+											<span>{portfolio.project_start_date} </span>
+										</div>
+										<div className="">
+											date ended : <span>{portfolio.project_end_date} </span>
+										</div>
+										<div className="">
+											description : <span>{portfolio.description} </span>
+										</div>
+
+										<div className="p-a20">
+											<div className="actions">
+												<button
+													className="site-button  actions"
+													data-bs-target="#delete-portfolio"
+													data-bs-toggle="modal"
+													data-bs-dismiss="modal"
+												>
+													<FaRegTrashCan color="white" />
+													<span className="admin-nav-text">Delete</span>
+												</button>
+
+												<button
+													className="site-button  actions "
+													data-bs-target="#Work_Sample"
+													data-bs-toggle="modal"
+													data-bs-dismiss="modal"
+													onClick={() => {
+														console.log("portfolio-id", portfolio.id);
+
+														handleEditClick(portfolio.id);
+													}}
+												>
+													<MdOutlineEdit color="white" />
+													<span>Edit</span>
+												</button>
+											</div>
+										</div>
+									</div>
+								))
+							)}
 							<p>Title</p>
 							<p>Role</p>
 							<p>Skills</p>

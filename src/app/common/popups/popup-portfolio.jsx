@@ -180,7 +180,7 @@ export const PortfolioPopup = ({ submit }) => {
 									>
 										Close
 									</button>
-									<button type="button" className="site-button">
+									<button type="submit" className="site-button">
 										Save
 									</button>
 								</div>

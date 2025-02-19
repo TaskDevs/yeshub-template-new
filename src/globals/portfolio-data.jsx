@@ -19,13 +19,13 @@ export const PORTFOLIOFIELD = {
 			placeholder: "",
 		},
 		{
-			name: "start_date",
+			name: "project_start_date",
 			label: "Start Date",
 			type: "date",
 			placeholder: "",
 		},
 		{
-			name: "end_date",
+			name: "project_end_date",
 			label: "End Date",
 			type: "date",
 			placeholder: "",

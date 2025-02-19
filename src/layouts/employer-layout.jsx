@@ -6,52 +6,50 @@ import { popupType } from "../globals/constants";
 import { useState } from "react";
 
 function EmployerLayout() {
+  const [sidebarActive, setSidebarActive] = useState(true);
 
-    const [sidebarActive, setSidebarActive] = useState(true);
+  const handleSidebarCollapse = () => {
+    setSidebarActive(!sidebarActive);
+  };
 
-    const handleSidebarCollapse = () => {
-        setSidebarActive(!sidebarActive);
-    }
+  return (
+    <>
+      <div className="page-wraper">
+        <EmpHeaderSection
+          onClick={handleSidebarCollapse}
+          sidebarActive={sidebarActive}
+        />
+        <EmpSidebarSection sidebarActive={sidebarActive} />
 
-    return (
-			<>
-				<div className="page-wraper">
-					<EmpHeaderSection
-						onClick={handleSidebarCollapse}
-						sidebarActive={sidebarActive}
-					/>
-					<EmpSidebarSection sidebarActive={sidebarActive} />
+        <div id="content" className={sidebarActive ? "" : "active"}>
+          <div className="content-admin-main">
+            <EmployerRoutes />
+          </div>
+        </div>
 
-					<div id="content" className={sidebarActive ? "" : "active"}>
-						<div className="content-admin-main">
-							<EmployerRoutes />
-						</div>
-					</div>
-
-					<YesNoPopup
-						id="delete-dash-profile"
-						type={popupType.DELETE}
-						msg={"Do you want to delete your profile?"}
-					/>
-					<YesNoPopup
-						id="logout-dash-profile"
-						type={popupType.LOGOUT}
-						msg={"Do you want to Logout your profile?"}
-					/>
-					<YesNoPopup
-						id="delete-profile"
-						type={popupType.DELETE_PROFILE}
-						msg={"Do you want to delete your profile?"}
-					/>
-					<YesNoPopup
-						id="delete-skills"
-						type={popupType.DELETE_SKILLS}
-						msg={"Do you want to delete these skills?"}
-					/>
-					
-				</div>
-			</>
-		);
+        <YesNoPopup
+          id="delete-dash-profile"
+          type={popupType.DELETE}
+          msg={"Do you want to delete your profile?"}
+        />
+        <YesNoPopup
+          id="logout-dash-profile"
+          type={popupType.LOGOUT}
+          msg={"Do you want to Logout your profile?"}
+        />
+        <YesNoPopup
+          id="delete-profile"
+          type={popupType.DELETE_PROFILE}
+          msg={"Do you want to delete your profile?"}
+        />
+        <YesNoPopup
+          id="delete-skills"
+          type={popupType.DELETE_SKILLS}
+          msg={"Do you want to delete these skills?"}
+        />
+      </div>
+    </>
+  );
 }
 
 export default EmployerLayout;

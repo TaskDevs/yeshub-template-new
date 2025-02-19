@@ -8,286 +8,284 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
 
 const skills = [
-	{
-		id: "1",
-		skill: "writing",
-	},
-	{
-		id: "2",
-		skill: "communication",
-	},
-	{
-		id: "3",
-		skill: "research",
-	}
-]
+  {
+    id: "1",
+    skill: "writing",
+  },
+  {
+    id: "2",
+    skill: "communication",
+  },
+  {
+    id: "3",
+    skill: "research",
+  },
+];
 
 function SectionCandicateBasicInfo({ submit, id }) {
-	const [selectedItems, setSelectedItems] = useState([]);
-	const { formData, setFormData, profileData } = useContext(ProfileApiData);
-	// const { skills } = useContext(SkillsApiData);
-	console.log("skills-profile", skills);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const { formData, setFormData, profileData } = useContext(ProfileApiData);
+  // const { skills } = useContext(SkillsApiData);
+  console.log("skills-profile", skills);
 
-	console.log("selectedItems", selectedItems);
+  console.log("selectedItems", selectedItems);
 
-	const handleSelectChange = (selectedOptions) => {
-		// setSelectedItems(selectedOptions || []);
-		setSelectedItems(selectedOptions);
-		const selectedSkillsIds = selectedOptions
-			? selectedOptions.map((item) => item.id)
-			: []; 
-		setFormData({
-			...formData,
-			skills_id: selectedSkillsIds.join(","),
-		});
-	};
+  const handleSelectChange = (selectedOptions) => {
+    // setSelectedItems(selectedOptions || []);
+    setSelectedItems(selectedOptions);
+    const selectedSkillsIds = selectedOptions
+      ? selectedOptions.map((item) => item.id)
+      : [];
+    setFormData({
+      ...formData,
+      skills_id: selectedSkillsIds.join(","),
+    });
+  };
 
+  const handleChange = (field, data) => {
+    setFormData({
+      ...formData,
+      [field]: data,
+    });
+  };
 
- const handleChange = (field, data) => {
-		setFormData({
-			...formData,
-			[field]: data,
-		});
- };
-	
+  // const handleChange = (data, field) => {
+  // 	if (field) {
+  // 		setFormData({
+  // 			...formData,
+  // 			[field]: data,
+  // 		});
+  // 	} else {
 
-	// const handleChange = (data, field) => {
-	// 	if (field) {
-	// 		setFormData({
-	// 			...formData,
-	// 			[field]: data,
-	// 		});
-	// 	} else {
-			
-	// 		setSelectedItems(data); 
-	// 		const selectedSkillsIds = data ? data.map((item) => item.id) : []; // Extract IDs
-	// 		setFormData({
-	// 			...formData,
-	// 			skills_id: selectedSkillsIds.join(","), 
-	// 		});
-	// 	}
-	// };
+  // 		setSelectedItems(data);
+  // 		const selectedSkillsIds = data ? data.map((item) => item.id) : []; // Extract IDs
+  // 		setFormData({
+  // 			...formData,
+  // 			skills_id: selectedSkillsIds.join(","),
+  // 		});
+  // 	}
+  // };
 
-	return (
-		<>
-			<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
-				<div className="modal-dialog modal-dialog-centered">
-					<div className="modal-content">
-						<form onSubmit={submit}>
-							<div className="modal-header">
-								<h2 className="modal-title">Basic Informations</h2>
-								<button
-									type="button"
-									className="btn-close"
-									data-bs-dismiss="modal"
-									aria-label="Close"
-								/>
-							</div>
-							<div className="modal-body">
-								<div className="row">
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group">
-											<label>First Name</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[0]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fa fa-user " />
-											</div>
-										</div>
-									</div>
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group">
-											<label>Last Name</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[1]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
+  return (
+    <>
+      <div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <form onSubmit={submit}>
+              <div className="modal-header">
+                <h2 className="modal-title">Basic Informations</h2>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                />
+              </div>
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group">
+                      <label>First Name</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[0]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-user " />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group">
+                      <label>Last Name</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[1]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
 
-												<i className="fs-input-icon fa fa-user " />
-											</div>
-										</div>
-									</div>
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group">
-											<label>Phone</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[2]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fa fa-phone-alt" />
-											</div>
-										</div>
-									</div>
+                        <i className="fs-input-icon fa fa-user " />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group">
+                      <label>Phone</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[2]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-phone-alt" />
+                      </div>
+                    </div>
+                  </div>
 
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group city-outer-bx has-feedback">
-											<label>Experience</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[3]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>Experience</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[3]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
 
-												<i className="fs-input-icon fa fa-user-edit" />
-											</div>
-										</div>
-									</div>
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group">
-											<label>Address</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[4]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fa fa-globe-americas" />
-											</div>
-										</div>
-									</div>
+                        <i className="fs-input-icon fa fa-user-edit" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group">
+                      <label>Address</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[4]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-globe-americas" />
+                      </div>
+                    </div>
+                  </div>
 
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group city-outer-bx has-feedback">
-											<label>Country</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[5]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fa fa-globe-americas" />
-											</div>
-										</div>
-									</div>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>Country</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[5]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-globe-americas" />
+                      </div>
+                    </div>
+                  </div>
 
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group city-outer-bx has-feedback">
-											<label>Region</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[6]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fa fa-globe-americas" />
-											</div>
-										</div>
-									</div>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>Region</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[6]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-globe-americas" />
+                      </div>
+                    </div>
+                  </div>
 
-									<div className="col-xl-6 col-lg-6 col-md-12">
-										<div className="form-group city-outer-bx has-feedback">
-											<label>GPS Address</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[7]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fas fa-map-pin" />
-											</div>
-										</div>
-									</div>
-									<div className="col-xl-6 col-lg-12 col-md-12">
-										<div className="form-group city-outer-bx has-feedback">
-											<label>Postal Code</label>
-											<div className="ls-inputicon-box">
-												<InputField
-													field={USERPROFILEFIELD.fieldDetail[8]}
-													value={formData}
-													change={(data, field) => {
-														handleChange(data, field);
-													}}
-												/>
-												<i className="fs-input-icon fas fa-map-marker-alt" />
-											</div>
-										</div>
-									</div>
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>GPS Address</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[7]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fas fa-map-pin" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-6 col-lg-12 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>Postal Code</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[8]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fas fa-map-marker-alt" />
+                      </div>
+                    </div>
+                  </div>
 
-									<div className="col-xl-6 col-lg-12 col-md-12">
-										{/* <SelectField
+                  <div className="col-xl-6 col-lg-12 col-md-12">
+                    {/* <SelectField
 											field={USERPROFILEFIELD.fieldDetail[9]}
 											value={formData}
 											options={skills}
 											change={handleChange}
 											labelKey="skill"
 										/> */}
-										<div className="ls-inputicon-box ">
-											<div className="form-group">
-												<label>Skills</label>
-												<div className="wt-select-box selectpicker form-control">
-													<Select
-														isMulti
-														options={skills}
-														value={selectedItems}
-														onChange={(data) => handleSelectChange(data)}
-														placeholder="Search and select items..."
-														classNames="select-react"
-														classNamePrefix="select"
-														styles={{
-															control: (baseStyles, state) => ({
-																...baseStyles,
-																border: 0,
-																borderColor: state.isFocused ? "" : "",
-															}),
-														}}
-													/>
-												</div>
-											</div>
-										</div>
-									</div>
+                    <div className="ls-inputicon-box ">
+                      <div className="form-group">
+                        <label>Skills</label>
+                        <div className="wt-select-box selectpicker form-control">
+                          <Select
+                            isMulti
+                            options={skills}
+                            value={selectedItems}
+                            onChange={(data) => handleSelectChange(data)}
+                            placeholder="Search and select items..."
+                            classNames="select-react"
+                            classNamePrefix="select"
+                            styles={{
+                              control: (baseStyles, state) => ({
+                                ...baseStyles,
+                                border: 0,
+                                borderColor: state.isFocused ? "" : "",
+                              }),
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-									<div className="col-md-12">
-										<TextAreaField
-											field={USERPROFILEFIELD.fieldDetail[10]}
-											value={formData}
-											change={handleChange}
-										/>
-									</div>
-								</div>
-							</div>
+                  <div className="col-md-12">
+                    <TextAreaField
+                      field={USERPROFILEFIELD.fieldDetail[10]}
+                      value={formData}
+                      change={handleChange}
+                    />
+                  </div>
+                </div>
+              </div>
 
-							<div className="modal-footer">
-								<button
-									type="button"
-									className="site-button outline-primary"
-									data-bs-dismiss="modal"
-								>
-									Close
-								</button>
-								<button type="submit" className="site-button ">
-									Save
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</>
-	);
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="site-button outline-primary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="submit" className="site-button ">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default SectionCandicateBasicInfo;

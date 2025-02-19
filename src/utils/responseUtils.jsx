@@ -1,37 +1,41 @@
+import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { SUCCESS_STATUS } from "../globals/constants";
 
 export const notify = (
-    status,
-    success_mssg = "Operation Successful",
-    fail_mssg = "Operation failed"
+  status,
+  success = "Operation Successful",
+  fail = "Operation failed"
 ) => {
-    if (status === SUCCESS_STATUS) {
-        toast.success(success_mssg, {
-            position: "top-center"
-        })
-    } else {
-        toast.error(fail_mssg)
-    }
-}
+  if (status == 200) {
+    toast.success(success, {
+      position: "top-center",
+      autoClose: 3000, // You can set the duration for which the notification will be shown
+    });
+  } else {
+    toast.error(fail, {
+      position: "top-center",
+      autoClose: 3000, // You can set the duration for which the notification will be shown
+    });
+  }
+};
 
-export const topMessage = (status, error, changeState) => {
-    const handleClose = () => changeState(false)
-    return (
-    <div className="errorAlert">
-					<div className="inner">
-						{status && "User logged in successfully"}
-						{!status &&
-							error &&
-							"Oops!, An error ocurred while logging in. Try again"}
-					</div>
+export const topMessage = ({ status, msg, changeState }) => {
+  const handleClose = () =>
+    changeState({
+      status: null,
+      msg: null,
+    });
+  return (
+    <div className={status ? "errorAlert" : "successAlert"}>
+      <div className="inner">{msg}</div>
 
-					<button
-						type="button"
-						className="btn-close"
-						aria-label="Close"
-						onClick={() => handleClose()}
-					/>
-				</div>
-    )
-}
+      <button
+        type="button"
+        className="btn-close"
+        aria-label="Close"
+        onClick={() => handleClose()}
+      />
+    </div>
+  );
+};

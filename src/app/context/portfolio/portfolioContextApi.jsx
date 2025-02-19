@@ -123,6 +123,7 @@ const PortfolioApiDataProvider = (props) => {
 		<PortfolioApiData.Provider
 			value={{
 				formData,
+				setFormData,
         handleChange,
         handleResetForm,
 				processAddPortfolio,

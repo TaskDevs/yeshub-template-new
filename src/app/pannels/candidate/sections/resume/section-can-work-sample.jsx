@@ -15,8 +15,6 @@ function SectionCanWorkSample() {
 			processGetAllPortfolio,
 			handleUpdatePortfolio,
 			handleResetForm,
-        // processDeletePortfolio,
-            // formData
 			setFormData
 	} = useContext(PortfolioApiData);
 	const { setSelectedId } = useContext(GlobalApiData)
@@ -50,11 +48,11 @@ function SectionCanWorkSample() {
 		console.log("potfolioToEdit", potfolioToEdit);
 		if (potfolioToEdit) {
 			setFormData({
-				school: potfolioToEdit.project_title,
-				qualification: potfolioToEdit.role,
-				area_of_study: potfolioToEdit.skills,
-				date_attended: potfolioToEdit.project_start_date,
-				date_completed: potfolioToEdit.project_end_date,
+				project_title: potfolioToEdit.project_title,
+				role: potfolioToEdit.role,
+				skills: potfolioToEdit.skills,
+				project_start_date: potfolioToEdit.project_start_date,
+				project_end_date: potfolioToEdit.project_end_date,
 				description: potfolioToEdit.description,
 			});
 		}
@@ -107,7 +105,7 @@ function SectionCanWorkSample() {
 								portfolios.map((portfolio, i) => (
 									<div key={i} className="mb-4">
 										<div className="">
-											Project Title : <span>{portfolio.porject_title} </span>
+											Project Title : <span>{portfolio.project_title} </span>
 										</div>
 										<div className="">
 											Role : <span>{portfolio.role} </span>
@@ -140,7 +138,7 @@ function SectionCanWorkSample() {
 
 												<button
 													className="site-button  actions "
-													data-bs-target="#Work_Sample"
+													data-bs-target="#Edit-Portfolio"
 													data-bs-toggle="modal"
 													data-bs-dismiss="modal"
 													onClick={() => {
@@ -157,19 +155,13 @@ function SectionCanWorkSample() {
 									</div>
 								))
 							)}
-							<p>Title</p>
-							<p>Role</p>
-							<p>Skills</p>
-							<p>Start data</p>
-							<p>End date</p>
-							<p>Description</p>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<PortfolioPopup submit={handleAddPortfolio} />
-			<PortfolioPopup submit={handleUpdatePortfolio} />
+			<PortfolioPopup submit={handleAddPortfolio} id="Work_Sample" />
+			<PortfolioPopup submit={handleUpdatePortfolio} id="Edit-Portfolio" />
 		</div>
 	);
 }

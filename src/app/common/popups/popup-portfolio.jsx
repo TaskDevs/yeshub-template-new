@@ -6,7 +6,7 @@ import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 
 
 
-export const PortfolioPopup = ({ submit }) => {
+export const PortfolioPopup = ({ submit, id }) => {
 
     const { formData, handleChange } = useContext(PortfolioApiData)
 
@@ -14,7 +14,7 @@ export const PortfolioPopup = ({ submit }) => {
 			<div className="">
 				<div
 					className="modal fade twm-saved-jobs-view"
-					id="Work_Sample"
+					id={id}
 					tabIndex={-1}
 				>
 					<div className="modal-dialog modal-dialog-centered">

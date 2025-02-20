@@ -1,29 +1,37 @@
 import { useNavigate } from "react-router-dom";
 import { popupType } from "../../../globals/constants";
 import { publicUser } from "../../../globals/route-names";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { EducationApiData } from "../../context/education/educationContextApi";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { CategoryApiData } from "../../context/category/categoryContextApi";
 import { SkillsApiData } from "../../context/skills/skillsContextApi";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { toast } from "react-toastify";
+import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 
 function YesNoPopup(props) {
 	const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
 	const { processDeleteEducation } = useContext(EducationApiData);
 	const { processDeleteCategory } = useContext(CategoryApiData);
-	const { processDeleteProfile } = useContext(ProfileApiData);
-	const { setSkill, processDeleteSkills } = useContext(SkillsApiData);
-
+	const { processDeleteProfile, profileData } = useContext(ProfileApiData);
+	const {  processDeleteSkills } = useContext(SkillsApiData);
+   const {  processDeletePortfolio } = useContext(PortfolioApiData);
 
 	const handleDeleteEducation = async () => {
+		
+		if (!selectedId) {
+			toast.error("Please select the education profile to delete")
+			return;
+		}
 		setIsSubmitting(true);
 		try {
 			const response = await processDeleteEducation(selectedId);
 			console.log("Education deleted successfully", response);
+			toast.success("Education profile deleted successfully");
 		} catch (error) {
 			console.log("failed to deleted Education", error);
+			toast.error("Failed to delete education");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -35,9 +43,11 @@ function YesNoPopup(props) {
         try {
 					console.log("selectedid-del", selectedId);
 					const response = await processDeleteCategory(selectedId);
-					console.log("category deleted successfully", response);
+					console.log("User profile deleted successfully", response);
+									
 				} catch (e) {
-					console.error("failed to delete category", e);
+			console.error("Failed to delete profile", e);
+			toast.error("Failed to delete profile");
 				} finally {
 					setIsSubmitting(false);
 				}
@@ -46,12 +56,32 @@ function YesNoPopup(props) {
 	const handleDeleteProfile = async () => {
 		setIsSubmitting(true);
 		try {
-			const response = await processDeleteProfile(1);
-			if (response) {
-				console.log("category deleted successfully", response);
-			}
+			console.log("deleting-id", profileData.user_id);
+			const response = await processDeleteProfile(profileData.user_id);
+			console.log("category deleted successfully", response);
+			toast.success("Category deleted successfully");
 		} catch (e) {
 			console.error("failed to delete category", e);
+			toast.error("Failed to delete category", e);
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	const handleDeletePortfolio = async () => {
+		if (!selectedId) {
+			toast.error("Please select the education profile to delete");
+			return;
+		}
+		setIsSubmitting(true);
+		try {
+			console.log("deleting-id", );
+			const response = await processDeletePortfolio(selectedId);
+			console.log("category deleted successfully", response);
+			toast.success("Category deleted successfully");
+		} catch (e) {
+			console.error("failed to delete category", e);
+			toast.error("Failed to delete category", e);
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -63,13 +93,15 @@ function YesNoPopup(props) {
 
 	const handleDeleteSkills = async () => {
 		setIsSubmitting(true);
-			try {
+		try {
+				
 				const response = await processDeleteSkills(selectedId);
 				console.log("skills deleted successfully", response);
 				toast.success("skills deleted successfully")
 				 
 			} catch (error) {
 				console.error("Error deleting skill", error);
+				toast.error("Failed to delete skills");
 			} finally {
 				setIsSubmitting(false);
 			}
@@ -99,6 +131,9 @@ function YesNoPopup(props) {
 
 			case popupType.DELETE_EDUCATION:
 				return handleDeleteEducation();
+			
+			case popupType.DELETE_PORTFOLIO:
+				return handleDeletePortfolio();
 
 			default:
 				console.warn("Unknown type", props.type);

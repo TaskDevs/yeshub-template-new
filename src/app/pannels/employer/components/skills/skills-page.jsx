@@ -14,15 +14,17 @@ function SkillsPage() {
 			</div>
 
 			<div className="twm-right-section-panel site-bg-gray">
-				{/*Add category*/}
+				
 				<div className="panel panel-default mb-3">
+					{/* <div className="section-panel"></div> */}
 					<AddSkills />
+					
 				</div>
-				{/* get categories list  */}
-				<div className="panel panel-default mb-3">
+
+				{/* <div className="panel panel-default mb-3">
 					<SkillsDetails />
-				</div>
-				{/* get each category details */}
+				</div> */}
+
 				<div className="panel panel-default mb-3"></div>
 			</div>
 		</>

@@ -32,30 +32,31 @@ const ProfileApiDataProvider = (props) => {
 	const [formData, setFormData] = useState(initialFormData);
 
 	console.log("formData-profile-ctx: ", formData);
-	console.log("selectedFile", selectedFile);
+	// console.log("selectedFile", selectedFile);
 
-	useEffect(() => {
-		const fetchProfile = async () => {
-			if (!userId) {
-				return false;
-			}
-			try {
-				const res = await processProfileProfile(userId);
-				console.log("Fetching profile-can", res);
+	// useEffect(() => {
+	// 	const fetchProfile = async () => {
+	// 		if (!userId) {
+	// 			return false;
+	// 		}
+	// 		try {
+	// 			const res = await processProfileProfile(userId);
+	// 			console.log("Fetching profile-can", res);
 
-				const data = res.data.data;
-				console.log("data-profilectx", data);
-				setProfileData(data);
-			} catch (error) {
-				console.error("Failed Fetching profile", error);
-			} finally {
-			}
-		};
-		fetchProfile();
-	}, []);
+	// 			const data = res.data.data;
+	// 			console.log("data-profilectx", data);
+	// 			setProfileData(data);
+	// 		} catch (error) {
+	// 			console.error("Failed Fetching profile", error);
+	// 		} finally {
+	// 		}
+	// 	};
+	// 	fetchProfile();
+	// }, []);
 
 	const processAddProfile = async (data) => {
 		try {
+			console.log("data-profile", data);
 			const res = await addProfile(data);
 			console.log("add-profile", res);
 			return res;
@@ -67,7 +68,7 @@ const ProfileApiDataProvider = (props) => {
 	const processGetAllProfile = async () => {
 		try {
 			const res = await profileList();
-			console.log("profile", res);
+			// console.log("profile", res);
 			return res;
 		} catch (e) {
 			console.error("get-all-profile", e);
@@ -87,15 +88,23 @@ const ProfileApiDataProvider = (props) => {
 	const processSearchProfile = async (data) => {};
 
 	const processUpdateProfile = async (id, data) => {
-		const res = await updateProfile(id, data);
+		try {
+			const res = await updateProfile(id, data);
 		console.log("profile", res);
 		return res;
+		} catch (e) {
+			throw new Error("Failed to update profile", e);
+		}
 	};
 
 	const processDeleteProfile = async (id) => {
-		const res = await deleteProfile(id);
+		try {
+			const res = await deleteProfile(id);
 		console.log("profile", res);
 		return res;
+		} catch (e) {
+			throw new Error(`Could not delete profile`, e)
+		}
 	};
 
 	const handleSubmitProfile = async (e) => {
@@ -126,7 +135,7 @@ const ProfileApiDataProvider = (props) => {
 			return response;
 		} catch (e) {
 			console.error("adding profile error", e);
-			notify("An error occurred while adding the profile");
+			toast.error("An error occurred while adding the profile");
 		} finally {
 			setIsSubmitting(false);
 			setFormData(initialFormData);
@@ -141,15 +150,16 @@ const ProfileApiDataProvider = (props) => {
 		});
 
 		try {
-			const response = await processUpdateProfile(userId, {
+			const res = await processUpdateProfile(userId, {
 				...formData,
 				id: userId,
 			});
-			console.log("add-profile-res", response);
+			console.log("add-profile-res", res);
+			return res;
+			// toast.success("Profile data updated successfully")
 		} catch (e) {
-			console.error(e);
-			notify("An error occurred while updating the profile", "error");
-			setFormData(initialFormData);
+			console.error("Failed to update profile", e);
+			toast.error("An error occurred while updating the profile", "error");
 			setSelectedFile(null);
 			setImageURL(null);
 		} finally {

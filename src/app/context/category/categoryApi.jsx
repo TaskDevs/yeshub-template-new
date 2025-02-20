@@ -7,10 +7,9 @@ import { SUCCESS_STATUS, LIST_ON_PAGES , baseURL} from "../../../globals/constan
 export const addCategory = async (data) => {
   console.log("data-category", data)
   try {
-    let responseOnAddCategory = await axios.post(
-      
+    let responseOnAddCategory = await axios.post( 
       `${baseURL}job-categories`,
-     { ...data, category_name: data.title}
+     data
     );
      console.log(responseOnAddCategory);
 			return responseOnAddCategory;

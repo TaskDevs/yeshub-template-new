@@ -12,11 +12,7 @@ export const PortfolioPopup = ({ submit, id }) => {
 
     return (
 			<div className="">
-				<div
-					className="modal fade twm-saved-jobs-view"
-					id={id}
-					tabIndex={-1}
-				>
+				<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
 					<div className="modal-dialog modal-dialog-centered">
 						<div className="modal-content">
 							<form onSubmit={submit}>
@@ -180,7 +176,11 @@ export const PortfolioPopup = ({ submit, id }) => {
 									>
 										Close
 									</button>
-									<button type="submit" className="site-button">
+									<button
+										type="submit"
+										data-bs-dismiss="modal"
+										className="site-button"
+									>
 										Save
 									</button>
 								</div>

@@ -6,18 +6,22 @@ import { userId } from '../../../../../globals/dummy-users';
 import { MdOutlineEdit } from 'react-icons/md';
 import { GlobalApiData } from '../../../../context/global/globalContextApi';
 import { FaRegTrashCan } from 'react-icons/fa6';
+import { PiBriefcaseLight } from "react-icons/pi";
+import { toast } from 'react-toastify';
 
 function SectionCanWorkSample() {
 
-	const [portfolios, setPortfolios] = useState([])
+	// const [portfolios, setPortfolios] = useState([])
     const {
 			handleAddPortfolio,
 			processGetAllPortfolio,
 			handleUpdatePortfolio,
 			handleResetForm,
-			setFormData
-	} = useContext(PortfolioApiData);
-	const { setSelectedId } = useContext(GlobalApiData)
+			setFormData,
+			portfolios,
+			setPortfolios,
+		} = useContext(PortfolioApiData);
+	const { selectedId, setSelectedId } = useContext(GlobalApiData)
 	
 	console.log("portfolios-data", portfolios);
 
@@ -42,6 +46,10 @@ function SectionCanWorkSample() {
 
 
 	const handleEditClick = (id) => {
+		if (!selectedId) {
+			toast.error("Please select a portfolio profile")
+			return;
+		}
 		setSelectedId(id);
 		const potfolioToEdit = portfolios.find((e) => e.id === id);
 
@@ -102,58 +110,70 @@ function SectionCanWorkSample() {
 							{portfolios.length === 0 ? (
 								<p>No portfolio added yet</p>
 							) : (
-								portfolios.map((portfolio, i) => (
-									<div key={i} className="mb-4">
-										<div className="">
-											Project Title : <span>{portfolio.project_title} </span>
-										</div>
-										<div className="">
+								<>
+									{portfolios.map((portfolio, i) => (
+										<div
+											key={i}
+											className="mb-4 sec-educ"
+											onClick={() => setSelectedId(portfolio.id)}
+										>
+											<div className="">
+												<PiBriefcaseLight />
+											</div>
+											<div className="">
+												<div className="">
+													Project Title :{" "}
+													<span>{portfolio.project_title} </span>
+												</div>
+												{/* <div className="">
 											Role : <span>{portfolio.role} </span>
-										</div>
-										<div className="">
-											skills : <span>{portfolio.skills} </span>
-										</div>
-										<div className="">
+										</div> */}
+												<div className="">
+													skills : <span>{portfolio.skills} </span>
+												</div>
+												{/* <div className="">
 											date started :{" "}
 											<span>{portfolio.project_start_date} </span>
-										</div>
-										<div className="">
-											date ended : <span>{portfolio.project_end_date} </span>
-										</div>
-										<div className="">
-											description : <span>{portfolio.description} </span>
-										</div>
-
-										<div className="p-a20">
-											<div className="actions">
-												<button
-													className="site-button  actions"
-													data-bs-target="#delete-portfolio"
-													data-bs-toggle="modal"
-													data-bs-dismiss="modal"
-												>
-													<FaRegTrashCan color="white" />
-													<span className="admin-nav-text">Delete</span>
-												</button>
-
-												<button
-													className="site-button  actions "
-													data-bs-target="#Edit-Portfolio"
-													data-bs-toggle="modal"
-													data-bs-dismiss="modal"
-													onClick={() => {
-														console.log("portfolio-id", portfolio.id);
-
-														handleEditClick(portfolio.id);
-													}}
-												>
-													<MdOutlineEdit color="white" />
-													<span>Edit</span>
-												</button>
+										</div> */}
+												{/* <div className="">
+														date ended :{" "}
+														<span>{portfolio.project_end_date} </span>
+													</div> */}
+												<div className="">
+													description : <span>{portfolio.description} </span>
+												</div>
 											</div>
 										</div>
+									))}
+
+									<div className="p-a20">
+										<div className="sec-actions-btn">
+											<button
+												className="site-button  actions-btn"
+												data-bs-target="#delete-portfolio"
+												data-bs-toggle="modal"
+												data-bs-dismiss="modal"
+											>
+												
+												<FaRegTrashCan color="white" />
+												<span className="admin-nav-text">Delete</span>
+											</button>
+
+											<button
+												className="site-button  actions-btn "
+												data-bs-target="#Edit-Portfolio"
+												data-bs-toggle="modal"
+												data-bs-dismiss="modal"
+												onClick={() => {
+													handleEditClick(selectedId);
+												}}
+											>
+												<MdOutlineEdit color="white" />
+												<span>Edit</span>
+											</button>
+										</div>
 									</div>
-								))
+								</>
 							)}
 						</div>
 					</div>

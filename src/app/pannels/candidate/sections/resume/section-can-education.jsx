@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { EducationApiData } from "../../../../context/education/educationContextApi";
-import { EDUCATIONFIELD } from "../../../../../globals/education-data";
-import InputField from "../../../../common/input-field";
-import TextAreaField from "../../../../common/text-area-field";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import SectionEducationForm from "./section-education-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { userId } from "../../../../../globals/dummy-users";
+import { RiGraduationCapLine } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 function SectionCanEducation() {
 	const {	
@@ -18,14 +17,14 @@ function SectionCanEducation() {
 		setFormData
 	} = useContext(EducationApiData);
 
-	const { selectedId, setSelectedId, handleClicked } =
+	const { selectedId, setSelectedId } =
 		useContext(GlobalApiData);
 
 
 	const [educationData, setEducationData] = useState([]);
 
 	console.log("educationData", educationData);
-	//map the education data to the various fields and add the selectedId if the education is selected 
+	
 
 	useEffect(() => {
 		const fetchEducationData = async () => {
@@ -42,32 +41,17 @@ function SectionCanEducation() {
 		fetchEducationData();
 	}, [processEducationEducation]);
 
-	// const handleEditClick = (id) => {
-	// 	setSelectedId(id);
-	// 	const educationToEdit = educationData.find((e) => {
-	// 		e.id === id;
-	// 		return e.id;
-	// 	});
-	// 	console.log("educationToEdit", educationToEdit);
-	// 	educationToEdit === selectedId &&
-	// 		educationData.map((e) =>
-	// 			setFormData({
-	// 				school: e.school,
-	// 				qualification: e.qualification,
-	// 				area_of_study: e.area_of_study,
-	// 				date_attended: e.date_attended,
-	// 				date_completed: e.date_completed,
-	// 				description: e.description,
-	// 			})
-	// 		);
-		
-	// }
 
 
 
 
 	const handleEditClick = (id) => {
+		if (!id) {
+			toast.error("Please select the education to edit ")
+		}
 		setSelectedId(id);
+		console.log("edit-sch-id", id);
+
 		const educationToEdit = educationData.find((e) => e.id === id);
 
 		console.log("educationToEdit", educationToEdit);
@@ -89,35 +73,9 @@ function SectionCanEducation() {
 	}
 
 	
-
-	// const handleSubmitEducation = async (e) => {
-	// 	e.preventDefault();
-	// 	try { 
-	// 		const response = await processAddEducation({ ...formData, id: "1" });
-	// 		console.log("Education added successfully", response);
-
-	// 		if (response) {
-	// 			console.log("Education added successfully", response);
-	// 		} else {
-	// 			console.error("Failed to add education");
-	// 		}
-	// 	} catch (err) {
-	// 		console.error("failed to add education", err)
-	// 	}
-	// };
-
-	// const handleUpdate = async (e) => {
-	// 	e.preventDefault();
-
-	// 	try { 
-	// 		const response = await processUpdateEducation({ ...formData, id: "1" });
-	// 		console.log("Education updated successfully", response);
-
-	// 	} catch (err) {
-	// 		console.error("Failed to update education")
-	// 	}
-	// };
-
+	
+	
+	
 	return (
 		<>
 			<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -138,57 +96,59 @@ function SectionCanEducation() {
 					{educationData.length === 0 ? (
 						<p>Add your education profile.</p>
 					) : (
-						educationData.map((education, i) => (
-							<div key={i} className="mb-4">
-								<div className="">
-									school : <span>{education.school} </span>
-								</div>
-								<div className="">
-									Area of study : <span>{education.area_of_study} </span>
-								</div>
-								<div className="">
-									qualification : <span>{education.qualification} </span>
-								</div>
-								<div className="">
-									date attended : <span>{education.date_attended} </span>
-								</div>
-								<div className="">
-									date completed : <span>{education.date_completed} </span>
-								</div>
-								<div className="">
-									description : <span>{education.description} </span>
-								</div>
+						<div className="">
+							{educationData.map((education, i) => (
+								
+									<div key={i} className="mb-4 sec-educ" onClick={() => setSelectedId(education.id)}>
+										<div className="">
+											<RiGraduationCapLine />
+										</div>
 
-								<div className="p-a20">
-									<div className="actions">
-										<button
-											className="site-button  actions"
-											data-bs-target="#delete-education"
-											data-bs-toggle="modal"
-											data-bs-dismiss="modal"
-										>
-											<FaRegTrashCan color="white" />
-											<span className="admin-nav-text">Delete</span>
-										</button>
-
-										<button
-											className="site-button  actions "
-											data-bs-target="#Edit-Education"
-											data-bs-toggle="modal"
-											data-bs-dismiss="modal"
-											onClick={() => {
-												console.log("edit-sch-id", education.id);
-												
-												handleEditClick(education.id);
-											}}
-										>
-											<MdOutlineEdit color="white" />
-											<span>Edit</span>
-										</button>
+										<div className="">
+											<div className="">
+												school : <span>{education.school} </span>
+											</div>
+											<div className="">
+												Area of study : <span>{education.area_of_study} </span>
+											</div>
+										
+											<div className="">
+												date completed :{" "}
+												<span>{education.date_completed} </span>
+											</div>
+											
+										</div>
 									</div>
+
+								
+							))}
+							<div className="p-a20">
+								<div className="sec-actions-btn">
+									<button
+										className="site-button  actions-btn"
+										data-bs-target="#delete-education"
+										data-bs-toggle="modal"
+										data-bs-dismiss="modal"
+									>
+										<FaRegTrashCan color="white" />
+										<span className="admin-nav-text">Delete</span>
+									</button>
+
+									<button
+										className="site-button  actions-btn "
+										data-bs-target="#Edit-Education"
+										data-bs-toggle="modal"
+										data-bs-dismiss="modal"
+										onClick={() => {
+											handleEditClick(selectedId);
+										}}
+									>
+										<MdOutlineEdit color="white" />
+										<span>Edit</span>
+									</button>
 								</div>
 							</div>
-						))
+						</div>
 					)}
 				</div>
 			</div>

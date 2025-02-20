@@ -1,22 +1,102 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import SkillsForm from "./skills-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
+import { notify } from "../../../../../utils/responseUtils";
+
+import YesNoPopup from "../../../../common/popups/popup-yes-no";
+import { popupType } from "../../../../../globals/constants";
+import { MdOutlineEdit } from "react-icons/md";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 function AddSkills() {
 	
 
-	 const { handleClicked } = useContext(GlobalApiData);
+
 			
     const {
 			skills,
 			setSkills,
+			
+			setSkill,
 			setFormData,
-			processAddSkills,
-			formData,
+			
 			processGetAllSkills,
+			handleUpdateSkills,
+			processSkillsProfile,
 			handleAddSkills,
-	} = useContext(SkillsApiData);
+		} = useContext(SkillsApiData);
+
+	const { selectedId, setSelectedId } =
+		useContext(GlobalApiData);
+
+	
+
+	useEffect(() => {
+		if (!selectedId) {
+			return;
+		}
+		const fetchSkill = async () => {
+			try {
+				const res = await processSkillsProfile(selectedId);
+
+				const data = res.data.data;
+				// console.log("skill", data.skill);
+				setSkill(data);
+			} catch (err) {
+				console.error("failed to get skill", err);
+			}
+		};
+		fetchSkill();
+	}, [processSkillsProfile]);
+
+
+
+
+	useEffect(() => {
+		const getAllSkills = async () => {
+			try {
+				const res = await processGetAllSkills();
+				const data = res.data.data;
+
+				if (Array.isArray(data)) {
+					setSkills(data);
+					localStorage.setItem("skills", JSON.stringify(data)); // Store in local storage
+				} else {
+					setSkills([]);
+					localStorage.removeItem("skills"); 
+					notify("No skills found", "warning");
+				}
+			} catch (error) {
+				console.error("get-all-skills-failed", error);
+				setSkills([]);
+				localStorage.removeItem("skills");
+			}
+		};
+
+		getAllSkills();
+	}, [processGetAllSkills, setSkills]);
+
+
+
+
+
+
+
+
+
+	const handleEditClick = (id) => {
+		setSelectedId(id);
+		console.log("id-edit-skill", id)
+		 const selectedSkill = skills.find((s) => s.id === id);
+			if (!selectedSkill) return;
+
+			setFormData({
+				skill: selectedSkill.skill,
+			});
+
+			
+	};
 	
 	
 
@@ -39,30 +119,65 @@ function AddSkills() {
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
-					{skills.length === 0 ? (
-						<p>No skills created</p>
-					) : (
-					<ul>
-					
-						{skills?.map((s) => (
-							<li key={s.id} className="category">
-								<div className="" onClick={() => {
-									console.log("skill-id-click", s.id)
-									handleClicked(s.id);
-								}}>
-									<p>{s.skill}</p>
-								</div>
+					<div className="">
+						{skills.length === 0 ? (
+							<p>No skills created</p>
+						) : (
+							<ul className="">
+								<div className="list-skills p-a20">
+									{skills?.map((s) => (
+										<li
+											key={s.id}
+											
+										>
+											<div className="section-panel-skills">
+												<p>{s.skill}</p>
+												
+												<div
+													className="skills"
+													onClick={() => setSelectedId(s.id)}
+												>
+													<div className="actions">
+														<button
+															className="site-button button-sm "
+															data-bs-target="#delete-skill"
+															data-bs-toggle="modal"
+															data-bs-dismiss="modal"
+															onClick={() => setSelectedId(s.id)}
+														>
+															<FaRegTrashCan color="white" />
+														</button>
 
-								
-							</li>
-						))}
-					</ul>
-					)}
-					
+														<button
+															className="site-button button-sm"
+															data-bs-target="#edit-skill"
+															data-bs-toggle="modal"
+															data-bs-dismiss="modal"
+															onClick={() => 
+																handleEditClick(s.id)}
+														>
+															<MdOutlineEdit color="white" />
+														</button>
+													</div>
+												</div>
+											</div>
+										</li>
+									))}
+								</div>
+							</ul>
+						)}
+					</div>
 				</div>
 			</div>
 
 			<SkillsForm submit={handleAddSkills} id="Skills" />
+			<YesNoPopup
+				id="delete-skill"
+				type={popupType.DELETE_SKILLS}
+				msg={"Are you sure you want to delete this skill?"}
+			/>
+
+			<SkillsForm submit={handleUpdateSkills} id="edit-skill" />
 		</>
 	);
 }

@@ -20,9 +20,9 @@ function CategoryPage() {
 					<AddCategories />
 				</div>
 				{/* get categories list  */}
-				<div className="panel panel-default mb-3">
+				{/* <div className="panel panel-default mb-3">
 					<CategoryDetails />
-				</div>
+				</div> */}
 				{/* get each category details */}
 				<div className="panel panel-default mb-3"></div>
 			</div>

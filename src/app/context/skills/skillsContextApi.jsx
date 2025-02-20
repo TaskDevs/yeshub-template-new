@@ -1,10 +1,7 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext, useState,  useContext } from "react";
 
 import {
   addSkills,
-  searchSkills,
   skillsList,
   skillsProfile,
   updateSkills,
@@ -34,61 +31,33 @@ const SkillsApiDataProvider = (props) => {
 
 	const [skill, setSkill] = useState({});
 
-	useEffect(() => {
-		if (!selectedId) {
-			return;
-		}
-		const fetchSkill = async () => {
-			try {
-				const res = await skillsProfile(selectedId);
-
-				console.log("get-skill", res);
-				const data = res.data.data;
-				console.log("skill", data.skill);
-				setSkill(data);
-
-				setFormData({
-					skill: data.skill || "",
-				});
-			} catch (err) {
-				console.error("failed to get skill", err);
-			}
-		};
-		fetchSkill();
-	}, [selectedId]);
-
-	useEffect(() => {
-		const fetchAllSkills = async () => {
-			try {
-				const res = await processGetAllSkills();
-
-				console.log("get-all-skills", res);
-				const data = res?.data.data;
-				setSkills(data);
-			} catch (error) {
-				console.error("get-all-skills-failed", error);
-			}
-		};
-		fetchAllSkills();
-	}, []);
-
 	
-
 	const handleChange = (field, data) => {
 		setFormData((prev) => ({ ...prev, [field]: data }));
 	};
+
 
 	const processAddSkills = async (data) => {
 		try {
 			const res = await addSkills(data);
 			console.log("processAddSkills", res);
-			return res;
-			
+
+			if (res && res.data) {
+				setSkills((prevSkills) => [...prevSkills, res.data]);
+				return res;
+				
+			} 
 		} catch (error) {
-			console.error("", error);
+			console.error("Add Skills Error:", error);
+			
 		}
 	};
 
+	
+
+
+	
+	
 	const processGetAllSkills = async () => {
 		try {
 			const res = await skillsList();
@@ -103,7 +72,7 @@ const SkillsApiDataProvider = (props) => {
 		try {
 			const res = await skillsProfile(id);
 
-			console.log("get-skill", res);
+			// console.log("get-skill", res);
 			return res;
 		} catch (err) {
 			console.error("failed to get skill", err);
@@ -140,9 +109,11 @@ const SkillsApiDataProvider = (props) => {
 		try {
 			const res = await processAddSkills(formData);
 			console.log("add-skills", res);
+			toast.success("Skills added successfully")
 			return res;
 		} catch (e) {
 			console.error("failed to add skills", e);
+			toast.error("Failed to add skills");
 		} finally {			
 			setFormData(initialData);
 		}
@@ -171,7 +142,7 @@ const SkillsApiDataProvider = (props) => {
 				skill,
 				skills,
 				formData,
-				
+				setSkill,
 				setSkills,
 				processAddSkills,
 				processGetAllSkills,

@@ -82,7 +82,7 @@ function CategoryForm({ submit, id }) {
 									</div> */}
 
 									<TextAreaField
-										field={ CATEGORYFIELD.fieldDetail[1]}
+										field={CATEGORYFIELD.fieldDetail[1]}
 										value={formData}
 										change={handleChange}
 									/>
@@ -98,7 +98,11 @@ function CategoryForm({ submit, id }) {
 							>
 								Close
 							</button>
-							<button type="submit" className="site-button ">
+							<button
+								type="submit"
+								data-bs-dismiss="modal"
+								className="site-button "
+							>
 								Save
 							</button>
 						</div>

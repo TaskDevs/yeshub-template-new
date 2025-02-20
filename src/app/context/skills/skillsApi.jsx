@@ -104,11 +104,12 @@ export const deleteSkills = async (id) => {
     let responseOnDeleteSkills = await axios.delete(
 			`${baseURL}skills/${id}`
 		);
-    if (responseOnDeleteSkills.status === SUCCESS_STATUS) {
-      return responseOnDeleteSkills.data;
-    } else {
-      return false;
-    }
+    // if (responseOnDeleteSkills.status === SUCCESS_STATUS) {
+    //   return responseOnDeleteSkills.data;
+    // } else {
+    //   return false;
+    // }
+    return responseOnDeleteSkills;
   } catch (err) {
     console.error(err);
   }

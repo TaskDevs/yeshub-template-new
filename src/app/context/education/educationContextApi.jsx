@@ -70,10 +70,10 @@ const EducationApiDataProvider = (props) => {
 		try {
 			const res = await deleteEducation(id);
 			console.log("delete-education", res);
-			toast.success("Eduacation deleted successfully");
+			
 			return res;
 		} catch (e) {
-			toast.error("Failed to delete education");
+			
 			throw new Error("Failed to delete education");
 		}
 	};

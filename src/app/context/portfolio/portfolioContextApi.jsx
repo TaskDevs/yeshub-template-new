@@ -25,8 +25,8 @@ const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
 const PortfolioApiDataProvider = (props) => {
 
 
-  const { setIsSubmitting } = useContext(GlobalApiData)
-
+  const { setIsSubmitting, selectedId } = useContext(GlobalApiData);
+   const [portfolios, setPortfolios] = useState([])
   const [formData, setFormData] = useState(initialData);
   console.log("formData-portfolio", formData);
   
@@ -104,7 +104,7 @@ const PortfolioApiDataProvider = (props) => {
 			e.preventDefault();
       setIsSubmitting(true)
 			try {
-				const res = await processUpdatePortfolio("1", formData);
+				const res = await processUpdatePortfolio(selectedId, formData);
 				console.log("update-portfolio", res);
 			} catch (err) {
 				console.error("failed to update portfolio", err);
@@ -122,8 +122,10 @@ const PortfolioApiDataProvider = (props) => {
   return (
 		<PortfolioApiData.Provider
 			value={{
-				formData,
-				setFormData,
+			  formData,
+				portfolios,
+			  setFormData,
+				setPortfolios,
         handleChange,
         handleResetForm,
 				processAddPortfolio,

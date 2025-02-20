@@ -12,9 +12,36 @@ function SkillsDetails() {
 	const { selectedId } = useContext(GlobalApiData);
 	const {
 		skill,
-        handleUpdateSkills,
-		
+		setSkill,
+		setFormData,
+		handleUpdateSkills,
+		processSkillsProfile,
 	} = useContext(SkillsApiData);
+
+	useEffect(() => {
+		if (!selectedId) {
+			return;
+		}
+		const fetchSkill = async () => {
+			try {
+				const res = await processSkillsProfile(selectedId);
+
+				// console.log("get-skill", res);
+				const data = res.data.data;
+				// console.log("skill", data.skill);
+				setSkill(data);
+			} catch (err) {
+				console.error("failed to get skill", err);
+			}
+		};
+		fetchSkill();
+	}, [processSkillsProfile]);
+
+	const handleEditClick = () => {
+		setFormData({
+			skill: skill.skill
+		});
+	}
 
 
 
@@ -49,6 +76,7 @@ function SkillsDetails() {
 											data-bs-target="#edit-skill"
 											data-bs-toggle="modal"
 											data-bs-dismiss="modal"
+											onClick={handleEditClick}
 										>
 											<MdOutlineEdit color="white" />
 											<span>Edit</span>

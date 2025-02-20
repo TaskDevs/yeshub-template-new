@@ -72,12 +72,17 @@ function CandidateLayout() {
 					<YesNoPopup
 						id="delete-skills"
 						type={popupType.DELETE_SKILLS}
-						msg={"Are you sure you want to delete your education?"}
+						msg={"Are you sure you want to delete this skill?"}
 					/>
 					<YesNoPopup
 						id="delete-profile"
 						type={popupType.DELETE_PROFILE}
 						msg={"Are you sure you want to delete your education?"}
+					/>
+					<YesNoPopup
+						id="delete-portfolio"
+						type={popupType.DELETE_PORTFOLIO}
+						msg={"Are you sure you want to delete your portfolio?"}
 					/>
 				</div>
 			</>

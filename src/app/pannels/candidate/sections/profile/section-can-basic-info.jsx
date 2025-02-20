@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import InputField from "../../../../common/input-field";
 import { USERPROFILEFIELD } from "../../../../../globals/user-profile-data";
 import TextAreaField from "../../../../common/text-area-field";
@@ -7,44 +7,38 @@ import { ProfileApiData } from "../../../../context/user-profile/profileContextA
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
 import { useLocation } from "react-router-dom";
-// import { role } from "../../../../../globals/dummy-users";
 
-const skills = [
-	{
-		id: "1",
-		skill: "writing",
-	},
-	{
-		id: "2",
-		skill: "communication",
-	},
-	{
-		id: "3",
-		skill: "research",
-	},
-];
 
 function SectionCandicateBasicInfo({ submit, id }) {
 	const [selectedItems, setSelectedItems] = useState([]);
-	const { formData, setFormData } = useContext(ProfileApiData);
-	// const { skills } = useContext(SkillsApiData);
-	// console.log("skills-profile", skills);
-
+	const { formData, setFormData, profileData } = useContext(ProfileApiData);
 	
-	const currentpath = useLocation().pathname;
-	const location = currentpath.split("/")[1];
+
+	const savedSkills = localStorage.getItem("skills");
+	const skillsArray = savedSkills ? JSON.parse(savedSkills) : [];
+
+
+
+	const formattedSkills = skillsArray.map((skill) => ({
+		value: skill.id,
+		label: skill.skill,
+	}));
+
 	
 
 
 	const handleSelectChange = (selectedOptions) => {
 		setSelectedItems(selectedOptions);
+		console.log("selectedOptions", selectedOptions);
+
 		const selectedSkillsIds = selectedOptions
-			? selectedOptions.map((item) => item.id)
+			? selectedOptions.map((item) => item.value)
 			: [];
 		setFormData({
 			...formData,
 			skills_id: selectedSkillsIds.join(","),
 		});
+		console.log("selectedSkillsIds", selectedSkillsIds);
 	};
 
 	 const handleChange = (data, field) => {
@@ -73,41 +67,37 @@ function SectionCandicateBasicInfo({ submit, id }) {
 							</div>
 							<div className="modal-body">
 								<div className="row">
-									
-										
-											<div className="col-xl-6 col-lg-6 col-md-12">
-												<div className="form-group">
-													<label>First Name</label>
-													<div className="ls-inputicon-box">
-														<InputField
-															field={USERPROFILEFIELD.fieldDetail[0]}
-															value={formData}
-															change={(data, field) => {
-																handleChange(data, field);
-															}}
-														/>
-														<i className="fs-input-icon fa fa-user " />
-													</div>
-												</div>
+									<div className="col-xl-6 col-lg-6 col-md-12">
+										<div className="form-group">
+											<label>First Name</label>
+											<div className="ls-inputicon-box">
+												<InputField
+													field={USERPROFILEFIELD.fieldDetail[0]}
+													value={formData}
+													change={(data, field) => {
+														handleChange(data, field);
+													}}
+												/>
+												<i className="fs-input-icon fa fa-user " />
 											</div>
-											<div className="col-xl-6 col-lg-6 col-md-12">
-												<div className="form-group">
-													<label>Last Name</label>
-													<div className="ls-inputicon-box">
-														<InputField
-															field={USERPROFILEFIELD.fieldDetail[1]}
-															value={formData}
-															change={(data, field) => {
-																handleChange(data, field);
-															}}
-														/>
+										</div>
+									</div>
+									<div className="col-xl-6 col-lg-6 col-md-12">
+										<div className="form-group">
+											<label>Last Name</label>
+											<div className="ls-inputicon-box">
+												<InputField
+													field={USERPROFILEFIELD.fieldDetail[1]}
+													value={formData}
+													change={(data, field) => {
+														handleChange(data, field);
+													}}
+												/>
 
-														<i className="fs-input-icon fa fa-user " />
-													</div>
-												</div>
+												<i className="fs-input-icon fa fa-user " />
 											</div>
-										
-									
+										</div>
+									</div>
 
 									<div className="col-xl-6 col-lg-6 col-md-12">
 										<div className="form-group">
@@ -190,6 +180,9 @@ function SectionCandicateBasicInfo({ submit, id }) {
 										</div>
 									</div>
 
+
+									
+	
 									<div className="col-xl-6 col-lg-6 col-md-12">
 										<div className="form-group city-outer-bx has-feedback">
 											<label>GPS Address</label>
@@ -201,12 +194,13 @@ function SectionCandicateBasicInfo({ submit, id }) {
 														handleChange(data, field);
 													}}
 												/>
-												<i className="fs-input-icon fas fa-map-pin" />
+												<i
+													className="fs-input-icon fas fa-map-pin" />
 											</div>
 										</div>
 									</div>
 
-									<div className="col-xl-6 col-lg-12 col-md-12">
+									<div className=" col-lg-12 col-md-12">
 										<div className="form-group city-outer-bx has-feedback">
 											<label>Postal Code</label>
 											<div className="ls-inputicon-box">
@@ -222,26 +216,27 @@ function SectionCandicateBasicInfo({ submit, id }) {
 										</div>
 									</div>
 
-									<div className="col-xl-6 col-lg-12 col-md-12">
+									<div className=" col-lg-12 col-md-12">
 										<div className="ls-inputicon-box ">
 											<div className="form-group">
 												<label>Skills</label>
-												<div className="wt-select-box selectpicker form-control">
+												{/* selectpicker wt-select-box  form-control */}
+												<div className="form-control">
 													<Select
-														isMulti
-														options={skills}
+														isMulti={true}
+														options={formattedSkills}
 														value={selectedItems}
 														onChange={(data) => handleSelectChange(data)}
-														placeholder="Search and select items..."
-														classNames="select-react"
-														classNamePrefix="select"
 														styles={{
-															control: (baseStyles, state) => ({
-																...baseStyles,
+															control: (base) => ({
+																...base,
 																border: 0,
-																borderColor: state.isFocused ? "" : "",
+																boxShadow: "none", // Disables the blue border
+																backgroundColor: "none",
 															}),
 														}}
+
+														// (data) => handleSelectChange(data)
 													/>
 												</div>
 											</div>
@@ -266,7 +261,11 @@ function SectionCandicateBasicInfo({ submit, id }) {
 								>
 									Close
 								</button>
-								<button type="submit" className="site-button ">
+								<button
+									type="submit"
+									data-bs-dismiss="modal"
+									className="site-button "
+								>
 									Save
 								</button>
 							</div>

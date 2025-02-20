@@ -3,7 +3,7 @@ import { popupType } from "../../../globals/constants";
 import { publicUser } from "../../../globals/route-names";
 import React from "react";
 import { logout } from "../../context/auth/authApi"; // Import the logout function
-
+import toast from 'react-hot-toast';
 function YesNoPopup(props) {
     const navigate = useNavigate();
 
@@ -14,6 +14,7 @@ function YesNoPopup(props) {
 
             if (result) {
                 // If logout is successful, navigate to login page
+                toast.success(result.message, { position: "top-right", autoClose: 3000 });
                 navigateToAfterLogin();
             } else {
                 // Optionally handle any failure in logout (e.g., show an error message)
@@ -24,7 +25,7 @@ function YesNoPopup(props) {
 
     // Navigate to login page
     const navigateToAfterLogin = () => {
-        navigate(publicUser.pages.LOGIN);  // Navigate to login page after logout
+        navigate('/');  // Navigate to login page after logout
     };
 
     return (

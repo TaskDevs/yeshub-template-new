@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PinInput from "react-pin-input";
 import Loader from "../../../../common/loader";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
-import { verifyOtp , ResendOtp} from "../../../../context/auth/authApi";
-
+import { verifyOtp , forgottenPassword} from "../../../../context/auth/authApi";
+import toast from 'react-hot-toast';
 
 function VerifyOtp() {
   const { isLoading } = useContext(GlobalApiData);
@@ -15,6 +15,8 @@ function VerifyOtp() {
   // Get email from previous page OR from localStorage if refreshed
   const email = location.state?.email || localStorage.getItem("verifyEmail") || "";
   const [otp, setOtp] = useState("");
+  const [expiryTime, setExpiryTime] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(null);
   const [showTopMessage, setShowTopMessage] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -51,20 +53,26 @@ function VerifyOtp() {
   };
 
 
+
   const ResendOtps = async (e) => {
     e.preventDefault();
-     console.log(email)
+    console.log(email);
+  
     if (!email) {
       setErrorMessage("Please enter your email.");
       return;
     }
   
     try {
-      const res = await ResendOtp( email );
+      const res = await forgottenPassword({ email });
   
       if (res?.message) {
-        console.log(res.message);
-        setErrorMessage(res.message); // Update error message state
+        toast.success(res.message, { position: "top-right", autoClose: 3000 });
+        console.log("Response:", res);
+        setErrorMessage(res.message); 
+  
+        // Set expiry time from response
+        setExpiryTime(res.expired_at); 
       } else {
         setErrorMessage("OTP resent successfully!");
       }
@@ -73,7 +81,6 @@ function VerifyOtp() {
       setErrorMessage(err.response?.message || "Something went wrong. Please try again.");
     }
   };
-  
   return (
     <>
       {isLoading && <Loader />}
@@ -169,6 +176,12 @@ function VerifyOtp() {
 
                     {/* Resend OTP Link */}
                     <div className="text-center mt-3">
+                    {expiryTime && (
+                  <p className="text-center text-danger">
+                    OTP expires in: <strong>{expiryTime}</strong>
+                  </p>
+                )}
+
                       <button
                         type="button"
                         className="btn btn-link"

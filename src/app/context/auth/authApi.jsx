@@ -74,14 +74,6 @@ export const ResendOtp = async (data) => {
 };
 
 
-export const googleLogin = async ()=>{
-    try{
-        
-    }catch(err){
-
-    }
-}
-
 //Retrieve Info
 
 // Retrieve User Info
@@ -163,17 +155,11 @@ export const changePassword = async (data) => {
   
 
 export const loginWithGoogle = (data) => {
-    window.location.href = `${process.env.REACT_APP_OAUTH_URL}/google/redirect?role=${data}`;
+    window.location.href = `${process.env.REACT_APP_OAUTH_URL}auth/google/redirect?role=${data}`;
   };
   
   export const loginWithLinkedIn = async (data) => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_OAUTH_URL}linkedin/callback`, { data });
-      console.log(response.data.token);
-      // Store the token and redirect
-    } catch (error) {
-      console.error("LinkedIn login failed", error);
-    }
+    window.location.href =`${process.env.REACT_APP_OAUTH_URL}auth/redirect/linkedin?role=${data}`;
   };
   
 

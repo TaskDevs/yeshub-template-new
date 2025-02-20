@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PinInput from "react-pin-input";
 import Loader from "../../../../common/loader";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
-import { VerifyReset, ResendOtp } from "../../../../context/auth/authApi";
+import { VerifyReset,forgottenPassword } from "../../../../context/auth/authApi";
+import toast from 'react-hot-toast';
 
 function VerifyResetOtp() {
   const { isLoading } = useContext(GlobalApiData);
@@ -14,6 +15,7 @@ function VerifyResetOtp() {
   // Get email from previous page OR from localStorage if refreshed
   const email = location.state?.email || localStorage.getItem("verifyEmail") || "";
   const [otp, setOtp] = useState("");
+  const [expiryTime, setExpiryTime] = useState(null);
   const [showTopMessage, setShowTopMessage] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -43,7 +45,7 @@ function VerifyResetOtp() {
       // Handle the response based on success or failure
       if (response?.message === "OTP verified successfully.") {
         setSuccess(true); // Show success message
-        setErrorMessage(""); // Clear any previous error messages
+        setErrorMessage(""); 
   
         // Redirect after a brief delay to reset-password page
         setTimeout(() => {
@@ -62,23 +64,30 @@ function VerifyResetOtp() {
       setErrorMessage("Something went wrong. Please try again.");
     }
   
-    setShowTopMessage(true); // Show the top message after handling the API response
-    setIsSubmitting(false); // Re-enable the form submission
+    setShowTopMessage(true); 
+    setIsSubmitting(false); 
   };
   
 
   const ResendOtps = async (e) => {
     e.preventDefault();
+    console.log(email);
+  
     if (!email) {
       setErrorMessage("Please enter your email.");
       return;
     }
-
+  
     try {
-      const res = await ResendOtp(email);
-
+      const res = await forgottenPassword({ email });
+  
       if (res?.message) {
-        setErrorMessage(res.message);
+        toast.success(res.message, { position: "top-right", autoClose: 3000 });
+        console.log("Response:", res);
+        setErrorMessage(res.message); 
+  
+        // Set expiry time from response
+        setExpiryTime(res.expired_at); 
       } else {
         setErrorMessage("OTP resent successfully!");
       }
@@ -87,7 +96,6 @@ function VerifyResetOtp() {
       setErrorMessage(err.response?.message || "Something went wrong. Please try again.");
     }
   };
-
   return (
     <>
       {isLoading && <Loader />}
@@ -184,6 +192,11 @@ function VerifyResetOtp() {
 
                     {/* Resend OTP Link */}
                     <div className="text-center mt-3">
+                    {expiryTime && (
+                  <p className="text-center text-danger">
+                    OTP expires in: <strong>{expiryTime}</strong>
+                  </p>
+                )}
                       <button
                         type="button"
                         className="btn btn-link"

@@ -65,6 +65,7 @@ import VerifyOtp from "../app/pannels/public-user/components/pages/verify-otp";
 import GoogleCallback from "../app/pannels/public-user/components/pages/GoogleCallback";
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgotton-password";
 import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-reset-otp";
+import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 
 // const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
@@ -150,6 +151,8 @@ function PublicUserRoutes() {
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp/>}/>
         <Route path={publicUser.pages.FORGOTPASS} element={<ForgotPassword/>}/>
         <Route path={publicUser.pages.VERIFYRESETOTP} element={<VerifyResetOtp/>}/>
+        <Route path={publicUser.pages.LINKEDIN} element={<LinkedInCallback/>}/>
+        <Route path={publicUser.pages.GOOGLEAUTH} element={<GoogleCallback/>}/>
         <Route
           path={publicUser.pages.AFTER_LOGIN}
           element={<AfterLoginPage />}

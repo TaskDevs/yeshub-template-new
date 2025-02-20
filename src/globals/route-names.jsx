@@ -59,7 +59,9 @@ export const publicUser = {
 		CONTRACT: "/contract",
 		GOOGLECALLBACK:"/google/auth/callback",
 		FORGOTPASS:"/forgotton-password",
-		VERIFYRESETOTP:"verify-reset-otp"
+		VERIFYRESETOTP:"verify-reset-otp",
+		LINKEDIN: "/auth/linkedin/callback",
+		GOOGLEAUTH:"/auth/google/callback"
 
 	},
 	candidate: {

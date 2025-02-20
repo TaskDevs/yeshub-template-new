@@ -6,7 +6,7 @@ import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
 import { login } from "../../context/auth/authApi";
 import cookieMethods from "../../../utils/cookieUtils";
-
+import toast from 'react-hot-toast';
 function SignInPopup() {
   const {
     isLoading,
@@ -48,31 +48,32 @@ function SignInPopup() {
     }));
   };
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setServerResponse(null); // Reset previous messages
-
+   
     try {
       const response = await login(formData);
+  
       if (response && response.token && response.refresh_token) {
         const { token, refresh_token, role } = response;
-
-        // Store both tokens in sessionStorage and cookies
+  
+        // Store tokens
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
         cookieMethods.setCookies(token, refresh_token);
-
+  
         if (formData.rememberMe) {
           sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
         } else {
           sessionStorage.removeItem("rememberedUser");
         }
-
-        // Show success message
-        setServerResponse({ type: "success", message: "Login successful!" });
-
-        // Redirect based on role
+  
+        // ✅ Show success toast
+        toast.success(response.message, { position: "top-right", autoClose: 3000 });
+  
+        // Redirect based on role after 2 seconds
         setTimeout(() => {
           switch (role) {
             case "admin":
@@ -88,17 +89,18 @@ function SignInPopup() {
           }
         }, 2000);
       } else {
-        setServerResponse({ type: "error", message: "Login failed: No token received" });
+        toast.error("Incorrect credential, check identifier or password", { position: "top-right", autoClose: 3000 });
       }
     } catch (error) {
       console.error("Login failed", error);
       const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
-      setServerResponse({ type: "error", message: errorMessage });
+  
+      
+      toast.error(errorMessage, { position: "top-right", autoClose: 3000 });
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <>
       {isLoading && <Loader />}
@@ -229,6 +231,7 @@ function SignInPopup() {
               </div>
 
               <div className="modal-footer">
+             
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
                   <li>
@@ -242,6 +245,9 @@ function SignInPopup() {
                     </a>
                   </li>
                 </ul>
+
+               
+                
               </div>
             </div>
           </div>

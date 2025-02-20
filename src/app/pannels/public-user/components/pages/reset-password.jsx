@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../../../common/loader";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { changePassword } from "../../../../context/auth/authApi";
-
+import toast from 'react-hot-toast';
 function ResetPasswordPage() {
   const { isLoading } = useContext(GlobalApiData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,6 +56,7 @@ function ResetPasswordPage() {
       if (response.success) {
         setSuccess(true);
         setErrorMessage(""); // Clear error message
+        toast.success(response.message, { position: "top-right", autoClose: 3000 });
         setTimeout(() => navigate("/login"), 2000); // Redirect after successful password reset
       } else {
         setSuccess(false);

@@ -3,6 +3,7 @@
 import axios from "axios";
 import {
   SUCCESS_STATUS,
+  SUCCESS_STATUS_TEXT,
   // LIST_ON_PAGES,
   // baseUrl,
 } from "../../../globals/constants";
@@ -14,7 +15,7 @@ export const addJob = async (data) => {
       `http://127.0.0.1:8000/api/v1/posted-jobs`,
       data
     );
-    if (responseOnAddJob.status === SUCCESS_STATUS) {
+    if (responseOnAddJob.status == SUCCESS_STATUS) {
       return responseOnAddJob.data;
     } else {
       return false;
@@ -47,7 +48,7 @@ export const jobList = async () => {
     let responseOnJobList = await axios.get(
       `http://127.0.0.1:8000/api/v1/get-posted-jobs`
     );
-    if (responseOnJobList.status == SUCCESS_STATUS) {
+    if (responseOnJobList.status == 200) {
       return responseOnJobList.data.data;
     } else {
       return false;

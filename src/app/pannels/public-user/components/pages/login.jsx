@@ -8,7 +8,7 @@ import {
   empRoute,
   employer,
   publicUser,
-  base
+  base,
 } from "../../../../../globals/route-names";
 import Loader from "../../../../common/loader";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
@@ -32,13 +32,19 @@ function LoginPage() {
   } = useContext(GlobalApiData);
 
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState(() => {
     const savedUser = JSON.parse(localStorage.getItem("rememberedUser"));
-    return savedUser || SIGNINFIELD.fieldDetail.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, { rememberMe: false });
+    return (
+      savedUser ||
+      SIGNINFIELD.fieldDetail.reduce(
+        (acc, field) => {
+          acc[field.name] = "";
+          return acc;
+        },
+        { rememberMe: false }
+      )
+    );
   });
 
   useEffect(() => {
@@ -63,48 +69,45 @@ function LoginPage() {
     }));
   };
 
-
-
   const handleLogin = async (e) => {
-	e.preventDefault();
-	setIsSubmitting(true);
-  
-	try {
-	  const response = await login(formData);
-	  if (response && response.token) {
-		// Store token and user role
-		sessionStorage.setItem("authToken", response.token);
-		sessionStorage.setItem("userRole", response.role);
-  
-		if (formData.rememberMe) {
-		  sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
-		} else {
-		  sessionStorage.removeItem("rememberedUser");
-		}
-  
-		// Redirect based on role
-		switch (response.role) {
-		  case "admin":
-			navigate('/admin');
-			break;
-		  case "employer":
-			navigate(base.EMPLOYER_PRE);
-			break;
-		  case "user":
-		  default:
-			navigate(base.CANDIDATE_PRE);
-			break;
-		}
-	  } else {
-		console.error("Login failed: No token received");
-	  }
-	} catch (error) {
-	  console.error("Login failed", error);
-	} finally {
-	  setIsSubmitting(false);
-	}
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await login(formData);
+      if (response && response.token) {
+        // Store token and user role
+        sessionStorage.setItem("authToken", response.token);
+        sessionStorage.setItem("userRole", response.role);
+
+        if (formData.rememberMe) {
+          sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
+        } else {
+          sessionStorage.removeItem("rememberedUser");
+        }
+
+        // Redirect based on role
+        switch (response.role) {
+          case "admin":
+            navigate("/admin");
+            break;
+          case "employer":
+            navigate(base.EMPLOYER_PRE);
+            break;
+          case "user":
+          default:
+            navigate(base.CANDIDATE_PRE);
+            break;
+        }
+      } else {
+        console.error("Login failed: No token received");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-  
 
   return (
     <>
@@ -138,13 +141,12 @@ function LoginPage() {
                     </div>
                   </div>
                   <div className="twm-tabs-style-2">
-                    
                     <div className="tab-content" id="myTab2Content">
                       {/*Login Employer Content*/}
                       <form
                         className="tab-pane fade show active"
                         id="twm-login-candidate"
-						onSubmit={handleLogin}
+                        onSubmit={handleLogin}
                       >
                         <div className="row">
                           {SIGNINFIELD.fieldDetail.map((field) => (
@@ -194,26 +196,34 @@ function LoginPage() {
                             </div>
                           ))}
 
-						<div className="col-lg-12">
-						<div className="twm-forgot-wrap">
-                          <div className="form-group mb-3">
-                            <div className="form-check ml-2">
-                              <input
-                                type="checkbox"
-                                className="form-check-input"
-                                id="rememberMe"
-                                name="rememberMe"
-                                checked={formData.rememberMe}
-                                onChange={handleInputChange}
-                              />
-                              <label className="form-check-label rem-forgot " htmlFor="rememberMe">
-                                Remember me
-                                <NavLink to="/reset-password" className="site-text-primary p-3">Forgot Password?</NavLink>
-                              </label>
+                          <div className="col-lg-12">
+                            <div className="twm-forgot-wrap">
+                              <div className="form-group mb-3">
+                                <div className="form-check ml-2">
+                                  <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    id="rememberMe"
+                                    name="rememberMe"
+                                    checked={formData.rememberMe}
+                                    onChange={handleInputChange}
+                                  />
+                                  <label
+                                    className="form-check-label rem-forgot "
+                                    htmlFor="rememberMe"
+                                  >
+                                    Remember me
+                                    <NavLink
+                                      to="/reset-password"
+                                      className="site-text-primary p-3"
+                                    >
+                                      Forgot Password?
+                                    </NavLink>
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
                           <div className="col-md-12">
                             <div className="form-group">
                               <button
@@ -228,14 +238,27 @@ function LoginPage() {
                         </div>
                       </form>
 
-                     
-                      <span className="modal-f-title">Login or Sign up with</span>
+                      <span className="modal-f-title">
+                        Login or Sign up with
+                      </span>
                       <ul className="twm-modal-social">
-                     <li><a href="https://in.linkedin.com/" className="linkedin-clr m-2"><i className="fab fa-linkedin-in" /></a></li>
-                     <li><a href="https://www.google.com/" className="google-clr m-2"><i className="fab fa-google" /></a></li>
-                                
-                  
-                </ul>
+                        <li>
+                          <a
+                            href="https://in.linkedin.com/"
+                            className="linkedin-clr m-2"
+                          >
+                            <i className="fab fa-linkedin-in" />
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="https://www.google.com/"
+                            className="google-clr m-2"
+                          >
+                            <i className="fab fa-google" />
+                          </a>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>

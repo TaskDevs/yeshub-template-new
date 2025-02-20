@@ -15,12 +15,19 @@ export const JobApiData = createContext();
 
 const JobApiDataProvider = (props) => {
   const [jobListData, setJobListData] = useState([]);
+  const [statusAlert, setStatusAlert] = useState({
+    status: true,
+    msg: null,
+  });
 
   const processAddJob = async (data) => {
     let response = await addJob(data);
-    console.log(response);
     if (response) {
-      notify(SUCCESS_STATUS, "Job Added Successfully");
+      data.status == 1
+        ? notify(200, "Job added successfully")
+        : notify(200, "Draft added successfully");
+    } else {
+      notify(null, 400, "Oops Something went wrong");
     }
   };
 
@@ -49,6 +56,8 @@ const JobApiDataProvider = (props) => {
         processSearchJob,
         processUpdateJob,
         processDeleteJob,
+        statusAlert,
+        setStatusAlert,
         jobListData,
         setJobListData,
       }}

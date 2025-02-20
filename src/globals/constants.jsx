@@ -3,7 +3,8 @@ export const baseURL = process.env.REACT_APP_BASE_URL;
 export const timeOut = { timeout: 10000 };
 
 //STATUS CODE
-export const SUCCESS_STATUS = 200;
+export const SUCCESS_STATUS = 201;
+export const SUCCESS_STATUS_TEXT = "success";
 export const BAD_REQUEST_STATUS = 401;
 export const SERVER_ERROR = 500;
 export const LIST_ON_PAGES = 20;

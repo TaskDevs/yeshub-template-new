@@ -54,7 +54,6 @@
     ]
   },
   "devDependencies": {
-    "vite": "^6.0.7",
-    "@babel/plugin-proposal-private-property-in-object"
+    "vite": "^6.0.7"
   }
 }

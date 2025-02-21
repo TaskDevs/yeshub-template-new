@@ -3,16 +3,15 @@
 import axios from "axios";
 import {
   SUCCESS_STATUS,
-  SUCCESS_STATUS_TEXT,
-  // LIST_ON_PAGES,
-  // baseUrl,
+  LOCAL_BACKEND_URL,
+  LIST_ON_PAGES,
 } from "../../../globals/constants";
 
 // ADD Job
 export const addJob = async (data) => {
   try {
     let responseOnAddJob = await axios.post(
-      `http://127.0.0.1:8000/api/v1/posted-jobs`,
+      `${LOCAL_BACKEND_URL}posted-jobs`,
       data
     );
     if (responseOnAddJob.status == SUCCESS_STATUS) {
@@ -46,10 +45,71 @@ export const searchJob = async (data) => {
 export const jobList = async () => {
   try {
     let responseOnJobList = await axios.get(
-      `http://127.0.0.1:8000/api/v1/get-posted-jobs`
+      `${LOCAL_BACKEND_URL}get-posted-jobs`
     );
     if (responseOnJobList.status == 200) {
       return responseOnJobList.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const searchJobs = async (title, category, location) => {
+  try {
+    // Combine title, category, and location into a single string for the "keywords" parameter
+    const keywords = `${title || ""} ${category || ""} ${
+      location || ""
+    }`.trim();
+
+    let response = await axios.get(
+      `${LOCAL_BACKEND_URL}jobs-search`, // Adjust the endpoint as needed
+      {
+        params: {
+          keywords, // Send the combined keywords as a single parameter
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error("Error fetching jobs:", err);
+    return false;
+  }
+};
+
+// LIST Employer Jobs Posted
+export const employerJobList = async (id) => {
+  try {
+    let responseOnEmployerJobList = await axios.get(
+      `${LOCAL_BACKEND_URL}employers-posted-jobs/${id}`
+    );
+    if (responseOnEmployerJobList.status == 200) {
+      return responseOnEmployerJobList.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+// Count the employer
+export const countEmployerJobsPosted = async (id) => {
+  try {
+    let responseOnCountEmployerJobsPosted = await axios.get(
+      `${LOCAL_BACKEND_URL}count-posted-jobs/${id}`
+    );
+    if (responseOnCountEmployerJobsPosted.status == 200) {
+      return responseOnCountEmployerJobsPosted.data.data;
     } else {
       return false;
     }

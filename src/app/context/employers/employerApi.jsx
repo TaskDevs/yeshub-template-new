@@ -1,13 +1,18 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 //import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import {
+  SUCCESS_STATUS,
+  LOCAL_BACKEND_URL,
+  BACKEND_HOST,
+  LIST_ON_PAGES,
+} from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
   try {
     let responseOnAddEmployer = await axios.post(
-      `http://127.0.0.1:8000/api/v1/create-employers`,
+      `${LOCAL_BACKEND_URL}create-employers`,
       data
     );
     if (responseOnAddEmployer.status === SUCCESS_STATUS) {
@@ -41,7 +46,7 @@ export const searchEmployer = async (data) => {
 export const employerList = async (pageNo) => {
   try {
     let responseOnEmployerList = await axios.get(
-      `http://127.0.0.1:8000/api/v1/create-employers`
+      `${LOCAL_BACKEND_URL}employers`
     );
 
     if (responseOnEmployerList.data.status === SUCCESS_STATUS) {
@@ -56,14 +61,14 @@ export const employerList = async (pageNo) => {
 };
 
 // VIEW Employer
-export const employerProfile = async () => {
+export const employerProfile = async (id) => {
   try {
     let responseOnEmployerProfile = await axios.get(
-      `http://127.0.0.1:8000/api/v1/employer-companies/3`
+      `${LOCAL_BACKEND_URL}employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
     );
-    //console.log(responseOnEmployerProfile);
-    if (responseOnEmployerProfile.status == 201) {
+    // console.log(responseOnEmployerProfile.data.data);
+    if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
     } else {
       return false;
@@ -75,12 +80,33 @@ export const employerProfile = async () => {
 };
 
 // UPDATE Employer
-export const updateEmployer = async (data) => {
+export const updateEmployer = async (id, data) => {
+  console.log(LOCAL_BACKEND_URL);
   try {
-    let responseOnUpdateEmployer = await axios.put({
-      /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
-    });
-    if (responseOnUpdateEmployer.status === SUCCESS_STATUS) {
+    let responseOnUpdateEmployer = await axios.put(
+      `${LOCAL_BACKEND_URL}employers/${id}`,
+      data
+    );
+    //console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateEmployer.status == 200) {
+      return responseOnUpdateEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// Update Employer Logo
+export const updateEmployerLogo = async (id, data) => {
+  try {
+    let responseOnUpdateEmployer = await axios.put(
+      `${LOCAL_BACKEND_URL}employers-logo/${id}`,
+      data
+    );
+    console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
     } else {
       return false;
@@ -91,12 +117,12 @@ export const updateEmployer = async (data) => {
 };
 
 // DELETE Employer
-export const deleteEmployer = async (data) => {
+export const deleteEmployer = async (id) => {
   try {
-    let responseOnDeleteEmployer = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/
-    });
-    if (responseOnDeleteEmployer.status === SUCCESS_STATUS) {
+    let responseOnDeleteEmployer = await axios.delete(
+      `${LOCAL_BACKEND_URL}employers/${id}`
+    );
+    if (responseOnDeleteEmployer.status == 200) {
       return responseOnDeleteEmployer.data;
     } else {
       return false;

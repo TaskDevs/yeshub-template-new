@@ -34,7 +34,7 @@ function Home2Page() {
                                         <span className="outline-dot-2" />
                                         <span className="outline-dot-3" />
                                         {/*Samll Ring Left*/}
-                                        <div className="twm-small-ring-l scale-up-center" />
+                                      <div className="twm-small-ring-l scale-up-center" />
                                     </div>
                                 </div>
                             </div>

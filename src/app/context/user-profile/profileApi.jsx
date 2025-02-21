@@ -1,7 +1,7 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, baseUrl } from "../../../globals/constants";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, } from "../../../globals/constants";
 
 // ADD Profile
 export const addProfile = async (data) => {
@@ -36,11 +36,12 @@ export const searchProfile = async (data) => {
 };
 
 // LIST Profile
-export const profileList = async (id) => {
+/**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
+export const profileList = async () => {
   try {
-    let responseOnProfileList = await axios.get({
-      /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnProfileList = await axios.get(
+			 `${baseURL}get-profile`
+		);
 
     if (responseOnProfileList.status === SUCCESS_STATUS) {
       return responseOnProfileList.data;

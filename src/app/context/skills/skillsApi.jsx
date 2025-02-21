@@ -3,6 +3,7 @@
 import axios from "axios";
 import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL } from "../../../globals/constants";
 
+console.log("baseURL", baseURL);
 // ADD Skills
 /**Add Create Education API URL here**/
 export const addSkills = async (data) => {

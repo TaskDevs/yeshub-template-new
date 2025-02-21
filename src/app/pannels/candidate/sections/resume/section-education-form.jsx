@@ -22,11 +22,7 @@ function SectionEducationForm({ submit, id }) {
 
 
   return (
-		<div
-			className="modal fade twm-saved-jobs-view"
-			id={id}
-			tabIndex={-1}
-		>
+		<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
 			<div className="modal-dialog modal-dialog-centered">
 				<div className="modal-content">
 					<form onSubmit={submit}>
@@ -52,7 +48,7 @@ function SectionEducationForm({ submit, id }) {
 													handleChange(data, field);
 												}}
 											/>
-											
+
 											<i className="fs-input-icon fas fa-book-reader" />
 										</div>
 									</div>
@@ -75,7 +71,6 @@ function SectionEducationForm({ submit, id }) {
 									<div className="form-group">
 										<label>Course</label>
 										<div className="ls-inputicon-box">
-											
 											<InputField
 												field={EDUCATIONFIELD.fieldDetail[2]}
 												value={formData}
@@ -138,7 +133,11 @@ function SectionEducationForm({ submit, id }) {
 							>
 								Close
 							</button>
-							<button type="submit" className="site-button ">
+							<button
+								type="submit"
+								data-bs-dismiss="modal"
+								className="site-button "
+							>
 								Save
 							</button>
 						</div>

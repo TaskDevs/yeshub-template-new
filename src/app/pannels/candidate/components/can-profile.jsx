@@ -1,27 +1,75 @@
 import { MdOutlineEdit } from "react-icons/md";
 import SectionCandicateBasicInfo from "../sections/profile/section-can-basic-info";
-import SectionCandidateSocialInfo from "../sections/profile/section-can-social-info";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useContext, useState } from "react";
+import { useContext, useEffect} from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
-import { BASICPROFILEFIELD } from "../../../../globals/basic-profile-data";
-import JobZImage from "../../../common/jobz-img";
 import SectionProfileData from "../common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { popupType } from "../../../../globals/constants";
+import { userId } from "../../../../globals/dummy-users";
+
 
 function CanProfilePage() {
+	
 	const {
 		imageURL,
 		handleSubmitProfile,
 		handleUpdateProfile,
-		handleEditClick,
 		handleImageChange,
-		
+		processProfileProfile,
+		profileData,
+		setFormData,
+		setProfileData,
 	} = useContext(ProfileApiData);
+
+
 	
 
-	// console.log("ProfileApiData-can", ProfileApiData);
+	useEffect(() => {
+		
+
+		const fetchProfile = async () => {
+			try {
+				const res = await processProfileProfile(userId);
+				
+
+				const data = res.data.data;
+				console.log("data-can", data);
+				setProfileData(data);
+			} catch (error) {
+				console.error("Failed Fetching profile", error);
+			} finally {
+			}
+		};
+		fetchProfile();
+	}, [processProfileProfile, setProfileData]);
+
+	
+
+
+	const handleEditClick = () => {
+		setFormData({
+			firstname: profileData.firstname,
+			lastname: profileData.lastname,
+			telephone: profileData.telephone,
+			country: profileData.country,
+			gps_address: profileData.gps_address,
+			postal_code: profileData.postal_code,
+			address: profileData.address,
+			region: profileData.region,
+			experience: profileData.experience,
+			bio: profileData.bio,
+			 skills_id: Array.isArray(profileData.skills_id) 
+            ? profileData.skills_id 
+				: profileData.skills_id?.split(",") || [],
+		});
+		
+	};
+
+	
+	
+
+	//yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1740052249_contract-1.png
 
 	return (
 		<>
@@ -30,41 +78,55 @@ function CanProfilePage() {
 					<h2>User Profile!</h2>
 					<div className="breadcrumbs">
 						<a href="/">Home</a>
-						{/* <a href="#">Dasboard</a> */}
+
 						<span>Profile</span>
 					</div>
 				</div>
-				{/*Logo and Cover image*/}
+
 				<div className="panel panel-default">
 					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Profile Photo</h4>
+						<h4 className="panel-tittle m-a0">Profile Picture</h4>
 					</div>
 					<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
 						<div className="row">
-							<div className="col-lg-12 col-md-12">
-								<div className="form-group">
-									<div className="dashboard-profile-pic">
-										<div className="dashboard-profile-photo">
-											<JobZImage src={imageURL || ""} alt="" />
-											<div className="upload-btn-wrapper">
-												<div id="upload-image-grid" />
-												<button className="site-button button-sm">
-													Upload Photo
-												</button>
-												<input
-													type="file"
-													name="myfile"
-													id="file-uploader"
-													accept=".jpg, .jpeg, .png"
-													onChange={handleImageChange}
-												/>
+							<div className="panel panel-default">
+								
+								<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
+									<div className="row">
+										<div className="col-lg-12 col-md-12">
+											<div className="form-group">
+												<div className="dashboard-profile-pic">
+													<div className="dashboard-profile-photo">
+														
+														<img
+															src={
+																imageURL ||
+																`yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData.profile_image}`
+															}
+															alt=""
+														/>
+														<div className="upload-btn-wrapper">
+															<div id="upload-image-grid" />
+															<button className="site-button button-sm">
+																Upload Photo
+															</button>
+															<input
+																type="file"
+																name="profile_image"
+																id="file-uploader"
+																accept="/*"
+																onChange={handleImageChange}
+															/>
+														</div>
+													</div>
+													<p>
+														<b>Profile picture :- </b> Max file size is 1MB,
+														Minimum dimension: 136 x 136 And Suitable files are
+														.jpg &amp; .png
+													</p>
+												</div>
 											</div>
 										</div>
-										<p>
-											<b>User Profile Picture :- </b> Max file size is 1MB,
-											Minimum dimension: 136 x 136 And Suitable files are .jpg
-											&amp; .png
-										</p>
 									</div>
 								</div>
 							</div>
@@ -72,12 +134,9 @@ function CanProfilePage() {
 					</div>
 				</div>
 				<div className=" panel panel-default m-b30 ">
-					{/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
 					<div className=" p-a20 ">
-						<div className="panel-heading-with-btn">
-							<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-								<h4 className="panel-tittle m-a0"> Profile</h4>
-							</div>
+						<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+							<h4 className="panel-tittle m-a0"> Profile</h4>
 
 							<a
 								data-bs-toggle="modal"
@@ -95,32 +154,34 @@ function CanProfilePage() {
 								<SectionProfileData />
 							</div>
 
-							{/* actions */}
-							<div className="modal-footer">
-								<div className="actions">
-									<button
-										className="site-button  actions"
-										data-bs-target="#delete-profile"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-									>
-										<FaRegTrashCan color="white" />
-										<span className="admin-nav-text">Delete</span>
-									</button>
+							
+							<div className="">
+								{profileData.id && (
+									<div className="sec-actions-btn">
+										<button
+											className="site-button  actions-btn"
+											data-bs-target="#delete-profile"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+										>
+											<FaRegTrashCan color="white" />
+											<span className="admin-nav-text">Delete</span>
+										</button>
 
-									<button
-										className="site-button  actions "
-										data-bs-target="#EditProfile"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-										onClick={() => {
-											handleEditClick();
-										}}
-									>
-										<MdOutlineEdit color="white" />
-										<span>Edit</span>
-									</button>
-								</div>
+										<button
+											className="site-button  actions-btn "
+											data-bs-target="#EditProfile"
+											data-bs-toggle="modal"
+											data-bs-dismiss="modal"
+											onClick={() => {
+												handleEditClick();
+											}}
+										>
+											<MdOutlineEdit color="white" />
+											<span>Edit</span>
+										</button>
+									</div>
+								)}
 							</div>
 						</div>
 					</div>
@@ -129,7 +190,7 @@ function CanProfilePage() {
 					submit={handleSubmitProfile}
 					id="AddProfile"
 				/>
-				;
+
 				<SectionCandicateBasicInfo
 					submit={handleUpdateProfile}
 					id="EditProfile"
@@ -137,14 +198,18 @@ function CanProfilePage() {
 				<YesNoPopup
 					id="delete-profile"
 					type={popupType.DELETE_PROFILE}
-					msg={"Are you sure you want to delete this profile?"}
+					msg={"Are you sure you want to delete your profile?"}
 				/>
 			</div>
 		</>
 	);
+
 }
 
 export default CanProfilePage;
+
+
+
 
 /* <div className="twm-right-section-panel site-bg-gray">
 					{/*Basic Information

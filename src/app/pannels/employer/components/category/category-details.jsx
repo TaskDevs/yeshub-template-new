@@ -11,12 +11,12 @@ function CategoryDetails() {
 
 	const [category, setCategory] = useState({});
 	const { showDetailsId } = useContext(GlobalApiData);
-	const { processCategoryProfile, handleUpdateCategory } =
+	const { processCategoryProfile, handleUpdateCategory, setFormData } =
 		useContext(CategoryApiData);
 		
 	
 
-	// console.log("cat-single-data", category)
+	console.log("cat-single-data", !category)
 	// console.log("showDetailsId", showDetailsId);
 
 	useEffect(() => {
@@ -35,7 +35,14 @@ function CategoryDetails() {
 			}
 		};
 		fetchCategory();
-	}, [showDetailsId]);
+	}, [showDetailsId, processCategoryProfile]);
+
+	const handleEditClick = () => {
+		setFormData({
+			category_name: category.category_name,
+			description: category.description,
+		});
+	}
 	
 
 	return (
@@ -46,9 +53,11 @@ function CategoryDetails() {
 
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
-					{/* <p>Category </p> */}
-
-					{showDetailsId === category?.id && (
+					{!category.id ? (
+						<p>No Category Selected. </p>
+					)
+						: (
+							showDetailsId === category.id && (
 						<>
 							<div className="category">
 								<p>{category?.category_name}</p>
@@ -73,19 +82,19 @@ function CategoryDetails() {
 									className="site-button  actions "
 									data-bs-target="#edit-category"
 									data-bs-toggle="modal"
-									data-bs-dismiss="modal"
+											data-bs-dismiss="modal"
+											onClick={() => handleEditClick()}
 								>
 									<MdOutlineEdit color="white" />
 									<span>Edit</span>
 								</button>
 							</div>
 						</>
-					)}
-					{/* <div className="">
-						<p>data engineering</p>
-						<p>data science</p>
-						<p>product management</p>
-					</div> */}
+					)
+				)}
+
+					
+					
 				</div>
 			</div>
 

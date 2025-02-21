@@ -25,8 +25,6 @@ function SkillsForm({ id, submit }) {
 						<div className="modal-body">
 							<p>Add the related skills to your job category</p>
 							<div className="form-group">
-								
-
 								<InputField
 									field={SKILLSFIELD.fieldDetail[0]}
 									value={formData}
@@ -44,7 +42,11 @@ function SkillsForm({ id, submit }) {
 							>
 								Close
 							</button>
-							<button type="submit" className="site-button">
+							<button
+								type="submit"
+								data-bs-dismiss="modal"
+								className="site-button"
+							>
 								Save
 							</button>
 						</div>

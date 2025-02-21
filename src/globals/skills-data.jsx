@@ -1,10 +1,10 @@
 export const SKILLSFIELD = {
-    fieldDetail: [
-        {
-            name: "title",
-            label: "Title",
-            type: "text",
-            placeholder: "Finance",
-        },
-    ]
-}
+	fieldDetail: [
+		{
+			name: "skill",
+			label: "Title",
+			type: "text",
+			placeholder: "Finance",
+		},
+	],
+};

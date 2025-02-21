@@ -1,7 +1,7 @@
 export const EDUCATIONFIELD = {
 	fieldDetail: [
 		{
-			name: "university",
+			name: "school",
 			label: "University/Institute",
 			type: "text",
 			placeholder: "University of Ghana",
@@ -13,13 +13,13 @@ export const EDUCATIONFIELD = {
 			placeholder: "Degree",
 		},
 		{
-			name: "course",
+			name: "area_of_study",
 			label: "Course",
 			type: "text",
 			placeholder: "Bsc.Statistics",
 		},
 		{
-			name: "date_started",
+			name: "date_attended",
 			label: "Date Started",
 			type: "date",
 			placeholder: "3/07/2020",

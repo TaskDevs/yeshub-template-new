@@ -84,12 +84,13 @@ export const updateEducation = async (id, data) => {
 			
       `${baseURL}update-education-profile/${id}`,
       data
-		);
-    if (responseOnUpdateEducation.status === SUCCESS_STATUS) {
-      return responseOnUpdateEducation.data;
-    } else {
-      return false;
-    }
+    );
+    return responseOnUpdateEducation;
+    // if (responseOnUpdateEducation.status === SUCCESS_STATUS) {
+    //   return responseOnUpdateEducation.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }

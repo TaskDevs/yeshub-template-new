@@ -3,8 +3,12 @@ import { NavLink, useLocation } from "react-router-dom";
 import { setMenuActive } from "../../../../../globals/constants";
 import { candidate, canRoute, publicUser } from "../../../../../globals/route-names";
 
+
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
+
+
+
     return (
 			<>
 				<div className="twm-candidate-profile-pic">

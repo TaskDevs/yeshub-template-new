@@ -1,8 +1,10 @@
 export const baseUrl = process.env.PUBLIC_URL;
+export const baseURL = process.env.REACT_APP_BASE_URL;
 export const timeOut = { timeout: 10000 };
 
 //STATUS CODE
 export const SUCCESS_STATUS = 201;
+export const SUCCESS_STATUS_TEXT = "success";
 export const BAD_REQUEST_STATUS = 401;
 export const SERVER_ERROR = 500;
 export const LIST_ON_PAGES = 20;
@@ -12,6 +14,10 @@ export const default_skin = "6";
 export const popupType = {
   DELETE: "DELETE",
   LOGOUT: "LOGOUT",
+  DELETE_PROFILE: "DELETE_PROFILE",
+  DELETE_CATEGORY: "DELETE_CATEGORY",
+  DELETE_EDUCATION: "DELETE_EDUCATION",
+  DELETE_SKILLS: "DELETE_SKILLS",
 };
 
 export const formType = {

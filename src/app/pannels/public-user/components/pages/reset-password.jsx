@@ -166,6 +166,7 @@ function ResetPasswordPage() {
                       </div>
                     )}
 
+
                     {/* Submit Button */}
                     <div className="form-group">
                       <button
@@ -177,7 +178,9 @@ function ResetPasswordPage() {
                       </button>
                     </div>
 
+
                   </form>
+
 
                 </div>
               </div>
@@ -187,6 +190,7 @@ function ResetPasswordPage() {
       </div>
     </>
   );
+
 }
 
 export default ResetPasswordPage;

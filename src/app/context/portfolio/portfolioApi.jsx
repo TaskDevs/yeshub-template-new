@@ -1,21 +1,21 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config";
+import axios from "axios";
+import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL } from "../../../globals/constants";
 
 // ADD Portfolio
 export const addPortfolio = async (data) => {
   try {
     let responseOnAddPortfolio = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
-      data
-    );
-    if (responseOnAddPortfolio.status === SUCCESS_STATUS) {
-      return responseOnAddPortfolio.data;
-    } else {
-      return false;
-    }
+			`${baseURL}create-portfolio`,
+			data
+		);
+    return responseOnAddPortfolio;
+    // if (responseOnAddPortfolio.status === SUCCESS_STATUS) {
+    //   return responseOnAddPortfolio.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -39,17 +39,19 @@ export const searchPortfolio = async (data) => {
 };
 
 // LIST Portfolio
-export const portfolioList = async (pageNo) => {
+/**Add Get Portfolio API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
+export const portfolioList = async (userid) => {
   try {
-    let responseOnPortfolioList = await axios.get({
-      /**Add Get Portfolio API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnPortfolioList = await axios.get(
+      `${baseURL}}get-portfolio/${userid}`
+    );
 
-    if (responseOnPortfolioList.status === SUCCESS_STATUS) {
-      return responseOnPortfolioList.data;
-    } else {
-      return false;
-    }
+    return responseOnPortfolioList;
+    // if (responseOnPortfolioList.status === SUCCESS_STATUS) {
+    //   return responseOnPortfolioList.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -62,12 +64,13 @@ export const portfolioProfile = async (id) => {
     let responseOnPortfolioProfile = await axios.get({
       /**Add View Portfolio API URL here like ${URL}api/getEmployerProfile/${id}**/
     });
+    return responseOnPortfolioProfile;
 
-    if (responseOnPortfolioProfile.status === SUCCESS_STATUS) {
-      return responseOnPortfolioProfile.data;
-    } else {
-      return false;
-    }
+    // if (responseOnPortfolioProfile.status === SUCCESS_STATUS) {
+    //   return responseOnPortfolioProfile.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -75,32 +78,36 @@ export const portfolioProfile = async (id) => {
 };
 
 // UPDATE Portfolio
-export const updatePortfolio = async (data) => {
+export const updatePortfolio = async (userid, data) => {
   try {
-    let responseOnUpdatePortfolio = await axios.put({
-      /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
-    });
-    if (responseOnUpdatePortfolio.status === SUCCESS_STATUS) {
-      return responseOnUpdatePortfolio.data;
-    } else {
-      return false;
-    }
+    let responseOnUpdatePortfolio = await axios.put(		
+			`${baseURL}update-portfolio/${userid}`,
+      data
+		);
+    return responseOnUpdatePortfolio;
+    // if (responseOnUpdatePortfolio.status === SUCCESS_STATUS) {
+    //   return responseOnUpdatePortfolio.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }
 };
 
 // DELETE Portfolio
-export const deletePortfolio = async (data) => {
+export const deletePortfolio = async (id) => {
   try {
-    let responseOnDeletePortfolio = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/
-    });
-    if (responseOnDeletePortfolio.status === SUCCESS_STATUS) {
-      return responseOnDeletePortfolio.data;
-    } else {
-      return false;
-    }
+    let responseOnDeletePortfolio = await axios.delete(
+			
+			`${baseURL}delete-portfolio/${id}`
+    );
+    return responseOnDeletePortfolio;
+    // if (responseOnDeletePortfolio.status === SUCCESS_STATUS) {
+    //   return responseOnDeletePortfolio.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.error(err);
   }

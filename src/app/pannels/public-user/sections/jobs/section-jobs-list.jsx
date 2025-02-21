@@ -1,162 +1,41 @@
+import React, { useEffect, useContext } from "react";
 import JobZImage from "../../../../common/jobz-img";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../../../globals/route-names";
 import SectionPagination from "../common/section-pagination";
+import { JobApiData } from "../../../../context/jobs/jobsContextApi";
+import { JOBLISTDATA } from "../../../../../globals/job-list-data";
+import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
+  const { jobListData, processGetAllJob } = useContext(JobApiData);
 
-	//TODO: EXTRACT UNIQUE JOB IDS, ADD TO LINK AND ROUTE EACH JOB TO ITS PAGE
-
-
-
-	return (
-		<>
-			<div>
-				<div className="twm-jobs-list-wrap">
-					<NavLink
-						to={publicUser.jobs.DETAIL1}
-						className="twm-jobs-list-style1 mb-5"
-					>
-						<div className="twm-media">
-							<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-						</div>
-						<div className="twm-mid-content">
-							<h4 className="twm-job-title">
-								Senior Web Designer
-								<span className="twm-job-post-duration">/ 1 days ago</span>
-							</h4>
-							<p className="twm-job-address">
-								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
-							</p>
-							<ul className="ul-skills">
-								<li>ux writing</li>
-								<li>wire framing</li>
-								<li>prototyping</li>
-								<li>information architecture</li>
-							</ul>
-						</div>
-						<div className="twm-right-content">
-							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">Bid Now</span>
-							</div>
-							<div className="twm-jobs-amount">
-								₵2000 - ₵3000
-								{/* <span>/ daily</span> */}
-							</div>
-							<p className="twm-jobs-browse bids"> 10 bids</p>
-						</div>
-					</NavLink>
-
-					<NavLink
-						to={publicUser.jobs.DETAIL1}
-						className="twm-jobs-list-style1 mb-5"
-					>
-						<div className="twm-media">
-							<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-						</div>
-						<div className="twm-mid-content">
-							<h4 className="twm-job-title">
-								Senior Web Designer
-								{/* <span className="twm-job-post-duration">/ 1 days ago</span> */}
-							</h4>
-							<p className="twm-job-address">
-								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
-							</p>
-							<ul className="ul-skills">
-								<li>ux writing</li>
-								<li>wire framing</li>
-								<li>prototyping</li>
-								<li>information architecture</li>
-							</ul>
-						</div>
-						<div className="twm-right-content">
-							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">Bid Now</span>
-							</div>
-							<div className="twm-jobs-amount">
-								₵200 <span>/ daily</span>
-							</div>
-							<p className="twm-jobs-browse bids"> 10 bids</p>
-						</div>
-					</NavLink>
-
-					<NavLink
-						to={publicUser.jobs.DETAIL1}
-						className="twm-jobs-list-style1 mb-5"
-					>
-						<div className="twm-media">
-							<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-						</div>
-						<div className="twm-mid-content">
-							<h4 className="twm-job-title">
-								Senior Web Designer
-								<span className="twm-job-post-duration">/ 1 days ago</span>
-							</h4>
-							<p className="twm-job-address">
-								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
-							</p>
-							<ul className="ul-skills">
-								<li>ux writing</li>
-								<li>wire framing</li>
-								<li>prototyping</li>
-								<li>information architecture</li>
-							</ul>
-						</div>
-						<div className="twm-right-content">
-							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">Bid Now</span>
-							</div>
-							<div className="twm-jobs-amount">
-								₵200 <span>/ daily</span>
-							</div>
-							<p className="twm-jobs-browse bids"> 10 bids</p>
-						</div>
-					</NavLink>
-
-					<NavLink
-						to={publicUser.jobs.DETAIL1}
-						className="twm-jobs-list-style1 mb-5"
-					>
-						<div className="twm-media">
-							<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
-						</div>
-						<div className="twm-mid-content">
-							<h4 className="twm-job-title">
-								Senior Web Designer
-								<span className="twm-job-post-duration">/ 1 days ago</span>
-							</h4>
-							<p className="twm-job-address">
-								Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
-							</p>
-							<ul className="ul-skills">
-								<li>ux writing</li>
-								<li>wire framing</li>
-								<li>prototyping</li>
-								<li>information architecture</li>
-							</ul>
-						</div>
-						<div className="twm-right-content">
-							<div className="twm-jobs-category green">
-								<span className="twm-bg-green">Bid Now</span>
-							</div>
-							<div className="twm-jobs-amount">
-								₵200 <span>/ daily</span>
-							</div>
-							<p className="twm-jobs-browse bids"> 10 bids</p>
-						</div>
-					</NavLink>
-				</div>
-				<SectionPagination />
-			</div>
-		</>
-	);
+  useEffect(() => {
+    //console.log("We are rendering");
+    processGetAllJob();
+  }, []);
+  return (
+    <>
+      <div>
+        <div className="twm-jobs-list-wrap">
+          {jobListData.map((item, index) => (
+            <JobsCard
+              key={index}
+              img={item.img}
+              title={item.job_title}
+              duration={"1 day ago"}
+              location={item.description}
+              amount={item.salary}
+            />
+          ))}
+        </div>
+        <SectionPagination />
+      </div>
+    </>
+  );
 }
 
 export default SectionJobsList;
-
-
-
-
 
 // <ul>
 // 	<li>

@@ -1,14 +1,13 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
+//import axios from "../../../utils/axios.config";
+import axios from "axios";
 import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
   try {
     let responseOnAddEmployer = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+      `http://127.0.0.1:8000/api/v1/create-employers`,
       data
     );
     if (responseOnAddEmployer.status === SUCCESS_STATUS) {
@@ -41,11 +40,11 @@ export const searchEmployer = async (data) => {
 // LIST Employer
 export const employerList = async (pageNo) => {
   try {
-    let responseOnEmployerList = await axios.get({
-      /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnEmployerList = await axios.get(
+      `http://127.0.0.1:8000/api/v1/create-employers`
+    );
 
-    if (responseOnEmployerList.status === SUCCESS_STATUS) {
+    if (responseOnEmployerList.data.status === SUCCESS_STATUS) {
       return responseOnEmployerList.data;
     } else {
       return false;
@@ -57,13 +56,14 @@ export const employerList = async (pageNo) => {
 };
 
 // VIEW Employer
-export const employerProfile = async (id) => {
+export const employerProfile = async () => {
   try {
-    let responseOnEmployerProfile = await axios.get({
+    let responseOnEmployerProfile = await axios.get(
+      `http://127.0.0.1:8000/api/v1/employer-companies/3`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
-    });
-
-    if (responseOnEmployerProfile.status === SUCCESS_STATUS) {
+    );
+    //console.log(responseOnEmployerProfile);
+    if (responseOnEmployerProfile.status == 201) {
       return responseOnEmployerProfile.data;
     } else {
       return false;

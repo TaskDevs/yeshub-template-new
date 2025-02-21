@@ -14,11 +14,26 @@ import {
 export const EmployerApiData = createContext();
 
 const EmployerApiDataProvider = (props) => {
-  const processAddEmployer = async (data) => {};
+  const [employerProfiles, setEmployerProfiles] = useState([]);
 
-  const processGetAllEmployer = async (id) => {};
+  const processAddEmployer = async (data) => {
+    let response = await addEmployer(data);
+    if (response) {
+      notify(200, "Company Added Successfully");
+    } else {
+      notify(400, "Failed to Add Company");
+    }
+  };
 
-  const processEmployerProfile = async (id) => {};
+  const processGetAllEmployer = async () => {};
+
+  const processEmployerProfile = async () => {
+    let response = await employerProfile();
+
+    if (response) {
+      setEmployerProfiles(response.data);
+    }
+  };
 
   const processSearchEmployer = async (data) => {};
 
@@ -35,6 +50,7 @@ const EmployerApiDataProvider = (props) => {
         processSearchEmployer,
         processUpdateEmployer,
         processDeleteEmployer,
+        employerProfiles,
       }}
     >
       {props.children}

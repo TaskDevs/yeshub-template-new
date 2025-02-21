@@ -6,40 +6,107 @@ import {
   addEducation,
   searchEducation,
   eductionList,
+  // educationEducation,
   educationProfile,
   updateEducation,
   deleteEducation,
 } from "./educationApi";
+import { EDUCATIONFIELD } from "../../../globals/education-data";
 
 export const EducationApiData = createContext();
 
 const EducationApiDataProvider = (props) => {
-  const processAddEducation = async (data) => {};
+  
+	 const [formData, setFormData] = useState(
+			EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
+				acc[field.name] = "";
+				return acc;
+			}, {})
+		);
+
+	
+  
+
+  const processAddEducation = async (data) => {
+    const res = await addEducation(data);
+    console.log("add-education", res);
+    
+    notify(res.status, "Education added successfully", "Failed to add education");
+    
+
+  };
 
   const processGetAllEducation = async (id) => {};
-
-  const processEducationProfile = async (id) => {};
-
   const processSearchEducation = async (data) => {};
 
-  const processUpdateEducation = async (data) => {};
+  const processEducationEducation = async (id) => {
 
-  const processDeleteEducation = async (id) => {};
+    const res = await educationProfile(id);
+		console.log("get-education", res);
+
+		notify(
+			res.status,
+			"Education added successfully",
+			"Failed to add education"
+		);
+  };
+
+
+
+  const processUpdateEducation = async (id,data) => {
+    const res = await updateEducation(id,data);
+		console.log("update-education", res);
+
+		notify(
+			res.status,
+			"Education updated successfully",
+			"Failed to add education"
+		);
+  };
+
+  const processDeleteEducation = async (id) => {
+    const res = await deleteEducation(id);
+		console.log("delete-education", res);
+
+		notify(
+			res.status,
+			"Education added successfully",
+			"Failed to add education"
+		);
+  };
+
+	const handleAddEducation = async (e) => {
+		e.preventDefault();
+		const res = await processAddEducation(formData);
+		console.log("add-edu",res);
+	}
+
+	const handleUpdateEducation = async (e) => {
+		e.preventDefault();
+		const res = await processUpdateEducation(formData);
+		console.log("update-edu", res);
+	};
+
+
 
   return (
-    <EducationApiData.Provider
-      value={{
-        processAddEducation,
-        processGetAllEducation,
-        processEducationProfile,
-        processSearchEducation,
-        processUpdateEducation,
-        processDeleteEducation,
-      }}
-    >
-      {props.children}
-    </EducationApiData.Provider>
-  );
+		<EducationApiData.Provider
+			value={{
+				processAddEducation,
+				processGetAllEducation,
+				processEducationEducation,
+				processSearchEducation,
+				processUpdateEducation,
+				processDeleteEducation,
+				handleAddEducation,
+			  handleUpdateEducation,
+			  formData,
+			  setFormData
+			}}
+		>
+			{props.children}
+		</EducationApiData.Provider>
+	);
 };
 
 export default EducationApiDataProvider;

@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import cookieMethods from '../../../../../utils/cookieUtils';
 import toast from 'react-hot-toast';
 
-const GoogleCallback = () => {
-  const location = useLocation();
+const LinkedinCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,24 +15,30 @@ const GoogleCallback = () => {
     if (token) {
       // Store the token in sessionStorage or localStorage
       sessionStorage.setItem('authToken', token);
-      console.log('Google token:', token);
-      cookieMethods.setCookies(token, refreshToken);
- // ✅ Show success toast
-       // ✅ Show success toast
-     toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
-      navigate('/'); // Change this to the page you want the user to go to
+      console.log('LinkedIn token:', token);
+
+      // Store tokens in cookies
+      cookieMethods.setCookies(token, refreshToken || ""); // Ensure no null values
+
+      // ✅ Show success toast
+      toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
+
+      // Redirect after successful login
+      navigate('/'); 
     } else {
       console.error('No token found in the URL');
+      toast.error("Login failed. Please try again.", { position: "top-right", autoClose: 3000 });
+
       navigate('/login'); // Redirect the user to login if there's no token
     }
-  }, [location, navigate]);
+  }, [navigate]); // Removed `location` since it's not used
 
   return (
     <div>
-      <h2>Processing Google Login...</h2>
+      <h2>Processing LinkedIn Login...</h2>
       <p>Redirecting...</p>
     </div>
   );
 };
 
-export default GoogleCallback;
+export default LinkedinCallback;

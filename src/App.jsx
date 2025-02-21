@@ -18,6 +18,7 @@ import SkillsApiDataProvider from "./app/context/skills/skillsContextApi";
 import TestimonialApiDataProvider from "./app/context/testimonial/testimonialContextApi";
 import ProfileApiDataProvider from "./app/context/user-profile/profileContextApi";
 import WalletApiDataProvider from "./app/context/wallet/walletContextApi";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [isLoading, setLoading] = useState(true);
@@ -45,6 +46,7 @@ function App() {
                               <ProfileApiDataProvider>
                                 <WalletApiDataProvider>
                                   {isLoading && <Loader />}
+                                  <Toaster/>
                                   <ScrollToTop />
                                   <RootLayout />
                                 </WalletApiDataProvider>

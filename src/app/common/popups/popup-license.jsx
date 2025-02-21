@@ -25,7 +25,14 @@ function PopupLicense({ submit }) {
 									<div className="col-xl-12 col-lg-12">
 										<div className="form-group">
 											<label>Profession</label>
-											<div className="ls-inputicon-box">
+										  <div className="ls-inputicon-box">
+											  {/* <InputField
+												field={EDUCATIONFIELD.fieldDetail[2]}
+												value={formData}
+												change={(data, field) => {
+													handleChange(data, field);
+												}}
+											/> */}
 												<input
 													className="form-control"
 													type="text"

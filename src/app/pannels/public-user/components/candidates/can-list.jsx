@@ -5,15 +5,17 @@ import JobZImage from "../../../../common/jobz-img";
 import SectionPagination from "../../sections/common/section-pagination";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { MdOutlineStarRate } from "react-icons/md";
 import { LuMessageSquare } from "react-icons/lu";
 import { MdDonutLarge } from "react-icons/md";
 import { FaCediSign } from "react-icons/fa6";
 import axios from "axios";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 
 function CandidateListPage() {
+
 	
 
     const _filterConfig = {
@@ -27,6 +29,8 @@ function CandidateListPage() {
     useEffect(()=>{
         loadScript("js/custom.js")
 	})
+	
+	
 	
 	
 

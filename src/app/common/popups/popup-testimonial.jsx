@@ -144,7 +144,11 @@ function TestimonialPopup({ submit }) {
 								>
 									Close
 								</button>
-								<button type="submit" className="site-button">
+								<button
+									type="submit"
+									data-bs-dismiss="modal"
+									className="site-button"
+								>
 									Save
 								</button>
 							</div>

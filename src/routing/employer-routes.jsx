@@ -14,54 +14,49 @@ import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ProtectedRoute from "../app/context/ProtectedRoute";
-import  { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
+import { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
-import CategoryPage from "../app/pannels/employer/components/category/category-page";
-import SkillsPage from "../app/pannels/employer/components/skills/skills-page";
-
 
 function EmployerRoutes() {
-	const [routes, setRoutes] = useState({});
-	// const errorMessage = () =>
-	//         toast(" User Unauthenticated!, login");
+  const [routes, setRoutes] = useState({});
+  // const errorMessage = () =>
+  //         toast(" User Unauthenticated!, login");
 
-	// const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-	//   useEffect(() => {
-	//     if (user?.id) {
-	//       const updatedRoutes = withId(user.id, employer);
-	//       setRoutes(updatedRoutes);
-	//     }
-	//   }, [user]);
+  //   useEffect(() => {
+  //     if (user?.id) {
+  //       const updatedRoutes = withId(user.id, employer);
+  //       setRoutes(updatedRoutes);
+  //     }
+  //   }, [user]);
 
-	// if (!routes.dashboard) {
+  // if (!routes.dashboard) {
 
-	//         errorMessage()
-	// 	navigate("/login")
+  //         errorMessage()
+  // 	navigate("/login")
 
-	// }
-	// SkillsPage
+  // }
+  // SkillsPage
 
-	return (
-		// <ProtectedRoute roleProp="2"></ProtectedRoute>
-		<Routes>
-			<Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
-			<Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
-			<Route path={employer.ADD_CATEGORY} element={<CategoryPage />} />
-			<Route path={employer.ADD_SKILL} element={< SkillsPage />} />
-			<Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
-			<Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
-			<Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
-			<Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />
-			<Route path={employer.PACKAGES} element={<EmpPackagesPage />} />
-			<Route path={employer.MESSAGES1} element={<EmpMessages1Page />} />
-			{/* <Route path={employer.MESSAGES2} element={<EmpMessages2Page />} /> */}
-			<Route path={employer.RESUME_ALERTS} element={<EmpResumeAlertsPage />} />
-			<Route path={employer.ACCOUNTS} element={<FinancesPage />} />
-			<Route path={employer.REVIEWS} element={<EmpReviewsPage />} />
-			<Route path="*" element={<Error404Page />} />
-		</Routes>
-	);
+  return (
+    // <ProtectedRoute roleProp="2"></ProtectedRoute>
+    <Routes>
+      <Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
+      <Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
+      <Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
+      <Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
+      <Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
+      <Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />
+      <Route path={employer.PACKAGES} element={<EmpPackagesPage />} />
+      <Route path={employer.MESSAGES1} element={<EmpMessages1Page />} />
+      {/* <Route path={employer.MESSAGES2} element={<EmpMessages2Page />} /> */}
+      <Route path={employer.RESUME_ALERTS} element={<EmpResumeAlertsPage />} />
+      <Route path={employer.ACCOUNTS} element={<FinancesPage />} />
+      <Route path={employer.REVIEWS} element={<EmpReviewsPage />} />
+      <Route path="*" element={<Error404Page />} />
+    </Routes>
+  );
 }
 
 export default EmployerRoutes;

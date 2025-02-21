@@ -2,14 +2,35 @@ import { useEffect, useContext, useState } from "react";
 import { POSTJOBFIELD } from "../../../../../globals/post-job-data";
 import JobInputField from "../../../../common/job-input-field";
 import JobSelectField from "../../../../common/job-select-field";
+import JobMultiSelectField from "../../../../common/job-multi-select-field";
 import SelectField from "../../../../common/select-field";
 import DateField from "../../../../common/date-field";
 import TextAreaField from "../../../../common/text-area-field";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
+import { topMessage } from "../../../../../utils/responseUtils";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function EmpPostAJobPage() {
-  const { processAddJob } = useContext(JobApiData);
-  const [formData, setFormData] = useState({});
+  const { processAddJob, statusAlert, setAlertStatus } = useContext(JobApiData);
+  const { profileData } = useContext(ProfileApiData);
+  const { skillOptions } = useContext(SkillsApiData);
+  const [formData, setFormData] = useState({
+    jobRoles: [],
+  });
+
+  useEffect(() => {
+    console.log(skillOptions);
+  }, [skillOptions]);
+
+  const jobOptions = [
+    { id: 1, name: "Developer" },
+    { id: 2, name: "Designer" },
+    { id: 3, name: "Manager" },
+    { id: 4, name: "Tester" },
+  ];
 
   const handleInputChange = (field, data) => {
     setFormData({
@@ -27,13 +48,23 @@ function EmpPostAJobPage() {
     formData.user_id = 3; //dummy user_id
     formData.employer_id = 5; //dummy employer_id
     formData.status = 1; //dummy status
+    formData.skills_id = 6;
 
-    console.log(formData);
     processAddJob(formData);
   };
 
   const handleSaveDraft = () => {
-    console.log(formData);
+    //console.log(formData);
+    formData.user_id = 3; //dummy user_id
+    formData.employer_id = 5; //dummy employer_id
+    formData.status = 1; //dummy status
+    formData.skills_id = 6;
+
+    processAddJob(formData);
+  };
+
+  const handleClose = () => {
+    console.log("We move");
   };
 
   const handlePostAJob = async (e) => {
@@ -42,6 +73,14 @@ function EmpPostAJobPage() {
 
   return (
     <>
+      {/* {statusAlert.status && (
+        <topMessage
+          status={statusAlert.status}
+          msg={statusAlert.msg}
+          changeState={setAlertStatus}
+        />
+      )} */}
+
       <div className="wt-admin-right-page-header clearfix">
         <h2>Post a Job</h2>
         <div className="breadcrumbs">
@@ -68,7 +107,7 @@ function EmpPostAJobPage() {
                   field={POSTJOBFIELD.fieldDetail[0]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -79,7 +118,7 @@ function EmpPostAJobPage() {
                   value={formData}
                   options={POSTJOBFIELD.fieldDetail[1].options}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -90,7 +129,7 @@ function EmpPostAJobPage() {
                   value={formData}
                   options={POSTJOBFIELD.fieldDetail[2].options}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -100,7 +139,7 @@ function EmpPostAJobPage() {
                   field={POSTJOBFIELD.fieldDetail[3]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -110,7 +149,7 @@ function EmpPostAJobPage() {
                   field={POSTJOBFIELD.fieldDetail[4]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -120,7 +159,7 @@ function EmpPostAJobPage() {
                   field={POSTJOBFIELD.fieldDetail[5]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -131,18 +170,19 @@ function EmpPostAJobPage() {
                   field={POSTJOBFIELD.fieldDetail[6]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
 
-              {/* job type */}
+              {/* skills */}
               <div className="col-xl-4 col-lg-6 col-md-12">
-                <JobInputField
+                <JobMultiSelectField
                   field={POSTJOBFIELD.fieldDetail[7]}
                   value={formData}
+                  options={skillOptions || jobOptions}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -153,7 +193,7 @@ function EmpPostAJobPage() {
                   field={POSTJOBFIELD.fieldDetail[8]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -171,21 +211,21 @@ function EmpPostAJobPage() {
 
               {/*Start Date*/}
               <div className="col-md-6">
-                <DateField
+                <JobInputField
                   field={POSTJOBFIELD.fieldDetail[10]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
               {/*End Date*/}
               <div className="col-md-6">
-                <DateField
+                <JobInputField
                   field={POSTJOBFIELD.fieldDetail[11]}
                   value={formData}
                   change={(data, field) => {
-                    handleInputChange(data, field);
+                    handleInputChange(field, data);
                   }}
                 />
               </div>
@@ -211,6 +251,8 @@ function EmpPostAJobPage() {
           </div>
         </div>
       </div>
+
+      <ToastContainer />
     </>
   );
 }

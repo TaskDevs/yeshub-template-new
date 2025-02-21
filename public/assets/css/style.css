@@ -15283,6 +15283,26 @@ strong {
   }
 }
 
+
+@keyframes hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(-360deg);
+  }
+}
+
+@-webkit-keyframes hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(-360deg);
+  }
+}
+
+/* 
 @-webkit-keyframes hue {
   from {
     -webkit-filter: hue-rotate(0deg);
@@ -15298,7 +15318,12 @@ strong {
   to {
     -webkit-filter: hue-rotate(-360deg);
   }
-}
+} */
+
+
+
+
+
 /*Candidate pages start------------------------------------------------------------*/
 .side-bar-st-1 {
   background: #d4e6ff;

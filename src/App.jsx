@@ -29,41 +29,43 @@ function App() {
 
 
   return (
-    <GlobalApiDataProvider>
-      <AuthApiDataProvider>
-        <ApplicationApiDataProvider>
-          <CategoryApiDataProvider>
-            <EducationApiDataProvider>
-              <HistoryApiDataProvider>
-                <EmployerApiDataProvider>
-                  <FreelanceApiDataProvider>
-                    <JobApiDataProvider>
-                      <PaymentApiDataProvider>
-                        <PortfolioApiDataProvider>
-                          <SkillsApiDataProvider>
-                            <TestimonialApiDataProvider>
-                              <ProfileApiDataProvider>
-                                <WalletApiDataProvider>
-                                  {isLoading && <Loader />}
-                                  <ToastContainer/>
-                                  <ScrollToTop />
-                                  <RootLayout />
-                                </WalletApiDataProvider>
-                              </ProfileApiDataProvider>
-                            </TestimonialApiDataProvider>
-                          </SkillsApiDataProvider>
-                        </PortfolioApiDataProvider>
-                      </PaymentApiDataProvider>
-                    </JobApiDataProvider>
-                  </FreelanceApiDataProvider>
-                </EmployerApiDataProvider>
-              </HistoryApiDataProvider>
-            </EducationApiDataProvider>
-          </CategoryApiDataProvider>
-        </ApplicationApiDataProvider>
-      </AuthApiDataProvider>
-    </GlobalApiDataProvider>
-  );
+		<GlobalApiDataProvider>
+			<AuthApiDataProvider>
+				<ApplicationApiDataProvider>
+					<CategoryApiDataProvider>
+						<EducationApiDataProvider>
+							<HistoryApiDataProvider>
+								<EmployerApiDataProvider>
+									<FreelanceApiDataProvider>
+										<JobApiDataProvider>
+											<MilestoneApiDataProvider>
+												<PaymentApiDataProvider>
+													<PortfolioApiDataProvider>
+														<SkillsApiDataProvider>
+															<TestimonialApiDataProvider>
+																<ProfileApiDataProvider>
+																	<WalletApiDataProvider>
+																		{isLoading && <Loader />}
+																		<ToastContainer />
+																		<ScrollToTop />
+																		<RootLayout />
+																	</WalletApiDataProvider>
+																</ProfileApiDataProvider>
+															</TestimonialApiDataProvider>
+														</SkillsApiDataProvider>
+													</PortfolioApiDataProvider>
+												</PaymentApiDataProvider>
+											</MilestoneApiDataProvider>
+										</JobApiDataProvider>
+									</FreelanceApiDataProvider>
+								</EmployerApiDataProvider>
+							</HistoryApiDataProvider>
+						</EducationApiDataProvider>
+					</CategoryApiDataProvider>
+				</ApplicationApiDataProvider>
+			</AuthApiDataProvider>
+		</GlobalApiDataProvider>
+	);
 }
 
 export default App;

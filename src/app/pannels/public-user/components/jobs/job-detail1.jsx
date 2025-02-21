@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import JobZImage from "../../../../common/jobz-img";
 import ApplyJobPopup from "../../../../common/popups/popup-apply-job";
@@ -12,14 +12,15 @@ import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-
 import ApplyJobPage from "./apply-job";
 import { NavLink } from "react-router-dom";
 import { publicUser } from "../../../../../globals/route-names";
+import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
 
 
 function JobDetail1Page() {
 
-	const [empListData, setEmpListData] = useState([]);
-	const [error, setError] = useState(null);
+	// const [empListData, setEmpListData] = useState([]);
+	// const [error, setError] = useState(null);
 	
-    
+    const { handleSubmmitApplication } = useContext(ApplicationApiData);
     
     const sidebarConfig = {
         showJobInfo: true
@@ -29,9 +30,9 @@ function JobDetail1Page() {
         loadScript("js/custom.js");
     })
 
-	useEffect(() => {
-		console.log("Holding Up")
-	}, ["getEmpListUrl"]);
+	// useEffect(() => {
+	// 	console.log("Holding Up")
+	// }, ["getEmpListUrl"]);
 
 
     return (
@@ -92,7 +93,7 @@ function JobDetail1Page() {
 															</div>
 														</div>
 														<div className="twm-job-self-bottom">
-															<NavLink
+															{/* <NavLink
 																className="site-button"
 																// data-bs-toggle="modal"
 																// href="#apply_job_popup"
@@ -102,7 +103,18 @@ function JobDetail1Page() {
 																// role="button"
 															>
 																Apply Now
-															</NavLink>
+															</NavLink> */}
+															<button
+																className="site-button"
+																// data-bs-toggle="modal"
+																// href="#apply_job_popup"
+																// to="#apply_job_pop"
+																// role="button"
+																type="submit"
+																onClick={() => handleSubmmitApplication()}
+															>
+																Apply Now
+															</button>
 														</div>
 														<div className=""></div>
 													</div>

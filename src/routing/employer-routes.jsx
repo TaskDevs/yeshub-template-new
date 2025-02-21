@@ -22,25 +22,7 @@ import SkillsPage from "../app/pannels/employer/components/skills/skills-page";
 
 function EmployerRoutes() {
 	const [routes, setRoutes] = useState({});
-	// const errorMessage = () =>
-	//         toast(" User Unauthenticated!, login");
-
-	// const navigate = useNavigate();
-
-	//   useEffect(() => {
-	//     if (user?.id) {
-	//       const updatedRoutes = withId(user.id, employer);
-	//       setRoutes(updatedRoutes);
-	//     }
-	//   }, [user]);
-
-	// if (!routes.dashboard) {
-
-	//         errorMessage()
-	// 	navigate("/login")
-
-	// }
-	// SkillsPage
+	
 
 	return (
 		// <ProtectedRoute roleProp="2"></ProtectedRoute>

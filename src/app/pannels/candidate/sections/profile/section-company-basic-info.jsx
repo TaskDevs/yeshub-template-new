@@ -9,7 +9,7 @@ import SelectField from "../../../../common/select-field";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import Select from "react-select";
+// import Select from "react-select";
 
 const skills = [
   {

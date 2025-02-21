@@ -76,7 +76,7 @@ function LoginPage() {
   
       
    // ✅ Show success toast
-   toast.success(response.message, { position: "top-right", autoClose: 3000 });
+    toast.success(response.message, { position: "top-right", autoClose: 3000 });
         setTimeout(() => {
           switch (role) {
             case "admin":
@@ -123,44 +123,44 @@ function LoginPage() {
     console.log(res)
   }
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const response = await login(formData);
-      if (response && response.token) {
-        // Store token and user role
-        sessionStorage.setItem("authToken", response.token);
-        sessionStorage.setItem("userRole", response.role);
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   try {
+  //     const response = await login(formData);
+  //     if (response && response.token) {
+  //       // Store token and user role
+  //       sessionStorage.setItem("authToken", response.token);
+  //       sessionStorage.setItem("userRole", response.role);
 
-        if (formData.rememberMe) {
-          sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
-        } else {
-          sessionStorage.removeItem("rememberedUser");
-        }
+  //       if (formData.rememberMe) {
+  //         sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
+  //       } else {
+  //         sessionStorage.removeItem("rememberedUser");
+  //       }
 
-        // Redirect based on role
-        switch (response.role) {
-          case "admin":
-            navigate("/admin");
-            break;
-          case "employer":
-            navigate(base.EMPLOYER_PRE);
-            break;
-          case "user":
-          default:
-            navigate(base.CANDIDATE_PRE);
-            break;
-        }
-      } else {
-        console.error("Login failed: No token received");
-      }
-    } catch (error) {
-      console.error("Login failed", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  //       // Redirect based on role
+  //       switch (response.role) {
+  //         case "admin":
+  //           navigate("/admin");
+  //           break;
+  //         case "employer":
+  //           navigate(base.EMPLOYER_PRE);
+  //           break;
+  //         case "user":
+  //         default:
+  //           navigate(base.CANDIDATE_PRE);
+  //           break;
+  //       }
+  //     } else {
+  //       console.error("Login failed: No token received");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed", error);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   const linkedinSignin = async ()=>{
     const res = await loginWithLinkedIn(formData.role)
@@ -347,8 +347,10 @@ function LoginPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
+  </>
   );
 }
+
 
 export default LoginPage;

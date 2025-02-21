@@ -8,6 +8,7 @@ import {
   jobList,
   jobProfile,
   updateJob,
+  employerJobList,
   deleteJob,
 } from "./jobsApi";
 
@@ -23,7 +24,7 @@ const JobApiDataProvider = (props) => {
   const processAddJob = async (data) => {
     let response = await addJob(data);
     if (response) {
-      data.status == 1
+      data.status === 1
         ? notify(200, "Job added successfully")
         : notify(200, "Draft added successfully");
     } else {
@@ -34,12 +35,19 @@ const JobApiDataProvider = (props) => {
   const processGetAllJob = async () => {
     let response = await jobList();
     if (response) {
-      //console.log(response);
+      console.log("get-all-jobs",response);
       setJobListData(response);
     }
   };
 
-  const processJobProfile = async (id) => {};
+  const processJobProfile = async (id) => {
+    let response = await employerJobList(id);
+		if (response) {
+			console.log("get-single-jobs", response);
+			setJobListData(response);
+		}
+
+  };
 
   const processSearchJob = async (data) => {};
 

@@ -9,6 +9,7 @@ import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
   const { jobListData, processGetAllJob } = useContext(JobApiData);
+  console.log("jobListData", jobListData);
 
   useEffect(() => {
     //console.log("We are rendering");

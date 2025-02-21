@@ -2,6 +2,7 @@
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
+  baseURL,
   SUCCESS_STATUS,
   SUCCESS_STATUS_TEXT,
   // LIST_ON_PAGES,
@@ -12,10 +13,10 @@ import {
 export const addJob = async (data) => {
   try {
     let responseOnAddJob = await axios.post(
-      `http://127.0.0.1:8000/api/v1/posted-jobs`,
-      data
-    );
-    if (responseOnAddJob.status == SUCCESS_STATUS) {
+			`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/posted-jobs`,
+			data
+		);
+    if (responseOnAddJob.status === SUCCESS_STATUS) {
       return responseOnAddJob.data;
     } else {
       return false;
@@ -46,10 +47,10 @@ export const searchJob = async (data) => {
 export const jobList = async () => {
   try {
     let responseOnJobList = await axios.get(
-      `http://127.0.0.1:8000/api/v1/get-posted-jobs`
-    );
-    if (responseOnJobList.status == 200) {
-      return responseOnJobList.data.data;
+			`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/posted-jobs`
+		);
+    if (responseOnJobList.status === 200) {
+      return responseOnJobList.data.data.data;
     } else {
       return false;
     }
@@ -76,6 +77,30 @@ export const jobProfile = async (id) => {
     return false;
   }
 };
+
+
+export const employerJobList = async (id) => {
+  try {
+    let responseOnEmployerJobList = await axios.get(
+      `${baseURL}employers-posted-jobs/${id}`
+    );
+    if (responseOnEmployerJobList.status === 200) {
+      console.log(
+				"responseOnEmployerJob-detail",
+				responseOnEmployerJobList.data.data
+			);
+      return responseOnEmployerJobList.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+
+
 
 // UPDATE Job
 export const updateJob = async (data) => {

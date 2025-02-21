@@ -1,14 +1,14 @@
 import axios from "axios";
 import cookieMethods from "./cookieUtils";
 import {
-  baseUrl,
+  baseURL,
   timeOut,
   SUCCESS_STATUS,
   BAD_REQUEST_STATUS,
 } from "../globals/constants";
 
 const instance = axios.create({
-  baseUrl,
+  baseURL,
   timeOut,
   withCredentials: true,
   crossDomain: true,

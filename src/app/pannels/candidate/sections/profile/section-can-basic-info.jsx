@@ -26,9 +26,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const { formData, setFormData, profileData } = useContext(ProfileApiData);
   // const { skills } = useContext(SkillsApiData);
-  console.log("skills-profile", skills);
-
-  console.log("selectedItems", selectedItems);
 
   const handleSelectChange = (selectedOptions) => {
     // setSelectedItems(selectedOptions || []);

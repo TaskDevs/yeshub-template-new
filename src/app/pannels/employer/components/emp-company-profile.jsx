@@ -6,18 +6,25 @@ import { DropzoneComponent } from "react-dropzone-component";
 import axios from "axios";
 import { toast } from "react-toastify";
 import SectionCandicateBasicInfo from "../../candidate/sections/profile/section-can-basic-info";
+import SectionEditCompanyInfo from "../../candidate/sections/profile/section-edit-company-info";
 import SectionCompanyBasicInfo from "../../candidate/sections/profile/section-company-basic-info";
 import CompanyProfileData from "../../candidate/common/company-profile-data";
+import formatImgUrl from "../../../../utils/formatImgUrl";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import SectionProfileData from "../../candidate/common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { BACKEND_HOST, baseURL } from "../../../../globals/constants";
+import FormatUrl from "../../../../utils/formatUrl";
 
 function EmpCompanyProfilePage() {
-  const { processEmployerProfile, employerProfiles } =
-    useContext(EmployerApiData);
+  const {
+    processEmployerProfile,
+    employerProfiles,
+    processUpdateEmployerLogo,
+  } = useContext(EmployerApiData);
   const { isSubmitting } = useContext(GlobalApiData);
   const {
     handleSubmitProfile,
@@ -26,34 +33,31 @@ function EmpCompanyProfilePage() {
     // handleImageChange,
   } = useContext(ProfileApiData);
   const [imageURL, setImageURL] = useState(null);
+  const [formData, setFormData] = useState({});
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileUpdated, setProfileUpdated] = useState(false);
 
   useEffect(() => {
     loadScript("js/custom.js");
     processEmployerProfile();
-  });
+  }, []);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log("file-img", file);
-    setSelectedFile(file);
-
-    const reader = new FileReader();
-    console.log("reader", reader);
-
-    reader.onloadend = () => {
-      setImageURL(reader.result);
-    };
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        let logoFile = reader.result;
+        setFormData({ id: employerProfiles?.id, logo: logoFile });
+        setImageURL(reader.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
   };
 
   const handleSubmitCompanyLogo = () => {
-    let newData = {
-      id: employerProfiles.id,
-      companyLogo: selectedFile,
-    };
-    console.log(newData);
-    //handleUpdateProfile(newData);
+    console.log(formData);
+    processUpdateEmployerLogo(employerProfiles?.id, formData);
   };
 
   //   useEffect(() => {
@@ -85,7 +89,17 @@ function EmpCompanyProfilePage() {
                 <div className="form-group">
                   <div className="dashboard-profile-pic">
                     <div className="dashboard-profile-photo">
-                      <JobZImage src={imageURL || ""} alt="" />
+                      {!employerProfiles.logo ? (
+                        <JobZImage
+                          src={
+                            FormatUrl(baseURL) + formatImgUrl(imageURL) || ""
+                          }
+                          alt=""
+                        />
+                      ) : (
+                        <img src={employerProfiles.logo} alt="Company Logo" />
+                      )}
+
                       <div className="upload-btn-wrapper">
                         <div id="upload-image-grid" />
                         <button className="site-button button-sm">
@@ -167,12 +181,19 @@ function EmpCompanyProfilePage() {
           </div>
         </div>
 
-        <SectionCompanyBasicInfo submit={handleSubmitProfile} id="AddProfile" />
-
-        <SectionCandicateBasicInfo
-          submit={handleUpdateProfile}
-          id="EditProfile"
+        <SectionCompanyBasicInfo
+          data={employerProfiles}
+          submit={handleSubmitProfile}
+          id="AddProfile"
         />
+
+        {employerProfiles && (
+          <SectionEditCompanyInfo
+            data={employerProfiles}
+            submit={handleSubmitProfile}
+            id="EditProfile"
+          />
+        )}
 
         {/*Photo gallery*/}
         <div className="panel panel-default">

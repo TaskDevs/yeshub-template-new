@@ -1,19 +1,27 @@
-import { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import JobInputField from "../../../../common/job-input-field";
 import { COMPANYPROFILEDATA } from "../../../../../globals/company-profile-data";
-import TextAreaField from "../../../../common/text-area-field";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { Modal } from "bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { Modal } from "bootstrap"; // Import Bootstrap's modal API
+import TextAreaField from "../../../../common/text-area-field";
+import SelectField from "../../../../common/select-field";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
-function SectionCompanyBasicInfo({ submit, id }) {
-  const { processAddEmployer } = useContext(EmployerApiData);
-  const [formData, setFormData] = useState({
-    user_id: 3,
-    longitude: "01888374.98",
-    latitude: "97647773.00",
-  });
+function SectionEditCompanyInfo({ data, submit, id }) {
+  const { processUpdateEmployer } = useContext(EmployerApiData);
+
+  //
+
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    //setFormData(weData);
+    if (data) {
+      setFormData(data);
+    }
+    //console.log(data);
+  }, []);
 
   const handleInputChange = (field, data) => {
     setFormData({
@@ -23,7 +31,8 @@ function SectionCompanyBasicInfo({ submit, id }) {
   };
 
   const handleSubmit = () => {
-    processAddEmployer(formData);
+    //console.log(formData);
+    processUpdateEmployer(formData.id, formData);
 
     // Close modal
     const modalElement = document.getElementById(id);
@@ -51,9 +60,9 @@ function SectionCompanyBasicInfo({ submit, id }) {
       <div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-            <div>
+            <form onSubmit={submit}>
               <div className="modal-header">
-                <h2 className="modal-title">Company Basic Informations</h2>
+                <h2 className="modal-title">Edit Company Informations</h2>
                 <button
                   type="button"
                   className="btn-close"
@@ -121,7 +130,6 @@ function SectionCompanyBasicInfo({ submit, id }) {
                       }}
                     />
                   </div>
-
                   <div className="col-md-12">
                     <TextAreaField
                       field={COMPANYPROFILEDATA.fieldDetail[7]}
@@ -150,13 +158,12 @@ function SectionCompanyBasicInfo({ submit, id }) {
                   Save
                 </button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 }
 
-export default SectionCompanyBasicInfo;
+export default SectionEditCompanyInfo;

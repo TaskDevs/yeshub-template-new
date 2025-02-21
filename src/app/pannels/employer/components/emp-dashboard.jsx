@@ -1,17 +1,26 @@
 import JobZImage from "../../../common/jobz-img";
 import CountUp from "react-countup";
 import SectionCandidateProfileViews from "../../candidate/sections/dashboard/section-can-profile-views";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
+import { JobApiData } from "../../../context/jobs/jobsContextApi";
 import { useNavigate } from "react-router-dom";
 
 function EmpDashboardPage() {
+  //const { paginationData } = useContext(JobApiData);
   const [error, setError] = useState(null);
   const [postedJobs, setPostedJobs] = useState(null);
+  const { processCountJobsPostedByEmp, totalPost, totalAppliedJob } =
+    useContext(JobApiData);
   const [showTopMessage, setShowTopMessage] = useState(false);
   // const { user } = useUser();
 
+  // processCountJobsPostedByEmp
   const navigate = useNavigate();
+
+  useEffect(() => {
+    processCountJobsPostedByEmp(3);
+  }, []);
 
   return (
     <>
@@ -33,7 +42,7 @@ function EmpDashboardPage() {
                       <i className="far fa-address-book" />
                     </div>
                     <div className="wt-card-right wt-total-active-listing counter ">
-                      <CountUp end={25} duration={10} />
+                      <CountUp end={totalPost} duration={10} />
                     </div>
                     <div className="wt-card-bottom ">
                       <h4 className="m-b0">Posted Jobs</h4>
@@ -50,7 +59,7 @@ function EmpDashboardPage() {
                       <i className="far fa-file-alt" />
                     </div>
                     <div className="wt-card-right  wt-total-listing-view counter ">
-                      <CountUp end={435} duration={10} />
+                      <CountUp end={totalAppliedJob} duration={10} />
                     </div>
                     <div className="wt-card-bottom">
                       <h4 className="m-b0">Total Applications</h4>

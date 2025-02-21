@@ -8,7 +8,8 @@ import {
 } from "../globals/constants";
 
 const instance = axios.create({
-	baseURL,
+  // baseURL,
+  baseUrl,
 	timeOut,
 	withCredentials: true,
 	crossDomain: true,

@@ -11,15 +11,10 @@ import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNUPFIELD } from "../../../globals/sign-up-data";
 import InputField from "../input-field";
 import PasswordField from "../password-field";
-
+import toast from 'react-hot-toast';
 function SignUpPopup() {
   const {
     isLoading,
-    setIsLoading,
-    roleOption,
-    setRoleOption,
-    isVisible,
-    setIsVisible,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
@@ -69,8 +64,8 @@ function SignUpPopup() {
       const res = await register(formData);
 
       if (res) {
-        console.log("Registration successful:", res);
-        setMessage({ type: "success", text: "Registration successful!" });
+       
+        toast.success(res.message, { position: "top-right", autoClose: 3000 });
 
         // Reset form data after successful submission
         setFormData(
@@ -83,6 +78,7 @@ function SignUpPopup() {
         // Redirect after 2 seconds
         setTimeout(() => {
           navigate("/verify-otp", { state: { email: formData.email } });
+          window.location.reload();
         }, 2000);
       }
     } catch (err) {
@@ -137,6 +133,7 @@ function SignUpPopup() {
           aria-hidden="true"
           aria-labelledby="sign_up_popupLabel"
           tabIndex={-1}
+          data-bs-backdrop="static"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">

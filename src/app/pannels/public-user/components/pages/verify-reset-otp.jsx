@@ -3,10 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PinInput from "react-pin-input";
 import Loader from "../../../../common/loader";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
-import { verifyOtp , forgottenPassword} from "../../../../context/auth/authApi";
+import { VerifyReset,forgottenPassword } from "../../../../context/auth/authApi";
 import toast from 'react-hot-toast';
 
-function VerifyOtp() {
+function VerifyResetOtp() {
   const { isLoading } = useContext(GlobalApiData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
@@ -16,7 +16,6 @@ function VerifyOtp() {
   const email = location.state?.email || localStorage.getItem("verifyEmail") || "";
   const [otp, setOtp] = useState("");
   const [expiryTime, setExpiryTime] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(null);
   const [showTopMessage, setShowTopMessage] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -29,30 +28,46 @@ function VerifyOtp() {
   const handleOtpVerification = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setShowTopMessage(false);
+    setShowTopMessage(false); // Hide the message before verification
+  
+    // Validate email and OTP fields
+    if (!email || !otp) {
+      setErrorMessage("Please enter both email and OTP.");
+      setShowTopMessage(true); // Show the message if validation fails
+      setIsSubmitting(false);
+      return;
+    }
+  
     try {
-      const response = await verifyOtp({ email, otp });
+      const response = await VerifyReset({ email, otp });
       console.log("API Response:", response);
-
-      if (response?.success === true) { // Ensure response is true boolean
-        setSuccess(true);
-        setErrorMessage("");
-        setTimeout(() => navigate("/login"), 2000);
+  
+      // Handle the response based on success or failure
+      if (response?.message === "OTP verified successfully.") {
+        setSuccess(true); // Show success message
+        setErrorMessage(""); 
+  
+        // Redirect after a brief delay to reset-password page
+        setTimeout(() => {
+          navigate("/reset-password", { state: { email } }); // Pass email to the next page
+        }, 2000);
+      } else if (response?.message === "OTP expired") {
+        setSuccess(false); // Show failure message
+        setErrorMessage("OTP has expired. Please request a new one.");
       } else {
-        setSuccess(false);
+        setSuccess(false); // Show failure message
         setErrorMessage(response?.message || "Invalid OTP. Please try again.");
       }
     } catch (error) {
       console.error("Verification error:", error);
-      setSuccess(false);
+      setSuccess(false); // In case of error
       setErrorMessage("Something went wrong. Please try again.");
     }
-
-    setShowTopMessage(true);
-    setIsSubmitting(false);
+  
+    setShowTopMessage(true); 
+    setIsSubmitting(false); 
   };
-
-
+  
 
   const ResendOtps = async (e) => {
     e.preventDefault();
@@ -85,20 +100,21 @@ function VerifyOtp() {
     <>
       {isLoading && <Loader />}
 
-      <div className="section-full site-bg-white my-4">
-        <div className="container-fluid pt-3 mt-4">
+      <div className="section-full site-bg-white my-5">
+        <div className="container-fluid pt-5 mt-5">
           <div className="row justify-content-center">
             <div className="col-xl-4 col-lg-6 col-md-7">
               <div className="twm-log-reg-form-wrap">
                 <div className="twm-log-reg-inner">
                   <div className="twm-log-reg-head">
-                    <span className="log-reg-form-title">Verify OTP</span>
+                    <span className="log-reg-form-title">Verify Reset OTP</span>
                   </div>
 
                   {/* Show email where OTP was sent */}
                   <p className="text-center">OTP sent to: <strong>{email}</strong></p>
 
                   <form onSubmit={handleOtpVerification}>
+                    {/* OTP input field */}
                     <div className="form-group mb-3 text-center">
                       <PinInput
                         length={6}
@@ -181,7 +197,6 @@ function VerifyOtp() {
                     OTP expires in: <strong>{expiryTime}</strong>
                   </p>
                 )}
-
                       <button
                         type="button"
                         className="btn btn-link"
@@ -203,4 +218,4 @@ function VerifyOtp() {
   );
 }
 
-export default VerifyOtp;
+export default VerifyResetOtp;

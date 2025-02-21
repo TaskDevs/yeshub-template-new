@@ -57,7 +57,12 @@ export const publicUser = {
 		VERIFYOTP:"/verify-otp",
 		ICONS: "/icons",
 		CONTRACT: "/contract",
-		GOOGLECALLBACK:"/google/auth/callback"
+		GOOGLECALLBACK:"/google/auth/callback",
+		FORGOTPASS:"/forgotton-password",
+		VERIFYRESETOTP:"verify-reset-otp",
+		LINKEDIN: "/auth/linkedin/callback",
+		GOOGLEAUTH:"/auth/google/callback"
+
 	},
 	candidate: {
 		GRID: "/can-grid",

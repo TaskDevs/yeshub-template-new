@@ -4,6 +4,7 @@ import SectionCandidateProfileViews from "../../candidate/sections/dashboard/sec
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
+import { EmployerApiData } from "../../../context/employers/employerContextApi";
 import { useNavigate } from "react-router-dom";
 
 function EmpDashboardPage() {
@@ -12,6 +13,7 @@ function EmpDashboardPage() {
   const [postedJobs, setPostedJobs] = useState(null);
   const { processCountJobsPostedByEmp, totalPost, totalAppliedJob } =
     useContext(JobApiData);
+  const { processEmployerProfile } = useContext(EmployerApiData);
   const [showTopMessage, setShowTopMessage] = useState(false);
   // const { user } = useUser();
 
@@ -19,6 +21,7 @@ function EmpDashboardPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    processEmployerProfile();
     processCountJobsPostedByEmp(3);
   }, []);
 

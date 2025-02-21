@@ -26,6 +26,7 @@ const JobApiDataProvider = (props) => {
   const [searchJobListData, setSearchJobListData] = useState([]);
 
   const processAddJob = async (data) => {
+    console.log(data);
     let response = await addJob(data);
     if (response) {
       data.status == 1

@@ -110,9 +110,10 @@ const ApplicationApiDataProvider = (props) => {
     console.log("submitting applicatication")
     try {
       const res = await processAddApplication({
-				user_id: userId,
+				user_id: "3",
 				job_id: "1",
 				status: "pending",
+				freelance_id: "",
 			});
       console.log("application added", res);
     } catch (e) {

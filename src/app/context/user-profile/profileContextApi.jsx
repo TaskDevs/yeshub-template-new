@@ -31,29 +31,8 @@ const ProfileApiDataProvider = (props) => {
 
 	const [formData, setFormData] = useState(initialFormData);
 
-	console.log("formData-profile-ctx: ", formData);
-	// console.log("selectedFile", selectedFile);
-
-	// useEffect(() => {
-	// 	const fetchProfile = async () => {
-	// 		if (!userId) {
-	// 			return false;
-	// 		}
-	// 		try {
-	// 			const res = await processProfileProfile(userId);
-	// 			console.log("Fetching profile-can", res);
-
-	// 			const data = res.data.data;
-	// 			console.log("data-profilectx", data);
-	// 			setProfileData(data);
-	// 		} catch (error) {
-	// 			console.error("Failed Fetching profile", error);
-	// 		} finally {
-	// 		}
-	// 	};
-	// 	fetchProfile();
-	// }, []);
-
+	// console.log("formData-profile-ctx: ", formData);
+	
 	const processAddProfile = async (data) => {
 		try {
 			console.log("data-profile", data);

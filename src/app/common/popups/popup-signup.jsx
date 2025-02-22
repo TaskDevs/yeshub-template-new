@@ -46,6 +46,8 @@ function SignUpPopup() {
     }
   };
 
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -53,7 +55,15 @@ function SignUpPopup() {
       [name]: value,
     }));
   };
+  const googleSignin = async ()=>{
+    const res = await loginWithGoogle(formData.role)
+    console.log(res)
+  }
 
+    const linkedinSignin = async ()=>{
+      const res = await loginWithLinkedIn(formData.role)
+      console.log(res)
+    }
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting form data:", formData);
@@ -82,7 +92,7 @@ function SignUpPopup() {
         }, 2000);
       }
     } catch (err) {
-      console.error("Registration failed:", err);
+   
 
       setMessage({
         type: "error",
@@ -91,36 +101,6 @@ function SignUpPopup() {
     } finally {
       setIsSubmitting(false); // Reset submitting state after request completes
     }
-  };
-
-  const googleLogin = (e) => {
-    try {
-      // Assuming you have a method that actually handles Google login (e.g., googleAuth)
-      const res = loginWithGoogle(formData.role);  // Correct function for Google login
-  
-      if (res) {
-        console.log("Registration successful:", res);
-        setMessage({ type: "success", text: "Registration successful!" });
-  
-        // Redirect after 2 seconds
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      }
-    } catch (err) {
-      console.error("Registration failed:", err);
-  
-      setMessage({
-        type: "error",
-        text: "Registration failed. Please try again.",
-      });
-    }
-  };
-  
-
-  const LinkedinLogin = async (e) => {
-    e.preventDefault();
-    console.log("role", formData.role);
   };
 
   return (
@@ -263,17 +243,19 @@ function SignUpPopup() {
               <div className="modal-footer">
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
-  <li onClick={googleLogin}>
-    <a href="#" className="google-clr m-2">
-      <i className="fab fa-google" />
-    </a>
-  </li>
-  <li onClick={LinkedinLogin}>
-    <a href="#" className="linkedin-clr m-2">
-      <i className="fab fa-linkedin-in" />
-    </a>
-  </li>
-</ul>
+                  <li>
+                      <a onClick={googleSignin} className="google-clr m-2">
+                        <i className="fab fa-google" />
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={linkedinSignin} className="linkedin-clr m-2">
+                        <i className="fab fa-linkedin-in" />
+                      </a>
+                    </li>
+                    
+                  </ul>
+
 
               </div>
             </div>

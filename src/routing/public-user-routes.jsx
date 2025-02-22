@@ -149,19 +149,19 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
-        <Route
+        {/* <Route
           path={publicUser.pages.GOOGLECALLBACK}
           element={GoogleCallback}
-        />
-         <Route
+        /> */}
+         {/* <Route
           path={publicUser.pages.LINKEDINCALLBACK}
           element={LinkedInCallback}
-        />
+        /> */}
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route path={publicUser.pages.FORGOTPASS} element={<ForgotPassword/>}/>
         <Route path={publicUser.pages.VERIFYRESETOTP} element={<VerifyResetOtp/>}/>
-        <Route path={publicUser.pages.LINKEDIN} element={<LinkedInCallback/>}/>
-        <Route path={publicUser.pages.GOOGLEAUTH} element={<GoogleCallback/>}/>
+        <Route path={publicUser.pages.LINKEDINCALLBACK} element={<LinkedInCallback/>}/>
+        <Route path={publicUser.pages.GOOGLECALLBACK} element={<GoogleCallback/>}/>
         <Route
           path={publicUser.pages.AFTER_LOGIN}
           element={<AfterLoginPage />}

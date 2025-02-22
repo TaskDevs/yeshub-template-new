@@ -4,7 +4,7 @@ import { IoMdEye, IoIosEyeOff } from "react-icons/io";
 import Loader from "../loader";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
-import { login } from "../../context/auth/authApi";
+import { login , loginWithLinkedIn, loginWithGoogle} from "../../context/auth/authApi";
 import cookieMethods from "../../../utils/cookieUtils";
 import toast from 'react-hot-toast';
 function SignInPopup() {
@@ -47,6 +47,24 @@ function SignInPopup() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    };
+    const googleSignin = async ()=>{
+      const res = await loginWithGoogle(formData.role)
+      console.log(res)
+    }
+
+      const linkedinSignin = async ()=>{
+        const res = await loginWithLinkedIn(formData.role)
+        console.log(res)
+      }
+    
 
 
   const handleLogin = async (e) => {
@@ -141,6 +159,44 @@ function SignInPopup() {
                   <div className="tab-content">
                     <form onSubmit={handleLogin} className="tab-pane fade show active">
                       <div className="row">
+                      <ul className="nav nav-tabs" id="myTab" role="tablist">
+                      {/* Signup Candidate */}
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${
+                            formData.role === "user" ? "active" : ""
+                          }`}
+                          data-bs-toggle="tab"
+                          type="button"
+                          aria-selected={formData.role === "user"}
+                          onClick={() =>
+                            handleChange({
+                              target: { name: "role", value: "user" },
+                            })
+                          }
+                        >
+                          <i className="fas fa-user-tie" /> Candidate
+                        </button>
+                      </li>
+                      {/* Signup Employer */}
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${
+                            formData.role === "employer" ? "active" : ""
+                          }`}
+                          data-bs-toggle="tab"
+                          type="button"
+                          aria-selected={formData.role === "employer"}
+                          onClick={() =>
+                            handleChange({
+                              target: { name: "role", value: "employer" },
+                            })
+                          }
+                        >
+                          <i className="fas fa-building" /> Employer
+                        </button>
+                      </li>
+                    </ul>
                         {SIGNINFIELD?.fieldDetail?.map((field) => (
                           <div className="col-lg-12" key={field.name}>
                             <div className="form-group mb-3">
@@ -235,16 +291,17 @@ function SignInPopup() {
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
                   <li>
-                    <a href="https://in.linkedin.com/" className="linkedin-clr m-2">
-                      <i className="fab fa-linkedin-in" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://www.google.com/" className="google-clr m-2">
-                      <i className="fab fa-google" />
-                    </a>
-                  </li>
-                </ul>
+                      <a onClick={googleSignin} className="google-clr m-2">
+                        <i className="fab fa-google" />
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={linkedinSignin} className="linkedin-clr m-2">
+                        <i className="fab fa-linkedin-in" />
+                      </a>
+                    </li>
+                    
+                  </ul>
 
                
                 

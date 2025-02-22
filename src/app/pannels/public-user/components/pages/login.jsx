@@ -95,7 +95,7 @@ function LoginPage() {
         setMessage({ type: "error", text: "Error logging in: check credentials" });
       }
     } catch (error) {
-      console.error("Login failed", error);
+     
       
       let errorMessage = "An error occurred. Please try again.";
       
@@ -329,16 +329,17 @@ function LoginPage() {
                   <div className="text-center align-items-center">
                   <span className="modal-f-title">Login or Sign up with</span>
                   <ul className="twm-modal-social">
+                  <li>
+                      <a onClick={googleSignin} className="google-clr m-2">
+                        <i className="fab fa-google" />
+                      </a>
+                    </li>
                     <li>
                       <a onClick={linkedinSignin} className="linkedin-clr m-2">
                         <i className="fab fa-linkedin-in" />
                       </a>
                     </li>
-                    <li onClick={googleSignin}>
-                      <a href="#" className="google-clr m-2">
-                        <i className="fab fa-google" />
-                      </a>
-                    </li>
+                    
                   </ul>
                   </div>
                 </div>

@@ -1,22 +1,16 @@
-import React, { createContext, useState, useEffect, useMemo, useContext } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-// import { notify } from "../../../utils/responseUtils";
+import React, { createContext, useState, useEffect, useContext } from "react";
+
 
 import {
   addApplication,
-  searchApplication,
   applicationList,
   applicationProfile,
   updateApplication,
   deleteApplication,
 } from "./applicationApi";
 import { APPLICATIONFIELD } from "../../../globals/application-data";
-import { userId } from "../../../globals/dummy-users";
+
 import { GlobalApiData } from "../global/globalContextApi";
-
-
-
-
 
 
 export const ApplicationApiData = createContext();

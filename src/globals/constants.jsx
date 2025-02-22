@@ -1,4 +1,5 @@
 export const baseURL = process.env.PUBLIC_URL;
+export const REACT_BASE_URL = process.env.REACT_APP_BASE_URL;
 export const LOCAL_BACKEND_URL = process.env.REACT_APP_LOCAL_BACKEND_URL;
 export const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 //export const BACKEND_FULL_URL = process.env.REACT_APP_BACKEND_FULL_URL;

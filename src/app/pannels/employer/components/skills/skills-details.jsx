@@ -3,10 +3,10 @@ import { popupType } from "../../../../../globals/constants";
 import YesNoPopup from "../../../../common/popups/popup-yes-no";
 import SkillsForm from "./skills-form";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
-import { toast } from "react-toastify";
+
 
 function SkillsDetails() {
 	const { selectedId } = useContext(GlobalApiData);
@@ -26,9 +26,8 @@ function SkillsDetails() {
 			try {
 				const res = await processSkillsProfile(selectedId);
 
-				// console.log("get-skill", res);
 				const data = res.data.data;
-				// console.log("skill", data.skill);
+				
 				setSkill(data);
 			} catch (err) {
 				console.error("failed to get skill", err);

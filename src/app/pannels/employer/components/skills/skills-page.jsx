@@ -1,5 +1,5 @@
 import AddSkills from "./add-skills";
-import SkillsDetails from "./skills-details";
+
 
 function SkillsPage() {
 	return (

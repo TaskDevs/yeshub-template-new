@@ -12,15 +12,13 @@ function  AddCategories() {
 		useContext(CategoryApiData);
 
 	const { handleClicked } = useContext(GlobalApiData);
-		
 
 	const [allCategories, setAllCategories] = useState([]);
 	const [category, setCategory] = useState({});
-	// const { showCategoryDetailsId } = useContext(GlobalApiData);
+	const { setSelectedId } = useContext(GlobalApiData);
 	const { processCategoryProfile, handleUpdateCategory, setFormData } =
 		useContext(CategoryApiData);
-    const [showCategoryDetailsId, setShowCategoryDetailsId] = useState("1")
-
+	const [showCategoryDetailsId, setShowCategoryDetailsId] = useState("1");
 
 	useEffect(() => {
 		const fetchCategory = async () => {
@@ -40,8 +38,6 @@ function  AddCategories() {
 		fetchCategory();
 	}, [showCategoryDetailsId, processCategoryProfile]);
 
-	
-
 	console.log("allcategories", allCategories);
 
 	useEffect(() => {
@@ -58,15 +54,17 @@ function  AddCategories() {
 		fetchAllCategories();
 	}, [processGetAllCategory]);
 
+	const handleSelected = (id) => {
+		setShowCategoryDetailsId(id);
+		setSelectedId(id);
+	};
+
 	const handleEditClick = () => {
 		setFormData({
 			category_name: category.category_name,
 			description: category.description,
 		});
 	};
-
-	
-
 
 	return (
 		<>
@@ -95,7 +93,7 @@ function  AddCategories() {
 										<li
 											key={category.id}
 											className="category-items"
-											onClick={() => setShowCategoryDetailsId(category.id)}
+											onClick={() => handleSelected(category.id)}
 										>
 											<div className="">
 												{console.log("category-name", category.category_name)}

@@ -12,11 +12,13 @@ export const notify = (
       position: "top-center",
       autoClose: 3000, // You can set the duration for which the notification will be shown
     });
-  } else {
+  } else if (status == 400) {
     toast.error(fail, {
       position: "top-center",
       autoClose: 3000, // You can set the duration for which the notification will be shown
     });
+  } else {
+    console.log("mind your business");
   }
 };
 

@@ -1,16 +1,20 @@
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
 import SectionJobsList from "../../sections/jobs/section-jobs-list";
+import { useSearchParams } from "react-router-dom";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import { useEffect, useContext } from "react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { loadScript } from "../../../../../globals/constants";
 
-function JobsListPage() {
-  const { paginationData } = useContext(JobApiData);
+function JobSearchPage() {
+  const { paginationData, searchJobInfo, processSearchJob } =
+    useContext(JobApiData);
 
-  //   useEffect(() => {
-  //     console.log(paginationData);
-  //   }, [paginationData]);
+  useEffect(() => {
+    loadScript("js/custom.js");
+    console.log("We are trying log something");
+    //processSearchJob
+  }, []);
 
   const _filterConfig = {
     prefix: "Showing",
@@ -19,10 +23,6 @@ function JobsListPage() {
     showRange: false,
     showingUpto: "",
   };
-
-  useEffect(() => {
-    loadScript("js/custom.js");
-  });
 
   return (
     <>
@@ -44,4 +44,4 @@ function JobsListPage() {
   );
 }
 
-export default JobsListPage;
+export default JobSearchPage;

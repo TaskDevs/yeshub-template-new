@@ -1,5 +1,7 @@
 import JobZImage from "../../../../common/jobz-img";
 import { NavLink } from "react-router-dom";
+import { LOCAL_BACKEND_URL, baseURL } from "../../../../../globals/constants";
+import TimeAgo from "../../../../../utils/formateDate";
 
 export const JobsCard = ({
   img,
@@ -7,18 +9,24 @@ export const JobsCard = ({
   location,
   link,
   title,
-  noOfBid,
+  days_left,
   amount,
 }) => {
   return (
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
       <div className="twm-media">
-        <JobZImage src={img} alt="#" />
+        <img
+          src={img ? `${img}` : `${baseURL}/assets/images/no-logo.png`}
+          alt="#"
+        />
+        {/* <JobZImage src={`${baseURL}/assets/images/no-logo.png`} alt="#" /> */}
       </div>
       <div className="twm-mid-content">
         <h4 className="twm-job-title">
           {title}
-          <span className="twm-job-post-duration">/ {duration}</span>
+          <span className="twm-job-post-duration">
+            / <TimeAgo date={duration} />
+          </span>
         </h4>
         <p className="twm-job-address">{location}</p>
         <ul className="ul-skills">
@@ -36,7 +44,7 @@ export const JobsCard = ({
           {amount}
           {/* <span>/ daily</span> */}
         </div>
-        <p className="twm-jobs-browse bids"> {noOfBid} bids</p>
+        <p className="twm-jobs-browse bids"> {days_left} days left</p>
       </div>
     </NavLink>
   );

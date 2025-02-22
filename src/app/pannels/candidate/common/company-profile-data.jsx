@@ -5,28 +5,28 @@ function CompanyProfileData({ data }) {
   return (
     <div className="">
       <p>
-        Company Name: <span>{data[0]?.company_name}</span>{" "}
+        Company Name: <span>{data?.company_name}</span>{" "}
       </p>
       <p>
-        Sector: <span>{data[0]?.sector}</span>{" "}
+        Sector: <span>{data?.sector}</span>{" "}
       </p>
       <p>
-        Country: <span>{data[0]?.phone_no}</span>
+        Country: <span>{data?.phone_no}</span>
       </p>
       <p>
-        Email: <span>{data[0]?.email}</span>
+        Email: <span>{data?.email}</span>
       </p>
       <p>
-        Address: <span>{data[0]?.address}</span>
+        Address: <span>{data?.address}</span>
       </p>
       <p>
-        Website: <span>{data[0]?.website}</span>
+        Website: <span>{data?.website}</span>
       </p>
       <p>
-        Description: <span>{data[0]?.description}</span>
+        Description: <span>{data?.description}</span>
       </p>
       <p>
-        Est. Date: <span>{data[0]?.est_date}</span>
+        Est. Date: <span>{data?.est_date}</span>
       </p>
     </div>
   );

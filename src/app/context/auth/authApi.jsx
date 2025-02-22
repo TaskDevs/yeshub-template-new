@@ -182,8 +182,8 @@ export const logout = async () => {
             );
 
             if (responseOnLogout.status === 200) {
-                sessionStorage.removeItem("authToken")
-                cookieMethods.deleteCookies();  // Clear cookies after successful logout
+              sessionStorage.removeItem("authToken")
+              cookieMethods.deleteCookies();  // Clear cookies after successful logout
                 return responseOnLogout.data;
             } else {
                 console.log("Logout response not 200:", responseOnLogout);

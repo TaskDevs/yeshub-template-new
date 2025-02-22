@@ -1,14 +1,18 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, } from "../../../globals/constants";
+import {
+	SUCCESS_STATUS,
+	LIST_ON_PAGES,
+	REACT_BASE_URL,
+} from "../../../globals/constants";
 
 // ADD Profile
 export const addProfile = async (data) => {
   console.log("p-data", data)
   try {
     let responseOnAddProfile = await axios.post(
-			`${baseURL}create-profile`,
+			`${REACT_BASE_URL}create-profile`,
 			data
 		);
   
@@ -39,9 +43,7 @@ export const searchProfile = async (data) => {
 /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
 export const profileList = async () => {
   try {
-    let responseOnProfileList = await axios.get(
-			 `${baseURL}get-profile`
-		);
+    let responseOnProfileList = await axios.get(`${REACT_BASE_URL}get-profile`);
 
     if (responseOnProfileList.status === SUCCESS_STATUS) {
       return responseOnProfileList.data;
@@ -60,9 +62,8 @@ export const profileList = async () => {
 export const profileProfile = async (id) => {
   try {
     let responseOnProfile = await axios.get(
-      `${baseURL}get-profile/${id}`
-      
-    );
+			`${REACT_BASE_URL}get-profile/${id}`
+		);
     console.log(responseOnProfile)
     return responseOnProfile;
   
@@ -77,9 +78,8 @@ export const profileProfile = async (id) => {
 export const updateProfile = async (id, data) => {
   try {
     let responseOnUpdateProfile = await axios.put(
-			
-      `${baseURL}update-profile/${id}`,
-      data
+			`${REACT_BASE_URL}update-profile/${id}`,
+			data
 		);
    return responseOnUpdateProfile;
   } catch (err) {
@@ -90,8 +90,8 @@ export const updateProfile = async (id, data) => {
 // DELETE Profile
 export const deleteProfile = async (id) => {
   try {
-    let responseOnDeleteProfile = await axios.delete(	
-			`${baseURL}delete-profile/${id}`
+    let responseOnDeleteProfile = await axios.delete(
+			`${REACT_BASE_URL}delete-profile/${id}`
 		);
    return responseOnDeleteProfile;
   } catch (err) {

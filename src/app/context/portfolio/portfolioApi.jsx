@@ -1,13 +1,17 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL } from "../../../globals/constants";
+import {
+	SUCCESS_STATUS,
+	LIST_ON_PAGES,
+	REACT_BASE_URL,
+} from "../../../globals/constants";
 
 // ADD Portfolio
 export const addPortfolio = async (data) => {
   try {
     let responseOnAddPortfolio = await axios.post(
-			`${baseURL}create-portfolio`,
+			`${REACT_BASE_URL}create-portfolio`,
 			data
 		);
     return responseOnAddPortfolio;
@@ -43,8 +47,8 @@ export const searchPortfolio = async (data) => {
 export const portfolioList = async (id) => {
   try {
     let responseOnPortfolioList = await axios.get(
-      `${baseURL}get-portfolio/${id}`
-    );
+			`${REACT_BASE_URL}get-portfolio/${id}`
+		);
 
     return responseOnPortfolioList;
     // if (responseOnPortfolioList.status === SUCCESS_STATUS) {
@@ -80,9 +84,9 @@ export const portfolioProfile = async (id) => {
 // UPDATE Portfolio
 export const updatePortfolio = async (userid, data) => {
   try {
-    let responseOnUpdatePortfolio = await axios.put(		
-			`${baseURL}update-portfolio/${userid}`,
-      data
+    let responseOnUpdatePortfolio = await axios.put(
+			`${REACT_BASE_URL}update-portfolio/${userid}`,
+			data
 		);
     return responseOnUpdatePortfolio;
     // if (responseOnUpdatePortfolio.status === SUCCESS_STATUS) {
@@ -99,9 +103,8 @@ export const updatePortfolio = async (userid, data) => {
 export const deletePortfolio = async (id) => {
   try {
     let responseOnDeletePortfolio = await axios.delete(
-			
-			`${baseURL}delete-portfolio/${id}`
-    );
+			`${REACT_BASE_URL}delete-portfolio/${id}`
+		);
     return responseOnDeletePortfolio;
     // if (responseOnDeletePortfolio.status === SUCCESS_STATUS) {
     //   return responseOnDeletePortfolio.data;

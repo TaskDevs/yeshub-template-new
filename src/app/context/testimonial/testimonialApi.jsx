@@ -1,17 +1,21 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL, baseUrl } from "../../../globals/constants";
+import {
+	SUCCESS_STATUS,
+	LIST_ON_PAGES,
+	REACT_BASE_URL,
+	
+} from "../../../globals/constants";
 
 
 // ADD Testimonial
 export const addTestimonial = async (data) => {
   try {
     let responseOnAddTestimonial = await axios.post(
-     
-      `${baseURL}create-testimonial`,
-      data
-    );
+			`${REACT_BASE_URL}create-testimonial`,
+			data
+		);
     return responseOnAddTestimonial;
     // if (responseOnAddTestimonial.status === SUCCESS_STATUS) {
     //   return responseOnAddTestimonial.data;
@@ -45,8 +49,8 @@ export const searchTestimonial = async (data) => {
 export const testimonialList = async (id) => {
   try {
     let responseOnTestimonialList = await axios.get(
-			`${baseURL}get-testimonial-by-user-id/${id}`
-    );
+			`${REACT_BASE_URL}get-testimonial-by-user-id/${id}`
+		);
     return responseOnTestimonialList;
 
     // if (responseOnTestimonialList.status === SUCCESS_STATUS) {
@@ -83,9 +87,9 @@ export const testimonialProfile = async (id) => {
 export const updateTestimonial = async (id, data) => {
   try {
     let responseOnUpdateTestimonial = await axios.put(
-      `${baseURL}update-testimonial/${id}`,
-      data
-    );
+			`${REACT_BASE_URL}update-testimonial/${id}`,
+			data
+		);
     return responseOnUpdateTestimonial;
     // if (responseOnUpdateTestimonial.status === SUCCESS_STATUS) {
     //   return responseOnUpdateTestimonial.data;
@@ -102,8 +106,8 @@ export const updateTestimonial = async (id, data) => {
 export const deleteTestimonial = async (id) => {
   try {
     let responseOnDeleteTestimonial = await axios.delete(
-			`${baseURL}delete-testimonial/${id}`
-    );
+			`${REACT_BASE_URL}delete-testimonial/${id}`
+		);
     return responseOnDeleteTestimonial;
     // if (responseOnDeleteTestimonial.status === SUCCESS_STATUS) {
     //   return responseOnDeleteTestimonial.data;

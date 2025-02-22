@@ -9,8 +9,8 @@ import {
   countEmployerJobsPosted,
   jobProfile,
   updateJob,
-  deleteJob,
   employerJobList,
+  deleteJob,
 } from "./jobsApi";
 
 export const JobApiData = createContext();
@@ -25,10 +25,12 @@ const JobApiDataProvider = (props) => {
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [searchJobListData, setSearchJobListData] = useState([]);
 
+  console.log("jobListData", jobListData);
+
   const processAddJob = async (data) => {
     let response = await addJob(data);
     if (response) {
-      data.status == 1
+      data.status === 1
         ? notify(200, "Job added successfully")
         : notify(200, "Draft added successfully");
     } else {
@@ -39,7 +41,9 @@ const JobApiDataProvider = (props) => {
   const processGetAllJob = async () => {
     let response = await jobList();
     if (response) {
-      //console.log(response);
+      
+      setJobListData(response);
+      console.log("get-all-jobs",response);
       setJobListData(response.data);
       setPaginationData({
         total: response.total,
@@ -69,7 +73,14 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  const processJobProfile = async (id) => {};
+  const processJobProfile = async (id) => {
+    let response = await employerJobList(id);
+		if (response) {
+			console.log("get-single-jobs", response);
+			setJobListData(response);
+		}
+
+  };
 
   const processSearchJob = async (data) => {
     let response = await searchJob(data);

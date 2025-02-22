@@ -8,24 +8,38 @@ const GoogleCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Parse the query params from the URL
+    
     const queryParams = new URLSearchParams(window.location.search);
     const token = queryParams.get('token');
-    const refreshToken = queryParams.get("refresh_token");
+    const refresh_token = queryParams.get("refresh_token");
+
+    // if (token) {
+    //   sessionStorage.setItem('authToken', token);
+    //   console.log('Google token:', token, refresh_token);
+    //   cookieMethods.setCookies(token, refresh_token);
+    //   toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
+    //   navigate('/'); 
+    // } else {
+    //   console.error('No token found in the URL');
+    //   navigate('/login');
+    // }
 
     if (token) {
-      // Store the token in sessionStorage or localStorage
       sessionStorage.setItem('authToken', token);
-      console.log('Google token:', token);
-      cookieMethods.setCookies(token, refreshToken);
- // ✅ Show success toast
-       // ✅ Show success toast
-     toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
-      navigate('/'); // Change this to the page you want the user to go to
+      console.log('Google token:', token, refresh_token);
+      
+      cookieMethods.setCookies(token, refresh_token);
+    
+      // Debugging
+      console.log("Stored Cookies:", cookieMethods.getCookies());
+    
+      toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
+      navigate('/'); 
     } else {
       console.error('No token found in the URL');
-      navigate('/login'); // Redirect the user to login if there's no token
+      navigate('/login');
     }
+    
   }, [location, navigate]);
 
   return (

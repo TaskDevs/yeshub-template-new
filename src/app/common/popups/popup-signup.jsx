@@ -4,7 +4,6 @@ import { useContext, useEffect, useState } from "react";
 
 import Loader from "../loader";
 import { register, loginWithGoogle, loginWithLinkedIn} from "../../context/auth/authApi";
-
 import { FcGoogle } from "react-icons/fc";
 import { IoLogoLinkedin } from "react-icons/io5";
 import { GlobalApiData } from "../../context/global/globalContextApi";
@@ -118,10 +117,17 @@ function SignUpPopup() {
   };
   
 
-  const LinkedinLogin = async (e) => {
-    e.preventDefault();
-    console.log("role", formData.role);
-  };
+  const googleSignin = async ()=>{
+    const res = await loginWithGoogle(formData.role)
+    console.log(res)
+  }
+  
+  
+  const linkedinSignin = async ()=>{
+    const res = await loginWithLinkedIn(formData.role)
+    console.log(res)
+  }
+  
 
   return (
     <>
@@ -263,12 +269,12 @@ function SignUpPopup() {
               <div className="modal-footer">
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
-  <li onClick={googleLogin}>
+  <li onClick={googleSignin}>
     <a href="#" className="google-clr m-2">
       <i className="fab fa-google" />
     </a>
   </li>
-  <li onClick={LinkedinLogin}>
+  <li onClick={ linkedinSignin}>
     <a href="#" className="linkedin-clr m-2">
       <i className="fab fa-linkedin-in" />
     </a>

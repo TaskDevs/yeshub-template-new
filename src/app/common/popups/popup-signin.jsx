@@ -4,7 +4,7 @@ import { IoMdEye, IoIosEyeOff } from "react-icons/io";
 import Loader from "../loader";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
-import { login } from "../../context/auth/authApi";
+import { login,loginWithGoogle,loginWithLinkedIn } from "../../context/auth/authApi";
 import cookieMethods from "../../../utils/cookieUtils";
 import toast from 'react-hot-toast';
 function SignInPopup() {
@@ -101,6 +101,33 @@ function SignInPopup() {
       setIsSubmitting(false);
     }
   };
+
+
+
+// login with google and linkedin
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prevFormData) => ({
+    ...prevFormData,
+    [name]: value,
+  }));
+};
+
+const googleSignin = async ()=>{
+  const res = await loginWithGoogle(formData.role)
+  console.log(res)
+}
+
+
+const linkedinSignin = async ()=>{
+  const res = await loginWithLinkedIn(formData.role)
+  console.log(res)
+}
+
+
+
+
   return (
     <>
       {isLoading && <Loader />}
@@ -138,6 +165,51 @@ function SignInPopup() {
 
               <div className="modal-body">
                 <div className="twm-tabs-style-2">
+                <div className="twm-tabs-style-2">
+                  
+                  <ul className="nav nav-tabs" id="myTab" role="tablist">
+                    {/* Signup Candidate */}
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className={`nav-link ${
+                          formData.role === "user" ? "active" : ""
+                        }`}
+                        data-bs-toggle="tab"
+                        type="button"
+                        aria-selected={formData.role === "user"}
+                        onClick={() =>
+                          handleChange({
+                            target: { name: "role", value: "user" },
+                          })
+                        }
+                      >
+                        <i className="fas fa-user-tie" /> Candidate
+                      </button>
+                    </li>
+                    {/* Signup Employer */}
+                    <li className="nav-item" role="presentation">
+                      <button
+                        className={`nav-link ${
+                          formData.role === "employer" ? "active" : ""
+                        }`}
+                        data-bs-toggle="tab"
+                        type="button"
+                        aria-selected={formData.role === "employer"}
+                        onClick={() =>
+                          handleChange({
+                            target: { name: "role", value: "employer" },
+                          })
+                        }
+                      >
+                        <i className="fas fa-building" /> Employer
+                      </button>
+                    </li>
+                  </ul>
+
+                 
+
+                 
+                </div>
                   <div className="tab-content">
                     <form onSubmit={handleLogin} className="tab-pane fade show active">
                       <div className="row">
@@ -234,14 +306,15 @@ function SignInPopup() {
              
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
-                  <li>
-                    <a href="https://in.linkedin.com/" className="linkedin-clr m-2">
-                      <i className="fab fa-linkedin-in" />
+                 
+                  <li onClick={googleSignin}>
+                    <a  className="google-clr m-2">
+                      <i className="fab fa-google" />
                     </a>
                   </li>
-                  <li>
-                    <a href="https://www.google.com/" className="google-clr m-2">
-                      <i className="fab fa-google" />
+                  <li onClick={linkedinSignin}>
+                    <a className="linkedin-clr m-2">
+                      <i className="fab fa-linkedin-in" />
                     </a>
                   </li>
                 </ul>

@@ -3,16 +3,11 @@ import CandidateRoutes from "../routing/candidate-routes";
 import SignUpPopup from "../app/common/popups/popup-signup";
 import SignInPopup from "../app/common/popups/popup-signin";
 import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
-import InnerPageBanner from "../app/common/inner-page-banner";
-import Footer1 from "../app/common/footer/footer1";
-import { setBanner } from "../globals/banner-data";
 import { useLocation } from "react-router-dom";
-import { getHeaderConfig, setFooterType, showFooter } from "../globals/layout-config";
+import { getHeaderConfig } from "../globals/layout-config";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
-import { useContext } from "react";
-import { EducationApiData } from "../app/context/education/educationContextApi";
-// import SectionReviews from "../app/pannels/public-user/sections/common/section-reviews";
+
 
 function CandidateLayout() {
 	const currentpath = useLocation().pathname;

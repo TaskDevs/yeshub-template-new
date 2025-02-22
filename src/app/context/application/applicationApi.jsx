@@ -1,7 +1,7 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { LIST_ON_PAGES, REACT_BASE_URL } from "../../../globals/constants";
+import { REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD APPLICATION
 export const addApplication = async (data) => {
@@ -22,25 +22,10 @@ export const addApplication = async (data) => {
   }
 };
 
-// SEARCH APPLICATION
-export const searchApplication = async (data) => {
-  try {
-    let responseOnSearchApplication = await axios.get({
-      /**Add Search Application API URL here like /searchApplication?keyword=${data}**/
-    });
-    return responseOnSearchApplication;
-    // if (responseOnSearchApplication.status === SUCCESS_STATUS) {
-    //   return responseOnSearchApplication.data;
-    // } else {
-    //   return false;
-    // }
-  } catch (err) {
-    console.log(err);
-  }
-};
+
 
 // LIST APPLICATION
-export const applicationList = async (id, pageNo) => {
+export const applicationList = async (id) => {
   try {
     let responseOnApplicationList = await axios.get(
 			`${REACT_BASE_URL}get-job-application-by-job-id/${id}`

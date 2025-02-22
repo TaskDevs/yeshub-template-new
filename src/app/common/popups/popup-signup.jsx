@@ -1,12 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import JobZImage from "../jobz-img";
 import { useContext, useEffect, useState } from "react";
 
 import Loader from "../loader";
 import { register, loginWithGoogle, loginWithLinkedIn} from "../../context/auth/authApi";
 
-import { FcGoogle } from "react-icons/fc";
-import { IoLogoLinkedin } from "react-icons/io5";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNUPFIELD } from "../../../globals/sign-up-data";
 import InputField from "../input-field";

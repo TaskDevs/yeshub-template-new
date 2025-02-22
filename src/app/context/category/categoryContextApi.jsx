@@ -1,10 +1,8 @@
-import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext, useState, useContext } from "react";
+
 
 import {
   addCategory,
-  searchCategory,
   catgoryList,
   categoryProfile,
   updateCategory,
@@ -12,6 +10,7 @@ import {
 } from "./categoryApi";
 import { CATEGORYFIELD } from "../../../globals/category-data";
 import { GlobalApiData } from "../global/globalContextApi";
+import toast from "react-hot-toast";
 
 export const CategoryApiData = createContext();
 
@@ -127,15 +126,16 @@ const CategoryApiDataProvider = (props) => {
 
 	const handleUpdateCategory = async (e) => {
 		e.preventDefault();
-		 console.log("submitting update category");
-     console.log("selectedId-ctx", selectedId);
+	
+   
     try {
-       console.log("updateCategory-form", formData);
-			const res = await processUpdateCategory(selectedId, formData);
-		console.log("add-category", res);
+     
+			 await processUpdateCategory(selectedId, formData);
+		
 		toast.success("Category updated successfully");
+		
 		} catch (err) {
-			console.error("failed to update-category", err);
+			
 			toast.error("Failed to update category");
 	} finally {
 		setFormData(initialData)

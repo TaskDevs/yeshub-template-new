@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { popupType } from "../../../globals/constants";
-import { publicUser } from "../../../globals/route-names";
 import React, { useContext } from "react";
 import { logout } from "../../context/auth/authApi"; // Import the logout function
 import toast from 'react-hot-toast';

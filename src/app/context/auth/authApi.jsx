@@ -1,5 +1,5 @@
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, BAD_REQUEST_STATUS } from "../../../globals/constants";import cookieMethods from "../../../utils/cookieUtils";
+import { SUCCESS_STATUS } from "../../../globals/constants";import cookieMethods from "../../../utils/cookieUtils";
 
 
 // Manual Login

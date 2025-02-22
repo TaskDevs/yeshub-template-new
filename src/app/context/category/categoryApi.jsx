@@ -1,7 +1,7 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config"
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES , REACT_BASE_URL} from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL} from "../../../globals/constants";
 
 // ADD CATEGORY
 export const addCategory = async (data) => {

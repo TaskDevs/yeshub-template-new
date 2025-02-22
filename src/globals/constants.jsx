@@ -1,5 +1,5 @@
 export const baseURL = process.env.PUBLIC_URL;
-export const LOCAL_BACKEND_URL = process.env.REACT_APP_LOCAL_BACKEND_URL;
+export const LOCAL_BACKEND_URL = process.env.REACT_APP_BASE_URL;
 export const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 //export const BACKEND_FULL_URL = process.env.REACT_APP_BACKEND_FULL_URL;
 export const HOST = window.location.hostname;
@@ -21,7 +21,7 @@ export const popupType = {
   DELETE_CATEGORY: "DELETE_CATEGORY",
   DELETE_EDUCATION: "DELETE_EDUCATION",
   DELETE_SKILLS: "DELETE_SKILLS",
-   DELETE_PORTFOLIO: "DELETE_PORTFOLIO",
+  DELETE_PORTFOLIO: "DELETE_PORTFOLIO",
 };
 
 export const formType = {

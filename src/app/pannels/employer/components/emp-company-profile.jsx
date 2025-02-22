@@ -1,624 +1,229 @@
 import { useContext, useEffect, useState } from "react";
 import JobZImage from "../../../common/jobz-img";
 import { loadScript, popupType } from "../../../../globals/constants";
+import { EmployerApiData } from "../../../context/employers/employerContextApi";
 import { DropzoneComponent } from "react-dropzone-component";
 import axios from "axios";
 import { toast } from "react-toastify";
 import SectionCandicateBasicInfo from "../../candidate/sections/profile/section-can-basic-info";
+import SectionEditCompanyInfo from "../../candidate/sections/profile/section-edit-company-info";
+import SectionCompanyBasicInfo from "../../candidate/sections/profile/section-company-basic-info";
+import CompanyProfileData from "../../candidate/common/company-profile-data";
+import formatImgUrl from "../../../../utils/formatImgUrl";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import SectionProfileData from "../../candidate/common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { BACKEND_HOST, baseURL } from "../../../../globals/constants";
+import FormatUrl from "../../../../utils/formatUrl";
 
 function EmpCompanyProfilePage() {
-	useEffect(() => {
-		loadScript("js/custom.js");
-	});
+  const {
+    processEmployerProfile,
+    employerProfiles,
+    processUpdateEmployerLogo,
+  } = useContext(EmployerApiData);
+  const { isSubmitting } = useContext(GlobalApiData);
+  const {
+    handleSubmitProfile,
+    handleUpdateProfile,
+    handleEditClick,
+    // handleImageChange,
+  } = useContext(ProfileApiData);
+  const [imageURL, setImageURL] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [profileUpdated, setProfileUpdated] = useState(false);
 
-// https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1739799400_select-img.png
+  useEffect(() => {
+    loadScript("js/custom.js");
+    processEmployerProfile();
+  }, []);
 
-	
-	
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        let logoFile = reader.result;
+        setFormData({ id: employerProfiles?.id, logo: logoFile });
+        setImageURL(reader.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
 
-	const {
-		imageURL,
-		handleSubmitProfile,
-		handleUpdateProfile,
-		handleEditClick,
-		handleImageChange,
-	} = useContext(ProfileApiData);
+  const handleSubmitCompanyLogo = () => {
+    console.log(formData);
+    processUpdateEmployerLogo(employerProfiles?.id, formData);
+  };
 
-	const { isSubmitting } = useContext(GlobalApiData)
+  //   useEffect(() => {
 
-	
-		return (
-			<>
-				<div className="">
-					<div className="wt-admin-right-page-header clearfix">
-						<h2>Company Profile!</h2>
-						<div className="breadcrumbs">
-							<a href="/">Home</a>
-							{/* <a href="#">Dasboard</a> */}
-							<span>Company Profile</span>
-						</div>
-					</div>
-					{/*Logo and Cover image*/}
-					<div className="panel panel-default">
-						<div className="panel-heading wt-panel-heading p-a20">
-							<h4 className="panel-tittle m-a0">Logo and Cover image</h4>
-						</div>
-						<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
-							<div className="row">
-								<div className="col-lg-12 col-md-12">
-									<div className="form-group">
-										<div className="dashboard-profile-pic">
-											<div className="dashboard-profile-photo">
-												<JobZImage src={imageURL || ""} alt="" />
-												<div className="upload-btn-wrapper">
-													<div id="upload-image-grid" />
-													<button className="site-button button-sm">
-														Upload Photo
-													</button>
-													<input
-														type="file"
-														name="profile_image"
-														id="file-uploader"
-														accept="/*"
-														onChange={handleImageChange}
-													/>
-												</div>
-											</div>
-											<p>
-												<b>Company Logo :- </b> Max file size is 1MB, Minimum
-												dimension: 136 x 136 And Suitable files are .jpg &amp;
-												.png
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+  //   }, []);
 
-					<div className=" panel panel-default m-b30 ">
-						{/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
-						<div className=" p-a20 ">
-							{/* <div className="panel-heading-with-btn"> */}
-							<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-								<h4 className="panel-tittle m-a0"> Profile</h4>
-								{!isSubmitting && (
-									<a
-										data-bs-toggle="modal"
-										href="#AddProfile"
-										role="button"
-										title="Edit"
-										className="site-text-primary"
-									>
-										<span className="fa fa-edit" />
-									</a>
-								)}
-							</div>
+  // if (!imageURL) {
+  // 	return false;
+  // }
+  return (
+    <>
+      <div className="">
+        <div className="wt-admin-right-page-header clearfix">
+          <h2>Company Profile!</h2>
+          <div className="breadcrumbs">
+            <a href="/">Home</a>
+            {/* <a href="#">Dasboard</a> */}
+            <span>Company Profile</span>
+          </div>
+        </div>
+        {/*Logo and Cover image*/}
+        <div className="panel panel-default">
+          <div className="panel-heading wt-panel-heading p-a20">
+            <h4 className="panel-tittle m-a0">Logo and Cover image</h4>
+          </div>
+          <div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
+            <div className="row">
+              <div className="col-lg-12 col-md-12">
+                <div className="form-group">
+                  <div className="dashboard-profile-pic">
+                    <div className="dashboard-profile-photo">
+                      {!employerProfiles.logo ? (
+                        <JobZImage
+                          src={
+                            FormatUrl(baseURL) + formatImgUrl(imageURL) || ""
+                          }
+                          alt=""
+                        />
+                      ) : (
+                        <img src={employerProfiles.logo} alt="Company Logo" />
+                      )}
 
-							<div className="panel-body wt-panel-body  ">
-								<div className="twm-panel-inner">
-									<SectionProfileData />
-								</div>
+                      <div className="upload-btn-wrapper">
+                        <div id="upload-image-grid" />
+                        <button className="site-button button-sm">
+                          Upload Photo
+                        </button>
+                        <input
+                          type="file"
+                          name="profile_image"
+                          id="file-uploader"
+                          accept="/*"
+                          onChange={handleImageChange}
+                        />
+                      </div>
+                    </div>
+                    <p>
+                      <b>Company Logo :- </b> Max file size is 1MB, Minimum
+                      dimension: 136 x 136 And Suitable files are .jpg &amp;
+                      .png
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-								{/* actions */}
-								<div className="">
-									<div className="actions">
-										<button
-											className="site-button  actions"
-											data-bs-target="#delete-profile"
-											data-bs-toggle="modal"
-											data-bs-dismiss="modal"
-										>
-											<FaRegTrashCan color="white" />
-											<span className="admin-nav-text">Delete</span>
-										</button>
+        <div className=" panel panel-default m-b30 ">
+          {/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
+          <div className=" p-a20 ">
+            {/* <div className="panel-heading-with-btn"> */}
+            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+              <h4 className="panel-tittle m-a0"> Profile</h4>
+              {!isSubmitting && (
+                <a
+                  data-bs-toggle="modal"
+                  href="#AddProfile"
+                  role="button"
+                  title="Edit"
+                  className="site-text-primary"
+                >
+                  <span className="fa fa-edit" />
+                </a>
+              )}
+            </div>
 
-										<button
-											className="site-button  actions "
-											data-bs-target="#EditProfile"
-											data-bs-toggle="modal"
-											data-bs-dismiss="modal"
-											onClick={() => {
-												handleEditClick();
-											}}
-										>
-											<MdOutlineEdit color="white" />
-											<span>Edit</span>
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+            <div className="panel-body wt-panel-body  ">
+              <div className="twm-panel-inner">
+                <CompanyProfileData data={employerProfiles} />
+              </div>
 
-					<SectionCandicateBasicInfo
-						submit={handleSubmitProfile}
-						id="AddProfile"
-					/>
+              {/* actions */}
+              <div className="">
+                <div className="actions">
+                  <button
+                    className="site-button  actions"
+                    data-bs-target="#delete-profile"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    <FaRegTrashCan color="white" />
+                    <span className="admin-nav-text">Delete</span>
+                  </button>
 
-					<SectionCandicateBasicInfo
-						submit={handleUpdateProfile}
-						id="EditProfile"
-					/>
+                  <button
+                    className="site-button  actions "
+                    data-bs-target="#EditProfile"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    onClick={() => {
+                      handleEditClick();
+                    }}
+                  >
+                    <MdOutlineEdit color="white" />
+                    <span>Edit</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-					{/*Photo gallery*/}
-					<div className="panel panel-default">
-						<div className="panel-heading wt-panel-heading p-a20">
-							<h4 className="panel-tittle m-a0">Photo Gallery</h4>
-						</div>
-						<div className="panel-body wt-panel-body p-a20 m-b30 ">
-							<div className="row">
-								<div className="col-lg-12 col-md-12">
-									<div className="form-group">
-										{/* <DropzoneComponent config={componentConfig} /> */}
-									</div>
-								</div>
-								<div className="col-lg-12 col-md-12">
-									<div className="text-left">
-										<button type="submit" className="site-button">
-											Save Changes
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</>
-		);
+        <SectionCompanyBasicInfo
+          data={employerProfiles}
+          submit={handleSubmitProfile}
+          id="AddProfile"
+        />
+
+        {employerProfiles && (
+          <SectionEditCompanyInfo
+            data={employerProfiles}
+            submit={handleSubmitProfile}
+            id="EditProfile"
+          />
+        )}
+
+        {/*Photo gallery*/}
+        <div className="panel panel-default">
+          <div className="panel-heading wt-panel-heading p-a20">
+            <h4 className="panel-tittle m-a0">Photo Gallery</h4>
+          </div>
+          <div className="panel-body wt-panel-body p-a20 m-b30 ">
+            <div className="row">
+              <div className="col-lg-12 col-md-12">
+                <div className="form-group">
+                  {/* <DropzoneComponent config={componentConfig} /> */}
+                </div>
+              </div>
+              <div className="col-lg-12 col-md-12">
+                <div className="text-left">
+                  <button
+                    type="submit"
+                    className="site-button"
+                    onClick={handleSubmitCompanyLogo}
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default EmpCompanyProfilePage;
-
-/*Basic Information*/
-/* <div className="panel panel-default">
-					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Basic Informations</h4>
-					</div>
-					<div className="panel-body wt-panel-body p-a20 m-b30 ">
-						<form onSubmit={handleSubmitProfile}>
-							<div className="row">
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Company Name</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="company_name"
-												type="text"
-												placeholder="Devid Smith"
-												value={formData.company_name}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-user " />
-										</div>
-									</div>
-								</div>
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Phone</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="company_phone"
-												type="text"
-												placeholder="(251) 1234-456-7890"
-												value={formData.phone_no}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-phone-alt" />
-										</div>
-									</div>
-								</div>
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Email Address</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="email"
-												type="text"
-												placeholder="Devid@example.com"
-												value={formData.email}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-envelope" />
-										</div>
-									</div>
-								</div>
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Website</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="website"
-												type="text"
-												placeholder="https://..."
-												value={formData.website}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-globe-americas" />
-										</div>
-									</div>
-								</div>
-
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group city-outer-bx has-feedback">
-										<label>Sector</label>
-										<div className="ls-inputicon-box">
-											<select
-												className="wt-select-box selectpicker"
-												name="sector"
-												data-live-search="true"
-												title="sector"
-												id="city"
-												data-bv-field="sector"
-												value={formData.sector}
-												onChange={handleChange}
-											>
-												<option className="bs-title-option" value>
-													Software engineering
-												</option>
-												<option value>Education</option>
-												<option value>Health</option>
-												<option value>Finance</option>
-											</select>
-											<i className="fs-input-icon fa fa-sort-numeric-up" />
-										</div>
-									</div>
-								</div>
-
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Address</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="Address"
-												type="text"
-												placeholder="Boulevard street"
-												value={formData.address}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-globe-americas" />
-										</div>
-									</div>
-								</div>
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Est. Date</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="est_date"
-												type="text"
-												placeholder="Since..."
-												value={formData.est_date}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-globe-americas" />
-										</div>
-									</div>
-								</div>
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Longitude</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="longitude"
-												type="text"
-												placeholder="1.0232° W"
-												value={formData.longitude}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-globe-americas" />
-										</div>
-									</div>
-								</div>
-
-								<div className="col-xl-4 col-lg-12 col-md-12">
-									<div className="form-group">
-										<label>Latitude</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control"
-												name="latitude"
-												type="text"
-												placeholder="7.9465° N"
-												value={formData.latitude}
-												onChange={handleChange}
-											/>
-											<i className="fs-input-icon fa fa-globe-americas" />
-										</div>
-									</div>
-								</div>
-
-								<div className="col-md-12">
-									<div className="form-group">
-										<label>Description</label>
-										<textarea
-											className="form-control"
-											rows={3}
-											placeholder="Greetings! We are Galaxy Software Development Company."
-											defaultValue={""}
-											value={formData.description}
-											onChange={handleChange}
-										/>
-									</div>
-								</div>
-								<div className="col-lg-12 col-md-12">
-									<div className="text-left">
-										<button type="submit" className="site-button">
-											Save Changes
-										</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div> */
-
-//   useEffect(() => {
-// 		let isMounted = true;
-// 		const EmployerProfile = async () => {
-// 			try {
-// 				const res = await axios.get(profileUrl);
-
-// 				console.log("employer-details", res);
-// 				const jobsData = res;
-// 				if (isMounted) {
-// 					setProfileData(jobsData);
-// 				}
-// 			} catch (error) {
-// 				if (isMounted) {
-// 					setError(error || "An error occurred while getting data");
-// 					setShowTopMessage(true);
-// 					setTimeout(() => {}, 1000);
-// 				}
-// 			}
-// 		};
-
-// 		EmployerProfile();
-// 	}, [profileUrl]);
-
-/*Video gallery*/
-
-/* <div className="panel panel-default">
-					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Video Gallery</h4>
-					</div>
-					<div className="panel-body wt-panel-body p-a20 m-b30 ">
-						<div className="row">
-							<div className="col-lg-6 col-md-6">
-								<div className="form-group">
-									<label>Youtube</label>
-									<div className="ls-inputicon-box input_fields_youtube">
-										<input
-											className="form-control wt-form-control"
-											name="mytext[]"
-											type="text"
-											placeholder="https://www.youtube.com/"
-										/>
-										<i className="fs-input-icon fab fa-youtube" />
-										{Array.from(Array(youtubeFields)).map(() => {
-											return (
-												<div class="ls-inputicon-box">
-													<input
-														class="form-control wt-form-control m-tb10"
-														name="mytext[]"
-														type="text"
-														placeholder="https://www.youtube.com/"
-													/>
-													<i class="fs-input-icon fab fa-youtube"></i>
-													<a href="#" class="remove_field">
-														<i class="fa fa-times"></i>
-													</a>
-												</div>
-											);
-										})}
-									</div>
-									<div className="text-right m-tb10">
-										<button
-											className="add_field_youtube"
-											onClick={handleYoutubeClick}
-										>
-											Add More Fields <i className="fa fa-plus" />
-										</button>
-									</div>
-								</div>
-							</div>
-							<div className="col-lg-6 col-md-6">
-								<div className="form-group">
-									<label>Vimeo</label>
-									<div className="ls-inputicon-box input_fields_vimeo">
-										<input
-											className="form-control wt-form-control"
-											name="mytext[]"
-											type="text"
-											placeholder="https://vimeo.com/"
-										/>
-										<i className="fs-input-icon fab fa-vimeo-v" />
-										{Array.from(Array(vimeoFields)).map(() => {
-											return (
-												<div class="ls-inputicon-box">
-													<input
-														class="form-control m-tb10 wt-form-control"
-														name="mytext[]"
-														type="text"
-														placeholder="https://vimeo.com/"
-													/>
-													<i class="fs-input-icon fab fa-vimeo-v"></i>
-													<a href="#" class="remove_field">
-														<i class="fa fa-times"></i>
-													</a>
-												</div>
-											);
-										})}
-									</div>
-									<div className="text-right m-tb10">
-										<button
-											className="add_field_vimeo"
-											onClick={handleVimeoClick}
-										>
-											Add More Fields <i className="fa fa-plus" />
-										</button>
-									</div>
-								</div>
-							</div>
-							<div className="col-lg-12 col-md-12">
-								<div className="custome-video-upload form-group">
-									<label>Custom Video</label>
-									<DropzoneComponent config={componentConfig} />
-								</div>
-							</div>
-							<div className="col-lg-12 col-md-12">
-								<div className="text-left">
-									<button type="submit" className="site-button">
-										Save Changes
-									</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div> */
-
-/*Social Network*/
-
-/* <div className="panel panel-default">
-					<div className="panel-heading wt-panel-heading p-a20">
-						<h4 className="panel-tittle m-a0">Social Network</h4>
-					</div>
-					<div className="panel-body wt-panel-body p-a20 m-b30 ">
-						<form>
-							<div className="row">
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Facebook</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://www.facebook.com/"
-											/>
-											<i className="fs-input-icon fab fa-facebook-f" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Twitter</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://twitter.com/"
-											/>
-											<i className="fs-input-icon fab fa-twitter" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>linkedin</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://in.linkedin.com/"
-											/>
-											<i className="fs-input-icon fab fa-linkedin-in" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Whatsapp</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://www.whatsapp.com/"
-											/>
-											<i className="fs-input-icon fab fa-whatsapp" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Instagram</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://www.instagram.com/"
-											/>
-											<i className="fs-input-icon fab fa-instagram" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Pinterest</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://in.pinterest.com/"
-											/>
-											<i className="fs-input-icon fab fa-pinterest-p" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Tumblr</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://www.tumblr.com/"
-											/>
-											<i className="fs-input-icon fab fa-tumblr" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-4 col-md-6">
-									<div className="form-group">
-										<label>Youtube</label>
-										<div className="ls-inputicon-box">
-											<input
-												className="form-control wt-form-control"
-												name="company_name"
-												type="text"
-												placeholder="https://www.youtube.com/"
-											/>
-											<i className="fs-input-icon fab fa-youtube" />
-										</div>
-									</div>
-								</div>
-								<div className="col-lg-12 col-md-12">
-									<div className="text-left">
-										<button type="submit" className="site-button">
-											Save Changes
-										</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div> */

@@ -1,11 +1,16 @@
 import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import {
+  SUCCESS_STATUS,
+  LIST_ON_PAGES,
+  BACKEND_HOST,
+} from "../../../globals/constants";
 import { notify } from "../../../utils/responseUtils";
 
 import {
   addEmployer,
   searchEmployer,
   employerList,
+  updateEmployerLogo,
   employerProfile,
   updateEmployer,
   deleteEmployer,
@@ -14,17 +19,56 @@ import {
 export const EmployerApiData = createContext();
 
 const EmployerApiDataProvider = (props) => {
-  const processAddEmployer = async (data) => {};
+  const [employerProfiles, setEmployerProfiles] = useState([]);
 
-  const processGetAllEmployer = async (id) => {};
+  const processAddEmployer = async (data) => {
+    let response = await addEmployer(data);
+    if (response) {
+      notify(200, "Company Added Successfully");
+    } else {
+      notify(400, "Failed to Add Company");
+    }
+  };
 
-  const processEmployerProfile = async (id) => {};
+  const processGetAllEmployer = async () => {};
+  console.log(BACKEND_HOST);
+  const processEmployerProfile = async (id) => {
+    let response = await employerProfile(id || 3);
+    if (response) {
+      console.log(response.data);
+      setEmployerProfiles(response.data);
+    }
+  };
 
-  const processSearchEmployer = async (data) => {};
+  const processUpdateEmployerLogo = async (id, data) => {
+    let response = await updateEmployerLogo(id, data);
+    if (response) {
+      notify(200, "Company Added Successfully");
+    } else {
+      notify(400, "Failed to Add Company");
+    }
+  };
 
-  const processUpdateEmployer = async (data) => {};
+  const processSearchEmployer = async (id, data) => {};
 
-  const processDeleteEmployer = async (id) => {};
+  const processUpdateEmployer = async (id, data) => {
+    let response = await updateEmployer(id, data);
+    if (response) {
+      notify(200, "Profile updated successfully");
+      processEmployerProfile();
+    } else {
+      notify(400, "Failed to update profile");
+    }
+  };
+
+  const processDeleteEmployer = async (id) => {
+    let response = await deleteEmployer(id);
+    if (response) {
+      notify(200, "Profile deleted successfully");
+    } else {
+      notify(400, "Failed to delete profile");
+    }
+  };
 
   return (
     <EmployerApiData.Provider
@@ -34,7 +78,9 @@ const EmployerApiDataProvider = (props) => {
         processEmployerProfile,
         processSearchEmployer,
         processUpdateEmployer,
+        processUpdateEmployerLogo,
         processDeleteEmployer,
+        employerProfiles,
       }}
     >
       {props.children}

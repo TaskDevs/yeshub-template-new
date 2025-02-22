@@ -11,15 +11,10 @@ import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNUPFIELD } from "../../../globals/sign-up-data";
 import InputField from "../input-field";
 import PasswordField from "../password-field";
-
+import toast from 'react-hot-toast';
 function SignUpPopup() {
   const {
     isLoading,
-    setIsLoading,
-    roleOption,
-    setRoleOption,
-    isVisible,
-    setIsVisible,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
@@ -51,6 +46,8 @@ function SignUpPopup() {
     }
   };
 
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -58,10 +55,18 @@ function SignUpPopup() {
       [name]: value,
     }));
   };
+  const googleSignin = async ()=>{
+    const res = await loginWithGoogle(formData.role)
+    
+  }
 
+    const linkedinSignin = async ()=>{
+      const res = await loginWithLinkedIn(formData.role)
+      
+    }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form data:", formData);
+   
 
     setIsSubmitting(true); // Set submitting state to true
 
@@ -69,9 +74,9 @@ function SignUpPopup() {
       const res = await register(formData);
 
       if (res) {
-        console.log("Registration successful:", res);
-        setMessage({ type: "success", text: "Registration successful!" });
-
+       
+        toast.success(res.message, { position: "top-right", autoClose: 3000 });
+       
         // Reset form data after successful submission
         setFormData(
           SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
@@ -83,10 +88,11 @@ function SignUpPopup() {
         // Redirect after 2 seconds
         setTimeout(() => {
           navigate("/verify-otp", { state: { email: formData.email } });
+          window.location.reload();
         }, 2000);
       }
     } catch (err) {
-      console.error("Registration failed:", err);
+   
 
       setMessage({
         type: "error",
@@ -95,36 +101,6 @@ function SignUpPopup() {
     } finally {
       setIsSubmitting(false); // Reset submitting state after request completes
     }
-  };
-
-  const googleLogin = (e) => {
-    try {
-      // Assuming you have a method that actually handles Google login (e.g., googleAuth)
-      const res = loginWithGoogle(formData.role);  // Correct function for Google login
-  
-      if (res) {
-        console.log("Registration successful:", res);
-        setMessage({ type: "success", text: "Registration successful!" });
-  
-        // Redirect after 2 seconds
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
-      }
-    } catch (err) {
-      console.error("Registration failed:", err);
-  
-      setMessage({
-        type: "error",
-        text: "Registration failed. Please try again.",
-      });
-    }
-  };
-  
-
-  const LinkedinLogin = async (e) => {
-    e.preventDefault();
-    console.log("role", formData.role);
   };
 
   return (
@@ -137,6 +113,7 @@ function SignUpPopup() {
           aria-hidden="true"
           aria-labelledby="sign_up_popupLabel"
           tabIndex={-1}
+          data-bs-backdrop="static"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -266,17 +243,19 @@ function SignUpPopup() {
               <div className="modal-footer">
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
-  <li onClick={googleLogin}>
-    <a href="#" className="google-clr m-2">
-      <i className="fab fa-google" />
-    </a>
-  </li>
-  <li onClick={LinkedinLogin}>
-    <a href="#" className="linkedin-clr m-2">
-      <i className="fab fa-linkedin-in" />
-    </a>
-  </li>
-</ul>
+                  <li>
+                      <a onClick={googleSignin} className="google-clr m-2">
+                        <i className="fab fa-google" />
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={linkedinSignin} className="linkedin-clr m-2">
+                        <i className="fab fa-linkedin-in" />
+                      </a>
+                    </li>
+                    
+                  </ul>
+
 
               </div>
             </div>

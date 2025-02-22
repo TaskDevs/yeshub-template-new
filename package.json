@@ -11,12 +11,15 @@
     "@testing-library/user-event": "^13.5.0",
     "@ubilabs/google-maps-react-hooks": "^2.0.2",
     "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
     "chart.js": "^4.4.0",
+    "date-fns": "^4.1.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-countup": "^6.4.2",
     "react-dom": "^18.2.0",
     "react-dropzone-component": "^3.2.0",
+    "react-hot-toast": "^2.5.2",
     "react-icons": "^5.4.0",
     "react-pin-input": "^1.3.1",
     "react-router-dom": "^6.14.0",
@@ -51,6 +54,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+		"eslint": "^9.21.0",
+		"eslint-plugin-react": "^7.37.4",
     "vite": "^6.0.7"
   }
+
 }

@@ -1,18 +1,15 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoIosEyeOff } from "react-icons/io";
-import { FcGoogle } from "react-icons/fc";
 import Loader from "../loader";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
-import { login } from "../../context/auth/authApi";
-import JobZImage from "../jobz-img";
+import { login , loginWithLinkedIn, loginWithGoogle} from "../../context/auth/authApi";
+import cookieMethods from "../../../utils/cookieUtils";
+import toast from 'react-hot-toast';
 function SignInPopup() {
   const {
     isLoading,
-    setIsLoading,
-    roleOption,
-    setRoleOption,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
@@ -34,6 +31,7 @@ function SignInPopup() {
   });
 
   const [isVisible, setIsVisible] = useState(false);
+  const [serverResponse, setServerResponse] = useState(null); // State for messages
 
   useEffect(() => {
     if (!formData.role) {
@@ -49,67 +47,98 @@ function SignInPopup() {
     }));
   };
 
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    };
+    const googleSignin = async ()=>{
+      const res = await loginWithGoogle(formData.role)
+      console.log(res)
+    }
+
+      const linkedinSignin = async ()=>{
+        const res = await loginWithLinkedIn(formData.role)
+        console.log(res)
+      }
+    
+
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+   
     try {
       const response = await login(formData);
-      if (response && response.token) {
-        // Store token and user role
-        sessionStorage.setItem("authToken", response.token);
-        sessionStorage.setItem("userRole", response.role);
-
+      
+  
+      if (response && response.token && response.refresh_token) {
+        const { token, refresh_token, role, user_id } = response;
+  
+        // Store tokens
+        sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("userRole", role);
+        sessionStorage.setItem("userId", user_id);
+        cookieMethods.setCookies(token, refresh_token);
+  
         if (formData.rememberMe) {
           sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
         } else {
           sessionStorage.removeItem("rememberedUser");
         }
-
-        // Redirect based on role
-        switch (response.role) {
-          case "admin":
-            navigate("/admin");
-            break;
-          case "employer":
-            navigate("/");
-            break;
-          case "user":
-          default:
-            navigate("/");
-            break;
-        }
-
-        setFormData(
-          SIGNINFIELD.fieldDetail.reduce(
-            (acc, field) => {
-              acc[field.name] = "";
-              return acc;
-            },
-            { rememberMe: false }
-          )
-        );
+  
+        // ✅ Show success toast
+        toast.success(response.message, { position: "top-right", autoClose: 3000 });
+  
+        // Redirect based on role after 2 seconds
+        setTimeout(() => {
+          switch (role) {
+            case "admin":
+              navigate("/admin");
+              break;
+            case "employer":
+              navigate("/");
+              break;
+            case "user":
+            default:
+              navigate("/");
+              break;
+          }
+        }, 2000);
       } else {
-        console.error("Login failed: No token received");
+        toast.error("Incorrect credential, check identifier or password", { position: "top-right", autoClose: 3000 });
       }
     } catch (error) {
-      console.error("Login failed", error);
+      
+      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+  
+      
+      toast.error(errorMessage, { position: "top-right", autoClose: 3000 });
     } finally {
       setIsSubmitting(false);
     }
   };
-
   return (
     <>
       {isLoading && <Loader />}
+
+      {/* Server Response Message */}
+      {serverResponse && (
+        <div className={`alert ${serverResponse.type === "success" ? "alert-success" : "alert-danger"} text-center`} role="alert">
+          {serverResponse.message}
+        </div>
+      )}
 
       {!isLoading && (
         <div
           className="modal fade twm-sign-up"
           id="sign_up_popup2"
           aria-hidden="true"
-          aria-labelledby="sign_up_popupLabel2"
+          aria-labelledby="sign_up_popupLabel"
           tabIndex={-1}
+           data-bs-backdrop="static"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -129,11 +158,46 @@ function SignInPopup() {
               <div className="modal-body">
                 <div className="twm-tabs-style-2">
                   <div className="tab-content">
-                    <form
-                      onSubmit={handleLogin}
-                      className="tab-pane fade show active"
-                    >
+                    <form onSubmit={handleLogin} className="tab-pane fade show active">
                       <div className="row">
+                      <ul className="nav nav-tabs" id="myTab" role="tablist">
+                      {/* Signup Candidate */}
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${
+                            formData.role === "user" ? "active" : ""
+                          }`}
+                          data-bs-toggle="tab"
+                          type="button"
+                          aria-selected={formData.role === "user"}
+                          onClick={() =>
+                            handleChange({
+                              target: { name: "role", value: "user" },
+                            })
+                          }
+                        >
+                          <i className="fas fa-user-tie" /> Candidate
+                        </button>
+                      </li>
+                      {/* Signup Employer */}
+                      <li className="nav-item" role="presentation">
+                        <button
+                          className={`nav-link ${
+                            formData.role === "employer" ? "active" : ""
+                          }`}
+                          data-bs-toggle="tab"
+                          type="button"
+                          aria-selected={formData.role === "employer"}
+                          onClick={() =>
+                            handleChange({
+                              target: { name: "role", value: "employer" },
+                            })
+                          }
+                        >
+                          <i className="fas fa-building" /> Employer
+                        </button>
+                      </li>
+                    </ul>
                         {SIGNINFIELD?.fieldDetail?.map((field) => (
                           <div className="col-lg-12" key={field.name}>
                             <div className="form-group mb-3">
@@ -152,9 +216,7 @@ function SignInPopup() {
                                   />
                                   <div
                                     className="eye-icon"
-                                    onClick={() =>
-                                      setIsVisible((prev) => !prev)
-                                    }
+                                    onClick={() => setIsVisible((prev) => !prev)}
                                     style={{
                                       position: "absolute",
                                       right: "10px",
@@ -163,11 +225,7 @@ function SignInPopup() {
                                       cursor: "pointer",
                                     }}
                                   >
-                                    {isVisible ? (
-                                      <IoMdEye size={20} />
-                                    ) : (
-                                      <IoIosEyeOff size={20} />
-                                    )}
+                                    {isVisible ? <IoMdEye size={20} /> : <IoIosEyeOff size={20} />}
                                   </div>
                                 </div>
                               ) : (
@@ -196,12 +254,8 @@ function SignInPopup() {
                                 checked={formData.rememberMe}
                                 onChange={handleInputChange}
                               />
-                              <label
-                                className="form-check-label rem-forgot"
-                                htmlFor="rememberMe"
-                              >
-                                Remember me{" "}
-                                <a href="/reset-password">Forgot Password?</a>
+                              <label className="form-check-label rem-forgot" htmlFor="rememberMe">
+                                Remember me <a href="/forgotton-password">Forgot Password?</a>
                               </label>
                             </div>
                           </div>
@@ -234,25 +288,24 @@ function SignInPopup() {
               </div>
 
               <div className="modal-footer">
+             
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
                   <li>
-                    <a
-                      href="https://in.linkedin.com/"
-                      className="linkedin-clr m-2"
-                    >
-                      <i className="fab fa-linkedin-in" />
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://www.google.com/"
-                      className="google-clr m-2"
-                    >
-                      <i className="fab fa-google" />
-                    </a>
-                  </li>
-                </ul>
+                      <a onClick={googleSignin} className="google-clr m-2">
+                        <i className="fab fa-google" />
+                      </a>
+                    </li>
+                    <li>
+                      <a onClick={linkedinSignin} className="linkedin-clr m-2">
+                        <i className="fab fa-linkedin-in" />
+                      </a>
+                    </li>
+                    
+                  </ul>
+
+               
+                
               </div>
             </div>
           </div>

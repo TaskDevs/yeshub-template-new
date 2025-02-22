@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 
 const DateField = ({ field, value, change }) => {
-  const [date, setDate] = useState(value[field.name] || "");
+  console.log(field);
+  const [date, setDate] = useState(value[field.name] || ""); // Initialize properly
 
   useEffect(() => {
-    setDate(value[field.name]); // Sync with external value updates
-  }, [value, field.name]);
+    // Only update state if the external value is different to avoid unnecessary resets
+    if (value[field.name] !== undefined && value[field.name] !== date) {
+      setDate(value[field.name]);
+    }
+  }, [value, field.name]); // Depend on field.name to correctly track changes
 
   const handleInputChange = (e) => {
     setDate(e.target.value);

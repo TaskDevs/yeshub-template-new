@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom'
 function FinancesPage() {
 	const currentpath = useLocation().pathname;
 	const location = currentpath.split("/")[1];
-	console.log("currentpath", currentpath.split("/")[1]);
+	// console.log("currentpath", currentpath.split("/")[1]);
 
 
     useEffect(()=>{

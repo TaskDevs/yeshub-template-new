@@ -1,16 +1,15 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config"
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES , baseURL} from "../../../globals/constants";
+import { SUCCESS_STATUS, LIST_ON_PAGES , REACT_BASE_URL} from "../../../globals/constants";
 
 // ADD CATEGORY
 export const addCategory = async (data) => {
   console.log("data-category", data)
   try {
-    let responseOnAddCategory = await axios.post(
-      
-      `${baseURL}job-categories`,
-     { ...data, category_name: data.title}
+    let responseOnAddCategory = await axios.post( 
+      `${REACT_BASE_URL}job-categories`,
+     data
     );
      console.log(responseOnAddCategory);
 			return responseOnAddCategory;
@@ -47,7 +46,7 @@ export const searchCategory = async (data) => {
 			
 export const catgoryList = async () => {
   try {
-    let responseOnCategoryList = await axios.get(`${baseURL}job-categories`);
+    let responseOnCategoryList = await axios.get(`${REACT_BASE_URL}job-categories`);
 
    console.log(responseOnCategoryList);
 		return responseOnCategoryList;
@@ -71,7 +70,7 @@ export const categoryProfile = async (id) => {
   try {
     let responseOnCategoryProfile = await axios.get(
 			
-			`${baseURL}job-categories/${id}`
+			`${REACT_BASE_URL}job-categories/${id}`
     );
     console.log(responseOnCategoryProfile);
     return responseOnCategoryProfile;
@@ -94,9 +93,9 @@ export const categoryProfile = async (id) => {
 export const updateCategory = async (id, data) => {
   
   try {
-    
+    console.log("data-p-update", data)
     let responseOnUpdateCategory = await axios.put(
-			`${baseURL}job-categories/${id}`,
+			`${REACT_BASE_URL}job-categories/${id}`,
 			data
 		);
     
@@ -116,7 +115,7 @@ export const updateCategory = async (id, data) => {
 export const deleteCategory = async (id) => {
   try {
     let responseOnDeleteCategory = await axios.delete(	
-			`${baseURL}job-categories/${id}`
+			`${REACT_BASE_URL}job-categories/${id}`
     );
     console.log(responseOnDeleteCategory);
 		return responseOnDeleteCategory;

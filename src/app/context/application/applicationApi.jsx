@@ -1,21 +1,21 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import axios from "../../../utils/axios.config";
+import axios from "axios";
+import { LIST_ON_PAGES, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD APPLICATION
 export const addApplication = async (data) => {
   try {
     let responseOnAddApplication = await axios.post(
-      {
-        /**Add Create Application API URL here**/
-      },
-      data
-    );
-    if (responseOnAddApplication.status === SUCCESS_STATUS) {
-      return responseOnAddApplication.data;
-    } else {
-      return false;
-    }
+			`${REACT_BASE_URL}create-job-application`,
+			data
+		);
+    return responseOnAddApplication;
+    // if (responseOnAddApplication.status === SUCCESS_STATUS) {
+    //   return responseOnAddApplication.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -28,47 +28,50 @@ export const searchApplication = async (data) => {
     let responseOnSearchApplication = await axios.get({
       /**Add Search Application API URL here like /searchApplication?keyword=${data}**/
     });
-    if (responseOnSearchApplication.status === SUCCESS_STATUS) {
-      return responseOnSearchApplication.data;
-    } else {
-      return false;
-    }
+    return responseOnSearchApplication;
+    // if (responseOnSearchApplication.status === SUCCESS_STATUS) {
+    //   return responseOnSearchApplication.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }
 };
 
 // LIST APPLICATION
-export const applicationList = async (pageNo) => {
+export const applicationList = async (id, pageNo) => {
   try {
-    let responseOnApplicationList = await axios.get({
-      /**Add Get Application API URL here like /api/getApplication?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnApplicationList = await axios.get(
+			`${REACT_BASE_URL}get-job-application-by-job-id/${id}`
+		);
+    return responseOnApplicationList;
 
-    if (responseOnApplicationList.status === SUCCESS_STATUS) {
-      return responseOnApplicationList.data;
-    } else {
-      return false;
-    }
+    // if (responseOnApplicationList.status === SUCCESS_STATUS) {
+    //   return responseOnApplicationList.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
   }
 };
 
+
 // VIEW AN APLLICATION
 export const applicationProfile = async (id) => {
   try {
-    let responseOnApplicationProfile = await axios
-      .get
-      /**Add View Application API URL here like ${URL}api/getClassesForSchool/${id}**/
-      ();
+    let responseOnApplicationProfile = await axios.get(
+			`${REACT_BASE_URL}get-job-application-by-user-id/${id}`
+		);
 
-    if (responseOnApplicationProfile.status === SUCCESS_STATUS) {
-      return responseOnApplicationProfile.data;
-    } else {
-      return false;
-    }
+    return responseOnApplicationProfile;
+    // if (responseOnApplicationProfile.status === SUCCESS_STATUS) {
+    //   return responseOnApplicationProfile.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -76,33 +79,39 @@ export const applicationProfile = async (id) => {
 };
 
 // UPDATE APPLICATION
-export const updateApplication = async (data) => {
+export const updateApplication = async (id, data) => {
   try {
-    let responseOnUpdateApplication = await axios.put({
-      /**Add Update Application API URL here like  `${URL}api/updateApplication/${data.id}` **/
-    });
-    if (responseOnUpdateApplication.status === SUCCESS_STATUS) {
-      return responseOnUpdateApplication.data;
-    } else {
-      return false;
-    }
+    let responseOnUpdateApplication = await axios.put(
+			`${REACT_BASE_URL}update-job-application/${id}`,
+			data
+		);
+    return responseOnUpdateApplication;
+    // if (responseOnUpdateApplication.status === SUCCESS_STATUS) {
+    //   return responseOnUpdateApplication.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }
 };
 
 // DELETE APPLICATION
-export const deleteApplication = async (data) => {
+export const deleteApplication = async (id) => {
   try {
-    let responseOnDeleteApplication = await axios.delete({
-      /**Add Delete Application API URL here like  `/api/deleteBook/${data}` **/
-    });
-    if (responseOnDeleteApplication.status === SUCCESS_STATUS) {
-      return responseOnDeleteApplication.data;
-    } else {
-      return false;
-    }
+    let responseOnDeleteApplication = await axios.delete(
+			`${REACT_BASE_URL}delete-job-application/${id}`
+		);
+    return responseOnDeleteApplication;
+    // if (responseOnDeleteApplication.status === SUCCESS_STATUS) {
+    //   return responseOnDeleteApplication.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.error(err);
   }
 };
+
+
+

@@ -1,7 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import {  useContext, useEffect, useState } from "react";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 import CategoryForm from "./category-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
+import YesNoPopup from "../../../../common/popups/popup-yes-no";
+import { popupType } from "../../../../../globals/constants";
+import { MdOutlineEdit } from "react-icons/md";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 function AddCategories() {
 	const { processGetAllCategory, handleAddCategory } =
@@ -10,18 +14,41 @@ function AddCategories() {
 	const { handleClicked,  } =
 		useContext(GlobalApiData);
 
-	const [allcategories, setAllCategories] = useState([]);
+	const [allCategories, setAllCategories] = useState([]);
+	const [category, setCategory] = useState({});
+	// const { showCategoryDetailsId } = useContext(GlobalApiData);
+	const { processCategoryProfile, handleUpdateCategory, setFormData } =
+		useContext(CategoryApiData);
+    const [showCategoryDetailsId, setShowCategoryDetailsId] = useState("1")
+
+
+	useEffect(() => {
+		const fetchCategory = async () => {
+			if (!showCategoryDetailsId) {
+				return;
+			}
+			try {
+				const res = await processCategoryProfile(showCategoryDetailsId);
+
+				console.log("category", res);
+				const data = res.data.data;
+				setCategory(data);
+			} catch (error) {
+				console.error("could not fetch category", error);
+			}
+		};
+		fetchCategory();
+	}, [showCategoryDetailsId, processCategoryProfile]);
 
 	
 
-	console.log("allcategories", allcategories);
+	console.log("allcategories", allCategories);
 
 	useEffect(() => {
 		const fetchAllCategories = async () => {
 			try {
 				const res = await processGetAllCategory();
 				console.log("all-categories", res);
-
 				const data = res.data.data;
 				setAllCategories(data);
 			} catch (err) {
@@ -30,6 +57,13 @@ function AddCategories() {
 		};
 		fetchAllCategories();
 	}, [processGetAllCategory]);
+
+	const handleEditClick = () => {
+		setFormData({
+			category_name: category.category_name,
+			description: category.description,
+		});
+	};
 
 	
 
@@ -50,28 +84,114 @@ function AddCategories() {
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
-					<ul>
-						<li>
-							<p>Title</p>
-							<p>Description</p>
-						</li>
-						{allcategories?.map((category) => (
-							<li key={category.id} className="category">
-								<div className="" onClick={() => handleClicked(category.id)}>
-									<p>{category.category_name}</p>
-								</div>
+					{allCategories.length === 0 ? (
+						<p>No categories created</p>
+					) : (
+						// <div className="section-panel">
+						// 	<div>
+						// 		<p className="cat-headings">List</p>
+						// 		<ul className=" category-list">
+						// 			{allCategories?.map((category) => (
+						// 				<li
+						// 					key={category.id}
+						// 					className="category-items"
+						// 					onClick={() => setShowCategoryDetailsId(category.id)}
+						// 				>
+						// 					<div className="">
+						// 						{console.log("category-name", category.category_name)}
+						// 						<p>{category.category_name}</p>
+						// 					</div>
+						// 				</li>
+						// 			))}
+						// 		</ul>
+						// 	</div>
 
-								{/* <div className="actions">
-									<div className="delete">DELETE</div>
-									<div className="edit">EDIT</div>
-								</div> */}
-							</li>
-						))}
-					</ul>
+						// 	<div className="">
+						// 		<p className="cat-headings">Details</p>
+
+						// 		{showCategoryDetailsId === category.id && (
+						// 			<div className="sec-cat-details">
+						// 				<div>
+						// 					{console.log("category-details", category)}
+						// 					<p>{category?.description}</p>
+						// 				</div>
+
+						// 				<div className="actions">
+						// 					<button
+						// 						className="site-button button-sm cat-btns"
+						// 						data-bs-target="#delete-category"
+						// 						data-bs-toggle="modal"
+						// 					>
+						// 						<FaRegTrashCan color="white" />
+						// 					</button>
+
+						// 					<button
+						// 						className="site-button button-sm cat-btns"
+						// 						data-bs-target="#edit-category"
+						// 						data-bs-toggle="modal"
+						// 						onClick={() => handleEditClick(category.id)}
+						// 					>
+						// 						<MdOutlineEdit color="white" />
+						// 					</button>
+						// 				</div>
+						// 			</div>
+						// 		)}
+						// 	</div>
+						// 	</div>
+
+						<ul className="p-a20 category">
+							{allCategories?.map((category) => (
+								<li key={category.id} className="">
+									<div
+										onClick={() => handleClicked(category.id)}
+										className={`section-panel ${
+											showCategoryDetailsId === category.id ? "show-actions" : ""
+										}`}
+									>
+										<div className="cat-lists">
+											<p>{category.category_name}</p>
+										</div>
+
+										<div className="sec-cat-details">
+											<div>
+												<p>{category?.description}</p>
+											</div>
+
+											<div className="actions">
+												<button
+													className="site-button button-sm cat-btns"
+													data-bs-target="#delete-category"
+													data-bs-toggle="modal"
+												>
+													<FaRegTrashCan color="white" />
+												</button>
+
+												<button
+													className="site-button button-sm cat-btns"
+													data-bs-target="#edit-category"
+													data-bs-toggle="modal"
+													onClick={() => handleEditClick(category.id)}
+												>
+													<MdOutlineEdit color="white" />
+												</button>
+											</div>
+										</div>
+									</div>
+								</li>
+							))}
+						</ul>
+					)}
 				</div>
 			</div>
 
 			<CategoryForm submit={handleAddCategory} id="Category" />
+			<YesNoPopup
+				id="delete-category"
+				type={popupType.DELETE_CATEGORY}
+				msg={"Are you sure you want to delete this category?"}
+			/>
+
+			<CategoryForm submit={handleUpdateCategory} id="edit-category" />
 		</>
 	);
 }

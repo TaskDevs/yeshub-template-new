@@ -1,14 +1,17 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+//import axios from "../../../utils/axios.config";
+import axios from "axios";
+import {
+  SUCCESS_STATUS,
+  REACT_BASE_URL,
+  LIST_ON_PAGES,
+} from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
   try {
     let responseOnAddEmployer = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+      `${REACT_BASE_URL}create-employers`,
       data
     );
     if (responseOnAddEmployer.status === SUCCESS_STATUS) {
@@ -41,11 +44,9 @@ export const searchEmployer = async (data) => {
 // LIST Employer
 export const employerList = async (pageNo) => {
   try {
-    let responseOnEmployerList = await axios.get({
-      /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnEmployerList = await axios.get(`${REACT_BASE_URL}employers`);
 
-    if (responseOnEmployerList.status === SUCCESS_STATUS) {
+    if (responseOnEmployerList.data.status === SUCCESS_STATUS) {
       return responseOnEmployerList.data;
     } else {
       return false;
@@ -59,11 +60,12 @@ export const employerList = async (pageNo) => {
 // VIEW Employer
 export const employerProfile = async (id) => {
   try {
-    let responseOnEmployerProfile = await axios.get({
+    let responseOnEmployerProfile = await axios.get(
+      `${REACT_BASE_URL}employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
-    });
-
-    if (responseOnEmployerProfile.status === SUCCESS_STATUS) {
+    );
+    // console.log(responseOnEmployerProfile.data.data);
+    if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
     } else {
       return false;
@@ -75,12 +77,32 @@ export const employerProfile = async (id) => {
 };
 
 // UPDATE Employer
-export const updateEmployer = async (data) => {
+export const updateEmployer = async (id, data) => {
   try {
-    let responseOnUpdateEmployer = await axios.put({
-      /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
-    });
-    if (responseOnUpdateEmployer.status === SUCCESS_STATUS) {
+    let responseOnUpdateEmployer = await axios.put(
+      `${REACT_BASE_URL}employers/${id}`,
+      data
+    );
+    //console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateEmployer.status == 200) {
+      return responseOnUpdateEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// Update Employer Logo
+export const updateEmployerLogo = async (id, data) => {
+  try {
+    let responseOnUpdateEmployer = await axios.put(
+      `${REACT_BASE_URL}employers-logo/${id}`,
+      data
+    );
+    console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
     } else {
       return false;
@@ -91,12 +113,12 @@ export const updateEmployer = async (data) => {
 };
 
 // DELETE Employer
-export const deleteEmployer = async (data) => {
+export const deleteEmployer = async (id) => {
   try {
-    let responseOnDeleteEmployer = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/
-    });
-    if (responseOnDeleteEmployer.status === SUCCESS_STATUS) {
+    let responseOnDeleteEmployer = await axios.delete(
+      `${REACT_BASE_URL}employers/${id}`
+    );
+    if (responseOnDeleteEmployer.status == 200) {
       return responseOnDeleteEmployer.data;
     } else {
       return false;

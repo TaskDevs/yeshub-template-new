@@ -9,6 +9,7 @@ import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
   const { jobListData, processGetAllJob } = useContext(JobApiData);
+  console.log("jobListData", jobListData);
 
   useEffect(() => {
     //console.log("We are rendering");
@@ -21,11 +22,13 @@ function SectionJobsList() {
           {jobListData.map((item, index) => (
             <JobsCard
               key={index}
-              img={item.img}
+              img={item.logo}
               title={item.job_title}
-              duration={"1 day ago"}
+              duration={item.created_at}
               location={item.description}
               amount={item.salary}
+              days_left={item.days_left}
+              link={`/job-detail/${item.id}`}
             />
           ))}
         </div>

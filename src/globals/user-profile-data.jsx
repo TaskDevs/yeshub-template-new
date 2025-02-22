@@ -1,5 +1,5 @@
 export const USERPROFILEFIELD = {
-	fieldDetail: [
+	fieldDetail: [		
 		{
 			name: "firstname",
 			label: "First Name",
@@ -12,6 +12,7 @@ export const USERPROFILEFIELD = {
 			type: "text",
 			placeholder: "Smith",
 		},
+
 		{
 			name: "telephone",
 			label: "Phone",
@@ -60,7 +61,7 @@ export const USERPROFILEFIELD = {
 			type: "text",
 			placeholder: "Select Skill",
 		},
-		
+
 		{
 			name: "bio",
 			label: "Bio",

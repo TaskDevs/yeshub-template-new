@@ -16,12 +16,12 @@ export const TestimonialApiData = createContext();
 
 const TestimonialApiDataProvider = (props) => {
 
-   const [formData, setFormData] = useState(
-         TESTIMONIALFIELD.fieldDetail.reduce((acc, field) => {
+  const initialData = TESTIMONIALFIELD.fieldDetail.reduce((acc, field) => {
           acc[field.name] = "";
           return acc;
         }, {})
-    );
+
+   const [formData, setFormData] = useState(initialData);
     
      const handleChange = (field, data) => {
         setFormData({
@@ -39,7 +39,8 @@ const TestimonialApiDataProvider = (props) => {
     } catch (err) {
       console.log("failed to add testimonial", err)
     } finally {
-          // notify(res.data.status, "Category added successfully", "Failed to add category")
+      setFormData(initialData);
+          notify( "Category added successfully", "Failed to add category")
       
     }
 

@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 function SignInPopup() {
   const {
     isLoading,
-    setIsLoading,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);

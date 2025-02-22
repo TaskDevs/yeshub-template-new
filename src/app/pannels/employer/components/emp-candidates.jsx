@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import JobZImage from "../../../common/jobz-img";
 import { loadScript } from "../../../../globals/constants";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
+import EmpGetApplicants from "./jobs/emp-get-applicants";
 
 function EmpCandidatesPage() {
 
@@ -14,7 +15,7 @@ function EmpCandidatesPage() {
 
     const [applicationData, setApplicationData] = useState([]);
     
-        console.log("applicationData", applicationData);
+     
         
     
         useEffect(() => {
@@ -67,7 +68,7 @@ function EmpCandidatesPage() {
 													<input type="checkbox" id="candidate_select_all" />
 												</th>
 												<th>Name</th>
-												<th>Applied for</th>
+												{/* <th>Applied for</th> */}
 												<th>Date</th>
 												<th>Status</th>
 												<th />
@@ -76,74 +77,7 @@ function EmpCandidatesPage() {
 										<tbody>
 											{/*map*/}
 											{applicationData?.map((data) => (
-												<tr key={data.id}>
-													<td>
-														<input type="checkbox" />
-													</td>
-													<td>
-														<div className="twm-DT-candidates-list">
-															<div className="twm-media">
-																<div className="twm-media-pic">
-																	<JobZImage
-																		src={
-																			data.img || "images/candidates/pic1.jpg"
-																		}
-																		alt="#"
-																	/>
-																</div>
-															</div>
-															<div className="twm-mid-content">
-																<a href="#" className="twm-job-title">
-																	<h4>data.name </h4>
-																	<p className="twm-candidate-address">
-																		<i className="feather-map-pin" />
-																		New York
-																	</p>
-																</a>
-															</div>
-														</div>
-													</td>
-													<td>UI Designer</td>
-													<td>15/06/2023 at 10:35 am</td>
-													<td>
-														<div className="twm-jobs-category">
-															<span className="twm-bg-green">data.status</span>
-														</div>
-													</td>
-													<td>
-														<div className="twm-table-controls">
-															<ul className="twm-DT-controls-icon list-unstyled">
-																<li>
-																	<button
-																		title="View profile"
-																		data-bs-toggle="tooltip"
-																		data-bs-placement="top"
-																	>
-																		<span className="fa fa-eye" />
-																	</button>
-																</li>
-																<li>
-																	<button
-																		title="Send message"
-																		data-bs-toggle="tooltip"
-																		data-bs-placement="top"
-																	>
-																		<span className="far fa-envelope-open" />
-																	</button>
-																</li>
-																<li>
-																	<button
-																		title="Delete"
-																		data-bs-toggle="tooltip"
-																		data-bs-placement="top"
-																	>
-																		<span className="far fa-trash-alt" />
-																	</button>
-																</li>
-															</ul>
-														</div>
-													</td>
-												</tr>
+												<EmpGetApplicants data={data} key={data.id} />
 											))}
 
 											{/* 1 */}

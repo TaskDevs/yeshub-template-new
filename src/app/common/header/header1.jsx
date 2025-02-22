@@ -1,7 +1,7 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { base, publicUser } from "../../../globals/route-names";
-import { useContext, useState } from "react";
+import {  useState } from "react";
 import { AiFillDashboard } from "react-icons/ai";
 
 function Header1({ _config }) {

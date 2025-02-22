@@ -1,13 +1,9 @@
 import { useContext, useState } from "react";
 import { publicUrlFor } from "../../../../../globals/constants";
-import JobZImage from "../../../../common/jobz-img";
-import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-letter";
-import SectionJobTerms from "../../sections/jobs/detail/section-job-terms";
-import SectionApplyJob from "../../sections/jobs/section-apply-job";
+
+
 import SectionMilestone from "../../sections/jobs/section-milestone";
 import { FaPlus } from "react-icons/fa6";
-import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
-import { MilestoneApiData } from "../../../../context/milestone/milestoneContextApi";
 import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
 import InputField from "../../../../common/input-field";
 import { APPLICATIONFIELD } from "../../../../../globals/application-data";

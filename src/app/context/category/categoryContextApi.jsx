@@ -26,7 +26,7 @@ const CategoryApiDataProvider = (props) => {
 
 	const [formData, setFormData] = useState(initialData);
 
-	console.log("form-cat", formData);
+	console.log("form-category", formData);
 
 
 	
@@ -57,7 +57,7 @@ const CategoryApiDataProvider = (props) => {
 				return res;
 			
 		} catch (error) {
-			console.error("Error fetching categories:", error);
+			console.error("error getting all", e);
 		}
 	};
 
@@ -126,7 +126,8 @@ const CategoryApiDataProvider = (props) => {
 	};
 
 	const handleUpdateCategory = async (e) => {
-    e.preventDefault();
+		e.preventDefault();
+		 console.log("submitting update category");
      console.log("selectedId-ctx", selectedId);
     try {
        console.log("updateCategory-form", formData);

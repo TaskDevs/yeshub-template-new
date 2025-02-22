@@ -2,9 +2,8 @@
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
-  SUCCESS_STATUS,
-  REACT_BASE_URL,
-  LIST_ON_PAGES,
+	REACT_BASE_URL,
+	SUCCESS_STATUS,
 } from "../../../globals/constants";
 
 // ADD Job

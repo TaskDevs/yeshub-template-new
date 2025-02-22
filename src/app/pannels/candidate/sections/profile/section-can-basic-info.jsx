@@ -1,25 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import InputField from "../../../../common/input-field";
 import { USERPROFILEFIELD } from "../../../../../globals/user-profile-data";
 import TextAreaField from "../../../../common/text-area-field";
-import SelectField from "../../../../common/select-field";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
-import { useLocation } from "react-router-dom";
+
 
 
 function SectionCandicateBasicInfo({ submit, id }) {
 	const [selectedItems, setSelectedItems] = useState([]);
-	const { formData, setFormData, profileData } = useContext(ProfileApiData);
+	const { formData, setFormData } = useContext(ProfileApiData);
+	const { skillOptions } = useContext(SkillsApiData);
+	// console.log("skillOptions", skillOptions);
 	
 
-	const savedSkills = localStorage.getItem("skills");
-	const skillsArray = savedSkills ? JSON.parse(savedSkills) : [];
-
-
-
-	const formattedSkills = skillsArray.map((skill) => ({
+	const formattedSkills = skillOptions.map((skill) => ({
 		value: skill.id,
 		label: skill.skill,
 	}));
@@ -48,12 +44,8 @@ function SectionCandicateBasicInfo({ submit, id }) {
 			});
 		};
 
-		// console.log("USERPROFILEFIELD.fieldDetail", USERPROFILEFIELD.fieldDetail);
 	
-<<<<<<< HEAD
-
-=======
->>>>>>> main
+	
 	return (
 		<>
 			<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>

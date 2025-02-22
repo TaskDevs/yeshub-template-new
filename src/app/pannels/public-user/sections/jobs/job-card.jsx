@@ -1,6 +1,5 @@
-import JobZImage from "../../../../common/jobz-img";
 import { NavLink } from "react-router-dom";
-import { LOCAL_BACKEND_URL, baseURL } from "../../../../../globals/constants";
+import {  baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
 
 export const JobsCard = ({

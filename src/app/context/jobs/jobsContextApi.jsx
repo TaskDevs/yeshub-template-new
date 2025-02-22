@@ -25,6 +25,8 @@ const JobApiDataProvider = (props) => {
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [searchJobListData, setSearchJobListData] = useState([]);
 
+  console.log("jobListData", jobListData);
+
   const processAddJob = async (data) => {
     let response = await addJob(data);
     if (response) {
@@ -41,7 +43,7 @@ const JobApiDataProvider = (props) => {
     if (response) {
       
       setJobListData(response);
-      //console.log(response);
+      console.log("get-all-jobs",response);
       setJobListData(response.data);
       setPaginationData({
         total: response.total,

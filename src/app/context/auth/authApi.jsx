@@ -198,7 +198,8 @@ export const logout = async () => {
             );
 
             if (responseOnLogout.status === 200) {
-                sessionStorage.removeItem("authToken")
+              sessionStorage.removeItem("authToken")
+              sessionStorage.removeItem("userId")
                 cookieMethods.deleteCookies();  // Clear cookies after successful logout
                 return responseOnLogout.data;
             } else {

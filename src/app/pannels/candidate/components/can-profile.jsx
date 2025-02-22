@@ -1,16 +1,14 @@
 import { MdOutlineEdit } from "react-icons/md";
 import SectionCandicateBasicInfo from "../sections/profile/section-can-basic-info";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useContext, useEffect} from "react";
+import { useContext, useEffect } from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import SectionProfileData from "../common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { popupType } from "../../../../globals/constants";
 import { userId } from "../../../../globals/dummy-users";
 
-
 function CanProfilePage() {
-	
 	const {
 		imageURL,
 		handleSubmitProfile,
@@ -22,19 +20,14 @@ function CanProfilePage() {
 		setProfileData,
 	} = useContext(ProfileApiData);
 
-
-	
-
 	useEffect(() => {
-		
-
 		const fetchProfile = async () => {
 			try {
 				const res = await processProfileProfile(userId);
-				
 
 				const data = res.data.data;
 				console.log("data-can", data);
+				localStorage.setItem("user-profile-id", data.user_id);
 				setProfileData(data);
 			} catch (error) {
 				console.error("Failed Fetching profile", error);
@@ -43,9 +36,6 @@ function CanProfilePage() {
 		};
 		fetchProfile();
 	}, [processProfileProfile, setProfileData]);
-
-	
-
 
 	const handleEditClick = () => {
 		setFormData({
@@ -59,16 +49,16 @@ function CanProfilePage() {
 			region: profileData.region,
 			experience: profileData.experience,
 			bio: profileData.bio,
-			 skills_id: Array.isArray(profileData.skills_id) 
-            ? profileData.skills_id 
+			skills_id: Array.isArray(profileData.skills_id)
+				? profileData.skills_id
 				: profileData.skills_id?.split(",") || [],
 		});
-		
 	};
 
-	
-	
-
+	console.log(
+		"img-profile-link",
+		`yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData.profile_image}`
+	);
 	//yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1740052249_contract-1.png
 
 	return (
@@ -90,19 +80,16 @@ function CanProfilePage() {
 					<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
 						<div className="row">
 							<div className="panel panel-default">
-								
 								<div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
 									<div className="row">
 										<div className="col-lg-12 col-md-12">
 											<div className="form-group">
 												<div className="dashboard-profile-pic">
 													<div className="dashboard-profile-photo">
-														
 														<img
-															src={
-																imageURL ||
-																`yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData.profile_image}`
-															}
+															src={ imageURL || `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData.profile_image}`}
+															// "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1740133986_add-withrawal-method.png"
+
 															alt=""
 														/>
 														<div className="upload-btn-wrapper">
@@ -154,7 +141,6 @@ function CanProfilePage() {
 								<SectionProfileData />
 							</div>
 
-							
 							<div className="">
 								{profileData.id && (
 									<div className="sec-actions-btn">
@@ -203,13 +189,9 @@ function CanProfilePage() {
 			</div>
 		</>
 	);
-
 }
 
 export default CanProfilePage;
-
-
-
 
 /* <div className="twm-right-section-panel site-bg-gray">
 					{/*Basic Information

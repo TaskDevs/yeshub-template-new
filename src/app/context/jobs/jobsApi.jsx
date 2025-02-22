@@ -45,7 +45,9 @@ export const searchJob = async (data) => {
 // LIST Job
 export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get(`${REACT_BASE_URL}posted-jobs`);
+    let responseOnJobList = await axios.get(
+			`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/posted-jobs`
+		);
     if (responseOnJobList.status === 200) {
       return responseOnJobList.data.data;
     } else {

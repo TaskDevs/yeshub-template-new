@@ -3,8 +3,7 @@ function SelectField({
 	value,
 	options,
 	change,
-	valueKey = "id",
-	labelKey = "",
+	
 }) {
 	const handleInputChange = (e) => {
 		change(field.name, e.target.value);
@@ -15,7 +14,9 @@ function SelectField({
 			<label>{field.label}</label>
 			<div className="ls-inputicon-box">
 				<select
-					className="wt-select-box selectpicker form-control"
+					// wt-select-box selectpicker
+
+					className=" form-control wt-select-box bg-red"
 					data-live-search="true"
 					id={field.id}
 					name={field.name}
@@ -25,14 +26,14 @@ function SelectField({
 					<option className="bs-title-option" value="">
 						{field.placeholder || "Select an option"}
 					</option>
-					{options.map((option) => (
-						<option key={option.id} value={option[valueKey] || ""}>
-							{console.log("labelkey", option[labelKey])}
-							{option[labelKey] || option[valueKey]}
+					{options.map((option, i) => (
+						<option key={i}>
+							{console.log("labelkey", option)}
+							{option}
 						</option>
 					))}
 				</select>
-				<i className="fs-input-icon fa fa-user-edit" />
+				{/* <i className="fs-input-icon fa fa-user-edit" /> */}
 			</div>
 		</div>
 	);

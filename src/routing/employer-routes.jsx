@@ -18,7 +18,7 @@ import { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 
 function EmployerRoutes() {
-  const [routes, setRoutes] = useState({});
+ 
  
 
   return (

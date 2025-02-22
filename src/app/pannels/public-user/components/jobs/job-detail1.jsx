@@ -31,7 +31,7 @@ function JobDetail1Page() {
 
 	useEffect(() => {
 		console.log("Holding Up")
-	}, [getEmpListUrl]);
+	}, ["getEmpListUrl"]);
 
 
     return (

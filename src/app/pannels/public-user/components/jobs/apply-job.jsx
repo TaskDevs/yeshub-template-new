@@ -7,6 +7,7 @@ import SectionApplyJob from "../../sections/jobs/section-apply-job";
 import SectionMilestone from "../../sections/jobs/section-milestone";
 import { FaPlus } from "react-icons/fa6";
 import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
+import { MilestoneApiData } from "../../../../context/milestone/milestoneContextApi";
 
 
 
@@ -14,14 +15,15 @@ function ApplyJobPage() {
 	const [selectedOption, setSelectedOption] = useState("milestone");
 	const [showMilestone, setShowMilestone] = useState(0);
 
-	const context = useContext(MilestoneContext);
+	// const context = useContext(MilestoneContext);
+	const context = useContext(MilestoneApiData);
 
 	if (!context) {
 		throw new Error("Context not found");
 	}
 
 
-	const [formData, setFormData] = useState(data);
+	const [formData, setFormData] = useState("data");
 
 
 	const handleFormChange = (field, data) => {

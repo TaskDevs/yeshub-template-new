@@ -107,6 +107,8 @@ export const employer = {
 	INITIAL: "/",
 	DASHBOARD: "/",
 	PROFILE: "/profile",
+	ADD_CATEGORY: "/add-category",
+	ADD_SKILL: "/add-skill",
 	POST_A_JOB: "/post-a-job",
 	MANAGE_JOBS: "/manage-jobs",
 	CANDIDATES: "/candidates-list",

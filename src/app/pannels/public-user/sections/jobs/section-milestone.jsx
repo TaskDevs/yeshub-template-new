@@ -1,9 +1,9 @@
 import { useContext } from "react";
 
 function SectionMilestone() {
-	if (!context) { 
-		throw new Error("Context not found")
-	}
+	// if (!context) { 
+	// 	throw new Error("Context not found")
+	// }
 
 	return (
 		<div className="twm-sec-timelines">
@@ -14,8 +14,8 @@ function SectionMilestone() {
 					className=" form-control milestone-options"
 					required
 					name="description"
-					value={initialData.description}
-					onChange={handleChange}
+					// value={initialData.description}
+					// onChange={handleChange}
 				/>
 			</div>
 			<div className="twm-timelines">
@@ -25,8 +25,8 @@ function SectionMilestone() {
 					className=" form-control milestone-options"
 					required
 					name="date"
-					value={initialData.date}
-					onChange={handleChange}
+					// value={initialData.date}
+					// onChange={handleChange}
 				/>
 			</div>
 			<div className="twm-timelines">
@@ -37,8 +37,8 @@ function SectionMilestone() {
 					className="form-control milestone-options"
 					required
 					name="amount"
-					value={initialData.amount}
-					onChange={handleChange}
+					// value={initialData.amount}
+					// onChange={handleChange}
 				/>
 			</div>
 		</div>

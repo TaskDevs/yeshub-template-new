@@ -52,6 +52,28 @@ function EmpSidebarSection(props) {
 								</NavLink>
 							</li>
 							<li
+								className={setMenuActive(
+									currentpath,
+									empRoute(employer.ADD_CATEGORY)
+								)}
+							>
+								<NavLink to={empRoute(employer.ADD_CATEGORY)}>
+									<i className="fa fa-user-tie" />
+									<span className="admin-nav-text">Category</span>
+								</NavLink>
+							</li>
+							<li
+								className={setMenuActive(
+									currentpath,
+									empRoute(employer.ADD_SKILL)
+								)}
+							>
+								<NavLink to={empRoute(employer.ADD_SKILL)}>
+									<i className="fa fa-user-tie" />
+									<span className="admin-nav-text">Skills</span>
+								</NavLink>
+							</li>
+							<li
 								className={
 									setMenuActive(currentpath, empRoute(employer.POST_A_JOB)) +
 									setMenuActive(currentpath, empRoute(employer.MANAGE_JOBS))
@@ -157,7 +179,7 @@ function EmpSidebarSection(props) {
 									<span className="admin-nav-text">Reviews</span>
 								</NavLink>
 							</li>
-							
+
 							<li>
 								<a
 									href="#"

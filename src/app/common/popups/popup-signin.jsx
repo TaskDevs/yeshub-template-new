@@ -72,7 +72,7 @@ function SignInPopup() {
    
     try {
       const response = await login(formData);
-      console.log("login-response", response);
+      
   
       if (response && response.token && response.refresh_token) {
         const { token, refresh_token, role, user_id } = response;
@@ -111,7 +111,7 @@ function SignInPopup() {
         toast.error("Incorrect credential, check identifier or password", { position: "top-right", autoClose: 3000 });
       }
     } catch (error) {
-      console.error("Login failed", error);
+      
       const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
   
       

@@ -8,15 +8,9 @@ const GoogleCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('Full URL:', window.location.href);
-    console.log('Search Params:', window.location.search);
-  
     const queryParams = new URLSearchParams(window.location.search);
     const token = queryParams.get('token');
     const refresh_token = queryParams.get("refresh_token");
-  
-    console.log('Extracted Token:', token);
-    console.log('Extracted Refresh Token:', refresh_token);
     
     if (token) {
       sessionStorage.setItem('authToken', token);
@@ -24,7 +18,7 @@ const GoogleCallback = () => {
       toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
       navigate('/');
     } else {
-      console.error('No token found in the URL');
+     
       navigate('/login');
     }
   

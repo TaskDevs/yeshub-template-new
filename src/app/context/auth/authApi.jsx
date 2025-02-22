@@ -18,7 +18,7 @@ export const login = async (data) => {
       return false;
     }
   } catch (err) {
-    console.error("Login error:", err); // Print the error
+   
     return false;
   }
 };
@@ -36,7 +36,7 @@ export const register = async (data) => {
       return false;
     }
   } catch (err) {
-    console.log(err);
+
     return false;
   }
 };
@@ -92,7 +92,7 @@ export const retrieve = async () => {
       return false;
     }
   } catch (err) {
-    console.error("Retrieve User Error:", err);
+   
     return false;
   }
 };
@@ -111,7 +111,7 @@ export const forgottenPassword = async (data) => {
             return false;
         }
     } catch (err) {
-        console.error("Forgotten Password API Error:", err.response ? err.response.data : err.message);
+       
         return false;
     }
 };
@@ -129,7 +129,7 @@ export const VerifyReset = async (data) => {
             return false;
         }
     } catch (err) {
-        console.error("Error:", err);
+       
         return false;
     }
 };
@@ -149,7 +149,7 @@ export const changePassword = async (data) => {
         return { success: false, message: responseOnChangePassword.data.message || 'An error occurred' };
       }
     } catch (err) {
-      console.error("Change Password Error:", err);
+    
       return { success: false, message: 'An error occurred. Please try again.' };
     }
   };
@@ -186,11 +186,12 @@ export const logout = async () => {
                 return false;
             }
         } else {
-            console.log("No refresh token available");
+           
             return false;
         }
     } catch (err) {
-        console.error("Logout error:", err);
+        
+        return false
     }
 };
 

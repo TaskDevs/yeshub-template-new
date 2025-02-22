@@ -57,16 +57,16 @@ function SignUpPopup() {
   };
   const googleSignin = async ()=>{
     const res = await loginWithGoogle(formData.role)
-    console.log(res)
+    
   }
 
     const linkedinSignin = async ()=>{
       const res = await loginWithLinkedIn(formData.role)
-      console.log(res)
+      
     }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form data:", formData);
+   
 
     setIsSubmitting(true); // Set submitting state to true
 
@@ -74,7 +74,7 @@ function SignUpPopup() {
       const res = await register(formData);
 
       if (res) {
-        console.log("res-signup", res)
+       
         toast.success(res.message, { position: "top-right", autoClose: 3000 });
        
         // Reset form data after successful submission

@@ -15,8 +15,6 @@ const LinkedinCallback = () => {
     if (token) {
       // Store the token in sessionStorage or localStorage
       sessionStorage.setItem('authToken', token);
-      console.log('LinkedIn token:', token);
-
       // Store tokens in cookies
       cookieMethods.setCookies(token, refreshToken || ""); // Ensure no null values
 
@@ -26,7 +24,7 @@ const LinkedinCallback = () => {
       // Redirect after successful login
       navigate('/'); 
     } else {
-      console.error('No token found in the URL');
+      
       toast.error("Login failed. Please try again.", { position: "top-right", autoClose: 3000 });
 
       navigate('/login'); // Redirect the user to login if there's no token

@@ -7,12 +7,12 @@ import { popupType } from "../../../../../globals/constants";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 
-function AddCategories() {
+function  AddCategories() {
 	const { processGetAllCategory, handleAddCategory } =
 		useContext(CategoryApiData);
 
-	const { handleClicked,  } =
-		useContext(GlobalApiData);
+	const { handleClicked } = useContext(GlobalApiData);
+		
 
 	const [allCategories, setAllCategories] = useState([]);
 	const [category, setCategory] = useState({});
@@ -87,99 +87,59 @@ function AddCategories() {
 					{allCategories.length === 0 ? (
 						<p>No categories created</p>
 					) : (
-						// <div className="section-panel">
-						// 	<div>
-						// 		<p className="cat-headings">List</p>
-						// 		<ul className=" category-list">
-						// 			{allCategories?.map((category) => (
-						// 				<li
-						// 					key={category.id}
-						// 					className="category-items"
-						// 					onClick={() => setShowCategoryDetailsId(category.id)}
-						// 				>
-						// 					<div className="">
-						// 						{console.log("category-name", category.category_name)}
-						// 						<p>{category.category_name}</p>
-						// 					</div>
-						// 				</li>
-						// 			))}
-						// 		</ul>
-						// 	</div>
+						<div className="section-panel">
+							<div>
+								<p className="cat-headings">List</p>
+								<ul className=" category-list">
+									{allCategories?.map((category) => (
+										<li
+											key={category.id}
+											className="category-items"
+											onClick={() => setShowCategoryDetailsId(category.id)}
+										>
+											<div className="">
+												{console.log("category-name", category.category_name)}
+												<p>{category.category_name}</p>
+											</div>
+										</li>
+									))}
+								</ul>
+							</div>
 
-						// 	<div className="">
-						// 		<p className="cat-headings">Details</p>
+							<div className="">
+								<p className="cat-headings">Details</p>
 
-						// 		{showCategoryDetailsId === category.id && (
-						// 			<div className="sec-cat-details">
-						// 				<div>
-						// 					{console.log("category-details", category)}
-						// 					<p>{category?.description}</p>
-						// 				</div>
-
-						// 				<div className="actions">
-						// 					<button
-						// 						className="site-button button-sm cat-btns"
-						// 						data-bs-target="#delete-category"
-						// 						data-bs-toggle="modal"
-						// 					>
-						// 						<FaRegTrashCan color="white" />
-						// 					</button>
-
-						// 					<button
-						// 						className="site-button button-sm cat-btns"
-						// 						data-bs-target="#edit-category"
-						// 						data-bs-toggle="modal"
-						// 						onClick={() => handleEditClick(category.id)}
-						// 					>
-						// 						<MdOutlineEdit color="white" />
-						// 					</button>
-						// 				</div>
-						// 			</div>
-						// 		)}
-						// 	</div>
-						// 	</div>
-
-						<ul className="p-a20 category">
-							{allCategories?.map((category) => (
-								<li key={category.id} className="">
-									<div
-										onClick={() => handleClicked(category.id)}
-										className={`section-panel ${
-											showCategoryDetailsId === category.id ? "show-actions" : ""
-										}`}
-									>
-										<div className="cat-lists">
-											<p>{category.category_name}</p>
+								{showCategoryDetailsId === category.id && (
+									<div className="sec-cat-details">
+										<div>
+											{console.log("category-details", category)}
+											<p>{category?.description}</p>
 										</div>
 
-										<div className="sec-cat-details">
-											<div>
-												<p>{category?.description}</p>
-											</div>
+										<div className="actions">
+											<button
+												className="site-button button-sm cat-btns"
+												data-bs-target="#delete-category"
+												data-bs-toggle="modal"
+											>
+												<FaRegTrashCan color="white" />
+											</button>
 
-											<div className="actions">
-												<button
-													className="site-button button-sm cat-btns"
-													data-bs-target="#delete-category"
-													data-bs-toggle="modal"
-												>
-													<FaRegTrashCan color="white" />
-												</button>
-
-												<button
-													className="site-button button-sm cat-btns"
-													data-bs-target="#edit-category"
-													data-bs-toggle="modal"
-													onClick={() => handleEditClick(category.id)}
-												>
-													<MdOutlineEdit color="white" />
-												</button>
-											</div>
+											<button
+												className="site-button button-sm cat-btns"
+												data-bs-target="#edit-category"
+												data-bs-toggle="modal"
+												onClick={() => handleEditClick(category.id)}
+											>
+												<MdOutlineEdit color="white" />
+											</button>
 										</div>
 									</div>
-								</li>
-							))}
-						</ul>
+								)}
+							</div>
+							</div>
+
+						
 					)}
 				</div>
 			</div>

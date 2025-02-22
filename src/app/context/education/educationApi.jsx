@@ -1,14 +1,14 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, baseURL } from "../../../globals/constants";
+import { SUCCESS_STATUS, LIST_ON_PAGES, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Education
 export const addEducation = async (data) => {
   try {
     let responseOnAddEducation = await axios.post(
       
-      `${baseURL}create-education-profile`,
+      `${REACT_BASE_URL}create-education-profile`,
       data
     );
     // if (responseOnAddEducation.status === SUCCESS_STATUS) {
@@ -62,7 +62,7 @@ export const educationProfile = async (id) => {
   try {
     let responseOnEducationProfile = await axios.get(
 			
-			`${baseURL}get-education-profile/${id}`
+			`${REACT_BASE_URL}get-education-profile/${id}`
     );
     return responseOnEducationProfile;
 
@@ -82,7 +82,7 @@ export const updateEducation = async (id, data) => {
   try {
     let responseOnUpdateEducation = await axios.put(
 			
-      `${baseURL}update-education-profile/${id}`,
+      `${REACT_BASE_URL}update-education-profile/${id}`,
       data
     );
     return responseOnUpdateEducation;
@@ -100,7 +100,7 @@ export const updateEducation = async (id, data) => {
 export const deleteEducation = async (id) => {
   try {
     let responseOnDeleteEducation = await axios.delete(
-    `${baseURL}delete-education-profile/${id}`
+    `${REACT_BASE_URL}delete-education-profile/${id}`
     );
     return responseOnDeleteEducation;
     // if (responseOnDeleteEducation.status === SUCCESS_STATUS) {

@@ -2,18 +2,17 @@
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
-  baseURL,
-  SUCCESS_STATUS,
-  SUCCESS_STATUS_TEXT,
-  // LIST_ON_PAGES,
-  // baseUrl,
+	REACT_BASE_URL,
+	SUCCESS_STATUS,
+	LOCAL_BACKEND_URL,
+	LIST_ON_PAGES,
 } from "../../../globals/constants";
 
 // ADD Job
 export const addJob = async (data) => {
   try {
     let responseOnAddJob = await axios.post(
-			`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/posted-jobs`,
+			`${REACT_BASE_URL}posted-jobs`,
 			data
 		);
     if (responseOnAddJob.status === SUCCESS_STATUS) {
@@ -46,11 +45,70 @@ export const searchJob = async (data) => {
 // LIST Job
 export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get(
-			`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/posted-jobs`
-		);
+    let responseOnJobList = await axios.get(`${REACT_BASE_URL}posted-jobs`);
     if (responseOnJobList.status === 200) {
-      return responseOnJobList.data.data.data;
+      return responseOnJobList.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const searchJobs = async (title, category, location) => {
+  try {
+    // Combine title, category, and location into a single string for the "keywords" parameter
+    const keywords = `${title || ""} ${category || ""} ${
+      location || ""
+    }`.trim();
+
+    let response = await axios.get(
+      `${LOCAL_BACKEND_URL}jobs-search`, // Adjust the endpoint as needed
+      {
+        params: {
+          keywords, // Send the combined keywords as a single parameter
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error("Error fetching jobs:", err);
+    return false;
+  }
+};
+
+// LIST Employer Jobs Posted
+export const employerJobList = async (id) => {
+  try {
+    let responseOnEmployerJobList = await axios.get(
+			`${REACT_BASE_URL}employers-posted-jobs/${id}`
+		);
+    if (responseOnEmployerJobList.status == 200) {
+      return responseOnEmployerJobList.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+// Count the employer
+export const countEmployerJobsPosted = async (id) => {
+  try {
+    let responseOnCountEmployerJobsPosted = await axios.get(
+			`${REACT_BASE_URL}count-posted-jobs/${id}`
+		);
+    if (responseOnCountEmployerJobsPosted.status == 200) {
+      return responseOnCountEmployerJobsPosted.data.data;
     } else {
       return false;
     }
@@ -77,28 +135,6 @@ export const jobProfile = async (id) => {
     return false;
   }
 };
-
-
-export const employerJobList = async (id) => {
-  try {
-    let responseOnEmployerJobList = await axios.get(
-      `${baseURL}employers-posted-jobs/${id}`
-    );
-    if (responseOnEmployerJobList.status === 200) {
-      console.log(
-				"responseOnEmployerJob-detail",
-				responseOnEmployerJobList.data.data
-			);
-      return responseOnEmployerJobList.data.data;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-};
-
 
 
 

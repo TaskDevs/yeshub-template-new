@@ -1,15 +1,14 @@
 import axios from "axios";
 import cookieMethods from "./cookieUtils";
 import {
-  baseUrl,
+  baseURL,
   timeOut,
   SUCCESS_STATUS,
   BAD_REQUEST_STATUS,
 } from "../globals/constants";
 
 const instance = axios.create({
-  // baseURL,
-  baseUrl,
+  baseURL,
 	timeOut,
 	withCredentials: true,
 	crossDomain: true,
@@ -29,7 +28,7 @@ instance.interceptors.response.use(
         const accessToken = cookiesData ? cookiesData.accessToken : null;
 
         if (accessToken) {
-          const refreshResponse = await axios.post(`${baseUrl}api/v1/auth/refreshToken`, {
+          const refreshResponse = await axios.post(`${baseURL}api/v1/auth/refreshToken`, {
             accessToken: accessToken, // Use the accessToken from cookies
           });
 

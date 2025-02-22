@@ -64,9 +64,9 @@ function SignUpPopup() {
       const res = await register(formData);
 
       if (res) {
-       
+        console.log("res-signup", res)
         toast.success(res.message, { position: "top-right", autoClose: 3000 });
-
+       
         // Reset form data after successful submission
         setFormData(
           SIGNUPFIELD.fieldDetail.reduce((acc, field) => {

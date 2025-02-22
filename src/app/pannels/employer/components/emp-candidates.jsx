@@ -20,7 +20,7 @@ function EmpCandidatesPage() {
         useEffect(() => {
 					const fetchApplicationData = async () => {
 						try {
-							const res = await processGetAllApplication("jobId");
+							const res = await processGetAllApplication(1);
 							console.log("get-application", res);
 							const data = res.data.data;
 							setApplicationData(data);
@@ -29,7 +29,7 @@ function EmpCandidatesPage() {
 						}
 					};
 					fetchApplicationData();
-				}, [processGetAllApplication]);
+				}, []);
 
 
 

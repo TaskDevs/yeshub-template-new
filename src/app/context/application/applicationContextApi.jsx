@@ -27,7 +27,7 @@ const ApplicationApiDataProvider = (props) => {
    const { setIsSubmitting } = useContext(GlobalApiData)
 
      
-  console.log("selectedOption", selectedOption )
+  
   const initialData = APPLICATIONFIELD.fieldDetail.slice(2).reduce(
 		(acc, field) => {
 			acc[field.name] = "";
@@ -45,13 +45,6 @@ const ApplicationApiDataProvider = (props) => {
 		}));
   }, [selectedOption]);
   
-  // const [formData, setFormData] = useState({
-  //   user_id: userId,
-  //   job_id: "",
-  //   status: "pending",
-  //  });
-
-  console.log("formData-apply", formData);
 
   const processAddApplication = async (data) => {
     try {

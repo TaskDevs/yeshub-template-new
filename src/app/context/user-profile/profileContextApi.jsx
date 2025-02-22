@@ -13,8 +13,8 @@ import {
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import { userId, role } from "../../../globals/dummy-users";
-import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const ProfileApiData = createContext();
 
@@ -31,7 +31,6 @@ const ProfileApiDataProvider = (props) => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-	// console.log("formData-profile-ctx: ", formData);
 	
 	const processAddProfile = async (data) => {
 		try {
@@ -47,7 +46,6 @@ const ProfileApiDataProvider = (props) => {
 	const processGetAllProfile = async () => {
 		try {
 			const res = await profileList();
-			// console.log("profile", res);
 			return res;
 		} catch (e) {
 			console.error("get-all-profile", e);
@@ -100,7 +98,6 @@ const ProfileApiDataProvider = (props) => {
 		const profileFormData = new FormData();
 		profileFormData.append("user_id", "1");
 		profileFormData.append("profile_image", selectedFile); 
-		// profileFormData.append("user_id", "1");
 		profileFormData.append("user_id", userId);
 		profileFormData.append("profile_image", selectedFile);
 		Object.entries(formData).forEach(([key, value]) => {

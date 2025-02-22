@@ -10,10 +10,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 function AddSkills() {
-	
-
-
-			
+				
     const {
 			skills,
 			setSkills,

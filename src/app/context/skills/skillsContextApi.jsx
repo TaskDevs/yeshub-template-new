@@ -273,23 +273,20 @@ import {
 } from "./skillsApi";
 import { SKILLSFIELD } from "../../../globals/skills-data";
 import { GlobalApiData } from "../global/globalContextApi";
+import { userId } from "../../../globals/dummy-users";
 
 export const SkillsApiData = createContext();
 
+const initialData = SKILLSFIELD.fieldDetail.reduce((acc, field) => {
+	acc[field.name] = "";
+	return acc;
+}, {});
 const SkillsApiDataProvider = (props) => {
   const [skillOptions, setSkillOptions] = useState(null);
-  const [formData, setFormData] = useState(
-    SKILLSFIELD.fieldDetail.reduce((acc, field) => {
-      acc[field.name] = "";
-      return acc;
-    }, {})
-  );
+  const [formData, setFormData] = useState(initialData);
 
-  const { title, ...filteredData } = {
-    ...formData,
-    skill: formData.title,
-  };
-  console.log("filteredData-skills", filteredData);
+
+  console.log("formData-skills", formData);
 
   const { selectedId } = useContext(GlobalApiData);
 
@@ -430,10 +427,10 @@ const SkillsApiDataProvider = (props) => {
   };
 
   const handleAddSkills = async (e) => {
-    console.log("submitting skills", filteredData);
+    console.log("submitting skills", formData);
     e.preventDefault();
     try {
-      const res = await processAddSkills(filteredData);
+      const res = await processAddSkills(formData);
       console.log("add-skills", res);
     } catch (e) {
       console.error("failed to add skills", e);
@@ -447,12 +444,11 @@ const SkillsApiDataProvider = (props) => {
   const handleUpdateSkills = async (e) => {
     e.preventDefault();
     try {
-      const res = await processUpdateSkills("1", filteredData);
+      const res = await processUpdateSkills(userId, formData);
       console.log("add-skills", res);
     } catch (e) {
       console.error("failed to add skills", e);
     } finally {
-      // setFormData(filteredData);
       setFormData({
         skill: "",
         description: "",
@@ -461,27 +457,27 @@ const SkillsApiDataProvider = (props) => {
   };
 
   return (
-    <SkillsApiData.Provider
-      value={{
-        skill,
-        skills,
-        formData,
-        filteredData,
-        processAddSkills,
-        processSkillsProfile,
-        processSearchSkills,
-        processUpdateSkills,
-        processDeleteSkills,
-        skillOptions,
-        setFormData,
-        handleChange,
-        handleAddSkills,
-        handleUpdateSkills,
-      }}
-    >
-      {props.children}
-    </SkillsApiData.Provider>
-  );
+		<SkillsApiData.Provider
+			value={{
+				skill,
+				skills,
+				skillOptions,
+				formData,
+				setSkills,
+				processAddSkills,
+				processSkillsProfile,
+				processSearchSkills,
+				processUpdateSkills,
+				processDeleteSkills,
+				setFormData,
+				handleChange,
+				handleAddSkills,
+				handleUpdateSkills,
+			}}
+		>
+			{props.children}
+		</SkillsApiData.Provider>
+	);
 };
 
 export default SkillsApiDataProvider;

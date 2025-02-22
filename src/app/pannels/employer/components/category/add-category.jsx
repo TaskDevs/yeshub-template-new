@@ -111,14 +111,13 @@ function  AddCategories() {
 
 								{showCategoryDetailsId === category.id && (
 									<div className="sec-cat-details">
-										<div>
-											{console.log("category-details", category)}
+										<div className="category-desc">
 											<p>{category?.description}</p>
 										</div>
 
 										<div className="actions">
 											<button
-												className="site-button button-sm cat-btns"
+												className="site-button button-sm "
 												data-bs-target="#delete-category"
 												data-bs-toggle="modal"
 											>
@@ -126,7 +125,7 @@ function  AddCategories() {
 											</button>
 
 											<button
-												className="site-button button-sm cat-btns"
+												className="site-button button-sm "
 												data-bs-target="#edit-category"
 												data-bs-toggle="modal"
 												onClick={() => handleEditClick(category.id)}
@@ -137,9 +136,7 @@ function  AddCategories() {
 									</div>
 								)}
 							</div>
-							</div>
-
-						
+						</div>
 					)}
 				</div>
 			</div>

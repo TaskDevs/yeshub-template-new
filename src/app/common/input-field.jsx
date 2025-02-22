@@ -1,8 +1,9 @@
 
 function InputField ({ field, value, change}) {
+  
   const handleInputChange = (e) => {
-    change(e)
-  }
+		change(field.name, e.target.value);
+	};
 
 return (
 <div className="form-group mb-3">

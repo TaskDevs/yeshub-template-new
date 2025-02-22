@@ -153,6 +153,10 @@ function PublicUserRoutes() {
           path={publicUser.pages.GOOGLECALLBACK}
           element={GoogleCallback}
         />
+         <Route
+          path={publicUser.pages.LINKEDINCALLBACK}
+          element={LinkedInCallback}
+        />
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route path={publicUser.pages.FORGOTPASS} element={<ForgotPassword/>}/>
         <Route path={publicUser.pages.VERIFYRESETOTP} element={<VerifyResetOtp/>}/>

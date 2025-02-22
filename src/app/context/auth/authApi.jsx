@@ -7,7 +7,7 @@ export const login = async (data) => {
   console.log("Login function called with data:", data);
   try {
     let responseOnLogin = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}login`,
+      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/login`,
       data
     );
     console.log("Response received:", responseOnLogin); // Check the response
@@ -28,7 +28,7 @@ export const login = async (data) => {
 export const register = async (data) => {
   try {
     let responseOnRegister = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}register`,
+      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/register`,
       data
     );
     if (responseOnRegister.status === SUCCESS_STATUS) {
@@ -45,7 +45,7 @@ export const register = async (data) => {
 export const verifyOtp = async (data) => {
   try {
     let responseOnVerifyOtp = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}verify-otp`,
+      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/verify-otp`,
       data
     );
 
@@ -62,7 +62,7 @@ export const verifyOtp = async (data) => {
 export const ResendOtp = async (data) => {
   try {
     let responseOnResendOtp = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}send-otp`,
+      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/send-otp`,
       data
     );
 
@@ -77,13 +77,6 @@ export const ResendOtp = async (data) => {
 };
 
 
-export const googleLogin = async ()=>{
-    try{
-        
-    }catch(err){
-
-    }
-}
 
 //Retrieve Info
 
@@ -91,7 +84,7 @@ export const googleLogin = async ()=>{
 export const retrieve = async () => {
   try {
     let responseOnRetrieve = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}user`
+      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/user`
     );
 
     if (responseOnRetrieve.status === SUCCESS_STATUS) {
@@ -108,7 +101,7 @@ export const retrieve = async () => {
 // Request Password Reset (Forgotten Password)
 export const forgottenPassword = async (data) => {
     try {
-        let responseForgottenPass = await axios.post(`${process.env.REACT_APP_BASE_URL}forgot-password`, data);
+        let responseForgottenPass = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/v1/forgot-password`, data);
         
         console.log("Forgot Password API Response:", responseForgottenPass);
 
@@ -128,7 +121,7 @@ export const forgottenPassword = async (data) => {
 // verify reste otp
 export const VerifyReset = async (data) => {
     try {
-        let responseOnVerifyResetOtp = await axios.post(`${process.env.REACT_APP_BASE_URL}verify-reset-otp`, data);
+        let responseOnVerifyResetOtp = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/v1/verify-reset-otp`, data);
         console.log("API Status:", responseOnVerifyResetOtp.status); // Log the status code
 
         if (responseOnVerifyResetOtp.status === 200) { // Check if the status is 200
@@ -146,7 +139,7 @@ export const VerifyReset = async (data) => {
 export const changePassword = async (data) => {
     try {
       let responseOnChangePassword = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}change-password`,
+        `${process.env.REACT_APP_BACKEND_HOST}/api/v1/change-password`,
         data
       );
   
@@ -168,20 +161,11 @@ export const changePassword = async (data) => {
   
 
 export const loginWithGoogle = (data) => {
-  window.location.href = `${process.env.REACT_APP_OAUTH_URL}/google/redirect?role=${data}`;
+  window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect?role=${data}`;
 };
 
 export const loginWithLinkedIn = async (data) => {
-  try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_OAUTH_URL}linkedin/callback`,
-      { data }
-    );
-    console.log(response.data.token);
-    // Store the token and redirect
-  } catch (error) {
-    console.error("LinkedIn login failed", error);
-  }
+  window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/redirect/linkedin?role=${data}`;
 };
 
 // Logout
@@ -192,7 +176,7 @@ export const logout = async () => {
         
         if (data.refreshToken) {
             let responseOnLogout = await axios.post(
-                `${process.env.REACT_APP_BASE_URL}logout`, 
+                `${process.env.REACT_APP_BACKEND_HOST}/api/v1/logout`, 
                 { refresh_token: data.refreshToken },  // Send refresh token
                 { headers: { Authorization: `Bearer ${data.accessToken}` } }  // Send access token in headers
             );

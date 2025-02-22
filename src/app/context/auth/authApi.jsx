@@ -4,18 +4,17 @@ import { SUCCESS_STATUS, BAD_REQUEST_STATUS } from "../../../globals/constants";
 
 // Manual Login
 export const login = async (data) => {
-  console.log("Login function called with data:", data);
+ 
   try {
     let responseOnLogin = await axios.post(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/login`,
       data
     );
-    console.log("Response received:", responseOnLogin); // Check the response
-
+  
     if (responseOnLogin.status === SUCCESS_STATUS) {
       return responseOnLogin.data;
     } else {
-      console.log("Unexpected response status:", responseOnLogin.status);
+      
       return false;
     }
   } catch (err) {
@@ -103,12 +102,12 @@ export const forgottenPassword = async (data) => {
     try {
         let responseForgottenPass = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/v1/forgot-password`, data);
         
-        console.log("Forgot Password API Response:", responseForgottenPass);
+      
 
         if (responseForgottenPass.status === 200 || responseForgottenPass.status === 201) { 
             return responseForgottenPass.data;
         } else {
-            console.error("Unexpected API response:", responseForgottenPass);
+         
             return false;
         }
     } catch (err) {
@@ -122,7 +121,7 @@ export const forgottenPassword = async (data) => {
 export const VerifyReset = async (data) => {
     try {
         let responseOnVerifyResetOtp = await axios.post(`${process.env.REACT_APP_BACKEND_HOST}/api/v1/verify-reset-otp`, data);
-        console.log("API Status:", responseOnVerifyResetOtp.status); // Log the status code
+      
 
         if (responseOnVerifyResetOtp.status === 200) { // Check if the status is 200
             return responseOnVerifyResetOtp.data;
@@ -142,9 +141,6 @@ export const changePassword = async (data) => {
         `${process.env.REACT_APP_BACKEND_HOST}/api/v1/change-password`,
         data
       );
-  
-      console.log("API Response Status:", responseOnChangePassword.status);  // Log the status
-      console.log("API Response Data:", responseOnChangePassword.data);      // Log the response data
   
       // Check the response message for success
       if (responseOnChangePassword.data.message === 'Password reset successfully.') {
@@ -172,7 +168,7 @@ export const loginWithLinkedIn = async (data) => {
 export const logout = async () => {
     try {
         let data = cookieMethods.getCookies();
-        console.log("Tokens before logout:", data);
+       
         
         if (data.refreshToken) {
             let responseOnLogout = await axios.post(
@@ -186,7 +182,7 @@ export const logout = async () => {
               cookieMethods.deleteCookies();  // Clear cookies after successful logout
                 return responseOnLogout.data;
             } else {
-                console.log("Logout response not 200:", responseOnLogout);
+                
                 return false;
             }
         } else {

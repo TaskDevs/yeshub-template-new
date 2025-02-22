@@ -3,7 +3,7 @@
 import axios from "axios";
 import {
   SUCCESS_STATUS,
-  LOCAL_BACKEND_URL,
+  REACT_BASE_URL,
   BACKEND_HOST,
   LIST_ON_PAGES,
 } from "../../../globals/constants";
@@ -12,7 +12,7 @@ import {
 export const addEmployer = async (data) => {
   try {
     let responseOnAddEmployer = await axios.post(
-      `${LOCAL_BACKEND_URL}create-employers`,
+      `${REACT_BASE_URL}create-employers`,
       data
     );
     if (responseOnAddEmployer.status === SUCCESS_STATUS) {
@@ -45,9 +45,7 @@ export const searchEmployer = async (data) => {
 // LIST Employer
 export const employerList = async (pageNo) => {
   try {
-    let responseOnEmployerList = await axios.get(
-      `${LOCAL_BACKEND_URL}employers`
-    );
+    let responseOnEmployerList = await axios.get(`${REACT_BASE_URL}employers`);
 
     if (responseOnEmployerList.data.status === SUCCESS_STATUS) {
       return responseOnEmployerList.data;
@@ -64,7 +62,7 @@ export const employerList = async (pageNo) => {
 export const employerProfile = async (id) => {
   try {
     let responseOnEmployerProfile = await axios.get(
-      `${LOCAL_BACKEND_URL}employer-companies/${id}`
+      `${REACT_BASE_URL}employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
     );
     // console.log(responseOnEmployerProfile.data.data);
@@ -81,10 +79,9 @@ export const employerProfile = async (id) => {
 
 // UPDATE Employer
 export const updateEmployer = async (id, data) => {
-  console.log(LOCAL_BACKEND_URL);
   try {
     let responseOnUpdateEmployer = await axios.put(
-      `${LOCAL_BACKEND_URL}employers/${id}`,
+      `${REACT_BASE_URL}employers/${id}`,
       data
     );
     //console.log(responseOnUpdateEmployer);
@@ -102,7 +99,7 @@ export const updateEmployer = async (id, data) => {
 export const updateEmployerLogo = async (id, data) => {
   try {
     let responseOnUpdateEmployer = await axios.put(
-      `${LOCAL_BACKEND_URL}employers-logo/${id}`,
+      `${REACT_BASE_URL}employers-logo/${id}`,
       data
     );
     console.log(responseOnUpdateEmployer);
@@ -120,7 +117,7 @@ export const updateEmployerLogo = async (id, data) => {
 export const deleteEmployer = async (id) => {
   try {
     let responseOnDeleteEmployer = await axios.delete(
-      `${LOCAL_BACKEND_URL}employers/${id}`
+      `${REACT_BASE_URL}employers/${id}`
     );
     if (responseOnDeleteEmployer.status == 200) {
       return responseOnDeleteEmployer.data;

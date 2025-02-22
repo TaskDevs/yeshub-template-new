@@ -3,7 +3,7 @@
 import axios from "axios";
 import {
   SUCCESS_STATUS,
-  LOCAL_BACKEND_URL,
+  REACT_BASE_URL,
   LIST_ON_PAGES,
 } from "../../../globals/constants";
 
@@ -11,7 +11,7 @@ import {
 export const addJob = async (data) => {
   try {
     let responseOnAddJob = await axios.post(
-      `${LOCAL_BACKEND_URL}posted-jobs`,
+      `${REACT_BASE_URL}posted-jobs`,
       data
     );
     if (responseOnAddJob.status == SUCCESS_STATUS) {
@@ -44,7 +44,7 @@ export const searchJob = async (data) => {
 // LIST Job
 export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get(`${LOCAL_BACKEND_URL}posted-jobs`);
+    let responseOnJobList = await axios.get(`${REACT_BASE_URL}posted-jobs`);
     if (responseOnJobList.status == 200) {
       return responseOnJobList.data.data;
     } else {
@@ -64,7 +64,7 @@ export const searchJobs = async (title, category, location) => {
     }`.trim();
 
     let response = await axios.get(
-      `${LOCAL_BACKEND_URL}jobs-search`, // Adjust the endpoint as needed
+      `${REACT_BASE_URL}jobs-search`, // Adjust the endpoint as needed
       {
         params: {
           keywords, // Send the combined keywords as a single parameter
@@ -87,7 +87,7 @@ export const searchJobs = async (title, category, location) => {
 export const employerJobList = async (id) => {
   try {
     let responseOnEmployerJobList = await axios.get(
-      `${LOCAL_BACKEND_URL}employers-posted-jobs/${id}`
+      `${REACT_BASE_URL}employers-posted-jobs/${id}`
     );
     if (responseOnEmployerJobList.status == 200) {
       return responseOnEmployerJobList.data.data;
@@ -104,7 +104,7 @@ export const employerJobList = async (id) => {
 export const countEmployerJobsPosted = async (id) => {
   try {
     let responseOnCountEmployerJobsPosted = await axios.get(
-      `${LOCAL_BACKEND_URL}count-posted-jobs/${id}`
+      `${REACT_BASE_URL}count-posted-jobs/${id}`
     );
     if (responseOnCountEmployerJobsPosted.status == 200) {
       return responseOnCountEmployerJobsPosted.data.data;

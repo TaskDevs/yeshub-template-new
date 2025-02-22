@@ -13,8 +13,8 @@ import {
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import { userId, role } from "../../../globals/dummy-users";
-import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const ProfileApiData = createContext();
 
@@ -31,29 +31,7 @@ const ProfileApiDataProvider = (props) => {
 
   const [formData, setFormData] = useState(initialFormData);
 
-	console.log("formData-profile-ctx: ", formData);
-	// console.log("selectedFile", selectedFile);
-
-	// useEffect(() => {
-	// 	const fetchProfile = async () => {
-	// 		if (!userId) {
-	// 			return false;
-	// 		}
-	// 		try {
-	// 			const res = await processProfileProfile(userId);
-	// 			console.log("Fetching profile-can", res);
-
-	// 			const data = res.data.data;
-	// 			console.log("data-profilectx", data);
-	// 			setProfileData(data);
-	// 		} catch (error) {
-	// 			console.error("Failed Fetching profile", error);
-	// 		} finally {
-	// 		}
-	// 	};
-	// 	fetchProfile();
-	// }, []);
-
+	
 	const processAddProfile = async (data) => {
 		try {
 			console.log("data-profile", data);
@@ -68,7 +46,6 @@ const ProfileApiDataProvider = (props) => {
 	const processGetAllProfile = async () => {
 		try {
 			const res = await profileList();
-			// console.log("profile", res);
 			return res;
 		} catch (e) {
 			console.error("get-all-profile", e);
@@ -103,8 +80,8 @@ const ProfileApiDataProvider = (props) => {
 		console.log("profile", res);
 		return res;
 		} catch (e) {
-			throw new Error(`Could not delete profile`, e)
-		}
+			throw new Error("Failed to delete profile", e);
+	}
 	};
 
 	const handleSubmitProfile = async (e) => {
@@ -119,7 +96,8 @@ const ProfileApiDataProvider = (props) => {
 		}
 
 		const profileFormData = new FormData();
-		// profileFormData.append("user_id", "1");
+		profileFormData.append("user_id", "1");
+		profileFormData.append("profile_image", selectedFile); 
 		profileFormData.append("user_id", userId);
 		profileFormData.append("profile_image", selectedFile);
 		Object.entries(formData).forEach(([key, value]) => {
@@ -129,7 +107,8 @@ const ProfileApiDataProvider = (props) => {
     console.log("profileFormData", Object.fromEntries(profileFormData));
 
 		try {
-			const response = await processAddProfile(profileFormData);
+			const response = await processAddProfile(profileFormData); 
+			
 			console.log("add-profile-res", response);
 			toast.success("Profile added successfully");
 			return response;
@@ -138,6 +117,7 @@ const ProfileApiDataProvider = (props) => {
 			toast.error("An error occurred while adding the profile");
 		} finally {
 			setIsSubmitting(false);
+			setFormData(initialFormData);
 			setFormData(initialFormData);
 		}
 	};
@@ -150,12 +130,13 @@ const ProfileApiDataProvider = (props) => {
 		});
 
 		try {
-			const res = await processUpdateProfile(userId, {
+			const response = await processUpdateProfile(userId, {
+			
 				...formData,
 				id: userId,
 			});
-			console.log("add-profile-res", res);
-			return res;
+			// console.log("add-profile-res", res);
+			return response;
 			// toast.success("Profile data updated successfully")
 		} catch (e) {
 			console.error("Failed to update profile", e);

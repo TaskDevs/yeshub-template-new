@@ -8,30 +8,35 @@ import SectionMilestone from "../../sections/jobs/section-milestone";
 import { FaPlus } from "react-icons/fa6";
 import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
 import { MilestoneApiData } from "../../../../context/milestone/milestoneContextApi";
+import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
+import InputField from "../../../../common/input-field";
+import { APPLICATIONFIELD } from "../../../../../globals/application-data";
+import TextAreaField from "../../../../common/text-area-field";
+import SelectField from "../../../../common/select-field";
 
 
+const options = [
+	"Select a duration",
+	"more than 8 months",
+	"3 to 6 months",
+	"1 to 3 months",
+	"less than 1 month",
+];
 
 function ApplyJobPage() {
-	const [selectedOption, setSelectedOption] = useState("milestone");
+	// const [selectedOption, setSelectedOption] = useState("milestone");
 	const [showMilestone, setShowMilestone] = useState(0);
-
-	// const context = useContext(MilestoneContext);
-	const context = useContext(MilestoneApiData);
-
-	if (!context) {
-		throw new Error("Context not found");
-	}
+    const { formData, setFormData, selectedOption, setSelectedOption } =
+			useContext(ApplicationApiData);
+	
 
 
-	const [formData, setFormData] = useState("data");
-
-
-	const handleFormChange = (field, data) => {
+	const handleChange = (field, data) => {
 		setFormData({
 			...formData,
-			[field] : data,
-		})
-	}
+			[field]: data,
+		});
+	};
 	
 
 
@@ -59,11 +64,6 @@ function ApplyJobPage() {
 								Apply For This Job
 							</h3>
 
-							{/* <div className="">
-									<SectionJobTerms />
-									<SectionJobCoverLetter />
-								</div> */}
-
 							<form onSubmit={handleSubmit}>
 								<div className="">
 									<p className="twm-s-title-text">
@@ -71,6 +71,14 @@ function ApplyJobPage() {
 									</p>
 									<div className="">
 										<div className="twm-pay-terms">
+											{/* <InputField
+												field={APPLICATIONFIELD.fieldDetail[0]}
+												value={formData}
+												change={(data, field) => {
+													handleChange(data, field);
+												}}
+											/> */}
+
 											<div className="">
 												<input
 													type="radio"
@@ -93,6 +101,13 @@ function ApplyJobPage() {
 										</div>
 
 										<div className="twm-pay-terms">
+											{/* <InputField
+												field={APPLICATIONFIELD.fieldDetail[1]}
+												value={formData}
+												change={(data, field) => {
+													handleChange(data, field);
+												}}
+											/> */}
 											<div className="">
 												<input
 													type="radio"
@@ -113,38 +128,6 @@ function ApplyJobPage() {
 									</div>
 								</div>
 
-								{/* {selectedOption === "milestone" && (
-										<>
-											<div className="twm-sec-main">
-												<p className="twm-s-title-text">
-													How many milestones do you want to include?
-												</p>
-												<SectionMilestone />
-												{showMilestone && <SectionMilestone />}
-
-												<div className="milestone-add-options">
-													<div
-														className="milestone-plus"
-														onClick={() => {
-															setShowMilestone((prev) => prev + 1);
-														}}
-													>
-														<FaPlus />
-														Add more milestones
-													</div>
-
-													<button
-														type="button"
-														className="site-button outline-primary"
-														onClick={() => setShowMilestone((prev) => prev - 1)}
-													>
-														Cancel
-													</button>
-												</div>
-											</div>
-										</>
-									)} */}
-
 								{selectedOption === "milestone" && (
 									<div className="twm-sec-main">
 										<p className="twm-s-title-text">
@@ -152,7 +135,6 @@ function ApplyJobPage() {
 										</p>
 										<SectionMilestone />
 
-										{/* Dynamically render multiple SectionMilestone components */}
 										{Array.from({ length: showMilestone }, (_, index) => (
 											<SectionMilestone key={index} />
 										))}
@@ -184,23 +166,19 @@ function ApplyJobPage() {
 										<p className="twm-s-title-text">
 											How long will this project take?
 										</p>
-										{/* <select
-												name=""
-												id=""
-												value="Select a duration"
-												placeholder="Select a duration"
-												className="twm-select-duration form-control milestone-options"
-											>
-												<option value="">Select a duration</option>
-												<option value="">more than 8 months</option>
-												<option value="">3 to 6 months</option>
-												<option value="">1 to 3 months</option>
-												<option value="">less than 1 month</option>
-											</select> */}
 
 										<div className="twm-sec-timelines">
 											<div className="twm-timelines">
-												<label htmlFor="">Project Duration</label>
+												<SelectField
+													field={APPLICATIONFIELD.fieldDetail[2]}
+													change={(data, field) => {
+														handleChange(data, field);
+													}}
+													options={options}
+													value={formData}
+												/>
+
+												{/* <label htmlFor="">Project Duration</label>
 												<select
 													name=""
 													id=""
@@ -215,12 +193,19 @@ function ApplyJobPage() {
 													<option value="">3 to 6 months</option>
 													<option value="">1 to 3 months</option>
 													<option value="">less than 1 month</option>
-												</select>
+												</select> */}
 											</div>
 
 											<div className="twm-timelines">
 												<label htmlFor="amount">Amount</label>
-												<input
+												<InputField
+													field={APPLICATIONFIELD.fieldDetail[3]}
+													value={formData}
+													change={(data, field) => {
+														handleChange(data, field);
+													}}
+												/>
+												{/* <input
 													type="number"
 													placeholder="₵0.00"
 													className="form-control milestone-options"
@@ -228,17 +213,29 @@ function ApplyJobPage() {
 													name=""
 													value={formData.amount}
 													onChange={handleFormChange}
-												/>
+												/> */}
 											</div>
 
 											<div className="twm-timelines">
 												<label htmlFor="desc">Description</label>
-												<input
+												{/* <input
 													type="text"
 													className=" form-control milestone-options timeliness-desc"
 													value={formData.description}
 													onChange={handleFormChange}
+												/> */}
+												<InputField
+													field={APPLICATIONFIELD.fieldDetail[4]}
+													value={formData}
+													change={(data, field) => {
+														handleChange(data, field);
+													}}
 												/>
+												{/* <TextAreaField
+													field={APPLICATIONFIELD.fieldDetail[4]}
+													value={formData}
+													change={handleChange}
+												/> */}
 											</div>
 										</div>
 									</div>
@@ -248,40 +245,134 @@ function ApplyJobPage() {
 									<div className="">
 										<h4 className="twm-s-title">Cover letter</h4>
 										<div className="twm-sec-text-area">
-											<textarea
+											{/* <textarea
 												name=""
 												id=""
 												className="twm-text-area"
 												value={formData.cover_letter}
 												onChange={handleFormChange}
-											></textarea>
+											></textarea> */}
+											<TextAreaField
+												field={APPLICATIONFIELD.fieldDetail[5]}
+												value={formData}
+												change={handleChange}
+											/>
 										</div>
 									</div>
-									<div className="">
-										{/* <h4 className="twm-s-title">Profile Highlights</h4>
+									{/* <div className="">
+										<div className="twm-pay-terms image-upload"></div>
+										<SectionCandidatePortfolio />
+									</div> */}
+								</div>
+
+								<div className="btn-show-more  ">
+									<button className="site-button" type="submit">
+										Submit
+									</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+}
+
+export default ApplyJobPage;
+
+
+
+
+
+							
+								/* <div className="">
+									<SectionJobTerms />
+									<SectionJobCoverLetter />
+								</div> */
+							
+
+
+
+
+
+	/* <h4 className="twm-s-title">Profile Highlights</h4>
 											<p className="twm-s-title-text">
 												Emphasise the most relevant data from your profile to
 												highlight your abilities and experience. Up to four
 												highlights are possible.
-											</p> */}
-										<div className="twm-pay-terms image-upload">
-											{/* <div className="twm-sec-add">
+											</p> */
+
+
+
+/* <div className="twm-sec-add">
 													<label htmlFor="project">Add portfolio project</label>
 													<input type="file" name="project" accept="image/*" />
 													{/* <button type="submit">Add Portfolio projects</button> *
-												</div> */}
+												</div> */
 
-											{/* <div className="twm-sec-add">
+											/* <div className="twm-sec-add">
 													<label htmlFor="cert">Add a certificate</label>
 													<input name="cert" type="file" accept="image/*" />
 													{/* <button type="submit">Add a Certificate</button> 
-												</div> */}
-										</div>
-										<SectionCandidatePortfolio />
-									</div>
-								</div>
+												</div> */
 
-								{/* <div className="sec-add-portfolio">
+
+
+
+	/* <select
+												name=""
+												id=""
+												value="Select a duration"
+												placeholder="Select a duration"
+												className="twm-select-duration form-control milestone-options"
+											>
+												<option value="">Select a duration</option>
+												<option value="">more than 8 months</option>
+												<option value="">3 to 6 months</option>
+												<option value="">1 to 3 months</option>
+												<option value="">less than 1 month</option>
+											</select> */
+
+
+
+
+	/* {selectedOption === "milestone" && (
+										<>
+											<div className="twm-sec-main">
+												<p className="twm-s-title-text">
+													How many milestones do you want to include?
+												</p>
+												<SectionMilestone />
+												{showMilestone && <SectionMilestone />}
+
+												<div className="milestone-add-options">
+													<div
+														className="milestone-plus"
+														onClick={() => {
+															setShowMilestone((prev) => prev + 1);
+														}}
+													>
+														<FaPlus />
+														Add more milestones
+													</div>
+
+													<button
+														type="button"
+														className="site-button outline-primary"
+														onClick={() => setShowMilestone((prev) => prev - 1)}
+													>
+														Cancel
+													</button>
+												</div>
+											</div>
+										</>
+									)} */
+
+
+
+
+	/* <div className="sec-add-portfolio">
 										<div className="sub-sec-add-portfolio">
 											<div className="">
 												<div className="img-portfolio">
@@ -330,16 +421,12 @@ function ApplyJobPage() {
 												/>
 											</div>
 										</div>
-									</div> */}
+									</div> */
 
-								<div className="btn-show-more  ">
-									<button className="site-button" type="submit">
-										Submit
-									</button>
-								</div>
-							</form>
 
-							{/* <div className="sec-add-portfolio">
+
+
+	/* <div className="sec-add-portfolio">
 									<div className="sub-sec-add-portfolio">
 										<div className="">
 											<div className="img-portfolio">
@@ -372,23 +459,15 @@ function ApplyJobPage() {
 											<p className="img-portfolio-link">Link: </p>
 										</div>
 									</div>
-								</div> */}
-						</div>
-					</div>
-				</div>
+								</div> */
 
-				{/* <div className="btn-show-more  ">
+
+
+	/* <div className="btn-show-more  ">
 						<a href="" className="site-button">
 							Submit
 						</a>
-					</div> */}
-			</div>
-		</>
-	);
-}
-
-export default ApplyJobPage;
-
+					</div> */
 
 
 

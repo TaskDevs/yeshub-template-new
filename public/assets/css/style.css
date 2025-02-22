@@ -180,7 +180,7 @@ This files [Table of contents] are outlined below
 
 .section-panel {
   display: grid;
-  grid-template-columns: 150px 1fr ; 
+  grid-template-columns: 200px 1fr ; 
   align-items: start;
   width: 100%;
   cursor: pointer;
@@ -190,33 +190,64 @@ This files [Table of contents] are outlined below
   text-transform: capitalize;  
 }
 
-.sec-cat-details{
-  display: flex;
-  justify-content: center;
+.sec-cat-details {
+   display: grid;
+  /* grid-template-columns: 200px 1fr ; */
+  grid-template-rows: 6(1fr);
+  background: yellowgreen;
+}
+/* .sec-cat-details{
+  display: grid;
+  grid-template-rows: 1fr;
+  flex-direction: column; 
+   justify-content: center;
   align-items: center;
   gap: 1rem;
   width: 100%;
-}
+} */
 
-.section-panel:hover, .section-panel-skills:hover {
+/* .section-panel-skills:hover {
   background: #d6d6d6;
+} */
+.cat-headings {
+  background: red;
+  font-weight: bold;
 }
-
-.category-list {
+/* .category-list {
   display: flex;
-} 
+  flex-direction: column;
+  display: grid;
+  gap: 1rem;
+   font-weight: bold;
+  background: green;
+  width: 100%;
+  min-width: 80px;
+  max-width: 150px;
+}  */
 
-.cat-lists {
+/* .cat-lists {
   font-weight: bold;
   
   width: 100%;
-}
+} */
 
+.category-items {
+  display: grid;
+  grid-template-columns: 200px 1fr; 
+  align-items: center; 
+  gap: 1rem;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-transform: capitalize;
+}
 
 .section-panel div:nth-child(2) {
   flex-grow: 1;
   font-weight: 400; 
-  width: 100%
+  width: 100%;
+  /* background: whitesmoke; */
 }
 
 .section-panel .actions {
@@ -239,6 +270,31 @@ This files [Table of contents] are outlined below
   gap: 0.5rem;
   width: 100%;
 }
+
+.section-panel-skills:hover {
+  background: #d6d6d6;
+}
+
+/* .section-panel {
+  display: grid;
+  grid-template-columns: 150px 1fr ; 
+  align-items: start;
+  width: 100%;
+  cursor: pointer;
+  padding: 10px;
+  transition: background 0.3s ease;
+  gap: 2rem;
+  text-transform: capitalize;  
+}
+
+.section-panel div:nth-child(2) {
+  flex-grow: 1;
+  font-weight: 400; 
+  width: 100%;
+  background: whitesmoke;
+} */
+
+
 
 .actions-btn {
   width: 30%;
@@ -15283,6 +15339,26 @@ strong {
   }
 }
 
+
+@keyframes hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(-360deg);
+  }
+}
+
+@-webkit-keyframes hue {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(-360deg);
+  }
+}
+
+/* 
 @-webkit-keyframes hue {
   from {
     -webkit-filter: hue-rotate(0deg);
@@ -15298,7 +15374,12 @@ strong {
   to {
     -webkit-filter: hue-rotate(-360deg);
   }
-}
+} */
+
+
+
+
+
 /*Candidate pages start------------------------------------------------------------*/
 .side-bar-st-1 {
   background: #d4e6ff;

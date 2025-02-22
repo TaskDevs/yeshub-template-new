@@ -9,13 +9,13 @@ import {
 
 const instance = axios.create({
   baseURL,
-  timeOut,
-  withCredentials: true,
-  crossDomain: true,
-  headers: {
-    "x-Requested-with": "XMLHttpRequest",
-    Accept: "application/json",
-  },
+	timeOut,
+	withCredentials: true,
+	crossDomain: true,
+	headers: {
+		"x-Requested-with": "XMLHttpRequest",
+		Accept: "application/json",
+	},
 });
 
 // Axios response interceptor

@@ -1,7 +1,7 @@
 import RootLayout from "./layouts/root-layout";
 import Loader from "./app/common/loader";
 import ScrollToTop from "./globals/scroll-to-top";
-import { useState } from "react";
+import React, { useState } from "react";
 import AuthApiDataProvider from "./app/context/auth/authContextApi";
 import GlobalApiDataProvider from "./app/context/global/globalContextApi";
 import ApplicationApiDataProvider from "./app/context/application/applicationContextApi";
@@ -29,42 +29,43 @@ function App() {
 
 
   return (
-    
-    <GlobalApiDataProvider>
-      <AuthApiDataProvider>
-        <ApplicationApiDataProvider>
-          <CategoryApiDataProvider>
-            <EducationApiDataProvider>
-              <HistoryApiDataProvider>
-                <EmployerApiDataProvider>
-                  <FreelanceApiDataProvider>
-                    <JobApiDataProvider>
-                      <PaymentApiDataProvider>
-                        <PortfolioApiDataProvider>
-                          <SkillsApiDataProvider>
-                            <TestimonialApiDataProvider>
-                              <ProfileApiDataProvider>
-                                <WalletApiDataProvider>
-                                  {isLoading && <Loader />}
-                                  <Toaster/>
-                                  <ScrollToTop />
-                                  <RootLayout />
-                                </WalletApiDataProvider>
-                              </ProfileApiDataProvider>
-                            </TestimonialApiDataProvider>
-                          </SkillsApiDataProvider>
-                        </PortfolioApiDataProvider>
-                      </PaymentApiDataProvider>
-                    </JobApiDataProvider>
-                  </FreelanceApiDataProvider>
-                </EmployerApiDataProvider>
-              </HistoryApiDataProvider>
-            </EducationApiDataProvider>
-          </CategoryApiDataProvider>
-        </ApplicationApiDataProvider>
-      </AuthApiDataProvider>
-    </GlobalApiDataProvider>
-  );
+		<GlobalApiDataProvider>
+			<AuthApiDataProvider>
+				<ApplicationApiDataProvider>
+					<CategoryApiDataProvider>
+						<EducationApiDataProvider>
+							<HistoryApiDataProvider>
+								<EmployerApiDataProvider>
+									<FreelanceApiDataProvider>
+										<JobApiDataProvider>
+											<MilestoneApiDataProvider>
+												<PaymentApiDataProvider>
+													<PortfolioApiDataProvider>
+														<SkillsApiDataProvider>
+															<TestimonialApiDataProvider>
+																<ProfileApiDataProvider>
+																	<WalletApiDataProvider>
+																		{isLoading && <Loader />}
+																		<Toaster />
+																		<ScrollToTop />
+																		<RootLayout />
+																	</WalletApiDataProvider>
+																</ProfileApiDataProvider>
+															</TestimonialApiDataProvider>
+														</SkillsApiDataProvider>
+													</PortfolioApiDataProvider>
+												</PaymentApiDataProvider>
+											</MilestoneApiDataProvider>
+										</JobApiDataProvider>
+									</FreelanceApiDataProvider>
+								</EmployerApiDataProvider>
+							</HistoryApiDataProvider>
+						</EducationApiDataProvider>
+					</CategoryApiDataProvider>
+				</ApplicationApiDataProvider>
+			</AuthApiDataProvider>
+		</GlobalApiDataProvider>
+	);
 }
 
 export default App;

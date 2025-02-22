@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 function SignInPopup() {
   const {
     isLoading,
-    setIsLoading,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
@@ -55,13 +54,15 @@ function SignInPopup() {
    
     try {
       const response = await login(formData);
+      console.log("login-response", response);
   
       if (response && response.token && response.refresh_token) {
-        const { token, refresh_token, role } = response;
+        const { token, refresh_token, role, user_id } = response;
   
         // Store tokens
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
+        sessionStorage.setItem("userId", user_id);
         cookieMethods.setCookies(token, refresh_token);
   
         if (formData.rememberMe) {

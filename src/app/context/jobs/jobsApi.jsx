@@ -89,6 +89,7 @@ export const employerJobList = async (id) => {
     let responseOnEmployerJobList = await axios.get(
       `${REACT_BASE_URL}employers-posted-jobs/${id}`
     );
+
     if (responseOnEmployerJobList.status == 200) {
       return responseOnEmployerJobList.data.data;
     } else {
@@ -104,8 +105,10 @@ export const employerJobList = async (id) => {
 export const countEmployerJobsPosted = async (id) => {
   try {
     let responseOnCountEmployerJobsPosted = await axios.get(
+
       `${REACT_BASE_URL}count-posted-jobs/${id}`
     );
+
     if (responseOnCountEmployerJobsPosted.status == 200) {
       return responseOnCountEmployerJobsPosted.data.data;
     } else {
@@ -134,6 +137,8 @@ export const jobProfile = async (id) => {
     return false;
   }
 };
+
+
 
 // UPDATE Job
 export const updateJob = async (data) => {

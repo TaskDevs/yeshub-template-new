@@ -11,14 +11,13 @@ function  AddCategories() {
 	const { processGetAllCategory, handleAddCategory } =
 		useContext(CategoryApiData);
 
-	const { handleClicked } = useContext(GlobalApiData);
 
 	const [allCategories, setAllCategories] = useState([]);
 	const [category, setCategory] = useState({});
 	const { setSelectedId } = useContext(GlobalApiData);
 	const { processCategoryProfile, handleUpdateCategory, setFormData } =
 		useContext(CategoryApiData);
-	const [showCategoryDetailsId, setShowCategoryDetailsId] = useState("1");
+	const [showCategoryDetailsId, setShowCategoryDetailsId] = useState(null);
 
 	useEffect(() => {
 		const fetchCategory = async () => {
@@ -32,19 +31,19 @@ function  AddCategories() {
 				const data = res.data.data;
 				setCategory(data);
 			} catch (error) {
-				console.error("could not fetch category", error);
+				throw new Error("could not fetch category", error);
 			}
 		};
 		fetchCategory();
 	}, [showCategoryDetailsId, processCategoryProfile]);
 
-	console.log("allcategories", allCategories);
+
 
 	useEffect(() => {
 		const fetchAllCategories = async () => {
 			try {
 				const res = await processGetAllCategory();
-				console.log("all-categories", res);
+				
 				const data = res.data.data;
 				setAllCategories(data);
 			} catch (err) {
@@ -53,6 +52,13 @@ function  AddCategories() {
 		};
 		fetchAllCategories();
 	}, [processGetAllCategory]);
+
+
+	useEffect(() => {
+		if (allCategories.length > 0) {
+			setShowCategoryDetailsId(allCategories[0].id); 
+		}
+	}, [allCategories]);
 
 	const handleSelected = (id) => {
 		setShowCategoryDetailsId(id);
@@ -92,11 +98,15 @@ function  AddCategories() {
 									{allCategories?.map((category) => (
 										<li
 											key={category.id}
-											className="category-items"
+											
+											className={`category-items ${
+												showCategoryDetailsId === category.id
+													? "selected-category"
+													: ""
+											}`}
 											onClick={() => handleSelected(category.id)}
 										>
 											<div className="">
-												{console.log("category-name", category.category_name)}
 												<p>{category.category_name}</p>
 											</div>
 										</li>

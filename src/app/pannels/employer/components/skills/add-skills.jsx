@@ -10,24 +10,19 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 function AddSkills() {
-				
-    const {
-			skills,
-			setSkills,
-			
-			setSkill,
-			setFormData,
-			
-			processGetAllSkills,
-			handleUpdateSkills,
-			processSkillsProfile,
-			handleAddSkills,
-		} = useContext(SkillsApiData);
+	const {
+		skills,
+		setSkills,
+		setSkill,
+		setFormData,
+		setSkillOptions,
+		processGetAllSkills,
+		handleUpdateSkills,
+		processSkillsProfile,
+		handleAddSkills,
+	} = useContext(SkillsApiData);
 
-	const { selectedId, setSelectedId } =
-		useContext(GlobalApiData);
-
-	
+	const { selectedId, setSelectedId } = useContext(GlobalApiData);
 
 	useEffect(() => {
 		if (!selectedId) {
@@ -38,7 +33,7 @@ function AddSkills() {
 				const res = await processSkillsProfile(selectedId);
 
 				const data = res.data.data;
-				// console.log("skill", data.skill);
+
 				setSkill(data);
 			} catch (err) {
 				console.error("failed to get skill", err);
@@ -47,58 +42,49 @@ function AddSkills() {
 		fetchSkill();
 	}, [processSkillsProfile]);
 
-
-
-
 	useEffect(() => {
 		const getAllSkills = async () => {
 			try {
 				const res = await processGetAllSkills();
-				const data = res.data.data;
 
-				if (Array.isArray(data)) {
-					setSkills(data);
-					localStorage.setItem("skills", JSON.stringify(data)); // Store in local storage
+				let newData = [];
+
+				res.map((item) => {
+					let newObj = {
+						id: item.id,
+						name: item.skill,
+					};
+					newData.push(newObj);
+				});
+
+				setSkillOptions(newData);
+
+				// Safely set skills
+				if (Array.isArray(res)) {
+					setSkills(res);
 				} else {
 					setSkills([]);
-					localStorage.removeItem("skills"); 
 					notify("No skills found", "warning");
 				}
 			} catch (error) {
 				console.error("get-all-skills-failed", error);
 				setSkills([]);
-				localStorage.removeItem("skills");
 			}
 		};
 
 		getAllSkills();
-	}, [processGetAllSkills, setSkills]);
-
-
-
-
-
-
-
-
+	}, [processGetAllSkills]);
 
 	const handleEditClick = (id) => {
 		setSelectedId(id);
-		console.log("id-edit-skill", id)
-		 const selectedSkill = skills.find((s) => s.id === id);
-			if (!selectedSkill) return;
 
-			setFormData({
-				skill: selectedSkill.skill,
-			});
+		const selectedSkill = skills.find((s) => s.id === id);
+		if (!selectedSkill) return;
 
-			
+		setFormData({
+			skill: selectedSkill.skill,
+		});
 	};
-	
-	
-
-   
-    
 
 	return (
 		<>
@@ -118,18 +104,15 @@ function AddSkills() {
 				<div className="twm-panel-inner">
 					<div className="">
 						{skills.length === 0 ? (
-							<p>No skills created</p>
+							<p>No skills found</p>
 						) : (
 							<ul className="">
 								<div className="list-skills p-a20">
 									{skills?.map((s) => (
-										<li
-											key={s.id}
-											
-										>
+										<li key={s.id}>
 											<div className="section-panel-skills">
 												<p>{s.skill}</p>
-												
+
 												<div
 													className="skills"
 													onClick={() => setSelectedId(s.id)}
@@ -150,8 +133,7 @@ function AddSkills() {
 															data-bs-target="#edit-skill"
 															data-bs-toggle="modal"
 															data-bs-dismiss="modal"
-															onClick={() => 
-																handleEditClick(s.id)}
+															onClick={() => handleEditClick(s.id)}
 														>
 															<MdOutlineEdit color="white" />
 														</button>

@@ -74,10 +74,10 @@ function YesNoPopup(props) {
 		const handleDeleteProfile = async () => {
 			setIsSubmitting(true);
 			try {
-				console.log("deleting-id", profileData.user_id);
+				
 				const response = await processDeleteProfile(profileData.user_id);
-				console.log("category deleted successfully", response);
-				toast.success("Category deleted successfully");
+		
+				toast.success("User profile deleted successfully");
 			} catch (e) {
 				console.error("failed to delete category", e);
 				toast.error("Failed to delete category", e);

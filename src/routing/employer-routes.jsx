@@ -11,9 +11,7 @@ import EmpMessages1Page from "../app/pannels/employer/components/messages/emp-me
 import EmpMessages2Page from "../app/pannels/employer/components/messages/emp-messages2";
 import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-alerts";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import ProtectedRoute from "../app/context/ProtectedRoute";
+
 import { EmpReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 import SkillsPage from "../app/pannels/employer/components/skills/skills-page";

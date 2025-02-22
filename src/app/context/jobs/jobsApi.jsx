@@ -4,8 +4,6 @@ import axios from "axios";
 import {
 	REACT_BASE_URL,
 	SUCCESS_STATUS,
-	LOCAL_BACKEND_URL,
-	LIST_ON_PAGES,
 } from "../../../globals/constants";
 
 // ADD Job
@@ -45,9 +43,7 @@ export const searchJob = async (data) => {
 // LIST Job
 export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get(
-			`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/api/v1/posted-jobs`
-		);
+    let responseOnJobList = await axios.get(`${REACT_BASE_URL}get-posted-jobs`);
     if (responseOnJobList.status === 200) {
       return responseOnJobList.data.data;
     } else {
@@ -67,13 +63,13 @@ export const searchJobs = async (title, category, location) => {
     }`.trim();
 
     let response = await axios.get(
-      `${LOCAL_BACKEND_URL}jobs-search`, // Adjust the endpoint as needed
-      {
-        params: {
-          keywords, // Send the combined keywords as a single parameter
-        },
-      }
-    );
+			`${REACT_BASE_URL}jobs-search`, // Adjust the endpoint as needed
+			{
+				params: {
+					keywords, // Send the combined keywords as a single parameter
+				},
+			}
+		);
 
     if (response.status === 200) {
       return response.data.data;

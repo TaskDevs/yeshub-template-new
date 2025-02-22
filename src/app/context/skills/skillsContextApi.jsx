@@ -1,279 +1,16 @@
-// import React, { createContext, useState,  useContext } from "react";
-
-// import {
-//   addSkills,
-//   skillsList,
-//   skillsProfile,
-//   updateSkills,
-//   deleteSkills,
-// } from "./skillsApi";
-// import { SKILLSFIELD } from "../../../globals/skills-data";
-// import { GlobalApiData } from "../global/globalContextApi";
-// import { toast } from "react-toastify";
-
-
-// export const SkillsApiData = createContext();
-
-// export const SkillsApiDataProvider = (props) => {
-
-// 	const initialData = SKILLSFIELD.fieldDetail.reduce((acc, field) => {
-// 		acc[field.name] = "";
-// 		return acc;
-// 	}, {});
-// 	// const [formData, setFormData] = useState(initialData);
-	
-
-	
-//   const [skillOptions, setSkillOptions] = useState(null);
-//   const [formData, setFormData] = useState(
-//     SKILLSFIELD.fieldDetail.reduce((acc, field) => {
-//       acc[field.name] = "";
-//       return acc;
-//     }, {})
-//   );
-
-//   const { title, ...filteredData } = {
-//     ...formData,
-//     skill: formData.title,
-//   };
-//   console.log("filteredData-skills", filteredData);
-
-//   const { selectedId } = useContext(GlobalApiData);
-
-//   const [skills, setSkills] = useState([]);
-
-// 	const [skill, setSkill] = useState({});
-
-	
-// 	const handleChange = (field, data) => {
-// 		setFormData((prev) => ({ ...prev, [field]: data }));
-// 	};
-
-
-// 	// const processAddSkills = async (data) => {
-// 	// 	try {
-// 	// 		const res = await addSkills(data);
-// 	// 		console.log("processAddSkills", res);
-
-// 	// 		if (res && res.data) {
-// 	// 			setSkills((prevSkills) => [...prevSkills, res.data]);
-// 	// 			return res;
-				
-// 	// 		} 
-// 	// 	} catch (error) {
-// 	// 		console.error("Add Skills Error:", error);
-			
-// 	// 	}
-// 	// };
-
-	
-
-
-	
-	
-// 	const processGetAllSkills = async () => {
-// 		try {
-// 			const res = await skillsList();
-
-// 			return res;
-// 		} catch (error) {
-// 			console.error("get-all-skills-failed", error);
-// 		}
-// 	};
-//   const processAddSkills = async (data) => {
-//     try {
-//       const res = await addSkills(data);
-//       console.log("processAddSkills", res);
-
-//       // Safely add new skill
-//       if (res && res.data) {
-//         setSkills((prevSkills) => [...prevSkills, res.data]);
-//         notify("Skill added successfully", "success");
-//       } else {
-//         notify("Failed to add skill", "error");
-//       }
-//     } catch (error) {
-//       console.error("Add Skills Error:", error);
-//       notify("Error adding skill", "error");
-//     }
-//   };
-
-//   useEffect(() => {
-//     const processGetAllSkills = async () => {
-//       try {
-//         const res = await skillsList();
-//         console.log("get all skills:", res);
-
-//         const skills = res.data;
-//         console.log("skills data:", skills);
-
-//         let newData = [];
-
-//         skills.map((item) => {
-//           let newObj = {
-//             id: item.id,
-//             name: item.skill,
-//           };
-//           newData.push(newObj);
-//         });
-//         setSkillOptions(newData);
-
-//         // Safely set skills
-//         if (Array.isArray(skills)) {
-//           setSkills(skills);
-//         } else {
-//           setSkills([]);
-//           notify("No skills found", "warning");
-//         }
-//       } catch (error) {
-//         console.error("get-all-skills-failed", error);
-//         setSkills([]);
-//         notify("Failed to fetch skills", "error");
-//       }
-//     };
-//     processGetAllSkills();
-//   }, []);
-
-//   const processSkillsProfile = async (id) => {
-//     try {
-//       const res = await skillsProfile(id);
-
-// 			// console.log("get-skill", res);
-// 			return res;
-// 		} catch (err) {
-// 			console.error("failed to get skill", err);
-// 		}
-// 	};
-
-//   const processSearchSkills = async (data) => {};
-
-//   const processUpdateSkills = async (id, data) => {
-//     try {
-//       const res = await updateSkills(id, data);
-
-//       console.log("update-skill", res);
-//       return res;
-//     } catch (e) {
-//       console.error("Error updating skill", e);
-//     }
-//   };
-
-//   const processDeleteSkills = async (id) => {
-//     try {
-//       const res = await deleteSkills(id);
-
-//       console.log("delete-skill", res);
-//       return res;
-//     } catch (e) {
-//       console.error("Failed to delete skill", e);
-//     }
-//   };
-  
-// 	const handleAddSkills = async (e) => {
-// 	   console.log("submitting skills", formData);
-// 		e.preventDefault();
-// 		try {
-// 			const res = await processAddSkills(formData);
-// 			console.log("add-skills", res);
-// 			toast.success("Skills added successfully")
-// 			return res;
-// 		} catch (e) {
-// 			console.error("failed to add skills", e);
-// 			toast.error("Failed to add skills");
-// 		} finally {			
-// 			setFormData(initialData);
-// 		}
-
-//   const handleAddSkills = async (e) => {
-//     console.log("submitting skills", filteredData);
-//     e.preventDefault();
-//     try {
-//       const res = await processAddSkills(filteredData);
-//       console.log("add-skills", res);
-//     } catch (e) {
-//       console.error("failed to add skills", e);
-//     } finally {
-//       setFormData({
-//         skill: "",
-//       });
-//     }
-//   };
-  
-	
-// 		// const handleUpdateSkills = async (e) => {
-// 		// 	e.preventDefault();
-// 		// 	try {
-// 		// 		const res = await processUpdateSkills(selectedId, formData);
-// 		// 		toast.success("Skills updated successfully");
-// 		// 		return res;
-// 		// 	} catch (e) {
-// 		// 		console.error("error updating skill", e);
-// 		// 		toast.error("Failed to updat skill");
-// 		// 	} finally {
-// 		// 		setFormData(initialData);
-// 		// 	}
-// 		// };
-
-//   const handleUpdateSkills = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await processUpdateSkills("1", filteredData);
-//       console.log("add-skills", res);
-//     } catch (e) {
-//       console.error("failed to add skills", e);
-//     } finally {
-//       // setFormData(filteredData);
-//       setFormData({
-//         skill: "",
-//         description: "",
-//       });
-//     }
-//   };
-
-
-
-// 	return (
-// 		<SkillsApiData.Provider
-// 			value={{
-// 				skill,
-// 				skills,
-// 				formData,
-// 				setSkill,
-// 				setSkills,
-// 				processAddSkills,
-// 				processGetAllSkills,
-// 				processSkillsProfile,
-// 				processSearchSkills,
-// 				processUpdateSkills,
-// 				processDeleteSkills,
-// 				setFormData,
-// 				handleChange,
-// 				handleAddSkills,
-// 				handleUpdateSkills,
-// 			}}
-// 		>
-// 			{props.children}
-// 		</SkillsApiData.Provider>
-// 	);
-// };
-
-// // export default SkillsApiDataProvider;
-
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import React, { createContext, useState, useContext } from "react";
 import { notify } from "../../../utils/responseUtils";
 
 import {
-  addSkills,
-  searchSkills,
-  skillsList,
-  skillsProfile,
-  updateSkills,
-  deleteSkills,
+	addSkills,
+	skillsList,
+	skillsProfile,
+	updateSkills,
+	deleteSkills,
 } from "./skillsApi";
 import { SKILLSFIELD } from "../../../globals/skills-data";
 import { GlobalApiData } from "../global/globalContextApi";
-import { userId } from "../../../globals/dummy-users";
+import toast from "react-hot-toast";
 
 export const SkillsApiData = createContext();
 
@@ -282,191 +19,117 @@ const initialData = SKILLSFIELD.fieldDetail.reduce((acc, field) => {
 	return acc;
 }, {});
 const SkillsApiDataProvider = (props) => {
-  const [skillOptions, setSkillOptions] = useState(null);
-  const [formData, setFormData] = useState(initialData);
+	const [skillOptions, setSkillOptions] = useState(null);
+	const [formData, setFormData] = useState(initialData);
 
+	const { selectedId } = useContext(GlobalApiData);
 
-  console.log("formData-skills", formData);
+	const [skills, setSkills] = useState([]);
 
-  const { selectedId } = useContext(GlobalApiData);
+	const [skill, setSkill] = useState({});
 
-  const [skills, setSkills] = useState([]);
+	const handleChange = (field, data) => {
+		setFormData((prev) => ({ ...prev, [field]: data }));
+	};
 
-  const [skill, setSkill] = useState({});
+	const processAddSkills = async (data) => {
+		try {
+			const res = await addSkills(data);
+			console.log("processAddSkills", res);
 
-  useEffect(() => {
-    if (!selectedId) {
-      return;
-    }
-    const fetchSkill = async () => {
-      try {
-        const res = await skillsProfile(selectedId);
+			// Safely add new skill
+			if (res && res.data) {
+				setSkills((prevSkills) => [...prevSkills, res.data]);
+				notify("Skill added successfully", "success");
+			} else {
+				notify("Failed to add skill", "error");
+			}
+		} catch (error) {
+			console.error("Add Skills Error:", error);
+			notify("Error adding skill", "error");
+		}
+	};
 
-        console.log("get-skill", res);
-        const data = res.data.data;
-        console.log("skill", data.skill);
-        setSkill(data);
+	const processGetAllSkills = async () => {
+		try {
+			const res = await skillsList();
 
-        setFormData({
-          skill: data.skill || "",
-        });
-      } catch (err) {
-        console.error("failed to get skill", err);
-      }
-    };
-    fetchSkill();
-  }, [selectedId]);
+			const skills = res.data;
 
-  useEffect(() => {
-    const fetchAllSkills = async () => {
-      try {
-        const res = await skillsList();
+			return skills;
+		} catch (error) {
+			setSkills([]);
+		}
+	};
 
-        console.log("get-all-skills", res);
-        const data = res?.data;
+	const processSkillsProfile = async (id) => {
+		try {
+			const res = await skillsProfile(id);
 
-        setSkills(data);
-      } catch (error) {
-        console.error("get-all-skills-failed", error);
-      }
-    };
-    fetchAllSkills();
-  }, []);
+			return res;
+		} catch (err) {
+			throw new Error("failed to get skill", err);
+		}
+	};
 
-  const handleChange = (field, data) => {
-    setFormData((prev) => ({ ...prev, [field]: data }));
-  };
+	const processSearchSkills = async (data) => {};
 
-  const processAddSkills = async (data) => {
-    try {
-      const res = await addSkills(data);
-      console.log("processAddSkills", res);
+	const processUpdateSkills = async (id, data) => {
+		const res = await updateSkills(id, data);
 
-      // Safely add new skill
-      if (res && res.data) {
-        setSkills((prevSkills) => [...prevSkills, res.data]);
-        notify("Skill added successfully", "success");
-      } else {
-        notify("Failed to add skill", "error");
-      }
-    } catch (error) {
-      console.error("Add Skills Error:", error);
-      notify("Error adding skill", "error");
-    }
-  };
+		return res;
+	};
 
-  useEffect(() => {
-    const processGetAllSkills = async () => {
-      try {
-        const res = await skillsList();
-        console.log("get all skills:", res);
+	const processDeleteSkills = async (id) => {
+		const res = await deleteSkills(id);
+		return res;
+	};
 
-        const skills = res.data;
-        console.log("skills data:", skills);
+	const handleAddSkills = async (e) => {
+		e.preventDefault();
+		try {
+			await processAddSkills(formData);
+			toast.success("Skills added successfully");
+		} catch (e) {
+			toast.error("Failed to add Skills ");
+		} finally {
+			setFormData({
+				skill: "",
+			});
+		}
+	};
 
-        let newData = [];
+	const handleUpdateSkills = async (e) => {
+		e.preventDefault();
+		try {
+			const res = await processUpdateSkills(selectedId, formData);
 
-        skills.map((item) => {
-          let newObj = {
-            id: item.id,
-            name: item.skill,
-          };
-          newData.push(newObj);
-        });
-        setSkillOptions(newData);
+			toast.success("Skills updated successfully");
+			return res;
+		} catch (e) {
+			toast.error("Failed to update Skills");
+			throw new Error("failed to update skills", e);
+		} finally {
+			setFormData({
+				skill: "",
+			});
+		}
+	};
 
-        // Safely set skills
-        if (Array.isArray(skills)) {
-          setSkills(skills);
-        } else {
-          setSkills([]);
-          notify("No skills found", "warning");
-        }
-      } catch (error) {
-        console.error("get-all-skills-failed", error);
-        setSkills([]);
-        notify("Failed to fetch skills", "error");
-      }
-    };
-    processGetAllSkills();
-  }, []);
-
-  const processSkillsProfile = async (id) => {
-    try {
-      const res = await skillsProfile(id);
-
-      console.log("get-skill", res);
-      return res;
-    } catch (err) {
-      console.error("failed to get skill", err);
-    }
-  };
-
-  const processSearchSkills = async (data) => {};
-
-  const processUpdateSkills = async (id, data) => {
-    try {
-      const res = await updateSkills(id, data);
-
-      console.log("update-skill", res);
-      return res;
-    } catch (e) {
-      console.error("Error updating skill", e);
-    }
-  };
-
-  const processDeleteSkills = async (id) => {
-    try {
-      const res = await deleteSkills(id);
-
-      console.log("delete-skill", res);
-      return res;
-    } catch (e) {
-      console.error("Failed to delete skill", e);
-    }
-  };
-
-  const handleAddSkills = async (e) => {
-    console.log("submitting skills", formData);
-    e.preventDefault();
-    try {
-      const res = await processAddSkills(formData);
-      console.log("add-skills", res);
-    } catch (e) {
-      console.error("failed to add skills", e);
-    } finally {
-      setFormData({
-        skill: "",
-      });
-    }
-  };
-
-  const handleUpdateSkills = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await processUpdateSkills(userId, formData);
-      console.log("add-skills", res);
-    } catch (e) {
-      console.error("failed to add skills", e);
-    } finally {
-      setFormData({
-        skill: "",
-        description: "",
-      });
-    }
-  };
-
-  return (
+	return (
 		<SkillsApiData.Provider
 			value={{
 				skill,
 				skills,
+				setSkill,
+				setSkills,
 				skillOptions,
 				formData,
-				setSkills,
+				setSkillOptions,
 				processAddSkills,
 				processSkillsProfile,
 				processSearchSkills,
+				processGetAllSkills,
 				processUpdateSkills,
 				processDeleteSkills,
 				setFormData,

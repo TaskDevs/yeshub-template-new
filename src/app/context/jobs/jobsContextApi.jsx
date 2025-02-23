@@ -1,5 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import React, { createContext, useState } from "react";
 import { notify } from "../../../utils/responseUtils";
 
 import {
@@ -7,10 +6,7 @@ import {
   searchJob,
   jobList,
   countEmployerJobsPosted,
-  jobProfile,
-  updateJob,
   employerJobList,
-  deleteJob,
 } from "./jobsApi";
 
 export const JobApiData = createContext();
@@ -25,7 +21,6 @@ const JobApiDataProvider = (props) => {
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [searchJobListData, setSearchJobListData] = useState([]);
 
-  console.log("jobListData", jobListData);
 
   const processAddJob = async (data) => {
     let response = await addJob(data);
@@ -43,7 +38,6 @@ const JobApiDataProvider = (props) => {
     if (response) {
       
       setJobListData(response);
-      console.log("get-all-jobs",response);
       setJobListData(response.data);
       setPaginationData({
         total: response.total,

@@ -1,6 +1,6 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
-import { empRoute, employer, publicUser } from "../../../globals/route-names";
+import { publicUser } from "../../../globals/route-names";
 import { useState } from "react";
 
 function Header2({ _config }) {
@@ -148,7 +148,7 @@ function Header2({ _config }) {
                                     <li><NavLink to={publicUser.pages.ABOUT}>About Us</NavLink></li>
                                     <li><NavLink to={publicUser.pages.PRICING}>Pricing</NavLink></li>
                                     <li><NavLink to={publicUser.pages.ERROR404}>Error-404</NavLink></li>
-                                    <li><NavLink to={publicUser.pages.FAQ}>FAQ's</NavLink></li>
+                                    <li><NavLink to={publicUser.pages.FAQ}>FAQ&apos;s</NavLink></li>
                                     <li><NavLink to={publicUser.pages.CONTACT}>Contact Us</NavLink></li>
                                     <li><NavLink to={publicUser.pages.MAINTENANCE}>Under Maintenance</NavLink></li>
                                     <li><NavLink to={publicUser.pages.COMING}>Coming soon</NavLink></li>

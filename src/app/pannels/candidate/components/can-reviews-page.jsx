@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
 import { loadScript } from "../../../../globals/constants";
 import SectionReviews from "../../public-user/sections/common/section-reviews";
 

@@ -31,7 +31,7 @@ function SignInPopup() {
   });
 
   const [isVisible, setIsVisible] = useState(false);
-  const [serverResponse, setServerResponse] = useState(null); // State for messages
+  const [serverResponse, setServerResponse] = useState(null); 
 
   useEffect(() => {
     if (!formData.role) {
@@ -54,7 +54,7 @@ function SignInPopup() {
         [name]: value,
       }));
     };
-    const googleSignin = async ()=>{
+    const googleSignin = async ()=> {
       const res = await loginWithGoogle(formData.role)
       console.log(res)
     }

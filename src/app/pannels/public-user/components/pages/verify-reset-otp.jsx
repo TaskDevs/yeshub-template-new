@@ -202,7 +202,7 @@ function VerifyResetOtp() {
                         className="btn btn-link"
                         onClick={ResendOtps}
                       >
-                        Didn't receive OTP? Resend
+                        Didn&apos;t receive OTP? Resend
                       </button>
                     </div>
 

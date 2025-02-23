@@ -1,4 +1,5 @@
 import React from 'react'
+import JobZImage from '../../../../common/jobz-img';
 
 function EmpGetApplicants({ data }) {
   return (

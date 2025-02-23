@@ -1,36 +1,35 @@
-import axios from "axios";
-import { useState } from "react";
-import { toast } from "react-toastify";
+
+
 
 function SectionCanAccomplishments() {
 
-    const [error, setError] = useState(null);
-		const [success, setSuccess] = useState("");
+    // const [error, setError] = useState(null);
+		// const [success, setSuccess] = useState("");
 
-		const [showTopMessage, setShowTopMessage] = useState(false);
-		const [isLoading, setLoading] = useState(false);
-		// const { user } = useUser();
+		// const [showTopMessage, setShowTopMessage] = useState(false);
+		// const [isLoading, setLoading] = useState(false);
+		
 
-		const [formData, setFormData] = useState({});
+		// const [formData, setFormData] = useState({});
 
-		const handleChange = (field, data) => {
-			setFormData({
-				...formData,
-				[field]: data,
-			});
-		};
+		// const handleChange = (field, data) => {
+		// 	setFormData({
+		// 		...formData,
+		// 		[field]: data,
+		// 	});
+		// };
 
-		const handleAddEducation = async (e) => {
-			e.preventDefault();
-			setError("");
-			setSuccess("");
+		// const handleAddEducation = async (e) => {
+		// 	e.preventDefault();
+		// 	setError("");
+		// 	setSuccess("");
 
-			setTimeout(() => {
-				setLoading(true);
-			}, 200);
+		// 	setTimeout(() => {
+		// 		setLoading(true);
+		// 	}, 200);
 
 			
-		};
+		// };
 
 
 

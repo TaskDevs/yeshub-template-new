@@ -72,7 +72,7 @@ const SkillsApiDataProvider = (props) => {
 		}
 	};
 
-	const processSearchSkills = async (data) => {};
+	
 
 	const processUpdateSkills = async (id, data) => {
 		const res = await updateSkills(id, data);
@@ -128,7 +128,6 @@ const SkillsApiDataProvider = (props) => {
 				setSkillOptions,
 				processAddSkills,
 				processSkillsProfile,
-				processSearchSkills,
 				processGetAllSkills,
 				processUpdateSkills,
 				processDeleteSkills,

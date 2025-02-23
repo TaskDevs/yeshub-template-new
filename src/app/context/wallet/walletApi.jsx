@@ -1,6 +1,6 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import { SUCCESS_STATUS } from "../../../globals/constants";
 
 // ADD Wallet
 export const addWallet = async (data) => {
@@ -23,7 +23,7 @@ export const addWallet = async (data) => {
 };
 
 // SEARCH Wallet
-export const searchWallet = async (data) => {
+export const searchWallet = async () => {
   try {
     let responseOnSearchWallet = await axios.get({
       /**Add Search Wallet API URL here like /searchWallet?keyword=${data}**/
@@ -39,7 +39,7 @@ export const searchWallet = async (data) => {
 };
 
 // LIST Wallet
-export const walletList = async (pageNo) => {
+export const walletList = async () => {
   try {
     let responseOnWalletList = await axios.get({
       /**Add Get Wallet API URL here like /api/getWallet?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
@@ -57,7 +57,7 @@ export const walletList = async (pageNo) => {
 };
 
 // VIEW Wallet
-export const WalletProfile = async (id) => {
+export const WalletProfile = async () => {
   try {
     let responseOnWalletProfile = await axios.get({
       /**Add View Wallet API URL here like ${URL}api/getWalletProfile/${id}**/
@@ -75,7 +75,7 @@ export const WalletProfile = async (id) => {
 };
 
 // UPDATE Wallet
-export const updateWallet = async (data) => {
+export const updateWallet = async () => {
   try {
     let responseOnUpdateWallet = await axios.put({
       /**Add Update Wallet API URL here like  `${URL}api/updateWallet/${data.id}` **/
@@ -91,7 +91,7 @@ export const updateWallet = async (data) => {
 };
 
 // DELETE Wallet
-export const deleteWallet = async (data) => {
+export const deleteWallet = async () => {
   try {
     let responseOnDeleteWallet = await axios.delete({
       /**Add Delete Wallet API URL here like  `/api/deleteWallet/${data}` **/

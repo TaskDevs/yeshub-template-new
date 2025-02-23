@@ -1,12 +1,9 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import React, { createContext, useState } from "react";
 import { notify } from "../../../utils/responseUtils";
 
 import {
   addTestimonial,
-  searchTestimonial,
   testimonialList,
-  testimonialProfile,
   updateTestimonial,
   deleteTestimonial,
 } from "./testimonialApi";
@@ -55,9 +52,7 @@ const TestimonialApiDataProvider = (props) => {
 		}
   };
 
-  const processTestimonialProfile = async (id) => {};
 
-  const processSearchTestimonial = async (data) => {};
 
   const processUpdateTestimonial = async (id, data) => {
     try {
@@ -82,8 +77,6 @@ const TestimonialApiDataProvider = (props) => {
 			value={{
 				processAddTestimonial,
 				processGetAllTestimonial,
-				processTestimonialProfile,
-				processSearchTestimonial,
 				processUpdateTestimonial,
 				processDeleteTestimonial,
         formData,

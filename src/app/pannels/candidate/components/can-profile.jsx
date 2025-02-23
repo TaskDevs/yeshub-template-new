@@ -31,8 +31,7 @@ function CanProfilePage() {
 				setProfileData(data);
 			} catch (error) {
 				console.error("Failed Fetching profile", error);
-			} finally {
-			}
+			} 
 		};
 		fetchProfile();
 	}, [processProfileProfile, setProfileData]);

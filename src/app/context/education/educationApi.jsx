@@ -1,7 +1,7 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import { SUCCESS_STATUS, LIST_ON_PAGES, REACT_BASE_URL } from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Education
 export const addEducation = async (data) => {
@@ -24,7 +24,7 @@ export const addEducation = async (data) => {
 };
 
 // SEARCH Education
-export const searchEducation = async (data) => {
+export const searchEducation = async () => {
   try {
     let responseOnSearchEducation = await axios.get({
       /**Add Search Category API URL here like /searchEducation?keyword=${data}**/
@@ -40,7 +40,7 @@ export const searchEducation = async (data) => {
 };
 
 // LIST Education
-export const educationList = async (pageNo) => {
+export const educationList = async () => {
   try {
     let responseOnEducationList = await axios.get({
       /**Add Get Category API URL here like /api/getEducation?page=${pageNo}&perPage=${LIST_ON_PAGES}**/

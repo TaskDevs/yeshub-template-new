@@ -1,5 +1,5 @@
 import AddCategories from "./add-category";
-import CategoryDetails from "./category-details";
+
 
 
 function CategoryPage() {

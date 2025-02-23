@@ -1,6 +1,6 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import { SUCCESS_STATUS } from "../../../globals/constants";
 
 // ADD Freelance
 export const addFreelance = async (data) => {
@@ -23,7 +23,7 @@ export const addFreelance = async (data) => {
 };
 
 // SEARCH Freelance
-export const searchFreelance = async (data) => {
+export const searchFreelance = async () => {
   try {
     let responseOnSearchFreelance = await axios.get({
       /**Add Search Employer API URL here like /searchEmployer?keyword=${data}**/
@@ -39,7 +39,7 @@ export const searchFreelance = async (data) => {
 };
 
 // LIST Freelance
-export const freelanceList = async (pageNo) => {
+export const freelanceList = async () => {
   try {
     let responseOnFreelanceList = await axios.get({
       /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
@@ -57,7 +57,7 @@ export const freelanceList = async (pageNo) => {
 };
 
 // VIEW Freelance
-export const freelanceProfile = async (id) => {
+export const freelanceProfile = async () => {
   try {
     let responseOnFreelanceProfile = await axios.get({
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
@@ -75,7 +75,7 @@ export const freelanceProfile = async (id) => {
 };
 
 // UPDATE Freelance
-export const updateFreelance = async (data) => {
+export const updateFreelance = async () => {
   try {
     let responseOnUpdateFreelance = await axios.put({
       /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
@@ -91,7 +91,7 @@ export const updateFreelance = async (data) => {
 };
 
 // DELETE Freelance
-export const deleteFreelance = async (data) => {
+export const deleteFreelance = async () => {
   try {
     let responseOnDeleteFreelance = await axios.delete({
       /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/

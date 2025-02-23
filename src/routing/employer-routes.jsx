@@ -1,5 +1,5 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { employer, withId } from "../globals/route-names";
+import { Route, Routes } from "react-router-dom";
+import { employer } from "../globals/route-names";
 import EmpDashboardPage from "../app/pannels/employer/components/emp-dashboard";
 import EmpCompanyProfilePage from "../app/pannels/employer/components/emp-company-profile";
 import EmpPostAJobPage from "../app/pannels/employer/components/jobs/emp-post-a-job";
@@ -8,7 +8,6 @@ import EmpCandidatesPage from "../app/pannels/employer/components/emp-candidates
 import EmpBookmarksPage from "../app/pannels/employer/components/emp-bookmarks";
 import EmpPackagesPage from "../app/pannels/employer/components/emp-packages";
 import EmpMessages1Page from "../app/pannels/employer/components/messages/emp-messages1";
-import EmpMessages2Page from "../app/pannels/employer/components/messages/emp-messages2";
 import EmpResumeAlertsPage from "../app/pannels/employer/components/emp-resume-alerts";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
 

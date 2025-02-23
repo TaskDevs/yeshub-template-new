@@ -1,9 +1,5 @@
-// if issues arise with axios import basic_url and import axios from original source from constant
-// import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
-	SUCCESS_STATUS,
-	LIST_ON_PAGES,
 	baseURL,
 } from "../../../globals/constants";
 
@@ -15,11 +11,7 @@ export const addMilestone = async (data) => {
 			data
 		);
     return responseOnAddMilestone;
-    // if (responseOnAddMilestone.status === SUCCESS_STATUS) {
-    //   return responseOnAddMilestone.data;
-    // } else {
-    //   return false;
-    // }
+   
   } catch (err) {
     console.log(err);
     return false;
@@ -27,7 +19,7 @@ export const addMilestone = async (data) => {
 };
 
 // SEARCH Milestone
-export const searchMilestone = async (data) => {
+export const searchMilestone = async () => {
   try {
     let responseOnSearchMilestone = await axios.get({
       /**Add Search Milestone API URL here like /searchEmployer?keyword=${data}**/
@@ -39,7 +31,7 @@ export const searchMilestone = async (data) => {
 };
 
 // LIST Milestone
-export const milestoneList = async (pageNo) => {
+export const milestoneList = async () => {
   try {
     let responseOnMilestoneList = await axios.get({
       /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/

@@ -57,8 +57,8 @@ function SectionJobsSidebar1() {
 														className="form-check-input checkbox-large"
 														id="exampleCheck3"
 														placeholder="min"
-														inputmode="numeric"
-														oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+														inputMode="numeric"
+														onInput="this.value = this.value.replace(/[^0-9]/g, '')"
 													/>
 													<span>/hr</span>
 												</div>
@@ -103,8 +103,8 @@ function SectionJobsSidebar1() {
 														id="exampleCheck3"
 														placeholder="min"
 														// type="text"
-														inputmode="numeric"
-														oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+														inputMode="numeric"
+														onInput="this.value = this.value.replace(/[^0-9]/g, '')"
 													/>
 												</div>
 

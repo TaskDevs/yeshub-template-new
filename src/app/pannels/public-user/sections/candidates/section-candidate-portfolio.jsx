@@ -1,26 +1,24 @@
 import React, { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+
 // import { DropzoneComponent } from 'react-dropzone-component';
 
 function SectionCandidatePortfolio() {
-    const currentpath = useLocation().pathname;
+	const currentpath = useLocation().pathname;
 	const location = currentpath.split("/")[1];
-		console.log("currentpath", location);
-	
+	console.log("currentpath", location);
 
 	const ref = useRef(null);
 	const fileInputRef = useRef(null);
 	const [preview, setPreview] = useState(null);
 
+	const handleImageChange = (event) => {
+		const file = event.target.files?.[0];
 
-	 const handleImageChange = (event) => {
-			const file = event.target.files?.[0];
-
-			if (file) {
-				setPreview(URL.createObjectURL(file));
-			}
-		};
+		if (file) {
+			setPreview(URL.createObjectURL(file));
+		}
+	};
 
 	return (
 		<>
@@ -35,10 +33,7 @@ function SectionCandidatePortfolio() {
 			<div className="tw-sidebar-tags-wrap">
 				<div className="">
 					<div className="mb-5">
-						<form
-							ref={ref}
-							
-						>
+						<form ref={ref}>
 							<div className="twm-sec-add">
 								<input
 									ref={fileInputRef}
@@ -58,11 +53,7 @@ function SectionCandidatePortfolio() {
 									</button>
 
 									{preview && (
-										<button
-											variant="outline"
-											type="button"
-											onClick={() => setPreview(null)}
-										>
+										<button type="button" onClick={() => setPreview(null)}>
 											Remove image
 										</button>
 									)}
@@ -85,8 +76,6 @@ function SectionCandidatePortfolio() {
 						{/* show images */}
 
 						<div className="mt-5">
-							
-
 							<div className="sec-add-portfolio">
 								<div className="sub-sec-add-portfolio">
 									<div className="">
@@ -134,9 +123,7 @@ function SectionCandidatePortfolio() {
 
 export default SectionCandidatePortfolio;
 
-
-
-	/* <div className="">
+/* <div className="">
 								<img
 									src={""}
 									width={500}
@@ -146,7 +133,7 @@ export default SectionCandidatePortfolio;
 								/>
 							</div> */
 
-	/* <div className="">
+/* <div className="">
 								<img src="/assets/images/portfolio/homepage.png" alt="" />
 							</div>
 							<div className="">
@@ -159,23 +146,14 @@ export default SectionCandidatePortfolio;
 								className="img-portfolio-link"
 							/> */
 
+/* new app-job-pg */
 
-
-	/* new app-job-pg */
-
-
-
-
-
-
-	/* <div className="col-lg-12 col-md-12">
+/* <div className="col-lg-12 col-md-12">
 								{/* <div className="form-group">
 									<DropzoneComponent config={componentConfig} />
 								</div> */
 
-
-
-	/* <div className="">
+/* <div className="">
 								<div className="">
 									<img src="/assets/images/portfolio/homepage.png" alt="" />
 								</div>
@@ -220,104 +198,100 @@ export default SectionCandidatePortfolio;
 								
 							</div>*/
 
-
-
-
-
 /* flex justify-end mt-2 space-x-2 */
-							// <div className="">
-							// 	<button
-							// 		type="button"
-							// 		onClick={() => fileInputRef.current?.click()}
-							// 		className="sec-port-add-btn"
-							// 	>
-							// 		{preview ? "Change" : "Add"} image
-							// 	</button>
+// <div className="">
+// 	<button
+// 		type="button"
+// 		onClick={() => fileInputRef.current?.click()}
+// 		className="sec-port-add-btn"
+// 	>
+// 		{preview ? "Change" : "Add"} image
+// 	</button>
 
-							// 	{/* Add a remove preview button */}
+// 	{/* Add a remove preview button */}
 
-							// 	{preview && (
-							// 		<button type="button" onClick={() => setPreview(null)}>
-							// 			Remove image
-							// 		</button>
-							// 	)}
-							// </div>
+// 	{preview && (
+// 		<button type="button" onClick={() => setPreview(null)}>
+// 			Remove image
+// 		</button>
+// 	)}
+// </div>
 
-							// <div className="sub-sec-add-portfolio">
-							// 	<div className="col-lg-12 col-md-12 tw-sidebar-tags-wrap">
-							// 		<div className="form-group">
-							// 			<form
-							// 				ref={ref}
-							// 				action={(formData) => {
-							// 					// const promise = handlePostAction(formData);
-							// 				}}
-							// 				className="p-2 bg-white rounded-lg"
-							// 			>
-							// 				{/* {preview && (
-							// 			<div className="mt-3">
-							// 				<img
-							// 					src={preview}
-							// 					alt="preview"
-							// 					className="w-full object-cover"
-							// 					width={10}
-							// 					height={10}
-							// 				/>
-							// 			</div>
-							// 		)} */}
+// <div className="sub-sec-add-portfolio">
+// 	<div className="col-lg-12 col-md-12 tw-sidebar-tags-wrap">
+// 		<div className="form-group">
+// 			<form
+// 				ref={ref}
+// 				action={(formData) => {
+// 					// const promise = handlePostAction(formData);
+// 				}}
+// 				className="p-2 bg-white rounded-lg"
+// 			>
+// 				{/* {preview && (
+// 			<div className="mt-3">
+// 				<img
+// 					src={preview}
+// 					alt="preview"
+// 					className="w-full object-cover"
+// 					width={10}
+// 					height={10}
+// 				/>
+// 			</div>
+// 		)} */}
 
-							// 				<div className="">
-							// 					<button
-							// 						type="button"
-							// 						onClick={() => fileInputRef.current?.click()}
-							// 						className="sec-port-add-btn"
-							// 					>
-							// 						{preview ? "Change" : "Add"} image
-							// 					</button>
+// 				<div className="">
+// 					<button
+// 						type="button"
+// 						onClick={() => fileInputRef.current?.click()}
+// 						className="sec-port-add-btn"
+// 					>
+// 						{preview ? "Change" : "Add"} image
+// 					</button>
 
-							// 					{/* Add a remove preview button */}
+// 					{/* Add a remove preview button */}
 
-							// 					{preview && (
-							// 						<button
-							// 							variant="outline"
-							// 							type="button"
-							// 							onClick={() => setPreview(null)}
-							// 						>
-							// 							Remove image
-							// 						</button>
-							// 					)}
-							// 				</div>
+// 					{preview && (
+// 						<button
+// 							variant="outline"
+// 							type="button"
+// 							onClick={() => setPreview(null)}
+// 						>
+// 							Remove image
+// 						</button>
+// 					)}
+// 				</div>
 
-							// 				{/* show images */}
+// 				{/* show images */}
 
-							// 				{/* {post.imageUrl && ( */}
+// 				{/* {post.imageUrl && ( */}
 
-							// 				<div className="">
-							// 					<img
-							// 						src={"post.imageUrl"}
-							// 						width={500}
-							// 						alt="Post"
-							// 						height={500}
-							// 						className="w-full mx-auto"
-							// 					/>
-							// 				</div>
+// 				<div className="">
+// 					<img
+// 						src={"post.imageUrl"}
+// 						width={500}
+// 						alt="Post"
+// 						height={500}
+// 						className="w-full mx-auto"
+// 					/>
+// 				</div>
 
-							// 				{/* placeholder image */}
+// 				{/* placeholder image */}
 
-							// 				<div className="">
-							// 					<div className="">
-							// 						<img
-							// 							src="/assets/images/portfolio/homepage.png"
-							// 							alt=""
-							// 						/>
-							// 					</div>
+// 				<div className="">
+// 					<div className="">
+// 						<img
+// 							src="/assets/images/portfolio/homepage.png"
+// 							alt=""
+// 						/>
+// 					</div>
 
-							// 					<input
-							// 						type="text"
-							// 						placeholder="Add link"
-							// 						className="img-portfolio-link"
-							// 					/>
-							// 				</div>
-							// 			</form>
-							// 		</div>
-							// 	</div>
-							// </div>
+// 					<input
+// 						type="text"
+// 						placeholder="Add link"
+// 						className="img-portfolio-link"
+// 					/>
+// 				</div>
+// 			</form>
+// 		</div>
+// 	</div>
+// </div>

@@ -1,11 +1,8 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext, useState, useContext } from "react";
+
 
 import {
 	addEducation,
-	searchEducation,
-	eductionList,
 	educationProfile,
 	updateEducation,
 	deleteEducation,
@@ -39,14 +36,14 @@ const EducationApiDataProvider = (props) => {
 		}
 	};
 
-	const processGetAllEducation = async (id) => {};
-	const processSearchEducation = async (data) => {};
+	const processGetAllEducation = async () => {};
+	const processSearchEducation = async () => {};
 
 	const processEducationEducation = async (id) => {
 		try {
 			const res = await educationProfile(id);
 			console.log("get-education", res);
-			// toast.success("education ")
+			
 			return res;
 		} catch (e) {
 			toast.error("Failed to get education");

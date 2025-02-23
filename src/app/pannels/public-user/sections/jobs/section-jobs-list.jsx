@@ -1,15 +1,11 @@
 import React, { useEffect, useContext } from "react";
-import JobZImage from "../../../../common/jobz-img";
-import { NavLink } from "react-router-dom";
-import { publicUser } from "../../../../../globals/route-names";
 import SectionPagination from "../common/section-pagination";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { JOBLISTDATA } from "../../../../../globals/job-list-data";
 import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
   const { jobListData, processGetAllJob } = useContext(JobApiData);
-  console.log("jobListData", jobListData);
+ 
 
   useEffect(() => {
     //console.log("We are rendering");

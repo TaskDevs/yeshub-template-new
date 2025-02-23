@@ -1,18 +1,15 @@
-import { useEffect, useState, useContext } from "react";
-import JobZImage from "../../../../common/jobz-img";
-import { useApify } from "../../../../context/work-data/useApify";
+import { useEffect, useContext } from "react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import EmpJobPostCard from "./emp-post-job-card";
 
 function EmpManageJobsPage() {
-  const { processGetAllJobPostByEmployer, empJobListData, empPaginationData } =
+  const { processGetAllJobPostByEmployer, empJobListData } =
     useContext(JobApiData);
 
   useEffect(() => {
     processGetAllJobPostByEmployer(3);
   }, []);
 
-  // const { postedJobsData, error } = useApify();
   return (
     <>
       <div className="wt-admin-right-page-header clearfix">
@@ -49,7 +46,7 @@ function EmpManageJobsPage() {
               <tbody>
                 {/*1*/}
                 {empJobListData.map((item) => (
-                  <EmpJobPostCard data={item} />
+                  <EmpJobPostCard data={item} key={item.id} />
                 ))}
               </tbody>
               <tfoot>

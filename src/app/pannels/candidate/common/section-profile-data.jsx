@@ -1,16 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 
 function SectionProfileData({}) {
   const { profileData } = useContext(ProfileApiData);
 
-  console.log("profileData-sec", profileData);
-
-    // if (!profileData.id) {
-    //     return (
-	// 		<p>No Profile Created</p>
-	// 	)
-    // }
 
 	return (
 		profileData.id ?  (

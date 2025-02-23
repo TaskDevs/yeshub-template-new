@@ -100,13 +100,11 @@ const CategoryApiDataProvider = (props) => {
 	const processDeleteCategory = async (id) => {
 		try {
 			const res = await deleteCategory(id);
-			
-			toast.success("Category deleted successfully")
              return res;
 			
 		} catch (error) {
-			console.error("Error fetching category:", error);
-			toast.error("Failed to delete category")
+			return false;
+			
 		}
 	};
 

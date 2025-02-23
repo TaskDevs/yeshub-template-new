@@ -1,30 +1,30 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext } from "react";
+// import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import { notify } from "../../../utils/responseUtils";
 
-import {
-  addWallet,
-  searchWallet,
-  walletList,
-  walletProfile,
-  updateWallet,
-  deleteWallet,
-} from "./walletApi";
+// import {
+//   addWallet,
+//   searchWallet,
+//   walletList,
+//   walletProfile,
+//   updateWallet,
+//   deleteWallet,
+// } from "./walletApi";
 
 export const WalletApiData = createContext();
 
 const WalletApiDataProvider = (props) => {
-  const processAddWallet = async (data) => {};
+  const processAddWallet = async () => {};
 
-  const processGetAllWallet = async (id) => {};
+  const processGetAllWallet = async () => {};
 
-  const processWalletProfile = async (id) => {};
+  const processWalletProfile = async () => {};
 
-  const processSearchWallet = async (data) => {};
+  const processSearchWallet = async () => {};
 
-  const processUpdateWallet = async (data) => {};
+  const processUpdateWallet = async () => {};
 
-  const processDeleteWallet = async (id) => {};
+  const processDeleteWallet = async () => {};
 
   return (
     <WalletApiData.Provider

@@ -1,30 +1,30 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext } from "react";
+// import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import { notify } from "../../../utils/responseUtils";
 
-import {
-  addFreelance,
-  searchFreelance,
-  freelanceList,
-  freelanceProfile,
-  updateFreelance,
-  deleteFreelance,
-} from "./freelanceApi";
+// import {
+//   addFreelance,
+//   searchFreelance,
+//   freelanceList,
+//   freelanceProfile,
+//   updateFreelance,
+//   deleteFreelance,
+// } from "./freelanceApi";
 
 export const FreelanceApiData = createContext();
 
 const FreelanceApiDataProvider = (props) => {
-  const processAddFreelance = async (data) => {};
+  const processAddFreelance = async () => {};
 
-  const processGetAllFreelance = async (id) => {};
+  const processGetAllFreelance = async () => {};
 
-  const processFreelanceProfile = async (id) => {};
+  const processFreelanceProfile = async () => {};
 
-  const processSearchFreelance = async (data) => {};
+  const processSearchFreelance = async () => {};
 
-  const processUpdateFreelance = async (data) => {};
+  const processUpdateFreelance = async () => {};
 
-  const processDeleteFreelance = async (id) => {};
+  const processDeleteFreelance = async () => {};
 
   return (
     <FreelanceApiData.Provider

@@ -1,5 +1,3 @@
-import { useContext, useEffect, useState } from "react";
-import { LOCAL_BACKEND_URL, baseURL } from "../../../../../globals/constants";
 import readableDate from "../../../../../utils/readableDate";
 
 const EmpJobPostCard = ({ data }) => {

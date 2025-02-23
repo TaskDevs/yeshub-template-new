@@ -53,12 +53,12 @@ function SignUpPopup() {
     }));
   };
   const googleSignin = async ()=>{
-    const res = await loginWithGoogle(formData.role)
+    await loginWithGoogle(formData.role)
     
   }
 
     const linkedinSignin = async ()=>{
-      const res = await loginWithLinkedIn(formData.role)
+      await loginWithLinkedIn(formData.role)
       
     }
   const handleSubmit = async (e) => {

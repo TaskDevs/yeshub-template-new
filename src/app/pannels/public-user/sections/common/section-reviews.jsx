@@ -1,12 +1,11 @@
-import axios from 'axios';
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import TestimonialPopup from '../../../../common/popups/popup-testimonial';
 import { GlobalApiData } from '../../../../context/global/globalContextApi';
 import { TestimonialApiData } from '../../../../context/testimonial/testimonialContextApi';
 // import { LuAsterisk } from 'react-icons/lu';
 
 function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
-       const { isLoading, setIsLoading, setIsSubmitting } =
+       const {  setIsLoading, setIsSubmitting } =
 		useContext(GlobalApiData);
 	
 	const { formData, setFormData, processAddTestimonial } =

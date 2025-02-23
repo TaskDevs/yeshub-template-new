@@ -4,8 +4,6 @@ import { COMPANYPROFILEDATA } from "../../../../../globals/company-profile-data"
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { Modal } from "bootstrap"; // Import Bootstrap's modal API
 import TextAreaField from "../../../../common/text-area-field";
-import SelectField from "../../../../common/select-field";
-import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 function SectionEditCompanyInfo({ data, submit, id }) {

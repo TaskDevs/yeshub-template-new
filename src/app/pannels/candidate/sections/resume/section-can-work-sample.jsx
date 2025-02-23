@@ -23,16 +23,14 @@ function SectionCanWorkSample() {
 			setPortfolios,
 		} = useContext(PortfolioApiData);
 	const { selectedId, setSelectedId } = useContext(GlobalApiData)
-	
-	// console.log("portfolios-data", portfolios);
+
 
     useEffect(() => {
         const fetchAllPortfolio = async () => {
             try {          
                 const res = await processGetAllPortfolio(userId)
 				if (res) {
-					console.log("get portfolio", res);
-					const data = res?.data.data;
+					const data = res.data.data;
 					setPortfolios(data);
 				}
                 

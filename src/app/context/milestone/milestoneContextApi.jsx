@@ -1,11 +1,7 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext, useState } from "react";
 
 import {
   addMilestone,
-  searchMilestone,
-  milestoneList,
   milestoneProfile,
   updateMilestone,
   deleteMilestone,
@@ -29,7 +25,7 @@ const MilestoneApiDataProvider = (props) => {
           }
   };
 
-  const processGetAllMilestone = async (id) => {};
+  const processGetAllMilestone = async () => {};
 
   const processMilestoneProfile = async (id) => {
     try {
@@ -41,7 +37,7 @@ const MilestoneApiDataProvider = (props) => {
           }
   };
 
-  const processSearchMilestone = async (data) => {};
+  const processSearchMilestone = async () => {};
 
   const processUpdateMilestone = async (id, data) => {
     try {

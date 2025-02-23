@@ -16,7 +16,6 @@ function VerifyOtp() {
   const email = location.state?.email || localStorage.getItem("verifyEmail") || "";
   const [otp, setOtp] = useState("");
   const [expiryTime, setExpiryTime] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(null);
   const [showTopMessage, setShowTopMessage] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -187,7 +186,7 @@ function VerifyOtp() {
                         className="btn btn-link"
                         onClick={ResendOtps}
                       >
-                        Didn't receive OTP? Resend
+                        Didn&apos;t receive OTP? Resend
                       </button>
                     </div>
 

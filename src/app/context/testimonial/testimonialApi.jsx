@@ -2,14 +2,11 @@
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
-	SUCCESS_STATUS,
-	LIST_ON_PAGES,
 	REACT_BASE_URL,
 	
 } from "../../../globals/constants";
 
 
-// ADD Testimonial
 export const addTestimonial = async (data) => {
   try {
     let responseOnAddTestimonial = await axios.post(
@@ -17,32 +14,14 @@ export const addTestimonial = async (data) => {
 			data
 		);
     return responseOnAddTestimonial;
-    // if (responseOnAddTestimonial.status === SUCCESS_STATUS) {
-    //   return responseOnAddTestimonial.data;
-    // } else {
-    //   return false;
-    // }
+    
   } catch (err) {
     console.log(err);
     return false;
   }
 };
 
-// SEARCH Testimonial
-export const searchTestimonial = async (data) => {
-  try {
-    let responseOnSearchTestimonial = await axios.get({
-      /**Add Search Testimonial API URL here like /searchTestimonial?keyword=${data}**/
-    });
-    if (responseOnSearchTestimonial.status === SUCCESS_STATUS) {
-      return responseOnSearchTestimonial.data;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+
 
 // LIST Testimonial
 /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
@@ -53,11 +32,6 @@ export const testimonialList = async (id) => {
 		);
     return responseOnTestimonialList;
 
-    // if (responseOnTestimonialList.status === SUCCESS_STATUS) {
-    //   return responseOnTestimonialList.data;
-    // } else {
-    //   return false;
-    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -65,18 +39,13 @@ export const testimonialList = async (id) => {
 };
 
 // VIEW Testimonial
-export const testimonialProfile = async (id) => {
+export const testimonialProfile = async () => {
   try {
     let responseOnTestimonialProfile = await axios.get({
       /**Add View Testimonial API URL here like ${URL}api/getEmployerProfile/${id}**/
     });
     return responseOnTestimonialProfile;
 
-    // if (responseOnTestimonialProfile.status === SUCCESS_STATUS) {
-    //   return responseOnTestimonialProfile.data;
-    // } else {
-    //   return false;
-    // }
   } catch (err) {
     console.log(err);
     return false;

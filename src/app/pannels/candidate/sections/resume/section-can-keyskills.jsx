@@ -5,12 +5,6 @@ import { useContext } from "react";
 function SectionCanKeySkills() {
 
     const {
-                skills,
-                filteredData,
-                setFormData,
-                processAddSkills,
-                formData,
-                processGetAllSkills,
                 handleAddSkills,
             } = useContext(SkillsApiData);
         

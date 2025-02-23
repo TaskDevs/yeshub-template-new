@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { publicUrlFor } from "../../../../../../globals/constants";
-import { publicUser } from "../../../../../../globals/route-names";
+
 
 function SectionSideAdvert({title, description, link, action}) {
     return (

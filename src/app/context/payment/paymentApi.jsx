@@ -1,6 +1,6 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import { SUCCESS_STATUS } from "../../../globals/constants";
 
 // ADD Payment
 export const addPayment = async (data) => {
@@ -23,7 +23,7 @@ export const addPayment = async (data) => {
 };
 
 // SEARCH Payment
-export const searchPayment = async (data) => {
+export const searchPayment = async () => {
   try {
     let responseOnSearchPayment = await axios.get({
       /**Add Search Payment API URL here like /searchEmployer?keyword=${data}**/
@@ -39,7 +39,7 @@ export const searchPayment = async (data) => {
 };
 
 // LIST Payment
-export const paymentList = async (pageNo) => {
+export const paymentList = async () => {
   try {
     let responseOnPaymentList = await axios.get({
       /**Add Get Payment API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
@@ -57,7 +57,7 @@ export const paymentList = async (pageNo) => {
 };
 
 // VIEW Payment
-export const paymentProfile = async (id) => {
+export const paymentProfile = async () => {
   try {
     let responseOnPaymentProfile = await axios.get({
       /**Add View History API URL here like ${URL}api/getPaymentProfile/${id}**/
@@ -75,7 +75,7 @@ export const paymentProfile = async (id) => {
 };
 
 // UPDATE Payment
-export const updatePayment = async (data) => {
+export const updatePayment = async () => {
   try {
     let responseOnUpdatePayment = await axios.put({
       /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
@@ -91,7 +91,7 @@ export const updatePayment = async (data) => {
 };
 
 // DELETE Payment
-export const deletePayment = async (data) => {
+export const deletePayment = async () => {
   try {
     let responseOnDeletePayment = await axios.delete({
       /**Add Delete Payment API URL here like  `/api/deleteHistory/${data}` **/

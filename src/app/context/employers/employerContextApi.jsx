@@ -1,15 +1,8 @@
-import React, { createContext, useState, useEffect } from "react";
-import {
-  SUCCESS_STATUS,
-  LIST_ON_PAGES,
-  BACKEND_HOST,
-} from "../../../globals/constants";
+import React, { createContext, useState } from "react";
 import { notify } from "../../../utils/responseUtils";
 
 import {
   addEmployer,
-  searchEmployer,
-  employerList,
   updateEmployerLogo,
   employerProfile,
   updateEmployer,
@@ -31,7 +24,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processGetAllEmployer = async () => {};
-  console.log(BACKEND_HOST);
+  
   const processEmployerProfile = async (id) => {
     let response = await employerProfile(id || 3);
     if (response) {
@@ -49,7 +42,7 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
-  const processSearchEmployer = async (id, data) => {};
+  const processSearchEmployer = async () => {};
 
   const processUpdateEmployer = async (id, data) => {
     let response = await updateEmployer(id, data);

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
+import React from "react";
 
 function CompanyProfileData({ data }) {
   return (

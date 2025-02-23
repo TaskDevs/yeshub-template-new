@@ -56,8 +56,6 @@ import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 import ContractPopup from "../app/common/popups/popup-contract";
 
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements } from "@stripe/react-stripe-js";
 
 import VerifyOtp from "../app/pannels/public-user/components/pages/verify-otp";
 import GoogleCallback from "../app/pannels/public-user/components/pages/GoogleCallback";
@@ -65,7 +63,7 @@ import ForgotPassword from "../app/pannels/public-user/components/pages/forgotto
 import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-reset-otp";
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 
-// const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
+
 
 function PublicUserRoutes() {
  
@@ -73,7 +71,7 @@ function PublicUserRoutes() {
   return (
     <>
       <Routes>
-        {/* <Route path="/auth/google/callback" element={<GoogleCallback />} /> */}
+        
         <Route path={publicUser.INITIAL} element={<Home1Page />} />
         <Route path={publicUser.HOME1} element={<Home1Page />} />
         <Route path={publicUser.HOME2} element={<Home2Page />} />
@@ -130,14 +128,7 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
-        {/* <Route
-          path={publicUser.pages.GOOGLECALLBACK}
-          element={GoogleCallback}
-        /> */}
-         {/* <Route
-          path={publicUser.pages.LINKEDINCALLBACK}
-          element={LinkedInCallback}
-        /> */}
+        
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route path={publicUser.pages.FORGOTPASS} element={<ForgotPassword/>}/>
         <Route path={publicUser.pages.VERIFYRESETOTP} element={<VerifyResetOtp/>}/>

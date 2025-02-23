@@ -1,4 +1,3 @@
-import SectionContact from "./section-contact";
 import SectionLocation from "./section-location";
 import SectionProfile from "./section-profile";
 import SectionVerification from "./section-verification";

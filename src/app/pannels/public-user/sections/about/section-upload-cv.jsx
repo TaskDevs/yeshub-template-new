@@ -15,7 +15,7 @@ function SectionUploadCV() {
 					<div className="container">
 						<div className="section-content">
 							<div className="row">
-								<div className="col-lg-4 col-md-12">
+								<div className="col-lg-4 col-md-12 mb-5">
 									<div className="twm-explore-media-wrap">
 										<div className="twm-media girl-media">
 											<JobZImage src="images/girl-large-1b.png" alt="" />

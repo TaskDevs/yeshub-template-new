@@ -1,11 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import JobZImage from "../../../common/jobz-img";
-import { loadScript, popupType } from "../../../../globals/constants";
+import { loadScript } from "../../../../globals/constants";
 import { EmployerApiData } from "../../../context/employers/employerContextApi";
-import { DropzoneComponent } from "react-dropzone-component";
-import axios from "axios";
-import { toast } from "react-toastify";
-import SectionCandicateBasicInfo from "../../candidate/sections/profile/section-can-basic-info";
 import SectionEditCompanyInfo from "../../candidate/sections/profile/section-edit-company-info";
 import SectionCompanyBasicInfo from "../../candidate/sections/profile/section-company-basic-info";
 import CompanyProfileData from "../../candidate/common/company-profile-data";
@@ -13,10 +9,8 @@ import formatImgUrl from "../../../../utils/formatImgUrl";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
-import SectionProfileData from "../../candidate/common/section-profile-data";
-import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
-import { BACKEND_HOST, baseURL } from "../../../../globals/constants";
+import {  baseURL } from "../../../../globals/constants";
 import FormatUrl from "../../../../utils/formatUrl";
 
 function EmpCompanyProfilePage() {
@@ -28,14 +22,12 @@ function EmpCompanyProfilePage() {
   const { isSubmitting } = useContext(GlobalApiData);
   const {
     handleSubmitProfile,
-    handleUpdateProfile,
     handleEditClick,
-    // handleImageChange,
   } = useContext(ProfileApiData);
   const [imageURL, setImageURL] = useState(null);
   const [formData, setFormData] = useState({});
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [profileUpdated, setProfileUpdated] = useState(false);
+  // const [selectedFile, setSelectedFile] = useState(null);
+  // const [profileUpdated, setProfileUpdated] = useState(false);
 
   useEffect(() => {
     loadScript("js/custom.js");

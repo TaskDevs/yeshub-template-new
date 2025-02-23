@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { loadScript } from "../../../globals/constants";
-import SectionApplyJob from "../../pannels/public-user/sections/jobs/section-apply-job";
-import JobZImage from "../jobz-img";
+// import { useEffect } from "react";
+// import { loadScript } from "../../../globals/constants";
+// import SectionApplyJob from "../../pannels/public-user/sections/jobs/section-apply-job";
+// import JobZImage from "../jobz-img";
 
 function ContractPopup() {
 	return (
@@ -15,7 +15,7 @@ function ContractPopup() {
 			>
 				<div className="modal-dialog modal-dialog-centered">
 					<div className="modal-content">
-						<form onSubmit={"handleSubmit"}>
+						<form >
 							<div className="modal-header">
 								<h4 className="modal-title" id="">
 									Contract Agreement
@@ -55,7 +55,7 @@ function ContractPopup() {
 													<div className="twm-tabs-style-2">
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
-																<label>Client's email address</label>
+																<label>Client&apos;s email address</label>
 																<input
 																	name="email"
 																	type="text"
@@ -64,8 +64,8 @@ function ContractPopup() {
 																	// placeholder="email"
 																	minLength={3}
 																	maxLength={50}
-																	value={""}
-																	onChange={""}
+																	// value={""}
+																	// onChange={}
 																/>
 															</div>
 														</div>
@@ -80,14 +80,14 @@ function ContractPopup() {
 																	// placeholder="email"
 																	minLength={3}
 																	maxLength={50}
-																	value={""}
-																	onChange={""}
+																	// value={""}
+																	// onChange={""}
 																/>
 															</div>
 														</div>
 														<div className="col-lg-12">
 															<div className="form-group mb-3">
-																<label>Client's email address</label>
+																<label>Client&apos;s email address</label>
 																<input
 																	name="email"
 																	type="text"
@@ -96,8 +96,8 @@ function ContractPopup() {
 																	// placeholder="email"
 																	minLength={3}
 																	maxLength={50}
-																	value={""}
-																	onChange={""}
+																	// value={""}
+																	// onChange={""}
 																/>
 															</div>
 														</div>
@@ -112,8 +112,8 @@ function ContractPopup() {
 																	// placeholder="email"
 																	minLength={3}
 																	maxLength={50}
-																	value={""}
-																	onChange={""}
+																	// value={""}
+																	// onChange={""}
 																/>
 															</div>
 														</div>
@@ -175,8 +175,8 @@ function ContractPopup() {
 																		placeholder="Title"
 																		minLength={3}
 																		maxLength={50}
-																		value={""}
-																		onChange={""}
+																		// value={""}
+																		// onChange={""}
 																	/>
 																</div>
 															</div>
@@ -193,8 +193,8 @@ function ContractPopup() {
 																	placeholder={0}
 																	minLength={3}
 																	maxLength={50}
-																	value={""}
-																	onChange={""}
+																	// value={""}
+																	// onChange={""}
 																/>
 															</div>
 														</div>
@@ -210,8 +210,8 @@ function ContractPopup() {
 																	placeholder="Due date"
 																	minLength={3}
 																	maxLength={50}
-																	value={""}
-																	onChange={""}
+																	// value={""}
+																	// onChange={""}
 																/>
 															</div>
 														</div>

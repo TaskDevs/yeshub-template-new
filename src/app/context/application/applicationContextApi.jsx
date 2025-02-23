@@ -11,6 +11,8 @@ import {
 import { APPLICATIONFIELD } from "../../../globals/application-data";
 
 import { GlobalApiData } from "../global/globalContextApi";
+import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 
 export const ApplicationApiData = createContext();
@@ -18,7 +20,13 @@ export const ApplicationApiData = createContext();
 
 const ApplicationApiDataProvider = (props) => {
    const [selectedOption, setSelectedOption] = useState("milestone");
-   const { setIsSubmitting } = useContext(GlobalApiData)
+  const { setIsSubmitting } = useContext(GlobalApiData)
+  const currentpath = useLocation().pathname;
+    const location = currentpath.split("/")[1];
+  
+ 
+  console.log("location", location);
+  // retrieve job id from thelink and append to the data to the server
 
      
   
@@ -70,12 +78,12 @@ const ApplicationApiDataProvider = (props) => {
 			}
   };
 
-  const processSearchApplication = async (data) => {};
+  const processSearchApplication = async () => {};
 
   const processUpdateApplication = async (id, data) => {
      try {
 				const res = await updateApplication(id, data);
-				console.log("update application", res);
+			
 				return res;
 			} catch (e) {
 				throw new Error("Failed to update application", e);
@@ -85,7 +93,7 @@ const ApplicationApiDataProvider = (props) => {
   const processDeleteApplication = async (id) => {
      try {
 				const res = await deleteApplication(id);
-				console.log("delete application", res);
+				
 				return res;
 			} catch (e) {
 				throw new Error("Failed to delete application", e);
@@ -93,17 +101,24 @@ const ApplicationApiDataProvider = (props) => {
   };
 
   const handleSubmmitApplication = async () => {
+    // if (!userId)
+    // {
+    //   toast.error("User does not exist, Please sign in");
+    //   return;
+    // }
     setIsSubmitting(true)
-    console.log("submitting applicatication")
+   
     try {
-      const res = await processAddApplication({
+      await processAddApplication({
 				user_id: "3",
 				job_id: "1",
 				status: "pending",
 				freelance_id: "",
 			});
-      console.log("application added", res);
+     
+      toast.success("Job applied successfully")
     } catch (e) {
+      toast.error("Failed to apply job");
       throw new Error ("Couldn't add application", e);
     } finally {
       setIsSubmitting(false);

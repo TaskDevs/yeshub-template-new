@@ -1,4 +1,4 @@
-import { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState } from "react";
 import JobInputField from "../../../../common/job-input-field";
 import { COMPANYPROFILEDATA } from "../../../../../globals/company-profile-data";
 import TextAreaField from "../../../../common/text-area-field";

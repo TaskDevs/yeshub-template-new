@@ -1,16 +1,11 @@
-import axios from 'axios';
-import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom';
-import SectionCandidateShortIntro1 from './detail1/section-can-short-intro1';
-import SectionCandidateSkills from './section-can-skills';
+import React from "react";
+import SectionCandidateShortIntro1 from "./detail1/section-can-short-intro1";
+import SectionCandidateSkills from "./section-can-skills";
 
 function CandidatePortfolioPage() {
-	const [formData, setFormData] = useState({});
-	
 	const handleSubmitPortfolio = async (e) => {
 		e.preventDefault();
-		
-	 }
+	};
 
 	return (
 		<>
@@ -30,7 +25,9 @@ function CandidatePortfolioPage() {
 							creativity, and problem-solving abilities. Explore a collection of
 							work that demonstrates expertise and innovation.
 						</p>
-						<div className=""><SectionCandidateSkills /></div>
+						<div className="">
+							<SectionCandidateSkills />
+						</div>
 						<div className="tw-sidebar-tags-wrap">
 							<div className="sec-add-portfolio ">
 								<form onSubmit={handleSubmitPortfolio}>

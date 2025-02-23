@@ -1,30 +1,30 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext } from "react";
+// import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+// import { notify } from "../../../utils/responseUtils";
 
-import {
-  addPayment,
-  searchPayment,
-  paymentList,
-  paymentProfile,
-  updatePayment,
-  deletePayment,
-} from "./paymentApi";
+// import {
+//   addPayment,
+//   searchPayment,
+//   paymentList,
+//   paymentProfile,
+//   updatePayment,
+//   deletePayment,
+// } from "./paymentApi";
 
 export const PaymentApiData = createContext();
 
 const PaymentApiDataProvider = (props) => {
-  const processAddPayment = async (data) => {};
+  const processAddPayment = async () => {};
 
-  const processGetAllPayment = async (id) => {};
+  const processGetAllPayment = async () => {};
 
-  const processPaymentProfile = async (id) => {};
+  const processPaymentProfile = async () => {};
 
-  const processSearchPayment = async (data) => {};
+  const processSearchPayment = async () => {};
 
-  const processUpdatePayment = async (data) => {};
+  const processUpdatePayment = async () => {};
 
-  const processDeletePayment = async (id) => {};
+  const processDeletePayment = async () => {};
 
   return (
     <PaymentApiData.Provider

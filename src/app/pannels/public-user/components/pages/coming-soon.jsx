@@ -14,7 +14,7 @@ function ComingSoonPage() {
                     <div className="row">
                         <div className="col-lg-12 col-md-12">
                             <div className="twm-c-soon-content">
-                                <h2 className="twm-c-soon-title"><span className="site-text-primary">Coming Soon !</span> We're doing something amazing
+                                <h2 className="twm-c-soon-title"><span className="site-text-primary">Coming Soon !</span> We&apos;re doing something amazing
                                     almost done...</h2>
                                 <p className="twm-c-soon-title2">Type Your Email To Get Notified</p>
                                 <form>

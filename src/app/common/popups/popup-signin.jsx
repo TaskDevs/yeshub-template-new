@@ -75,12 +75,12 @@ function SignInPopup() {
       
   
       if (response && response.token && response.refresh_token) {
-        const { token, refresh_token, role, user_id } = response;
+        const { token, refresh_token, role } = response;
   
         // Store tokens
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
-        sessionStorage.setItem("userId", user_id);
+
         cookieMethods.setCookies(token, refresh_token);
   
         if (formData.rememberMe) {

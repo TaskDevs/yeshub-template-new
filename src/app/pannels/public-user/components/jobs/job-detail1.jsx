@@ -23,7 +23,7 @@ function JobDetail1Page() {
 
 	useEffect(() => {
 		let newData = jobListData.filter((item) => item.id == id)[0];
-		console.log("newData", newData);
+		
 		setProfile(newData);
 	}, []);
 

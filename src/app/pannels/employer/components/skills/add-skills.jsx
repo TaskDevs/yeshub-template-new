@@ -13,40 +13,20 @@ function AddSkills() {
 	const {
 		skills,
 		setSkills,
-		setSkill,
 		setFormData,
 		setSkillOptions,
 		processGetAllSkills,
 		handleUpdateSkills,
-		processSkillsProfile,
 		handleAddSkills,
 	} = useContext(SkillsApiData);
 
-	const { selectedId, setSelectedId } = useContext(GlobalApiData);
+	const {  setSelectedId } = useContext(GlobalApiData);
 
-	useEffect(() => {
-		if (!selectedId) {
-			return;
-		}
-		const fetchSkill = async () => {
-			try {
-				const res = await processSkillsProfile(selectedId);
-
-				const data = res.data.data;
-
-				setSkill(data);
-			} catch (err) {
-				console.error("failed to get skill", err);
-			}
-		};
-		fetchSkill();
-	}, [processSkillsProfile]);
 
 	useEffect(() => {
 		const getAllSkills = async () => {
 			try {
 				const res = await processGetAllSkills();
-
 				let newData = [];
 
 				res.map((item) => {
@@ -56,8 +36,8 @@ function AddSkills() {
 					};
 					newData.push(newObj);
 				});
-
 				setSkillOptions(newData);
+
 
 				// Safely set skills
 				if (Array.isArray(res)) {
@@ -86,6 +66,12 @@ function AddSkills() {
 		});
 	};
 
+	const handleResetForm = () => {
+		setFormData({
+			skill: ""
+		})
+	}
+
 	return (
 		<>
 			<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
@@ -96,18 +82,21 @@ function AddSkills() {
 					role="button"
 					title="Edit"
 					className="site-text-primary"
+					onClick={() => handleResetForm()}
 				>
 					<span className="fa fa-edit" />
 				</a>
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">
 				<div className="twm-panel-inner">
+				
+
 					<div className="">
 						{skills.length === 0 ? (
 							<p>No skills found</p>
 						) : (
-							<ul className="">
-								<div className="list-skills p-a20">
+							<div className="list-skills p-a20">
+								<ul>
 									{skills?.map((s) => (
 										<li key={s.id}>
 											<div className="section-panel-skills">
@@ -142,8 +131,8 @@ function AddSkills() {
 											</div>
 										</li>
 									))}
-								</div>
-							</ul>
+								</ul>
+							</div>
 						)}
 					</div>
 				</div>

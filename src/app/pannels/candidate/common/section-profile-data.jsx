@@ -40,8 +40,8 @@ function SectionProfileData() {
 		</div>
 	)
 	: 
-	(<p>No Profile Created</p>) 
-	);
+	(<p>No Profile found</p>) 
+	)
 }
 
 export default SectionProfileData;

@@ -6,7 +6,7 @@ import { ProfileApiData } from "../../../context/user-profile/profileContextApi"
 import SectionProfileData from "../common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { popupType } from "../../../../globals/constants";
-import { userId } from "../../../../globals/dummy-users";
+
 
 function CanProfilePage() {
 	const {
@@ -19,15 +19,22 @@ function CanProfilePage() {
 		setFormData,
 		setProfileData,
 	} = useContext(ProfileApiData);
+	// const { skillOptions,} = useContext(SkillsApiData);
+
 
 	useEffect(() => {
+		const userId = sessionStorage.getItem("userId");
+
+		if (!userId) {
+			return;
+		}
 		const fetchProfile = async () => {
+			
 			try {
 				const res = await processProfileProfile(userId);
 
-				const data = res.data.data;
-				console.log("data-can", data);
-				localStorage.setItem("user-profile-id", data.user_id);
+				const data = res?.data.data;
+				
 				setProfileData(data);
 			} catch (error) {
 				console.error("Failed Fetching profile", error);
@@ -36,7 +43,30 @@ function CanProfilePage() {
 		fetchProfile();
 	}, [processProfileProfile, setProfileData]);
 
+	// const handleEditClick = () => {
+	// 	setFormData({
+	// 		firstname: profileData.firstname,
+	// 		lastname: profileData.lastname,
+	// 		telephone: profileData.telephone,
+	// 		country: profileData.country,
+	// 		gps_address: profileData.gps_address,
+	// 		postal_code: profileData.postal_code,
+	// 		address: profileData.address,
+	// 		region: profileData.region,
+	// 		experience: profileData.experience,
+	// 		bio: profileData.bio,
+	// 		skills_id: Array.isArray(profileData.skills_id)
+	// 			? profileData.skills_id
+	// 			: profileData.skills_id?.split(",") || [],
+	// 	});
+	// };
+
+
 	const handleEditClick = () => {
+		const skillIds = Array.isArray(profileData.skills_id)
+			? profileData.skills_id
+			: profileData.skills_id?.split(",") || [];
+
 		setFormData({
 			firstname: profileData.firstname,
 			lastname: profileData.lastname,
@@ -48,9 +78,7 @@ function CanProfilePage() {
 			region: profileData.region,
 			experience: profileData.experience,
 			bio: profileData.bio,
-			skills_id: Array.isArray(profileData.skills_id)
-				? profileData.skills_id
-				: profileData.skills_id?.split(",") || [],
+			skills_id: skillIds,
 		});
 	};
 
@@ -86,7 +114,7 @@ function CanProfilePage() {
 												<div className="dashboard-profile-pic">
 													<div className="dashboard-profile-photo">
 														<img
-															src={ imageURL || `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData.profile_image}`}
+															src={ imageURL || `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`}
 															// "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1740133986_add-withrawal-method.png"
 
 															alt=""

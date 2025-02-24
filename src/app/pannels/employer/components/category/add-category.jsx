@@ -1,4 +1,4 @@
-import {  useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 import CategoryForm from "./category-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
@@ -7,45 +7,29 @@ import { popupType } from "../../../../../globals/constants";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 
-function  AddCategories() {
+
+function AddCategories() {
 	const { processGetAllCategory, handleAddCategory } =
 		useContext(CategoryApiData);
 
-
 	const [allCategories, setAllCategories] = useState([]);
-	const [category, setCategory] = useState({});
+	const [selectedCategory, setSelectedCategory] = useState(null);
 	const { setSelectedId } = useContext(GlobalApiData);
 	const { processCategoryProfile, handleUpdateCategory, setFormData } =
 		useContext(CategoryApiData);
-	const [showCategoryDetailsId, setShowCategoryDetailsId] = useState(null);
-
-	useEffect(() => {
-		const fetchCategory = async () => {
-			if (!showCategoryDetailsId) {
-				return;
-			}
-			try {
-				const res = await processCategoryProfile(showCategoryDetailsId);
-
-				console.log("category", res);
-				const data = res.data.data;
-				setCategory(data);
-			} catch (error) {
-				throw new Error("could not fetch category", error);
-			}
-		};
-		fetchCategory();
-	}, [showCategoryDetailsId, processCategoryProfile]);
-
 
 
 	useEffect(() => {
 		const fetchAllCategories = async () => {
 			try {
 				const res = await processGetAllCategory();
-				
 				const data = res.data.data;
 				setAllCategories(data);
+
+				
+				if (data.length > 0 && !selectedCategory) {
+					handleSelected(data[0].id);
+				}
 			} catch (err) {
 				console.error("could not fetch categories", err);
 			}
@@ -53,22 +37,45 @@ function  AddCategories() {
 		fetchAllCategories();
 	}, [processGetAllCategory]);
 
-
 	useEffect(() => {
-		if (allCategories.length > 0) {
-			setShowCategoryDetailsId(allCategories[0].id); 
-		}
-	}, [allCategories]);
+		const fetchCategory = async () => {
+			if (!selectedCategory?.id) return;
+
+			try {
+				const res = await processCategoryProfile(selectedCategory.id);
+				const data = res.data.data;
+
+				if (JSON.stringify(selectedCategory) !== JSON.stringify(data)) {
+					setSelectedCategory(data);
+				}
+			} catch (error) {
+				console.error("could not fetch category", error);
+			}
+		};
+		fetchCategory();
+	}, [selectedCategory?.id, processCategoryProfile]);
 
 	const handleSelected = (id) => {
-		setShowCategoryDetailsId(id);
+		if (selectedCategory?.id === id) return; 
+
+		const selected = allCategories.find(cat => cat.id === id);
+		setSelectedCategory(selected);
 		setSelectedId(id);
 	};
 
 	const handleEditClick = () => {
+		if (!selectedCategory) return;
+		
 		setFormData({
-			category_name: category.category_name,
-			description: category.description,
+			category_name: selectedCategory.category_name,
+			description: selectedCategory.description,
+		});
+	};
+
+	const handleResetForm = () => {
+		setFormData({
+			category_name: "",
+			description: "",
 		});
 	};
 
@@ -82,6 +89,7 @@ function  AddCategories() {
 					role="button"
 					title="Edit"
 					className="site-text-primary"
+					onClick={() => handleResetForm()}
 				>
 					<span className="fa fa-edit" />
 				</a>
@@ -94,16 +102,15 @@ function  AddCategories() {
 						<div className="section-panel">
 							<div>
 								<p className="cat-headings">List</p>
-								<ul className=" category-list">
+								<ul className="category-list">
 									{allCategories?.map((category) => (
 										<li
 											key={category.id}
-											
 											className={`category-items ${
-												showCategoryDetailsId === category.id
+												selectedCategory?.id === category.id
 													? "selected-category"
-													: ""
-											}`}
+												: ""
+										}`}
 											onClick={() => handleSelected(category.id)}
 										>
 											<div className="">
@@ -116,11 +123,10 @@ function  AddCategories() {
 
 							<div className="">
 								<p className="cat-headings">Details</p>
-
-								{showCategoryDetailsId === category.id && (
+								{selectedCategory && (
 									<div className="sec-cat-details">
 										<div className="category-desc">
-											<p>{category?.description}</p>
+											<p>{selectedCategory?.description}</p>
 										</div>
 
 										<div className="actions">
@@ -136,7 +142,7 @@ function  AddCategories() {
 												className="site-button button-sm "
 												data-bs-target="#edit-category"
 												data-bs-toggle="modal"
-												onClick={() => handleEditClick(category.id)}
+												onClick={() => handleEditClick()}
 											>
 												<MdOutlineEdit color="white" />
 											</button>
@@ -160,5 +166,8 @@ function  AddCategories() {
 		</>
 	);
 }
+
+
+
 
 export default AddCategories;

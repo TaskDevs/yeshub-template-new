@@ -1,30 +1,30 @@
-import React, { createContext, useState, useEffect } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext } from "react";
+// import { REACT_BASE_URL } from "../../../globals/constants";
+// import { notify } from "../../../utils/responseUtils";
 
-import {
-  addHistory,
-  searchHistory,
-  historyList,
-  historyProfile,
-  updateHistory,
-  deleteHistory,
-} from "./historyApi";
+// import {
+//   addHistory,
+//   searchHistory,
+//   historyList,
+//   historyProfile,
+//   updateHistory,
+//   deleteHistory,
+// } from "./historyApi";
 
 export const HistoryApiData = createContext();
 
 const HistoryApiDataProvider = (props) => {
-  const processAddHistory = async (data) => {};
+  const processAddHistory = async () => {};
 
-  const processGetAllHistory = async (id) => {};
+  const processGetAllHistory = async () => {};
 
-  const processHistoryProfile = async (id) => {};
+  const processHistoryProfile = async () => {};
 
-  const processSearchHistory = async (data) => {};
+  const processSearchHistory = async () => {};
 
-  const processUpdateHistory = async (data) => {};
+  const processUpdateHistory = async () => {};
 
-  const processDeleteHistory = async (id) => {};
+  const processDeleteHistory = async () => {};
 
   return (
     <HistoryApiData.Provider

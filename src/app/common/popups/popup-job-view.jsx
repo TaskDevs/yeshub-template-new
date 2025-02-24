@@ -11,10 +11,10 @@ function JobViewPopup() {
                             </div>
                             <div className="modal-body">
                                 <ul className="list-unstyled">
-                                    <li><strong>Job title="" :</strong><p> Web Developer – PHP, HTML, CSS </p></li>
+                                    <li><strong>Job title :</strong><p> Web Developer – PHP, HTML, CSS </p></li>
                                     <li><strong>Experience :</strong><p>5 Year 3 Months</p></li>
                                     <li><strong>Deseription :</strong>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry has been the industry's standard dummy text ever since.</p>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry has been the industry&apos;s standard dummy text ever since.</p>
                                     </li>
                                 </ul>
                             </div>

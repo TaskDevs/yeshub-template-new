@@ -31,7 +31,7 @@ function SignInPopup() {
   });
 
   const [isVisible, setIsVisible] = useState(false);
-  const [serverResponse, setServerResponse] = useState(null); // State for messages
+  const [serverResponse] = useState(null); 
 
   useEffect(() => {
     if (!formData.role) {
@@ -54,7 +54,7 @@ function SignInPopup() {
         [name]: value,
       }));
     };
-    const googleSignin = async ()=>{
+    const googleSignin = async ()=> {
       const res = await loginWithGoogle(formData.role)
       console.log(res)
     }
@@ -271,7 +271,7 @@ function SignInPopup() {
                           </button>
                         </div>
                         <div className="mt-3 mb-3">
-                          Don't have an account?
+                          Don&apos;t have an account?
                           <button
                             className="twm-backto-login"
                             data-bs-target="#sign_up_popup"

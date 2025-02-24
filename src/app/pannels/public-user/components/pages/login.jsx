@@ -14,7 +14,6 @@ import toast from "react-hot-toast";
 function LoginPage() {
   const {
     isLoading,
-    setIsLoading,
     isVisible,
     setIsVisible,
     isSubmitting,

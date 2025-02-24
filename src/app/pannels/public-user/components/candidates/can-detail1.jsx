@@ -1,10 +1,10 @@
 import SectionCandidateShortIntro1 from "../../sections/candidates/detail1/section-can-short-intro1";
 import SectionCandidateAbout1 from "../../sections/candidates/detail1/section-can-about1";
 import SectionCandidateSkills from "../../sections/candidates/section-can-skills";
-import SectionCandidateExperience from "../../sections/candidates/section-can-experience";
-import SectionCandidateEducation from "../../sections/candidates/section-can-education";
+// import SectionCandidateExperience from "../../sections/candidates/section-can-experience";
+// import SectionCandidateEducation from "../../sections/candidates/section-can-education";
 import { useEffect } from "react";
-import { loadScript, publicUrlFor } from "../../../../../globals/constants";
+import { loadScript } from "../../../../../globals/constants";
 import SectionEmployersCandidateSidebar from "../../sections/common/section-emp-can-sidebar";
 import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
 import SectionReview from "../../sections/common/section-review";

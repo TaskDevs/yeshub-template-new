@@ -3,19 +3,16 @@ import { POSTJOBFIELD } from "../../../../../globals/post-job-data";
 import JobInputField from "../../../../common/job-input-field";
 import JobSelectField from "../../../../common/job-select-field";
 import JobMultiSelectField from "../../../../common/job-multi-select-field";
-import SelectField from "../../../../common/select-field";
-import DateField from "../../../../common/date-field";
 import TextAreaField from "../../../../common/text-area-field";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+// import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import { topMessage } from "../../../../../utils/responseUtils";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function EmpPostAJobPage() {
-  const { processAddJob, statusAlert, setAlertStatus } = useContext(JobApiData);
-  const { profileData } = useContext(ProfileApiData);
+  const { processAddJob } = useContext(JobApiData);
+  // const { profileData } = useContext(ProfileApiData);
   const { skillOptions } = useContext(SkillsApiData);
   const [formData, setFormData] = useState({
     jobRoles: [],
@@ -63,13 +60,13 @@ function EmpPostAJobPage() {
     processAddJob(formData);
   };
 
-  const handleClose = () => {
-    console.log("We move");
-  };
+  // const handleClose = () => {
+  //   console.log("We move");
+  // };
 
-  const handlePostAJob = async (e) => {
-    e.preventDefault();
-  };
+  // const handlePostAJob = async (e) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <>

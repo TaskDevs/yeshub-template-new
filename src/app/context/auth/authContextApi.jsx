@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { login, retrieve, changePassword, logout } from "./authApi";
+import { login, retrieve, logout } from "./authApi";
 import { notify } from "../../../utils/responseUtils";
 import axios from "../../../utils/axios.config";
 import { BAD_REQUEST_STATUS } from "../../../globals/constants";

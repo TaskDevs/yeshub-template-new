@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 // import { PortfolioPopup } from '../../../../common/popups/popup-portfoio';
 import { PortfolioApiData } from '../../../../context/portfolio/portfolioContextApi';
 import { PortfolioPopup } from '../../../../common/popups/popup-portfolio';
@@ -7,11 +7,12 @@ import { MdOutlineEdit } from 'react-icons/md';
 import { GlobalApiData } from '../../../../context/global/globalContextApi';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { PiBriefcaseLight } from "react-icons/pi";
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
+
+
 
 function SectionCanWorkSample() {
 
-	// const [portfolios, setPortfolios] = useState([])
     const {
 			handleAddPortfolio,
 			processGetAllPortfolio,
@@ -22,16 +23,14 @@ function SectionCanWorkSample() {
 			setPortfolios,
 		} = useContext(PortfolioApiData);
 	const { selectedId, setSelectedId } = useContext(GlobalApiData)
-	
-	console.log("portfolios-data", portfolios);
+
 
     useEffect(() => {
         const fetchAllPortfolio = async () => {
             try {          
                 const res = await processGetAllPortfolio(userId)
 				if (res) {
-					console.log("get portfolio", res);
-					const data = res?.data.data;
+					const data = res.data.data;
 					setPortfolios(data);
 				}
                 
@@ -53,7 +52,7 @@ function SectionCanWorkSample() {
 		setSelectedId(id);
 		const potfolioToEdit = portfolios.find((e) => e.id === id);
 
-		console.log("potfolioToEdit", potfolioToEdit);
+		
 		if (potfolioToEdit) {
 			setFormData({
 				project_title: potfolioToEdit.project_title,

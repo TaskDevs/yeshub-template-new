@@ -19,8 +19,7 @@ import Home16Page from "../app/pannels/public-user/components/home/index16";
 import Home17Page from "../app/pannels/public-user/components/home/index17";
 import Home18Page from "../app/pannels/public-user/components/home/index18";
 
-import JobsGridPage from "../app/pannels/public-user/components/jobs/jobs-grid";
-import JobsGridMapPage from "../app/pannels/public-user/components/jobs/jobs-grid-map";
+
 import JobsListPage from "../app/pannels/public-user/components/jobs/jobs-list";
 import JobSearchPage from "../app/pannels/public-user/components/jobs/jobs-list";
 import JobDetail1Page from "../app/pannels/public-user/components/jobs/job-detail1";
@@ -57,42 +56,22 @@ import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 import ContractPopup from "../app/common/popups/popup-contract";
 
-// import { loadStripe } from "@stripe/stripe-js";
-// import { Elements } from "@stripe/react-stripe-js";
-import { useEffect, useState } from "react";
-import CompletePage from "../app/common/payment/stripe/complete-page";
-import CheckoutPage from "../app/common/payment/stripe/checkout-page";
+
 import VerifyOtp from "../app/pannels/public-user/components/pages/verify-otp";
 import GoogleCallback from "../app/pannels/public-user/components/pages/GoogleCallback";
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgotton-password";
 import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-reset-otp";
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 
-// const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
+
 
 function PublicUserRoutes() {
-  const [clientSecret, setClientSecret] = useState("");
-
-  useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    fetch("", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: [{ id: "xl-tshirt", amount: 1000 }] }),
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, []);
-
-  const appearance = {
-    theme: "stripe",
-  };
-  const loader = "auto";
+ 
 
   return (
     <>
       <Routes>
-        {/* <Route path="/auth/google/callback" element={<GoogleCallback />} /> */}
+        
         <Route path={publicUser.INITIAL} element={<Home1Page />} />
         <Route path={publicUser.HOME1} element={<Home1Page />} />
         <Route path={publicUser.HOME2} element={<Home2Page />} />
@@ -149,14 +128,7 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
-        {/* <Route
-          path={publicUser.pages.GOOGLECALLBACK}
-          element={GoogleCallback}
-        /> */}
-         {/* <Route
-          path={publicUser.pages.LINKEDINCALLBACK}
-          element={LinkedInCallback}
-        /> */}
+        
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route path={publicUser.pages.FORGOTPASS} element={<ForgotPassword/>}/>
         <Route path={publicUser.pages.VERIFYRESETOTP} element={<VerifyResetOtp/>}/>
@@ -198,30 +170,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.blog.DETAIL} element={<BlogDetailPage />} />
         <Route path="*" element={<Error404Page />} />
       </Routes>
-      {/* PAYMENTS */}
-      {/* {clientSecret && ( */}
-      {/* options={{ clientSecret, appearance, loader }} */}
-
-      {/* <Elements
-					options={{
-						mode: "payment",
-						amount: 345,
-						currency: "usd",
-						appearance,
-					}}
-					stripe={stripePromise}
-				>
-					<Routes>
-						<Route
-							path={publicUser.payment.CHECKOUT}
-							element={<CheckoutPage />}
-						/>
-						<Route
-							path={publicUser.payment.COMPLETE}
-							element={<CompletePage />}
-						/>
-					</Routes>
-				</Elements> */}
+      
     </>
   );
 }

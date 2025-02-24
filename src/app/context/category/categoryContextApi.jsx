@@ -1,10 +1,8 @@
-import React, { createContext, useState, useEffect, useCallback, useContext } from "react";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
-import { notify } from "../../../utils/responseUtils";
+import React, { createContext, useState, useContext } from "react";
+
 
 import {
   addCategory,
-  searchCategory,
   catgoryList,
   categoryProfile,
   updateCategory,
@@ -12,7 +10,7 @@ import {
 } from "./categoryApi";
 import { CATEGORYFIELD } from "../../../globals/category-data";
 import { GlobalApiData } from "../global/globalContextApi";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export const CategoryApiData = createContext();
 
@@ -27,7 +25,7 @@ const CategoryApiDataProvider = (props) => {
 
 	const [formData, setFormData] = useState(initialData);
 
-	console.log("form-cat", formData);
+	console.log("form-category", formData);
 
 
 	
@@ -51,14 +49,14 @@ const CategoryApiDataProvider = (props) => {
 	};
 
 	const processGetAllCategory = async () => {
-	  try {
+	try {
 			const res = await catgoryList();
 			console.log("getall-category", res);
 
 				return res;
 			
 		} catch (error) {
-			console.error("Error fetching categories:", error);
+			console.error("error getting all", error);
 		}
 	};
 
@@ -82,7 +80,7 @@ const CategoryApiDataProvider = (props) => {
 		}
 	};
 
-	const processSearchCategory = async (data) => {};
+	const processSearchCategory = async () => {};
 
 	const processUpdateCategory = async (id, data) => {
 		try {
@@ -102,13 +100,11 @@ const CategoryApiDataProvider = (props) => {
 	const processDeleteCategory = async (id) => {
 		try {
 			const res = await deleteCategory(id);
-			
-			toast.success("Category deleted successfully")
-             return res;
+			return res;
 			
 		} catch (error) {
-			console.error("Error fetching category:", error);
-			toast.error("Failed to delete category")
+			return false;
+			
 		}
 	};
 
@@ -121,38 +117,42 @@ const CategoryApiDataProvider = (props) => {
 			toast.success("Category added successfully");
 		} catch (err) {
 			console.error("failed to add-category", err);
+		} finally {
+			setFormData(initialData);
 		}
 	};
 
 	const handleUpdateCategory = async (e) => {
-    e.preventDefault();
-     console.log("selectedId-ctx", selectedId);
+		e.preventDefault();
+	
+
     try {
-       console.log("updateCategory-form", formData);
-			const res = await processUpdateCategory(selectedId, formData);
-		console.log("add-category", res);
+    
+		await processUpdateCategory(selectedId, formData);
+		
 		toast.success("Category updated successfully");
+		
 		} catch (err) {
-			console.error("failed to update-category", err);
+			
 			toast.error("Failed to update category");
 	} finally {
 		setFormData(initialData)
 		}
-  };
+};
   
  
 
 	return (
 		<CategoryApiData.Provider
 			value={{
+				formData,
+				setFormData,
 				processAddCategory,
 				processGetAllCategory,
 				processCategoryProfile,
 				processSearchCategory,
 				processUpdateCategory,
 				processDeleteCategory,
-				formData,
-				setFormData,
 				handleAddCategory,
 				handleUpdateCategory,
 			}}

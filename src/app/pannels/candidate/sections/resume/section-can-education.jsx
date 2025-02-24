@@ -6,7 +6,8 @@ import SectionEducationForm from "./section-education-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { userId } from "../../../../../globals/dummy-users";
 import { RiGraduationCapLine } from "react-icons/ri";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 
 function SectionCanEducation() {
 	const {	
@@ -23,17 +24,16 @@ function SectionCanEducation() {
 
 	const [educationData, setEducationData] = useState([]);
 
-	console.log("educationData", educationData);
 	
 
 	useEffect(() => {
 		const fetchEducationData = async () => {
 			try {
 				const res = await processEducationEducation(userId);
-				console.log("get-education", res);
+			
 				const data = res.data.data;
 				setEducationData(data);
-			 } catch (err) {
+			} catch (err) {
 				console.error("Failed to get education", err);
 			}
 			
@@ -50,7 +50,6 @@ function SectionCanEducation() {
 			toast.error("Please select the education to edit ")
 		}
 		setSelectedId(id);
-		console.log("edit-sch-id", id);
 
 		const educationToEdit = educationData.find((e) => e.id === id);
 

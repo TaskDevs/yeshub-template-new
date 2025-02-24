@@ -4,7 +4,6 @@ import axios from "axios";
 import {
   SUCCESS_STATUS,
   REACT_BASE_URL,
-  LIST_ON_PAGES,
 } from "../../../globals/constants";
 
 // ADD Employer
@@ -26,7 +25,7 @@ export const addEmployer = async (data) => {
 };
 
 // SEARCH Employer
-export const searchEmployer = async (data) => {
+export const searchEmployer = async () => {
   try {
     let responseOnSearchEmployer = await axios.get({
       /**Add Search Employer API URL here like /searchEmployer?keyword=${data}**/
@@ -42,7 +41,7 @@ export const searchEmployer = async (data) => {
 };
 
 // LIST Employer
-export const employerList = async (pageNo) => {
+export const employerList = async () => {
   try {
     let responseOnEmployerList = await axios.get(`${REACT_BASE_URL}employers`);
 

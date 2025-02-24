@@ -1,6 +1,6 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
+import { SUCCESS_STATUS } from "../../../globals/constants";
 
 // ADD History
 export const addHistory = async (data) => {
@@ -23,10 +23,10 @@ export const addHistory = async (data) => {
 };
 
 // SEARCH History
-export const searchHistory = async (data) => {
+export const searchHistory = async () => {
   try {
     let responseOnSearchHistory = await axios.get({
-      /**Add Search Category API URL here like /searchEducation?keyword=${data}**/
+      /**Add Search History API URL here like /searchHistory?keyword=${data}**/
     });
     if (responseOnSearchHistory.status === SUCCESS_STATUS) {
       return responseOnSearchHistory.data;
@@ -39,11 +39,11 @@ export const searchHistory = async (data) => {
 };
 
 // LIST History
-export const historyList = async (pageNo) => {
+export const historyList = async () => {
   try {
-    let responseOnHistoryList = await axios.get({
-      /**Add Get Category API URL here like /api/getHistory?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnHistoryList = await axios.get(
+      `${REACT_BASE_URL}get-history`
+    );
 
     if (responseOnHistoryList.status === SUCCESS_STATUS) {
       return responseOnHistoryList.data;
@@ -57,7 +57,7 @@ export const historyList = async (pageNo) => {
 };
 
 // VIEW History
-export const historyProfile = async (id) => {
+export const historyProfile = async () => {
   try {
     let responseOnHistoryProfile = await axios.get({
       /**Add View History API URL here like ${URL}api/getHistoryProfile/${id}**/
@@ -75,7 +75,7 @@ export const historyProfile = async (id) => {
 };
 
 // UPDATE History
-export const updateHistory = async (data) => {
+export const updateHistory = async () => {
   try {
     let responseOnUpdateHistory = await axios.put({
       /**Add Update History API URL here like  `${URL}api/updateHistory/${data.id}` **/
@@ -91,7 +91,7 @@ export const updateHistory = async (data) => {
 };
 
 // DELETE History
-export const deleteHistory = async (data) => {
+export const deleteHistory = async () => {
   try {
     let responseOnDeleteHistory = await axios.delete({
       /**Add Delete History API URL here like  `/api/deleteHistory/${data}` **/

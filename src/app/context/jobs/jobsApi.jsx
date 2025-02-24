@@ -2,9 +2,8 @@
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
-  SUCCESS_STATUS,
-  REACT_BASE_URL,
-  LIST_ON_PAGES,
+	REACT_BASE_URL,
+	SUCCESS_STATUS,
 } from "../../../globals/constants";
 
 // ADD Job
@@ -26,7 +25,7 @@ export const addJob = async (data) => {
 };
 
 // SEARCH Job
-export const searchJob = async (data) => {
+export const searchJob = async () => {
   try {
     let responseOnSearchJob = await axios.get({
       /**Add Search Employer API URL here like /searchEmployer?keyword=${data}**/
@@ -44,7 +43,7 @@ export const searchJob = async (data) => {
 // LIST Job
 export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get(`${REACT_BASE_URL}posted-jobs`);
+    let responseOnJobList = await axios.get(`${REACT_BASE_URL}get-posted-jobs`);
     if (responseOnJobList.status == 200) {
       return responseOnJobList.data.data;
     } else {
@@ -121,7 +120,7 @@ export const countEmployerJobsPosted = async (id) => {
 };
 
 // VIEW Job
-export const jobProfile = async (id) => {
+export const jobProfile = async () => {
   try {
     let responseOnJobProfile = await axios.get({
       /**Add View Job API URL here like ${URL}api/getEmployerProfile/${id}**/
@@ -141,7 +140,7 @@ export const jobProfile = async (id) => {
 
 
 // UPDATE Job
-export const updateJob = async (data) => {
+export const updateJob = async () => {
   try {
     let responseOnUpdateJob = await axios.put({
       /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
@@ -157,7 +156,7 @@ export const updateJob = async (data) => {
 };
 
 // DELETE Job
-export const deleteJob = async (data) => {
+export const deleteJob = async () => {
   try {
     let responseOnDeleteJob = await axios.delete({
       /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/

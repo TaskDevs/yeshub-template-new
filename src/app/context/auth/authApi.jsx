@@ -1,5 +1,5 @@
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, BAD_REQUEST_STATUS } from "../../../globals/constants";import cookieMethods from "../../../utils/cookieUtils";
+import { SUCCESS_STATUS } from "../../../globals/constants";import cookieMethods from "../../../utils/cookieUtils";
 
 
 // Manual Login
@@ -85,12 +85,13 @@ export const retrieve = async () => {
     let responseOnRetrieve = await axios.get(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/user`
     );
-
-    if (responseOnRetrieve.status === SUCCESS_STATUS) {
-      return responseOnRetrieve.data;
-    } else {
-      return false;
-    }
+    console.log("user info", responseOnRetrieve);
+    return responseOnRetrieve;
+    // if (responseOnRetrieve.status === SUCCESS_STATUS) {
+    //   return responseOnRetrieve.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
    
     return false;

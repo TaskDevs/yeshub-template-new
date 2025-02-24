@@ -1,58 +1,47 @@
 import { useEffect, useState, useContext } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import JobZImage from "../../../../common/jobz-img";
-import ApplyJobPopup from "../../../../common/popups/popup-apply-job";
-import SectionJobLocation from "../../sections/jobs/detail/section-job-location";
-import SectionOfficePhotos1 from "../../sections/common/section-office-photos1";
-import SectionOfficeVideo1 from "../../sections/common/section-office-video1";
-import SectionShareProfile from "../../sections/common/section-share-profile";
+
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
-import SectionJobTerms from "../../sections/jobs/detail/section-job-terms";
-import SectionJobCoverLetter from "../../sections/jobs/detail/section-job-cover-letter";
-import ApplyJobPage from "./apply-job";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { NavLink, useParams } from "react-router-dom";
-import { publicUser } from "../../../../../globals/route-names";
-import {
-  LOCAL_BACKEND_URL,
-  baseURL,
-  BACKEND_HOST,
-} from "../../../../../globals/constants";
+import { useParams } from "react-router-dom";
+
+import { baseURL } from "../../../../../globals/constants";
 import readableDate from "../../../../../utils/readableDate";
 import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 
 function JobDetail1Page() {
-  const { id } = useParams();
-  const { jobListData, processGetAllJob } = useContext(JobApiData);
-  const { handleSubmmitApplication } = useContext(ApplicationApiData)
-   const { isSubmitting } = useContext(GlobalApiData)
+	const { id } = useParams();
+	const { jobListData } = useContext(JobApiData);
+	const { handleSubmmitApplication } = useContext(ApplicationApiData);
+	const { isSubmitting } = useContext(GlobalApiData);
 
-  const [empListData, setEmpListData] = useState([]);
-  const [error, setError] = useState(null);
-  const [profile, setProfile] = useState({});
+	// const [empListData, setEmpListData] = useState([]);
+	// const [error, setError] = useState(null);
+	const [profile, setProfile] = useState({});
 
-  useEffect(() => {
-    let newData = jobListData.filter((item) => item.id == id)[0];
-    //console.log(newData);
-    setProfile(newData);
-  }, []);
+	useEffect(() => {
+		let newData = jobListData.filter((item) => item.id == id)[0];
+		console.log("newData", newData);
+		setProfile(newData);
+	}, []);
 
-  console.log(id);
+	console.log(id);
 
-  const sidebarConfig = {
-    showJobInfo: true,
-  };
+	const sidebarConfig = {
+		showJobInfo: true,
+	};
 
-  useEffect(() => {
-    loadScript("js/custom.js");
-  });
+	useEffect(() => {
+		loadScript("js/custom.js");
+	});
 
-  useEffect(() => {
-    console.log("Holding Up");
-  }, ["getEmpListUrl"]);
+	useEffect(() => {
+		console.log("Holding Up");
+	}, ["getEmpListUrl"]);
 
-  return (
+	return (
 		<>
 			<div className="section-full  p-t120 p-b90 bg-white">
 				<div className="container">

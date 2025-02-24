@@ -1,30 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import InputField from "../../../../common/input-field";
 import TextAreaField from "../../../../common/text-area-field";
 import { CATEGORYFIELD } from "../../../../../globals/category-data";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 
 function CategoryForm({ submit, id }) {
-	
-    // const [formData, setFormData] = useState(
-    //         CATEGORYFIELD.fieldDetail.reduce((acc, field) => {
-    //             acc[field.name] = "";
-    //             return acc;
-    //         }, {})
-    //     );
-        
-    
     const { formData, setFormData } = useContext(CategoryApiData);
-    // console.log("formData", { ...formData, id: "1" });
-    
-        const handleChange = (field, data) => {
-            setFormData({
-                ...formData,
-                [field]: data,
-            });
-        };
-    
-    
+    const handleChange = (field, data) => {
+        setFormData({
+            ...formData,
+            [field]: data,
+        });
+    };
 
 	return (
 		<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>

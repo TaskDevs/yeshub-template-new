@@ -10,7 +10,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ1-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -21,7 +21,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ2-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ3-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ4-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ5-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ6-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ7-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@ function SectionFaqPayments() {
                         </button>
                         <div id="FAQ8-3" className="accordion-collapse collapse" data-bs-parent="#sf-faq-accordion-3">
                             <div className="accordion-body">
-                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy.
+                                A digital interface the person causing the movement of goods uploads the relevant information prior to the commencement of movement of goods and generates e-way bill on the GST portal. Best service are provide us. simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&APOS;s standard dummy.
                             </div>
                         </div>
                     </div>

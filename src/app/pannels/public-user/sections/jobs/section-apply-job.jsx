@@ -1,6 +1,4 @@
-import { NavLink } from "react-router-dom";
-import { publicUser } from "../../../../../globals/route-names";
-import { DropzoneComponent } from "react-dropzone-component";
+
 
 function SectionApplyJob() {
     

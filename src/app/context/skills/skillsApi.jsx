@@ -1,24 +1,15 @@
-// if issues arise with axios import basic_url and import axios from original source from constant
-// import axios from "../../../utils/axios.config";
+
 import axios from "axios";
 import {
-	SUCCESS_STATUS,
-	LIST_ON_PAGES,
 	REACT_BASE_URL,
 } from "../../../globals/constants";
 
-console.log("REACT_BASE_URL", REACT_BASE_URL);
-// ADD Skills
-/**Add Create Education API URL here**/
+
 export const addSkills = async (data) => {
   try {
     let responseOnAddSkills = await axios.post(`${REACT_BASE_URL}skills`, data);
     return responseOnAddSkills;
-    // if (responseOnAddSkills.status === SUCCESS_STATUS) {
-    //   return responseOnAddSkills.data;
-    // } else {
-    //   return false;
-    // }
+    
   } catch (err) {
     console.log(err);
     return false;
@@ -32,8 +23,6 @@ export const searchSkills = async (keyword) => {
 			`${REACT_BASE_URL}skills?keyword=${keyword}`
 		);
 
-    console.log("search-skills", responseOnSearchSkills);
-
     return responseOnSearchSkills.data || [];
   } catch (err) {
     console.error("search skills error:", err);
@@ -45,7 +34,7 @@ export const searchSkills = async (keyword) => {
 export const skillsList = async () => {
   try {
     const responseOnSkillsList = await axios.get(`${REACT_BASE_URL}skills`);
-    console.log("get-all-skills", responseOnSkillsList);
+  
     return responseOnSkillsList.data || [];
   } catch (err) {
     console.error("failed to get all skills", err);

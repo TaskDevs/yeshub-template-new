@@ -1,6 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { SUCCESS_STATUS } from "../globals/constants";
+
 
 export const notify = (
   status,

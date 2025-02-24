@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 
-function SectionProfileData({}) {
-  const { profileData } = useContext(ProfileApiData);
-
+function SectionProfileData() {
+	const { profileData } = useContext(ProfileApiData);
 
 	return (
 		profileData.id ?  (
-		  <div className="sec-profile">
+		<div className="sec-profile">
 			<p className="profile-data-attributes">
 				Name:{" "}
 				<span>
@@ -39,8 +38,9 @@ function SectionProfileData({}) {
 				Bio: <span>{profileData.bio}</span>
 			</p>
 		</div>
-	  )
-		: (<p>No Profile Created</p>) 
+	)
+	: 
+	(<p>No Profile Created</p>) 
 	);
 }
 

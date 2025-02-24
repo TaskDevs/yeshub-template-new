@@ -49,14 +49,14 @@ const CategoryApiDataProvider = (props) => {
 	};
 
 	const processGetAllCategory = async () => {
-	  try {
+	try {
 			const res = await catgoryList();
 			console.log("getall-category", res);
 
 				return res;
 			
 		} catch (error) {
-			console.error("error getting all", e);
+			console.error("error getting all", error);
 		}
 	};
 
@@ -80,7 +80,7 @@ const CategoryApiDataProvider = (props) => {
 		}
 	};
 
-	const processSearchCategory = async (data) => {};
+	const processSearchCategory = async () => {};
 
 	const processUpdateCategory = async (id, data) => {
 		try {
@@ -100,7 +100,7 @@ const CategoryApiDataProvider = (props) => {
 	const processDeleteCategory = async (id) => {
 		try {
 			const res = await deleteCategory(id);
-             return res;
+			return res;
 			
 		} catch (error) {
 			return false;
@@ -125,10 +125,10 @@ const CategoryApiDataProvider = (props) => {
 	const handleUpdateCategory = async (e) => {
 		e.preventDefault();
 	
-   
+
     try {
-     
-			 await processUpdateCategory(selectedId, formData);
+    
+		await processUpdateCategory(selectedId, formData);
 		
 		toast.success("Category updated successfully");
 		
@@ -138,7 +138,7 @@ const CategoryApiDataProvider = (props) => {
 	} finally {
 		setFormData(initialData)
 		}
-  };
+};
   
  
 

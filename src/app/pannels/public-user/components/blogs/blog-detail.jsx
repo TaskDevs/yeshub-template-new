@@ -77,7 +77,7 @@ function BlogDetailPage() {
 													<div className="wt-post-discription">
 														<blockquote>
 															<p>
-																<span>"</span> A business consulting agency is
+																<span>&quot;</span> A business consulting agency is
 																involved in the planning, implementation, and
 																education of businesses.
 															</p>

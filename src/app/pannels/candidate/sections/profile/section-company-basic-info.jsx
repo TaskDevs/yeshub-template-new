@@ -4,10 +4,10 @@ import { COMPANYPROFILEDATA } from "../../../../../globals/company-profile-data"
 import TextAreaField from "../../../../common/text-area-field";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { Modal } from "bootstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
-function SectionCompanyBasicInfo({ submit, id }) {
+function SectionCompanyBasicInfo({ id }) {
   const { processAddEmployer } = useContext(EmployerApiData);
   const [formData, setFormData] = useState({
     user_id: 3,

@@ -5,7 +5,7 @@ import JobSelectField from "../../../../common/job-select-field";
 import JobMultiSelectField from "../../../../common/job-multi-select-field";
 import TextAreaField from "../../../../common/text-area-field";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+// import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -60,13 +60,13 @@ function EmpPostAJobPage() {
     processAddJob(formData);
   };
 
-  const handleClose = () => {
-    console.log("We move");
-  };
+  // const handleClose = () => {
+  //   console.log("We move");
+  // };
 
-  const handlePostAJob = async (e) => {
-    e.preventDefault();
-  };
+  // const handlePostAJob = async (e) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <>

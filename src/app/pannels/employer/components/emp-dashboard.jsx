@@ -1,9 +1,9 @@
 import JobZImage from "../../../common/jobz-img";
 import CountUp from "react-countup";
 import SectionCandidateProfileViews from "../../candidate/sections/dashboard/section-can-profile-views";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function EmpDashboardPage() {
   //const { paginationData } = useContext(JobApiData);
@@ -15,7 +15,7 @@ function EmpDashboardPage() {
  
 
   // processCountJobsPostedByEmp
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   useEffect(() => {
     processCountJobsPostedByEmp(3);

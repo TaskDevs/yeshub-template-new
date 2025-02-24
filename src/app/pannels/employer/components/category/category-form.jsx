@@ -5,18 +5,13 @@ import { CATEGORYFIELD } from "../../../../../globals/category-data";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 
 function CategoryForm({ submit, id }) {
-	     
-    
     const { formData, setFormData } = useContext(CategoryApiData);
-    
-        const handleChange = (field, data) => {
-            setFormData({
-                ...formData,
-                [field]: data,
-            });
-        };
-    
-    
+    const handleChange = (field, data) => {
+        setFormData({
+            ...formData,
+            [field]: data,
+        });
+    };
 
 	return (
 		<div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>

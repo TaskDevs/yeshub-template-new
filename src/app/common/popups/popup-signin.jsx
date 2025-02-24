@@ -31,7 +31,7 @@ function SignInPopup() {
   });
 
   const [isVisible, setIsVisible] = useState(false);
-  const [serverResponse, setServerResponse] = useState(null); 
+  const [serverResponse] = useState(null); 
 
   useEffect(() => {
     if (!formData.role) {
@@ -271,7 +271,7 @@ function SignInPopup() {
                           </button>
                         </div>
                         <div className="mt-3 mb-3">
-                          Don't have an account?
+                          Don&apos;t have an account?
                           <button
                             className="twm-backto-login"
                             data-bs-target="#sign_up_popup"

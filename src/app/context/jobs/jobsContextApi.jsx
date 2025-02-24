@@ -17,9 +17,9 @@ const JobApiDataProvider = (props) => {
   const [paginationData, setPaginationData] = useState({});
   const [empPaginationData, setEmpPaginationData] = useState({});
   const [totalPost, setTotalPost] = useState(0);
-  const [totalAppliedJob, setTotalAppliedJob] = useState(0);
+  const [totalAppliedJob] = useState(0);
   const [searchJobInfo, setSearchJobInfo] = useState({});
-  const [searchJobListData, setSearchJobListData] = useState([]);
+  const [ setSearchJobListData] = useState([]);
 
 
   const processAddJob = async (data) => {
@@ -87,9 +87,9 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  const processUpdateJob = async (data) => {};
+  const processUpdateJob = async () => {};
 
-  const processDeleteJob = async (id) => {};
+  const processDeleteJob = async () => {};
 
   return (
     <JobApiData.Provider

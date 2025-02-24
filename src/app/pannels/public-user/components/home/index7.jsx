@@ -1173,7 +1173,7 @@ function Home7Page() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div thumbsslider="" className="swiper testimonial-thumbpic-1">
+                                        <div className="swiper testimonial-thumbpic-1">
                                             <div className="swiper-wrapper">
                                                 {/*thumb-1*/}
                                                 <div className="swiper-slide">

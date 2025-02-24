@@ -3,7 +3,6 @@
 import axios from "axios";
 import {
 	SUCCESS_STATUS,
-	LIST_ON_PAGES,
 	REACT_BASE_URL,
 } from "../../../globals/constants";
 
@@ -24,7 +23,7 @@ export const addProfile = async (data) => {
 };
 
 // SEARCH Profile
-export const searchProfile = async (data) => {
+export const searchProfile = async () => {
   try {
     let responseOnSearchProfile = await axios.get({
       /**Add Search Profile API URL here like /searchEmployer?keyword=${data}**/

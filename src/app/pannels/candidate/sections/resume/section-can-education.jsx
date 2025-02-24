@@ -33,7 +33,7 @@ function SectionCanEducation() {
 			
 				const data = res.data.data;
 				setEducationData(data);
-			 } catch (err) {
+			} catch (err) {
 				console.error("Failed to get education", err);
 			}
 			

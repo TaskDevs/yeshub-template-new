@@ -25,11 +25,11 @@ export const addCategory = async (data) => {
 };
 
 // SEARCH CATEGORY
-export const searchCategory = async (data) => {
+export const searchCategory = async () => {
   try {
-    let responseOnSearchCategory = await axios.get({
-      /**Add Search Category API URL here like /searchApplication?keyword=${data}**/
-    });
+    let responseOnSearchCategory = await axios.get(
+      `${REACT_BASE_URL}job-categories`
+    );
     if (responseOnSearchCategory.status === SUCCESS_STATUS) {
       return responseOnSearchCategory.data;
     } else {
@@ -37,6 +37,7 @@ export const searchCategory = async (data) => {
     }
   } catch (err) {
     console.log(err);
+    return false;
   }
 };
 

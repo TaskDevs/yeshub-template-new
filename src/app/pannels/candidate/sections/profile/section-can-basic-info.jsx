@@ -37,7 +37,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
 		console.log("selectedSkillsIds", selectedSkillsIds);
 	};
 
-	 const handleChange = (data, field) => {
+	const handleChange = (data, field) => {
 			setFormData({
 				...formData,
 				[data]: field,

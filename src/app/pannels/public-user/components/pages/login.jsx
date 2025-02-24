@@ -62,6 +62,7 @@ function LoginPage() {
       const response = await login(formData);
       
       if (response && response.token && response.refresh_token) {
+        
         const { token, refresh_token, role } = response;
   
         sessionStorage.setItem("authToken", token);

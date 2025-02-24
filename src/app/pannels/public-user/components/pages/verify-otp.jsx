@@ -28,6 +28,8 @@ function VerifyOtp() {
   const handleOtpVerification = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    console.log(email, otp)
     setShowTopMessage(false);
     try {
       const response = await verifyOtp({ email, otp });

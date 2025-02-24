@@ -1,45 +1,64 @@
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS } from "../../../globals/constants";import cookieMethods from "../../../utils/cookieUtils";
+
+import cookieMethods from "../../../utils/cookieUtils";
 
 
 // Manual Login
+
 export const login = async (data) => {
- 
   try {
     let responseOnLogin = await axios.post(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/login`,
       data
     );
-  
-    if (responseOnLogin.status === SUCCESS_STATUS) {
-      return responseOnLogin.data;
-    } else {
-      
-      return false;
-    }
+
+    console.log("Login success:", responseOnLogin.data);
+
+    return {
+      success: true,
+      message: responseOnLogin.data.message || "Login successful!",
+      data: responseOnLogin.data, // Return token, refresh_token, role, etc.
+    };
   } catch (err) {
-   
-    return false;
+    console.error("Login failed:", err.response?.data || err.message);
+
+    return {
+      success: false,
+      message: err.response?.data?.message || "Invalid credentials",
+      errors: err.response?.data?.errors || {}, // Validation errors
+    };
   }
 };
 
+
 //Manual Register
+
+
 export const register = async (data) => {
   try {
     let responseOnRegister = await axios.post(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/register`,
       data
     );
-    if (responseOnRegister.status === SUCCESS_STATUS) {
-      return responseOnRegister.data;
-    } else {
-      return false;
-    }
-  } catch (err) {
 
-    return false;
+    console.log("Registration success:", responseOnRegister.data);
+
+    return {
+      success: true,
+      message: responseOnRegister.data.message || "Registration successful!",
+      data: responseOnRegister.data, // Return any additional data
+    };
+  } catch (err) {
+    console.error("Registration failed:", err.response?.data || err.message);
+
+    return {
+      success: false,
+      message: err.response?.data?.message || "An error occurred during registration.",
+      errors: err.response?.data?.errors || {}, // Return validation errors
+    };
   }
 };
+
 
 export const verifyOtp = async (data) => {
   try {

@@ -7,13 +7,15 @@ import { SIGNINFIELD } from "../../../globals/sign-in-data";
 import { login , loginWithLinkedIn, loginWithGoogle} from "../../context/auth/authApi";
 import cookieMethods from "../../../utils/cookieUtils";
 import toast from 'react-hot-toast';
+import { base } from "../../../globals/route-names";
+
 function SignInPopup() {
   const {
     isLoading,
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
-
+  const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState(() => {
@@ -65,22 +67,19 @@ function SignInPopup() {
       }
     
 
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-   
+    setMessage({ type: "", text: "" });
+  
     try {
       const response = await login(formData);
-      
   
-      if (response && response.token && response.refresh_token) {
-        const { token, refresh_token, role, user_id } = response;
+      if (response.success && response.data.token && response.data.refresh_token) {
+        const { token, refresh_token, role } = response.data;
   
-        // Store tokens
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
-        sessionStorage.setItem("userId", user_id);
         cookieMethods.setCookies(token, refresh_token);
   
         if (formData.rememberMe) {
@@ -89,37 +88,44 @@ function SignInPopup() {
           sessionStorage.removeItem("rememberedUser");
         }
   
-        // ✅ Show success toast
+        // ✅ Show success message
         toast.success(response.message, { position: "top-right", autoClose: 3000 });
   
-        // Redirect based on role after 2 seconds
         setTimeout(() => {
           switch (role) {
             case "admin":
               navigate("/admin");
               break;
             case "employer":
-              navigate("/");
+              navigate(base.EMPLOYER_PRE);
               break;
             case "user":
             default:
-              navigate("/");
+              navigate(base.CANDIDATE_PRE);
               break;
           }
         }, 2000);
       } else {
-        toast.error("Incorrect credential, check identifier or password", { position: "top-right", autoClose: 3000 });
+        // ✅ Extract validation errors
+        const errorMessages = Object.values(response.errors || {}).flat().join("\n");
+  
+        setMessage({
+          type: "error",
+          text: errorMessages || response.message || "Error logging in: check credentials",
+        });
       }
     } catch (error) {
-      
-      const errorMessage = error.response?.data?.message || "An error occurred. Please try again.";
+      console.error("Unexpected error:", error);
   
-      
-      toast.error(errorMessage, { position: "top-right", autoClose: 3000 });
+      setMessage({
+        type: "error",
+        text: "An error occurred. Please try again later.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
     <>
       {isLoading && <Loader />}
@@ -138,7 +144,7 @@ function SignInPopup() {
           aria-hidden="true"
           aria-labelledby="sign_up_popupLabel"
           tabIndex={-1}
-           data-bs-backdrop="static"
+          data-bs-backdrop="static"
         >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
@@ -198,6 +204,14 @@ function SignInPopup() {
                         </button>
                       </li>
                     </ul>
+                    {message.text && (
+                    <div
+                      className={`alert ${message.type === "success" ? "alert-success" : "alert-danger"} fade show`}
+                      role="alert"
+                    >
+                      {message.text}
+                    </div>
+                  )}
                         {SIGNINFIELD?.fieldDetail?.map((field) => (
                           <div className="col-lg-12" key={field.name}>
                             <div className="form-group mb-3">

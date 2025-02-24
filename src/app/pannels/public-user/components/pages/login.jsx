@@ -52,6 +52,7 @@ function LoginPage() {
     }));
   };
 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -59,10 +60,9 @@ function LoginPage() {
   
     try {
       const response = await login(formData);
-      
-      if (response && response.token && response.refresh_token) {
-        
-        const { token, refresh_token, role } = response;
+  
+      if (response.success && response.data.token && response.data.refresh_token) {
+        const { token, refresh_token, role } = response.data;
   
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
@@ -74,9 +74,9 @@ function LoginPage() {
           sessionStorage.removeItem("rememberedUser");
         }
   
-      
-   // ✅ Show success toast
-    toast.success(response.message, { position: "top-right", autoClose: 3000 });
+        // ✅ Show success message
+        toast.success(response.message, { position: "top-right", autoClose: 3000 });
+  
         setTimeout(() => {
           switch (role) {
             case "admin":
@@ -92,25 +92,26 @@ function LoginPage() {
           }
         }, 2000);
       } else {
-        setMessage({ type: "error", text: "Error logging in: check credentials" });
+        // ✅ Extract validation errors
+        const errorMessages = Object.values(response.errors || {}).flat().join("\n");
+  
+        setMessage({
+          type: "error",
+          text: errorMessages || response.message || "Error logging in: check credentials",
+        });
       }
     } catch (error) {
-     
-      
-      let errorMessage = "An error occurred. Please try again.";
-      
-      if (error.response) {
-        // Extract error message from response
-        errorMessage = error.response.data.message || "Invalid credentials";
-      }
+      console.error("Unexpected error:", error);
   
-      setMessage({ type: "error", text: errorMessage });
+      setMessage({
+        type: "error",
+        text: "An error occurred. Please try again later.",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
   
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({

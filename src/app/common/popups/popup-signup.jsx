@@ -61,45 +61,100 @@ function SignUpPopup() {
       await loginWithLinkedIn(formData.role)
       
     }
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-   
 
-    setIsSubmitting(true); // Set submitting state to true
+    // const handleSubmit = async (e) => {
+    //   e.preventDefault();
+    
+    //   setIsSubmitting(true);
+    
+    //   try {
+    //     const res = await register(formData);
+    
+    //     if (res.success) {
+    //       toast.success(res.message, { position: "top-right", autoClose: 3000 });
+    
+    //       setFormData(
+    //         SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
+    //           acc[field.name] = "";
+    //           return acc;
+    //         }, {})
+    //       );
 
-    try {
-      const res = await register(formData);
+    //       // Redirect after 2 seconds
+    //         setTimeout(() => {
+    //           navigate("/verify-otp", { state: { email: formData.email } });
+    //           window.location.reload();
+    //         }, 2000);
+    //     } else {
+    //       console.log("Validation Errors:", res.errors);
+    
+    //       // Extract and format validation messages
+    //       const errorMessages = Object.values(res.errors || {}).flat().join("\n");
+    
+    //       setMessage({
+    //         type: "error",
+    //         text: errorMessages || res.message || "Registration failed. Please try again.",
+    //       });
+    //     }
+    //   } catch (err) {
+    //     console.error("Unexpected error:", err);
+    
+    //     setMessage({
+    //       type: "error",
+    //       text: "Something went wrong. Please try again later.",
+    //     });
+    //   } finally {
+    //     setIsSubmitting(false);
+    //   }
+    // };
+    
 
-      if (res) {
-       
-        toast.success(res.message, { position: "top-right", autoClose: 3000 });
-       
-        // Reset form data after successful submission
-        setFormData(
-          SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
-            acc[field.name] = ""; // Reset all fields to an empty string
-            return acc;
-          }, {})
-        );
-
-        // Redirect after 2 seconds
-        setTimeout(() => {
-          navigate("/verify-otp", { state: { email: formData.email } });
-          window.location.reload();
-        }, 2000);
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+      setMessage({ type: "", text: "" });
+    
+      try {
+        const res = await register(formData);
+    
+        if (res.success) {
+          toast.success(res.message, { position: "top-right", autoClose: 3000 });
+    
+          setFormData(
+            SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
+              acc[field.name] = "";
+              return acc;
+            }, {})
+          );
+    
+          // Redirect after 2 seconds
+          setTimeout(() => {
+            navigate("/verify-otp", { state: { email: formData.email } });
+            window.location.reload();
+          }, 2000);
+        } else {
+          console.log("Validation Errors:", res.errors);
+    
+          // Extract and format validation messages
+          const errorMessages = Object.values(res.errors || {}).flat().join("\n");
+    
+          setMessage({
+            type: "error",
+            text: errorMessages || res.message || "Registration failed. Please try again.",
+          });
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+    
+        setMessage({
+          type: "error",
+          text: "Something went wrong. Please try again later.",
+        });
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (err) {
-   
-
-      setMessage({
-        type: "error",
-        text: "Registration failed. Please try again.",
-      });
-    } finally {
-      setIsSubmitting(false); // Reset submitting state after request completes
-    }
-  };
-
+    };
+    
   return (
     <>
       {isLoading && <Loader />}
@@ -234,10 +289,22 @@ function SignUpPopup() {
                       </button>
                     </div>
                   </div>
+                  <div className="mt-3 mb-3">
+                          Already have an account?
+                          <button
+                            className="twm-backto-login"
+                            data-bs-target="#sign_up_popup2"
+                            data-bs-toggle="modal"
+                            data-bs-dismiss="modal"
+                          >
+                            Sign In
+                          </button>
+                        </div>
                 </div>
               </form>
-
+              
               <div className="modal-footer">
+                
                 <span className="modal-f-title">Login or Sign up with</span>
                 <ul className="twm-modal-social">
                   <li>

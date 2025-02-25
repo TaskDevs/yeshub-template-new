@@ -11,13 +11,17 @@ function Header1({ _config }) {
   const role = sessionStorage.getItem("userRole");
   const [menuActive, setMenuActive] = useState(false);
   const { userProfile } = useContext(AuthApiData)
-  const username = userProfile?.username || "U"; // Default to "N" if no userna
+  const username = userProfile?.username || "U"; // Default to "N" if no username
+
+
+  
+  //navigation
   function handleNavigationClick() {
     setMenuActive(!menuActive);
   }
 
 
-  // colors
+  // colors for the username
   const stringToColor = (string) => {
     let hash = 0;
     for (let i = 0; i < string.length; i++) {

@@ -9,23 +9,27 @@ import {
 } from "./profileApi";
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
-import { userId } from "../../../globals/dummy-users";
 import toast from "react-hot-toast";
+import { OAuthUserId, userId } from "../../../globals/constants";
 
 export const ProfileApiData = createContext();
+
+
+const initialFormData = USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
+  acc[field.name] = "";
+  return acc;
+}, {});
+
+
 
 const ProfileApiDataProvider = (props) => {
   const { setIsSubmitting } = useContext(GlobalApiData);
   const [imageURL, setImageURL] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileData, setProfileData] = useState({});
-
-  const initialFormData = USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
-    acc[field.name] = "";
-    return acc;
-  }, {});
-
+  const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
+
 
   const processAddProfile = async (data) => {
     try {
@@ -35,6 +39,8 @@ const ProfileApiDataProvider = (props) => {
       console.error("add-profile", err);
     }
   };
+
+
 
   const processGetAllProfile = async () => {
     try {
@@ -48,7 +54,6 @@ const ProfileApiDataProvider = (props) => {
   const processProfileProfile = async (id) => {
     try {
       const res = await profileProfile(id);
-      console.log("profile", res);
       return res;
     } catch (err) {
       throw new Error(err);
@@ -68,7 +73,6 @@ const ProfileApiDataProvider = (props) => {
   const processDeleteProfile = async (id) => {
     try {
       const res = await deleteProfile(id);
-      console.log("profile", res);
       return res;
     } catch (e) {
       throw new Error("Failed to delete profile", e);
@@ -76,9 +80,10 @@ const ProfileApiDataProvider = (props) => {
   };
 
   const handleSubmitProfile = async (e) => {
+    
+    
     e.preventDefault();
     setIsSubmitting(true);
-    console.log("setIsSubmitting");
 
     if (!selectedFile) {
       toast.error("Please select a profile image before submitting.");
@@ -87,20 +92,17 @@ const ProfileApiDataProvider = (props) => {
     }
 
     const profileFormData = new FormData();
-    profileFormData.append("user_id", "1");
     profileFormData.append("profile_image", selectedFile);
-    profileFormData.append("user_id", userId);
+    profileFormData.append("user_id", userId || OAuthUserId);
     profileFormData.append("profile_image", selectedFile);
     Object.entries(formData).forEach(([key, value]) => {
       profileFormData.append(key, value);
     });
 
-    console.log("profileFormData", Object.fromEntries(profileFormData));
 
     try {
       const response = await processAddProfile(profileFormData);
 
-      console.log("add-profile-res", response);
       toast.success("Profile added successfully");
       return response;
     } catch (e) {
@@ -115,21 +117,20 @@ const ProfileApiDataProvider = (props) => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    console.log({
-      ...formData,
-      id: userId,
-    });
-
+    console.log("formData-update-profile", formData)
     try {
-      const response = await processUpdateProfile(userId, {
+      const response = await processUpdateProfile(userId || OAuthUserId, {
         ...formData,
-        id: userId,
+        id: userId || OAuthUserId,
       });
-      toast.success("Profile data updated successfully");
+      if (response) {
+        toast.success("Profile data updated successfully");
       return response;
+      }
+      
     } catch (e) {
       console.error("Failed to update profile", e);
-      toast.error("An error occurred while updating the profile", "error");
+      toast.error("Failed to update the profile");
       setSelectedFile(null);
       setImageURL(null);
     } finally {
@@ -139,12 +140,10 @@ const ProfileApiDataProvider = (props) => {
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    console.log("file-img", file);
     setSelectedFile(file);
 
     if (file) {
       const reader = new FileReader();
-      console.log("reader", reader);
 
       reader.onloadend = () => {
         setImageURL(reader.result);
@@ -162,6 +161,8 @@ const ProfileApiDataProvider = (props) => {
         profileData,
         formData,
         imageURL,
+        selectedItems,
+        setSelectedItems,
         setProfileData,
         processAddProfile,
         processGetAllProfile,

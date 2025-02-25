@@ -1,13 +1,16 @@
 import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { base, publicUser } from "../../../globals/route-names";
-import {  useState } from "react";
+import {  useContext, useState } from "react";
 import { AiFillDashboard } from "react-icons/ai";
+import { AuthApiData } from "../../context/auth/authContextApi";
 
 function Header1({ _config }) {
   const token = sessionStorage.getItem("authToken");
   const role = sessionStorage.getItem("userRole");
   const [menuActive, setMenuActive] = useState(false);
+  const { userProfile } = useContext(AuthApiData)
+
 
   
 
@@ -212,7 +215,7 @@ function Header1({ _config }) {
                           role="button"
                         >
                           <AiFillDashboard size={24} className="me-2" />
-                          <span className="btn-text">Dashboard</span>
+                          <span className="btn-text">{userProfile?.username}</span>
                         </a>
 						):(
 							<a

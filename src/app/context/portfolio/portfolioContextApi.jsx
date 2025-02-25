@@ -7,9 +7,8 @@ import {
 } from "./portfolioApi";
 import { PORTFOLIOFIELD } from "../../../globals/portfolio-data";
 import { GlobalApiData } from "../global/globalContextApi";
-
-import { userId } from "../../../globals/dummy-users";
 import toast from "react-hot-toast";
+import { userId } from "../../../globals/constants";
 
 export const PortfolioApiData = createContext();
 

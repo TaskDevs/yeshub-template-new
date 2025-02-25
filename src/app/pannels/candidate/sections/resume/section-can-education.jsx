@@ -4,9 +4,9 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import SectionEducationForm from "./section-education-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
-import { userId } from "../../../../../globals/dummy-users";
 import { RiGraduationCapLine } from "react-icons/ri";
 import toast from "react-hot-toast";
+import { userId } from "../../../../../globals/constants";
 
 
 function SectionCanEducation() {

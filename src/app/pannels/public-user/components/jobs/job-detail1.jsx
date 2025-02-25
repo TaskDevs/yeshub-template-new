@@ -98,7 +98,7 @@ function JobDetail1Page() {
 															Application ends:{" "}
 															<span className="twm-job-apllication-date">
 																{/* {profile.end_date} */}
-																{readableDate(profile.end_date)}
+																{readableDate(profile?.end_date)}
 															</span>
 														</div>
 													</div>

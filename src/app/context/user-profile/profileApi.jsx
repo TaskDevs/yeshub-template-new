@@ -42,13 +42,14 @@ export const searchProfile = async () => {
 /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
 export const profileList = async () => {
   try {
-    let responseOnProfileList = await axios.get(`${REACT_BASE_URL}get-profile`);
+    let responseOnProfileList = await axios.get(`${REACT_BASE_URL}get-all-users`);
 
-    if (responseOnProfileList.status === SUCCESS_STATUS) {
-      return responseOnProfileList.data;
-    } else {
-      return false;
-    }
+    return responseOnProfileList.data;
+    // if (responseOnProfileList.status === SUCCESS_STATUS) {
+    //   return responseOnProfileList.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;

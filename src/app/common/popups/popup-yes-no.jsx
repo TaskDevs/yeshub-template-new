@@ -110,7 +110,26 @@ function YesNoPopup(props) {
 		}
 	};
 
-	// const navigate = useNavigate();
+	const handleDeleteAppliedJob = async () => {
+		if (!selectedId) {
+			toast.error("Please select the portfolio profile to delete");
+			return;
+		}
+		setIsSubmitting(true);
+		try {
+			await processDeletePortfolio(selectedId);
+
+			toast.success("Portfolio deleted successfully");
+		} catch {
+			toast.error("Failed to delete portfolio");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+
+
 
 	const yesHandler = () => {
 		console.log("Popup-type-handler:", props.type);

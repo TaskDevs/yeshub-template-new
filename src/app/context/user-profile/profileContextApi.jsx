@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 import {
   addProfile,
@@ -27,9 +27,11 @@ const ProfileApiDataProvider = (props) => {
   const [imageURL, setImageURL] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileData, setProfileData] = useState({});
+  const [allUsersProfile, setAllUsersProfile] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
 
+  console.log("allUsersProfile", allUsersProfile)
 
   const processAddProfile = async (data) => {
     try {
@@ -41,6 +43,39 @@ const ProfileApiDataProvider = (props) => {
   };
 
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await processProfileProfile(userId || OAuthUserId);
+      if (res) {
+        setProfileData(res.data.data);
+      }
+    };
+
+    fetchProfile();
+
+   
+    const interval = setInterval(fetchProfile, 60000);
+    return () => clearInterval(interval); 
+  }, []);
+
+
+  useEffect(() => {
+    const fetchAllProfile = async () => {
+      const res = await profileList();
+      if (res) {
+        console.log("res-all", res)
+        setAllUsersProfile(res.data.data);
+      }
+    };
+
+    fetchAllProfile();
+
+   
+    const interval = setInterval(fetchAllProfile, 60000);
+    return () => clearInterval(interval); 
+  }, []);
+
+  
 
   const processGetAllProfile = async () => {
     try {
@@ -117,7 +152,7 @@ const ProfileApiDataProvider = (props) => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    console.log("formData-update-profile", formData)
+    // console.log("formData-update-profile", formData)
     try {
       const response = await processUpdateProfile(userId || OAuthUserId, {
         ...formData,
@@ -162,6 +197,7 @@ const ProfileApiDataProvider = (props) => {
         formData,
         imageURL,
         selectedItems,
+        allUsersProfile,
         setSelectedItems,
         setProfileData,
         processAddProfile,

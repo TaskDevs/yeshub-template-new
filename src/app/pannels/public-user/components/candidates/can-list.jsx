@@ -5,13 +5,15 @@ import JobZImage from "../../../../common/jobz-img";
 import SectionPagination from "../../sections/common/section-pagination";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { MdOutlineStarRate } from "react-icons/md";
 import { LuMessageSquare } from "react-icons/lu";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+import CandidateCard from "./candidate-card";
 
 function CandidateListPage() {
-
+     const { allUsersProfile } = useContext(ProfileApiData)
 	
 
     const _filterConfig = {
@@ -45,6 +47,19 @@ function CandidateListPage() {
 								<div className="twm-candidates-list-wrap">
 									<>
 										<ul>
+											{allUsersProfile.length === 0 ? (
+												<p>No User Found.</p>
+											) : (
+												allUsersProfile.map((user) => {
+													return (
+														<CandidateCard key={user._id} data={user} />
+													);
+												})
+											)}
+
+											{/* Pagination */}
+											<SectionPagination />
+
 											<li>
 												<NavLink
 													to={publicUser.candidate.DETAIL1}

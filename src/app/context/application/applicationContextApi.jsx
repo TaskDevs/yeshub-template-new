@@ -13,6 +13,7 @@ import { APPLICATIONFIELD } from "../../../globals/application-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { userId } from "../../../globals/constants";
 
 
 export const ApplicationApiData = createContext();
@@ -98,7 +99,7 @@ const ApplicationApiDataProvider = (props) => {
   };
 
   const handleSubmmitApplication = async () => {
-    const userId = sessionStorage.getItem("userId");
+    
     if (!userId)
     {
       toast.error("User does not exist, Please sign in");
@@ -108,7 +109,7 @@ const ApplicationApiDataProvider = (props) => {
    
     try {
       await processAddApplication({
-				user_id: userId || 3,
+				user_id: userId,
 				job_id: jobId,
 				status: "pending",
 				freelance_id: "",

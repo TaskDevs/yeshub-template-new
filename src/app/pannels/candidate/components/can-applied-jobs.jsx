@@ -13,7 +13,7 @@ function CanAppliedJobsPage() {
   const { processApplicationProfile } = useContext(ApplicationApiData);
   const { jobListData,  processAJobProfile  } = useContext(JobApiData);
 
-  console.log("jobListData", jobListData)
+  // console.log("jobListData", jobListData)
 
 
   const _filterConfig = {
@@ -38,7 +38,7 @@ useEffect(() => {
     
       const res = await processApplicationProfile(userId);
       const data = res.data.data;
-      console.log("data", data);
+      // console.log("data", data);
 
     
       const uniqueJobsMap = data.reduce((acc, current) => {

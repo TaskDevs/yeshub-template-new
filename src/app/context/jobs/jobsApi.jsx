@@ -120,17 +120,16 @@ export const countEmployerJobsPosted = async (id) => {
 };
 
 // VIEW Job
-export const jobProfile = async () => {
+export const jobProfile = async (id) => {
   try {
-    let responseOnJobProfile = await axios.get({
-      /**Add View Job API URL here like ${URL}api/getEmployerProfile/${id}**/
-    });
+    let responseOnJobProfile = await axios.get(`${REACT_BASE_URL}posted-jobs/${id}`);
 
-    if (responseOnJobProfile.status === SUCCESS_STATUS) {
-      return responseOnJobProfile.data;
-    } else {
-      return false;
-    }
+    return responseOnJobProfile.data;
+    // if (responseOnJobProfile.status === SUCCESS_STATUS) {
+    //   return responseOnJobProfile.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;

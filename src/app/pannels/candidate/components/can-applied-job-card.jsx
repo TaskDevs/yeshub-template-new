@@ -12,15 +12,15 @@ function CanAppliedJobCard({ data }) {
 					<JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
 				</div>
 				<div className="twm-mid-content">
-					<NavLink to={`/job-detail/${data.id}`} className="twm-job-title">
+					<NavLink to={`/job-detail/${data?.jobDetails?.id}`} className="twm-job-title">
 						<h4>
-							Senior Web Designer
+							{data?.jobDetails?.job_title}
 							<span className="twm-job-post-duration">
-								/{readableDate(data.created_at)}
+								/{readableDate(data?.created_at)}
 							</span>
 						</h4>
 					</NavLink>
-					<p className="twm-job-address">
+					{/* <p className="twm-job-address">
 						1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
 					</p>
 					<a
@@ -28,14 +28,14 @@ function CanAppliedJobCard({ data }) {
 						className="twm-job-websites site-text-primary"
 					>
 						https://thewebmax.com
-					</a>
+					</a> */}
 				</div>
 				<div className="twm-right-content">
 					<div className="twm-jobs-category green">
 						<span className="twm-bg-green">New</span>
 					</div>
 					<div className="twm-jobs-amount">
-						$2500 <span>/ Month</span>
+					₵{data?.jobDetails?.salary} <span>/ Month</span>
 					</div>
 					{/* <NavLink
 						to={publicUser.jobs.DETAIL1}

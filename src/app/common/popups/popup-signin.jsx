@@ -76,10 +76,11 @@ function SignInPopup() {
       const response = await login(formData);
   
       if (response.success && response.data.token && response.data.refresh_token) {
-        const { token, refresh_token, role } = response.data;
+        const { token, refresh_token, role, user_id } = response.data;
   
         sessionStorage.setItem("authToken", token);
         sessionStorage.setItem("userRole", role);
+        sessionStorage.setItem("userId", user_id);
         cookieMethods.setCookies(token, refresh_token);
   
         if (formData.rememberMe) {

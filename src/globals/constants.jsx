@@ -6,6 +6,10 @@ export const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 export const HOST = window.location.hostname;
 export const timeOut = { timeout: 10000 };
 
+//RETRIEVE USER IDS
+export const userId = sessionStorage.getItem("userId");
+export const OAuthUserId = sessionStorage.getItem("OAuthUserId")
+
 //STATUS CODE
 export const SUCCESS_STATUS = 201;
 export const SUCCESS_STATUS_TEXT = "success";
@@ -23,6 +27,7 @@ export const popupType = {
   DELETE_EDUCATION: "DELETE_EDUCATION",
   DELETE_SKILLS: "DELETE_SKILLS",
    DELETE_PORTFOLIO: "DELETE_PORTFOLIO",
+   DELETE_APPLIED_JOB: "DELETE_APPLIED_JOB",
 };
 
 export const formType = {

@@ -7,6 +7,7 @@ import {
   jobList,
   countEmployerJobsPosted,
   employerJobList,
+  jobProfile
 } from "./jobsApi";
 
 export const JobApiData = createContext();
@@ -59,22 +60,33 @@ const JobApiDataProvider = (props) => {
   const processGetAllJobPostByEmployer = async (id) => {
     let response = await employerJobList(id);
     if (response) {
-      console.log(response);
       setEmpJobListData(response.data);
       setEmpPaginationData({
         total: response.total,
       });
+      return response
     }
   };
 
   const processJobProfile = async (id) => {
     let response = await employerJobList(id);
-		if (response) {
-			console.log("get-single-jobs", response);
-			setJobListData(response);
+		if (response) {			
+      setJobListData(response);
+      
 		}
 
   };
+
+  const processAJobProfile = async (id) => {
+    let response = await jobProfile(id);
+		if (response) {
+			return response;
+      
+		}
+
+  };
+
+  // jobProfile
 
   const processSearchJob = async (data) => {
     let response = await searchJob(data);
@@ -103,6 +115,7 @@ const JobApiDataProvider = (props) => {
         processSearchJob,
         processUpdateJob,
         processDeleteJob,
+        processAJobProfile,
         jobListData,
         setJobListData,
         empJobListData,

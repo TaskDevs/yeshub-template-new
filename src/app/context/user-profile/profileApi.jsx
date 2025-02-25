@@ -8,7 +8,7 @@ import {
 
 // ADD Profile
 export const addProfile = async (data) => {
-  console.log("p-data", data)
+
   try {
     let responseOnAddProfile = await axios.post(
 			`${REACT_BASE_URL}create-profile`,
@@ -63,7 +63,6 @@ export const profileProfile = async (id) => {
     let responseOnProfile = await axios.get(
 			`${REACT_BASE_URL}get-profile/${id}`
 		);
-    console.log(responseOnProfile)
     return responseOnProfile;
   
   } catch (err) {

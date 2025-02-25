@@ -1,13 +1,12 @@
 import React, { useContext, useEffect } from 'react'
-// import { PortfolioPopup } from '../../../../common/popups/popup-portfoio';
 import { PortfolioApiData } from '../../../../context/portfolio/portfolioContextApi';
 import { PortfolioPopup } from '../../../../common/popups/popup-portfolio';
-import { userId } from '../../../../../globals/dummy-users';
 import { MdOutlineEdit } from 'react-icons/md';
 import { GlobalApiData } from '../../../../context/global/globalContextApi';
 import { FaRegTrashCan } from 'react-icons/fa6';
 import { PiBriefcaseLight } from "react-icons/pi";
 import toast from 'react-hot-toast';
+import { userId } from '../../../../../globals/constants';
 
 
 

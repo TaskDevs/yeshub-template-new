@@ -10,7 +10,8 @@ import {
 import { EDUCATIONFIELD } from "../../../globals/education-data";
 import { toast } from "react-toastify";
 import { GlobalApiData } from "../global/globalContextApi";
-import { userId } from "../../../globals/dummy-users";
+import { userId } from "../../../globals/constants";
+
 
 export const EducationApiData = createContext();
 
@@ -78,7 +79,6 @@ const EducationApiDataProvider = (props) => {
 	const handleAddEducation = async (e) => {
 		e.preventDefault();
 		try {
-            console.log("ed-form", { ...formData, user_id: userId });
 			setIsSubmitting(true);
 			
 			const res = await processAddEducation({...formData, user_id: userId});

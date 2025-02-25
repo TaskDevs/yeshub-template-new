@@ -4,7 +4,6 @@ import { notify } from "../../../utils/responseUtils";
 import {
 	addSkills,
 	skillsList,
-	skillsProfile,
 	updateSkills,
 	deleteSkills,
 } from "./skillsApi";
@@ -35,7 +34,6 @@ const SkillsApiDataProvider = (props) => {
 	const processAddSkills = async (data) => {
 		try {
 			const res = await addSkills(data);
-			console.log("processAddSkills", res);
 
 			// Safely add new skill
 			if (res && res.data) {
@@ -53,7 +51,7 @@ const SkillsApiDataProvider = (props) => {
 	const processGetAllSkills = async () => {
 		try {
 			const res = await skillsList();
-
+           
 			const skills = res.data;
 
 			return skills;
@@ -62,15 +60,15 @@ const SkillsApiDataProvider = (props) => {
 		}
 	};
 
-	const processSkillsProfile = async (id) => {
-		try {
-			const res = await skillsProfile(id);
+	// const processSkillsProfile = async (id) => {
+	// 	try {
+	// 		const res = await skillsProfile(id);
 
-			return res;
-		} catch (err) {
-			throw new Error("failed to get skill", err);
-		}
-	};
+	// 		return res;
+	// 	} catch (err) {
+	// 		throw new Error("failed to get skill", err);
+	// 	}
+	// };
 
 	
 
@@ -127,7 +125,6 @@ const SkillsApiDataProvider = (props) => {
 				formData,
 				setSkillOptions,
 				processAddSkills,
-				processSkillsProfile,
 				processGetAllSkills,
 				processUpdateSkills,
 				processDeleteSkills,

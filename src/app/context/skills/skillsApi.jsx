@@ -34,7 +34,6 @@ export const searchSkills = async (keyword) => {
 export const skillsList = async () => {
   try {
     const responseOnSkillsList = await axios.get(`${REACT_BASE_URL}skills`);
-  
     return responseOnSkillsList.data || [];
   } catch (err) {
     console.error("failed to get all skills", err);
@@ -44,15 +43,15 @@ export const skillsList = async () => {
 
 // VIEW Skills
 /**Add View History API URL here like ${URL}api/getSkillsProfile/${id}**/
-export const skillsProfile = async (id) => {
+export const skillsProfile = async () => {
   try {
     let responseOnSkillsProfile = await axios.get(
-			`${REACT_BASE_URL}skills/${id}`
+			// `${REACT_BASE_URL}skills/${id}`
 		);
 
     return responseOnSkillsProfile.data || null;
-  } catch (err) {
-    console.error(`Skills Profile Error for ID ${id}`, err);
+  } catch {
+    // console.error(`Skills Profile Error for ID ${id}`, err);
     return false;
   }
 };

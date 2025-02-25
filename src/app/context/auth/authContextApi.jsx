@@ -11,6 +11,7 @@ const AuthApiDataProvider = (props) => {
   const [userProfile, setUserProfile] = useState(null);
   const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  sessionStorage.setItem("OAuthUserId", userProfile?.id)
 
 
 
@@ -51,8 +52,8 @@ const AuthApiDataProvider = (props) => {
 
     let response = await retrieve();
     if (response) {
-      setUserProfile(response.user);
-      setRole(response.user.roleId);
+      setUserProfile(response.data);
+      setRole(response.data.role);
       setIsAuthenticated(true);
       return true;
     } else {

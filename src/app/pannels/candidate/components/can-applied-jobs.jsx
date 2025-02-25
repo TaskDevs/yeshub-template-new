@@ -1,7 +1,7 @@
 import SectionRecordsFilter from "../../public-user/sections/common/section-records-filter";
 import SectionPagination from "../../public-user/sections/common/section-pagination";
 import { useContext, useEffect, useState } from "react";
-import { loadScript } from "../../../../globals/constants";
+import { loadScript, userId } from "../../../../globals/constants";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -11,7 +11,10 @@ import { JobApiData } from "../../../context/jobs/jobsContextApi";
 function CanAppliedJobsPage() {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const { processApplicationProfile } = useContext(ApplicationApiData);
-  const { jobListData, processGetAllJob } = useContext(JobApiData);
+  const { jobListData,  processAJobProfile  } = useContext(JobApiData);
+
+  console.log("jobListData", jobListData)
+
 
   const _filterConfig = {
     prefix: "Applied",
@@ -25,47 +28,51 @@ function CanAppliedJobsPage() {
     loadScript("js/custom.js");
   });
 
-useEffect(() => {
-  const fetchJobs = async () => {
-    const employerId = sessionStorage.getItem("employerId");
-    await processGetAllJob(employerId || 3);
-  };
-  fetchJobs();
-}, []); // Runs once on mount
+
 
 useEffect(() => {
   const fetchProfileAndMatchJobs = async () => {
-    if (jobListData.length === 0) return; // Wait for jobListData to be available
+    if (!userId) return; 
 
-    const userId = sessionStorage.getItem("userId");
-    const res = await processApplicationProfile(userId || 3);
-    const data = res.data.data;
+    try {
+    
+      const res = await processApplicationProfile(userId);
+      const data = res.data.data;
+      console.log("data", data);
 
-    // Process unique jobs
-    const uniqueJobsMap = data.reduce((acc, current) => {
-      const existingJob = acc.get(current.job_id);
-      if (!existingJob || new Date(current.created_at) > new Date(existingJob.created_at)) {
-        acc.set(current.job_id, current);
-      }
-      return acc;
-    }, new Map());
-    const filteredJobs = Array.from(uniqueJobsMap.values());
+    
+      const uniqueJobsMap = data.reduce((acc, current) => {
+        const existingJob = acc.get(current.job_id);
+        if (!existingJob || new Date(current.created_at) > new Date(existingJob.created_at)) {
+          acc.set(current.job_id, current);
+        }
+        return acc;
+      }, new Map());
 
-    // Map jobs with details
-    const jobsWithDetails = filteredJobs.map((appliedJob) => {
-      const jobDetails = jobListData.find((job) => job.id === appliedJob.job_id);
-      return {
-        ...appliedJob,
-        jobDetails: jobDetails || null,
-      };
-    });
+      const filteredJobs = Array.from(uniqueJobsMap.values());
 
-    console.log("res-app-jobs", jobsWithDetails);
-    setAppliedJobs(jobsWithDetails);
+   
+      const uniqueJobIds = [...new Set(filteredJobs.map((job) => job.job_id))];
+
+      
+      const jobDetailsResponses = await Promise.all(uniqueJobIds.map((jobId) => processAJobProfile(jobId)));
+
+      const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
+        const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+        return {
+          ...appliedJob,
+          jobDetails, 
+        }
+      });
+      setAppliedJobs(jobsWithDetails); 
+
+    } catch (error) {
+      console.error("Failed to fetch jobs data", error);
+    }
   };
 
   fetchProfileAndMatchJobs();
-}, [jobListData])
+}, [userId, jobListData]); 
 
 
 

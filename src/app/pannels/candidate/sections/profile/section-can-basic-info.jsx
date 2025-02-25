@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import InputField from "../../../../common/input-field";
 import { USERPROFILEFIELD } from "../../../../../globals/user-profile-data";
 import TextAreaField from "../../../../common/text-area-field";
@@ -7,8 +7,7 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
 
 function SectionCandicateBasicInfo({ submit, id }) {
-  const [selectedItems, setSelectedItems] = useState([]);
-  const { formData, setFormData } = useContext(ProfileApiData);
+  const { formData, setFormData, selectedItems, setSelectedItems } = useContext(ProfileApiData);
   const { skillOptions, processGetAllSkills, setSkillOptions } =
     useContext(SkillsApiData);
 
@@ -227,7 +226,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
                               }),
                             }}
 
-                            // (data) => handleSelectChange(data)
                           />
                         </div>
                       </div>

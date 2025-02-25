@@ -103,17 +103,14 @@ function JobDetail1Page() {
 														</div>
 													</div>
 													<div className="twm-job-self-bottom">
-														{/* <NavLink
-															className="site-button"
-															// data-bs-toggle="modal"
-															// href="#apply_job_popup"
-															// href={publicUser.jobs.APPLY}
-															to={publicUser.jobs.APPLY}
-															// to="#apply_job_pop"
-															// role="button"
+														{/* <button
+															className="site-button m-4 btn-danger"
+															
+															to={''}
+															
 														>
-															Apply Now
-														</NavLink> */}
+															Save job
+														</button> */}
 
 														<button
 															type="submit"

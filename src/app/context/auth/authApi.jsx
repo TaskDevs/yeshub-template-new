@@ -12,7 +12,11 @@ export const login = async (data) => {
       data
     );
 
-    console.log("Login success:", responseOnLogin.data);
+    const { username, user_id } = responseOnLogin.data;
+
+    // Store necessary user info in sessionStorage
+    sessionStorage.setItem("username", username);
+    sessionStorage.setItem("user_id", user_id);
 
     return {
       success: true,
@@ -29,6 +33,7 @@ export const login = async (data) => {
     };
   }
 };
+
 
 
 //Manual Register

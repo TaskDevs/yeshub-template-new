@@ -6,8 +6,7 @@ import { candidate, canRoute, publicUser } from "../../../../../globals/route-na
 
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
-
-
+    const username = sessionStorage.getItem("username")
 
     return (
 			<>
@@ -29,7 +28,7 @@ function CanSidebarSection() {
 						to={canRoute(publicUser.candidate.DETAIL1)}
 						className="twm-job-title"
 					>
-						<h4>Randall Henderson </h4>
+						<h4>{username}</h4>
 					</NavLink>
 					<p>IT Contractor</p>
 				</div>

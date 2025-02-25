@@ -5,6 +5,7 @@ import JobZImage from "../../../common/jobz-img";
 
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
+	
     return (
 			<>
 				<div className="twm-candidate-profile-pic">

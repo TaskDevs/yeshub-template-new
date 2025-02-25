@@ -12,6 +12,8 @@ const AuthApiDataProvider = (props) => {
   const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+
+
   useEffect(() => {
     fetchUser();
   }, []);

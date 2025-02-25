@@ -59,19 +59,19 @@ const JobApiDataProvider = (props) => {
   const processGetAllJobPostByEmployer = async (id) => {
     let response = await employerJobList(id);
     if (response) {
-      console.log(response);
       setEmpJobListData(response.data);
       setEmpPaginationData({
         total: response.total,
       });
+      return response
     }
   };
 
   const processJobProfile = async (id) => {
     let response = await employerJobList(id);
 		if (response) {
-			console.log("get-single-jobs", response);
 			setJobListData(response);
+      
 		}
 
   };

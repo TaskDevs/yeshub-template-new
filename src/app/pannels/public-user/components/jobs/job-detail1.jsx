@@ -20,7 +20,7 @@ function JobDetail1Page() {
 	const { handleSubmmitApplication } = useContext(ApplicationApiData);
 	const { isSubmitting } = useContext(GlobalApiData);
     const [job, setJobs] = useState(null)
-	const navigate = useNavigate()
+	// const navigate = useNavigate()
 	// const [empListData, setEmpListData] = useState([]);
 	// const [error, setError] = useState(null);
 	const [profile, setProfile] = useState({});

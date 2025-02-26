@@ -3,6 +3,9 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 
 function SectionCandidateSkills({ props }) {
     const { skillOptions } = useContext(SkillsApiData)
+    console.log("skillOptions-detail", skillOptions)
+
+
     return (
         <>
             <h4 className="twm-s-title">Skills</h4>
@@ -11,14 +14,17 @@ function SectionCandidateSkills({ props }) {
                 <div className="tagcloud">
 
                 {skillOptions?.map((skill) => {
-    // Normalize data.skills_id to an array
+  
     const normalizedSkills = Array.isArray(props.skills_id)
-      ? props.skills_id
-      : props.skills_id
-          ? props.skills_id.toString().split(',').map(Number) // Convert string to array of numbers
-          : []; // Default to empty array if null or undefined
+    ? props.skills_id
+    : props.skills_id
+        ? JSON.parse(props.skills_id) 
+            .map(skill => {
+                return typeof skill === 'number' ? skill : Number(skill); 
+            })
+        : [];
 
-    // Check if the user has the skill
+    console.log("normalizedSkills", normalizedSkills)
     return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
     //   <li key={skill.id}>
     //     {console.log("skill.name", skill.name)}

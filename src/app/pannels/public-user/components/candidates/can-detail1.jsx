@@ -83,11 +83,13 @@ function CandidateDetail1Page() {
                   <SectionCandidateSkills props={candidate} />
 
                   {/* <SectionCandidatePortfolio  props={candidate}/> */}
-                  <SectionReview />
+                  
 
                   {/* <SectionCandidateExperience /> */}
 
                   <SectionCandidateEducation />
+
+                  <SectionReview />
                 </div>
               </div>
 

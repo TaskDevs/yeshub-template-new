@@ -18,9 +18,10 @@ function CandidateCard({ data }) {
         to={`/can-detail/${data.user_id}`}
         className="twm-candidates-list-style1 mb-5"
       >
-        <div className="twm-media">
-          <div className="twm-media-pic">
-            <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`} alt="user picture" />
+        <div className="twm-media dashboard-profile-pic ">
+          
+          <div className="twm-media-pic ">
+            <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`|| ""} alt="user picture" />
           </div>
         </div>
 

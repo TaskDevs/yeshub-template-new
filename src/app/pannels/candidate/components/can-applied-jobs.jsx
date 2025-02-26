@@ -6,15 +6,15 @@ import { ApplicationApiData } from "../../../context/application/applicationCont
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
-
+// import { GlobalApiData } from "../../../context/global/globalContextApi";
 
 function CanAppliedJobsPage() {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const { processApplicationProfile } = useContext(ApplicationApiData);
-  const { jobListData,  processAJobProfile  } = useContext(JobApiData);
+  const { jobListData, processAJobProfile } = useContext(JobApiData);
+ 
 
-  console.log("jobListData", jobListData)
-
+  // console.log("jobListData", jobListData)
 
   const _filterConfig = {
     prefix: "Applied",
@@ -28,53 +28,53 @@ function CanAppliedJobsPage() {
     loadScript("js/custom.js");
   });
 
+  useEffect(() => {
+    const fetchProfileAndMatchJobs = async () => {
+      if (!userId) return;
 
+      try {
+        const res = await processApplicationProfile(userId);
+        const data = res.data.data;
+        // console.log("data", data);
 
-useEffect(() => {
-  const fetchProfileAndMatchJobs = async () => {
-    if (!userId) return; 
+        const uniqueJobsMap = data.reduce((acc, current) => {
+          const existingJob = acc.get(current.job_id);
+          if (
+            !existingJob ||
+            new Date(current.created_at) > new Date(existingJob.created_at)
+          ) {
+            acc.set(current.job_id, current);
+          }
+          return acc;
+        }, new Map());
 
-    try {
-    
-      const res = await processApplicationProfile(userId);
-      const data = res.data.data;
-      console.log("data", data);
+        const filteredJobs = Array.from(uniqueJobsMap.values());
 
-    
-      const uniqueJobsMap = data.reduce((acc, current) => {
-        const existingJob = acc.get(current.job_id);
-        if (!existingJob || new Date(current.created_at) > new Date(existingJob.created_at)) {
-          acc.set(current.job_id, current);
-        }
-        return acc;
-      }, new Map());
+        const uniqueJobIds = [
+          ...new Set(filteredJobs.map((job) => job.job_id)),
+        ];
 
-      const filteredJobs = Array.from(uniqueJobsMap.values());
+        const jobDetailsResponses = await Promise.all(
+          uniqueJobIds.map((jobId) => processAJobProfile(jobId))
+        );
 
-   
-      const uniqueJobIds = [...new Set(filteredJobs.map((job) => job.job_id))];
+        const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
+          const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+          return {
+            ...appliedJob,
+            jobDetails,
+          };
+        });
+        setAppliedJobs(jobsWithDetails);
+      } catch (error) {
+        console.error("Failed to fetch jobs data", error);
+      }
+    };
 
-      
-      const jobDetailsResponses = await Promise.all(uniqueJobIds.map((jobId) => processAJobProfile(jobId)));
-
-      const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
-        const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
-        return {
-          ...appliedJob,
-          jobDetails, 
-        }
-      });
-      setAppliedJobs(jobsWithDetails); 
-
-    } catch (error) {
-      console.error("Failed to fetch jobs data", error);
-    }
-  };
-
-  fetchProfileAndMatchJobs();
-}, [userId, jobListData]); 
-
-
+    fetchProfileAndMatchJobs();
+    const interval = setInterval(fetchProfileAndMatchJobs, 60000);
+    return () => clearInterval(interval); 
+  }, [userId, jobListData]);
 
   return (
     <>
@@ -86,13 +86,16 @@ useEffect(() => {
           {appliedJobs.length === 0 ? (
             <p>No applied job found.</p>
           ) : (
-          <ul>
-            {appliedJobs?.map((job) => (
-              <CanAppliedJobCard data={job} key={job.id} />
-            ))}
+            <ul>
+              {appliedJobs?.map((job) => (
+                <CanAppliedJobCard
+                  data={job}
+                  key={job.id}
+                  
+                />
+              ))}
 
-            
-            {/* <li>
+              {/* <li>
               <div className="twm-jobs-list-style1 mb-5">
                 <div className="twm-media">
                   <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
@@ -178,7 +181,7 @@ useEffect(() => {
                 </div>
               </div>
             </li> */}
-            {/* <li>
+              {/* <li>
               <div className="twm-jobs-list-style1 mb-5">
                 <div className="twm-media">
                   <JobZImage src="images/jobs-company/pic3.jpg" alt="#" />
@@ -481,28 +484,26 @@ useEffect(() => {
                 </div>
               </div>
             </li> */}
-          </ul>
+            </ul>
           )}
         </div>
 
         <div>
-          
-
-          { appliedJobs.length > 0 && (
+          {appliedJobs.length > 0 && (
             <>
-            <SectionPagination />
-            <div className="sec-actions-btn d-flex justify-content-center align-items-center mt-5 w-100">
-            <button
-              className="site-button  actions-btn"
-              data-bs-target="#delete-applied-job"
-              data-bs-toggle="modal"
-              data-bs-dismiss="modal"
-            >
-              <FaRegTrashCan color="white" />
-              <span className="admin-nav-text">Delete</span>
-            </button>
+              <SectionPagination />
+              <div className="sec-actions-btn d-flex justify-content-center align-items-center mt-5 w-100">
+                <button
+                  className="site-button  actions-btn"
+                  data-bs-target="#delete-applied-job"
+                  data-bs-toggle="modal"
+                  data-bs-dismiss="modal"
+                >
+                  <FaRegTrashCan color="white" />
+                  <span className="admin-nav-text">Delete</span>
+                </button>
 
-            {/* <button
+                {/* <button
               className="site-button  actions-btn "
               data-bs-target="#Edit-"
               data-bs-toggle="modal"
@@ -512,10 +513,9 @@ useEffect(() => {
               <MdOutlineEdit color="white" />
               <span>Edit</span>
             </button> */}
-          </div>
-          </>
-           )}
-          
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

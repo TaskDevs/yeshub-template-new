@@ -13385,6 +13385,8 @@ strong {
   display: flex;
   justify-content: flex-end;
   padding: 0.75rem 0;
+  /* background: green; */
+  width: 100%;
 }
 .twm-dashboard-candidates-wrap .twm-dash-candidates-list .twm-fot-content .twm-candidate-address {
   font-size: 14px;
@@ -15575,7 +15577,8 @@ strong {
   /* background: red; */
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;;
+  margin-top: 1rem;
+  width: 100%;
 
 }
 .twm-exp-profile {

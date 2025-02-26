@@ -7,6 +7,9 @@ import SectionProfileData from "../common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
 import { popupType, userId, OAuthUserId } from "../../../../globals/constants";
 import { SkillsApiData } from "../../../context/skills/skillsContextApi";
+import FreelancePopup from "../../../common/popups/popup-freelance";
+import SectionFreelancerInfo from "../common/section-freelacer-info";
+import { FreelanceApiData } from "../../../context/freelance/freelanceContextApi";
 
 function CanProfilePage() {
   const {
@@ -22,6 +25,9 @@ function CanProfilePage() {
   } = useContext(ProfileApiData);
 
   const { skillOptions } = useContext(SkillsApiData);
+  const { handleSubmit, freelanceProfileData, handleEditFreelance } = useContext(FreelanceApiData)
+
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -78,6 +84,9 @@ function CanProfilePage() {
   
     setSelectedItems(selectedSkillObjects);
   };
+
+
+  
   
 
 
@@ -196,6 +205,65 @@ function CanProfilePage() {
             </div>
           </div>
         </div>
+
+
+        <div className=" panel panel-default m-b30 ">
+          <div className=" p-a20 ">
+            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+              <h4 className="panel-tittle m-a0"> Add Freelancer Profile</h4>
+
+              <a
+                data-bs-toggle="modal"
+                href="#AddFreelancerProfile"
+                role="button"
+                title="Edit"
+                className="site-text-primary"
+              >
+                <span className="fa fa-edit" />
+              </a>
+            </div>
+
+            <div className="panel-body wt-panel-body  ">
+              <div className="twm-panel-inner">
+                {/* <FreelancePopup submit={} id="AddFreelancerProfile" /> */}
+                <SectionFreelancerInfo />
+              </div>
+
+              <div className="">
+                {freelanceProfileData?.id && (
+                  <div className="sec-actions-btn">
+                    <button
+                      className="site-button  actions-btn"
+                      data-bs-target="#delete-profile"
+                      data-bs-toggle="modal"
+                      data-bs-dismiss="modal"
+                    >
+                      <FaRegTrashCan color="white" />
+                      <span className="admin-nav-text">Delete</span>
+                    </button>
+
+                    <button
+                      className="site-button  actions-btn "
+                      data-bs-target="#EditProfile"
+                      data-bs-toggle="modal"
+                      data-bs-dismiss="modal"
+                      onClick={() => {
+                        handleEditFreelance();
+                      }}
+                    >
+                      <MdOutlineEdit color="white" />
+                      <span>Edit</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
         <SectionCandicateBasicInfo
           submit={handleSubmitProfile}
           id="AddProfile"
@@ -210,6 +278,7 @@ function CanProfilePage() {
           type={popupType.DELETE_PROFILE}
           msg={"Are you sure you want to delete your profile?"}
         />
+         <FreelancePopup submit={handleSubmit} id="AddFreelancerProfile" />
       </div>
     </>
   );

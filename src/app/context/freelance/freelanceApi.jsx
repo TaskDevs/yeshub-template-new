@@ -1,21 +1,20 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS } from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Freelance
 export const addFreelance = async (data) => {
   try {
     let responseOnAddFreelance = await axios.post(
-      {
-        /**Add Create Freelance API URL here**/
-      },
+     `${REACT_BASE_URL}create-freelance`,
       data
     );
-    if (responseOnAddFreelance.status === SUCCESS_STATUS) {
-      return responseOnAddFreelance.data;
-    } else {
-      return false;
-    }
+    return responseOnAddFreelance;
+    // if (responseOnAddFreelance.status === SUCCESS_STATUS) {
+    //   return responseOnAddFreelance.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;
@@ -57,17 +56,16 @@ export const freelanceList = async () => {
 };
 
 // VIEW Freelance
-export const freelanceProfile = async () => {
+export const freelanceProfile = async (id) => {
   try {
-    let responseOnFreelanceProfile = await axios.get({
-      /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
-    });
+    let responseOnFreelanceProfile = await axios.get(`${REACT_BASE_URL}get-freelance/${id}`);
 
-    if (responseOnFreelanceProfile.status === SUCCESS_STATUS) {
-      return responseOnFreelanceProfile.data;
-    } else {
-      return false;
-    }
+    return responseOnFreelanceProfile;
+    // if (responseOnFreelanceProfile.status === SUCCESS_STATUS) {
+    //   return responseOnFreelanceProfile.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
     return false;

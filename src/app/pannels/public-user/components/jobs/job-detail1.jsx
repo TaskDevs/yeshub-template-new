@@ -4,7 +4,7 @@ import JobZImage from "../../../../common/jobz-img";
 
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { baseURL } from "../../../../../globals/constants";
 import readableDate from "../../../../../utils/readableDate";
@@ -21,7 +21,7 @@ function JobDetail1Page() {
 	const { handleSubmmitApplication } = useContext(ApplicationApiData);
 	const { isSubmitting } = useContext(GlobalApiData);
     const [job, setJobs] = useState(null)
-	const navigate = useNavigate()
+	// const navigate = useNavigate()
 	// const [empListData, setEmpListData] = useState([]);
 	// const [error, setError] = useState(null);
 	const [profile, setProfile] = useState({});

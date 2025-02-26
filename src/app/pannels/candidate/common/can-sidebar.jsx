@@ -1,16 +1,19 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { setMenuActive } from "../../../../globals/constants";
 import { candidate, canRoute } from "../../../../globals/route-names";
-import JobZImage from "../../../common/jobz-img";
+// import JobZImage from "../../../common/jobz-img";
+import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
+import { useContext } from "react";
 
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
 	
+
     return (
 			<>
 				<div className="twm-candidate-profile-pic">
-					<JobZImage src="images/user-avtar/pic4.jpg" alt="" />
-					<div className="upload-btn-wrapper">
+					<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" />
+					{/* <div className="upload-btn-wrapper">
 						<div id="upload-image-grid" />
 						<button className="site-button button-sm">Upload Photo</button>
 						<input
@@ -19,17 +22,17 @@ function CanSidebarSection() {
 							id="file-uploader"
 							accept=".jpg, .jpeg, .png"
 						/>
-					</div>
+					</div> */}
 				</div>
 				<div className="twm-mid-content text-center">
 					<a href="candidate-detail.html" className="twm-job-title">
-						<h4>Randall Henderson </h4>
+						<h4>{profileData?.firstname} {profileData?.lastname} </h4>
 					</a>
-					<p>IT Contractor</p>
+					{/* <p>IT Contractor</p> */}
 				</div>
 				<div className="twm-nav-list-1">
 					<ul>
-						<li
+						{/* <li
 							className={setMenuActive(
 								currentpath,
 								canRoute(candidate.DASHBOARD)
@@ -39,7 +42,7 @@ function CanSidebarSection() {
 								<i className="fa fa-tachometer-alt" />
 								Dashboard
 							</NavLink>
-						</li>
+						</li> */}
 						<li
 							className={setMenuActive(
 								currentpath,
@@ -48,7 +51,7 @@ function CanSidebarSection() {
 						>
 							<NavLink to={canRoute(candidate.PROFILE)}>
 								<i className="fa fa-user" />
-								My Pfofile
+								My Profile
 							</NavLink>
 						</li>
 						<li>

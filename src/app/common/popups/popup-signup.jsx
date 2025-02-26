@@ -62,53 +62,6 @@ function SignUpPopup() {
       
     }
 
-    // const handleSubmit = async (e) => {
-    //   e.preventDefault();
-    
-    //   setIsSubmitting(true);
-    
-    //   try {
-    //     const res = await register(formData);
-    
-    //     if (res.success) {
-    //       toast.success(res.message, { position: "top-right", autoClose: 3000 });
-    
-    //       setFormData(
-    //         SIGNUPFIELD.fieldDetail.reduce((acc, field) => {
-    //           acc[field.name] = "";
-    //           return acc;
-    //         }, {})
-    //       );
-
-    //       // Redirect after 2 seconds
-    //         setTimeout(() => {
-    //           navigate("/verify-otp", { state: { email: formData.email } });
-    //           window.location.reload();
-    //         }, 2000);
-    //     } else {
-    //       console.log("Validation Errors:", res.errors);
-    
-    //       // Extract and format validation messages
-    //       const errorMessages = Object.values(res.errors || {}).flat().join("\n");
-    
-    //       setMessage({
-    //         type: "error",
-    //         text: errorMessages || res.message || "Registration failed. Please try again.",
-    //       });
-    //     }
-    //   } catch (err) {
-    //     console.error("Unexpected error:", err);
-    
-    //     setMessage({
-    //       type: "error",
-    //       text: "Something went wrong. Please try again later.",
-    //     });
-    //   } finally {
-    //     setIsSubmitting(false);
-    //   }
-    // };
-    
-
     const handleSubmit = async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
@@ -185,18 +138,17 @@ function SignUpPopup() {
 
                 <div className="modal-body">
                   <div className="twm-tabs-style-2">
-                    {message && (
+                  {message && message.text && (
                       <div
                         className={`alert ${
-                          message.type === "success"
-                            ? "alert-success"
-                            : "alert-danger"
+                          message.type === "success" ? "alert-success" : "alert-danger"
                         }`}
                         role="alert"
                       >
                         {message.text}
                       </div>
                     )}
+
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                       {/* Signup Candidate */}
                       <li className="nav-item" role="presentation">

@@ -50,7 +50,7 @@ function CanSavedJobsPage() {
                                 </div>
                                 <div className="text-muted small">{new Date().toLocaleDateString()}</div>
                                 <div className="d-flex gap-2">
-                                    <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#saved-jobs-view">
+                                    <button className="btn btn-success" data-bs-toggle="modal" data-bs-target="#saved-jobs-view">
                                         View
                                     </button>
                                     <button className="btn btn-danger" onClick={() => handleRemoveJob(job.id)} disabled={deleting}>

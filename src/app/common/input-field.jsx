@@ -2,7 +2,7 @@
 function InputField ({ field, value, change}) {
   
   const handleInputChange = (e) => {
-		change(field.name, e.target.value);
+		change(e);
 	};
 
 return (

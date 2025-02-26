@@ -4,7 +4,7 @@ import JobZImage from "../../../../common/jobz-img";
 
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { baseURL } from "../../../../../globals/constants";
 import readableDate from "../../../../../utils/readableDate";

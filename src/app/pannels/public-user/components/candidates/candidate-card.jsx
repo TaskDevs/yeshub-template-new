@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { LuMessageSquare } from "react-icons/lu";
 import { MdOutlineStarRate } from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 
 function CandidateCard({ data }) {
+    const { skillOptions } = useContext(SkillsApiData)
+    console.log("data-card", data)
+    console.log("data.skills_id", typeof data.skills_id, data.skills_id)
+
+
+
   return (
     <li>
       <NavLink
         // to={publicUser.candidate.DETAIL1}
-        to={`/can-detail/${data.id}`}
+        to={`/can-detail/${data.user_id}`}
         className="twm-candidates-list-style1 mb-5"
       >
         <div className="twm-media">
           <div className="twm-media-pic">
-            <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`} alt="#" />
+            <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`} alt="user picture" />
           </div>
         </div>
 
@@ -91,20 +98,45 @@ function CandidateCard({ data }) {
 
           <div className="twm-fot-content">
             <div className="twm-left-info sec-pro-desc">
-              <p className="twm-exp-profile fs-6 text-truncate  d-block">
-                I am a Chartered Accountant specializing in financial reporting,
+              <p className="twm-exp-profile fs-6 ">
+                {/* I am a Chartered Accountant specializing in financial reporting,
                 tax planning, auditing, and budgeting. With expertise in IFRS
                 and GAAP, I provide accurate and reliable services to businesses
-                across various industries, ensuring their financial success.
-                {/* {data?.bio} */}
+                across various industries, ensuring their financial success. */}
+                {data?.bio}
               </p>
 
-              <ul className="twm-can-pro-info">
-                <li>Graphic design</li>
+              {/* <ul className="twm-can-pro-info">
+                {skillOptions?.map((skill) => (
+                    skill.id === data?.skills_id && <li key={skill.id}>
+                        {console.log("skill.name", skill.name)}
+                        {skill.name}</li>
+                ))} */}
+                {/* <li>Graphic design</li>
                 <li>Internet marketing</li>
                 <li>SEO</li>
-                <li>Java</li>
-              </ul>
+                <li>Java</li> */}
+              {/* </ul> */}
+              <ul className="twm-can-pro-info">
+  {skillOptions?.map((skill) => {
+    // Normalize data.skills_id to an array
+    const normalizedSkills = Array.isArray(data.skills_id)
+      ? data.skills_id
+      : data.skills_id
+          ? data.skills_id.toString().split(',').map(Number) // Convert string to array of numbers
+          : []; // Default to empty array if null or undefined
+
+    // Check if the user has the skill
+    return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
+      <li key={skill.id}>
+        {console.log("skill.name", skill.name)}
+        {skill.name}
+      </li>
+    );
+  })}
+</ul>
+
+
               {/* <div className="twm-jobs-vacancies">
 																₵20<span>/ Day</span>
 															</div> */}

@@ -7,9 +7,7 @@ import { useContext } from "react";
 
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
-	const { profileData } = useContext(ProfileApiData)
-    console.log("profileData", profileData)
-
+	
 
     return (
 			<>
@@ -34,7 +32,7 @@ function CanSidebarSection() {
 				</div>
 				<div className="twm-nav-list-1">
 					<ul>
-						<li
+						{/* <li
 							className={setMenuActive(
 								currentpath,
 								canRoute(candidate.DASHBOARD)
@@ -44,7 +42,7 @@ function CanSidebarSection() {
 								<i className="fa fa-tachometer-alt" />
 								Dashboard
 							</NavLink>
-						</li>
+						</li> */}
 						<li
 							className={setMenuActive(
 								currentpath,
@@ -53,7 +51,7 @@ function CanSidebarSection() {
 						>
 							<NavLink to={canRoute(candidate.PROFILE)}>
 								<i className="fa fa-user" />
-								My Pfofile
+								My Profile
 							</NavLink>
 						</li>
 						<li>

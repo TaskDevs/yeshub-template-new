@@ -20,6 +20,7 @@ export const ApplicationApiData = createContext();
 
 
 const ApplicationApiDataProvider = (props) => {
+  
    const [selectedOption, setSelectedOption] = useState("milestone");
   const { setIsSubmitting } = useContext(GlobalApiData)
   const currentpath = useLocation().pathname;
@@ -46,6 +47,11 @@ const ApplicationApiDataProvider = (props) => {
 		}));
   }, [selectedOption]);
   
+  
+
+
+
+
 
   const processAddApplication = async (data) => {
     try {

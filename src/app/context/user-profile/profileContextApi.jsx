@@ -31,7 +31,7 @@ const ProfileApiDataProvider = (props) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
 
-  console.log("allUsersProfile", allUsersProfile)
+  // console.log("allUsersProfile", allUsersProfile)
 
   const processAddProfile = async (data) => {
     try {
@@ -63,7 +63,7 @@ const ProfileApiDataProvider = (props) => {
     const fetchAllProfile = async () => {
       const res = await profileList();
       if (res) {
-        console.log("res-all", res)
+        // console.log("res-all", res)
         setAllUsersProfile(res.data.data);
       }
     };

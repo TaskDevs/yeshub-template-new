@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 
 export const GlobalApiData = createContext();
 
@@ -10,15 +10,7 @@ const GlobalApiDataProvider = (props) => {
     const [selectedId, setSelectedId] = useState("");
 	const [showDetailsId, setShowDetailsId] = useState("")
 	
-	useEffect(() => {
-		
-		if (!isSubmitting) {
-			console.log("submitting ended");
-		}
-		setTimeout(() => {
-			setIsLoading(false)
-		}, 3000);
-	}, [isSubmitting]);
+	
 
 	
 

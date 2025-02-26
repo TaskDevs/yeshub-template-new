@@ -1,27 +1,31 @@
-import JobZImage from "../../../../common/jobz-img";
+// import JobZImage from "../../../../common/jobz-img";
 import { NavLink, useLocation } from "react-router-dom";
 import { setMenuActive } from "../../../../../globals/constants";
 import { candidate, canRoute, publicUser } from "../../../../../globals/route-names";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+import { useContext } from "react";
 
 
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
-
+    // const username = sessionStorage.getItem("username")
+	const { profileData } = useContext(ProfileApiData)
+    // console.log("profileData", profileData)
 
 
     return (
 			<>
 				<div className="twm-candidate-profile-pic">
-					<JobZImage src="images/user-avtar/pic4.jpg" alt="" />
+					<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" />
 					<div className="upload-btn-wrapper">
 						<div id="upload-image-grid" />
-						<button className="site-button button-sm">Upload Photo</button>
-						<input
+						{/* <button className="site-button button-sm">Upload Photo</button> */}
+						{/* <input
 							type="file"
 							name="myfile"
 							id="file-uploader"
 							accept=".jpg, .jpeg, .png"
-						/>
+						/> */}
 					</div>
 				</div>
 				<div className="twm-mid-content text-center">
@@ -29,9 +33,9 @@ function CanSidebarSection() {
 						to={canRoute(publicUser.candidate.DETAIL1)}
 						className="twm-job-title"
 					>
-						<h4>Randall Henderson </h4>
+						<h4>{profileData?.firstname} {profileData?.lastname}</h4>
 					</NavLink>
-					<p>IT Contractor</p>
+					{/* <p>IT Contractor</p> */}
 				</div>
 				<div className="twm-nav-list-1">
 					<ul>

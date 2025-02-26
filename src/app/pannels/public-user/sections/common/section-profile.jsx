@@ -8,7 +8,7 @@ function SectionProfile() {
                         <div className="twm-s-info-inner">
                             <i className="fas fa-money-bill-wave" />
                             <span className="twm-title">Rate</span>
-                            <div className="twm-s-info-discription">GHS100 / Day</div>
+                            <div className="twm-s-info-discription">GHS200 / Day</div>
                         </div>
                     </li>
                     <li>

@@ -109,7 +109,15 @@ function SignInPopup() {
       } else {
         // ✅ Extract validation errors
         const errorMessages = Object.values(response.errors || {}).flat().join("\n");
-  
+        toast.error(errorMessages || response.message || "Error logging in: check credentials", {
+          position: "top-left",
+          autoClose: 3000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+        });
+        
         setMessage({
           type: "error",
           text: errorMessages || response.message || "Error logging in: check credentials",

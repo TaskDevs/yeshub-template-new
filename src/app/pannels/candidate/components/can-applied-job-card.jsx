@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import readableDate from "../../../../utils/readableDate";
 import { NavLink } from "react-router-dom";
-
+import { GlobalApiData } from "../../../context/global/globalContextApi";
 
 // {
 // 	imageURL ||
@@ -9,32 +9,42 @@ import { NavLink } from "react-router-dom";
 //   }
 
 function CanAppliedJobCard({ data }) {
+
+  const { setSelectedId } = useContext(GlobalApiData);
+
   console.log("data-app-job", data);
-  console.log(
-    "${data?.jobDetails?.employer?.logo}",
-    ` ${data?.jobDetails?.employer?.logo}`
-  );
+  
+
+
+
   return (
     <li>
-      <div className="twm-jobs-list-style1 mb-5">
+      <div
+        className="twm-jobs-list-style1 mb-5"
+        onClick={() => {
+          console.log("clicked-id", data.id);
+          setSelectedId(data.id);
+        }}
+      >
         <div className="twm-media">
-          <img
-            src={data?.jobDetails?.employer?.logo}
-            alt="company logo"
-          />
+          <img src={data?.jobDetails?.employer?.logo} alt="company logo" />
         </div>
         <div className="twm-mid-content">
           <NavLink
             to={`/job-detail/${data?.jobDetails?.id}`}
             className="twm-job-title"
           >
-            <h4>
-              {data?.jobDetails?.job_title}
-              <span className="twm-job-post-duration">
-                /{readableDate(data?.created_at)}
-              </span>
-            </h4>
+            <h4>{data?.jobDetails?.job_title}</h4>
           </NavLink>
+          <span className="twm-job-post-duration">
+            {readableDate(data?.created_at)}
+          </span>
+          <p className="font-weight-bold">
+            Status:{" "}
+            <span className="site-text-primary text-capitalize">
+              {data?.status}
+            </span>{" "}
+          </p>
           {/* <p className="twm-job-address">
 						1363-1385 Sunset Blvd Los Angeles, CA 90026, USA
 					</p>

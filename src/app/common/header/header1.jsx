@@ -2,21 +2,34 @@ import JobZImage from "../jobz-img";
 import { NavLink } from "react-router-dom";
 import { base, publicUser } from "../../../globals/route-names";
 import {  useContext, useState } from "react";
-import { AiFillDashboard } from "react-icons/ai";
 import { AuthApiData } from "../../context/auth/authContextApi";
+import { Avatar } from "@mui/material";
+
 
 function Header1({ _config }) {
   const token = sessionStorage.getItem("authToken");
   const role = sessionStorage.getItem("userRole");
   const [menuActive, setMenuActive] = useState(false);
   const { userProfile } = useContext(AuthApiData)
-
-
-  
-
+  const username = userProfile?.username || "U"; // Default to "N" if no userna
   function handleNavigationClick() {
     setMenuActive(!menuActive);
   }
+
+
+  // colors
+  const stringToColor = (string) => {
+    let hash = 0;
+    for (let i = 0; i < string.length; i++) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += ("00" + value.toString(16)).substr(-2);
+    }
+    return color;
+  };
 
   return (
     <>
@@ -203,59 +216,45 @@ function Header1({ _config }) {
                   </div>
                 </div>
                 <div className="extra-cell">
-                  <div className="header-nav-btn-section">
-                    {token ? (
-                      <div className="twm-nav-btn-left">
-						{role =="user" ? (
-							<a
-                          className="btn d-flex align-items-center p-2 rounded shadow-sm"
-                          style={{ background: "#305718", color: "#fff" }}
-                          
-                          href={base.CANDIDATE_PRE}
-                          role="button"
-                        >
-                          <AiFillDashboard size={24} className="me-2" />
-                          <span className="btn-text">{userProfile?.username}</span>
-                        </a>
-						):(
-							<a
-                          className="btn d-flex align-items-center p-2 rounded shadow-sm"
-                          style={{ background: "#305718", color: "#fff" }}
-                          href={base.EMPLOYER_PRE}
-                          role="button"
-                        >
-                          <AiFillDashboard size={24} className="me-2" /><span className="btn-text">PostJobs</span>
-                        </a>
-						)}
-                        
-                      </div>
-                    ) : (
-                      <>
-                        <div className="twm-nav-btn-left">
-                          <a
-                            className="twm-nav-sign-up"
-                            data-bs-toggle="modal"
-                            href="#sign_up_popup2"
-                            role="button"
-                          >
-                            <i className="feather-log-in" /> Log In
-                          </a>
-                        </div>
-                        <div className="twm-nav-btn-right">
-                          <a
-                            className="twm-nav-post-a-job"
-                            data-bs-toggle="modal"
-                            href="#sign_up_popup"
-                            role="button"
-                          >
-                            <i className="feather-log-in" />
-                            Sign up
-                          </a>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
+                <div className="extra-cell">
+      <div className="header-nav-btn-section">
+        {token ? ( // Check if token exists (User is logged in)
+          <div className="twm-nav-btn-left">
+            <a
+              className="d-flex align-items-center p-2"
+              href={role === "user" ? base.CANDIDATE_PRE : base.EMPLOYER_PRE}
+              role="button"
+            >
+              <Avatar
+                sx={{
+                  bgcolor: stringToColor(username),
+                  width: 40,
+                  height: 40,
+                  fontSize: "1.2rem",
+                }}
+              >
+                {username.charAt(0).toUpperCase()}
+              </Avatar>
+            </a>
+          </div>
+        ) : (
+          <>
+            <div className="twm-nav-btn-left">
+              <a className="twm-nav-sign-up" data-bs-toggle="modal" href="#sign_up_popup2" role="button">
+                <i className="feather-log-in" /> Log In
+              </a>
+            </div>
+            <div className="twm-nav-btn-right">
+              <a className="twm-nav-post-a-job" data-bs-toggle="modal" href="#sign_up_popup" role="button">
+                <i className="feather-log-in" />
+                Sign up
+              </a>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+    </div>
               </div>
             </div>
           </div>

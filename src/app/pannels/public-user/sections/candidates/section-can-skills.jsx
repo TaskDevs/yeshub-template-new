@@ -1,10 +1,33 @@
-function SectionCandidateSkills() {
+import { useContext } from "react";
+import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
+
+function SectionCandidateSkills({ props }) {
+    const { skillOptions } = useContext(SkillsApiData)
     return (
         <>
             <h4 className="twm-s-title">Skills</h4>
             <div className="tw-sidebar-tags-wrap">
+
                 <div className="tagcloud">
-                    <a href="#">Finance</a>
+
+                {skillOptions?.map((skill) => {
+    // Normalize data.skills_id to an array
+    const normalizedSkills = Array.isArray(props.skills_id)
+      ? props.skills_id
+      : props.skills_id
+          ? props.skills_id.toString().split(',').map(Number) // Convert string to array of numbers
+          : []; // Default to empty array if null or undefined
+
+    // Check if the user has the skill
+    return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
+    //   <li key={skill.id}>
+    //     {console.log("skill.name", skill.name)}
+    //     {skill.name}
+    //   </li>
+       <a href="#" key={skill.id}>{skill.name}</a>
+    );
+  })}
+                    {/* <a href="#">Finance</a>
                     <a href="#">Sales</a>
                     <a href="#">Part-time</a>
                     <a href="#">Administration</a>
@@ -13,7 +36,7 @@ function SectionCandidateSkills() {
                     <a href="#">Developer</a>
                     <a href="#">Work from home</a>
                     <a href="#">IT Consulting</a>
-                    <a href="#">Manufacturing</a>
+                    <a href="#">Manufacturing</a> */}
                 </div>
             </div>
         </>

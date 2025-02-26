@@ -9,7 +9,7 @@ const EmpJobPostCard = ({ data }) => {
         <div className="twm-bookmark-list">
           <div className="twm-media">
             <div className="twm-media-pic">
-              <img src={data?.logo} alt="Company Logo" />
+              <img src={data.logo} alt="Company Logo" />
             </div>
           </div>
           <div className="twm-mid-content">

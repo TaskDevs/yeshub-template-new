@@ -4,7 +4,7 @@ import { LOCAL_BACKEND_URL, baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
 
 export const JobsCard = ({
-  img,
+  imageData,
   duration,
   location,
   link,
@@ -16,7 +16,9 @@ export const JobsCard = ({
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
       <div className="twm-media">
         <img
-          src={img ? `${img}` : `${baseURL}/assets/images/no-logo.png`}
+          src={
+            imageData ? `${imageData}` : `${baseURL}/assets/images/no-logo.png`
+          }
           alt="#"
         />
         {/* <JobZImage src={`${baseURL}/assets/images/no-logo.png`} alt="#" /> */}

@@ -44,7 +44,7 @@ export const searchJob = async (data) => {
 // LIST Job
 export const jobList = async () => {
   try {
-    let responseOnJobList = await axios.get(`${REACT_BASE_URL}posted-jobs`);
+    let responseOnJobList = await axios.get(`${REACT_BASE_URL}get-posted-jobs`);
     if (responseOnJobList.status == 200) {
       return responseOnJobList.data.data;
     } else {

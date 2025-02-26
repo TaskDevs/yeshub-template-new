@@ -1,10 +1,6 @@
 import React, { useEffect, useContext } from "react";
-import JobZImage from "../../../../common/jobz-img";
-import { NavLink } from "react-router-dom";
-import { publicUser } from "../../../../../globals/route-names";
 import SectionPagination from "../common/section-pagination";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { JOBLISTDATA } from "../../../../../globals/job-list-data";
 import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
@@ -14,6 +10,10 @@ function SectionJobsList() {
     //console.log("We are rendering");
     processGetAllJob();
   }, []);
+
+  useEffect(() => {
+    console.log(jobListData);
+  }, [jobListData]);
   return (
     <>
       <div>
@@ -21,7 +21,7 @@ function SectionJobsList() {
           {jobListData.map((item, index) => (
             <JobsCard
               key={index}
-              img={item.logo}
+              imageData={item.logo}
               title={item.job_title}
               duration={item.created_at}
               location={item.description}

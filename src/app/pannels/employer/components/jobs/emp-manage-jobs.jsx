@@ -52,16 +52,6 @@ function EmpManageJobsPage() {
                   <EmpJobPostCard data={item} />
                 ))}
               </tbody>
-              <tfoot>
-                <tr>
-                  <th>Job Title</th>
-                  <th>Category</th>
-                  <th>Job Types</th>
-                  <th>Applications</th>
-                  <th>Created &amp; Expired</th>
-                  <th>Action</th>
-                </tr>
-              </tfoot>
             </table>
           </div>
         </div>

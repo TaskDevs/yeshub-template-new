@@ -9,6 +9,7 @@ import { CategoryApiData } from "../../context/category/categoryContextApi";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../context/skills/skillsContextApi";
 import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
+import { ApplicationApiData } from "../../context/application/applicationContextApi";
 function YesNoPopup(props) {
 	const navigate = useNavigate();
 
@@ -18,7 +19,10 @@ function YesNoPopup(props) {
 	const { processDeleteProfile, profileData } = useContext(ProfileApiData);
 	const { processDeleteSkills } = useContext(SkillsApiData);
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
-
+    const { processDeleteApplication } = useContext(ApplicationApiData)
+	
+	
+	
 	const handleLogout = async () => {
 		const result = await logout(); // Await logout function
 
@@ -39,9 +43,11 @@ function YesNoPopup(props) {
 		}
 		setIsSubmitting(true);
 		try {
-			await processDeleteEducation(selectedId);
+			const res =await processDeleteEducation(selectedId);
 
-			toast.success("Education profile deleted successfully");
+			if (res) {
+				toast.success("Education profile deleted successfully");
+			}
 		} catch {
 			toast.error("Failed to delete education");
 			return false;
@@ -110,7 +116,29 @@ function YesNoPopup(props) {
 		}
 	};
 
-	// const navigate = useNavigate();
+	const handleDeleteAppliedJob = async () => {
+		if (!selectedId) {
+			toast.error("Please select the applied job to delete");
+			return;
+		}
+		setIsSubmitting(true);
+		try {
+			const res = await processDeleteApplication(selectedId);
+
+			if (res) {
+				console.log("deleted job", res)
+				toast.success("Job deleted successfully");
+			}
+		} catch {
+			toast.error("Failed to delete job applied");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+
+
 
 	const yesHandler = () => {
 		console.log("Popup-type-handler:", props.type);
@@ -134,6 +162,9 @@ function YesNoPopup(props) {
 
 			case popupType.DELETE_PORTFOLIO:
 				return handleDeletePortfolio();
+
+			case popupType.DELETE_APPLIED_JOB:
+				return handleDeleteAppliedJob();
 
 			default:
 				console.warn("Unknown type", props.type);

@@ -1,7 +1,10 @@
-import JobZImage from "../../../../../common/jobz-img";
+// import JobZImage from "../../../../../common/jobz-img";
 import { publicUrlFor } from "../../../../../../globals/constants";
 
-function SectionCandidateShortIntro1() {
+function SectionCandidateShortIntro1({ props }) {
+
+
+	console.log("props", props)
     return (
 			<>
 				<div
@@ -17,14 +20,15 @@ function SectionCandidateShortIntro1() {
 						<div className="twm-candi-self-top">
 							<div className="twm-candi-fee">₵200 / Day</div>
 							<div className="twm-media can-banner-logo">
-								<JobZImage src="images/candidates/pic2.jpg" alt="#" />
+								{/* <JobZImage src="images/candidates/pic2.jpg" alt="#" /> */}
+								<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" />
 							</div>
 							<div className="twm-mid-content">
-								<h4 className="twm-job-title">Wanda Montgomery </h4>
-								<p>Senior UI / UX Designer and Developer at Google INC</p>
+								<h4 className="twm-job-title">{props?.firstname} {props?.lastname} </h4>
+								{/* <p>Senior UI / UX Designer and Developer at Google INC</p> */}
 								<p className="twm-candidate-address">
 									<i className="feather-map-pin" />
-									Kumasi
+									{props?.region}
 								</p>
 							</div>
 						</div>

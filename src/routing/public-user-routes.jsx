@@ -155,6 +155,7 @@ function PublicUserRoutes() {
           path={publicUser.candidate.DETAIL1}
           element={<CandidateDetail1Page />}
         />
+        <Route path={publicUser.candidate.DETAIL} element={<CandidateDetail1Page/>} />
         <Route
           path={publicUser.candidate.PORTFOLIO}
           element={<CandidatePortfolioPage />}

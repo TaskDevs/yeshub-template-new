@@ -66,6 +66,7 @@ export const publicUser = {
     DETAIL1: "/can-detail/1",
     DETAIL2: "/can-detail/2",
     PORTFOLIO: "/can-portfolio",
+    DETAIL: '/can-detail/:id',
   },
   blog: {
     GRID1: "/blog-grid/1",

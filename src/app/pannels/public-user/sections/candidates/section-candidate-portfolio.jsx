@@ -1,39 +1,39 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
 
 // import { DropzoneComponent } from 'react-dropzone-component';
 
 function SectionCandidatePortfolio() {
-	const currentpath = useLocation().pathname;
-	const location = currentpath.split("/")[1];
-	console.log("currentpath", location);
+  const currentpath = useLocation().pathname;
+  const location = currentpath.split("/")[1];
+  console.log("currentpath", location);
 
-	const ref = useRef(null);
-	const fileInputRef = useRef(null);
-	const [preview, setPreview] = useState(null);
+  // const ref = useRef(null);
+  // const fileInputRef = useRef(null);
+  // const [preview, setPreview] = useState(null);
 
-	const handleImageChange = (event) => {
-		const file = event.target.files?.[0];
+  // const handleImageChange = (event) => {
+  // 	const file = event.target.files?.[0];
 
-		if (file) {
-			setPreview(URL.createObjectURL(file));
-		}
-	};
+  // 	if (file) {
+  // 		setPreview(URL.createObjectURL(file));
+  // 	}
+  // };
 
-	return (
-		<>
-			{/* <h4 className="twm-s-title">Portfolio</h4> */}
-			<h4 className="twm-s-title">Profile Highlights</h4>
-			{location === "apply-job" && (
-				<p className="twm-s-title-text">
-					Emphasise the most relevant data from your profile to highlight your
-					abilities and experience. Up to four highlights are possible.
-				</p>
-			)}
-			<div className="tw-sidebar-tags-wrap">
-				<div className="">
-					<div className="mb-5">
-						<form ref={ref}>
+  return (
+    <>
+      {/* <h4 className="twm-s-title">Portfolio</h4> */}
+      <h4 className="twm-s-title">Profile Highlights</h4>
+      {location === "apply-job" && (
+        <p className="twm-s-title-text">
+          Emphasise the most relevant data from your profile to highlight your
+          abilities and experience. Up to four highlights are possible.
+        </p>
+      )}
+      <div className="tw-sidebar-tags-wrap">
+        <div className="">
+          <div className="mb-5">
+            {/* <form ref={ref}>
 							<div className="twm-sec-add">
 								<input
 									ref={fileInputRef}
@@ -70,12 +70,12 @@ function SectionCandidatePortfolio() {
 												height={10}
 											/>
 										</div>
-									)} */}
-						</form>
+									)} *
+						</form> */}
 
-						{/* show images */}
+            {/* show images */}
 
-						<div className="mt-5">
+            {/* <div className="mt-5">
 							<div className="sec-add-portfolio">
 								<div className="sub-sec-add-portfolio">
 									<div className="">
@@ -83,7 +83,7 @@ function SectionCandidatePortfolio() {
 											<img src="/assets/images/portfolio/homepage.png" alt="" />
 										</div>
 
-										{/* <p className="img-portfolio-link">Link: </p> */}
+										<p className="img-portfolio-link">Link: </p>
 										<input
 											type="text"
 											className="img-portfolio-link"
@@ -95,7 +95,7 @@ function SectionCandidatePortfolio() {
 											<img src="/assets/images/portfolio/homepage.png" alt="" />
 										</div>
 
-										{/* <p className="img-portfolio-link">Link: </p> */}
+										<p className="img-portfolio-link">Link: </p>
 										<input
 											type="text"
 											className="img-portfolio-link"
@@ -104,21 +104,21 @@ function SectionCandidatePortfolio() {
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				</div>
+						</div> */}
+          </div>
+        </div>
 
-				{location === "can-detail" && (
-					<div className="btn-show-more">
-						<a href="/can-portfolio" className="site-button ">
-							Show more
-						</a>
-						{/* <a href="#" className="site-button secondry">Download CV</a> */}
-					</div>
-				)}
-			</div>
-		</>
-	);
+        {location === "can-detail" && (
+          <div className="btn-show-more">
+            <a href="/can-portfolio" className="site-button ">
+              Show more
+            </a>
+            {/* <a href="#" className="site-button secondry">Download CV</a> */}
+          </div>
+        )}
+      </div>
+    </>
+  );
 }
 
 export default SectionCandidatePortfolio;

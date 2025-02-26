@@ -64,7 +64,6 @@ function JobDetail1Page() {
                 
             });
 			isSave(true)
-			navigate('/dashboard-candidate/saved-jobs')
             toast.success("Job successfully save", { position: "bottom-center", autoClose: 3000 })
         }
     };

@@ -64,7 +64,7 @@ function CanProfilePage() {
     const selectedSkillObjects = skillsArray
       .map((id) => {
         const skill = skillOptions.find((skill) => String(skill.id) === String(id));
-        return skill ? { value: skill.id, label: skill.skill } : null;
+        return skill ? { value: skill.id, label: skill.name } : null;
       })
   
    
@@ -78,8 +78,9 @@ function CanProfilePage() {
       address: profileData.address,
       region: profileData.region,
       experience: profileData.experience,
+      profession: profileData.profession,
       bio: profileData.bio,
-      skills_id: selectedSkillObjects.map((skill) => skill.value), // Ensure array format
+      skills_id: selectedSkillObjects.map((skill) => skill.value), 
     });
   
     setSelectedItems(selectedSkillObjects);
@@ -244,7 +245,7 @@ function CanProfilePage() {
 
                     <button
                       className="site-button  actions-btn "
-                      data-bs-target="#EditProfile"
+                      data-bs-target="#EditFreelanceProfile"
                       data-bs-toggle="modal"
                       data-bs-dismiss="modal"
                       onClick={() => {

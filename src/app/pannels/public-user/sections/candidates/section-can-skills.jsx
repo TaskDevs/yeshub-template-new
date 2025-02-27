@@ -26,10 +26,7 @@ function SectionCandidateSkills({ props }) {
 
     console.log("normalizedSkills", normalizedSkills)
     return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
-    //   <li key={skill.id}>
-    //     {console.log("skill.name", skill.name)}
-    //     {skill.name}
-    //   </li>
+    
        <a href="#" key={skill.id}>{skill.name}</a>
     );
   })}

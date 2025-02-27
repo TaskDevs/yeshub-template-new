@@ -30,7 +30,11 @@ const ProfileApiDataProvider = (props) => {
   const [allUsersProfile, setAllUsersProfile] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false); 
 
+    const toggleSidebar = () => {
+        setSidebarCollapsed(!isSidebarCollapsed); 
+    };
   // console.log("allUsersProfile", allUsersProfile)
 
   const processAddProfile = async (data) => {
@@ -45,7 +49,7 @@ const ProfileApiDataProvider = (props) => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const res = await processProfileProfile(userId || OAuthUserId);
+      const res = await processProfileProfile(userId);
       if (res) {
         setProfileData(res.data.data);
       }
@@ -152,11 +156,14 @@ const ProfileApiDataProvider = (props) => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    // console.log("formData-update-profile", formData)
+    console.log("formData-update-profile",{
+      ...formData,
+      id: userId,
+    })
     try {
-      const response = await processUpdateProfile(userId || OAuthUserId, {
+      const response = await processUpdateProfile(userId, {
         ...formData,
-        id: userId || OAuthUserId,
+        id: userId,
       });
       if (response) {
         toast.success("Profile data updated successfully");
@@ -198,6 +205,8 @@ const ProfileApiDataProvider = (props) => {
         imageURL,
         selectedItems,
         allUsersProfile,
+        isSidebarCollapsed,
+        toggleSidebar,
         setSelectedItems,
         setProfileData,
         processAddProfile,

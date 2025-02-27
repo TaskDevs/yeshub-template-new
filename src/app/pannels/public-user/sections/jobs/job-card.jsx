@@ -27,7 +27,7 @@ export const JobsCard = ({
             / <TimeAgo date={duration} />
           </span>
         </h4>
-        <p className="twm-job-address">{location}</p>
+        <p className="twm-job-address twm-exp-profile">{location}</p>
         <ul className="ul-skills">
           <li>ux writing</li>
           <li>wire framing</li>

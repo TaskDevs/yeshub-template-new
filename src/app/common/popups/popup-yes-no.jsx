@@ -73,9 +73,12 @@ function YesNoPopup(props) {
 	const handleDeleteProfile = async () => {
 		setIsSubmitting(true);
 		try {
-			await processDeleteProfile(profileData.user_id);
+			const res = await processDeleteProfile(profileData.user_id);
+			if (res) {
+				toast.success("User profile deleted successfully");
+			window.location.reload();
+			}
 
-			toast.success("User profile deleted successfully");
 		} catch {
 			toast.error("Failed to delete profile");
 			return false;

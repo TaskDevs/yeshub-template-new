@@ -5,6 +5,7 @@ export const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 //export const BACKEND_FULL_URL = process.env.REACT_APP_BACKEND_FULL_URL;
 export const HOST = window.location.hostname;
 export const timeOut = { timeout: 10000 };
+console.log("LOCAL_BACKEND_URL", LOCAL_BACKEND_URL)
 
 //RETRIEVE USER IDS
 export const userId = sessionStorage.getItem("userId");

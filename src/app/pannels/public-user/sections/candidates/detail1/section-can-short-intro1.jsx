@@ -1,7 +1,9 @@
 // import JobZImage from "../../../../../common/jobz-img";
-import { publicUrlFor } from "../../../../../../globals/constants";
+import { useState } from "react";
+import { LOCAL_BACKEND_URL, publicUrlFor } from "../../../../../../globals/constants";
 
 function SectionCandidateShortIntro1({ props }) {
+	const [imgSrc, setImgSrc] = useState(`${LOCAL_BACKEND_URL}/${props?.profile_image}`);
 
 
 	console.log("props", props)
@@ -21,7 +23,12 @@ function SectionCandidateShortIntro1({ props }) {
 							<div className="twm-candi-fee">₵200 / Day</div>
 							<div className="twm-media can-banner-logo">
 								{/* <JobZImage src="images/candidates/pic2.jpg" alt="#" /> */}
-								<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" />
+								{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" /> */}
+								<img 
+                    src={imgSrc} 
+                    alt="user picture" 
+                    onError={() => setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")} 
+                />
 							</div>
 							<div className="twm-mid-content">
 								<h4 className="twm-job-title">{props?.firstname} {props?.lastname} </h4>

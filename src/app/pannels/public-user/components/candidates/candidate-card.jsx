@@ -1,11 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { LuMessageSquare } from "react-icons/lu";
 import { MdOutlineStarRate } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
+import { LOCAL_BACKEND_URL } from "../../../../../globals/constants";
 
+
+// https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/
 function CandidateCard({ data }) {
     const { skillOptions } = useContext(SkillsApiData)
+    const [imgSrc, setImgSrc] = useState(`${LOCAL_BACKEND_URL
+
+    }/${data?.profile_image}`);
     console.log("data-card", data)
     console.log("data.skills_id", typeof data.skills_id, data.skills_id)
 
@@ -21,7 +27,12 @@ function CandidateCard({ data }) {
         <div className="twm-media dashboard-profile-pic ">
           
           <div className="twm-media-pic ">
-            <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`|| ""} alt="user picture" />
+            {/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`||"/assets/images/candidates/user-avatar-fallback.jpg"} alt="user picture" /> */}
+            <img 
+                    src={imgSrc} 
+                    alt="user picture" 
+                    onError={() => setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")} 
+                />
           </div>
         </div>
 

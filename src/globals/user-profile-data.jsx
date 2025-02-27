@@ -20,6 +20,12 @@ export const USERPROFILEFIELD = {
 			placeholder: "(+233) 554-456-789",
 		},
 		{
+			name: "profession",
+			label: "Profession",
+			type: "text",
+			placeholder: "teacher",
+		},
+		{
 			name: "experience",
 			label: "First Name",
 			type: "text",

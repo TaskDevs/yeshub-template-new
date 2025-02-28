@@ -134,9 +134,10 @@ const FreelanceApiDataProvider = (props) => {
   }
 
   const handleEditFreelance = () => {
+    console.log("free-data", freelanceProfileData[1])
     setFormData({
-      rate: freelanceProfileData?.data[1]?.rate,
-      experience: freelanceProfileData?.data[1]?.experience,
+      rate: freelanceProfileData[1]?.rate,
+      experience: freelanceProfileData[1]?.experience,
     })
   }
 

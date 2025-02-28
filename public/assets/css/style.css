@@ -263,17 +263,19 @@ This files [Table of contents] are outlined below
   .rightSidebar {
     display: block !important; /* Ensure sidebar is always visible on desktop */
   }
+ 
 }
 .can-header-right {
   display: none!important;
 }
-.rightSidebar.collapsed {
-  display: none; /* Hide the sidebar when collapsed */
-}
+
 @media (max-width: 768px) {
   .can-header-right {
     display: block!important;
     margin-right: 0.75rem;
+  }
+  .rightSidebar.collapsed {
+    display: none; /* Hide the sidebar when collapsed */
   }
   
 }

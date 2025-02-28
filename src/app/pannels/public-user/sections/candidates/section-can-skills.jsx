@@ -14,6 +14,28 @@ function SectionCandidateSkills({ props }) {
             <div className="tw-sidebar-tags-wrap">
 
                 <div className="tagcloud">
+
+                {skillOptions?.map((skill) => {
+    // Normalize data.skills_id to an array
+    const normalizedSkills = Array.isArray(props.skills_id)
+      ? props.skills_id
+      : props.skills_id
+          ? props.skills_id.toString().split(',').map(Number) // Convert string to array of numbers
+          : []; // Default to empty array if null or undefined
+
+    // Check if the user has the skill
+    return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
+    //   <li key={skill.id}>
+    //     {console.log("skill.name", skill.name)}
+    //     {skill.name}
+    //   </li>
+      <a href="#" key={skill.id}>  {skill.name}</a>
+    );
+  })}
+
+
+
+
 {/* 
                 {skillOptions?.map((skill) => {
   

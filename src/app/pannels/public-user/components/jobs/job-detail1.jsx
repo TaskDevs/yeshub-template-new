@@ -4,7 +4,7 @@ import JobZImage from "../../../../common/jobz-img";
 
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import { baseURL } from "../../../../../globals/constants";
 import readableDate from "../../../../../utils/readableDate";
@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 
 
 function JobDetail1Page() {
+	const token = sessionStorage.getItem("authToken")
 	const { id } = useParams();
 	const { jobListData } = useContext(JobApiData);
 	const { handleSubmmitApplication } = useContext(ApplicationApiData);
@@ -25,7 +26,7 @@ function JobDetail1Page() {
 	// const [error, setError] = useState(null);
 	const [profile, setProfile] = useState({});
 	const addJob = useJobCartStore((state) => state.addJob);
-	const [save, isSave] = useState(false)
+	const [save, setSave] = useState(false);
 	
 	useEffect(() => {
 		let newData = jobListData.filter((item) => item.id == id)[0];
@@ -53,21 +54,20 @@ function JobDetail1Page() {
 
 
 	const handleSaveJob = () => {
-		isSave(false)
-        if (job) {
-            addJob({
-                id: job?.id,
-                title: job.job_title,
-                salary: job.salary,
-				company:job.company_name,
-                image: job.logo,
-                
-            });
-			isSave(true)
-			navigate('/dashboard-candidate/saved-jobs')
-            toast.success("Job successfully save", { position: "bottom-center", autoClose: 3000 })
-        }
-    };
+		if (job) {
+			addJob({
+				id: job.id,
+				title: job.job_title,
+				salary: job.salary,
+				company: job.company_name,
+				image: job.logo,
+			});
+	
+			setSave(true); // ✅ Update state to "Saved"
+			navigate('/dashboard-candidate/saved-jobs');
+			toast.success("Job successfully saved", { position: "bottom-center", autoClose: 3000 });
+		}
+	};
 
 	return (
 		<>
@@ -131,14 +131,17 @@ function JobDetail1Page() {
 														</div>
 													</div>
 													<div className="twm-job-self-bottom">
+													{token && (
 														<button
-															className="site-button m-4 btn-danger"
-															
-																onClick={()=>handleSaveJob()}
-															
-														>
+														className="site-buttons p-3 m-3 btn btn-danger fw-bold"
+														
+															onClick={()=>handleSaveJob()}
+														
+													>
 														{save ? "Saved" : "Save Job"}
-														</button>
+													</button>
+													)}
+														
 
 														<button
 															type="submit"

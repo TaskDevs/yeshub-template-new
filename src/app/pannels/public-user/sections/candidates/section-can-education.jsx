@@ -1,16 +1,25 @@
-function SectionCandidateEducation() {
+import SectionCanEducCard from "./section-can-educ-card";
+
+function SectionCandidateEducation({ props }) {
+    console.log("sec-edu", props )
     return (
         <>
-            <h4 className="twm-s-title">Education &amp; Training</h4>
+            <h4 className="twm-s-title">Education</h4>
             <div className="twm-timing-list-wrap">
-                <div className="twm-timing-list">
+                {props.map((edu) => (
+                    <SectionCanEducCard data={edu} key={edu.id} />
+                ))}
+                 <div className="twm-timing-list">
                     <div className="twm-time-list-date">2004 to 2006</div>
                     <div className="twm-time-list-title">BCA - Bachelor of Computer Applications</div>
                     <div className="twm-time-list-position">International University</div>
                     <div className="twm-time-list-discription">
                         <p>One of the main areas that I work on with my clients is shedding these non-supportive beliefs and
+                  
                             replacing them with beliefs that will help them to accomplish their desires.</p>
-                    </div>
+                            </div>
+                            </div>
+                {/*    
                 </div>
                 <div className="twm-timing-list">
                     <div className="twm-time-list-date">2006 to 2008</div>
@@ -29,7 +38,7 @@ function SectionCandidateEducation() {
                         <p>One of the main areas that I work on with my clients is shedding these non-supportive beliefs and
                             replacing them with beliefs that will help them to accomplish their desires.</p>
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     )

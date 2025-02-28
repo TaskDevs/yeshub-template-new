@@ -1,50 +1,52 @@
-import React, { useState } from "react";
-import Header1 from "../app/common/header/header1";
-import CandidateRoutes from "../routing/candidate-routes";
-import SignUpPopup from "../app/common/popups/popup-signup";
-import SignInPopup from "../app/common/popups/popup-signin";
-import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
-import { useLocation } from "react-router-dom";
-import { getHeaderConfig } from "../globals/layout-config";
-
-function CandidateLayout() {
-    const currentpath = useLocation().pathname;
-    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false); // State to manage sidebar visibility
-
-    const toggleSidebar = () => {
-        setSidebarCollapsed(!isSidebarCollapsed); // Toggle the sidebar state
+export const JobsCard = ({
+    img,
+    duration,
+    location,
+    link,
+    title,
+    days_left,
+    amount,
+    employerId, // Add employerId prop
+    onSelectEmployer, // Add onSelectEmployer prop
+  }) => {
+    const handleCardClick = () => {
+      if (onSelectEmployer) {
+        onSelectEmployer(employerId); // Call the function to select the employer ID
+      }
     };
-
+  
     return (
-        <>
-            <div className="page-wraper">
-                <Header1 _config={getHeaderConfig(currentpath)} />
-                <button onClick={toggleSidebar} className="sidebar-toggle">
-                    {isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-                </button>
-
-                <div className="page-content">
-                    <div className="section-full p-t120 p-b90 site-bg-white">
-                        <div className="container">
-                            <div className="row">
-                                <div className={`col-xl-3 col-lg-4 col-md-12 rightSidebar m-b30 ${isSidebarCollapsed ? 'collapsed' : ''}`}>
-                                    <div className="side-bar-st-1">
-                                        <CanSidebarSection />
-                                    </div>
-                                </div>
-                                <div className="col-xl-9 col-lg-8 col-md-12 m-b30">
-                                    <CandidateRoutes />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <SignUpPopup />
-                <SignInPopup />
-            </div>
-        </>
+      <NavLink to={link} className="twm-jobs-list-style1 mb-5" onClick={handleCardClick}>
+        <div className="twm-media">
+          <img
+            src={img ? `${img}` : `${baseURL}/assets/images/no-logo.png`}
+            alt="#"
+          />
+        </div>
+        <div className="twm-mid-content">
+          <h4 className="twm-job-title">
+            {title}
+            <span className="twm-job-post-duration">
+              / <TimeAgo date={duration} />
+            </span>
+          </h4>
+          <p className="twm-job-address twm-exp-profile">{location}</p>
+          <ul className="ul-skills">
+            <li>ux writing</li>
+            <li>wire framing</li>
+            <li>prototyping</li>
+            <li>information architecture</li>
+          </ul>
+        </div>
+        <div className="twm-right-content">
+          <div className="twm-jobs-category green">
+            <span className="twm-bg-green">Bid Now</span>
+          </div>
+          <div className="twm-jobs-amount">
+            {amount}
+          </div>
+          <p className="twm-jobs-browse bids"> {days_left} days left</p>
+        </div>
+      </NavLink>
     );
-}
-
-export default CandidateLayout;
+  };

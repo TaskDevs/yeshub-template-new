@@ -9,14 +9,23 @@ import { useContext } from "react";
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
     // const username = sessionStorage.getItem("username")
-	const { profileData } = useContext(ProfileApiData)
+	const { profileData, imgSrc, setImgSrc } = useContext(ProfileApiData)
     // console.log("profileData", profileData)
 
 
     return (
 			<>
 				<div className="twm-candidate-profile-pic">
-					<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" />
+					{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" /> */}
+					<img
+                              src={imgSrc}
+                              alt="user picture"
+                              onError={() =>
+                                setImgSrc(
+                                  "/assets/images/candidates/user-avatar-fallback.jpg"
+                                )
+                              }
+                            />
 					<div className="upload-btn-wrapper">
 						<div id="upload-image-grid" />
 						{/* <button className="site-button button-sm">Upload Photo</button> */}

@@ -14,7 +14,9 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 function CandidateListPage() {
   const { allUsersProfile } = useContext(ProfileApiData);
   const { skillOptions } = useContext(SkillsApiData);
-  console.log("skillOptions", skillOptions);
+
+  console.log("skillOptions", skillOptions)
+  console.log("allUsersProfile", allUsersProfile);
 
   const _filterConfig = {
     prefix: "Showing",

@@ -22,10 +22,9 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
   
    const [selectedOption, setSelectedOption] = useState("milestone");
-  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+  const { selectedId, setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const currentpath = useLocation().pathname;
   const jobId = currentpath.split("/")[2];
-  
   const navigate = useNavigate();
  
      
@@ -116,13 +115,14 @@ const ApplicationApiDataProvider = (props) => {
     setTimeout(() => {
       setIsLoading(true)
     }, 200)
-   
+   console.log("emp-id-apply", selectedId)
     try {
       const res =  await processAddApplication({
 				user_id: userId,
 				job_id: jobId,
 				status: "pending",
 				freelance_id: "",
+        employer_id: selectedId,
 			});
       if (res) {
         console.log("app-res", res)

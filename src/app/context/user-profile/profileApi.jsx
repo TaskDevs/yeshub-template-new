@@ -57,12 +57,27 @@ export const profileList = async () => {
 };
 
 
-// VIEW Profile
+// VIEW Profile  get-profile  `user-full-info/1`
  /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
 export const profileProfile = async (id) => {
   try {
     let responseOnProfile = await axios.get(
 			`${REACT_BASE_URL}get-profile/${id}`
+      
+		);
+    return responseOnProfile;
+  
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const fullProfileProfile = async (id) => {
+  try {
+    let responseOnProfile = await axios.get(
+			`${REACT_BASE_URL}user-full-info/${id}`
+      
 		);
     return responseOnProfile;
   
@@ -97,3 +112,6 @@ export const deleteProfile = async (id) => {
     console.error(err);
   }
 };
+
+
+// /user-full-info/1

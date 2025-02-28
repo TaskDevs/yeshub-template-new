@@ -5,6 +5,8 @@ function SectionCandidateSkills({ props }) {
     const { skillOptions } = useContext(SkillsApiData)
     console.log("skillOptions-detail", skillOptions)
 
+    console.log("skills-detail", props.skills_id)
+
 
     return (
         <>
@@ -12,10 +14,10 @@ function SectionCandidateSkills({ props }) {
             <div className="tw-sidebar-tags-wrap">
 
                 <div className="tagcloud">
-
+{/* 
                 {skillOptions?.map((skill) => {
   
-    const normalizedSkills = Array.isArray(props.skills_id)
+    const normalizedSkills = Array.isArray(props?.skills_id)
     ? props.skills_id
     : props.skills_id
         ? JSON.parse(props.skills_id) 
@@ -30,7 +32,7 @@ function SectionCandidateSkills({ props }) {
        <a href="#" key={skill.id}>{skill.name}</a>
     );
   })}
-                    {/* <a href="#">Finance</a>
+                    {/* <a href="#">Finance</a> */}
                     <a href="#">Sales</a>
                     <a href="#">Part-time</a>
                     <a href="#">Administration</a>
@@ -39,7 +41,7 @@ function SectionCandidateSkills({ props }) {
                     <a href="#">Developer</a>
                     <a href="#">Work from home</a>
                     <a href="#">IT Consulting</a>
-                    <a href="#">Manufacturing</a> */}
+                    <a href="#">Manufacturing</a> 
                 </div>
             </div>
         </>

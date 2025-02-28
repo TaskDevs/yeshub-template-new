@@ -1,5 +1,5 @@
 import JobZImage from "../jobz-img";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { base, publicUser } from "../../../globals/route-names";
 import { useContext, useState } from "react";
 import { AuthApiData } from "../../context/auth/authContextApi";
@@ -12,9 +12,14 @@ function Header1({ _config }) {
   const [menuActive, setMenuActive] = useState(false);
   const { userProfile } = useContext(AuthApiData);
   const username = userProfile?.username || "U"; // Default to "N" if no username
-  const { toggleSidebar } = useContext(ProfileApiData);
+  const { isSidebarCollapsed, toggleSidebar } = useContext(ProfileApiData);
   const location = useLocation(); // Get the current location
   const isCandidateDashboard = location.pathname.startsWith(base.CANDIDATE_PRE);
+  const isHome = location.pathname === "/index" || location.pathname === "/"
+  const navigate = useNavigate();
+  
+
+
   //navigation
   function handleNavigationClick() {
     setMenuActive(!menuActive);
@@ -222,6 +227,7 @@ function Header1({ _config }) {
                   <div className="extra-cell">
                     <div className="header-nav-btn-section">
                       {token ? ( // Check if token exists (User is logged in)
+                        <>
                         <div className="twm-nav-btn-left">
                           <a
                             className="d-flex align-items-center p-2"
@@ -244,6 +250,28 @@ function Header1({ _config }) {
                             </Avatar>
                           </a>
                         </div>
+
+                        {isHome && (
+                          <>
+                          {/* twm-nav-btn-left twm-nav-sign-up */}
+                        <div className=" freelancer-btn">
+                        {/* onClick={() => navigate("/dashboard-candidate/profile")} */}
+                          <button  className="" onClick={() => navigate("/dashboard-candidate/profile")}>
+                           Become A Freelancer
+                          </button></div>
+                        {/* <div className="twm-nav-btn-left">
+                            <a
+                              className="twm-nav-sign-up"
+                              data-bs-toggle="modal"
+                              href="#sign_up_popup2"
+                              role="button"
+                            >
+                              <i className="feather-log-in" /> Log In
+                            </a>
+                          </div> */}
+                          </>
+                          )}
+                        </>
                       ) : (
                         <>
                           <div className="twm-nav-btn-left">
@@ -279,7 +307,12 @@ function Header1({ _config }) {
                       {/* header-left  header-right*/}
                       <div className="nav-btn-wrap">
                         <a className="nav-btn-admin" id="sidebarCollapse">
-                          <span className="fa fa-angle-left" />
+                          {isSidebarCollapsed? (
+                            <span className="fa fa-angle-left" />
+                          ) : (
+                            <span className="fa fa-angle-right" />
+                          )}
+                          
                         </a>
                       </div>
                     </div>

@@ -7,7 +7,7 @@ import {
   // searchFreelance,
   // freelanceList,
   freelanceProfile,
-  // updateFreelance,
+  updateFreelance,
   // deleteFreelance,
 } from "./freelanceApi";
 import { userId } from "../../../globals/constants";
@@ -25,23 +25,23 @@ const initialFormData =  FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
 
 
 const FreelanceApiDataProvider = (props) => {
-  const [freelanceProfileData, setFreelanceProfileData] = useState({});
+  const [freelanceProfileData, setFreelanceProfileData] = useState([]);
   const [formData, setFormData] = useState(initialFormData)
   const { setIsSubmitting } = useContext(GlobalApiData)
+
+  console.log("freelanceProfileData-ctx", freelanceProfileData)
 
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await processFreelanceProfile(userId);
       if (res) {
+        console.log("freelance-profile", res)
         setFreelanceProfileData(res.data);   
       } else {
         return false;
       }
     };
-
     fetchProfile();
-
-   
     const interval = setInterval(fetchProfile, 60000);
     return () => clearInterval(interval); 
   }, []);
@@ -69,7 +69,22 @@ const FreelanceApiDataProvider = (props) => {
 
   const processSearchFreelance = async () => {};
 
-  const processUpdateFreelance = async () => {};
+  const processUpdateFreelance = async (id, data) => {
+    setIsSubmitting(true)
+   try{
+    const res = await updateFreelance(id, data);
+    if (res) {
+      return res.data;
+    } else {
+      return false;
+    }
+   }catch(e){
+    console.error(e);
+   } finally {
+    setFormData(initialFormData)
+    setIsSubmitting(false)
+   }
+  };
 
   const processDeleteFreelance = async () => {};
 
@@ -102,10 +117,26 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
+  const handleUpdateFreelanceProfile = async (e) => {
+    e.preventDefault();
+   
+    try{
+      const res = await processUpdateFreelance( {...formData, portfolio_id
+        : userId, user_id: userId})
+    if (res) {
+      console.log("update-freelancer", res)
+      toast.success("Freelance profile updated successfully")
+    }
+    }catch(e) {
+      console.error()
+      toast.error("Failed to update freelance profile")
+    }
+  }
+
   const handleEditFreelance = () => {
     setFormData({
-      rate: freelanceProfileData.rate,
-      experience: freelanceProfileData.experience,
+      rate: freelanceProfileData?.data[1]?.rate,
+      experience: freelanceProfileData?.data[1]?.experience,
     })
   }
 
@@ -116,6 +147,7 @@ const FreelanceApiDataProvider = (props) => {
         formData,
         setFormData,
         handleSubmit,
+        handleUpdateFreelanceProfile,
         handleEditFreelance,
         processAddFreelance,
         processGetAllFreelance,

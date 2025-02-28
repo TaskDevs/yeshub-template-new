@@ -19,7 +19,7 @@ function CandidateLayout() {
       <div className="page-wraper">
         <Header1 _config={getHeaderConfig(currentpath)} />
 
-        <div className="page-content">
+        <div className="page-content m-t40">
           {/* <InnerPageBanner _data={setBanner(currentpath)} /> */}
           {/* "col-xl-3 col-lg-4 col-md-12 rightSidebar m-b30 */}
 

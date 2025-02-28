@@ -3,7 +3,7 @@ function SectionCandidateAbout1({ props }) {
 			<>
 				<h4 className="twm-s-title">About Me</h4>
 				<p>
-					{props.bio}
+					{props?.user?.bio}
 				</p>
 				
 			</>

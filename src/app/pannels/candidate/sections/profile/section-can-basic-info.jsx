@@ -254,6 +254,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       field={USERPROFILEFIELD.fieldDetail[11]}
                       value={formData}
                       change={handleChange}
+                      required={true} 
                     />
                   </div>
                 </div>

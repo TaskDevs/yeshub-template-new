@@ -1,16 +1,26 @@
-function SectionProfile({ data }) {
+import { useContext } from "react";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
+
+function SectionProfile({ data, isFreelancer }) {
+    const { freelanceProfileData } = useContext(FreelanceApiData)
+
+
+
     return (
         <>
             <h4 className="section-head-small mb-4">Profile Info</h4>
             <div className="twm-s-info">
                 <ul>
-                    <li>
-                        <div className="twm-s-info-inner">
-                            <i className="fas fa-money-bill-wave" />
-                            <span className="twm-title">Rate</span>
-                            <div className="twm-s-info-discription">GHS200 / Day</div>
-                        </div>
-                    </li>
+                    {isFreelancer && (
+                         <li>
+                         <div className="twm-s-info-inner">
+                             <i className="fas fa-money-bill-wave" />
+                             <span className="twm-title">Rate</span>
+                             <div className="twm-s-info-discription">GHS{freelanceProfileData[0]?.rate}/ Day</div>
+                         </div>
+                     </li>
+                    )}
+                   
                     <li>
                         <div className="twm-s-info-inner">
                             <i className="fas fa-clock" />

@@ -11,8 +11,8 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 function CandidateCard({ data }) {
     const { skillOptions } = useContext(SkillsApiData)
     const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`);
-    console.log("data-card", data)
-    console.log("data.skills_id", typeof data.skills_id, data.skills_id)
+    // console.log("data-card", data)
+    // console.log("data.skills_id", typeof data.skills_id, data.skills_id)
 
 
 

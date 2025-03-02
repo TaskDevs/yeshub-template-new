@@ -9,7 +9,7 @@ function SectionCandidateEducation({ props }) {
                 {props.map((edu) => (
                     <SectionCanEducCard data={edu} key={edu.id} />
                 ))}
-                 <div className="twm-timing-list">
+                 {/* <div className="twm-timing-list">
                     <div className="twm-time-list-date">2004 to 2006</div>
                     <div className="twm-time-list-title">BCA - Bachelor of Computer Applications</div>
                     <div className="twm-time-list-position">International University</div>
@@ -18,7 +18,7 @@ function SectionCandidateEducation({ props }) {
                   
                             replacing them with beliefs that will help them to accomplish their desires.</p>
                             </div>
-                            </div>
+                            </div> */}
                 {/*    
                 </div>
                 <div className="twm-timing-list">

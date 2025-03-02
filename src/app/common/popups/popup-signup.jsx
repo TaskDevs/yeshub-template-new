@@ -43,6 +43,13 @@ function SignUpPopup() {
     }
   };
 
+  // const handleChange = (data, field) => {
+  //   setFormData({
+  //     ...formData,
+  //     [data]: field,
+  //   });
+  // };
+
 
 
   const handleChange = (e) => {
@@ -52,6 +59,13 @@ function SignUpPopup() {
       [name]: value,
     }));
   };
+
+  
+
+
+
+
+
   const googleSignin = async ()=>{
     await loginWithGoogle(formData.role)
     

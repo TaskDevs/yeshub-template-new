@@ -1,9 +1,9 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import {
-	addPortfolio,
-	portfolioList,
-	updatePortfolio,
-	deletePortfolio,
+  addPortfolio,
+  portfolioList,
+  updatePortfolio,
+  deletePortfolio,
 } from "./portfolioApi";
 import { PORTFOLIOFIELD } from "../../../globals/portfolio-data";
 import { GlobalApiData } from "../global/globalContextApi";
@@ -13,117 +13,137 @@ import { userId } from "../../../globals/constants";
 export const PortfolioApiData = createContext();
 
 const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
-	acc[field.name] = "";
-	return acc;
+  acc[field.name] = "";
+  return acc;
 }, {});
 
 const PortfolioApiDataProvider = (props) => {
-	const { setIsSubmitting, selectedId } = useContext(GlobalApiData);
-	const [portfolios, setPortfolios] = useState([]);
-	const [formData, setFormData] = useState(initialData);
+  const { setIsSubmitting, selectedId } = useContext(GlobalApiData);
+  const [portfolios, setPortfolios] = useState([]);
+  const [formData, setFormData] = useState(initialData);
 
-	const handleChange = (field, data) => {
-		setFormData({
-			...formData,
-			[field]: data,
-		});
-	};
+  const handleChange = (field, data) => {
+    setFormData({
+      ...formData,
+      [field]: data,
+    });
+  };
 
-	const processAddPortfolio = async (data) => {
-		try {
-			const res = await addPortfolio(data);
+  const fetchAllPortfolio = async () => {
+    try {
+      const res = await processGetAllPortfolio(userId);
+      if (res) {
+        const data = res.data.data;
+        setPortfolios(data);
+      }
+    } catch (err) {
+      console.error("failed to get portfolio", err);
+    }
+  };
 
-			return res;
-		} catch (err) {
-			console.error("failed to add-portfolio", err);
-		}
-	};
+  useEffect(() => {
+    fetchAllPortfolio();
 
-	const processGetAllPortfolio = async (userid) => {
-		try {
-			const res = await portfolioList(userid);
+    const interval = setInterval(fetchAllPortfolio, 60000);
+    return () => clearInterval(interval);
+  }, [fetchAllPortfolio]);
 
-			return res;
-		} catch (err) {
-			console.error("failed to get-portfolio", err);
-		}
-	};
+  const processAddPortfolio = async (data) => {
+    try {
+      const res = await addPortfolio(data);
 
-	//   const processPortfolioProfile = async (id) => {};
+      return res;
+    } catch (err) {
+      console.error("failed to add-portfolio", err);
+    }
+  };
 
-	const processUpdatePortfolio = async (userid, data) => {
-		try {
-			const res = await updatePortfolio(userid, data);
+  const processGetAllPortfolio = async (userid) => {
+    try {
+      const res = await portfolioList(userid);
 
-			return res;
-		} catch (err) {
-			console.error("failed to update-portfolio", err);
-		}
-	};
+      return res;
+    } catch (err) {
+      console.error("failed to get-portfolio", err);
+    }
+  };
 
-	const processDeletePortfolio = async (id) => {
-		try {
-			const res = await deletePortfolio(id);
+  //   const processPortfolioProfile = async (id) => {};
 
-			return res;
-		} catch (err) {
-			console.error("failed to delete-portfolio", err);
-		}
-	};
+  const processUpdatePortfolio = async (userid, data) => {
+    try {
+      const res = await updatePortfolio(userid, data);
 
-	const handleAddPortfolio = async (e) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-		try {
-			await processAddPortfolio({ ...formData, user_id: userId });
+      return res;
+    } catch (err) {
+      console.error("failed to update-portfolio", err);
+    }
+  };
 
-			toast.success("Portfolio added successfully");
-		} catch (err) {
-			console.error("failed to add portfolio", err);
-			toast.error("Portfolio updated successfully");
-		} finally {
-			setIsSubmitting(false);
-			setFormData(initialData);
-		}
-	};
+  const processDeletePortfolio = async (id) => {
+    try {
+      const res = await deletePortfolio(id);
 
-	const handleUpdatePortfolio = async (e) => {
-		e.preventDefault();
-		setIsSubmitting(true);
-		try {
-			await processUpdatePortfolio(selectedId, formData);
-		} catch (err) {
-			console.error("failed to update portfolio", err);
-		} finally {
-			setIsSubmitting(false);
-			setFormData(initialData);
-		}
-	};
+      return res;
+    } catch (err) {
+      console.error("failed to delete-portfolio", err);
+    }
+  };
 
-	const handleResetForm = () => {
-		setFormData(initialData);
-	};
+  const handleAddPortfolio = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+	
+    try {
+      await processAddPortfolio({ ...formData, user_id: userId });
 
-	return (
-		<PortfolioApiData.Provider
-			value={{
-				formData,
-				portfolios,
-				setFormData,
-				setPortfolios,
-				handleChange,
-				handleResetForm,
-				processAddPortfolio,
-				processGetAllPortfolio,
-				processUpdatePortfolio,
-				processDeletePortfolio,
-				handleAddPortfolio,
-				handleUpdatePortfolio,
-			}}
-		>
-			{props.children}
-		</PortfolioApiData.Provider>
-	);
+      toast.success("Portfolio added successfully");
+    } catch (err) {
+      console.error("failed to add portfolio", err);
+      toast.error("Portfolio updated successfully");
+    } finally {
+      setIsSubmitting(false);
+      setFormData(initialData);
+    }
+  };
+
+  const handleUpdatePortfolio = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await processUpdatePortfolio(selectedId, formData);
+    } catch (err) {
+      console.error("failed to update portfolio", err);
+    } finally {
+      setIsSubmitting(false);
+      setFormData(initialData);
+    }
+  };
+
+  const handleResetForm = () => {
+    setFormData(initialData);
+  };
+
+  return (
+    <PortfolioApiData.Provider
+      value={{
+        formData,
+        portfolios,
+        setFormData,
+        setPortfolios,
+        handleChange,
+        handleResetForm,
+        processAddPortfolio,
+        processGetAllPortfolio,
+        processUpdatePortfolio,
+        processDeletePortfolio,
+        handleAddPortfolio,
+        handleUpdatePortfolio,
+      }}
+    >
+      {props.children}
+    </PortfolioApiData.Provider>
+  );
 };
 
 export default PortfolioApiDataProvider;

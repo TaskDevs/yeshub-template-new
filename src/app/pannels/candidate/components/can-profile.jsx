@@ -233,7 +233,7 @@ function CanProfilePage() {
                   <div className="sec-actions-btn">
                     <button
                       className="site-button  actions-btn"
-                      data-bs-target="#delete-profile"
+                      data-bs-target="#delete-freelance"
                       data-bs-toggle="modal"
                       data-bs-dismiss="modal"
                     >

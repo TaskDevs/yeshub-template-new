@@ -15,12 +15,13 @@ import { ProfileApiData } from "../../../../context/user-profile/profileContextA
 // import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import SectionCandidateEducation from "../../sections/candidates/section-can-education";
 import SectionProfile from "../../sections/common/section-profile";
+import SectionCandidatePortfolio from "../../sections/candidates/detail2/section-can-portfolio";
 
 function CandidateDetail1Page() {
   const { id } = useParams();
   const [candidate, setCandidate] = useState(null);
   const { processFullProfileProfile, allUsersProfile } = useContext(ProfileApiData);
-  
+ 
   const user = allUsersProfile?.find(user => {
     // console.log("user-find", typeof user.user_id)
     // console.log("id-params-find", typeof id);
@@ -48,7 +49,7 @@ console.log("is_freelancer", isFreelancer);
     loadScript("js/custom.js");
   });
 
-//   console.log("candidate", candidate);
+  console.log("candidate", candidate);
 
   useEffect(() => {
     // setTimeout(() => {
@@ -86,7 +87,7 @@ console.log("is_freelancer", isFreelancer);
           // 	)})`,
           // }}
         >
-          <SectionCandidateShortIntro1 props={candidate} />
+          <SectionCandidateShortIntro1 props={candidate} isFreelancer={isFreelancer} />
           <div className="overlay-main site-bg-white opacity-01" />
         </div>
       </div>
@@ -101,7 +102,7 @@ console.log("is_freelancer", isFreelancer);
                 <div className="cabdidate-de-info">
                   {/* <SectionCandidateShortIntro1 /> */}
 
-                  <SectionCandidateAbout1 props={candidate} />
+                  <SectionCandidateAbout1 props={candidate} isFreelancer={isFreelancer} />
 
                   <SectionCandidateSkills props={candidate.user} />
 
@@ -111,6 +112,8 @@ console.log("is_freelancer", isFreelancer);
                   {/* <SectionCandidateExperience /> */}
 
                   <SectionCandidateEducation props={candidate.education} />
+
+                  <SectionCandidatePortfolio  />
 
                   <SectionReview />
                 </div>
@@ -122,7 +125,7 @@ console.log("is_freelancer", isFreelancer);
               <div className=" col-lg-4 rightSidebar">
                 {/* <SectionEmployersCandidateSidebar type="1" /> */}
                 <div className="side-bar-2 m-t20 m-b10">
-                <SectionProfile data={candidate.user} />
+                <SectionProfile data={candidate.user} isFreelancer={isFreelancer}/>
                 </div>
               </div>
 

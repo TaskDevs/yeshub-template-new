@@ -156,13 +156,21 @@ function CandidateCard({ data }) {
 
 
 {skillOptions?.map((skill) => {
+            // const normalizedSkills = Array.isArray(data?.skills_id)
+            //   ? data.skills_id
+            //   : data.skills_id
+            //   ? JSON.parse(data.skills_id).map((skill) => 
+            //       typeof skill === "number" ? skill : Number(skill)
+            //     )
+            //   : [];
+
             const normalizedSkills = Array.isArray(data?.skills_id)
-              ? data.skills_id
-              : data.skills_id
-              ? JSON.parse(data.skills_id).map((skill) => 
-                  typeof skill === "number" ? skill : Number(skill)
-                )
-              : [];
+            ? data.skills_id // Already an array
+            : typeof data?.skills_id === "string"
+            ? JSON.parse(data.skills_id).map((skill) =>
+                typeof skill === "number" ? skill : Number(skill)
+              )
+            : [];
 
             // console.log("normalizedSkills", normalizedSkills);
             return (

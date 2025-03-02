@@ -44,6 +44,19 @@ function SectionCandicateBasicInfo({ submit, id }) {
     });
   };
 
+  // const handleChange = (data, field) => {
+  //   if (data?.target) {
+  //     // Handles standard input fields
+  //     const { name, value } = data.target;
+  //     setFormData((prev) => ({ ...prev, [name]: value }));
+  //   } else if (field?.name) {
+  //     // Handles custom components like PasswordField
+  //     setFormData((prev) => ({ ...prev, [field.name]: data }));
+  //   }
+  // };
+
+
+
   return (
     <>
       <div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
@@ -72,6 +85,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                             handleChange(data, field);
                           }}
                         />
+                     
                         <i className="fs-input-icon fa fa-user " />
                       </div>
                     </div>

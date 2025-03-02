@@ -3,7 +3,7 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 
 function SectionCandidateSkills({ props }) {
   const { skillOptions } = useContext(SkillsApiData);
-  console.log("skillOptions-detail", skillOptions);
+  // console.log("skillOptions-detail", skillOptions);
 
 //   console.log("skills-detail", props.skills_id);
 

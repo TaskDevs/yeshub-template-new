@@ -15,34 +15,36 @@ function SectionFreelancerInfo() {
           Rate: <span>{data?.rate}</span>
         </p>
 
-        <p className="profile-data-attributes">
-          Portfolio(s):{" "}
-          {portfolios?.map((portfolio) => {
-            // Normalize data.portfolio_id to an array
-            const normalizedPortfolio = Array.isArray(portfolio.portfolio_id)
-              ? portfolio.portfolio_id
-              : portfolio.portfolio_id
-              ? portfolio.portfolio_id.toString().split(",").map(Number) // Convert string to array of numbers
-              : []; // Default to empty array if null or undefined
+       
 
-            {
-              console.log("normalizedPortfolio", normalizedPortfolio);
-            }
-            // Check if the user has the portfolio
-            return (
-              normalizedPortfolio.some((user) => user === portfolio.id) && (
-                <span key={portfolio.id}>
-                  {console.log(
-                    "portfolio.project_title",
-                    portfolio.project_title
-                  )}
-                  {portfolio.project_title}
-                </span>
-              )
-            );
-          })}
-          {/* <span>{data?.portfolio_id}</span> */}
-        </p>
+<p className="profile-data-attributes">
+Portfolio(s):
+<ul className="portfolio-lists" >
+{portfolios?.map((portfolio) => {
+
+    const freelancePortfolioIds = freelanceProfileData[0]?.portfolio_id;
+
+    const normalizedPortfolio = Array.isArray(freelancePortfolioIds)
+        ? freelancePortfolioIds
+        : freelancePortfolioIds
+        ? freelancePortfolioIds.toString().split(",").map(Number)
+        : [];
+
+    return (
+        normalizedPortfolio.some((id) => id === portfolio.id) && (
+            <li key={portfolio.id} className="portfolio-list">
+               
+                {portfolio.project_title}
+            </li>
+        )
+    );
+})}
+</ul>
+
+</p>
+
+
+
         <p className="profile-data-attributes">
           Experience: <span>{data?.experience}</span>{" "}
         </p>

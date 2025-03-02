@@ -1,10 +1,21 @@
 
 function InputField ({ field, value, change, required=true}) {
   
+
   const handleInputChange = (e) => {
-		change(field.name, e.target.value);
-	};
+    if (typeof change === 'function') {
+       
+        if (change.length === 2) {
+            change(field.name, e.target.value);
+        } else {
   
+            change(e);
+        }
+    }
+};
+  
+
+
 return (
 <div className="form-group mb-3">
     <input

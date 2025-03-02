@@ -308,6 +308,16 @@ This files [Table of contents] are outlined below
   }
 }
 
+.portfolio-lists {
+  font-weight: 400;
+  padding-left: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.portfolio-list {
+  margin-right: 10px;
+}
 
 
 .site-text-primary {

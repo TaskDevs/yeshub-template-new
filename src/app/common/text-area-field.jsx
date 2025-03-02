@@ -1,4 +1,4 @@
-function TextAreaField({ field, value, change }) {
+function TextAreaField({ field, value, change, required=false }) {
 	const handleInputChange = (e) => {
 		change(field.name, e.target.value);
 	};
@@ -12,6 +12,7 @@ function TextAreaField({ field, value, change }) {
 				name={field.name}
 				value={value[field.name]}
 				onChange={handleInputChange}
+				required={required} 
 			/>
 		</div>
 	);

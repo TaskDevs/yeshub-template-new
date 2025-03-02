@@ -22,7 +22,7 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
   
    const [selectedOption, setSelectedOption] = useState("milestone");
-  const { selectedId, setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+  const {  setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const currentpath = useLocation().pathname;
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ const ApplicationApiDataProvider = (props) => {
   const processGetAllApplication = async (id) => {
      try {
 				const res = await applicationList(id);
-				console.log("get all applications", res);
+				// console.log("get all applications", res);
 				return res;
 			} catch (e) {
 				throw new Error("Failed to get all applications", e);
@@ -115,17 +115,17 @@ const ApplicationApiDataProvider = (props) => {
     setTimeout(() => {
       setIsLoading(true)
     }, 200)
-   console.log("emp-id-apply", selectedId)
+  //  console.log("emp-id-apply", selectedId)
     try {
       const res =  await processAddApplication({
 				user_id: userId,
 				job_id: jobId,
 				status: "pending",
 				freelance_id: "",
-        employer_id: selectedId,
+        
 			});
       if (res) {
-        console.log("app-res", res)
+        // console.log("app-res", res)
         navigate(`/dashboard-candidate/applied-jobs`)
         setTimeout(() => {
           toast.success("Job applied successfully")

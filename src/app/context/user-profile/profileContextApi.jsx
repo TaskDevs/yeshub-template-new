@@ -62,24 +62,25 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
+  const fetchProfile = async () => {
+    const res = await processProfileProfile(userId);
+    if (res) {
+      setProfileData(res.data.data);
+    }
+  };
 
   useEffect(() => {
-    if(!profileData && !profileData.id) {
-      return false;
-    }
-    const fetchProfile = async () => {
-      const res = await processProfileProfile(userId);
-      if (res) {
-        setProfileData(res.data.data);
-      }
-    };
+    // if(!profileData && !profileData.id) {
+    //   return false;
+    // }
+    
 
     fetchProfile();
 
    
     const interval = setInterval(fetchProfile, 60000);
     return () => clearInterval(interval); 
-  }, []);
+  }, [fetchProfile]);
 
 
   useEffect(() => {
@@ -147,7 +148,7 @@ const ProfileApiDataProvider = (props) => {
   };
 
   const handleSubmitProfile = async (e) => {
-    
+    // console.log("formdata-profile", formData)
     
     e.preventDefault();
     setIsSubmitting(true);
@@ -157,6 +158,18 @@ const ProfileApiDataProvider = (props) => {
       setIsSubmitting(false);
       return;
     }
+
+    if (selectedItems.length <= 2) {
+      toast.error("Please select at least 3 skills");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.bio) { 
+      toast.error("Please fill out the description field.");
+      setIsSubmitting(false);
+      return;
+  }
 
     const profileFormData = new FormData();
     profileFormData.append("profile_image", selectedFile);

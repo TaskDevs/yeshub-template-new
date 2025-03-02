@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { notify } from "../../../utils/responseUtils";
+// import { notify } from "../../../utils/responseUtils";
 
 import {
   addTestimonial,
@@ -36,9 +36,7 @@ const TestimonialApiDataProvider = (props) => {
     } catch (err) {
       console.log("failed to add testimonial", err)
     } finally {
-      setFormData(initialData);
-          notify( "Category added successfully", "Failed to add category")
-      
+      setFormData(initialData); 
     }
 
   };

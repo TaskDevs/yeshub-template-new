@@ -5,7 +5,7 @@ import { useContext } from "react";
 
 function SectionCandidateOverview() {
     const { profileData } = useContext(ProfileApiData)
-    console.log("profileData", profileData)
+    // console.log("profileData", profileData)
 
 
     return (

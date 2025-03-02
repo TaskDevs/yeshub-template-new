@@ -70,7 +70,7 @@ function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 	return (
 		<>
 			<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-				<h4 className="panel-tittle m-a0">Testimonial</h4>
+				<h4 className="panel-tittle m-a0">Reviews</h4>
 				<a
 					data-bs-toggle="modal"
 					href="#Testimonial"
@@ -102,6 +102,7 @@ function SectionReviews({ receiver, criterio1, criterio2, criterio3 }) {
 
 			<TestimonialPopup submit={handleAddTestimonial} />
 			<TestimonialPopup submit={""} />
+			
 		</>
 	);
 }

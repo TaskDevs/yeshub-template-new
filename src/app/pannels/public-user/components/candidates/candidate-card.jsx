@@ -11,8 +11,8 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 function CandidateCard({ data }) {
     const { skillOptions } = useContext(SkillsApiData)
     const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`);
-    console.log("data-card", data)
-    console.log("data.skills_id", typeof data.skills_id, data.skills_id)
+    // console.log("data-card", data)
+    // console.log("data.skills_id", typeof data.skills_id, data.skills_id)
 
 
 
@@ -41,7 +41,7 @@ function CandidateCard({ data }) {
             <div className="">
               <div className="">
                 {/* twm-candi-self-bottom */}
-                {data?.is_freelancer && (
+                {data?.is_freelancer ? (
                   <div className="">
                   {/* <a
                   href="#"
@@ -50,11 +50,15 @@ function CandidateCard({ data }) {
                   Hire Me Now
                 </a> */}
 
-<div className="twm-jobs-category brown">
+<div className="twm-jobs-category">
 <span className="twm-bg-green">Freelancer</span>
 </div>
 </div>
 
+                ): (
+                  <div className="twm-jobs-category">
+<span className="twm-bg-brown">Full Time</span>
+</div>
                 )}
                 
                 {/* <a href="#" className="site-button secondry">Download CV</a> */}
@@ -147,22 +151,28 @@ function CandidateCard({ data }) {
                 <li>Java</li> */}
               {/* </ul> */}
               <ul className="twm-can-pro-info">
-  {skillOptions?.map((skill) => {
-    // Normalize data.skills_id to an array
-    const normalizedSkills = Array.isArray(data.skills_id)
-      ? data.skills_id
-      : data.skills_id
-          ? data.skills_id.toString().split(',').map(Number) // Convert string to array of numbers
-          : []; // Default to empty array if null or undefined
+ 
 
-    // Check if the user has the skill
-    return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
-      <li key={skill.id}>
-        {console.log("skill.name", skill.name)}
-        {skill.name}
-      </li>
-    );
-  })}
+
+
+{skillOptions?.map((skill) => {
+            const normalizedSkills = Array.isArray(data?.skills_id)
+              ? data.skills_id
+              : data.skills_id
+              ? JSON.parse(data.skills_id).map((skill) => {
+                  return typeof skill === "number" ? skill : Number(skill);
+                })
+              : [];
+
+            // console.log("normalizedSkills", normalizedSkills);
+            return (
+              normalizedSkills.some((userSkill) => userSkill === skill.id) && (
+                <a href="#" key={skill.id}>
+                  {skill.name}
+                </a>
+              )
+            );
+          })}
 </ul>
 
 

@@ -15,7 +15,7 @@ function Header1({ _config }) {
   const { isSidebarCollapsed, toggleSidebar } = useContext(ProfileApiData);
   const location = useLocation(); // Get the current location
   const isCandidateDashboard = location.pathname.startsWith(base.CANDIDATE_PRE);
-  const isHome = location.pathname === "/index" || location.pathname === "/"
+  const isHome = location.pathname === "/index" || location.pathname === "/" || location.pathname === "/about-us"
   const navigate = useNavigate();
   
 

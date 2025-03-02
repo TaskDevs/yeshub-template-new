@@ -3,18 +3,21 @@ import  { extractYear } from '../../../../../utils/readableDate'
 
 
 
-function SectionCanEducCard({data}) {
+function SectionCanPortfolioCard({data}) {
    
   return (
     <div className="twm-timing-list">
-    <div className="twm-time-list-date">{extractYear(data?.
-date_attended
+    <div className="twm-time-list-date">{extractYear(data?.project_start_date
+
 )} to {extractYear(data?.
-    date_completed
+    project_end_date
+
     )}</div>
-    <div className="twm-time-list-title">{data?.school}</div>
+    <div className="twm-time-list-title">{data?.project_title}</div>
     {/* <div className="twm-time-list-position">{data?.qualification}</div> */}
-    <div className="twm-time-list-position"> {data?.qualification} - {data?.area_of_study}</div>
+    <div className="twm-time-list-position">{data?.
+skills
+}</div>
     <div className="twm-time-list-discription">
         <p>{data?.description}</p>
     </div>
@@ -22,4 +25,4 @@ date_attended
   )
 }
 
-export default SectionCanEducCard
+export default SectionCanPortfolioCard

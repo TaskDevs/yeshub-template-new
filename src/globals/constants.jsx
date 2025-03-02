@@ -8,7 +8,7 @@ export const timeOut = { timeout: 10000 };
 console.log("REACT_BASE_URL", REACT_BASE_URL)
 
 //RETRIEVE USER IDS
-export const userId = sessionStorage.getItem("userId");
+export const userId = sessionStorage.getItem("user_id");
 export const OAuthUserId = sessionStorage.getItem("OAuthUserId")
 
 //STATUS CODE
@@ -24,6 +24,7 @@ export const popupType = {
   DELETE: "DELETE",
   LOGOUT: "LOGOUT",
   DELETE_PROFILE: "DELETE_PROFILE",
+  DELETE_FREELANCE: "DELETE_FREELANCE",
   DELETE_CATEGORY: "DELETE_CATEGORY",
   DELETE_EDUCATION: "DELETE_EDUCATION",
   DELETE_SKILLS: "DELETE_SKILLS",

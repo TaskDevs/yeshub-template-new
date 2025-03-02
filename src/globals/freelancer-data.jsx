@@ -16,3 +16,10 @@ export const  FREELANCERFIELD = {
 	],
 };
 
+// {
+// 	name: "portfolio_id",
+// 	label: "Portfolio(s)",
+// 	type: "text",
+// 	placeholder: "",
+// },
+

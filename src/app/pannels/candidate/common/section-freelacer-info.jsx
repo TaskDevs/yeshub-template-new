@@ -5,14 +5,16 @@ function SectionFreelancerInfo() {
 	const { freelanceProfileData } = useContext(FreelanceApiData);
 
 	return (
-		freelanceProfileData ?  (
-		<div className="sec-profile">
+		freelanceProfileData.length > 0 ?  (
+			freelanceProfileData.slice(1,).map((data) => (
+		<div className="sec-profile" key={data.id}>
+
 			
 			<p className="profile-data-attributes">
-				Experience: <span>{freelanceProfileData?.experience}</span>{" "}
+				Experience: <span>{data?.experience}</span>{" "}
 			</p>
 			<p className="profile-data-attributes">
-				Rate: <span>{freelanceProfileData?.rate}</span>
+				Rate: <span>{data?.rate}</span>
 			</p>
 			{/* <p className="profile-data-attributes">
 				Region: <span>{freelanceProfileData.region}</span>
@@ -33,6 +35,7 @@ function SectionFreelancerInfo() {
 				Bio: <span>{freelanceProfileData.bio}</span>
 			</p> */}
 		</div>
+	))
 	)
 	: 
 	(<p>No Freelance Profile found</p>) 

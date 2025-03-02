@@ -3,15 +3,14 @@ import { LuMessageSquare } from "react-icons/lu";
 import { MdOutlineStarRate } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import { LOCAL_BACKEND_URL } from "../../../../../globals/constants";
-
+// import { LOCAL_BACKEND_URL } from "../../../../../globals/constants";
 
 // https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/
+
+
 function CandidateCard({ data }) {
     const { skillOptions } = useContext(SkillsApiData)
-    const [imgSrc, setImgSrc] = useState(`${LOCAL_BACKEND_URL
-
-    }/${data?.profile_image}`);
+    const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`);
     console.log("data-card", data)
     console.log("data.skills_id", typeof data.skills_id, data.skills_id)
 
@@ -42,14 +41,22 @@ function CandidateCard({ data }) {
             <div className="">
               <div className="">
                 {/* twm-candi-self-bottom */}
-                <a
+                {data?.is_freelancer && (
+                  <div className="">
+                  {/* <a
                   href="#"
                   className="site-button"
-
-                  // outline-white
                 >
                   Hire Me Now
-                </a>
+                </a> */}
+
+<div className="twm-jobs-category brown">
+<span className="twm-bg-green">Freelancer</span>
+</div>
+</div>
+
+                )}
+                
                 {/* <a href="#" className="site-button secondry">Download CV</a> */}
               </div>
             </div>
@@ -62,51 +69,61 @@ function CandidateCard({ data }) {
             </p>
           </div>
 
-          <ul className="twm-can-pro-info can-insights">
-            <li className="pro-info-lists list-rate">
-              <div className="">
-                <MdOutlineStarRate
-                  className="star-icon star-1"
-                  size={20}
-                  color="red"
-                />
-                <MdOutlineStarRate
-                  className="star-icon star-2"
-                  size={20}
-                  color="red"
-                />
-                <MdOutlineStarRate
-                  className="star-icon star-3"
-                  size={20}
-                  color="red"
-                />
-                <MdOutlineStarRate
-                  className="star-icon star-4"
-                  size={20}
-                  color="red"
-                />
-              </div>
+   {
+    data?.is_freelancer ? (
+      <ul className="twm-can-pro-info can-insights">
+      <li className="pro-info-lists list-rate">
+        <div className="">
+          <MdOutlineStarRate
+            className="star-icon star-1"
+            size={20}
+            color="red"
+          />
+          <MdOutlineStarRate
+            className="star-icon star-2"
+            size={20}
+            color="red"
+          />
+          <MdOutlineStarRate
+            className="star-icon star-3"
+            size={20}
+            color="red"
+          />
+          <MdOutlineStarRate
+            className="star-icon star-4"
+            size={20}
+            color="red"
+          />
+        </div>
 
-              <span className="start-reviews">5.0</span>
-            </li>
-            <li className="pro-info-lists">
-              <LuMessageSquare size={20} color="brown" />
-              <span className="start-reviews">100</span> Reviews
-            </li>
-            {/* <li className="pro-info-lists">
-																<FaCediSign size={20} color="green" />
-																<span>10.0</span>
-															</li>
-															<li className="pro-info-lists">
-																<MdDonutLarge size={20} color="blue" />
-																<span>100%</span>
-															</li> */}
-            <li className="pro-info-lists">
-              {/* pro-info-lists */}
-              {/* twm-candidates-tag-rate */}
-              <span className=" twm-candidates-tag-rate">₵20</span>/ per hour
-            </li>
-          </ul>
+        <span className="start-reviews">5.0</span>
+      </li>
+      <li className="pro-info-lists">
+        <LuMessageSquare size={20} color="brown" />
+        <span className="start-reviews">100</span> Reviews
+      </li>
+      {/* <li className="pro-info-lists">
+                          <FaCediSign size={20} color="green" />
+                          <span>10.0</span>
+                        </li>
+                        <li className="pro-info-lists">
+                          <MdDonutLarge size={20} color="blue" />
+                          <span>100%</span>
+                        </li> */}
+      <li className="pro-info-lists">
+        {/* pro-info-lists */}
+        {/* twm-candidates-tag-rate */}
+        <span className=" twm-candidates-tag-rate">₵20</span>/ per hour
+      </li>
+    </ul>
+    ) : (
+      <p>
+       { data?.profession}
+      </p>
+      
+    )
+   }
+         
 
           <div className="twm-fot-content">
             <div className="twm-left-info sec-pro-desc">

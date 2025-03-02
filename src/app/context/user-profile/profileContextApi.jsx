@@ -6,6 +6,7 @@ import {
   profileProfile,
   updateProfile,
   deleteProfile,
+  fullProfileProfile
 } from "./profileApi";
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
@@ -30,12 +31,27 @@ const ProfileApiDataProvider = (props) => {
   const [allUsersProfile, setAllUsersProfile] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false); 
+  // const [isSidebarCollapsed, setSidebarCollapsed] = useState(true); 
+  const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const savedState = localStorage.getItem('isSidebarCollapsed');
+    return savedState ? JSON.parse(savedState) : true; 
+  }); 
+  
+  // const toggleSidebar = () => {
+  //       setSidebarCollapsed(!isSidebarCollapsed); 
+  //   };
 
-    const toggleSidebar = () => {
-        setSidebarCollapsed(!isSidebarCollapsed); 
-    };
-  // console.log("allUsersProfile", allUsersProfile)
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(prevState => {
+      const newState = !prevState;
+      localStorage.setItem('isSidebarCollapsed', JSON.stringify(newState)); // Save new state to local storage
+      return newState;
+    });
+  };
+  
+  // console.log("profileData", profileData)
 
   const processAddProfile = async (data) => {
     try {
@@ -48,6 +64,9 @@ const ProfileApiDataProvider = (props) => {
 
 
   useEffect(() => {
+    if(!profileData && !profileData.id) {
+      return false;
+    }
     const fetchProfile = async () => {
       const res = await processProfileProfile(userId);
       if (res) {
@@ -93,6 +112,15 @@ const ProfileApiDataProvider = (props) => {
   const processProfileProfile = async (id) => {
     try {
       const res = await profileProfile(id);
+      return res;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  const processFullProfileProfile = async (id) => {
+    try {
+      const res = await fullProfileProfile(id);
       return res;
     } catch (err) {
       throw new Error(err);
@@ -206,6 +234,9 @@ const ProfileApiDataProvider = (props) => {
         selectedItems,
         allUsersProfile,
         isSidebarCollapsed,
+        imgSrc, 
+        setImgSrc,
+        processFullProfileProfile,
         toggleSidebar,
         setSelectedItems,
         setProfileData,

@@ -259,7 +259,11 @@ This files [Table of contents] are outlined below
   width: 100%;
   background: red;
 } */
-
+@media (min-width: 768px) {
+  .rightSidebar {
+    display: block !important; /* Ensure sidebar is always visible on desktop */
+  }
+}
 .can-header-right {
   display: none!important;
 }
@@ -274,7 +278,33 @@ This files [Table of contents] are outlined below
   
 }
 /* header-nav navbar-collapse collapse */
+.freelancer-btn {
+  width: 100%;
+  max-width: 500px;
+  min-width: 200px;
+  background-color: #e0eeff;
+  font-size: 16px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.freelancer-btn button {
+  border: none;
+  color: #305718!important;
+  background: none;
+  font-weight: 500;
+  
+  
+}
 
+@media (max-width: 480px) {
+  .freelancer-btn {
+    position: absolute;
+    top: 80px;
+    right: -30px;
+  }
+}
 
 
 

@@ -5,6 +5,7 @@ import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
   const { jobListData, processGetAllJob } = useContext(JobApiData);
+  console.log("jobListData-lists", jobListData)
  
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function SectionJobsList() {
               amount={item.salary}
               days_left={item.days_left}
               link={`/job-detail/${item.id}`}
+              employerId = {item.employer_id}
             />
           ))}
         </div>

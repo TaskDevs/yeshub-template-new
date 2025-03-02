@@ -1,9 +1,9 @@
 // import JobZImage from "../../../../../common/jobz-img";
 import { useState } from "react";
-import { LOCAL_BACKEND_URL, publicUrlFor } from "../../../../../../globals/constants";
+import { publicUrlFor } from "../../../../../../globals/constants";
 
 function SectionCandidateShortIntro1({ props }) {
-	const [imgSrc, setImgSrc] = useState(`${LOCAL_BACKEND_URL}/${props?.profile_image}`);
+	const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.user?.profile_image}`);
 
 
 	console.log("props", props)
@@ -31,11 +31,11 @@ function SectionCandidateShortIntro1({ props }) {
                 />
 							</div>
 							<div className="twm-mid-content">
-								<h4 className="twm-job-title">{props?.firstname} {props?.lastname} </h4>
+								<h4 className="twm-job-title">{props?.user?.firstname} {props?.user?.lastname} </h4>
 								{/* <p>Senior UI / UX Designer and Developer at Google INC</p> */}
 								<p className="twm-candidate-address">
 									<i className="feather-map-pin" />
-									{props?.region}
+									{props?.user?.region}
 								</p>
 							</div>
 						</div>

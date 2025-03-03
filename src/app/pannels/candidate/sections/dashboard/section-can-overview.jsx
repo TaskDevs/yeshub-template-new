@@ -1,17 +1,20 @@
 import CountUp from "react-countup";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { useContext } from "react";
+import { AuthApiData } from "../../../../context/auth/authContextApi";
 
 
 function SectionCandidateOverview() {
     const { profileData } = useContext(ProfileApiData)
+    const { userProfile } = useContext(AuthApiData);
+	const username = userProfile?.username;
     // console.log("profileData", profileData)
 
 
     return (
         <>
             <div className="wt-admin-right-page-header">
-                <h2>{profileData?.firstname || "No username found"} {profileData?.lastname} </h2>
+                <h2>{profileData?.firstname || username} {profileData?.lastname} </h2>
                 {/* <p>IT Contractor</p> */}
             </div>
             <div className="twm-dash-b-blocks mb-5">

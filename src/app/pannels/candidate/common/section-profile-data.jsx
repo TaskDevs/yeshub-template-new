@@ -6,12 +6,12 @@ import { ProfileApiData } from "../../../context/user-profile/profileContextApi"
 
 function SectionProfileData() {
 	const { profileData } = useContext(ProfileApiData);
-   
+	
+
+
+
 	return (
 		<>
-		{/* <div className=""> */}
-		{/* {isLoading && <BiLoaderCircle size={20} className="spinner-grow" />
-	} */}
 		
 		
 

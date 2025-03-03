@@ -49,26 +49,6 @@ function CanProfilePage() {
       return;
     }
 
-    // console.log("skillsArray", skillsArray)
-
-    // const skillsArray = Array.isArray(profileData.skills_id)
-    //   ? profileData.skills_id.map(String)
-    //   : typeof profileData.skills_id === "string"
-    //   ? profileData.skills_id.split(",").map((id) => id.trim())
-    //   : [];
-
-    //   console.log("skillsArray", skillsArray)
-
-    // const selectedSkillObjects = skillsArray.map((id) => {
-    //   const skill = skillOptions.find(
-    //     (skill) => String(skill.id) === String(id)
-    //   );
-    //   return skill ? { value: skill.id, label: skill.name } : null;
-    // });
-
-    // console.log("selectedSkillObjects", selectedSkillObjects)
-
-
     const skillsArray = Array.isArray(profileData.skills_id)
     ? profileData.skills_id.map(String)
     : typeof profileData.skills_id === "string"
@@ -77,7 +57,6 @@ function CanProfilePage() {
         : profileData.skills_id.split(",").map((id) => id.trim())
     : [];
 
-// console.log("skillsArray", skillsArray);
 
 const selectedSkillObjects = skillsArray.map((id) => {
     const skill = skillOptions.find(
@@ -91,7 +70,6 @@ const selectedSkillObjects = skillsArray.map((id) => {
     }
 });
 
-// console.log("selectedSkillObjects", selectedSkillObjects);
     
     setFormData({
       firstname: profileData.firstname,

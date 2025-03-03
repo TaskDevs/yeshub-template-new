@@ -1,13 +1,24 @@
-import readableDate from "../../../../../utils/readableDate";
+import { useNavigate } from "react-router-dom";
 
 const EmpJobPostCard = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(`/dashboard-employer/candidates-list?jobid=${data.id}`);
+  };
+
   return (
     <tr>
-      <td>
+      <td onClick={(e) => {
+            e.preventDefault(); // Prevent default anchor behavior
+            handleNavigate();
+          
+          }}
+          className="cursor-pointer">
         <div className="twm-bookmark-list">
           <div className="twm-media">
             <div className="twm-media-pic">
-              <img src={data?.logo} alt="Company Logo" />
+              <img src={data.logo || ''} alt="Logo" />
             </div>
           </div>
           <div className="twm-mid-content">
@@ -15,7 +26,7 @@ const EmpJobPostCard = ({ data }) => {
               <h4>{data.job_title}</h4>
               <p className="twm-bookmark-address">
                 <i className="feather-map-pin" />
-                {data.address}
+                {data.employer.address}
               </p>
             </a>
           </div>
@@ -34,42 +45,60 @@ const EmpJobPostCard = ({ data }) => {
         </div>
       </td>
       <td>
-        <a href="#" className="site-text-primary">
-          0 Applied
+        <a onClick={(e) => {
+            e.preventDefault(); // Prevent default anchor behavior
+            handleNavigate();
+          }}
+          className="site-text-primary cursor">
+          {data.job_applications_count} Applied
         </a>
       </td>
       <td>
-        <div>{readableDate(data.created_at)}</div>
-        <div>{readableDate(data.end_date)}</div>
+        <div
+          style={{
+            color: new Date(data.end_date) < new Date() ? "red" : "green",
+          }}
+        >
+          {new Date(data.end_date) < new Date()
+            ? "Expired"
+            : `${Math.ceil(
+                (new Date(data.end_date) - new Date()) / (1000 * 60 * 60 * 24)
+              )} days left`}
+        </div>
+        <div
+          style={{
+            color: new Date(data.end_date) < new Date() ? "red" : "green",
+          }}
+        >
+          ({new Date(data.end_date) < new Date() ? "Expired" : "Active"})
+        </div>
       </td>
+
       <td>
-        <div className="twm-table-controls">
-          <ul className="twm-DT-controls-icon list-unstyled">
+        <div className="actions">
+          <ul className="twm-DT-controls-icon list-unstyled flex space-x-2">
             <li>
               <button
                 title="View profile"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
+                className="site-button button-sm"
               >
                 <span className="fa fa-eye" />
               </button>
             </li>
             <li>
               <button
-                title="Edit"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
+                title="Send message"
+                className="site-button button-sm"
               >
-                <span className="far fa-edit" />
+              <span className="far fa-edit" />
               </button>
             </li>
             <li>
               <button
                 title="Delete"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
+                className="site-button button-sm"
               >
-                <span className="far fa-trash-alt" />
+                <span className="far fa-trash-alt text-red-500" />
               </button>
             </li>
           </ul>

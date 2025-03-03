@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import JobZImage from "../../../common/jobz-img";
 import JobViewPopup from "../../../common/popups/popup-job-view";
 import { loadScript } from "../../../../globals/constants";
 import { useJobCartStore } from "../../../../utils/useJobCartStore";
@@ -8,7 +7,7 @@ function CanSavedJobsPage() {
     const { jobs, removeJob } = useJobCartStore();
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
-
+console.log(jobs)
     useEffect(() => {
         loadScript("js/custom.js");
         setLoading(false);
@@ -37,11 +36,9 @@ function CanSavedJobsPage() {
                             <div key={job.id} className="list-group-item d-flex align-items-center justify-content-between p-3">
                                 <div className="d-flex align-items-center">
                                     <div style={{ width: '60px', height: '60px', overflow: 'hidden', borderRadius: '8px' }}>
-                                        <JobZImage 
-                                            src={job.imageUrl || "images/jobs-company/pic1.jpg"} 
-                                            alt={job.title} 
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
+                                        <img src={job?.image}  
+                                        alt={job.title}  
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     </div>
                                     <div className="ms-3">
                                         <h5 className="mb-1">{job.title}</h5>

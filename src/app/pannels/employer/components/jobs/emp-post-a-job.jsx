@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function EmpPostAJobPage() {
   const { processAddJob } = useContext(JobApiData);
+  const userId= sessionStorage.getItem("user_id");
   // const { profileData } = useContext(ProfileApiData);
   const { skillOptions } = useContext(SkillsApiData);
   const [formData, setFormData] = useState({
@@ -42,8 +43,8 @@ function EmpPostAJobPage() {
 
   const handlePublishJob = () => {
     //console.log(formData);
-    formData.user_id = 3; //dummy user_id
-    formData.employer_id = 5; //dummy employer_id
+    formData.user_id = userId;
+    formData.employer_id =userId; //dummy employer_id
     formData.status = 1; //dummy status
     formData.skills_id = 6;
 

@@ -164,13 +164,18 @@ function CandidateCard({ data }) {
             //     )
             //   : [];
 
-            const normalizedSkills = Array.isArray(data?.skills_id)
-            ? data.skills_id // Already an array
-            : typeof data?.skills_id === "string"
-            // ? JSON.parse(data.skills_id).map((skill) =>
-            //     typeof skill === "number" ? skill : Number(skill)
-            //   )
-            // : [];
+            const normalizedSkills = [];
+            try {
+              normalizedSkills = Array.isArray(data?.skills_id)
+                ? data.skills_id
+                : typeof data?.skills_id === "string"
+                ? JSON.parse(data.skills_id).map((skill) =>
+                    typeof skill === "number" ? skill : Number(skill)
+                  )
+                : [];
+            } catch (error) {
+              console.error("Failed to parse skills_id:", error);
+            }
 
             // console.log("normalizedSkills", normalizedSkills);
             return (

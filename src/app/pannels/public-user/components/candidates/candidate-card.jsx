@@ -164,7 +164,7 @@ function CandidateCard({ data }) {
             //     )
             //   : [];
 
-            const normalizedSkills = [];
+            let normalizedSkills = [];
             try {
               normalizedSkills = Array.isArray(data?.skills_id)
                 ? data.skills_id

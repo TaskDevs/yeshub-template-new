@@ -9,12 +9,14 @@ import { useContext, useEffect } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import CandidateCard from "./candidate-card";
-import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
+// import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 
 function CandidateListPage() {
   const { allUsersProfile } = useContext(ProfileApiData);
-  const { skillOptions } = useContext(SkillsApiData);
-  console.log("skillOptions", skillOptions);
+  // const { skillOptions } = useContext(SkillsApiData);
+
+  // console.log("skillOptions", skillOptions)
+  // console.log("allUsersProfile", allUsersProfile);
 
   const _filterConfig = {
     prefix: "Showing",

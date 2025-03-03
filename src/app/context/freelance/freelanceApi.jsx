@@ -73,27 +73,24 @@ export const freelanceProfile = async (id) => {
 };
 
 // UPDATE Freelance
-export const updateFreelance = async () => {
+export const updateFreelance = async (id, data) => {
   try {
-    let responseOnUpdateFreelance = await axios.put({
-      /**Add Update History API URL here like  `${URL}api/updateEmployer/${data.id}` **/
-    });
-    if (responseOnUpdateFreelance.status === SUCCESS_STATUS) {
-      return responseOnUpdateFreelance.data;
-    } else {
-      return false;
-    }
+    let responseOnUpdateFreelance = await axios.put(`${REACT_BASE_URL}update-freelance/${id}`, data);
+    return responseOnUpdateFreelance;
+    // if (responseOnUpdateFreelance.status === SUCCESS_STATUS) {
+    //   return responseOnUpdateFreelance.data;
+    // } else {
+    //   return false;
+    // }
   } catch (err) {
     console.log(err);
   }
 };
 
 // DELETE Freelance
-export const deleteFreelance = async () => {
+export const deleteFreelance = async (id) => {
   try {
-    let responseOnDeleteFreelance = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/
-    });
+    let responseOnDeleteFreelance = await axios.delete(`${REACT_BASE_URL}delete-freelance/${id}`);
     if (responseOnDeleteFreelance.status === SUCCESS_STATUS) {
       return responseOnDeleteFreelance.data;
     } else {

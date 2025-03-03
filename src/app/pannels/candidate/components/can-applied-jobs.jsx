@@ -6,13 +6,16 @@ import { ApplicationApiData } from "../../../context/application/applicationCont
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
+import { GlobalApiData } from "../../../context/global/globalContextApi";
+import Loader from "../../../common/loader";
 // import { GlobalApiData } from "../../../context/global/globalContextApi";
 
 function CanAppliedJobsPage() {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const { processApplicationProfile } = useContext(ApplicationApiData);
   const { jobListData, processAJobProfile } = useContext(JobApiData);
- 
+  const { isLoading } = useContext(GlobalApiData)
+
 
   // console.log("jobListData", jobListData)
 
@@ -78,6 +81,7 @@ function CanAppliedJobsPage() {
 
   return (
     <>
+    {isLoading && <Loader/>}
       <div className="twm-right-section-panel candidate-save-job site-bg-gray">
         {/*Filter Short By*/}
         <SectionRecordsFilter _config={_filterConfig} />

@@ -7,8 +7,8 @@ import {
   // searchFreelance,
   // freelanceList,
   freelanceProfile,
-  // updateFreelance,
-  // deleteFreelance,
+  updateFreelance,
+  deleteFreelance,
 } from "./freelanceApi";
 import { userId } from "../../../globals/constants";
 import toast from "react-hot-toast";
@@ -25,26 +25,32 @@ const initialFormData =  FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
 
 
 const FreelanceApiDataProvider = (props) => {
-  const [freelanceProfileData, setFreelanceProfileData] = useState({});
+  const [freelanceProfileData, setFreelanceProfileData] = useState([]);
   const [formData, setFormData] = useState(initialFormData)
   const { setIsSubmitting } = useContext(GlobalApiData)
+  const [selectedItems, setSelectedItems] = useState([])
+
+  // console.log("freelanceProfileData-ctx", freelanceProfileData)
+
+  const fetchProfile = async () => {
+    const res = await processFreelanceProfile(userId);
+    if (res) {
+      // console.log("freelance-profile", res)
+      setFreelanceProfileData(res.data);   
+    } else {
+      return false;
+    }
+  };
+
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const res = await processFreelanceProfile(userId);
-      if (res) {
-        setFreelanceProfileData(res.data);   
-      } else {
-        return false;
-      }
-    };
-
-    fetchProfile();
-
    
+    fetchProfile();
     const interval = setInterval(fetchProfile, 60000);
     return () => clearInterval(interval); 
-  }, []);
+  }, [fetchProfile]);
+
+  
 
 
   const processAddFreelance = async (data) => {
@@ -69,9 +75,32 @@ const FreelanceApiDataProvider = (props) => {
 
   const processSearchFreelance = async () => {};
 
-  const processUpdateFreelance = async () => {};
+  const processUpdateFreelance = async (id, data) => {
+    setIsSubmitting(true)
+   try{
+    const res = await updateFreelance(id, data);
+    if (res) {
+      return res.data;
+    } else {
+      return false;
+    }
+   }catch(e){
+    console.error(e);
+   } finally {
+    setFormData(initialFormData)
+    setIsSubmitting(false)
+   }
+  };
 
-  const processDeleteFreelance = async () => {};
+  const processDeleteFreelance = async (id) => {
+    const res = await deleteFreelance(id);
+    if (res) {
+      console.log("delete-freelancer", res)
+      return res.data;
+    } else {
+      return false;
+    }
+  };
 
 
   const handleSubmit = async (e) => {
@@ -83,10 +112,9 @@ const FreelanceApiDataProvider = (props) => {
   }
 
     setIsSubmitting(true)
-
+    console.log("formData-freelancer", formData)
     try {
-      const res = await processAddFreelance({...formData, portfolio_id
-        : userId, user_id: userId});
+      const res = await processAddFreelance({...formData, user_id: userId});
       
       if (res) {
         console.log("add-freelacer", res)
@@ -102,10 +130,26 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
+  const handleUpdateFreelanceProfile = async (e) => {
+    e.preventDefault();
+    console.log("formData-update-freelancer", formData)
+    try{
+      const res = await processUpdateFreelance( freelanceProfileData[0]?.id, {...formData, user_id: userId})
+    if (res) {
+      console.log("update-freelancer", res)
+      toast.success("Freelance profile updated successfully")
+    }
+    }catch(e) {
+      console.error()
+      toast.error("Failed to update freelance profile")
+    }
+  }
+
   const handleEditFreelance = () => {
+    console.log("free-data", freelanceProfileData)
     setFormData({
-      rate: freelanceProfileData.rate,
-      experience: freelanceProfileData.experience,
+      rate: freelanceProfileData[0]?.rate,
+      experience: freelanceProfileData[0]?.experience,
     })
   }
 
@@ -114,8 +158,11 @@ const FreelanceApiDataProvider = (props) => {
       value={{
         freelanceProfileData,
         formData,
+        selectedItems, 
+        setSelectedItems,
         setFormData,
         handleSubmit,
+        handleUpdateFreelanceProfile,
         handleEditFreelance,
         processAddFreelance,
         processGetAllFreelance,

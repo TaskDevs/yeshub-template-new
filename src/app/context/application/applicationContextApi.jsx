@@ -22,10 +22,9 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
   
    const [selectedOption, setSelectedOption] = useState("milestone");
-  const { setIsSubmitting } = useContext(GlobalApiData)
+  const {  setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const currentpath = useLocation().pathname;
   const jobId = currentpath.split("/")[2];
-  
   const navigate = useNavigate();
  
      
@@ -66,7 +65,7 @@ const ApplicationApiDataProvider = (props) => {
   const processGetAllApplication = async (id) => {
      try {
 				const res = await applicationList(id);
-				console.log("get all applications", res);
+				// console.log("get all applications", res);
 				return res;
 			} catch (e) {
 				throw new Error("Failed to get all applications", e);
@@ -112,23 +111,38 @@ const ApplicationApiDataProvider = (props) => {
       toast.error("User does not exist, Please sign in");
       return;
     }
+    
     setIsSubmitting(true)
-   
+    setTimeout(() => {
+      setIsLoading(true)
+    }, 200)
+  //  console.log("emp-id-apply", selectedId)
     try {
-      await processAddApplication({
+      const res =  await processAddApplication({
 				user_id: userId,
 				job_id: jobId,
 				status: "pending",
 				freelance_id: "",
+        
 			});
+      if (res) {
+        // console.log("app-res", res)
+        navigate(`/dashboard-candidate/applied-jobs`)
+        setTimeout(() => {
+          toast.success("Job applied successfully")
+        }, 3000)
+      }
      
-      toast.success("Job applied successfully")
-      navigate(`/dashboard-candidate/applied-jobs`)
     } catch {
-      toast.error("Failed to apply job");
+      setTimeout(() => {
+        toast.error("Failed to apply job")
+      }, 3000)
       return false;
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 3000)
     }
   }
 

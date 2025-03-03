@@ -22,7 +22,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
   const formattedSkills =
     skillOptions?.map((skill) => ({
       value: skill.id,
-      label: skill.skill,
+      label: skill.name,
     })) || [];
 
   const handleSelectChange = (selectedOptions) => {
@@ -43,6 +43,19 @@ function SectionCandicateBasicInfo({ submit, id }) {
       [data]: field,
     });
   };
+
+  // const handleChange = (data, field) => {
+  //   if (data?.target) {
+  //     // Handles standard input fields
+  //     const { name, value } = data.target;
+  //     setFormData((prev) => ({ ...prev, [name]: value }));
+  //   } else if (field?.name) {
+  //     // Handles custom components like PasswordField
+  //     setFormData((prev) => ({ ...prev, [field.name]: data }));
+  //   }
+  // };
+
+
 
   return (
     <>
@@ -72,6 +85,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                             handleChange(data, field);
                           }}
                         />
+                     
                         <i className="fs-input-icon fa fa-user " />
                       </div>
                     </div>
@@ -111,10 +125,27 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
-                      <label>Experience</label>
+                      <label>Profession</label>
                       <div className="ls-inputicon-box">
                         <InputField
                           field={USERPROFILEFIELD.fieldDetail[3]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+
+                        <i className="fs-input-icon fa fa-user-edit" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>Experience</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[4]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -131,7 +162,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       <label>Address</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[4]}
+                          field={USERPROFILEFIELD.fieldDetail[5]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -147,7 +178,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       <label>Country</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[5]}
+                          field={USERPROFILEFIELD.fieldDetail[6]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -163,7 +194,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       <label>Region</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[6]}
+                          field={USERPROFILEFIELD.fieldDetail[7]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -179,7 +210,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       <label>GPS Address</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[7]}
+                          field={USERPROFILEFIELD.fieldDetail[8]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -190,12 +221,12 @@ function SectionCandicateBasicInfo({ submit, id }) {
                     </div>
                   </div>
 
-                  <div className=" col-lg-12 col-md-12">
+                  <div className=" col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
                       <label>Postal Code</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[8]}
+                          field={USERPROFILEFIELD.fieldDetail[9]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -234,9 +265,10 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
                   <div className="col-md-12">
                     <TextAreaField
-                      field={USERPROFILEFIELD.fieldDetail[10]}
+                      field={USERPROFILEFIELD.fieldDetail[11]}
                       value={formData}
                       change={handleChange}
+                      required={true} 
                     />
                   </div>
                 </div>

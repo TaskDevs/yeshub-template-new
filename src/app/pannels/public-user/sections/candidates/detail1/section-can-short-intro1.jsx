@@ -1,8 +1,12 @@
 // import JobZImage from "../../../../../common/jobz-img";
+import { useContext, useState } from "react";
 import { publicUrlFor } from "../../../../../../globals/constants";
+import { FreelanceApiData } from "../../../../../context/freelance/freelanceContextApi";
 
-function SectionCandidateShortIntro1({ props }) {
-
+function SectionCandidateShortIntro1({ props, isFreelancer }) {
+	const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.user?.profile_image}`);
+	const { freelanceProfileData } = useContext(FreelanceApiData)
+	console.log("freelanceProfileData-details", freelanceProfileData)
 
 	console.log("props", props)
     return (
@@ -18,20 +22,26 @@ function SectionCandidateShortIntro1({ props }) {
 					<div className="overlay-main site-bg-primary opacity-01" />
 					<div className="twm-candi-self-info">
 						<div className="twm-candi-self-top">
-							<div className="twm-candi-fee">₵200 / Day</div>
+							{isFreelancer && (<div className="twm-candi-fee">₵{freelanceProfileData[0]?.rate} / Day</div>)}
 							<div className="twm-media can-banner-logo">
 								{/* <JobZImage src="images/candidates/pic2.jpg" alt="#" /> */}
-								<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" />
+								{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" /> */}
+								<img 
+                    src={imgSrc} 
+                    alt="user picture" 
+                    onError={() => setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")} 
+                />
 							</div>
 							<div className="twm-mid-content">
-								<h4 className="twm-job-title">{props?.firstname} {props?.lastname} </h4>
+								<h4 className="twm-job-title">{props?.user?.firstname} {props?.user?.lastname} </h4>
 								{/* <p>Senior UI / UX Designer and Developer at Google INC</p> */}
 								<p className="twm-candidate-address">
 									<i className="feather-map-pin" />
-									{props?.region}
+									{props?.user?.region}
 								</p>
 							</div>
 						</div>
+						{isFreelancer && (
 						<div className="twm-candi-self-bottom">
 							{/* <a
 								// href="#sign_up_popup"
@@ -64,6 +74,7 @@ function SectionCandidateShortIntro1({ props }) {
 							</button> */}
 							{/* <a href="#" className="site-button secondry">Download CV</a> */}
 						</div>
+						)}
 					</div>
 				</div>
 			</>

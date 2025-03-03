@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import {  baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
 
+
 export const JobsCard = ({
   img,
   duration,
@@ -12,6 +13,7 @@ export const JobsCard = ({
   amount,
   job_type
 }) => {
+  
   return (
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
       <div className="twm-media">
@@ -28,7 +30,7 @@ export const JobsCard = ({
             / <TimeAgo date={duration} />
           </span>
         </h4>
-        <p className="twm-job-address">{location}</p>
+        <p className="twm-job-address twm-exp-profile">{location}</p>
         <ul className="ul-skills">
           <li>ux writing</li>
           <li>wire framing</li>

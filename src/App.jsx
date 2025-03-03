@@ -1,7 +1,7 @@
 import RootLayout from "./layouts/root-layout";
 import Loader from "./app/common/loader";
 import ScrollToTop from "./globals/scroll-to-top";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthApiDataProvider from "./app/context/auth/authContextApi";
 import GlobalApiDataProvider from "./app/context/global/globalContextApi";
 import ApplicationApiDataProvider from "./app/context/application/applicationContextApi";
@@ -21,13 +21,27 @@ import WalletApiDataProvider from "./app/context/wallet/walletContextApi";
 
 
 import { Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+
 
 function App() {
-  const [isLoading, setLoading] = useState(true);
+//   const [isLoading, setLoading] = useState(true);
 
-  setTimeout(() => {
-    setLoading(false);
-  }, 500);
+//   setTimeout(() => {
+//     setLoading(false);
+//   }, 500);
+
+const [isLoading, setLoading] = useState(true);
+const location = useLocation(); 
+
+    useEffect(() => {
+        setLoading(true); 
+        const timer = setTimeout(() => {
+            setLoading(false); 
+        }, 2000); 
+
+        return () => clearTimeout(timer); 
+    }, [location]);
 
 
   return (

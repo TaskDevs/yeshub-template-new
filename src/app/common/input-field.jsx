@@ -1,9 +1,20 @@
 
-function InputField ({ field, value, change}) {
+function InputField ({ field, value, change, required=true}) {
   
+
   const handleInputChange = (e) => {
-		change(e);
-	};
+    if (typeof change === 'function') {
+       
+        if (change.length === 2) {
+            change(field.name, e.target.value);
+        } else {
+  
+            change(e);
+        }
+    }
+};
+  
+
 
 return (
 <div className="form-group mb-3">
@@ -12,7 +23,7 @@ return (
         type={field.type}
         minLength={3}
 				maxLength={50}
-        required
+        required={required}
         className="form-control"
         placeholder={field.placeholder}
         value={value[field.name]}

@@ -1,19 +1,22 @@
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import SkillsForm from "../../../employer/components/skills/skills-form";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+// import SkillsForm from "../../../employer/components/skills/skills-form";
 import { useContext } from "react";
 
 function SectionCanKeySkills() {
 
     const {
-                handleAddSkills,
+                skillOptions
             } = useContext(SkillsApiData);
-        
+    const { profileData } = useContext(ProfileApiData)    
+
+	console.log("skillOptions-key-skills", skillOptions)
     
     return (
 			<>
 				<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
 					<h4 className="panel-tittle m-a0">Key Skills</h4>
-					<a
+					{/* <a
 						data-bs-toggle="modal"
 						href="#Key_Skills"
 						role="button"
@@ -21,12 +24,41 @@ function SectionCanKeySkills() {
 						className="site-text-primary"
 					>
 						<span className="fa fa-edit" />
-					</a>
+					</a> */}
 				</div>
 				<div className="panel-body wt-panel-body p-a20 ">
 					<div className="tw-sidebar-tags-wrap">
 						<div className="tagcloud">
-							<a href="javascript:void(0)">Finance</a>
+						{skillOptions?.map((skill) => {
+    // Normalize skills_id to always be an array of numbers
+    const normalizedSkills = (() => {
+        if (!profileData?.skills_id) return []; // Handle null or undefined
+
+        if (Array.isArray(profileData?.skills_id)) {
+            return profileData.skills_id.map((skill) => Number(skill)); // Convert all elements to numbers
+        }
+
+        if (typeof profileData.skills_id === "string") {
+            return profileData.skills_id
+                .split(",") // Split by comma
+                .map((skill) => Number(skill.trim())) // Convert each value to number
+                .filter((skill) => !isNaN(skill)); // Remove invalid numbers
+        }
+
+        return []; // Fallback in case of unexpected types
+    })();
+
+    return (
+        normalizedSkills.includes(skill.id) && (
+            <a href="#" key={skill.id}>
+                {skill.name}
+            </a>
+        )
+    );
+})}
+
+
+							{/* <a href="javascript:void(0)">Finance</a>
 							<a href="javascript:void(0)">Sales</a>
 							<a href="javascript:void(0)">Part-time</a>
 							<a href="javascript:void(0)">Administration</a>
@@ -35,14 +67,15 @@ function SectionCanKeySkills() {
 							<a href="javascript:void(0)">Developer</a>
 							<a href="javascript:void(0)">Work from home</a>
 							<a href="javascript:void(0)">IT Consulting</a>
-							<a href="javascript:void(0)">Manufacturing</a>
+							<a href="javascript:void(0)">Manufacturing</a> */}
+
+
 						</div>
 					</div>
 				</div>
 				{/*Modal popup */}
 
-				<SkillsForm submit={handleAddSkills} id="Key_Skills" />
-				<SkillsForm submit={handleAddSkills} />
+			
 
 				{/* <div
 					className="modal fade twm-saved-jobs-view"

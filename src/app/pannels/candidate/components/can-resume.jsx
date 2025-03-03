@@ -8,7 +8,9 @@ import SectionCanResumeHeadline from "../sections/resume/section-can-resume-head
 import { loadScript } from "../../../../globals/constants";
 import SectionCanWorkSample from "../sections/resume/section-can-work-sample";
 
+
 function CanMyResumePage() {
+	
     
     useEffect(()=>{
         loadScript("js/custom.js")

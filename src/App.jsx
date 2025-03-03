@@ -50,7 +50,7 @@ const location = useLocation();
 						<EducationApiDataProvider>
 							<HistoryApiDataProvider>
 								<EmployerApiDataProvider>
-									<FreelanceApiDataProvider>
+									
 										<JobApiDataProvider>
 											<MilestoneApiDataProvider>
 												<PaymentApiDataProvider>
@@ -58,12 +58,14 @@ const location = useLocation();
 														<SkillsApiDataProvider>
 															<TestimonialApiDataProvider>
 																<ProfileApiDataProvider>
+																<FreelanceApiDataProvider>
 																	<WalletApiDataProvider>
 																		{isLoading && <Loader />}
 																		<Toaster />
 																		<ScrollToTop />
 																		<RootLayout />
 																	</WalletApiDataProvider>
+																	</FreelanceApiDataProvider>
 																</ProfileApiDataProvider>
 															</TestimonialApiDataProvider>
 														</SkillsApiDataProvider>
@@ -71,7 +73,7 @@ const location = useLocation();
 												</PaymentApiDataProvider>
 											</MilestoneApiDataProvider>
 										</JobApiDataProvider>
-									</FreelanceApiDataProvider>
+									
 								</EmployerApiDataProvider>
 							</HistoryApiDataProvider>
 						</EducationApiDataProvider>

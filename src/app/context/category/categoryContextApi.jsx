@@ -111,7 +111,7 @@ const CategoryApiDataProvider = (props) => {
 	const handleAddCategory = async (e) => {
 		e.preventDefault();
 		try {
-			console.log("formdata-cat", formData);
+		
 			const res = await processAddCategory(formData);
 			console.log("add-category", res);
 			toast.success("Category added successfully");

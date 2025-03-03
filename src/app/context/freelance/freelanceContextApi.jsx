@@ -14,6 +14,7 @@ import { userId } from "../../../globals/constants";
 import toast from "react-hot-toast";
 import { FREELANCERFIELD } from "../../../globals/freelancer-data";
 import { GlobalApiData } from "../global/globalContextApi";
+import { PortfolioApiData } from "../portfolio/portfolioContextApi";
 
 export const FreelanceApiData = createContext();
 
@@ -29,13 +30,14 @@ const FreelanceApiDataProvider = (props) => {
   const [formData, setFormData] = useState(initialFormData)
   const { setIsSubmitting } = useContext(GlobalApiData)
   const [selectedItems, setSelectedItems] = useState([])
+  const { portfolios } = useContext(PortfolioApiData)
 
-  // console.log("freelanceProfileData-ctx", freelanceProfileData)
+
 
   const fetchProfile = async () => {
     const res = await processFreelanceProfile(userId);
     if (res) {
-      // console.log("freelance-profile", res)
+    
       setFreelanceProfileData(res.data);   
     } else {
       return false;
@@ -145,11 +147,30 @@ const FreelanceApiDataProvider = (props) => {
   }
 
   const handleEditFreelance = () => {
+    if (!portfolios || portfolios.length === 0) {
+      console.error("Portfolio options not loaded yet.");
+      return;
+    }
+
+    const portfolioArray = Array.isArray(freelanceProfileData[0]?.portfolio_id)
+    ? JSON.parse(freelanceProfileData[0]?.portfolio_id).map(String)
+        : freelanceProfileData[0]?.portfolio_id.split(",").map((id) => id.trim())
    
+
+    const selectedPortfolioObjects = portfolioArray.map((id) => {
+      const portfolio = portfolios?.find(
+          (portfolio) => String(portfolio.id) === String(id)
+      );
+      return { value: portfolio.id, label: portfolio.project_title };
+    })
+
     setFormData({
       rate: freelanceProfileData[0]?.rate,
       experience: freelanceProfileData[0]?.experience,
+      portfolio_id: selectedPortfolioObjects.map((portfolio) => portfolio.value)
     })
+
+    setSelectedItems(selectedPortfolioObjects);
   }
 
   return (

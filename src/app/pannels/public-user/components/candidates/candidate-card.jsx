@@ -7,14 +7,13 @@ import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 
 // https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/
 
-
 function CandidateCard({ data }) {
-    const { skillOptions } = useContext(SkillsApiData)
-    const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`);
-    // console.log("data-card", data)
-    // console.log("data.skills_id", typeof data.skills_id, data.skills_id)
-
-
+  const { skillOptions } = useContext(SkillsApiData);
+  const [imgSrc, setImgSrc] = useState(
+    `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`
+  );
+  // console.log("data-card", data)
+  // console.log("skillOptions", skillOptions)
 
   return (
     <li>
@@ -24,43 +23,45 @@ function CandidateCard({ data }) {
         className="twm-candidates-list-style1 mb-5"
       >
         <div className="twm-media dashboard-profile-pic ">
-          
           <div className="twm-media-pic ">
             {/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`||"/assets/images/candidates/user-avatar-fallback.jpg"} alt="user picture" /> */}
-            <img 
-                    src={imgSrc} 
-                    alt="user picture" 
-                    onError={() => setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")} 
-                />
+            <img
+              src={imgSrc}
+              alt="user picture"
+              onError={() =>
+                setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")
+              }
+            />
           </div>
         </div>
 
         <div className="twm-mid-content">
           <div className="d-flex justify-content-between align-items-center">
-            <h4 className="twm-job-title">{data?.firstname}  {data?.lastname} </h4>
+            <h4 className="twm-job-title">
+              {data?.firstname} {data?.lastname}{" "}
+            </h4>
             <div className="">
               <div className="">
                 {/* twm-candi-self-bottom */}
                 {data?.is_freelancer ? (
                   <div className="">
-                  {/* <a
+                    {/* <a
                   href="#"
                   className="site-button"
                 >
                   Hire Me Now
                 </a> */}
 
-<div className="twm-jobs-category">
-<span className="twm-bg-green">Freelancer</span>
-</div>
-</div>
-
-                ): (
+                    <div className="twm-jobs-category">
+                      <span className="twm-bg-green">Freelancer</span>
+                    </div>
+                  </div>
+                ) : (
                   <div className="twm-jobs-category">
-<span className="twm-bg-brown">Full Time</span>
-</div>
+                    <span className="twm-bg-brown">Full Time</span>
+                  </div>
                 )}
-                
+
                 {/* <a href="#" className="site-button secondry">Download CV</a> */}
               </div>
             </div>
@@ -73,40 +74,39 @@ function CandidateCard({ data }) {
             </p>
           </div>
 
-   {
-    data?.is_freelancer ? (
-      <ul className="twm-can-pro-info can-insights">
-      <li className="pro-info-lists list-rate">
-        <div className="">
-          <MdOutlineStarRate
-            className="star-icon star-1"
-            size={20}
-            color="red"
-          />
-          <MdOutlineStarRate
-            className="star-icon star-2"
-            size={20}
-            color="red"
-          />
-          <MdOutlineStarRate
-            className="star-icon star-3"
-            size={20}
-            color="red"
-          />
-          <MdOutlineStarRate
-            className="star-icon star-4"
-            size={20}
-            color="red"
-          />
-        </div>
+          {data?.is_freelancer ? (
+            <ul className="twm-can-pro-info can-insights">
+              <li className="pro-info-lists list-rate">
+                <div className="">
+                  <MdOutlineStarRate
+                    className="star-icon star-1"
+                    size={20}
+                    color="red"
+                  />
+                  <MdOutlineStarRate
+                    className="star-icon star-2"
+                    size={20}
+                    color="red"
+                  />
+                  <MdOutlineStarRate
+                    className="star-icon star-3"
+                    size={20}
+                    color="red"
+                  />
+                  <MdOutlineStarRate
+                    className="star-icon star-4"
+                    size={20}
+                    color="red"
+                  />
+                </div>
 
-        <span className="start-reviews">5.0</span>
-      </li>
-      <li className="pro-info-lists">
-        <LuMessageSquare size={20} color="brown" />
-        <span className="start-reviews">100</span> Reviews
-      </li>
-      {/* <li className="pro-info-lists">
+                <span className="start-reviews">5.0</span>
+              </li>
+              <li className="pro-info-lists">
+                <LuMessageSquare size={20} color="brown" />
+                <span className="start-reviews">100</span> Reviews
+              </li>
+              {/* <li className="pro-info-lists">
                           <FaCediSign size={20} color="green" />
                           <span>10.0</span>
                         </li>
@@ -114,20 +114,15 @@ function CandidateCard({ data }) {
                           <MdDonutLarge size={20} color="blue" />
                           <span>100%</span>
                         </li> */}
-      <li className="pro-info-lists">
-        {/* pro-info-lists */}
-        {/* twm-candidates-tag-rate */}
-        <span className=" twm-candidates-tag-rate">₵20</span>/ per hour
-      </li>
-    </ul>
-    ) : (
-      <p>
-       { data?.profession}
-      </p>
-      
-    )
-   }
-         
+              <li className="pro-info-lists">
+                {/* pro-info-lists */}
+                {/* twm-candidates-tag-rate */}
+                <span className=" twm-candidates-tag-rate">₵20</span>/ per hour
+              </li>
+            </ul>
+          ) : (
+            <p>{data?.profession}</p>
+          )}
 
           <div className="twm-fot-content">
             <div className="twm-left-info sec-pro-desc">
@@ -145,36 +140,43 @@ function CandidateCard({ data }) {
                         {console.log("skill.name", skill.name)}
                         {skill.name}</li>
                 ))} */}
-                {/* <li>Graphic design</li>
+              {/* <li>Graphic design</li>
                 <li>Internet marketing</li>
                 <li>SEO</li>
                 <li>Java</li> */}
               {/* </ul> */}
+             {/* { console.log("data?.skills_id", data?.skills_id)} */}
               <ul className="twm-can-pro-info">
- 
+              {skillOptions?.map((skill) => {
+    // Normalize skills_id to always be an array of numbers
+    const normalizedSkills = (() => {
+        if (!data?.skills_id) return []; // Handle null or undefined
+
+        if (Array.isArray(data.skills_id)) {
+            return data.skills_id.map((skill) => Number(skill)); // Convert all elements to numbers
+        }
+
+        if (typeof data.skills_id === "string") {
+            return data.skills_id
+                .split(",") // Split by comma
+                .map((skill) => Number(skill.trim())) // Convert each value to number
+                .filter((skill) => !isNaN(skill)); // Remove invalid numbers
+        }
+
+        return []; // Fallback in case of unexpected types
+    })();
+
+    return (
+        normalizedSkills.includes(skill.id) && (
+            <a href="#" key={skill.id}>
+                {skill.name}
+            </a>
+        )
+    );
+})}
 
 
-
-{skillOptions?.map((skill) => {
-            const normalizedSkills = Array.isArray(data?.skills_id)
-              ? data.skills_id
-              : data.skills_id
-              ? JSON.parse(data.skills_id).map((skill) => {
-                  return typeof skill === "number" ? skill : Number(skill);
-                })
-              : [];
-
-            // console.log("normalizedSkills", normalizedSkills);
-            return (
-              normalizedSkills.some((userSkill) => userSkill === skill.id) && (
-                <a href="#" key={skill.id}>
-                  {skill.name}
-                </a>
-              )
-            );
-          })}
-</ul>
-
+              </ul>
 
               {/* <div className="twm-jobs-vacancies">
 																₵20<span>/ Day</span>

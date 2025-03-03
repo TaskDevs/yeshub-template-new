@@ -49,11 +49,15 @@ function CanProfilePage() {
       return;
     }
 
+    // console.log("skillsArray", skillsArray)
+
     const skillsArray = Array.isArray(profileData.skills_id)
       ? profileData.skills_id.map(String)
       : typeof profileData.skills_id === "string"
       ? profileData.skills_id.split(",").map((id) => id.trim())
       : [];
+
+      console.log("skillsArray", skillsArray)
 
     const selectedSkillObjects = skillsArray.map((id) => {
       const skill = skillOptions.find(
@@ -62,6 +66,8 @@ function CanProfilePage() {
       return skill ? { value: skill.id, label: skill.name } : null;
     });
 
+    console.log("selectedSkillObjects", selectedSkillObjects)
+    
     setFormData({
       firstname: profileData.firstname,
       lastname: profileData.lastname,

@@ -24,23 +24,20 @@ const initialFormData = USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
 
 
 const ProfileApiDataProvider = (props) => {
-  const { setIsSubmitting } = useContext(GlobalApiData);
+  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData);
   const [imageURL, setImageURL] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [allUsersProfile, setAllUsersProfile] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
-  // const [isSidebarCollapsed, setSidebarCollapsed] = useState(true); 
   const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(() => {
     const savedState = localStorage.getItem('isSidebarCollapsed');
     return savedState ? JSON.parse(savedState) : true; 
   }); 
   
-  // const toggleSidebar = () => {
-  //       setSidebarCollapsed(!isSidebarCollapsed); 
-  //   };
+  console.log("profileData", profileData)
 
 
   const toggleSidebar = () => {
@@ -70,21 +67,21 @@ const ProfileApiDataProvider = (props) => {
   };
 
   useEffect(() => {
-    // if(!profileData && !profileData.id) {
-    //   return false;
-    // }
-    
 
     fetchProfile();
 
    
     const interval = setInterval(fetchProfile, 60000);
     return () => clearInterval(interval); 
-  }, [fetchProfile]);
+  }, []);
 
 
   useEffect(() => {
     const fetchAllProfile = async () => {
+      setTimeout(() =>{
+        setIsLoading(true)
+      }, 200)
+
       const res = await profileList();
       if (res) {
         // console.log("res-all", res)
@@ -93,7 +90,9 @@ const ProfileApiDataProvider = (props) => {
     };
 
     fetchAllProfile();
-
+    setTimeout(() =>{
+      setIsLoading(false)
+    }, 2000)
    
     const interval = setInterval(fetchAllProfile, 60000);
     return () => clearInterval(interval); 

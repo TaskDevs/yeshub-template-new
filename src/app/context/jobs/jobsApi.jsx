@@ -119,6 +119,24 @@ export const countEmployerJobsPosted = async (id) => {
   }
 };
 
+
+export const countApplications= async (id) => {
+  try {
+    let responseOnCountApplications = await axios.get(
+
+      `${REACT_BASE_URL}applications/count/${id}`
+    );
+
+    if ( responseOnCountApplications .status == 200) {
+      return responseOnCountApplications.data.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
 // VIEW Job
 export const jobProfile = async (id) => {
   try {

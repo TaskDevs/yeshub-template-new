@@ -73,6 +73,7 @@ const ApplicationApiDataProvider = (props) => {
 			}
   };
 
+  
   const processApplicationProfile = async (id) => {
      try {
 				const res = await applicationProfile(id);

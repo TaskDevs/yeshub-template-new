@@ -7,8 +7,10 @@ import {
   jobList,
   countEmployerJobsPosted,
   employerJobList,
-  jobProfile
+  jobProfile,
+  countApplications
 } from "./jobsApi";
+import { useNavigate } from "react-router-dom";
 
 export const JobApiData = createContext();
 
@@ -18,17 +20,19 @@ const JobApiDataProvider = (props) => {
   const [paginationData, setPaginationData] = useState({});
   const [empPaginationData, setEmpPaginationData] = useState({});
   const [totalPost, setTotalPost] = useState(0);
-  const [totalAppliedJob] = useState(0);
+  const [totalAppliedJob, setTotalAppliedJob] = useState(0);
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [ setSearchJobListData] = useState([]);
+  const navigate = useNavigate()
 
-
+  const [loading, setLoading] = useState(false);
   const processAddJob = async (data) => {
     let response = await addJob(data);
     if (response) {
       data.status === 1
         ? notify(200, "Job added successfully")
         : notify(200, "Draft added successfully");
+      navigate('/dashboard-employer/manage-jobs')
     } else {
       notify(null, 400, "Oops Something went wrong");
     }
@@ -57,17 +61,43 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  const processGetAllJobPostByEmployer = async (id) => {
-    let response = await employerJobList(id);
+  const processCountApplications= async (id) => {
+    let response = await countApplications(id);
     if (response) {
-      setEmpJobListData(response.data);
-      setEmpPaginationData({
-        total: response.total,
-      });
-      return response
+      setTotalAppliedJob(response);
     }
   };
 
+  // const processGetAllJobPostByEmployer = async (id) => {
+  //   let response = await employerJobList(id);
+  //   if (response) {
+  //     setEmpJobListData(response.data);
+  //     setEmpPaginationData({
+  //       total: response.total,
+  //     });
+  //     return response
+  //   }
+  // };
+
+
+  const processGetAllJobPostByEmployer = async (id) => {
+    setLoading(true); // ✅ Set loading to true before fetching
+
+    try {
+      let response = await employerJobList(id);
+      if (response) {
+        setEmpJobListData(response.data);
+        setEmpPaginationData({
+          total: response.total,
+        });
+        return response;
+      }
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    } finally {
+      setLoading(false); // ✅ Ensure loading is false after the request
+    }
+  };
   const processJobProfile = async (id) => {
     let response = await employerJobList(id);
 		if (response) {			
@@ -124,6 +154,8 @@ const JobApiDataProvider = (props) => {
         totalAppliedJob,
         searchJobInfo,
         setSearchJobInfo,
+        loading,
+        processCountApplications,
       }}
     >
       {props.children}

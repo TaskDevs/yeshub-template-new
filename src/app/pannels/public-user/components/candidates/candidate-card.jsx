@@ -159,20 +159,7 @@ function CandidateCard({ data }) {
             const normalizedSkills = Array.isArray(data?.skills_id)
               ? data.skills_id
               : data.skills_id
-                ? (() => {
-                    try {
-                      console.log('Raw skills_id:', data.skills_id);
-                      const parsedSkills = JSON.parse(data.skills_id);
-                      console.log('Parsed skills:', parsedSkills);
-                      return parsedSkills.map((skill) => 
-                        typeof skill === "number" ? skill : Number(skill)
-                      );
-                    } catch (error) {
-                      console.error('Error parsing skills_id:', error);
-                      console.error('Problematic skills_id value:', data.skills_id);
-                      return [];
-                    }
-                  })()
+                ? data.skills_id.split(',').map(skill => Number(skill.trim()))
                 : [];
 
             // console.log("normalizedSkills", normalizedSkills);

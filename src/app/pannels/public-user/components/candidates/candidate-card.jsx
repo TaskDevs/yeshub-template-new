@@ -167,10 +167,10 @@ function CandidateCard({ data }) {
             const normalizedSkills = Array.isArray(data?.skills_id)
             ? data.skills_id // Already an array
             : typeof data?.skills_id === "string"
-            ? JSON.parse(data.skills_id).map((skill) =>
-                typeof skill === "number" ? skill : Number(skill)
-              )
-            : [];
+            // ? JSON.parse(data.skills_id).map((skill) =>
+            //     typeof skill === "number" ? skill : Number(skill)
+            //   )
+            // : [];
 
             // console.log("normalizedSkills", normalizedSkills);
             return (

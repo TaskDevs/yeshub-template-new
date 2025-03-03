@@ -3,13 +3,18 @@ import CountUp from "react-countup";
 import SectionCandidateProfileViews from "../../candidate/sections/dashboard/section-can-profile-views";
 import { useEffect, useContext } from "react";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
+import { AuthApiData } from "../../../context/auth/authContextApi";
+
 // import { useNavigate } from "react-router-dom";
 
 function EmpDashboardPage() {
+  const { userProfile } = useContext(AuthApiData);
+  const username = userProfile?.username;
+  const employerId = sessionStorage.getItem("user_id")
   //const { paginationData } = useContext(JobApiData);
   // const [error, setError] = useState(null);
   // const [postedJobs, setPostedJobs] = useState(null);
-  const { processCountJobsPostedByEmp, totalPost, totalAppliedJob } =
+  const { processCountJobsPostedByEmp, totalPost, totalAppliedJob ,processCountApplications} =
     useContext(JobApiData);
   // const [showTopMessage, setShowTopMessage] = useState(false);
  
@@ -18,14 +23,31 @@ function EmpDashboardPage() {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    processCountJobsPostedByEmp(3);
-  }, []);
+    processCountJobsPostedByEmp(employerId);
+  }, [employerId ]);
 
+
+  useEffect(() => {
+    const fetchJobCount = async () => {
+      try {
+        const response = await processCountApplications(employerId);
+        console.log("Total application:", response);
+      } catch (error) {
+        console.error("Error fetching job count:", error);
+      }
+    };
+  
+    if (employerId) {
+      fetchJobCount();
+    }
+  }, [employerId]);
+  
+  
   return (
     <>
       <div className="">
         <div className="wt-admin-right-page-header clearfix">
-          <h2>Hello, Nikola Tesla</h2>
+          <h2>Hello, <span className="text-capitalize">{username}</span></h2>
           <div className="breadcrumbs">
             <a href="#">Home</a>
             <span>Dasboard</span>

@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
 import { notify } from "../../../utils/responseUtils";
-
 import {
   addEmployer,
   updateEmployerLogo,
@@ -15,30 +14,59 @@ const EmployerApiDataProvider = (props) => {
   const [employerProfiles, setEmployerProfiles] = useState([]);
 
   const processAddEmployer = async (data) => {
-    let response = await addEmployer(data);
+    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
+    if (!userId) {
+      notify(400, "User ID not found. Please log in again.");
+      return;
+    }
+  
+    // Ensure the user ID is included in the request data
+    const requestData = {
+      ...data,
+      user_id: userId, // Use the logged-in user ID
+    };
+  
+    console.log("Final Data being sent to addEmployer API:", requestData); // Debugging log
+  
+    let response = await addEmployer(requestData);
+  
     if (response) {
+      console.log("API Response:", response); // Log the API response
       notify(200, "Company Added Successfully");
     } else {
+      console.error("Failed to Add Company, API Response:", response);
       notify(400, "Failed to Add Company");
     }
   };
+  
+  
 
   const processGetAllEmployer = async () => {};
+
+  const processEmployerProfile = async () => {
+    const userId = sessionStorage.getItem("user_id");
+    console.log("Retrieved User ID:", userId); // Debugging step
   
-  const processEmployerProfile = async (id) => {
-    let response = await employerProfile(id || 3);
+    if (!userId) {
+      notify(400, "User ID not found");
+      return;
+    }
+  
+    let response = await employerProfile(userId);
     if (response) {
-      console.log(response.data);
       setEmployerProfiles(response.data);
+    } else {
+      notify(400, "Failed to fetch employer profile");
     }
   };
+  
 
-  const processUpdateEmployerLogo = async (id, data) => {
+  const processUpdateEmployerLogo = async (id,data) => {
     let response = await updateEmployerLogo(id, data);
     if (response) {
-      notify(200, "Company Added Successfully");
+      notify(200, "Company Logo Updated Successfully");
     } else {
-      notify(400, "Failed to Add Company");
+      notify(400, "Failed to Update Logo");
     }
   };
 
@@ -54,8 +82,13 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
-  const processDeleteEmployer = async (id) => {
-    let response = await deleteEmployer(id);
+  const processDeleteEmployer = async () => {
+    const userId = sessionStorage.getItem("user_id");
+    if (!userId) {
+      notify(400, "User ID not found");
+      return;
+    }
+    let response = await deleteEmployer(userId);
     if (response) {
       notify(200, "Profile deleted successfully");
     } else {

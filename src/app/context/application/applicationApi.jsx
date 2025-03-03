@@ -44,6 +44,30 @@ export const applicationList = async (id) => {
 };
 
 
+export const getAppliedJbsByEmpid = async (id) => {
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}get-job-applicants-by-emp/${id}`);
+    
+    // ✅ Return only the data, not the full response object
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching job applications:", err);
+    return false; // Return false if the request fails
+  }
+};
+
+
+export const getAppliedJbsByJobid = async (id) => {
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}get-job-application-by-job-id/${id}`);
+    
+    // ✅ Return only the data, not the full response object
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching job applications:", err);
+    return false; // Return false if the request fails
+  }
+};
 // VIEW AN APLLICATION
 export const applicationProfile = async (id) => {
   try {

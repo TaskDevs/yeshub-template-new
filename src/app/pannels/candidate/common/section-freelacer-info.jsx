@@ -21,25 +21,54 @@ function SectionFreelancerInfo() {
 <p className="profile-data-attributes">
 Portfolio(s):
 <ul className="portfolio-lists" >
+
+
 {portfolios?.map((portfolio) => {
-
     const freelancePortfolioIds = freelanceProfileData[0]?.portfolio_id;
+    console.log("freelancePortfolioIds", freelancePortfolioIds, " - ", typeof freelancePortfolioIds);
 
-    const normalizedPortfolio = Array.isArray(freelancePortfolioIds)
-        ? freelancePortfolioIds
-        : freelancePortfolioIds
-        ? freelancePortfolioIds.toString().split(",").map(Number)
-        : [];
+    const normalizedPortfolio = (() => {
+        if (!freelancePortfolioIds) return [];
+
+        if (Array.isArray(freelancePortfolioIds)) {
+            return freelancePortfolioIds.map(Number); 
+        }
+
+        if (typeof freelancePortfolioIds === "string" && freelancePortfolioIds.startsWith('[') && freelancePortfolioIds.endsWith(']')) {
+          try {
+              const parsedArray = JSON.parse(freelancePortfolioIds);
+            
+              return parsedArray.map((portfolioId) => Number(portfolioId));
+          } catch (error) {
+              console.error("Error parsing JSON:", error);
+              return []; 
+          }
+      } else if (typeof freelancePortfolioIds === "string") {
+        return freelancePortfolioIds
+        .split(",")
+        .map((id) => {
+            const trimmedId = id.trim();
+            const numId = Number(trimmedId);
+            return numId;
+        })
+        .filter((id) => !isNaN(id));
+
+      }
+
+
+        return [];
+    })();
+
 
     return (
         normalizedPortfolio.some((id) => id === portfolio.id) && (
             <li key={portfolio.id} className="portfolio-list">
-               
                 {portfolio.project_title}
             </li>
         )
     );
 })}
+
 </ul>
 
 </p>

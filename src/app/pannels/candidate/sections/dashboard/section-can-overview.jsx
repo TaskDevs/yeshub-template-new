@@ -2,12 +2,14 @@ import CountUp from "react-countup";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { useContext } from "react";
 import { AuthApiData } from "../../../../context/auth/authContextApi";
+import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
 
 
 function SectionCandidateOverview() {
     const { profileData } = useContext(ProfileApiData)
     const { userProfile } = useContext(AuthApiData);
-	const username = userProfile?.username;
+	const username = userProfile?.username || "Loading....";
+    const { appliedJobs } = useContext(ApplicationApiData)
     // console.log("profileData", profileData)
 
 
@@ -40,7 +42,7 @@ function SectionCandidateOverview() {
                                 <div className="wt-card-wrap-2">
                                     <div className="wt-card-icon-2"><i className="flaticon-resume" /></div>
                                     <div className="wt-card-right  wt-total-listing-view counter ">
-                                        <CountUp end={435} duration={10} />
+                                        <CountUp end={appliedJobs.length} duration={10} />
                                     </div>
                                     <div className="wt-card-bottom-2">
                                         <h4 className="m-b0">Total Applications</h4>
@@ -49,6 +51,7 @@ function SectionCandidateOverview() {
                             </div>
                         </div>
                     </div>
+
                     <div className="col-xl-6 col-lg-6 col-md-12 mb-3">
                         <div className="panel panel-default">
                             <div className="panel-body wt-panel-body dashboard-card-2 block-gradient-3">

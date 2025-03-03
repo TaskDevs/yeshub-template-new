@@ -3,7 +3,7 @@ import { setMenuActive } from "../../../../globals/constants";
 import { candidate, canRoute } from "../../../../globals/route-names";
 // import JobZImage from "../../../common/jobz-img";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthApiData } from "../../../context/auth/authContextApi";
 
 function CanSidebarSection() {
@@ -11,22 +11,17 @@ function CanSidebarSection() {
 	const { profileData } = useContext(ProfileApiData)
 	const { userProfile } = useContext(AuthApiData);
 	const username = userProfile?.username;
-	const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
-
-	console.log("profileData-sidebar", profileData)
+	
+	console.log("username-sidebar", username)
 
     return (
 			<>
 				<div className="twm-candidate-profile-pic">
 					{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" /> */}
 					<img
-                              src={imgSrc}
+                              src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}` ||"/assets/images/candidates/user-avatar-fallback.jpg" }
                               alt="user picture"
-                              onError={() =>
-                                setImgSrc(
-                                  "/assets/images/candidates/user-avatar-fallback.jpg"
-                                )
-                              }
+                              
                             />
 					{/* <div className="upload-btn-wrapper">
 						<div id="upload-image-grid" />

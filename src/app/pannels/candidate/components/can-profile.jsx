@@ -108,7 +108,9 @@ console.log('Filtered selectedSkillObjects:',
       experience: profileData.experience,
       profession: profileData.profession,
       bio: profileData.bio,
-      skills_id: selectedSkillObjects.map((skill) => skill.value),
+      skills_id: selectedSkillObjects
+        .filter(skill => skill && skill.value !== undefined && skill.value !== null)
+        .map((skill) => skill.value),
     });
 
     setSelectedItems(selectedSkillObjects);

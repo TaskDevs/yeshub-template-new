@@ -35,9 +35,7 @@ function SectionCandidateSkills({ props }) {
             const normalizedSkills = Array.isArray(props?.skills_id)
               ? props.skills_id
               : props.skills_id
-              ? JSON.parse(props.skills_id).map((skill) => {
-                  return typeof skill === "number" ? skill : Number(skill);
-                })
+              ? props.skills_id.split(",").map(skill => Number(skill.trim()))
               : [];
 
             // console.log("normalizedSkills", normalizedSkills);

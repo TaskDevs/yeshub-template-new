@@ -91,8 +91,11 @@ const selectedSkillObjects = skillsArray.map((id) => {
     }
 });
 
-// console.log("selectedSkillObjects", selectedSkillObjects);
-    
+console.log('Raw selectedSkillObjects:', selectedSkillObjects);
+console.log('Filtered selectedSkillObjects:', 
+  selectedSkillObjects.filter(skill => skill && skill.value !== undefined && skill.value !== null)
+);
+
     setFormData({
       firstname: profileData.firstname,
       lastname: profileData.lastname,

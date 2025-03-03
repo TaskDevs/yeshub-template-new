@@ -99,7 +99,7 @@ export const POSTJOBFIELD = {
     {
       id: 10,
       name: "description",
-      label: "Description",
+      label: "Description (Skills Required)",
       type: "text",
       placeholder: "We are doing well",
       icon: "fs-input-icon fa fa-map-pin",

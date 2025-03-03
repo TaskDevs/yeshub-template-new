@@ -3,12 +3,13 @@ import { POSTJOBFIELD } from "../../../../../globals/post-job-data";
 import JobInputField from "../../../../common/job-input-field";
 import JobSelectField from "../../../../common/job-select-field";
 import JobMultiSelectField from "../../../../common/job-multi-select-field";
-import TextAreaField from "../../../../common/text-area-field";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 // import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import { ToastContainer } from "react-toastify";
+import ReactQuill from "react-quill";
 import "react-toastify/dist/ReactToastify.css";
+import "react-quill/dist/quill.snow.css";
 
 function EmpPostAJobPage() {
   const { processAddJob } = useContext(JobApiData);
@@ -78,6 +79,7 @@ function EmpPostAJobPage() {
           changeState={setAlertStatus}
         />
       )} */}
+
 
       <div className="wt-admin-right-page-header clearfix">
         <h2>Post a Job</h2>
@@ -186,26 +188,30 @@ function EmpPostAJobPage() {
               </div>
 
               {/* duty */}
-              <div className="col-xl-4 col-lg-6 col-md-12">
-                <JobInputField
-                  field={POSTJOBFIELD.fieldDetail[8]}
-                  value={formData}
-                  change={(data, field) => {
-                    handleInputChange(field, data);
-                  }}
-                />
-              </div>
+              <div className="col-md-12">
+                <h4>Key Responsibilities</h4>
+                  <ReactQuill
+                  
+                    theme="snow"
+                    value={formData[POSTJOBFIELD.fieldDetail[8].name] || ""}
+                    onChange={(content) => handleInputChange(POSTJOBFIELD.fieldDetail[8].name, content)}
+                   style={{height:'200px'}}
+                   className="mb-5 pb-5"
+                  />
+                </div>
 
               {/*Description*/}
               <div className="col-md-12">
-                <TextAreaField
-                  field={POSTJOBFIELD.fieldDetail[9]}
-                  value={formData}
-                  change={(data, field) => {
-                    handleInputChange(data, field);
-                  }}
-                />
-              </div>
+  <h4>Skills Required</h4>
+  <ReactQuill
+    theme="snow"
+    value={formData[POSTJOBFIELD.fieldDetail[9].name] || ""}
+    onChange={(content) => handleInputChange(POSTJOBFIELD.fieldDetail[9].name, content)}
+    style={{ height: "200px" }}
+    className="mb-5 pb-4"
+  />
+</div>
+
 
               {/*Start Date*/}
               <div className="col-md-6">

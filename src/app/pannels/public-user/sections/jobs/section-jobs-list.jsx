@@ -5,12 +5,26 @@ import { JobsCard } from "./job-card";
 
 function SectionJobsList() {
   const { jobListData, processGetAllJob } = useContext(JobApiData);
- 
+ console.log(jobListData)
 
   useEffect(() => {
-    //console.log("We are rendering");
     processGetAllJob();
   }, []);
+
+  // Function to calculate the number of days left
+  const calculateDaysLeft = (start_date, end_date) => {
+   new Date(start_date);
+    const endDate = new Date(end_date);
+    const today = new Date();
+
+    // If the job period is already over
+    if (today > endDate) {
+      return 0; // No days left
+    }
+
+    const timeDiff = endDate.getTime() - today.getTime();
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
+  };
   return (
     <>
       <div>
@@ -21,9 +35,10 @@ function SectionJobsList() {
               img={item.logo}
               title={item.job_title}
               duration={item.created_at}
-              location={item.description}
-              amount={item.salary}
-              days_left={item.days_left}
+              location={item.address}
+              amount={`GH₵${item.salary}`}
+              job_type={item.job_type}
+              days_left={calculateDaysLeft(item.start_date, item.end_date)}
               link={`/job-detail/${item.id}`}
             />
           ))}

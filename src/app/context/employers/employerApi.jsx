@@ -111,21 +111,15 @@ export const updateEmployer = async (id, data) => {
 //   }
 // };
 
+// Update Employer Logo
 export const updateEmployerLogo = async (id, data) => {
   try {
     let responseOnUpdateEmployer = await axios.put(
       `${REACT_BASE_URL}employers-logo/${id}`,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
+      data
     );
-
     console.log(responseOnUpdateEmployer);
-
-    if (responseOnUpdateEmployer.status === 200) {
+    if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
     } else {
       return false;
@@ -134,7 +128,6 @@ export const updateEmployerLogo = async (id, data) => {
     console.log(err);
   }
 };
-
 
 
 // DELETE Employer

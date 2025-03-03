@@ -3,7 +3,7 @@ import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import EmpJobPostCard from "./emp-post-job-card";
 
 function EmpManageJobsPage() {
-  const { processGetAllJobPostByEmployer, empJobListData, loading } =
+  const { processGetAllJobPostByEmployer, empJobListData,  loading } =
     useContext(JobApiData);
 
   const userId = sessionStorage.getItem("user_id");

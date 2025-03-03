@@ -8,7 +8,8 @@ import {
   countEmployerJobsPosted,
   employerJobList,
   jobProfile,
-  countApplications
+  countApplications,
+  deleteJob
 } from "./jobsApi";
 import { useNavigate } from "react-router-dom";
 
@@ -68,17 +69,6 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  // const processGetAllJobPostByEmployer = async (id) => {
-  //   let response = await employerJobList(id);
-  //   if (response) {
-  //     setEmpJobListData(response.data);
-  //     setEmpPaginationData({
-  //       total: response.total,
-  //     });
-  //     return response
-  //   }
-  // };
-
 
   const processGetAllJobPostByEmployer = async (id) => {
     setLoading(true); // ✅ Set loading to true before fetching
@@ -131,8 +121,15 @@ const JobApiDataProvider = (props) => {
 
   const processUpdateJob = async () => {};
 
-  const processDeleteJob = async () => {};
-
+  const processDeleteJob = async (id) => {
+    try {
+      await deleteJob(id);
+      console.log("Job deleted successfully");
+    } catch (error) {
+      console.error("Error deleting job:", error.response?.data || error);
+    }
+  };
+  
   return (
     <JobApiData.Provider
       value={{
@@ -156,6 +153,7 @@ const JobApiDataProvider = (props) => {
         setSearchJobInfo,
         loading,
         processCountApplications,
+     
       }}
     >
       {props.children}

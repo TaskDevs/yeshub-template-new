@@ -51,22 +51,47 @@ function CanProfilePage() {
 
     // console.log("skillsArray", skillsArray)
 
+    // const skillsArray = Array.isArray(profileData.skills_id)
+    //   ? profileData.skills_id.map(String)
+    //   : typeof profileData.skills_id === "string"
+    //   ? profileData.skills_id.split(",").map((id) => id.trim())
+    //   : [];
+
+    //   console.log("skillsArray", skillsArray)
+
+    // const selectedSkillObjects = skillsArray.map((id) => {
+    //   const skill = skillOptions.find(
+    //     (skill) => String(skill.id) === String(id)
+    //   );
+    //   return skill ? { value: skill.id, label: skill.name } : null;
+    // });
+
+    // console.log("selectedSkillObjects", selectedSkillObjects)
+
+
     const skillsArray = Array.isArray(profileData.skills_id)
-      ? profileData.skills_id.map(String)
-      : typeof profileData.skills_id === "string"
-      ? profileData.skills_id.split(",").map((id) => id.trim())
-      : [];
+    ? profileData.skills_id.map(String)
+    : typeof profileData.skills_id === "string"
+    ? profileData.skills_id.startsWith('[') && profileData.skills_id.endsWith(']')
+        ? JSON.parse(profileData.skills_id).map(String)
+        : profileData.skills_id.split(",").map((id) => id.trim())
+    : [];
 
-      console.log("skillsArray", skillsArray)
+// console.log("skillsArray", skillsArray);
 
-    const selectedSkillObjects = skillsArray.map((id) => {
-      const skill = skillOptions.find(
+const selectedSkillObjects = skillsArray.map((id) => {
+    const skill = skillOptions.find(
         (skill) => String(skill.id) === String(id)
-      );
-      return skill ? { value: skill.id, label: skill.name } : null;
-    });
+    );
+    if(skill){
+        return { value: skill.id, label: skill.name };
+    } else {
+        console.log("skill id: " + id + " not found in skill options.")
+        return null;
+    }
+});
 
-    console.log("selectedSkillObjects", selectedSkillObjects)
+// console.log("selectedSkillObjects", selectedSkillObjects);
     
     setFormData({
       firstname: profileData.firstname,

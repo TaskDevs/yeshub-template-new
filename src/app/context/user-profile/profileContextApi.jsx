@@ -37,7 +37,7 @@ const ProfileApiDataProvider = (props) => {
     return savedState ? JSON.parse(savedState) : true; 
   }); 
   
-  console.log("profileData", profileData)
+  // console.log("profileData", profileData)
 
 
   const toggleSidebar = () => {
@@ -62,6 +62,7 @@ const ProfileApiDataProvider = (props) => {
   const fetchProfile = async () => {
     const res = await processProfileProfile(userId);
     if (res) {
+      // window.location.reload();
       setProfileData(res.data.data);
     }
   };
@@ -69,10 +70,9 @@ const ProfileApiDataProvider = (props) => {
   useEffect(() => {
 
     fetchProfile();
-
-   
-    const interval = setInterval(fetchProfile, 60000);
-    return () => clearInterval(interval); 
+    
+    // const interval = setInterval(fetchProfile, 60000);
+    // return () => clearInterval(interval); 
   }, []);
 
 
@@ -94,8 +94,8 @@ const ProfileApiDataProvider = (props) => {
       setIsLoading(false)
     }, 2000)
    
-    const interval = setInterval(fetchAllProfile, 60000);
-    return () => clearInterval(interval); 
+    // const interval = setInterval(fetchAllProfile, 60000);
+    // return () => clearInterval(interval); 
   }, []);
 
   
@@ -147,8 +147,7 @@ const ProfileApiDataProvider = (props) => {
   };
 
   const handleSubmitProfile = async (e) => {
-    // console.log("formdata-profile", formData)
-    
+   
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -169,6 +168,7 @@ const ProfileApiDataProvider = (props) => {
       setIsSubmitting(false);
       return;
   }
+    
 
     const profileFormData = new FormData();
     profileFormData.append("profile_image", selectedFile);
@@ -181,7 +181,7 @@ const ProfileApiDataProvider = (props) => {
 
     try {
       const response = await processAddProfile(profileFormData);
-
+      await fetchProfile()
       toast.success("Profile added successfully");
       return response;
     } catch (e) {
@@ -190,22 +190,20 @@ const ProfileApiDataProvider = (props) => {
     } finally {
       setIsSubmitting(false);
       setFormData(initialFormData);
-      setFormData(initialFormData);
+      
     }
   };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    console.log("formData-update-profile",{
-      ...formData,
-      id: userId,
-    })
+
     try {
       const response = await processUpdateProfile(userId, {
         ...formData,
         id: userId,
       });
       if (response) {
+        await fetchProfile()
         toast.success("Profile data updated successfully");
       return response;
       }
@@ -217,6 +215,7 @@ const ProfileApiDataProvider = (props) => {
       setImageURL(null);
     } finally {
       setFormData(initialFormData);
+      
     }
   };
 
@@ -236,6 +235,28 @@ const ProfileApiDataProvider = (props) => {
       setImageURL(null);
     }
   };
+
+  const handleDeleteProfile = async () => {
+    
+		setIsSubmitting(true);
+		try {
+			await processDeleteProfile(profileData.user_id);		
+			toast.success("User profile deleted successfully");
+			window.location.reload();  
+
+		} catch {
+			toast.error("Failed to delete profile");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+      
+		}
+	};
+
+
+
+
+
 
   return (
     <ProfileApiData.Provider
@@ -259,6 +280,7 @@ const ProfileApiDataProvider = (props) => {
         processDeleteProfile,
         handleSubmitProfile,
         handleUpdateProfile,
+        handleDeleteProfile,
         setFormData,
         handleImageChange,
       }}
@@ -269,3 +291,15 @@ const ProfileApiDataProvider = (props) => {
 };
 
 export default ProfileApiDataProvider;
+
+
+
+// if (userDeleteResponse ) {
+//   await fetchProfile()
+//   toast.success("User profile deleted successfully");
+// // window.location.reload();
+// } else {
+//   return false;
+// }
+// console.log("userDeleteResponse", userDeleteResponse)
+//       await fetchProfile()

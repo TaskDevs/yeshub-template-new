@@ -1,10 +1,21 @@
 import React, { useContext } from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
+// import { GlobalApiData } from "../../../context/global/globalContextApi";
+// import { BiLoaderCircle } from "react-icons/bi";
+
 
 function SectionProfileData() {
 	const { profileData } = useContext(ProfileApiData);
-
+   
 	return (
+		<>
+		{/* <div className=""> */}
+		{/* {isLoading && <BiLoaderCircle size={20} className="spinner-grow" />
+	} */}
+		
+		
+
+{
 		profileData.id ?  (
 		<div className="sec-profile">
 			<p className="profile-data-attributes">
@@ -40,7 +51,8 @@ function SectionProfileData() {
 		</div>
 	)
 	: 
-	(<p>No Profile found</p>) 
+	(<p>No Profile found</p>) }
+	</>
 	)
 }
 

@@ -63,7 +63,7 @@ export const employerProfile = async (id) => {
       `${REACT_BASE_URL}employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
     );
-    // console.log(responseOnEmployerProfile.data.data);
+    console.log(responseOnEmployerProfile.data.data);
     if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
     } else {
@@ -94,14 +94,38 @@ export const updateEmployer = async (id, data) => {
 };
 
 // Update Employer Logo
+// export const updateEmployerLogo = async (id, data) => {
+//   try {
+//     let responseOnUpdateEmployer = await axios.put(
+//       `${REACT_BASE_URL}employers-logo/${id}`,
+//       data
+//     );
+//     console.log(responseOnUpdateEmployer);
+//     if (responseOnUpdateEmployer.status == 200) {
+//       return responseOnUpdateEmployer.data;
+//     } else {
+//       return false;
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
 export const updateEmployerLogo = async (id, data) => {
   try {
     let responseOnUpdateEmployer = await axios.put(
       `${REACT_BASE_URL}employers-logo/${id}`,
-      data
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     console.log(responseOnUpdateEmployer);
-    if (responseOnUpdateEmployer.status == 200) {
+
+    if (responseOnUpdateEmployer.status === 200) {
       return responseOnUpdateEmployer.data;
     } else {
       return false;
@@ -110,6 +134,8 @@ export const updateEmployerLogo = async (id, data) => {
     console.log(err);
   }
 };
+
+
 
 // DELETE Employer
 export const deleteEmployer = async (id) => {

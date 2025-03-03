@@ -46,9 +46,8 @@ const FreelanceApiDataProvider = (props) => {
   useEffect(() => {
    
     fetchProfile();
-    const interval = setInterval(fetchProfile, 60000);
-    return () => clearInterval(interval); 
-  }, [fetchProfile]);
+   
+  }, []);
 
   
 
@@ -112,12 +111,12 @@ const FreelanceApiDataProvider = (props) => {
   }
 
     setIsSubmitting(true)
-    console.log("formData-freelancer", formData)
+  
     try {
       const res = await processAddFreelance({...formData, user_id: userId});
       
       if (res) {
-        console.log("add-freelacer", res)
+        await fetchProfile();
         toast.success("Freelance profile added successfully")
       } 
       
@@ -132,11 +131,11 @@ const FreelanceApiDataProvider = (props) => {
 
   const handleUpdateFreelanceProfile = async (e) => {
     e.preventDefault();
-    console.log("formData-update-freelancer", formData)
+   
     try{
       const res = await processUpdateFreelance( freelanceProfileData[0]?.id, {...formData, user_id: userId})
     if (res) {
-      console.log("update-freelancer", res)
+      await fetchProfile();
       toast.success("Freelance profile updated successfully")
     }
     }catch(e) {
@@ -146,7 +145,7 @@ const FreelanceApiDataProvider = (props) => {
   }
 
   const handleEditFreelance = () => {
-    console.log("free-data", freelanceProfileData)
+   
     setFormData({
       rate: freelanceProfileData[0]?.rate,
       experience: freelanceProfileData[0]?.experience,

@@ -17,7 +17,7 @@ function YesNoPopup(props) {
 	const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
 	const { processDeleteEducation } = useContext(EducationApiData);
 	const { processDeleteCategory } = useContext(CategoryApiData);
-	const { processDeleteProfile, profileData } = useContext(ProfileApiData);
+	const { handleDeleteProfile } = useContext(ProfileApiData);
 	const { processDeleteSkills } = useContext(SkillsApiData);
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
     const { processDeleteApplication } = useContext(ApplicationApiData)
@@ -72,26 +72,29 @@ function YesNoPopup(props) {
 		}
 	};
 
-	const handleDeleteProfile = async () => {
+	// const handleDeleteProfile = async () => {
 		
-		setIsSubmitting(true);
-		try {
-			const userDeleteResponse = await processDeleteProfile(profileData.user_id);
+	// 	setIsSubmitting(true);
+	// 	try {
+	// 		const userDeleteResponse = await processDeleteProfile(profileData.user_id);
 			
 			
 			
-			if (userDeleteResponse ) {
-				toast.success("User profile deleted successfully");
-			window.location.reload();
-			}
+	// 		if (userDeleteResponse ) {
+	// 			const res = await processProfileProfile(userId)
+    //             setProfileData(res.data.data);
+	// 			toast.success("User profile deleted successfully");
+	// 		// window.location.reload();
+	// 		}
 
-		} catch {
-			toast.error("Failed to delete profile");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+	// 	} catch (e) {
+	// 		console.error("failed to delete", e)
+	// 		toast.error("Failed to delete profile");
+	// 		return false;
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
+	// };
 
 	const handleDeleteFreelance = async () => {
 		console.log("delete-", freelanceProfileData[0]?.id)

@@ -5,8 +5,9 @@ import { PortfolioApiData } from "../../../context/portfolio/portfolioContextApi
 function SectionFreelancerInfo() {
   const { freelanceProfileData } = useContext(FreelanceApiData);
   const { portfolios } = useContext(PortfolioApiData);
-  console.log("freelance-profile-data", freelanceProfileData);
-  console.log("portfolios-data", portfolios);
+
+  // console.log("freelance-profile-data", freelanceProfileData);
+  // console.log("portfolios-data", portfolios);
 
   return freelanceProfileData.length > 0 ? (
     freelanceProfileData.map((data) => (

@@ -19,7 +19,7 @@ function JobSelectField({ field, value, options, change }) {
             {field.placeholder || "Select an option"}
           </option>
           {options.map((option) => (
-            <option key={option.id} value={option.id}>
+            <option key={option.id} value={option.name}>
               {option.name}
             </option>
           ))}

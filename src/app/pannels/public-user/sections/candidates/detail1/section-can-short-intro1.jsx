@@ -6,9 +6,11 @@ import { FreelanceApiData } from "../../../../../context/freelance/freelanceCont
 function SectionCandidateShortIntro1({ props, isFreelancer }) {
 	const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.user?.profile_image}`);
 	const { freelanceProfileData } = useContext(FreelanceApiData)
-	console.log("freelanceProfileData-details", freelanceProfileData)
+	// console.log("freelanceProfileData-details", freelanceProfileData)
 
-	console.log("props", props)
+	// console.log("props", props)
+
+	
     return (
 			<>
 				<div

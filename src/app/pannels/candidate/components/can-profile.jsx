@@ -59,7 +59,11 @@ const selectedSkillObjects = skillsArray.map((id) => {
     }
 });
 
-    
+console.log('Raw selectedSkillObjects:', selectedSkillObjects);
+console.log('Filtered selectedSkillObjects:', 
+  selectedSkillObjects.filter(skill => skill && skill.value !== undefined && skill.value !== null)
+);
+
     setFormData({
       firstname: profileData.firstname,
       lastname: profileData.lastname,
@@ -72,7 +76,9 @@ const selectedSkillObjects = skillsArray.map((id) => {
       experience: profileData.experience,
       profession: profileData.profession,
       bio: profileData.bio,
-      skills_id: selectedSkillObjects.map((skill) => skill.value),
+      skills_id: selectedSkillObjects
+        .filter(skill => skill && skill.value !== undefined && skill.value !== null)
+        .map((skill) => skill.value),
     });
 
     setSelectedItems(selectedSkillObjects);

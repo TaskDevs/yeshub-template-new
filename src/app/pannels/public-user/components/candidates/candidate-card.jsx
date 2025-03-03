@@ -14,6 +14,7 @@ function CandidateCard({ data }) {
     `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`
   );
  const { freelanceProfileData } = useContext(FreelanceApiData)
+//  console.log("data", data)
  
   return (
     <li>

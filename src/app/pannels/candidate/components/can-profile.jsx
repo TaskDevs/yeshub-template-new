@@ -1,11 +1,11 @@
 import { MdOutlineEdit } from "react-icons/md";
 import SectionCandicateBasicInfo from "../sections/profile/section-can-basic-info";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import SectionProfileData from "../common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
-import { popupType, userId, OAuthUserId } from "../../../../globals/constants";
+import { popupType } from "../../../../globals/constants";
 import { SkillsApiData } from "../../../context/skills/skillsContextApi";
 import FreelancePopup from "../../../common/popups/popup-freelance";
 import SectionFreelancerInfo from "../common/section-freelacer-info";
@@ -17,57 +17,51 @@ function CanProfilePage() {
     handleSubmitProfile,
     handleUpdateProfile,
     handleImageChange,
-    processProfileProfile,
     profileData,
     setFormData,
-    setProfileData,
     setSelectedItems,
+    imgSrc,
+    setImgSrc,
   } = useContext(ProfileApiData);
 
   const { skillOptions } = useContext(SkillsApiData);
-  const { handleSubmit, freelanceProfileData, handleEditFreelance } = useContext(FreelanceApiData)
+  const { handleSubmit, freelanceProfileData, handleUpdateFreelanceProfile, handleEditFreelance } =
+    useContext(FreelanceApiData);
 
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     try {
+  //       const res = await processProfileProfile(userId || OAuthUserId);
 
+  //       const data = res?.data.data;
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await processProfileProfile(userId || OAuthUserId);
-
-        const data = res?.data.data;
-
-        setProfileData(data);
-      } catch (error) {
-        console.error("Failed Fetching profile", error);
-      }
-    };
-    fetchProfile();
-  }, [processProfileProfile, setProfileData]);
-
-
-
+  //       setProfileData(data);
+  //     } catch (error) {
+  //       console.error("Failed Fetching profile", error);
+  //     }
+  //   };
+  //   fetchProfile();
+  // }, [processProfileProfile, setProfileData]);
 
   const handleEditClick = () => {
     if (!skillOptions || skillOptions.length === 0) {
       console.error("Skill options not loaded yet.");
       return;
     }
-  
-  
+
     const skillsArray = Array.isArray(profileData.skills_id)
-      ? profileData.skills_id.map(String) 
+      ? profileData.skills_id.map(String)
       : typeof profileData.skills_id === "string"
-      ? profileData.skills_id.split(",").map((id) => id.trim()) 
+      ? profileData.skills_id.split(",").map((id) => id.trim())
       : [];
-  
-    
-    const selectedSkillObjects = skillsArray
-      .map((id) => {
-        const skill = skillOptions.find((skill) => String(skill.id) === String(id));
-        return skill ? { value: skill.id, label: skill.skill } : null;
-      })
-  
-   
+
+    const selectedSkillObjects = skillsArray.map((id) => {
+      const skill = skillOptions.find(
+        (skill) => String(skill.id) === String(id)
+      );
+      return skill ? { value: skill.id, label: skill.name } : null;
+    });
+
     setFormData({
       firstname: profileData.firstname,
       lastname: profileData.lastname,
@@ -78,18 +72,13 @@ function CanProfilePage() {
       address: profileData.address,
       region: profileData.region,
       experience: profileData.experience,
+      profession: profileData.profession,
       bio: profileData.bio,
-      skills_id: selectedSkillObjects.map((skill) => skill.value), // Ensure array format
+      skills_id: selectedSkillObjects.map((skill) => skill.value),
     });
-  
+
     setSelectedItems(selectedSkillObjects);
   };
-
-
-  
-  
-
-
 
   return (
     <>
@@ -116,7 +105,7 @@ function CanProfilePage() {
                       <div className="form-group">
                         <div className="dashboard-profile-pic">
                           <div className="dashboard-profile-photo">
-                            <img
+                            {/* <img
                               src={
                                 imageURL ||
                                 `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`
@@ -124,6 +113,16 @@ function CanProfilePage() {
                               // "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1740133986_add-withrawal-method.png"
 
                               alt=""
+                            /> */}
+
+                            <img
+                              src={imageURL || imgSrc}
+                              alt="user picture"
+                              onError={() =>
+                                setImgSrc(
+                                  "/assets/images/candidates/user-avatar-fallback.jpg"
+                                )
+                              }
                             />
                             <div className="upload-btn-wrapper">
                               <div id="upload-image-grid" />
@@ -206,11 +205,10 @@ function CanProfilePage() {
           </div>
         </div>
 
-
         <div className=" panel panel-default m-b30 ">
           <div className=" p-a20 ">
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-              <h4 className="panel-tittle m-a0"> Add Freelancer Profile</h4>
+              <h4 className="panel-tittle m-a0"> Become A Freelancer</h4>
 
               <a
                 data-bs-toggle="modal"
@@ -230,11 +228,12 @@ function CanProfilePage() {
               </div>
 
               <div className="">
-                {freelanceProfileData?.id && (
+                {/* freelanceProfileData?.id && ( */}
+                {freelanceProfileData.length > 0 && (
                   <div className="sec-actions-btn">
                     <button
                       className="site-button  actions-btn"
-                      data-bs-target="#delete-profile"
+                      data-bs-target="#delete-freelance"
                       data-bs-toggle="modal"
                       data-bs-dismiss="modal"
                     >
@@ -244,7 +243,7 @@ function CanProfilePage() {
 
                     <button
                       className="site-button  actions-btn "
-                      data-bs-target="#EditProfile"
+                      data-bs-target="#EditFreelanceProfile"
                       data-bs-toggle="modal"
                       data-bs-dismiss="modal"
                       onClick={() => {
@@ -261,9 +260,6 @@ function CanProfilePage() {
           </div>
         </div>
 
-
-
-
         <SectionCandicateBasicInfo
           submit={handleSubmitProfile}
           id="AddProfile"
@@ -278,7 +274,9 @@ function CanProfilePage() {
           type={popupType.DELETE_PROFILE}
           msg={"Are you sure you want to delete your profile?"}
         />
-         <FreelancePopup submit={handleSubmit} id="AddFreelancerProfile" />
+        
+        <FreelancePopup submit={handleSubmit} id="AddFreelancerProfile" />
+        <FreelancePopup submit={handleUpdateFreelanceProfile} id="EditFreelanceProfile" />
       </div>
     </>
   );

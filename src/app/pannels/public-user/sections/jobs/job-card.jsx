@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import {  baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
+import { useContext } from "react";
+import { GlobalApiData } from "../../../../context/global/globalContextApi";
 
 export const JobsCard = ({
   img,
@@ -10,9 +12,14 @@ export const JobsCard = ({
   title,
   days_left,
   amount,
+  employerId
 }) => {
+  const { setSelectedId } = useContext(GlobalApiData);
+
+  console.log("emp-id-card", employerId)
+
   return (
-    <NavLink to={link} className="twm-jobs-list-style1 mb-5">
+    <NavLink to={link} className="twm-jobs-list-style1 mb-5" onClick={() => setSelectedId(employerId)}>
       <div className="twm-media">
         <img
           src={img ? `${img}` : `${baseURL}/assets/images/no-logo.png`}
@@ -27,7 +34,7 @@ export const JobsCard = ({
             / <TimeAgo date={duration} />
           </span>
         </h4>
-        <p className="twm-job-address">{location}</p>
+        <p className="twm-job-address twm-exp-profile">{location}</p>
         <ul className="ul-skills">
           <li>ux writing</li>
           <li>wire framing</li>

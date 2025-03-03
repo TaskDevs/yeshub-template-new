@@ -5,27 +5,53 @@ import SectionCandidateSkills from "../../sections/candidates/section-can-skills
 // import SectionCandidateEducation from "../../sections/candidates/section-can-education";
 import { useContext, useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
-import SectionEmployersCandidateSidebar from "../../sections/common/section-emp-can-sidebar";
+// import SectionEmployersCandidateSidebar from "../../sections/common/section-emp-can-sidebar";
 // import SectionCandidatePortfolio from "../../sections/candidates/section-candidate-portfolio";
 import SectionReview from "../../sections/common/section-review";
 import ContractPopup from "../../../../common/popups/popup-contract";
 import { useParams } from "react-router-dom";
-import Loader from "../../../../common/loader";
+// import Loader from "../../../../common/loader";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
-import { GlobalApiData } from "../../../../context/global/globalContextApi";
+// import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import SectionCandidateEducation from "../../sections/candidates/section-can-education";
+import SectionProfile from "../../sections/common/section-profile";
+import SectionCandidatePortfolio from "../../sections/candidates/detail2/section-can-portfolio";
+import { GlobalApiData } from "../../../../context/global/globalContextApi";
 
 function CandidateDetail1Page() {
   const { id } = useParams();
   const [candidate, setCandidate] = useState(null);
-  const { isLoading, setIsLoading } = useContext(GlobalApiData);
-  const { processProfileProfile } = useContext(ProfileApiData);
+  const { processFullProfileProfile, allUsersProfile } = useContext(ProfileApiData);
+  const { setIsLoading } = useContext(GlobalApiData)
+  
+  const user = allUsersProfile?.find(user => {
+    // console.log("user-find", typeof user.user_id)
+    // console.log("id-params-find", typeof id);
+    // console.log("id-user-find", Number(id) === user.user_id );
+    return (user.user_id === Number(id))
+  });
+const isFreelancer = user ? user.is_freelancer : false;
+
+
+// console.log("id-params", id, "user", user);
+// console.log("is_freelancer", isFreelancer);
+
+
+
+  // console.log("id-params", id)
+  // console.log("is_freelancer", allUsersProfile?.reduce((d,acc) =>
+  // {
+  //   const isFreelancer = d.user_id === id ? d.is_freelancer : "";
+  //   return isFreelancer;
+  // }
+  // ))
+
 
   useEffect(() => {
     loadScript("js/custom.js");
   });
 
-//   console.log("candidate", candidate);
+  // console.log("candidate", candidate);
 
   useEffect(() => {
     setTimeout(() => {
@@ -33,7 +59,7 @@ function CandidateDetail1Page() {
     }, 200);
     const getCandidate = async () => {
       try {
-        const data = await processProfileProfile(id);
+        const data = await processFullProfileProfile(id);
         // console.log("data-cans", data);
         setCandidate(data.data.data);
       } catch (error) {
@@ -52,7 +78,7 @@ function CandidateDetail1Page() {
 
   return (
     <>
-      {isLoading && <Loader />}
+      
       <div className="container">
         <div
           className="wt-bnr-inr overlay-wraper bg-center"
@@ -63,7 +89,7 @@ function CandidateDetail1Page() {
           // 	)})`,
           // }}
         >
-          <SectionCandidateShortIntro1 props={candidate} />
+          <SectionCandidateShortIntro1 props={candidate} isFreelancer={isFreelancer} />
           <div className="overlay-main site-bg-white opacity-01" />
         </div>
       </div>
@@ -78,16 +104,18 @@ function CandidateDetail1Page() {
                 <div className="cabdidate-de-info">
                   {/* <SectionCandidateShortIntro1 /> */}
 
-                  <SectionCandidateAbout1 props={candidate} />
+                  <SectionCandidateAbout1 props={candidate} isFreelancer={isFreelancer} />
 
-                  <SectionCandidateSkills props={candidate} />
+                  <SectionCandidateSkills props={candidate.user} />
 
                   {/* <SectionCandidatePortfolio  props={candidate}/> */}
                   
 
                   {/* <SectionCandidateExperience /> */}
 
-                  <SectionCandidateEducation />
+                  <SectionCandidateEducation props={candidate.education} />
+
+                  <SectionCandidatePortfolio props={candidate.portfolio} />
 
                   <SectionReview />
                 </div>
@@ -97,7 +125,10 @@ function CandidateDetail1Page() {
                                 
                             </div> */}
               <div className=" col-lg-4 rightSidebar">
-                <SectionEmployersCandidateSidebar type="1" />
+                {/* <SectionEmployersCandidateSidebar type="1" /> */}
+                <div className="side-bar-2 m-t20 m-b10">
+                <SectionProfile data={candidate.user} isFreelancer={isFreelancer}/>
+                </div>
               </div>
 
               {/* popup-contract */}

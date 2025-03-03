@@ -89,6 +89,7 @@ function TestimonialPopup({ submit }) {
 													change={(data, field) => {
 														handleChange(data, field);
 													}}
+													required={false}
 												/>
 												<i className="fs-input-icon fa fa-address-card" />
 											</div>
@@ -132,6 +133,7 @@ function TestimonialPopup({ submit }) {
 											field={TESTIMONIALFIELD.fieldDetail[6]}
 											value={formData}
 											change={handleChange}
+											required={true}
 										/>
 									</div>
 								</div>

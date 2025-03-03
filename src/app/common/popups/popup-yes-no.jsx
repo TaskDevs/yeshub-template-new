@@ -10,6 +10,7 @@ import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../context/skills/skillsContextApi";
 import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 import { ApplicationApiData } from "../../context/application/applicationContextApi";
+import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
 function YesNoPopup(props) {
 	const navigate = useNavigate();
 
@@ -20,7 +21,8 @@ function YesNoPopup(props) {
 	const { processDeleteSkills } = useContext(SkillsApiData);
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
     const { processDeleteApplication } = useContext(ApplicationApiData)
-	
+	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
+
 	
 	
 	const handleLogout = async () => {
@@ -71,13 +73,44 @@ function YesNoPopup(props) {
 	};
 
 	const handleDeleteProfile = async () => {
+		
 		setIsSubmitting(true);
 		try {
-			await processDeleteProfile(profileData.user_id);
+			const userDeleteResponse = await processDeleteProfile(profileData.user_id);
+			
+			
+			
+			if (userDeleteResponse ) {
+				toast.success("User profile deleted successfully");
+			window.location.reload();
+			}
 
-			toast.success("User profile deleted successfully");
 		} catch {
 			toast.error("Failed to delete profile");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+	const handleDeleteFreelance = async () => {
+		console.log("delete-", freelanceProfileData[0]?.id)
+		setIsSubmitting(true);
+		try {
+			
+			
+			let freelancerDeleteResponse;
+			if (freelanceProfileData[0]?.id) {
+				freelancerDeleteResponse = await processDeleteFreelance(freelanceProfileData[0]?.id);
+			}
+			
+			if (freelancerDeleteResponse) {
+				toast.success("Freelance profile deleted successfully");
+			window.location.reload();
+			}
+
+		} catch {
+			toast.error("Failed to delete freelance profile");
 			return false;
 		} finally {
 			setIsSubmitting(false);
@@ -151,6 +184,9 @@ function YesNoPopup(props) {
 			case popupType.DELETE_PROFILE:
 				return handleDeleteProfile();
 
+			case popupType.DELETE_FREELANCE:
+				return handleDeleteFreelance();
+
 			case popupType.DELETE_SKILLS:
 				return handleDeleteSkills();
 
@@ -171,23 +207,7 @@ function YesNoPopup(props) {
 		}
 	};
 
-	// if (props.type === popupType.LOGOUT) {
-	//         const result = await logout();  // Await logout function
-
-	//         if (result) {
-	//             // If logout is successful, navigate to login page
-	//             toast.success(result.message, { position: "top-right", autoClose: 3000 });
-	//             navigateToAfterLogin();
-	//         } else {
-	//             // Optionally handle any failure in logout (e.g., show an error message)
-	//             console.error("Logout failed");
-	//         }
-	//     }
-
-	// Handle "Yes" button click
-	// const yesHandler = async () => {
-
-	// };
+	
 
 	// Navigate to login page
 	const navigateToAfterLogin = () => {

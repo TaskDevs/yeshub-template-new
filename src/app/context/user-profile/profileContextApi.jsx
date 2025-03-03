@@ -6,6 +6,7 @@ import {
   profileProfile,
   updateProfile,
   deleteProfile,
+  fullProfileProfile
 } from "./profileApi";
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
@@ -30,8 +31,27 @@ const ProfileApiDataProvider = (props) => {
   const [allUsersProfile, setAllUsersProfile] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
+  // const [isSidebarCollapsed, setSidebarCollapsed] = useState(true); 
+  const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const savedState = localStorage.getItem('isSidebarCollapsed');
+    return savedState ? JSON.parse(savedState) : true; 
+  }); 
+  
+  // const toggleSidebar = () => {
+  //       setSidebarCollapsed(!isSidebarCollapsed); 
+  //   };
 
-  // console.log("allUsersProfile", allUsersProfile)
+
+  const toggleSidebar = () => {
+    setSidebarCollapsed(prevState => {
+      const newState = !prevState;
+      localStorage.setItem('isSidebarCollapsed', JSON.stringify(newState)); // Save new state to local storage
+      return newState;
+    });
+  };
+  
+  // console.log("profileData", profileData)
 
   const processAddProfile = async (data) => {
     try {
@@ -42,21 +62,25 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
+  const fetchProfile = async () => {
+    const res = await processProfileProfile(userId);
+    if (res) {
+      setProfileData(res.data.data);
+    }
+  };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const res = await processProfileProfile(userId || OAuthUserId);
-      if (res) {
-        setProfileData(res.data.data);
-      }
-    };
+    // if(!profileData && !profileData.id) {
+    //   return false;
+    // }
+    
 
     fetchProfile();
 
    
     const interval = setInterval(fetchProfile, 60000);
     return () => clearInterval(interval); 
-  }, []);
+  }, [fetchProfile]);
 
 
   useEffect(() => {
@@ -95,6 +119,15 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
+  const processFullProfileProfile = async (id) => {
+    try {
+      const res = await fullProfileProfile(id);
+      return res;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   const processUpdateProfile = async (id, data) => {
     try {
       const res = await updateProfile(id, data);
@@ -115,7 +148,7 @@ const ProfileApiDataProvider = (props) => {
   };
 
   const handleSubmitProfile = async (e) => {
-    
+    // console.log("formdata-profile", formData)
     
     e.preventDefault();
     setIsSubmitting(true);
@@ -125,6 +158,18 @@ const ProfileApiDataProvider = (props) => {
       setIsSubmitting(false);
       return;
     }
+
+    if (selectedItems.length <= 2) {
+      toast.error("Please select at least 3 skills");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.bio) { 
+      toast.error("Please fill out the description field.");
+      setIsSubmitting(false);
+      return;
+  }
 
     const profileFormData = new FormData();
     profileFormData.append("profile_image", selectedFile);
@@ -152,11 +197,14 @@ const ProfileApiDataProvider = (props) => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    // console.log("formData-update-profile", formData)
+    console.log("formData-update-profile",{
+      ...formData,
+      id: userId,
+    })
     try {
-      const response = await processUpdateProfile(userId || OAuthUserId, {
+      const response = await processUpdateProfile(userId, {
         ...formData,
-        id: userId || OAuthUserId,
+        id: userId,
       });
       if (response) {
         toast.success("Profile data updated successfully");
@@ -198,6 +246,11 @@ const ProfileApiDataProvider = (props) => {
         imageURL,
         selectedItems,
         allUsersProfile,
+        isSidebarCollapsed,
+        imgSrc, 
+        setImgSrc,
+        processFullProfileProfile,
+        toggleSidebar,
         setSelectedItems,
         setProfileData,
         processAddProfile,

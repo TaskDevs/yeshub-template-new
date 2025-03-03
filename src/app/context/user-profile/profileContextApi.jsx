@@ -24,23 +24,20 @@ const initialFormData = USERPROFILEFIELD.fieldDetail.reduce((acc, field) => {
 
 
 const ProfileApiDataProvider = (props) => {
-  const { setIsSubmitting } = useContext(GlobalApiData);
+  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData);
   const [imageURL, setImageURL] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [allUsersProfile, setAllUsersProfile] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
-  // const [isSidebarCollapsed, setSidebarCollapsed] = useState(true); 
   const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(() => {
     const savedState = localStorage.getItem('isSidebarCollapsed');
     return savedState ? JSON.parse(savedState) : true; 
   }); 
   
-  // const toggleSidebar = () => {
-  //       setSidebarCollapsed(!isSidebarCollapsed); 
-  //   };
+  // console.log("profileData", profileData)
 
 
   const toggleSidebar = () => {
@@ -65,26 +62,26 @@ const ProfileApiDataProvider = (props) => {
   const fetchProfile = async () => {
     const res = await processProfileProfile(userId);
     if (res) {
+      // window.location.reload();
       setProfileData(res.data.data);
     }
   };
 
   useEffect(() => {
-    // if(!profileData && !profileData.id) {
-    //   return false;
-    // }
-    
 
     fetchProfile();
-
-   
-    const interval = setInterval(fetchProfile, 60000);
-    return () => clearInterval(interval); 
-  }, [fetchProfile]);
+    
+    // const interval = setInterval(fetchProfile, 60000);
+    // return () => clearInterval(interval); 
+  }, []);
 
 
   useEffect(() => {
     const fetchAllProfile = async () => {
+      setTimeout(() =>{
+        setIsLoading(true)
+      }, 200)
+
       const res = await profileList();
       if (res) {
         // console.log("res-all", res)
@@ -93,10 +90,12 @@ const ProfileApiDataProvider = (props) => {
     };
 
     fetchAllProfile();
-
+    setTimeout(() =>{
+      setIsLoading(false)
+    }, 2000)
    
-    const interval = setInterval(fetchAllProfile, 60000);
-    return () => clearInterval(interval); 
+    // const interval = setInterval(fetchAllProfile, 60000);
+    // return () => clearInterval(interval); 
   }, []);
 
   
@@ -148,8 +147,7 @@ const ProfileApiDataProvider = (props) => {
   };
 
   const handleSubmitProfile = async (e) => {
-    // console.log("formdata-profile", formData)
-    
+   
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -170,6 +168,7 @@ const ProfileApiDataProvider = (props) => {
       setIsSubmitting(false);
       return;
   }
+    
 
     const profileFormData = new FormData();
     profileFormData.append("profile_image", selectedFile);
@@ -182,7 +181,7 @@ const ProfileApiDataProvider = (props) => {
 
     try {
       const response = await processAddProfile(profileFormData);
-
+      await fetchProfile()
       toast.success("Profile added successfully");
       return response;
     } catch (e) {
@@ -191,22 +190,20 @@ const ProfileApiDataProvider = (props) => {
     } finally {
       setIsSubmitting(false);
       setFormData(initialFormData);
-      setFormData(initialFormData);
+      
     }
   };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    console.log("formData-update-profile",{
-      ...formData,
-      id: userId,
-    })
+
     try {
       const response = await processUpdateProfile(userId, {
         ...formData,
         id: userId,
       });
       if (response) {
+        await fetchProfile()
         toast.success("Profile data updated successfully");
       return response;
       }
@@ -218,6 +215,7 @@ const ProfileApiDataProvider = (props) => {
       setImageURL(null);
     } finally {
       setFormData(initialFormData);
+      
     }
   };
 
@@ -237,6 +235,28 @@ const ProfileApiDataProvider = (props) => {
       setImageURL(null);
     }
   };
+
+  const handleDeleteProfile = async () => {
+    
+		setIsSubmitting(true);
+		try {
+			await processDeleteProfile(profileData.user_id);		
+			toast.success("User profile deleted successfully");
+			window.location.reload();  
+
+		} catch {
+			toast.error("Failed to delete profile");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+      
+		}
+	};
+
+
+
+
+
 
   return (
     <ProfileApiData.Provider
@@ -260,6 +280,7 @@ const ProfileApiDataProvider = (props) => {
         processDeleteProfile,
         handleSubmitProfile,
         handleUpdateProfile,
+        handleDeleteProfile,
         setFormData,
         handleImageChange,
       }}
@@ -270,3 +291,15 @@ const ProfileApiDataProvider = (props) => {
 };
 
 export default ProfileApiDataProvider;
+
+
+
+// if (userDeleteResponse ) {
+//   await fetchProfile()
+//   toast.success("User profile deleted successfully");
+// // window.location.reload();
+// } else {
+//   return false;
+// }
+// console.log("userDeleteResponse", userDeleteResponse)
+//       await fetchProfile()

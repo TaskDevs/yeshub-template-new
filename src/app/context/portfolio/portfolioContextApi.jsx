@@ -44,9 +44,7 @@ const PortfolioApiDataProvider = (props) => {
   useEffect(() => {
     fetchAllPortfolio();
 
-    const interval = setInterval(fetchAllPortfolio, 60000);
-    return () => clearInterval(interval);
-  }, [fetchAllPortfolio]);
+  }, []);
 
   const processAddPortfolio = async (data) => {
     try {
@@ -96,7 +94,7 @@ const PortfolioApiDataProvider = (props) => {
 	
     try {
       await processAddPortfolio({ ...formData, user_id: userId });
-
+      await fetchAllPortfolio()
       toast.success("Portfolio added successfully");
     } catch (err) {
       console.error("failed to add portfolio", err);
@@ -112,6 +110,7 @@ const PortfolioApiDataProvider = (props) => {
     setIsSubmitting(true);
     try {
       await processUpdatePortfolio(selectedId, formData);
+      await fetchAllPortfolio()
     } catch (err) {
       console.error("failed to update portfolio", err);
     } finally {

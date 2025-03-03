@@ -60,7 +60,7 @@ const isFreelancer = user ? user.is_freelancer : false;
     const getCandidate = async () => {
       try {
         const data = await processFullProfileProfile(id);
-        // console.log("data-cans", data);
+        console.log("data-cans", data);
         setCandidate(data.data.data);
       } catch (error) {
         console.error("Error fetching candidate data:", error);

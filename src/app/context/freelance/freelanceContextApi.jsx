@@ -107,7 +107,7 @@ const FreelanceApiDataProvider = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (freelanceProfileData && freelanceProfileData.id) {
+    if (freelanceProfileData.length > 1 && freelanceProfileData[0].id) {
       toast.error("A freelance profile already exists. Please edit the existing profile instead.");
       return; 
   }

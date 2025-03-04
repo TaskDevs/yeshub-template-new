@@ -26,7 +26,7 @@ const EmpJobPostCard = ({ data }) => {
               <h4>{data.job_title}</h4>
               <p className="twm-bookmark-address">
                 <i className="feather-map-pin" />
-                {data.employer.address}
+                {data.employer?.address}
               </p>
             </a>
           </div>

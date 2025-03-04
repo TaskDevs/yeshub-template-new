@@ -81,6 +81,11 @@ const EmpJobPostCard = ({ data }) => {
               <button
                 title="View profile"
                 className="site-button button-sm"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default anchor behavior
+                  handleNavigate();
+                
+                }}
               >
                 <span className="fa fa-eye" />
               </button>

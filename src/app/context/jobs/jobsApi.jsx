@@ -173,11 +173,9 @@ export const updateJob = async () => {
 };
 
 // DELETE Job
-export const deleteJob = async () => {
+export const deleteJob = async (id) => {
   try {
-    let responseOnDeleteJob = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/
-    });
+    let responseOnDeleteJob = await axios.delete(`${REACT_BASE_URL}posted-jobs/${id}`);
     if (responseOnDeleteJob.status === SUCCESS_STATUS) {
       return responseOnDeleteJob.data;
     } else {

@@ -60,13 +60,12 @@ const EmployerApiDataProvider = (props) => {
     }
   };
   
-
-  const processUpdateEmployerLogo = async (id,data) => {
+  const processUpdateEmployerLogo = async (id, data) => {
     let response = await updateEmployerLogo(id, data);
     if (response) {
-      notify(200, "Company Logo Updated Successfully");
+      notify(200, "Company Added Successfully");
     } else {
-      notify(400, "Failed to Update Logo");
+      notify(400, "Failed to Add Company");
     }
   };
 

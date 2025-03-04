@@ -158,36 +158,13 @@ function JobDetail1Page() {
 										</div>
 									</div>
 									<h4 className="twm-s-title">Job Description:</h4>
-									<p>{profile?.description}</p>
+									<div dangerouslySetInnerHTML={{ __html: profile?.description }} />
 
-									{/* <h4 className="twm-s-title">Requirments:</h4>
-                  <ul className="description-list-2">
-                    <li>
-                      <i className="feather-check" />
-                      Must be able to communicate with others to convey
-                      information effectively.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Personally passionate and up to date with current trends
-                      and technologies, committed to quality and comfortable
-                      working with adult media.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Rachelor or Master degree level educational background.
-                    </li>
-                    <li>
-                      <i className="feather-check" />4 years relevant PHP dev
-                      experience.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Troubleshooting, testing and maintaining the core product
-                      software and databases.
-                    </li>
-                  </ul>
-                  <h4 className="twm-s-title">Responsabilities:</h4>
+									<h4 className="twm-s-title">Requirments:</h4>
+						
+									<div dangerouslySetInnerHTML={{ __html: profile?.duty }} />
+									
+                  {/* <h4 className="twm-s-title">Responsabilities:</h4>
                   <ul className="description-list-2">
                     <li>
                       <i className="feather-check" />

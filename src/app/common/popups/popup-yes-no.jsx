@@ -72,46 +72,17 @@ function YesNoPopup(props) {
 		}
 	};
 
-	// const handleDeleteProfile = async () => {
-		
-	// 	setIsSubmitting(true);
-	// 	try {
-	// 		const userDeleteResponse = await processDeleteProfile(profileData.user_id);
-			
-			
-			
-	// 		if (userDeleteResponse ) {
-	// 			const res = await processProfileProfile(userId)
-    //             setProfileData(res.data.data);
-	// 			toast.success("User profile deleted successfully");
-	// 		// window.location.reload();
-	// 		}
-
-	// 	} catch (e) {
-	// 		console.error("failed to delete", e)
-	// 		toast.error("Failed to delete profile");
-	// 		return false;
-	// 	} finally {
-	// 		setIsSubmitting(false);
-	// 	}
-	// };
-
 	const handleDeleteFreelance = async () => {
-		console.log("delete-", freelanceProfileData[0]?.id)
 		setIsSubmitting(true);
 		try {
 			
-			
-			let freelancerDeleteResponse;
 			if (freelanceProfileData[0]?.id) {
-				freelancerDeleteResponse = await processDeleteFreelance(freelanceProfileData[0]?.id);
-			}
-			
-			if (freelancerDeleteResponse) {
+				await processDeleteFreelance(freelanceProfileData[0]?.id);
 				toast.success("Freelance profile deleted successfully");
 			window.location.reload();
 			}
-
+			
+			
 		} catch {
 			toast.error("Failed to delete freelance profile");
 			return false;

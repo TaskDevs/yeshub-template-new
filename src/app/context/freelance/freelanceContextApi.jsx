@@ -147,22 +147,36 @@ const FreelanceApiDataProvider = (props) => {
   }
 
   const handleEditFreelance = () => {
+    console.log("freelanceProfileData[0]", freelanceProfileData[0])
     if (!portfolios || portfolios.length === 0) {
       console.error("Portfolio options not loaded yet.");
       return;
     }
 
-    const portfolioArray = Array.isArray(freelanceProfileData[0]?.portfolio_id)
-    ? JSON.parse(freelanceProfileData[0]?.portfolio_id).map(String)
-        : freelanceProfileData[0]?.portfolio_id.split(",").map((id) => id.trim())
-   
 
-    const selectedPortfolioObjects = portfolioArray.map((id) => {
-      const portfolio = portfolios?.find(
-          (portfolio) => String(portfolio.id) === String(id)
-      );
-      return { value: portfolio.id, label: portfolio.project_title };
-    })
+const portfolioArray = Array.isArray(freelanceProfileData[0]?.portfolio_id)
+    ? freelanceProfileData[0]?.portfolio_id.map(String)
+    : typeof freelanceProfileData[0]?.portfolio_id === "string"
+    ? freelanceProfileData[0]?.portfolio_id.startsWith('[') && freelanceProfileData[0]?.portfolio_id.endsWith(']')
+        ? JSON.parse(freelanceProfileData[0]?.portfolio_id).map(String)
+        : freelanceProfileData[0]?.portfolio_id.split(",").map((id) => id.trim())
+    : [];
+
+console.log("portfolioArray", portfolioArray);
+
+const selectedPortfolioObjects = portfolioArray.map((id) => {
+    const portfolio = portfolios?.find(
+        (portfolio) => String(portfolio.id) === String(id)
+    );
+    if (portfolio) {
+        return { value: portfolio.id, label: portfolio.project_title };
+    } else {
+        console.log("portfolio id: " + id + " not found in portfolios.");
+        return null;
+    }
+});
+
+console.log("selectedPortfolioObjects", selectedPortfolioObjects);
 
     setFormData({
       rate: freelanceProfileData[0]?.rate,

@@ -21,67 +21,63 @@ import WalletApiDataProvider from "./app/context/wallet/walletContextApi";
 import { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 
-
 function App() {
-//   const [isLoading, setLoading] = useState(true);
+  //   const [isLoading, setLoading] = useState(true);
 
-//   setTimeout(() => {
-//     setLoading(false);
-//   }, 500);
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 500);
 
-const [isLoading, setLoading] = useState(true);
-const location = useLocation(); 
+  const [isLoading, setLoading] = useState(true);
+  const location = useLocation();
 
-    useEffect(() => {
-        setLoading(true); 
-        const timer = setTimeout(() => {
-            setLoading(false); 
-        }, 2000); 
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
 
-        return () => clearTimeout(timer); 
-    }, [location]);
-
+    return () => clearTimeout(timer);
+  }, [location]);
 
   return (
-		<GlobalApiDataProvider>
-			<AuthApiDataProvider>
-				<ApplicationApiDataProvider>
-					<CategoryApiDataProvider>
-						<EducationApiDataProvider>
-							<HistoryApiDataProvider>
-								<EmployerApiDataProvider>
-									
-										<JobApiDataProvider>
-											<MilestoneApiDataProvider>
-												<PaymentApiDataProvider>
-													<PortfolioApiDataProvider>
-														<SkillsApiDataProvider>
-															<TestimonialApiDataProvider>
-																<ProfileApiDataProvider>
-																<FreelanceApiDataProvider>
-																	<WalletApiDataProvider>
-																		{isLoading && <Loader />}
-																		<Toaster />
-																		<ScrollToTop />
-																		<RootLayout />
-																	</WalletApiDataProvider>
-																	</FreelanceApiDataProvider>
-																</ProfileApiDataProvider>
-															</TestimonialApiDataProvider>
-														</SkillsApiDataProvider>
-													</PortfolioApiDataProvider>
-												</PaymentApiDataProvider>
-											</MilestoneApiDataProvider>
-										</JobApiDataProvider>
-									
-								</EmployerApiDataProvider>
-							</HistoryApiDataProvider>
-						</EducationApiDataProvider>
-					</CategoryApiDataProvider>
-				</ApplicationApiDataProvider>
-			</AuthApiDataProvider>
-		</GlobalApiDataProvider>
-	);
+    <GlobalApiDataProvider>
+      <AuthApiDataProvider>
+        <CategoryApiDataProvider>
+          <EducationApiDataProvider>
+            <HistoryApiDataProvider>
+              <EmployerApiDataProvider>
+                <JobApiDataProvider>
+                  <ApplicationApiDataProvider>
+                    <MilestoneApiDataProvider>
+                      <PaymentApiDataProvider>
+                        <PortfolioApiDataProvider>
+                          <SkillsApiDataProvider>
+                            <TestimonialApiDataProvider>
+                              <ProfileApiDataProvider>
+                                <FreelanceApiDataProvider>
+                                  <WalletApiDataProvider>
+                                    {isLoading && <Loader />}
+                                    <Toaster />
+                                    <ScrollToTop />
+                                    <RootLayout />
+                                  </WalletApiDataProvider>
+                                </FreelanceApiDataProvider>
+                              </ProfileApiDataProvider>
+                            </TestimonialApiDataProvider>
+                          </SkillsApiDataProvider>
+                        </PortfolioApiDataProvider>
+                      </PaymentApiDataProvider>
+                    </MilestoneApiDataProvider>
+                  </ApplicationApiDataProvider>
+                </JobApiDataProvider>
+              </EmployerApiDataProvider>
+            </HistoryApiDataProvider>
+          </EducationApiDataProvider>
+        </CategoryApiDataProvider>
+      </AuthApiDataProvider>
+    </GlobalApiDataProvider>
+  );
 }
 
 export default App;

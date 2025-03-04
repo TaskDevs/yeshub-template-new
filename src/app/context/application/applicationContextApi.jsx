@@ -14,15 +14,18 @@ import { GlobalApiData } from "../global/globalContextApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { userId } from "../../../globals/constants";
+import { JobApiData } from "../jobs/jobsContextApi";
 
 
 export const ApplicationApiData = createContext();
 
 
 const ApplicationApiDataProvider = (props) => {
-  
+
+  const [appliedJobs, setAppliedJobs] = useState([]);
    const [selectedOption, setSelectedOption] = useState("milestone");
   const {  setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+  const { processAJobProfile } = useContext(JobApiData)
   const currentpath = useLocation().pathname;
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
@@ -46,7 +49,55 @@ const ApplicationApiDataProvider = (props) => {
 		}));
   }, [selectedOption]);
   
+  const fetchProfileAndMatchJobs = async () => {
+    if (!userId) return;
+
+    try {
+      const res = await processApplicationProfile(userId);
+      const data = res.data.data;
+      // console.log("data", data);
+
+      const uniqueJobsMap = data.reduce((acc, current) => {
+        const existingJob = acc.get(current.job_id);
+        if (
+          !existingJob ||
+          new Date(current.created_at) > new Date(existingJob.created_at)
+        ) {
+          acc.set(current.job_id, current);
+        }
+        return acc;
+      }, new Map());
+
+      const filteredJobs = Array.from(uniqueJobsMap.values());
+
+      const uniqueJobIds = [
+        ...new Set(filteredJobs.map((job) => job.job_id)),
+      ];
+
+      const jobDetailsResponses = await Promise.all(
+        uniqueJobIds.map((jobId) => processAJobProfile(jobId))
+      );
+
+      const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
+        const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+        return {
+          ...appliedJob,
+          jobDetails,
+        };
+      });
+      setAppliedJobs(jobsWithDetails);
+    } catch (error) {
+      console.error("Failed to fetch jobs data", error);
+    }
+  };
   
+  useEffect(() => {
+    
+
+    fetchProfileAndMatchJobs();
+    // const interval = setInterval(fetchProfileAndMatchJobs, 60000);
+    // return () => clearInterval(interval); 
+  }, [userId]);
 
 
 
@@ -111,6 +162,12 @@ const ApplicationApiDataProvider = (props) => {
       toast.error("User does not exist, Please sign in");
       return;
     }
+
+    
+    if (appliedJobs.some((job) => job.job_id === Number(jobId))) {
+      toast.error("You have already applied for this job");
+      return;
+    }
     
     setIsSubmitting(true)
     setTimeout(() => {
@@ -127,6 +184,7 @@ const ApplicationApiDataProvider = (props) => {
 			});
       if (res) {
         // console.log("app-res", res)
+        await fetchProfileAndMatchJobs()
         navigate(`/dashboard-candidate/applied-jobs`)
         setTimeout(() => {
           toast.success("Job applied successfully")
@@ -151,6 +209,8 @@ const ApplicationApiDataProvider = (props) => {
       value={{
         formData,
         selectedOption,
+        appliedJobs, 
+        setAppliedJobs,
         setFormData,
         setSelectedOption,
 				processAddApplication,

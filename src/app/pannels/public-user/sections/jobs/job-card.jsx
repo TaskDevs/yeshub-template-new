@@ -3,6 +3,7 @@ import {  baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
 
 
+
 export const JobsCard = ({
   img,
   duration,

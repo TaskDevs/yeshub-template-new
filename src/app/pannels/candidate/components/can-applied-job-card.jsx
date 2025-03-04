@@ -12,7 +12,7 @@ function CanAppliedJobCard({ data }) {
 
   const { setSelectedId } = useContext(GlobalApiData);
 
-  console.log("data-app-job", data);
+  // console.log("data-app-job", data);
   
 
 

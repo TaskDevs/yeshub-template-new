@@ -1,14 +1,13 @@
 // import JobZImage from "../../../../../common/jobz-img";
-import { useContext, useState } from "react";
+import {  useState } from "react";
 import { publicUrlFor } from "../../../../../../globals/constants";
-import { FreelanceApiData } from "../../../../../context/freelance/freelanceContextApi";
 
-function SectionCandidateShortIntro1({ props, isFreelancer }) {
+
+function SectionCandidateShortIntro1({ props, isFreelancer, freelance }) {
 	const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.user?.profile_image}`);
-	const { freelanceProfileData } = useContext(FreelanceApiData)
-	console.log("freelanceProfileData-details", freelanceProfileData)
 
-	console.log("props", props)
+
+
     return (
 			<>
 				<div
@@ -22,7 +21,7 @@ function SectionCandidateShortIntro1({ props, isFreelancer }) {
 					<div className="overlay-main site-bg-primary opacity-01" />
 					<div className="twm-candi-self-info">
 						<div className="twm-candi-self-top">
-							{isFreelancer && (<div className="twm-candi-fee">₵{freelanceProfileData[0]?.rate} / Day</div>)}
+							{isFreelancer && (<div className="twm-candi-fee">₵{freelance[0]?.rate || "200"} / Day</div>)}
 							<div className="twm-media can-banner-logo">
 								{/* <JobZImage src="images/candidates/pic2.jpg" alt="#" /> */}
 								{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" /> */}

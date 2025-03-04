@@ -1,7 +1,7 @@
 import { MdOutlineEdit } from "react-icons/md";
 import SectionCandicateBasicInfo from "../sections/profile/section-can-basic-info";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import SectionProfileData from "../common/section-profile-data";
 import YesNoPopup from "../../../common/popups/popup-yes-no";
@@ -20,28 +20,17 @@ function CanProfilePage() {
     profileData,
     setFormData,
     setSelectedItems,
-    imgSrc,
-    setImgSrc,
   } = useContext(ProfileApiData);
 
   const { skillOptions } = useContext(SkillsApiData);
   const { handleSubmit, freelanceProfileData, handleUpdateFreelanceProfile, handleEditFreelance } =
     useContext(FreelanceApiData);
+    const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
 
-  // useEffect(() => {
-  //   const fetchProfile = async () => {
-  //     try {
-  //       const res = await processProfileProfile(userId || OAuthUserId);
 
-  //       const data = res?.data.data;
-
-  //       setProfileData(data);
-  //     } catch (error) {
-  //       console.error("Failed Fetching profile", error);
-  //     }
-  //   };
-  //   fetchProfile();
-  // }, [processProfileProfile, setProfileData]);
+  console.log("profileData-profile", profileData.profile_image)
+    
+    
 
   const handleEditClick = () => {
     if (!skillOptions || skillOptions.length === 0) {
@@ -50,17 +39,30 @@ function CanProfilePage() {
     }
 
     const skillsArray = Array.isArray(profileData.skills_id)
-      ? profileData.skills_id.map(String)
-      : typeof profileData.skills_id === "string"
-      ? profileData.skills_id.split(",").map((id) => id.trim())
-      : [];
+    ? profileData.skills_id.map(String)
+    : typeof profileData.skills_id === "string"
+    ? profileData.skills_id.startsWith('[') && profileData.skills_id.endsWith(']')
+        ? JSON.parse(profileData.skills_id).map(String)
+        : profileData.skills_id.split(",").map((id) => id.trim())
+    : [];
 
-    const selectedSkillObjects = skillsArray.map((id) => {
-      const skill = skillOptions.find(
+
+const selectedSkillObjects = skillsArray.map((id) => {
+    const skill = skillOptions.find(
         (skill) => String(skill.id) === String(id)
-      );
-      return skill ? { value: skill.id, label: skill.name } : null;
-    });
+    );
+    if(skill){
+        return { value: skill.id, label: skill.name };
+    } else {
+        console.log("skill id: " + id + " not found in skill options.")
+        return null;
+    }
+});
+
+console.log('Raw selectedSkillObjects:', selectedSkillObjects);
+console.log('Filtered selectedSkillObjects:', 
+  selectedSkillObjects.filter(skill => skill && skill.value !== undefined && skill.value !== null)
+);
 
     setFormData({
       firstname: profileData.firstname,
@@ -74,7 +76,9 @@ function CanProfilePage() {
       experience: profileData.experience,
       profession: profileData.profession,
       bio: profileData.bio,
-      skills_id: selectedSkillObjects.map((skill) => skill.value),
+      skills_id: selectedSkillObjects
+        .filter(skill => skill && skill.value !== undefined && skill.value !== null)
+        .map((skill) => skill.value),
     });
 
     setSelectedItems(selectedSkillObjects);

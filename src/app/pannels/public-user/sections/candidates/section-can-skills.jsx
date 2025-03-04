@@ -12,43 +12,40 @@ function SectionCandidateSkills({ props }) {
       <h4 className="twm-s-title">Skills</h4>
       <div className="tw-sidebar-tags-wrap">
         <div className="tagcloud">
-          {/* {skillOptions?.map((skill) => {
-    // Normalize data.skills_id to an array
-    const normalizedSkills = Array.isArray(props.skills_id)
-      ? props.skills_id
-      : props.skills_id
-          ? props.skills_id.toString().split(',').map(Number) // Convert string to array of numbers
-          : []; // Default to empty array if null or undefined
+         
 
-    // Check if the user has the skill
-    return normalizedSkills.some((userSkill) => userSkill === skill.id) && (
-    //   <li key={skill.id}>
-    //     {console.log("skill.name", skill.name)}
-    //     {skill.name}
-    //   </li>
-      <a href="#" key={skill.id}>  {skill.name}</a>
+{skillOptions?.map((skill) => {
+    // Normalize skills_id to always be an array of numbers
+    const normalizedSkills = (() => {
+        if (!props?.skills_id) return []; // Handle null or undefined
+
+        if (Array.isArray(props?.skills_id)) {
+            return props.skills_id.map((skill) => Number(skill)); // Convert all elements to numbers
+        }
+
+        if (typeof props.skills_id === "string") {
+            return props.skills_id
+                .split(",") // Split by comma
+                .map((skill) => Number(skill.trim())) // Convert each value to number
+                .filter((skill) => !isNaN(skill)); // Remove invalid numbers
+        }
+
+        return []; // Fallback in case of unexpected types
+    })();
+
+    return (
+        normalizedSkills.includes(skill.id) && (
+            <a href="#" key={skill.id}>
+                {skill.name}
+            </a>
+        )
     );
-  })}
- */}
+})}
 
-          {skillOptions?.map((skill) => {
-            const normalizedSkills = Array.isArray(props?.skills_id)
-              ? props.skills_id
-              : props.skills_id
-              ? JSON.parse(props.skills_id).map((skill) => {
-                  return typeof skill === "number" ? skill : Number(skill);
-                })
-              : [];
 
-            // console.log("normalizedSkills", normalizedSkills);
-            return (
-              normalizedSkills.some((userSkill) => userSkill === skill.id) && (
-                <a href="#" key={skill.id}>
-                  {skill.name}
-                </a>
-              )
-            );
-          })}
+
+
+
           {/* <a href="#">Finance</a> */}
           {/* <a href="#">Sales</a>
           <a href="#">Part-time</a>

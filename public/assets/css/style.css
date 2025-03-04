@@ -259,7 +259,7 @@ This files [Table of contents] are outlined below
   width: 100%;
   background: red;
 } */
-@media (min-width: 768px) {
+@media (min-width > 768px) {
   .rightSidebar {
     display: block !important; /* Ensure sidebar is always visible on desktop */
   }

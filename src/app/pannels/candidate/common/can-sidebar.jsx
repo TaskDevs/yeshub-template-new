@@ -4,15 +4,25 @@ import { candidate, canRoute } from "../../../../globals/route-names";
 // import JobZImage from "../../../common/jobz-img";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import { useContext } from "react";
+import { AuthApiData } from "../../../context/auth/authContextApi";
 
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
+	const { profileData } = useContext(ProfileApiData)
+	const { userProfile } = useContext(AuthApiData);
+	const username = userProfile?.username;
 	
+	console.log("username-sidebar", username)
 
     return (
 			<>
 				<div className="twm-candidate-profile-pic">
-					<img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" />
+					{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`} alt="" /> */}
+					<img
+                              src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}` ||"/assets/images/candidates/user-avatar-fallback.jpg" }
+                              alt="user picture"
+                              
+                            />
 					{/* <div className="upload-btn-wrapper">
 						<div id="upload-image-grid" />
 						<button className="site-button button-sm">Upload Photo</button>
@@ -26,7 +36,7 @@ function CanSidebarSection() {
 				</div>
 				<div className="twm-mid-content text-center">
 					<a href="candidate-detail.html" className="twm-job-title">
-						<h4>{profileData?.firstname} {profileData?.lastname} </h4>
+						<h4>{profileData?.firstname || username} {profileData?.lastname} </h4>
 					</a>
 					{/* <p>IT Contractor</p> */}
 				</div>

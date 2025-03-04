@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { loadScript } from "../../../../../globals/constants";
-import JobZImage from "../../../../common/jobz-img";
+
 
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
@@ -83,7 +83,14 @@ function JobDetail1Page() {
 										<div className="twm-job-self-info">
 											<div className="twm-job-self-top">
 												<div className="twm-media-bg">
-													<JobZImage src="images/job-detail-bg.jpg" alt="#" />
+												<img
+												src={
+													profile?.banner
+													? `${profile.banner}`
+													: `${baseURL}/assets/images/no-logo.png`
+												}
+												alt="#"
+												/>
 													{/* <div className="twm-jobs-category green">
 															<span className="twm-bg-green">New</span>
 														</div> */}

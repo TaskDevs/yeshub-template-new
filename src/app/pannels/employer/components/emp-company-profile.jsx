@@ -10,9 +10,9 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
-import {  baseURL } from "../../../../globals/constants";
+import { baseURL } from "../../../../globals/constants";
 import FormatUrl from "../../../../utils/formatUrl";
-import imageCompression from "browser-image-compression";
+
 function EmpCompanyProfilePage() {
   const {
     processEmployerProfile,
@@ -20,73 +20,37 @@ function EmpCompanyProfilePage() {
     processUpdateEmployerLogo,
   } = useContext(EmployerApiData);
   const { isSubmitting } = useContext(GlobalApiData);
-  const {
-    handleSubmitProfile,
-    handleEditClick,
-  } = useContext(ProfileApiData);
+  const { handleSubmitProfile, handleEditClick } = useContext(ProfileApiData);
   const [imageURL, setImageURL] = useState(null);
   const [formData, setFormData] = useState({});
- 
-  // const [selectedFile, setSelectedFile] = useState(null);
-  // const [profileUpdated, setProfileUpdated] = useState(false);
+
+  console.log('LOGO FOR CMPANY: ',formData)
 
   useEffect(() => {
     loadScript("js/custom.js");
     processEmployerProfile();
   }, []);
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     if (selectedImage) {
-      const options = {
-        maxSizeMB: 0.5, // Adjust max size in MB (e.g., 0.5MB)
-        maxWidthOrHeight: 800, // Adjust max width/height in pixels
-        useWebWorker: true,
+      const reader = new FileReader();
+      reader.onload = () => {
+        let logoFile = reader.result;
+        setFormData({ id: employerProfiles?.id, logo: logoFile });
+        setImageURL(reader.result);
       };
-  
-      try {
-        const compressedFile = await imageCompression(selectedImage, options);
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          let logoFile = reader.result;
-          const formData = { id: employerProfiles?.id, logo: logoFile };
-  
-          // Log the data being sent
-          console.log("Data being sent:", formData);
-  
-          setFormData(formData);
-          setImageURL(reader.result);
-        };
-  
-        reader.readAsDataURL(compressedFile);
-      } catch (error) {
-        console.error("Image compression error:", error);
-      }
+      reader.readAsDataURL(selectedImage);
     }
+  };
+
+  const handleSubmitCompanyLogo = () => {
+    console.log(formData);
+    processUpdateEmployerLogo(employerProfiles?.id, formData);
   };
   
 
-  const handleSubmitCompanyLogo = async () => {
-    try {
-      console.log("Submitting company logo:", formData);
-  
-      const response = await processUpdateEmployerLogo(employerProfiles?.id, formData);
-      
-      console.log("Company logo update successful:", response);
-    } catch (error) {
-      console.error("Error updating company logo:", error);
-    }
-  };
-  
 
-  //   useEffect(() => {
-
-  //   }, []);
-
-  // if (!imageURL) {
-  // 	return false;
-  // }
   return (
     <>
       <div className="">
@@ -109,15 +73,18 @@ function EmpCompanyProfilePage() {
                 <div className="form-group">
                   <div className="dashboard-profile-pic">
                     <div className="dashboard-profile-photo">
-                    {!employerProfiles.logo ? (
-  <JobZImage
-    src={imageURL ? FormatUrl(baseURL) + formatImgUrl(imageURL) : ""}
-    alt="Company Image"
-  />
-) : (
-  <img src={employerProfiles.logo} alt="Company Logo" />
-)}
-
+                      {!employerProfiles.logo ? (
+                        <JobZImage
+                          src={
+                            imageURL
+                              ? FormatUrl(baseURL) + formatImgUrl(imageURL)
+                              : ""
+                          }
+                          alt="Company Image"
+                        />
+                      ) : (
+                        <img src={employerProfiles.logo} alt="Company Logo" />
+                      )}
 
                       <div className="upload-btn-wrapper">
                         <div id="upload-image-grid" />

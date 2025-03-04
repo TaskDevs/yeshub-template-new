@@ -2,6 +2,8 @@ import { NavLink } from "react-router-dom";
 import {  baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
 
+
+
 export const JobsCard = ({
   img,
   duration,
@@ -10,11 +12,11 @@ export const JobsCard = ({
   title,
   days_left,
   amount,
+  job_type
 }) => {
   
-
   return (
-    <NavLink to={link} className="twm-jobs-list-style1 mb-5" >
+    <NavLink to={link} className="twm-jobs-list-style1 mb-5">
       <div className="twm-media">
         <img
           src={img ? `${img}` : `${baseURL}/assets/images/no-logo.png`}
@@ -39,13 +41,17 @@ export const JobsCard = ({
       </div>
       <div className="twm-right-content">
         <div className="twm-jobs-category green">
-          <span className="twm-bg-green">Bid Now</span>
+          <span className="twm-bg-green">{job_type}</span>
         </div>
         <div className="twm-jobs-amount">
           {amount}
           {/* <span>/ daily</span> */}
         </div>
-        <p className="twm-jobs-browse bids"> {days_left} days left</p>
+        <p className="twm-jobs-browse bids" style={{ color: days_left === 0 ? "red" : "inherit" }}>
+            {days_left === 0 ? "Expired" : `${days_left} days left`}
+          </p>
+
+
       </div>
     </NavLink>
   );

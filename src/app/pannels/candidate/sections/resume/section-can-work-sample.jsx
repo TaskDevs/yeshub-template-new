@@ -18,6 +18,10 @@ function SectionCanWorkSample() {
   } = useContext(PortfolioApiData);
   const { selectedId, setSelectedId } = useContext(GlobalApiData);
 
+//   console.log("portfolios-sample", portfolios)
+
+
+
   const handleEditClick = (id) => {
     if (!selectedId) {
       toast.error("Please select a portfolio profile");
@@ -91,23 +95,29 @@ function SectionCanWorkSample() {
                           Project Title :{" "}
                           <span>{portfolio.project_title} </span>
                         </div>
-                        {/* <div className="">
-											Role : <span>{portfolio.role} </span>
-										</div> */}
+                       
                         <div className="">
                           skills : <span>{portfolio.skills} </span>
                         </div>
-                        {/* <div className="">
-											date started :{" "}
-											<span>{portfolio.project_start_date} </span>
-										</div> */}
-                        {/* <div className="">
-														date ended :{" "}
-														<span>{portfolio.project_end_date} </span>
-													</div> */}
+                        
                         <div className="">
                           description : <span>{portfolio.description} </span>
                         </div>
+
+                        {portfolio.media.length > 0 &&
+                          portfolio.media.map((m) => (
+                            <div className="" key={m.id}>
+                              Project Link:{" "}
+                              <a
+                                href={m.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+								className="project_link"
+                              >
+                                {m.url}
+                              </a>
+                            </div>
+                          ))}
                       </div>
                     </div>
                   ))}

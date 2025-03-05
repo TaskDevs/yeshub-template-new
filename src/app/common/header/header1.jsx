@@ -1,5 +1,5 @@
 import JobZImage from "../jobz-img";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { base, publicUser } from "../../../globals/route-names";
 import { useContext, useState } from "react";
 import { AuthApiData } from "../../context/auth/authContextApi";
@@ -15,8 +15,7 @@ function Header1({ _config }) {
   const { isSidebarCollapsed, toggleSidebar } = useContext(ProfileApiData);
   const location = useLocation(); // Get the current location
   const isCandidateDashboard = location.pathname.startsWith(base.CANDIDATE_PRE);
-  const isHome = location.pathname === "/index" || location.pathname === "/" || location.pathname === "/about-us"
-  const navigate = useNavigate();
+
   
 
 
@@ -251,27 +250,7 @@ function Header1({ _config }) {
                           </a>
                         </div>
 
-                        {isHome && (
-                          <>
-                          {/* twm-nav-btn-left twm-nav-sign-up */}
-                        <div className=" freelancer-btn">
-                        {/* onClick={() => navigate("/dashboard-candidate/profile")} */}
-                          <button  className="" onClick={() => navigate("/dashboard-candidate/profile")}>
-                           Become A Freelancer
-                          </button></div>
-                        {/* <div className="twm-nav-btn-left">
-                            <a
-                              className="twm-nav-sign-up"
-                              data-bs-toggle="modal"
-                              href="#sign_up_popup2"
-                              role="button"
-                            >
-                              <i className="feather-log-in" /> Log In
-                            </a>
-                          </div> */}
-                          </>
-                          )}
-                        </>
+                         </>
                       ) : (
                         <>
                           <div className="twm-nav-btn-left">

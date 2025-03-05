@@ -4,7 +4,7 @@ import SectionCanAttachment from "../sections/resume/section-can-attachment";
 import SectionCanEducation from "../sections/resume/section-can-education";
 import SectionCanKeySkills from "../sections/resume/section-can-keyskills";
 import SectionCanProjects from "../sections/resume/section-can-projects";
-import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
+// import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
 import { loadScript } from "../../../../globals/constants";
 import SectionCanWorkSample from "../sections/resume/section-can-work-sample";
 
@@ -20,9 +20,9 @@ function CanMyResumePage() {
 			<>
 				<div className="twm-right-section-panel site-bg-gray">
 					{/*Resume Headline*/}
-					<div className="panel panel-default mb-3">
+					{/* <div className="panel panel-default mb-3">
 						<SectionCanResumeHeadline />
-					</div>
+					</div> */}
 					{/*Key Skills*/}
 					<div className="panel panel-default mb-3">
 						<SectionCanWorkSample />

@@ -667,6 +667,37 @@ function Home2Page() {
           </div>
         </div>
       </div>
+
+      <div className="section-full p-t120 p-b90 site-bg-gray twm-bg-ring-wrap2">
+                <div className="twm-bg-ring-right" />
+                <div className="twm-bg-ring-left" />
+                <div className="container">
+                    <div className="wt-separator-two-part">
+                        <div className="row wt-separator-two-part-row">
+                            <div className="col-xl-6 col-lg-6 col-md-12 wt-separator-two-part-left">
+                                
+                                <div className="section-head left wt-small-separator-outer">
+                                    <div className="wt-small-separator site-text-primary">
+                                        <div>Unlock Your Freedom!</div>
+                                    </div>
+                                    <h2 className="wt-title">Ready for more control? Explore freelancing</h2>
+                                </div>
+                                
+                            </div>
+                            <div className="col-xl-6 col-lg-6 col-md-12 wt-separator-two-part-right text-right">
+                                <NavLink to="/dashboard-candidate/profile" className=" site-button">Become a Freelancer</NavLink>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+      </div>
+                   
+                    
+
+
+
+
+
       {/* EXPLORE NEW LIFE END */}
       {/* JOB POST START */}
       {/* <div className="section-full p-t120 p-b90 site-bg-gray twm-bg-ring-wrap2">

@@ -11,18 +11,19 @@ import { SkillsApiData } from "../../context/skills/skillsContextApi";
 import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 import { ApplicationApiData } from "../../context/application/applicationContextApi";
 import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
+import { PortfolioMediaApiData } from "../../context/portfolio-media/portfolioMediaContextApi";
 function YesNoPopup(props) {
 	const navigate = useNavigate();
 
 	const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
 	const { processDeleteEducation } = useContext(EducationApiData);
-	const { processDeleteCategory } = useContext(CategoryApiData);
+	const { handleDeleteCategory } = useContext(CategoryApiData);
 	const { handleDeleteProfile } = useContext(ProfileApiData);
-	const { processDeleteSkills } = useContext(SkillsApiData);
+	const { handleDeleteSkills } = useContext(SkillsApiData);
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
     const { processDeleteApplication } = useContext(ApplicationApiData)
 	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
-
+    const { handleDeletePortfolioMedia } = useContext(PortfolioMediaApiData)
 	
 	
 	const handleLogout = async () => {
@@ -58,19 +59,19 @@ function YesNoPopup(props) {
 		}
 	};
 
-	const handleDeleteCategory = async () => {
-		setIsSubmitting(true);
+	// const handleDeleteCategory = async () => {
+	// 	setIsSubmitting(true);
 
-		try {
-			await processDeleteCategory(selectedId);
-			toast.success("Category deleted successfully");
-		} catch {
-			toast.error("Failed to delete category");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+	// 	try {
+	// 		await processDeleteCategory(selectedId);
+	// 		toast.success("Category deleted successfully");
+	// 	} catch {
+	// 		toast.error("Failed to delete category");
+	// 		return false;
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
+	// };
 
 	const handleDeleteFreelance = async () => {
 		setIsSubmitting(true);
@@ -109,19 +110,19 @@ function YesNoPopup(props) {
 		}
 	};
 
-	const handleDeleteSkills = async () => {
-		setIsSubmitting(true);
-		try {
-			await processDeleteSkills(selectedId);
+	// const handleDeleteSkills = async () => {
+	// 	setIsSubmitting(true);
+	// 	try {
+	// 		await processDeleteSkills(selectedId);
 
-			toast.success("skills deleted successfully");
-		} catch (error) {
-			toast.error("Failed to delete skills");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+	// 		toast.success("skills deleted successfully");
+	// 	} catch (error) {
+	// 		toast.error("Failed to delete skills");
+	// 		return false;
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
+	// };
 
 	const handleDeleteAppliedJob = async () => {
 		if (!selectedId) {
@@ -175,6 +176,9 @@ function YesNoPopup(props) {
 
 			case popupType.DELETE_APPLIED_JOB:
 				return handleDeleteAppliedJob();
+			
+			case popupType.DELETE_PORTFOLIO_MEDIA:
+				return handleDeletePortfolioMedia();
 
 			default:
 				console.warn("Unknown type", props.type);

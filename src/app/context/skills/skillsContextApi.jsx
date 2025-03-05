@@ -15,13 +15,11 @@ const initialData = SKILLSFIELD.fieldDetail.reduce((acc, field) => {
 const SkillsApiDataProvider = (props) => {
   const [skillOptions, setSkillOptions] = useState(null);
   const [formData, setFormData] = useState(initialData);
-  const { selectedId } = useContext(GlobalApiData);
+  const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
   const [skills, setSkills] = useState([]);
   const [skill, setSkill] = useState({});
 
-
-  useEffect(() => {
-	const getAllSkills = async () => {
+  const getAllSkills = async () => {
 		try {
 			const res = await processGetAllSkills();
 			let newData = [];
@@ -49,10 +47,13 @@ const SkillsApiDataProvider = (props) => {
 		}
 	};
 
+  useEffect(() => {
+	
+
 	getAllSkills();
 
-	const interval = setInterval(getAllSkills, 60000);
-    return () => clearInterval(interval); 
+	// const interval = setInterval(getAllSkills, 60000);
+  //   return () => clearInterval(interval); 
 }, []);
 
 
@@ -116,6 +117,7 @@ const SkillsApiDataProvider = (props) => {
     e.preventDefault();
     try {
       await processAddSkills(formData);
+      await getAllSkills();
       toast.success("Skills added successfully");
     } catch (e) {
       toast.error("Failed to add Skills ");
@@ -130,7 +132,7 @@ const SkillsApiDataProvider = (props) => {
     e.preventDefault();
     try {
       const res = await processUpdateSkills(selectedId, formData);
-
+      await getAllSkills();
       toast.success("Skills updated successfully");
       return res;
     } catch (e) {
@@ -142,6 +144,23 @@ const SkillsApiDataProvider = (props) => {
       });
     }
   };
+
+  const handleDeleteSkills = async () => {
+		setIsSubmitting(true);
+		try {
+			await processDeleteSkills(selectedId);
+      await getAllSkills();
+
+			toast.success("skills deleted successfully");
+		} catch (error) {
+			toast.error("Failed to delete skills");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
+
 
   return (
     <SkillsApiData.Provider
@@ -161,6 +180,7 @@ const SkillsApiDataProvider = (props) => {
         handleChange,
         handleAddSkills,
         handleUpdateSkills,
+        handleDeleteSkills
       }}
     >
       {props.children}

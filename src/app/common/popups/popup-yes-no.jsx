@@ -11,6 +11,8 @@ import { SkillsApiData } from "../../context/skills/skillsContextApi";
 import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 import { ApplicationApiData } from "../../context/application/applicationContextApi";
 import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
+import { JobApiData } from "../../context/jobs/jobsContextApi";
+
 function YesNoPopup(props) {
 	const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ function YesNoPopup(props) {
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
     const { processDeleteApplication } = useContext(ApplicationApiData)
 	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
+    const {processDeleteJob} = useContext(JobApiData)
 
 	
 	
@@ -144,6 +147,22 @@ function YesNoPopup(props) {
 		}
 	};
 
+	const handleDeleteJob = async () => {
+		setIsSubmitting(true);
+
+		try {
+			await processDeleteJob(selectedId);
+			toast.success("Job deleted successfully");
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000); 
+		} catch {
+			toast.error("Failed to delete Job");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 
 
@@ -175,6 +194,8 @@ function YesNoPopup(props) {
 
 			case popupType.DELETE_APPLIED_JOB:
 				return handleDeleteAppliedJob();
+			case popupType.DELETE_JOB:
+				return handleDeleteJob()
 
 			default:
 				console.warn("Unknown type", props.type);

@@ -21,6 +21,13 @@ skills
     <div className="twm-time-list-discription">
         <p>{data?.description}</p>
     </div>
+    <div className="twm-time-list-position">
+      {data?.media?.map((url) => (
+        <a key={url.id} href={url.url} target="_blank" rel="noreferrer">
+          {url.url}
+        </a>
+      ))}
+    </div>
 </div>
   )
 }

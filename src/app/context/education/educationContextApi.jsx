@@ -29,7 +29,7 @@ const EducationApiDataProvider = (props) => {
 		try {
 			const res = await addEducation(data);
 			toast.success("Education added successfully");
-			console.log("add-education", res);
+			// console.log("add-education", res);
 			return res;
 		} catch (e) {
 			toast.error("Failed to add education");
@@ -43,7 +43,7 @@ const EducationApiDataProvider = (props) => {
 	const processEducationEducation = async (id) => {
 		try {
 			const res = await educationProfile(id);
-			console.log("get-education", res);
+			// console.log("get-education", res);
 			
 			return res;
 		} catch (e) {
@@ -67,7 +67,7 @@ const EducationApiDataProvider = (props) => {
 	const processDeleteEducation = async (id) => {
 		try {
 			const res = await deleteEducation(id);
-			console.log("delete-education", res);
+			// console.log("delete-education", res);
 			
 			return res;
 		} catch (e) {

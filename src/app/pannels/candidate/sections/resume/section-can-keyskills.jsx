@@ -10,7 +10,7 @@ function SectionCanKeySkills() {
             } = useContext(SkillsApiData);
     const { profileData } = useContext(ProfileApiData)    
 
-	console.log("skillOptions-key-skills", skillOptions)
+	// console.log("skillOptions-key-skills", skillOptions)
     
     return (
 			<>

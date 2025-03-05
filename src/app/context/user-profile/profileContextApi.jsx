@@ -82,17 +82,23 @@ const ProfileApiDataProvider = (props) => {
         setIsLoading(true)
       }, 200)
 
-      const res = await profileList();
+      try{
+        const res = await profileList();
       if (res) {
         // console.log("res-all", res)
         setAllUsersProfile(res.data.data);
       }
-    };
+    } catch (e) {
+      throw new Error("could not fetch all profiles", e);  
+    } finally {
+      setTimeout(() =>{
+        setIsLoading(false)
+      }, 2000)
+    }
+      }
 
     fetchAllProfile();
-    setTimeout(() =>{
-      setIsLoading(false)
-    }, 2000)
+   
    
     // const interval = setInterval(fetchAllProfile, 60000);
     // return () => clearInterval(interval); 

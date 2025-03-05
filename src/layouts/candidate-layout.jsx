@@ -97,6 +97,12 @@ function CandidateLayout() {
           type={popupType.DELETE_APPLIED_JOB}
           msg={"Are you sure you want to delete this job application?"}
         />
+        <YesNoPopup
+          id="delete-portfolio-media"
+          type={popupType.DELETE_PORTFOLIO_MEDIA}
+          msg={"Are you sure you want to delete this potfolio media?"}
+        />
+      
       </div>
     </>
   );

@@ -83,7 +83,7 @@ function EmpCompanyProfilePage() {
         <div className="wt-admin-right-page-header clearfix">
           <h2>Company Profile!</h2>
           <div className="breadcrumbs">
-            <a href="/">Home</a>
+            <a href="/dashboard-employer">Home</a>
             {/* <a href="#">Dasboard</a> */}
             <span>Company Profile</span>
           </div>
@@ -91,7 +91,7 @@ function EmpCompanyProfilePage() {
             <div className="twm-job-self-wrap">
               <div className="twm-job-self-info">
                 <div className="twm-job-self-top">
-                  <div className="twm-media-bg">
+                  <div className="twm-media-bg pt-3">
                   {bannerURL ? ( // Use `bannerURL` directly
                         <img src={bannerURL} alt="Company Banner" />
                       ) : employerProfiles.banner ? (

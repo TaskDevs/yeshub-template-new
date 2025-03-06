@@ -38,7 +38,7 @@ function EmpGetApplicants({ data }) {
             <div className="twm-media-pic">
               <JobZImage
                 src={
-                  data.user.user_info.profile_img ||
+                  data.user.user_info?.profile_img ||
                   "images/candidates/pic1.jpg"
                 }
                 alt="Profile"
@@ -49,10 +49,10 @@ function EmpGetApplicants({ data }) {
 
           <div className="twm-mid-content">
             <a href="#" className="twm-job-title">
-              <h4> {data.user.user_info.firstname} {data.user.user_info.lastname}</h4>
+              <h4> {data.user.user_info?.firstname} {data.user.user_info?.lastname}</h4>
               <p className="twm-bookmark-address">
                 <i className="feather-map-pin" />
-                {data.user.user_info.region}
+                {data.user.user_info?.region}
               </p>
             </a>
           </div>

@@ -11,6 +11,7 @@ function EmpDashboardPage() {
   const { userProfile } = useContext(AuthApiData);
   const username = userProfile?.username;
   const employerId = sessionStorage.getItem("user_id")
+  console.log(employerId)
   //const { paginationData } = useContext(JobApiData);
   // const [error, setError] = useState(null);
   // const [postedJobs, setPostedJobs] = useState(null);
@@ -24,23 +25,10 @@ function EmpDashboardPage() {
 
   useEffect(() => {
     processCountJobsPostedByEmp(employerId);
+    processCountApplications(employerId)
   }, [employerId ]);
 
-
-  useEffect(() => {
-    const fetchJobCount = async () => {
-      try {
-        const response = await processCountApplications(employerId);
-        console.log("Total application:", response);
-      } catch (error) {
-        console.error("Error fetching job count:", error);
-      }
-    };
-  
-    if (employerId) {
-      fetchJobCount();
-    }
-  }, [employerId]);
+console.log(totalAppliedJob)
   
   
   return (

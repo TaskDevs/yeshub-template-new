@@ -127,8 +127,8 @@ export const countApplications= async (id) => {
       `${REACT_BASE_URL}applications/count/${id}`
     );
 
-    if ( responseOnCountApplications .status == 200) {
-      return responseOnCountApplications.data.data;
+    if ( responseOnCountApplications.status == 200) {
+      return responseOnCountApplications.data.total_applications;
     } else {
       return false;
     }

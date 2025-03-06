@@ -11,10 +11,10 @@ import { SkillsApiData } from "../../context/skills/skillsContextApi";
 import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 import { ApplicationApiData } from "../../context/application/applicationContextApi";
 import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
-import { PortfolioMediaApiData } from "../../context/portfolio-media/portfolioMediaContextApi";
+import { JobApiData } from "../../context/jobs/jobsContextApi";
+
 function YesNoPopup(props) {
 	const navigate = useNavigate();
-
 	const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
 	const { processDeleteEducation } = useContext(EducationApiData);
 	const { handleDeleteCategory } = useContext(CategoryApiData);
@@ -23,8 +23,7 @@ function YesNoPopup(props) {
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
     const { processDeleteApplication } = useContext(ApplicationApiData)
 	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
-    const { handleDeletePortfolioMedia } = useContext(PortfolioMediaApiData)
-	
+    const {processDeleteJob} = useContext(JobApiData)
 	
 	const handleLogout = async () => {
 		const result = await logout(); // Await logout function
@@ -145,6 +144,22 @@ function YesNoPopup(props) {
 		}
 	};
 
+	const handleDeleteJob = async () => {
+		setIsSubmitting(true);
+
+		try {
+			await processDeleteJob(selectedId);
+			toast.success("Job deleted successfully");
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000); 
+		} catch {
+			toast.error("Failed to delete Job");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
 
 
 
@@ -176,9 +191,8 @@ function YesNoPopup(props) {
 
 			case popupType.DELETE_APPLIED_JOB:
 				return handleDeleteAppliedJob();
-			
-			case popupType.DELETE_PORTFOLIO_MEDIA:
-				return handleDeletePortfolioMedia();
+			case popupType.DELETE_JOB:
+				return handleDeleteJob()
 
 			default:
 				console.warn("Unknown type", props.type);

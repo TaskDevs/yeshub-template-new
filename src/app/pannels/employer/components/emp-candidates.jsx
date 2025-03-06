@@ -118,7 +118,7 @@ function EmpCandidatesPage() {
       <Button 
       icon="pi pi-eye"
       className="p-button p-button-sm p-button-info"
-      onClick={() => handleViewCandidates(rowData.user.user_info.user_id)}
+      onClick={() => handleViewCandidates(rowData.user.user_info?.user_id)}
       />
       
     

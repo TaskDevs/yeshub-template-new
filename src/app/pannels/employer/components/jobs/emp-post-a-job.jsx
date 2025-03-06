@@ -3,15 +3,17 @@ import { POSTJOBFIELD } from "../../../../../globals/post-job-data";
 import JobInputField from "../../../../common/job-input-field";
 import JobSelectField from "../../../../common/job-select-field";
 import JobMultiSelectField from "../../../../common/job-multi-select-field";
+
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 // import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import Select from "react-select";
+import { Dropdown } from "primereact/dropdown";
 import { ToastContainer } from "react-toastify";
 import ReactQuill from "react-quill";
 import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
+import DateField from "../../../../common/date-field";
 
 function EmpPostAJobPage() {
   const { processAddJob } = useContext(JobApiData);
@@ -23,6 +25,8 @@ function EmpPostAJobPage() {
     jobRoles: [],
   });
 
+
+  console.log("skilss:", skillOptions)
   useEffect(() => {
     const fetchAllCategories = async () => {
       try {
@@ -121,33 +125,36 @@ function EmpPostAJobPage() {
                   }}
                 />
               </div>
-              {/*Job Category*/}
-              <div className="col-xl-4 col-lg-6 col-md-12 rounded-lg">
+              <div className="p-field p-mb-3 col-xl-4 col-lg-6 col-md-12">
                 <label
                   htmlFor="category"
-                  className="block text-gray-700 text-sm font-medium mb-2"
+                  className="p-text-secondary p-d-block p-mb-2 p-font-bold"
                 >
                   Select Category
                 </label>
-
-                <Select
+                <div className="p-inputgroup p-shadow-3 p-rounded-lg">
+                <div className="p-inputgroup-addon">
+              <i className="fs-input-icon fa fa-border-all" style={{ fontSize: '1.2rem', color: '#6c757d' }} />
+            </div>
+                <Dropdown
                   id="category"
-                  className="w-full border border-gray-300 bg-grey-400 rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 text-gray-700"
-                  classNamePrefix="custom-select"
+                  value={formData.job_category_id || null} // Directly use job_category_id
                   options={categoryOptions}
-                  value={categoryOptions.find(
-                    (option) => option.value === formData.job_category_id
-                  )} // Ensure job_category_id is used
-                  onChange={(selectedOption) =>
-                    handleInputChange("job_category_id", selectedOption?.value)
-                  } // Ensure job_category_id is updated
-                  isSearchable={true}
+                  onChange={(e) =>
+                    handleInputChange("job_category_id", e.value)
+                  }
                   placeholder="Select a category..."
-                  menuPortalTarget={document.body}
-                  styles={{
-                    menuPortal: (base) => ({ ...base, zIndex: 1000 }),
+                  className="p-dropdown p-p-2 p-border-round p-shadow-1 "
+                  optionLabel="label"
+                  optionValue="value"
+                  filter
+                  showClear
+                  style={{ width: "100%", fontSize: "1rem" }}
+                  pt={{
+                    item: { style: { padding: "8px 12px" } },
                   }}
                 />
+              </div>
               </div>
 
               {/*Job Type*/}
@@ -245,7 +252,7 @@ function EmpPostAJobPage() {
 
               {/*Start Date*/}
               <div className="col-md-6">
-                <JobInputField
+                <DateField
                   field={POSTJOBFIELD.fieldDetail[10]}
                   value={formData}
                   change={(data, field) => {
@@ -255,7 +262,7 @@ function EmpPostAJobPage() {
               </div>
               {/*End Date*/}
               <div className="col-md-6">
-                <JobInputField
+                <DateField
                   field={POSTJOBFIELD.fieldDetail[11]}
                   value={formData}
                   change={(data, field) => {
@@ -263,7 +270,7 @@ function EmpPostAJobPage() {
                   }}
                 />
               </div>
-              <div className="col-lg-12 col-md-12">
+              <div className="col-lg-12 col-md-12 pt-3">
                 <div className="text-left">
                   <button
                     type="submit"

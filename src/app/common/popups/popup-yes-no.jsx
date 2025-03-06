@@ -15,18 +15,15 @@ import { JobApiData } from "../../context/jobs/jobsContextApi";
 
 function YesNoPopup(props) {
 	const navigate = useNavigate();
-
 	const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
 	const { processDeleteEducation } = useContext(EducationApiData);
-	const { processDeleteCategory } = useContext(CategoryApiData);
+	const { handleDeleteCategory } = useContext(CategoryApiData);
 	const { handleDeleteProfile } = useContext(ProfileApiData);
-	const { processDeleteSkills } = useContext(SkillsApiData);
+	const { handleDeleteSkills } = useContext(SkillsApiData);
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
     const { processDeleteApplication } = useContext(ApplicationApiData)
 	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
     const {processDeleteJob} = useContext(JobApiData)
-
-	
 	
 	const handleLogout = async () => {
 		const result = await logout(); // Await logout function
@@ -61,19 +58,19 @@ function YesNoPopup(props) {
 		}
 	};
 
-	const handleDeleteCategory = async () => {
-		setIsSubmitting(true);
+	// const handleDeleteCategory = async () => {
+	// 	setIsSubmitting(true);
 
-		try {
-			await processDeleteCategory(selectedId);
-			toast.success("Category deleted successfully");
-		} catch {
-			toast.error("Failed to delete category");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+	// 	try {
+	// 		await processDeleteCategory(selectedId);
+	// 		toast.success("Category deleted successfully");
+	// 	} catch {
+	// 		toast.error("Failed to delete category");
+	// 		return false;
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
+	// };
 
 	const handleDeleteFreelance = async () => {
 		setIsSubmitting(true);
@@ -112,19 +109,19 @@ function YesNoPopup(props) {
 		}
 	};
 
-	const handleDeleteSkills = async () => {
-		setIsSubmitting(true);
-		try {
-			await processDeleteSkills(selectedId);
+	// const handleDeleteSkills = async () => {
+	// 	setIsSubmitting(true);
+	// 	try {
+	// 		await processDeleteSkills(selectedId);
 
-			toast.success("skills deleted successfully");
-		} catch (error) {
-			toast.error("Failed to delete skills");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+	// 		toast.success("skills deleted successfully");
+	// 	} catch (error) {
+	// 		toast.error("Failed to delete skills");
+	// 		return false;
+	// 	} finally {
+	// 		setIsSubmitting(false);
+	// 	}
+	// };
 
 	const handleDeleteAppliedJob = async () => {
 		if (!selectedId) {

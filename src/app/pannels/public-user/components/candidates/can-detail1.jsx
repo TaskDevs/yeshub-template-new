@@ -136,7 +136,7 @@ const isFreelancer = user ? user.is_freelancer : false;
               <div className=" col-lg-4 rightSidebar">
                 {/* <SectionEmployersCandidateSidebar type="1" /> */}
                 <div className="side-bar-2 m-t20 m-b10">
-                <SectionProfile data={candidate.user} isFreelancer={isFreelancer}  freelance={freelance} />
+                <SectionProfile data={candidate.user} isFreelancer={isFreelancer} freelance={freelance} email={candidate.email}/>
                 </div>
               </div>
 

@@ -128,6 +128,7 @@ const PortfolioApiDataProvider = (props) => {
       value={{
         formData,
         portfolios,
+        fetchAllPortfolio,
         setFormData,
         setPortfolios,
         handleChange,

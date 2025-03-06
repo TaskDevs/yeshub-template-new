@@ -194,6 +194,16 @@ This files [Table of contents] are outlined below
   
 }
 
+@media (max-width: 768px) {
+  .section-panel{
+    grid-template-columns: 100px 1fr ; 
+  }
+
+  .sec-cat-details {
+    flex-direction: column;
+  }
+}
+
 .category-desc {
   width: 100%;
  
@@ -254,6 +264,13 @@ This files [Table of contents] are outlined below
 .sec-educ:hover {
    background: #D6D6D6;
 }
+
+.media-lists>ul>li {
+  text-transform: lowercase;
+  font-size: 0.85rem;
+  transition: 0.5s all ease;
+}
+
 /* .bg-red {
  
   width: 100%;
@@ -296,8 +313,6 @@ This files [Table of contents] are outlined below
   color: #305718!important;
   background: none;
   font-weight: 500;
-  
-  
 }
 
 @media (max-width: 480px) {
@@ -317,6 +332,19 @@ This files [Table of contents] are outlined below
 }
 .portfolio-list {
   margin-right: 10px;
+}
+
+.project_link {
+  color: #007BFF;
+  cursor: pointer;
+  transition: 0.5s all ease;
+  text-transform: lowercase;
+  
+}
+.project_link:hover, .media-lists>ul>li:hover {
+  color: #0056b3;
+  text-decoration: underline;
+  /* border-bottom: 1px #0056b3 solid;  */
 }
 
 
@@ -10058,6 +10086,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 }
 .can-insights {
   justify-content: space-between;
+  margin-bottom: 5rem;
   /* background: purple; */
 }
 @media (max-width: 480px) {
@@ -10066,9 +10095,10 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   }
   .twm-can-pro-info {
     /* gap: 0.5rem; */
-    /* background: green; */
+    background: green;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
   }
    .star-icon:not(.star-1) {
     display: none;

@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 import CategoryForm from "./category-form";
-import { GlobalApiData } from "../../../../context/global/globalContextApi";
+// import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import YesNoPopup from "../../../../common/popups/popup-yes-no";
 import { popupType } from "../../../../../globals/constants";
 import { MdOutlineEdit } from "react-icons/md";
@@ -9,33 +9,30 @@ import { FaRegTrashCan } from "react-icons/fa6";
 
 
 function AddCategories() {
-	const { processGetAllCategory, handleAddCategory } =
+	const { allCategories, selectedCategory, setSelectedCategory, handleAddCategory, handleSelected } =
 		useContext(CategoryApiData);
-
-	const [allCategories, setAllCategories] = useState([]);
-	const [selectedCategory, setSelectedCategory] = useState(null);
-	const { setSelectedId } = useContext(GlobalApiData);
+	// const { setSelectedId } = useContext(GlobalApiData);
 	const { processCategoryProfile, handleUpdateCategory, setFormData } =
 		useContext(CategoryApiData);
 
 
-	useEffect(() => {
-		const fetchAllCategories = async () => {
-			try {
-				const res = await processGetAllCategory();
-				const data = res.data.data;
-				setAllCategories(data);
+	// useEffect(() => {
+	// 	const fetchAllCategories = async () => {
+	// 		try {
+	// 			const res = await processGetAllCategory();
+	// 			const data = res.data.data;
+	// 			setAllCategories(data);
 
 				
-				if (data.length > 0 && !selectedCategory) {
-					handleSelected(data[0].id);
-				}
-			} catch (err) {
-				console.error("could not fetch categories", err);
-			}
-		};
-		fetchAllCategories();
-	}, [processGetAllCategory]);
+	// 			if (data.length > 0 && !selectedCategory) {
+	// 				handleSelected(data[0].id);
+	// 			}
+	// 		} catch (err) {
+	// 			console.error("could not fetch categories", err);
+	// 		}
+	// 	};
+	// 	fetchAllCategories();
+	// }, [processGetAllCategory]);
 
 	useEffect(() => {
 		const fetchCategory = async () => {
@@ -55,13 +52,13 @@ function AddCategories() {
 		fetchCategory();
 	}, [selectedCategory?.id, processCategoryProfile]);
 
-	const handleSelected = (id) => {
-		if (selectedCategory?.id === id) return; 
+	// const handleSelected = (id) => {
+	// 	if (selectedCategory?.id === id) return; 
 
-		const selected = allCategories.find(cat => cat.id === id);
-		setSelectedCategory(selected);
-		setSelectedId(id);
-	};
+	// 	const selected = allCategories.find(cat => cat.id === id);
+	// 	setSelectedCategory(selected);
+	// 	setSelectedId(id);
+	// };
 
 	const handleEditClick = () => {
 		if (!selectedCategory) return;

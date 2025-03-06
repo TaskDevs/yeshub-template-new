@@ -3,8 +3,7 @@ import { LuMessageSquare } from "react-icons/lu";
 import { MdOutlineStarRate } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
-// import { LOCAL_BACKEND_URL } from "../../../../../globals/constants";
+
 
 // https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/
 
@@ -13,8 +12,8 @@ function CandidateCard({ data }) {
   const [imgSrc, setImgSrc] = useState(
     `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${data?.profile_image}`
   );
- const { freelanceProfileData } = useContext(FreelanceApiData)
-//  console.log("data", data)
+
+ console.log("data-can-list", data)
  
   return (
     <li>
@@ -152,7 +151,7 @@ function CandidateCard({ data }) {
               {data?.is_freelancer && (
               <li className="pro-info-lists">
                
-                <span className=" twm-candidates-tag-rate">₵{freelanceProfileData[0]?.rate}</span>/ per hour
+                <span className=" twm-candidates-tag-rate">₵{data.freelancer_details?.rate}</span>/ per hour
               </li>
                )}
             </ul>

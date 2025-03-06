@@ -1,6 +1,6 @@
 
-function SectionProfile({ data, isFreelancer, freelance }) {
-   
+function SectionProfile({ data, isFreelancer, freelance, email }) {
+   console.log("data-profile-sec", data)
 
 
 
@@ -46,7 +46,7 @@ telephone
                         <div className="twm-s-info-inner">
                             <i className="fas fa-at" />
                             <span className="twm-title">Email</span>
-                            <div className="twm-s-info-discription">thewebmaxdemo@gmail.com</div>
+                            <div className="twm-s-info-discription">{email || "thewebmaxdemo@gmail.com"}</div>
                         </div>
                     </li>
                     <li>

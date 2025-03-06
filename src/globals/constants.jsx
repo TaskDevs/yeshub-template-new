@@ -31,7 +31,6 @@ export const popupType = {
    DELETE_PORTFOLIO: "DELETE_PORTFOLIO",
    DELETE_APPLIED_JOB: "DELETE_APPLIED_JOB",
    DELETE_JOB:"DELETE_JOB",
-   
 };
 
 export const formType = {

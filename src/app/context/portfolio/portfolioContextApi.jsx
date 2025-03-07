@@ -18,7 +18,7 @@ const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
 }, {});
 
 const PortfolioApiDataProvider = (props) => {
-  const { setIsSubmitting, selectedId } = useContext(GlobalApiData);
+  const { setIsSubmitting, selectedId, setSelectedId } = useContext(GlobalApiData);
   const [portfolios, setPortfolios] = useState([]);
   const [formData, setFormData] = useState(initialData);
 
@@ -116,6 +116,7 @@ const PortfolioApiDataProvider = (props) => {
     } finally {
       setIsSubmitting(false);
       setFormData(initialData);
+      setSelectedId(null)
     }
   };
 

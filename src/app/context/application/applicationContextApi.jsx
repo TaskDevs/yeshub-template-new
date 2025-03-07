@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 
 import {
@@ -8,12 +8,12 @@ import {
   updateApplication,
   deleteApplication,
 } from "./applicationApi";
-import { APPLICATIONFIELD } from "../../../globals/application-data";
+// import { APPLICATIONFIELD } from "../../../globals/application-data";
 
 import { GlobalApiData } from "../global/globalContextApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { userId } from "../../../globals/constants";
+import { freelancerId, userId } from "../../../globals/constants";
 import { JobApiData } from "../jobs/jobsContextApi";
 
 
@@ -23,31 +23,19 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
 
   const [appliedJobs, setAppliedJobs] = useState([]);
-   const [selectedOption, setSelectedOption] = useState("milestone");
-  const {  setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+   
+  const {  selectedId, setSelectedId, setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const { processAJobProfile } = useContext(JobApiData)
   const currentpath = useLocation().pathname;
+  const [profile, setProfile] = useState({});
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
+
+  console.log("jobId", jobId)
+  console.log("profile-appctx", profile)
  
-     
-  
-  const initialData = APPLICATIONFIELD.fieldDetail.slice(2).reduce(
-		(acc, field) => {
-			acc[field.name] = "";
-			return acc;
-		},
-		{ selectedOption }
-	);
 
-   const [formData, setFormData] = useState(initialData)
-
-  useEffect(() => {
-		setFormData((prev) => ({
-			...prev,
-			selectedOption, 
-		}));
-  }, [selectedOption]);
+ 
   
   const fetchProfileAndMatchJobs = async () => {
     if (!userId) return;
@@ -92,14 +80,34 @@ const ApplicationApiDataProvider = (props) => {
   };
   
   useEffect(() => {
-    
-
     fetchProfileAndMatchJobs();
-    // const interval = setInterval(fetchProfileAndMatchJobs, 60000);
-    // return () => clearInterval(interval); 
   }, [userId]);
 
+  const fetchJobProfile = async () => {
+    setTimeout(() => {
+      setIsLoading(true)
+    }, 200)
+    try {
+      
+      const res = await processAJobProfile(jobId);
+    console.log("res-jprofile", res)
+    setProfile(res?.data)
+    } catch (e) {
+      throw new Error("Failed to fetch job profile", e)
+    }finally {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 2000)
+    }
+    
+  }
 
+  useEffect(() => {
+    fetchJobProfile()
+  }, [jobId]);
+
+
+  console.log("freelancerId-global", freelancerId === "undefined")
 
 
 
@@ -156,11 +164,30 @@ const ApplicationApiDataProvider = (props) => {
   };
 
   const handleSubmmitApplication = async () => {
+
     
     if (!userId)
     {
       toast.error("User does not exist, Please sign in");
       return;
+    }
+
+    if (profile.job_type === "Freelance") {
+      if (freelancerId === "undefined") {
+        toast.error("Please sign up as freelancer to apply.")
+        return;
+      }
+      navigate(`/apply-job/${jobId}`)
+     return;
+    }
+
+
+    if (profile.job_type === "Full Time") {
+      if (freelancerId !== "undefined")
+        {
+          toast.error("A freelancer can not apply for this job")
+         return;
+        }
     }
 
     
@@ -169,11 +196,18 @@ const ApplicationApiDataProvider = (props) => {
       return;
     }
     
+    if (freelancerId !== "undefined")
+      {
+       navigate(`/apply-job/${jobId}`)
+       return;
+      }
+    
+
     setIsSubmitting(true)
     setTimeout(() => {
       setIsLoading(true)
     }, 200)
-  //  console.log("emp-id-apply", selectedId)
+ 
     try {
       const res =  await processAddApplication({
 				user_id: userId,
@@ -193,8 +227,8 @@ const ApplicationApiDataProvider = (props) => {
      
     } catch {
       setTimeout(() => {
-        toast.error("Failed to apply job")
-      }, 3000)
+        toast.error("Failed to apply")
+      }, 3100)
       return false;
     } finally {
       setIsSubmitting(false);
@@ -204,21 +238,44 @@ const ApplicationApiDataProvider = (props) => {
     }
   }
 
+
+  const handleDeleteAppliedJob = async () => {
+		if (!selectedId) {
+			toast.error("Please select the applied job to delete");
+			return;
+		}
+		setIsSubmitting(true);
+
+		try {
+			const res = await processDeleteApplication(selectedId);
+       await fetchProfileAndMatchJobs();
+			if (res) {
+				console.log("deleted job", res)
+				toast.success("Job deleted successfully");
+			}
+		} catch {
+			toast.error("Failed to delete job applied");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+      setSelectedId("")
+		}
+	}
+
   return (
 		<ApplicationApiData.Provider
       value={{
-        formData,
-        selectedOption,
+        
         appliedJobs, 
         setAppliedJobs,
-        setFormData,
-        setSelectedOption,
+        fetchProfileAndMatchJobs,    
 				processAddApplication,
 				processGetAllApplication,
 				processApplicationProfile,
 				processSearchApplication,
 				processUpdateApplication,
 				processDeleteApplication,
+        handleDeleteAppliedJob,
 				handleSubmmitApplication,
 			}}
 		>

@@ -25,6 +25,8 @@ function SectionJobsList() {
     const timeDiff = endDate.getTime() - today.getTime();
     return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
   };
+
+  
   return (
     <>
       <div>

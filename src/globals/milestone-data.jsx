@@ -1,39 +1,20 @@
 export const   MILESTONEFIELD = {
 	fieldDetail: [
 		{
-			name: "description",
-			label: "description",
-			type: "type",
-			placeholder: "",
-		},
-		{
-			name: "due_date",
-			label: "",
-			type: "date",
-			placeholder: "",
-		},
-
-		{
-			name: "amount",
-			label: "",
-			type: "",
-			placeholder: "",
-		},
-		{
 			name: "title",
-			label: "",
-			type: "",
-			placeholder: "",
-		},
-		{
-			name: "freelace_status",
-			label: "Description",
+			label: "Title",
 			type: "text",
 			placeholder: "",
 		},
 		{
-			name: "employer_status",
-			label: "status",
+			name: "amount",
+			label: "Amount",
+			type: "",
+			placeholder: "0.00",
+		},
+		{
+			name: "description",
+			label: "Description",
 			type: "text",
 			placeholder: "",
 		},
@@ -42,5 +23,40 @@ export const   MILESTONEFIELD = {
 		
 	],
 };
+
+
+// {
+// 	name: "duration",
+// 	label: "",
+// 	type: "",
+// 	placeholder: "Select a duration",
+// },
+// {
+// 	name: "description",
+// 	label: "description",
+// 	type: "type",
+// 	placeholder: "",
+// },
+// {
+// 	name: "due_date",
+// 	label: "",
+// 	type: "date",
+// 	placeholder: "",
+// },
+
+
+
+// {
+// 	name: "group1",
+// 	label: "milestone",
+// 	type: "radio",
+// 	placeholder: "",
+// },
+// {
+// 	name: "group1",
+// 	label: "Project",
+// 	type: "radio",
+// 	placeholder: "",
+// },
 
 

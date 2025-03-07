@@ -16,7 +16,7 @@ import { userId } from "../../../globals/constants";
 export const EducationApiData = createContext();
 
 const EducationApiDataProvider = (props) => {
-	const { setIsSubmitting, selectedId } = useContext(GlobalApiData);
+	const { setIsSubmitting, selectedId, setSelectedId } = useContext(GlobalApiData);
 
 	const initialFormData = EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
 		acc[field.name] = "";
@@ -105,6 +105,7 @@ const EducationApiDataProvider = (props) => {
 		} finally {
 			setIsSubmitting(false);
 			setFormData(initialFormData);
+			setSelectedId(null)
 		}
 	};
 

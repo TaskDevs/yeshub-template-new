@@ -59,7 +59,7 @@ const CategoryApiDataProvider = (props) => {
 	const processAddCategory = async (data) => {
 		try {
 			const res = await addCategory(data);
-			console.log("add-category", res);	
+			// console.log("add-category", res);	
 				return res;
 			
 		} catch (error) {
@@ -72,7 +72,7 @@ const CategoryApiDataProvider = (props) => {
 	const processGetAllCategory = async () => {
 	try {
 			const res = await catgoryList();
-			console.log("getall-category", res);
+			// console.log("getall-category", res);
 
 				return res;
 			
@@ -168,6 +168,7 @@ const CategoryApiDataProvider = (props) => {
 			toast.error("Failed to update category");
 	} finally {
 		setFormData(initialData)
+		setSelectedId("");
 		}
 };
 
@@ -183,6 +184,7 @@ const handleDeleteCategory = async () => {
 		return false;
 	} finally {
 		setIsSubmitting(false);
+		setSelectedId("");
 	}
 };
   

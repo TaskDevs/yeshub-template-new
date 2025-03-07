@@ -59,7 +59,7 @@ const EmployerApiDataProvider = (props) => {
     if (response) {
       setEmployerProfiles(response.data);
     } else {
-      notify(400, "Failed to fetch employer profile");
+      return false
     }
   };
   
@@ -67,6 +67,9 @@ const EmployerApiDataProvider = (props) => {
     let response = await updateEmployerLogo(id, data);
     if (response) {
       notify(200, "Company Added Successfully");
+      setTimeout(() => {
+        window.location.reload();
+    }, 1000); 
     } else {
       notify(400, "Failed to Add Company");
     }

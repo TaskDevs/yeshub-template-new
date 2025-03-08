@@ -43,6 +43,7 @@ function SectionJobsList() {
               days_left={calculateDaysLeft(item.start_date, item.end_date)}
               link={`/job-detail/${item.id}`}
               employerId = {item.employer_id}
+              skills={item.skills_id}
             />
           ))}
         </div>

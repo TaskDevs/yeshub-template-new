@@ -6,6 +6,7 @@ import {
   employerProfile,
   updateEmployer,
   deleteEmployer,
+  updateEmployerBanner,
 } from "./employerApi";
 
 export const EmployerApiData = createContext();
@@ -26,13 +27,15 @@ const EmployerApiDataProvider = (props) => {
       user_id: userId, // Use the logged-in user ID
     };
   
-    console.log("Final Data being sent to addEmployer API:", requestData); // Debugging log
-  
     let response = await addEmployer(requestData);
   
     if (response) {
       console.log("API Response:", response); // Log the API response
       notify(200, "Company Added Successfully");
+      // Reload the page after a short delay (optional)
+      setTimeout(() => {
+        window.location.reload();
+    }, 1000); 
     } else {
       console.error("Failed to Add Company, API Response:", response);
       notify(400, "Failed to Add Company");
@@ -56,12 +59,24 @@ const EmployerApiDataProvider = (props) => {
     if (response) {
       setEmployerProfiles(response.data);
     } else {
-      notify(400, "Failed to fetch employer profile");
+      return false
     }
   };
   
   const processUpdateEmployerLogo = async (id, data) => {
     let response = await updateEmployerLogo(id, data);
+    if (response) {
+      notify(200, "Company Added Successfully");
+      setTimeout(() => {
+        window.location.reload();
+    }, 1000); 
+    } else {
+      notify(400, "Failed to Add Company");
+    }
+  };
+
+  const processUpdateEmployerBanner = async (id, data) => {
+    let response = await updateEmployerBanner(id, data);
     if (response) {
       notify(200, "Company Added Successfully");
     } else {
@@ -104,6 +119,7 @@ const EmployerApiDataProvider = (props) => {
         processSearchEmployer,
         processUpdateEmployer,
         processUpdateEmployerLogo,
+        processUpdateEmployerBanner,
         processDeleteEmployer,
         employerProfiles,
       }}

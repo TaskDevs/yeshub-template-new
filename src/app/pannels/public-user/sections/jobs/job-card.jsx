@@ -12,10 +12,14 @@ export const JobsCard = ({
   title,
   days_left,
   amount,
-  job_type
+  job_type,
+
 }) => {
-  
+
+
+
   return (
+     
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
       <div className="twm-media">
         <img
@@ -54,5 +58,6 @@ export const JobsCard = ({
 
       </div>
     </NavLink>
+   
   );
 };

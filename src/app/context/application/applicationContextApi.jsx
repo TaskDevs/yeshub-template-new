@@ -23,7 +23,6 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
 
   const [appliedJobs, setAppliedJobs] = useState([]);
-   
   const {  selectedId, setSelectedId, setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const { processAJobProfile } = useContext(JobApiData)
   const currentpath = useLocation().pathname;
@@ -31,7 +30,10 @@ const ApplicationApiDataProvider = (props) => {
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
 
-  // console.log("jobId", jobId)
+  // console.log("jobId-params", id)
+  // sessionStorage.setItem("Job_id", jobId)
+
+
   // console.log("profile-appctx", profile)
  
 
@@ -43,7 +45,7 @@ const ApplicationApiDataProvider = (props) => {
     try {
       const res = await processApplicationProfile(userId);
       const data = res.data.data;
-      // console.log("data", data);
+      // console.log("data-applied-ctx", data);
 
       const uniqueJobsMap = data.reduce((acc, current) => {
         const existingJob = acc.get(current.job_id);
@@ -58,12 +60,17 @@ const ApplicationApiDataProvider = (props) => {
 
       const filteredJobs = Array.from(uniqueJobsMap.values());
 
+
+      // console.log("uniqueJobsMap-appctx", uniqueJobsMap)
+
       const uniqueJobIds = [
         ...new Set(filteredJobs.map((job) => job.job_id)),
       ];
+      
+      // console.log("uniqueJobIds-appctx", uniqueJobIds)
 
       const jobDetailsResponses = await Promise.all(
-        uniqueJobIds.map((jobId) => processAJobProfile(jobId))
+        uniqueJobIds.map((id) => processAJobProfile(id))
       );
 
       const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
@@ -73,6 +80,8 @@ const ApplicationApiDataProvider = (props) => {
           jobDetails,
         };
       });
+
+      // console.log("jobsWithDetails", jobsWithDetails)
       setAppliedJobs(jobsWithDetails);
     } catch (error) {
       console.error("Failed to fetch jobs data", error);
@@ -90,7 +99,7 @@ const ApplicationApiDataProvider = (props) => {
     try {
       
       const res = await processAJobProfile(jobId);
-    console.log("res-jprofile", res)
+    
     setProfile(res?.data)
     } catch (e) {
       throw new Error("Failed to fetch job profile", e)
@@ -250,7 +259,7 @@ const ApplicationApiDataProvider = (props) => {
 			const res = await processDeleteApplication(selectedId);
        await fetchProfileAndMatchJobs();
 			if (res) {
-				console.log("deleted job", res)
+				
 				toast.success("Job deleted successfully");
 			}
 		} catch {

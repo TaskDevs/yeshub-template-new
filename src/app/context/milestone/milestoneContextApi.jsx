@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, } from "react";
+import React, { createContext, useState, useContext, useEffect, } from "react";
 
 import {
   addMilestone,
@@ -7,11 +7,12 @@ import {
   deleteMilestone,
 } from "./milestoneApi";
 import { MILESTONEFIELD } from "../../../globals/milestone-data";
-import { ApplicationApiData } from "../application/applicationContextApi";
+// import { ApplicationApiData } from "../application/applicationContextApi";
 import { freelancerId, userId } from "../../../globals/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GlobalApiData } from "../global/globalContextApi";
+import { JobApiData } from "../jobs/jobsContextApi";
 
 
 const initialData = MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
@@ -32,11 +33,14 @@ const MilestoneApiDataProvider = (props) => {
   
   const [selectedOption, setSelectedOption] = useState("milestone");
   const [formData, setFormData] = useState(initialData)
-  const {  fetchProfileAndMatchJobs, appliedJobs } = useContext(ApplicationApiData)
+  const { processAJobProfile } = useContext(JobApiData)
+  const [appliedMilestones, setAppliedMilestones] = useState([]);
   const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const currentpath = useLocation().pathname;
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
+
+  console.log("jobId-milestone", freelancerId)
 
   const completeInitialMilestone = {
     ...initialMilestone,
@@ -49,6 +53,61 @@ const MilestoneApiDataProvider = (props) => {
 };
 
 const [milestones, setMilestones] = useState([completeInitialMilestone])
+
+console.log("appliedMilestones-milestonectx", appliedMilestones)
+
+const fetchProfileMilestones = async () => {
+  if (!userId) return;
+
+  try {
+    const res = await processMilestoneProfile(userId);
+    const data = res.data;
+    console.log("data-milestones-ctx", data);
+
+    const uniqueJobsMap = data.reduce((acc, current) => {
+      const existingJob = acc.get(current.job_id);
+      if (
+        !existingJob ||
+        new Date(current.created_at) > new Date(existingJob.created_at)
+      ) {
+        acc.set(current.job_id, current);
+      }
+      return acc;
+    }, new Map());
+
+    const filteredJobs = Array.from(uniqueJobsMap.values());
+
+
+    console.log("uniqueJobsMap-appctx", uniqueJobsMap)
+
+    const uniqueJobIds = [
+      ...new Set(filteredJobs.map((job) => job.job_id)),
+    ];
+    
+    console.log("uniqueJobIds-appctx", uniqueJobIds)
+
+    const jobDetailsResponses = await Promise.all(
+      uniqueJobIds.map((id) => processAJobProfile(id))
+    );
+
+    const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
+      const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+      return {
+        ...appliedJob,
+        jobDetails,
+      };
+    });
+
+    console.log("jobsWithDetails", jobsWithDetails)
+    setAppliedMilestones(jobsWithDetails);
+  } catch (error) {
+    console.error("Failed to fetch jobs data", error);
+  }
+};
+
+useEffect(() => {
+  fetchProfileMilestones();
+}, [userId]);
 
 
 const handleChange = (index, data, field) => {
@@ -77,10 +136,10 @@ const handleChange = (index, data, field) => {
   const processMilestoneProfile = async (id) => {
     try {
             const res = await milestoneProfile(id);
-            console.log("delete milestone", res);
+            console.log("milestone profile", res);
             return res;
           } catch (e) {
-            throw new Error("Failed to delete milestone", e);
+            throw new Error("Failed to get milestone profile", e);
           }
   };
 
@@ -108,7 +167,7 @@ const handleChange = (index, data, field) => {
 
 
 const addMilestones = () => {
-  setMilestones((prevMilestones) => [...prevMilestones, initialMilestone]);
+  setMilestones((prevMilestones) => [...prevMilestones, completeInitialMilestone]);
 };
 
 
@@ -132,7 +191,7 @@ const handleSubmitMilestoneApplication = async (e) => {
     }
 
     
-    if (appliedJobs.some((job) => job.job_id === Number(jobId))) {
+    if (appliedMilestones?.some((job) => job.job_id === Number(jobId))) {
       toast.error("You have already applied for this job");
       return;
     }
@@ -142,24 +201,13 @@ const handleSubmitMilestoneApplication = async (e) => {
       setIsLoading(true)
     }, 200)
 
-    console.log("payload-milestones", milestones);
-
-   console.log("payload-milestone", {
-    milestones,
-    user_id: userId,
-    job_id: jobId,
-    title: "testmilestone1",
-    employer_status: "pending",
-    freelancer_status: "pending",
-    pay_status: "pending"
-    
-  })
     try {
       const res =  await processAddMilestone({     
         milestones: milestones,
 			});
+      console.log("res-milestone", res)
       if (res) {
-        await fetchProfileAndMatchJobs();
+        await fetchProfileMilestones();
         navigate(`/dashboard-candidate/applied-jobs`)
         setTimeout(() => {
           toast.success("Job applied successfully")

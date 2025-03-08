@@ -32,6 +32,8 @@ function SectionJobsList() {
       <div>
         <div className="twm-jobs-list-wrap">
           {jobListData.map((item, index) => (
+          
+           
             <JobsCard
               key={index}
               img={item.logo}
@@ -43,7 +45,10 @@ function SectionJobsList() {
               days_left={calculateDaysLeft(item.start_date, item.end_date)}
               link={`/job-detail/${item.id}`}
               employerId = {item.employer_id}
+              
             />
+            
+            
           ))}
         </div>
         <SectionPagination />

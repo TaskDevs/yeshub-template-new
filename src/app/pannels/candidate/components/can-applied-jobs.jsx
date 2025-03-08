@@ -9,16 +9,17 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
 import Loader from "../../../common/loader";
 import { extractTime } from "../../../../utils/readableDate";
+import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi";
 // import { GlobalApiData } from "../../../context/global/globalContextApi";
 
 function CanAppliedJobsPage() {
   
   const {  appliedJobs } = useContext(ApplicationApiData);
-  // const { jobListData, processAJobProfile } = useContext(JobApiData);
+  const { appliedMilestones } = useContext(MilestoneApiData)
   const { isLoading } = useContext(GlobalApiData)
 
 
-  // console.log("jobListData", jobListData)
+  console.log("appliedMilestones-app-pg", appliedMilestones)
 
   const _filterConfig = {
     prefix: "Applied",
@@ -33,7 +34,7 @@ function CanAppliedJobsPage() {
   });
 
 
-  console.log("appliedJobs", appliedJobs)
+  // console.log("appliedJobs", appliedJobs)
 
   return (
     <>

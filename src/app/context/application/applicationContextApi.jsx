@@ -31,8 +31,8 @@ const ApplicationApiDataProvider = (props) => {
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
 
-  console.log("jobId", jobId)
-  console.log("profile-appctx", profile)
+  // console.log("jobId", jobId)
+  // console.log("profile-appctx", profile)
  
 
  
@@ -107,7 +107,7 @@ const ApplicationApiDataProvider = (props) => {
   }, [jobId]);
 
 
-  console.log("freelancerId-global", freelancerId === "undefined")
+  // console.log("freelancerId-global", freelancerId === "undefined")
 
 
 
@@ -172,7 +172,7 @@ const ApplicationApiDataProvider = (props) => {
       return;
     }
 
-    if (profile.job_type === "Freelance") {
+    if (profile?.job_type === "Freelance") {
       if (freelancerId === "undefined") {
         toast.error("Please sign up as freelancer to apply.")
         return;
@@ -182,7 +182,7 @@ const ApplicationApiDataProvider = (props) => {
     }
 
 
-    if (profile.job_type === "Full Time") {
+    if (profile?.job_type === "Full Time") {
       if (freelancerId !== "undefined")
         {
           toast.error("A freelancer can not apply for this job")
@@ -191,7 +191,7 @@ const ApplicationApiDataProvider = (props) => {
     }
 
     
-    if (appliedJobs.some((job) => job.job_id === Number(jobId))) {
+    if (appliedJobs?.some((job) => job.job_id === Number(jobId))) {
       toast.error("You have already applied for this job");
       return;
     }

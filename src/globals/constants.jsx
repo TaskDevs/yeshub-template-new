@@ -10,6 +10,8 @@ console.log("REACT_BASE_URL", REACT_BASE_URL)
 //RETRIEVE USER IDS
 export const userId = sessionStorage.getItem("user_id");
 export const OAuthUserId = sessionStorage.getItem("OAuthUserId")
+export const freelancerId = sessionStorage.getItem("freelancer_id")
+
 
 //STATUS CODE
 export const SUCCESS_STATUS = 201;

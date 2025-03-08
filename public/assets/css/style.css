@@ -347,6 +347,13 @@ This files [Table of contents] are outlined below
   /* border-bottom: 1px #0056b3 solid;  */
 }
 
+.apply-status {
+  font-weight: 500;
+}
+
+.apply-title:hover {
+  text-decoration: underline;
+}
 
 .site-text-primary {
   color: #305718;

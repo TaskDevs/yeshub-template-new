@@ -32,7 +32,7 @@ export const publicUser = {
     LIST: "/job-list",
     DETAIL1: "/job-detail/:id",
     DETAIL2: "/job-detail/2",
-    APPLY: "/apply-job",
+    APPLY: "/apply-job/:id",
     SEARCH: "/jobs",
   },
   employer: {

@@ -32,53 +32,6 @@ function CanAppliedJobsPage() {
     loadScript("js/custom.js");
   });
 
-  // useEffect(() => {
-  //   const fetchProfileAndMatchJobs = async () => {
-  //     if (!userId) return;
-
-  //     try {
-  //       const res = await processApplicationProfile(userId);
-  //       const data = res.data.data;
-  //       // console.log("data", data);
-
-  //       const uniqueJobsMap = data.reduce((acc, current) => {
-  //         const existingJob = acc.get(current.job_id);
-  //         if (
-  //           !existingJob ||
-  //           new Date(current.created_at) > new Date(existingJob.created_at)
-  //         ) {
-  //           acc.set(current.job_id, current);
-  //         }
-  //         return acc;
-  //       }, new Map());
-
-  //       const filteredJobs = Array.from(uniqueJobsMap.values());
-
-  //       const uniqueJobIds = [
-  //         ...new Set(filteredJobs.map((job) => job.job_id)),
-  //       ];
-
-  //       const jobDetailsResponses = await Promise.all(
-  //         uniqueJobIds.map((jobId) => processAJobProfile(jobId))
-  //       );
-
-  //       const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
-  //         const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
-  //         return {
-  //           ...appliedJob,
-  //           jobDetails,
-  //         };
-  //       });
-  //       setAppliedJobs(jobsWithDetails);
-  //     } catch (error) {
-  //       console.error("Failed to fetch jobs data", error);
-  //     }
-  //   };
-
-  //   fetchProfileAndMatchJobs();
-  //   const interval = setInterval(fetchProfileAndMatchJobs, 60000);
-  //   return () => clearInterval(interval); 
-  // }, [userId, jobListData]);
 
   console.log("appliedJobs", appliedJobs)
 

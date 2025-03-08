@@ -15,13 +15,14 @@ import { JobApiData } from "../../context/jobs/jobsContextApi";
 
 function YesNoPopup(props) {
 	const navigate = useNavigate();
-	const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
+
+	const { selectedId, setIsSubmitting, setSelectedId } = useContext(GlobalApiData);
 	const { processDeleteEducation } = useContext(EducationApiData);
 	const { handleDeleteCategory } = useContext(CategoryApiData);
 	const { handleDeleteProfile } = useContext(ProfileApiData);
 	const { handleDeleteSkills } = useContext(SkillsApiData);
 	const { processDeletePortfolio } = useContext(PortfolioApiData);
-    const { processDeleteApplication } = useContext(ApplicationApiData)
+    const { handleDeleteAppliedJob } = useContext(ApplicationApiData)
 	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
     const {processDeleteJob} = useContext(JobApiData)
 	
@@ -55,23 +56,11 @@ function YesNoPopup(props) {
 			return false;
 		} finally {
 			setIsSubmitting(false);
+			setSelectedId("");
 		}
 	};
 
-	// const handleDeleteCategory = async () => {
-	// 	setIsSubmitting(true);
-
-	// 	try {
-	// 		await processDeleteCategory(selectedId);
-	// 		toast.success("Category deleted successfully");
-	// 	} catch {
-	// 		toast.error("Failed to delete category");
-	// 		return false;
-	// 	} finally {
-	// 		setIsSubmitting(false);
-	// 	}
-	// };
-
+	
 	const handleDeleteFreelance = async () => {
 		setIsSubmitting(true);
 		try {
@@ -106,6 +95,7 @@ function YesNoPopup(props) {
 			return false;
 		} finally {
 			setIsSubmitting(false);
+			setSelectedId("")
 		}
 	};
 
@@ -160,8 +150,6 @@ function YesNoPopup(props) {
 			setIsSubmitting(false);
 		}
 	};
-
-
 
 	const yesHandler = () => {
 		console.log("Popup-type-handler:", props.type);

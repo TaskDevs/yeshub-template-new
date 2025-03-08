@@ -62,7 +62,6 @@ const ProfileApiDataProvider = (props) => {
   const fetchProfile = async () => {
     const res = await processProfileProfile(userId);
     if (res) {
-      // window.location.reload();
       setProfileData(res.data.data);
     }
   };
@@ -71,8 +70,6 @@ const ProfileApiDataProvider = (props) => {
 
     fetchProfile();
     
-    // const interval = setInterval(fetchProfile, 60000);
-    // return () => clearInterval(interval); 
   }, []);
 
 
@@ -275,6 +272,7 @@ const ProfileApiDataProvider = (props) => {
         isSidebarCollapsed,
         imgSrc, 
         setImgSrc,
+        fetchProfile,
         processFullProfileProfile,
         toggleSidebar,
         setSelectedItems,

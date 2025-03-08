@@ -61,13 +61,13 @@ const ApplicationApiDataProvider = (props) => {
       const uniqueJobIds = [
         ...new Set(filteredJobs.map((job) => job.job_id)),
       ];
-
+     
       const jobDetailsResponses = await Promise.all(
         uniqueJobIds.map((jobId) => processAJobProfile(jobId))
       );
 
       const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
-        const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+        const jobDetails = jobDetailsResponses[index]?.data || null; 
         return {
           ...appliedJob,
           jobDetails,

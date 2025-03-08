@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
 import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 import DateField from "../../../../common/date-field";
+import CurrencyInputField from "../../../../common/currency-input-field";
 
 function EmpPostAJobPage() {
   const { processAddJob } = useContext(JobApiData);
@@ -170,7 +171,7 @@ function EmpPostAJobPage() {
               </div>
               {/*Offered Salary*/}
               <div className="col-xl-4 col-lg-6 col-md-12">
-                <JobInputField
+                <CurrencyInputField
                   field={POSTJOBFIELD.fieldDetail[3]}
                   value={formData}
                   change={(data, field) => {
@@ -180,9 +181,10 @@ function EmpPostAJobPage() {
               </div>
               {/*Experience*/}
               <div className="col-xl-4 col-lg-6 col-md-12">
-                <JobInputField
+                <JobSelectField
                   field={POSTJOBFIELD.fieldDetail[4]}
                   value={formData}
+                  options={POSTJOBFIELD.fieldDetail[4].options}
                   change={(data, field) => {
                     handleInputChange(field, data);
                   }}
@@ -201,7 +203,7 @@ function EmpPostAJobPage() {
 
               {/* budget */}
               <div className="col-xl-4 col-lg-6 col-md-12">
-                <JobInputField
+                <CurrencyInputField
                   field={POSTJOBFIELD.fieldDetail[6]}
                   value={formData}
                   change={(data, field) => {

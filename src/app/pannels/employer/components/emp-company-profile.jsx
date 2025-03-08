@@ -12,6 +12,7 @@ import { ProfileApiData } from "../../../context/user-profile/profileContextApi"
 import { GlobalApiData } from "../../../context/global/globalContextApi";
 import { baseURL } from "../../../../globals/constants";
 import FormatUrl from "../../../../utils/formatUrl";
+import { Avatar } from "primereact/avatar";
 
 function EmpCompanyProfilePage() {
   const {
@@ -25,8 +26,6 @@ function EmpCompanyProfilePage() {
   const [imageURL, setImageURL] = useState(null);
   const [bannerURL, setBannerURL] = useState(null);
   const [formData, setFormData] = useState({});
-
-  console.log("LOGO FOR CMPANY: ", formData);
 
   useEffect(() => {
     loadScript("js/custom.js");
@@ -43,7 +42,6 @@ function EmpCompanyProfilePage() {
         setImageURL(reader.result);
       };
       reader.readAsDataURL(selectedImage);
-      
     }
   };
 
@@ -68,21 +66,22 @@ function EmpCompanyProfilePage() {
     console.log(formData);
 
     if (formData.logo) {
-        processUpdateEmployerLogo(employerProfiles?.id, { logo: formData.logo });
+      processUpdateEmployerLogo(employerProfiles?.id, { logo: formData.logo });
     }
 
     if (formData.banner) {
-        processUpdateEmployerBanner(employerProfiles?.id, { banner: formData.banner });
+      processUpdateEmployerBanner(employerProfiles?.id, {
+        banner: formData.banner,
+      });
     }
-};
-
+  };
 
   return (
     <>
       <div className="">
         <div className="wt-admin-right-page-header clearfix">
           <h2>Company Profile!</h2>
-          <div className="breadcrumbs">
+          <div className="breadcrumbs mb-3">
             <a href="/dashboard-employer">Home</a>
             {/* <a href="#">Dasboard</a> */}
             <span>Company Profile</span>
@@ -91,30 +90,77 @@ function EmpCompanyProfilePage() {
             <div className="twm-job-self-wrap">
               <div className="twm-job-self-info">
                 <div className="twm-job-self-top">
-                  <div className="twm-media-bg pt-3">
-                  {bannerURL ? ( // Use `bannerURL` directly
-                        <img src={bannerURL} alt="Company Banner" />
-                      ) : employerProfiles.banner ? (
-                        <img
-                          src={employerProfiles.banner}
-                          alt="Company Banner"
-                        />
-                      ) : (
-                        <JobZImage src="" alt="Company Image" />
-                      )}
-                   
+                  {/* Banner Section */}
+                  <div
+                    className="twm-media-bg pt-3"
+                    style={{
+                      background:
+                        employerProfiles.banner || bannerURL
+                          ? `url(${
+                              bannerURL || employerProfiles.banner
+                            }) center/cover no-repeat`
+                          : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      height: "250px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {bannerURL || employerProfiles.banner ? (
+                      <img
+                        src={bannerURL || employerProfiles.banner}
+                        alt="Company Banner"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <h2 style={{ color: "#fff", fontWeight: "bold" }}>
+                        Welcome to Your Company&rsquo;s Profile
+                      </h2>
+                    )}
                   </div>
-                  <div className="twm-mid-content">
-                    <div className="twm-media">
-                    {!employerProfiles.logo ? (
-                        <JobZImage
-                          src={
-                            imageURL
-                              ? FormatUrl(baseURL) + formatImgUrl(imageURL)
-                              : ""
-                          }
-                          alt="Company Image"
-                        />
+
+                  {/* Logo Section */}
+                  <div
+                    className="twm-mid-content"
+                    style={{ textAlign: "center", marginTop: "-40px" }}
+                  >
+                    <div
+                      className="twm-media"
+                     
+                    >
+                       {!employerProfiles.logo ? (
+                        imageURL ? (
+                          <JobZImage
+                            src={FormatUrl(baseURL) + formatImgUrl(imageURL)}
+                            alt="Company Image"
+                            style={{
+                              width: "110px", 
+                              height: "110px", 
+                              fontSize: "80px", 
+
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          />
+                        ) : (
+                          <Avatar
+                            icon="pi pi-user"
+                            size="xlarge"
+                            shape="circle"
+                            style={{
+                              width: "110px", 
+                              height: "110px", 
+                              fontSize: "80px", 
+
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          />
+                        )
                       ) : (
                         <img src={employerProfiles.logo} alt="Company Logo" />
                       )}
@@ -193,14 +239,26 @@ function EmpCompanyProfilePage() {
                   <div className="dashboard-profile-pic">
                     <div className="dashboard-profile-photo">
                       {!employerProfiles.logo ? (
-                        <JobZImage
-                          src={
-                            imageURL
-                              ? FormatUrl(baseURL) + formatImgUrl(imageURL)
-                              : ""
-                          }
-                          alt="Company Image"
-                        />
+                        imageURL ? (
+                          <JobZImage
+                            src={FormatUrl(baseURL) + formatImgUrl(imageURL)}
+                            alt="Company Image"
+                          />
+                        ) : (
+                          <Avatar
+                            icon="pi pi-user"
+                            size="xlarge"
+                            shape="circle"
+                            style={{
+                              width: "110px", // Adjust for larger avatar
+                              height: "110px", // Adjust for larger avatar
+                              fontSize: "80px", // Adjust icon size
+
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          />
+                        )
                       ) : (
                         <img src={employerProfiles.logo} alt="Company Logo" />
                       )}
@@ -246,11 +304,16 @@ function EmpCompanyProfilePage() {
                         <img src={bannerURL} alt="Company Banner" />
                       ) : employerProfiles.banner ? (
                         <img
-                          src={employerProfiles.banner}
-                          alt="Company Banner"
-                        />
+                        src={bannerURL || employerProfiles.banner}
+                        alt="Company Banner"
+                        
+                      />
                       ) : (
-                        <JobZImage src="" alt="Company Image" />
+                        <img
+                        src={bannerURL || employerProfiles.banner}
+                        alt="Company Banner"
+                        
+                      />
                       )}
 
                       <div className="upload-btn-wrapper">

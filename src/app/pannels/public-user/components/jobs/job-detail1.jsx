@@ -165,11 +165,12 @@ function JobDetail1Page() {
 										</div>
 									</div>
 									<h4 className="twm-s-title">Job Description:</h4>
-									<div dangerouslySetInnerHTML={{ __html: profile?.description }} />
-
+									<div dangerouslySetInnerHTML={{ __html: profile?.duty }} />
+									
 									<h4 className="twm-s-title">Requirments:</h4>
 						
-									<div dangerouslySetInnerHTML={{ __html: profile?.duty }} />
+									<div dangerouslySetInnerHTML={{ __html: profile?.description }} />
+
 									
                  
 									

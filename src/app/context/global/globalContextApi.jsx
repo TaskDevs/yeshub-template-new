@@ -9,6 +9,9 @@ const GlobalApiDataProvider = (props) => {
 	const [roleOption, setRoleOption] = useState("user");
     const [selectedId, setSelectedId] = useState("");
 	const [showDetailsId, setShowDetailsId] = useState("")
+	const jobId = sessionStorage.getItem("job_id")
+
+console.log("jobId-constants-storage", jobId)
 	
 	
 
@@ -23,6 +26,7 @@ const GlobalApiDataProvider = (props) => {
 	return (
 		<GlobalApiData.Provider
 			value={{
+				jobId,
 				isLoading,
 				setIsLoading,
 				roleOption,

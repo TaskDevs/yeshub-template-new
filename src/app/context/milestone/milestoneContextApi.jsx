@@ -8,11 +8,12 @@ import {
 } from "./milestoneApi";
 import { MILESTONEFIELD } from "../../../globals/milestone-data";
 // import { ApplicationApiData } from "../application/applicationContextApi";
-import { freelancerId, jobId, userId } from "../../../globals/constants";
-import { useNavigate } from "react-router-dom";
+import { freelancerId,  userId, getJobId } from "../../../globals/constants";
+import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GlobalApiData } from "../global/globalContextApi";
 import { JobApiData } from "../jobs/jobsContextApi";
+
 
 
 const initialData = MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
@@ -36,13 +37,17 @@ const MilestoneApiDataProvider = (props) => {
   const { processAJobProfile } = useContext(JobApiData)
   const [appliedMilestones, setAppliedMilestones] = useState([]);
   const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
-  // const currentpath = useLocation().pathname;
-  // const path = currentpath.startsWith("/job-list" || "/apply-job")
+  const currentpath = useLocation().pathname;
   const navigate = useNavigate();
 
-  // const jobId = path ? currentpath.split("/")[2] : null;
+
+  const job_Id =  currentpath.split("/")[2];
+  const job_id = getJobId();
+  const jobId =  sessionStorage.getItem("job_id");
  
-  console.log("jobId-milestone", jobId)
+  console.log("job_Id-milestone-location", job_Id)
+  console.log("jobId-global", jobId)
+  console.log("job_id-constants-milestonectx", job_id)
 
   const completeInitialMilestone = {
     ...initialMilestone,
@@ -57,9 +62,10 @@ const MilestoneApiDataProvider = (props) => {
 const [milestones, setMilestones] = useState([completeInitialMilestone])
 
 console.log("appliedMilestones-milestonectx", appliedMilestones)
+console.log("milestones-milestonectx", milestones)
 
 const fetchProfileMilestones = async () => {
-  if (!userId) return;
+  if (!jobId) return;
 
   try {
     const res = await processMilestoneProfile(jobId);
@@ -111,7 +117,7 @@ const fetchProfileMilestones = async () => {
 
 useEffect(() => {
   fetchProfileMilestones();
-}, [userId]);
+}, [jobId]);
 
 
 const handleChange = (index, data, field) => {
@@ -225,7 +231,15 @@ const handleSubmitMilestoneApplication = async (e) => {
       return false;
     } finally {
       setIsSubmitting(false);
-      setMilestones([completeInitialMilestone]);
+      setMilestones([{
+        ...initialMilestone,
+        user_id: userId,
+        job_id: jobId,
+        freelance_id: freelancerId,
+        employer_status: "pending",
+        freelancer_status: "pending",
+        pay_status: "pending"
+      }]);
       setTimeout(() => {
         setIsLoading(false)
       }, 3000)

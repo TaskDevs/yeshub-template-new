@@ -116,7 +116,7 @@ const ApplicationApiDataProvider = (props) => {
   }, [jobId]);
 
 
-  // console.log("freelancerId-global", freelancerId === "undefined")
+  console.log("freelancerId-global", freelancerId)
 
 
 
@@ -182,7 +182,7 @@ const ApplicationApiDataProvider = (props) => {
     }
 
     if (profile?.job_type === "Freelance") {
-      if (freelancerId === "undefined") {
+      if (!freelancerId) {
         toast.error("Please sign up as freelancer to apply.")
         return;
       }
@@ -192,7 +192,7 @@ const ApplicationApiDataProvider = (props) => {
 
 
     if (profile?.job_type === "Full Time") {
-      if (freelancerId !== "undefined")
+      if (freelancerId)
         {
           toast.error("A freelancer can not apply for this job")
          return;
@@ -205,7 +205,7 @@ const ApplicationApiDataProvider = (props) => {
       return;
     }
     
-    if (freelancerId !== "undefined")
+    if (freelancerId)
       {
        navigate(`/apply-job/${jobId}`)
        return;

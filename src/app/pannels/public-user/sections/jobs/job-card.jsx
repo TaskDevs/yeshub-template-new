@@ -29,6 +29,7 @@ export const JobsCard = ({
   }
   
   return (
+     
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
       <div className="twm-media">
         <img
@@ -68,5 +69,6 @@ export const JobsCard = ({
 
       </div>
     </NavLink>
+   
   );
 };

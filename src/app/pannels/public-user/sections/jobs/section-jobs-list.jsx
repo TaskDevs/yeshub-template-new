@@ -32,6 +32,8 @@ function SectionJobsList() {
       <div>
         <div className="twm-jobs-list-wrap">
           {jobListData.map((item, index) => (
+          
+           
             <JobsCard
               key={index}
               img={item.logo}
@@ -45,6 +47,8 @@ function SectionJobsList() {
               employerId = {item.employer_id}
               skills={item.skills_id}
             />
+            
+            
           ))}
         </div>
         <SectionPagination />

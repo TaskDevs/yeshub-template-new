@@ -99,41 +99,6 @@ function YesNoPopup(props) {
 		}
 	};
 
-	// const handleDeleteSkills = async () => {
-	// 	setIsSubmitting(true);
-	// 	try {
-	// 		await processDeleteSkills(selectedId);
-
-	// 		toast.success("skills deleted successfully");
-	// 	} catch (error) {
-	// 		toast.error("Failed to delete skills");
-	// 		return false;
-	// 	} finally {
-	// 		setIsSubmitting(false);
-	// 	}
-	// };
-
-	const handleDeleteAppliedJob = async () => {
-		if (!selectedId) {
-			toast.error("Please select the applied job to delete");
-			return;
-		}
-		setIsSubmitting(true);
-		try {
-			const res = await processDeleteApplication(selectedId);
-
-			if (res) {
-				console.log("deleted job", res)
-				toast.success("Job deleted successfully");
-			}
-		} catch {
-			toast.error("Failed to delete job applied");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
-
 	const handleDeleteJob = async () => {
 		setIsSubmitting(true);
 

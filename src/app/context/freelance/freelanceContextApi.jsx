@@ -39,7 +39,9 @@ const FreelanceApiDataProvider = (props) => {
     if (res) {
     
       setFreelanceProfileData(res.data); 
-      sessionStorage.setItem("freelancer_id", res?.data[0]?.id);  
+      // sessionStorage.setItem("freelancer_id", res?.data[0]?.id);  
+      sessionStorage.setItem("freelancer_id", res?.data[0]?.id || "");
+
     } else {
       return false;
     }

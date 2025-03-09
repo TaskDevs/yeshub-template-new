@@ -27,6 +27,8 @@ function JobDetail1Page() {
 	const [profile, setProfile] = useState({});
 	const addJob = useJobCartStore((state) => state.addJob);
 	const [save, setSave] = useState(false);
+
+    console.log("id-jobdetail-params", id)
 	
 	useEffect(() => {
 		let newData = jobListData.filter((item) => item.id == id)[0];
@@ -35,9 +37,12 @@ function JobDetail1Page() {
 	}, []);
 
 	useEffect(() =>{
+		
 		let newData = jobListData.filter((item) => item.id == id)[0];
+		
 		setJobs(newData)
 	})
+	sessionStorage.setItem("job_id", job?.id || id)
 
 	// console.log("josnss", job)
 	// const sidebarConfig = {

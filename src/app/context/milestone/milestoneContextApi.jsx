@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, } from "react";
+import React, { createContext, useState, useContext, useEffect, } from "react";
 
 import {
   addMilestone,
@@ -7,11 +7,13 @@ import {
   deleteMilestone,
 } from "./milestoneApi";
 import { MILESTONEFIELD } from "../../../globals/milestone-data";
-import { ApplicationApiData } from "../application/applicationContextApi";
-import { freelancerId, userId } from "../../../globals/constants";
+// import { ApplicationApiData } from "../application/applicationContextApi";
+import { freelancerId,  userId, getJobId } from "../../../globals/constants";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GlobalApiData } from "../global/globalContextApi";
+import { JobApiData } from "../jobs/jobsContextApi";
+
 
 
 const initialData = MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
@@ -32,11 +34,53 @@ const MilestoneApiDataProvider = (props) => {
   
   const [selectedOption, setSelectedOption] = useState("milestone");
   const [formData, setFormData] = useState(initialData)
-  const {  fetchProfileAndMatchJobs, appliedJobs } = useContext(ApplicationApiData)
+  const { processAJobProfile } = useContext(JobApiData)
+  const [appliedMilestones, setAppliedMilestones] = useState([]);
   const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
   const currentpath = useLocation().pathname;
-  const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
+
+
+//   const job_Id =  currentpath.split("/")[2];
+//   const job_id = getJobId();
+//   const jobId =  sessionStorage.getItem("job_id");
+ 
+//   console.log("job_Id-milestone-location", job_Id)
+//   console.log("jobId-global", jobId)
+//   console.log("job_id-constants-milestonectx", job_id)
+
+//   const completeInitialMilestone = {
+//     ...initialMilestone,
+//     user_id: userId,
+//     job_id: jobId,
+//     freelance_id: freelancerId,
+//     employer_status: "pending",
+//     freelancer_status: "pending",
+//     pay_status: "pending"
+// };
+
+// const [milestones, setMilestones] = useState([completeInitialMilestone])
+
+// console.log("appliedMilestones-milestonectx", appliedMilestones)
+
+
+const [jobId, setJobId] = useState(sessionStorage.getItem("job_id")); 
+const [sessionStorageUpdated, setSessionStorageUpdated] = useState(false);
+
+  useEffect(() => {
+    const newJobId = getJobId();
+    if (newJobId !== jobId) {
+      setJobId(newJobId);
+      setSessionStorageUpdated(true); // Signal update
+    }
+  }, [jobId]);
+
+  const job_Id = currentpath.split("/")[2];
+  const job_id = getJobId();
+
+  console.log("job_Id-milestone-location", job_Id);
+  console.log("jobId-global", jobId);
+  console.log("job_id-constants-milestonectx", job_id);
 
   const completeInitialMilestone = {
     ...initialMilestone,
@@ -45,10 +89,96 @@ const MilestoneApiDataProvider = (props) => {
     freelance_id: freelancerId,
     employer_status: "pending",
     freelancer_status: "pending",
-    pay_status: "pending"
+    pay_status: "pending",
+  };
+
+  const [milestones, setMilestones] = useState([completeInitialMilestone]);
+
+  useEffect(() => {
+    if (jobId) {
+      const currentCompleteInitialMilestone = {
+        ...initialMilestone,
+        user_id: userId,
+        job_id: jobId,
+        freelance_id: freelancerId,
+        employer_status: "pending",
+        freelancer_status: "pending",
+        pay_status: "pending",
+      };
+      setMilestones([currentCompleteInitialMilestone]);
+    }
+  }, [jobId, userId, freelancerId, initialMilestone]);
+
+  
+  useEffect(() => {
+    if (sessionStorageUpdated) {
+      setSessionStorageUpdated(false); // Reset signal
+    }
+  }, [sessionStorageUpdated]);
+
+  console.log("appliedMilestones-milestonectx", appliedMilestones);
+
+
+
+
+
+
+console.log("milestones-milestonectx", milestones)
+
+const fetchProfileMilestones = async () => {
+  if (!jobId) return;
+
+  try {
+    const res = await processMilestoneProfile(jobId);
+    const data = res.data.data;
+    console.log("data-milestones-ctx", data);
+
+    // const uniqueJobsMap = data.reduce((acc, current) => {
+    //   const existingJob = acc.get(current.job_id);
+    //   if (
+    //     !existingJob ||
+    //     new Date(current.created_at) > new Date(existingJob.created_at)
+    //   ) {
+    //     acc.set(current.job_id, current);
+    //   }
+    //   return acc;
+    // }, new Map());
+
+    // const filteredJobs = Array.from(uniqueJobsMap.values());
+
+
+    // console.log("uniqueJobsMap-appctx", uniqueJobsMap)
+
+    // const uniqueJobIds = [
+    //   ...new Set(filteredJobs.map((job) => job.job_id)),
+    // ];
+    
+    
+
+    const jobDetailsResponses = await Promise.all(
+      data?.map((job) => processAJobProfile(job.job_id))
+    );
+
+    console.log("uniqueJobIds-appctx", jobDetailsResponses)
+
+    const jobsWithDetails = data.map((appliedJob, index) => {
+      const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+      return {
+        ...appliedJob,
+        jobDetails,
+      };
+    });
+
+    console.log("jobsWithDetails", jobsWithDetails)
+    setAppliedMilestones(jobsWithDetails);
+  } catch (error) {
+    console.error("Failed to fetch jobs data", error);
+  }
 };
 
-const [milestones, setMilestones] = useState([completeInitialMilestone])
+useEffect(() => {
+  fetchProfileMilestones();
+}, [jobId]);
 
 
 const handleChange = (index, data, field) => {
@@ -77,10 +207,10 @@ const handleChange = (index, data, field) => {
   const processMilestoneProfile = async (id) => {
     try {
             const res = await milestoneProfile(id);
-            console.log("delete milestone", res);
+            console.log("milestone profile", res);
             return res;
           } catch (e) {
-            throw new Error("Failed to delete milestone", e);
+            throw new Error("Failed to get milestone profile", e);
           }
   };
 
@@ -108,7 +238,7 @@ const handleChange = (index, data, field) => {
 
 
 const addMilestones = () => {
-  setMilestones((prevMilestones) => [...prevMilestones, initialMilestone]);
+  setMilestones((prevMilestones) => [...prevMilestones, completeInitialMilestone]);
 };
 
 
@@ -132,7 +262,7 @@ const handleSubmitMilestoneApplication = async (e) => {
     }
 
     
-    if (appliedJobs.some((job) => job.job_id === Number(jobId))) {
+    if (appliedMilestones?.some((job) => job.job_id === Number(jobId))) {
       toast.error("You have already applied for this job");
       return;
     }
@@ -142,24 +272,13 @@ const handleSubmitMilestoneApplication = async (e) => {
       setIsLoading(true)
     }, 200)
 
-    console.log("payload-milestones", milestones);
-
-   console.log("payload-milestone", {
-    milestones,
-    user_id: userId,
-    job_id: jobId,
-    title: "testmilestone1",
-    employer_status: "pending",
-    freelancer_status: "pending",
-    pay_status: "pending"
-    
-  })
     try {
       const res =  await processAddMilestone({     
         milestones: milestones,
 			});
+      console.log("res-milestone", res)
       if (res) {
-        await fetchProfileAndMatchJobs();
+        await fetchProfileMilestones();
         navigate(`/dashboard-candidate/applied-jobs`)
         setTimeout(() => {
           toast.success("Job applied successfully")
@@ -173,7 +292,15 @@ const handleSubmitMilestoneApplication = async (e) => {
       return false;
     } finally {
       setIsSubmitting(false);
-      setMilestones([completeInitialMilestone]);
+      setMilestones([{
+        ...initialMilestone,
+        user_id: userId,
+        job_id: jobId,
+        freelance_id: freelancerId,
+        employer_status: "pending",
+        freelancer_status: "pending",
+        pay_status: "pending"
+      }]);
       setTimeout(() => {
         setIsLoading(false)
       }, 3000)
@@ -192,6 +319,7 @@ const handleUpdateMilestone = async () => {};
 				formData,
         selectedOption,
         milestones, 
+        appliedMilestones,
         setMilestones,
         handleChange,
         setSelectedOption,

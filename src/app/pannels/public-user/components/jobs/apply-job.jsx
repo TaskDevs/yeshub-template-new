@@ -29,6 +29,8 @@ function ApplyJobPage() {
     });
   };
 
+  console.log("milestones-apply-job", milestones)
+
   return (
     <>
       <div

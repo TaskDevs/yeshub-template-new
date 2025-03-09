@@ -8,8 +8,8 @@ import {
 } from "./milestoneApi";
 import { MILESTONEFIELD } from "../../../globals/milestone-data";
 // import { ApplicationApiData } from "../application/applicationContextApi";
-import { freelancerId, userId } from "../../../globals/constants";
-import { useLocation, useNavigate } from "react-router-dom";
+import { freelancerId, jobId, userId } from "../../../globals/constants";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GlobalApiData } from "../global/globalContextApi";
 import { JobApiData } from "../jobs/jobsContextApi";
@@ -36,11 +36,13 @@ const MilestoneApiDataProvider = (props) => {
   const { processAJobProfile } = useContext(JobApiData)
   const [appliedMilestones, setAppliedMilestones] = useState([]);
   const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
-  const currentpath = useLocation().pathname;
-  const jobId = currentpath.split("/")[2];
+  // const currentpath = useLocation().pathname;
+  // const path = currentpath.startsWith("/job-list" || "/apply-job")
   const navigate = useNavigate();
 
-  console.log("jobId-milestone", freelancerId)
+  // const jobId = path ? currentpath.split("/")[2] : null;
+ 
+  console.log("jobId-milestone", jobId)
 
   const completeInitialMilestone = {
     ...initialMilestone,
@@ -60,37 +62,39 @@ const fetchProfileMilestones = async () => {
   if (!userId) return;
 
   try {
-    const res = await processMilestoneProfile(userId);
-    const data = res.data;
+    const res = await processMilestoneProfile(jobId);
+    const data = res.data.data;
     console.log("data-milestones-ctx", data);
 
-    const uniqueJobsMap = data.reduce((acc, current) => {
-      const existingJob = acc.get(current.job_id);
-      if (
-        !existingJob ||
-        new Date(current.created_at) > new Date(existingJob.created_at)
-      ) {
-        acc.set(current.job_id, current);
-      }
-      return acc;
-    }, new Map());
+    // const uniqueJobsMap = data.reduce((acc, current) => {
+    //   const existingJob = acc.get(current.job_id);
+    //   if (
+    //     !existingJob ||
+    //     new Date(current.created_at) > new Date(existingJob.created_at)
+    //   ) {
+    //     acc.set(current.job_id, current);
+    //   }
+    //   return acc;
+    // }, new Map());
 
-    const filteredJobs = Array.from(uniqueJobsMap.values());
+    // const filteredJobs = Array.from(uniqueJobsMap.values());
 
 
-    console.log("uniqueJobsMap-appctx", uniqueJobsMap)
+    // console.log("uniqueJobsMap-appctx", uniqueJobsMap)
 
-    const uniqueJobIds = [
-      ...new Set(filteredJobs.map((job) => job.job_id)),
-    ];
+    // const uniqueJobIds = [
+    //   ...new Set(filteredJobs.map((job) => job.job_id)),
+    // ];
     
-    console.log("uniqueJobIds-appctx", uniqueJobIds)
+    
 
     const jobDetailsResponses = await Promise.all(
-      uniqueJobIds.map((id) => processAJobProfile(id))
+      data?.map((job) => processAJobProfile(job.job_id))
     );
 
-    const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
+    console.log("uniqueJobIds-appctx", jobDetailsResponses)
+
+    const jobsWithDetails = data.map((appliedJob, index) => {
       const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
       return {
         ...appliedJob,
@@ -240,6 +244,7 @@ const handleUpdateMilestone = async () => {};
 				formData,
         selectedOption,
         milestones, 
+        appliedMilestones,
         setMilestones,
         handleChange,
         setSelectedOption,

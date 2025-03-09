@@ -1,7 +1,7 @@
 import SectionRecordsFilter from "../../public-user/sections/common/section-records-filter";
 import SectionPagination from "../../public-user/sections/common/section-pagination";
 import { useContext, useEffect } from "react";
-import { loadScript } from "../../../../globals/constants";
+import { freelancerId, loadScript } from "../../../../globals/constants";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -20,11 +20,13 @@ function CanAppliedJobsPage() {
 
 
   console.log("appliedMilestones-app-pg", appliedMilestones)
+  console.log("freelancerId === undefined", freelancerId === "undefined")
 
   const _filterConfig = {
     prefix: "Applied",
     type: "jobs",
-    total: "250",
+    total: appliedMilestones.length || appliedJobs.length,
+    // total: {freelancerId !== "undefined"? appliedMilestones.length : appliedJobs.length},
     showRange: false,
     showingUpto: "",
   };
@@ -34,7 +36,8 @@ function CanAppliedJobsPage() {
   });
 
 
-  // console.log("appliedJobs", appliedJobs)
+  console.log("freelancerid-type", typeof freelancerId)
+  console.log("freelancerid",  freelancerId)
 
   return (
     <>
@@ -44,11 +47,12 @@ function CanAppliedJobsPage() {
         <SectionRecordsFilter _config={_filterConfig} />
 
         <div className="twm-jobs-list-wrap">
-          {appliedJobs.length === 0 ? (
+          { appliedMilestones.length === 0  || appliedJobs.length === 0 ? (
             <p>No applied job found.</p>
           ) : (
             <ul>
-              {appliedJobs
+              { freelancerId === "undefined"? (
+                appliedJobs
                 ?.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
                 .map((job) => (
                   <CanAppliedJobCard
@@ -56,7 +60,20 @@ function CanAppliedJobsPage() {
                     key={job.id}
                     
                   />
-              ))}
+              ))
+              ) : 
+              (
+                appliedMilestones
+                ?.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
+                .map((milestone) => (
+                  <CanAppliedJobCard
+                    data={milestone}
+                    key={milestone.id}
+                    
+                  />
+              ))
+              )
+              }
 
               {/* <li>
               <div className="twm-jobs-list-style1 mb-5">

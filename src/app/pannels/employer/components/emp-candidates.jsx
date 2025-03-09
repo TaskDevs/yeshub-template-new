@@ -1,21 +1,28 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { loadScript } from "../../../../globals/constants";
-import EmpGetApplicants from "./jobs/emp-get-applicants";
-import { getAppliedJbsByJobid } from "../../../context/application/applicationApi";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Dropdown } from "primereact/dropdown";
+import { Button } from "primereact/button";
+import {
+  getAppliedJbsByJobid,
+  updateApplication,
+} from "../../../context/application/applicationApi";
+import toast from "react-hot-toast";
+import JobZImage from "../../../common/jobz-img";
+import YesNoPopup from "../../../common/popups/popup-yes-no";
+import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { popupType } from "../../../../globals/constants";
 
 function EmpCandidatesPage() {
   const [searchParams] = useSearchParams();
-  const jobid = searchParams.get("jobid"); // ✅ Get job ID from URL query params
-
-  useEffect(() => {
-    loadScript("js/custom.js");
-  }, []);
-
+  const jobid = searchParams.get("jobid");
   const [applicationData, setApplicationData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const { setSelectedId } = useContext(GlobalApiData);
+  const navigate = useNavigate();
+  console.log(applicationData);
   const fetchJobAppliedByJobId = async () => {
     if (!jobid) {
       setError("No job ID provided.");
@@ -26,8 +33,6 @@ function EmpCandidatesPage() {
     try {
       const appliedJobs = await getAppliedJbsByJobid(jobid);
       const data = appliedJobs.data || [];
-
-      console.log("Data by job ID:", data);
 
       if (data.length === 0) {
         setError("No applications found for this job.");
@@ -48,70 +53,145 @@ function EmpCandidatesPage() {
     fetchJobAppliedByJobId();
   }, [jobid]);
 
+  const statusOptions = [
+    { label: "🟡 Pending", value: "pending" },
+    { label: "🟢 Shortlisted", value: "shortlisted" },
+    { label: "🔴 Rejected", value: "rejected" },
+  ];
+
+  const handleStatusChange = async (newStatus, rowData) => {
+    try {
+      await updateApplication(rowData.id, { status: newStatus });
+      setApplicationData((prev) =>
+        prev.map((app) =>
+          app.id === rowData.id ? { ...app, status: newStatus } : app
+        )
+      );
+      toast.success(`Status updated to ${newStatus}!`);
+    } catch (error) {
+      toast.error("Failed to update status. Try again.");
+      console.error("Error updating status:", error);
+    }
+  };
+
+
+  const handleViewCandidates = (userid) => {
+    navigate(`/can-detail/${userid}`);
+  };
+
+  const statusBodyTemplate = (rowData) => (
+    <Dropdown
+      value={rowData.status}
+      options={statusOptions}
+      onChange={(e) => handleStatusChange(e.value, rowData)}
+      placeholder="Select Status"
+    />
+  );
+
+  const nameBodyTemplate = (rowData) => (
+    <div className="flex items-center gap-3">
+      <JobZImage
+        src={
+          rowData.user.user_info?.profile_img || "images/candidates/pic1.jpg"
+        }
+        alt="Profile"
+        className="w-5 h-10 rounded-full"
+      />
+      <div>
+        <h4>
+          {rowData.user.user_info?.firstname} {rowData.user.user_info?.lastname}
+        </h4>
+        <p className="text-gray-500">{rowData.user.user_info?.region}</p>
+      </div>
+    </div>
+  );
+
+  const dateBodyTemplate = (rowData) =>
+    new Date(rowData.created_at).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    });
+
+  const actionsBodyTemplate = (rowData) => (
+    <div className="flex gap-2">
+      <Button 
+      icon="pi pi-eye"
+      className="p-button p-button-sm p-button-info"
+      onClick={() => handleViewCandidates(rowData.user.user_info?.user_id)}
+      />
+      
+    
+      <Button 
+      icon="pi pi-envelope"
+      className="p-button p-button-primary"
+      
+      />
+      
+     
+      <Button
+          icon="pi pi-trash"
+          className="p-button-sm p-button-danger"
+          data-bs-target="#delete-application"
+          data-bs-toggle="modal"
+          data-bs-dismiss="modal"
+          title="Delete Job"
+          onClick={() => setSelectedId(rowData.id)}
+        />
+
+      <YesNoPopup
+				id="delete-application"
+				type={popupType.DELETE_APPLIED_JOB}
+				msg={"Are you sure you want to delete this application?"}
+			/>
+    </div>
+  );
+
   return (
     <>
       <div className="wt-admin-right-page-header clearfix">
         <h2>Candidates</h2>
-        <div className="breadcrumbs">
-          <a href="/">Home</a>
-          <a href="/dashboard-employer/">Dashboard</a>
-          <a href="/dashboard-employer/manage-jobs">My Job Listing</a>
-          <span>Candidates</span>
-        </div>
       </div>
-      <div className="twm-pro-view-chart-wrap">
-        <div className="col-lg-12 col-md-12 mb-4">
-          <div className="panel panel-default site-bg-white m-t30">
-            <div className="panel-heading wt-panel-heading p-a20">
-              <h4 className="panel-title m-a0">
-                <i className="far fa-list-alt mr-3"/>
-                  All Applicants
-              </h4>
-            </div>
-            <div className="panel-body wt-panel-body">
-              <div className="twm-D_table p-a20 table-responsive">
-                {loading ? (
-                 <div className="text-center">
-                 <i className="fa fa-spinner fa-spin fa-3x" />
-                 <p>Loading jobs...</p>
-               </div>
-                ) : error ? (
-                  <p style={{ color: "red", textAlign: "center" }}>{error}</p>
-                ) : (
-                  <table id="" className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>
-                          <input type="checkbox" id="candidate_select_all" />
-                        </th>
-                        <th>Name</th>
-                        <th>Applied for</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        <th />
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {applicationData.map((data) => (
-                        <EmpGetApplicants data={data} key={data.id} />
-                      ))}
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th />
-                        <th>Name</th>
-                        <th>Applied for</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                        <th />
-                      </tr>
-                    </tfoot>
-                  </table>
-                )}
-              </div>
-            </div>
+
+      <div className="panel panel-default">
+        <div className="panel-heading p-a20">
+          <h4 className="panel-title">
+            <i className="far fa-list-alt mr-3" /> All Applicants
+          </h4>
+        </div>
+        <div className="panel-body p-a20">
+          <div className="table-responsive">
+            <DataTable
+              value={applicationData}
+              paginator
+              rows={5}
+              loading={loading}
+              stripedRows
+              emptyMessage={error || "No applications found."}
+            >
+              <Column
+                field="user.user_info.firstname"
+                header="Name"
+                body={nameBodyTemplate}
+              />
+              <Column
+                field="posted_job.job_title"
+                header="Applied for"
+                sortable
+              />
+              <Column
+                field="created_at"
+                header="Date"
+                body={dateBodyTemplate}
+                sortable
+              />
+              <Column
+                field="status"
+                header="Status"
+                body={statusBodyTemplate}
+              />
+              <Column header="Actions" body={actionsBodyTemplate} />
+            </DataTable>
           </div>
         </div>
       </div>

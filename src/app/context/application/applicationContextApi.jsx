@@ -74,7 +74,7 @@ const ApplicationApiDataProvider = (props) => {
       );
 
       const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
-        const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
+        const jobDetails = jobDetailsResponses[index]?.data || null; 
         return {
           ...appliedJob,
           jobDetails,

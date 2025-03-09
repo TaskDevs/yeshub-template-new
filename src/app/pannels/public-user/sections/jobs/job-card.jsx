@@ -1,9 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {  baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
-
-
-
+import { Badge } from 'primereact/badge';
 export const JobsCard = ({
   img,
   duration,
@@ -13,11 +11,23 @@ export const JobsCard = ({
   days_left,
   amount,
   job_type,
-
+  skills,
+  
 }) => {
+  
 
+  let skillsArray = [];
 
-
+  try {
+    skillsArray = JSON.parse(skills);
+    if (!Array.isArray(skillsArray)) {
+      skillsArray = []; // Ensure it's an array
+    }
+  } catch (error) {
+    console.error("Error parsing skills:", error);
+    skillsArray = []; // Fallback to empty array
+  }
+  
   return (
      
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
@@ -35,12 +45,13 @@ export const JobsCard = ({
             / <TimeAgo date={duration} />
           </span>
         </h4>
-        <p className="twm-job-address twm-exp-profile">{location}</p>
+        <p className="twm-job-address twm-exp-profile text-capitalize">{location}</p>
         <ul className="ul-skills">
-          <li>ux writing</li>
-          <li>wire framing</li>
-          <li>prototyping</li>
-          <li>information architecture</li>
+          
+          
+        {skillsArray.map((skill, index) => (
+      <Badge key={index} value={skill} severity="secondary" />
+    ))}
         </ul>
       </div>
       <div className="twm-right-content">

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { loadScript } from "../../../../../globals/constants";
-import JobZImage from "../../../../common/jobz-img";
+
 
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
@@ -42,13 +42,12 @@ function JobDetail1Page() {
 		
 		setJobs(newData)
 	})
-
-	console.log("josnss", job)
 	sessionStorage.setItem("job_id", job?.id || id)
 
-	const sidebarConfig = {
-		showJobInfo: true,
-	};
+	// console.log("josnss", job)
+	// const sidebarConfig = {
+	// 	showJobInfo: true,
+	// };
 
 	useEffect(() => {
 		loadScript("js/custom.js");
@@ -89,7 +88,14 @@ function JobDetail1Page() {
 										<div className="twm-job-self-info">
 											<div className="twm-job-self-top">
 												<div className="twm-media-bg">
-													<JobZImage src="images/job-detail-bg.jpg" alt="#" />
+												<img
+												src={
+													profile?.banner
+													? `${profile.banner}`
+													: `${baseURL}/assets/images/no-logo.png`
+												}
+												alt="#"
+												/>
 													{/* <div className="twm-jobs-category green">
 															<span className="twm-bg-green">New</span>
 														</div> */}
@@ -111,20 +117,20 @@ function JobDetail1Page() {
 																/ 1 days ago
 															</span> */}
 													</h4>
-													<p className="twm-job-address">
+													<p className="twm-job-address text-capitalize">
 														<i className="feather-map-pin" />
-														{profile?.job_address}
+														{profile?.address}
 													</p>
 													<div className="twm-job-self-mid">
 														<div className="twm-job-self-mid-left">
-															{/* <a
-																	href="https://themeforest.net/user/thewebmax/portfolio"
-																	className="twm-job-websites site-text-primary"
-																>
-																	https://thewebmax.com
-																</a> */}
+															
 															<div className="twm-jobs-amount">
-																Budget: ₵{profile?.budget}
+																{profile?.salary ? (
+																	<p>	Salary: ₵{profile?.salary}</p>
+																):(
+																	<p>	Budget: ₵{profile?.budget}</p>
+																)}
+															
 																{/* <span>/ daily</span> */}
 															</div>
 														</div>
@@ -164,89 +170,19 @@ function JobDetail1Page() {
 										</div>
 									</div>
 									<h4 className="twm-s-title">Job Description:</h4>
-									<div dangerouslySetInnerHTML={{ __html: profile?.description }} />
-
-									<h4 className="twm-s-title">Requirments:</h4>
-						
 									<div dangerouslySetInnerHTML={{ __html: profile?.duty }} />
 									
-                  {/* <h4 className="twm-s-title">Responsabilities:</h4>
-                  <ul className="description-list-2">
-                    <li>
-                      <i className="feather-check" />
-                      Establish and promote design guidelines, best practices
-                      and standards.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Accurately estimate design tickets during planning
-                      sessions.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Partnering with product and engineering to translate
-                      business and user goals into elegant and practical
-                      designs. that can deliver on key business and user
-                      metrics.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Create wireframes, storyboards, user flows, process flows
-                      and site maps to communicate interaction and design.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Present and defend designs and key deliverables to peers
-                      and executive level stakeholders.
-                    </li>
-                    <li>
-                      <i className="feather-check" />
-                      Execute all visual design stages from concept to final
-                      hand-off to engineering.
-                    </li>
-                  </ul> */}
+									<h4 className="twm-s-title">Requirments:</h4>
+						
+									<div dangerouslySetInnerHTML={{ __html: profile?.description }} />
 
-									{/* <SectionShareProfile />
-										<SectionJobLocation /> */}
-									{/* <SectionJobTerms />
-										<SectionJobCoverLetter /> */}
-
-									{/* <div className="twm-two-part-section">
-											<div className="twm-nav-btn-left">
-												<div
-													className="twm-nav-sign-up"
-													id="contract_up_popup"
-													aria-hidden="true"
-													aria-labelledby="sign_up_popupLabel"
-													tabIndex={-1}
-												>
-													<i className="feather-log-in" /> show contract
-												</div>
-												{/* <a
-													className="twm-nav-sign-up"
-													data-bs-toggle="modal"
-													href="#contract_up_popup"
-													role="button"
-												>
-													<i className="feather-log-in" /> show contract
-												</a> 
-											</div>
-										</div> */}
-
-									{/* <div className="twm-two-part-section">
-											<div className="row">
-												<div className="col-lg-6 col-md-12">
-													<SectionOfficePhotos1 />
-												</div>
-												<div className="col-lg-6 col-md-12">
-													<SectionOfficeVideo1 />
-												</div>
-											</div>
-										</div> */}
+									
+                 
+									
 								</div>
 							</div>
 							<div className="col-lg-4 col-md-12 rightSidebar">
-								<SectionJobsSidebar2 _config={sidebarConfig} />
+								<SectionJobsSidebar2 _config={profile} />
 							</div>
 						</div>
 					</div>

@@ -41,13 +41,46 @@ const MilestoneApiDataProvider = (props) => {
   const navigate = useNavigate();
 
 
-  const job_Id =  currentpath.split("/")[2];
-  const job_id = getJobId();
-  const jobId =  sessionStorage.getItem("job_id");
+//   const job_Id =  currentpath.split("/")[2];
+//   const job_id = getJobId();
+//   const jobId =  sessionStorage.getItem("job_id");
  
-  console.log("job_Id-milestone-location", job_Id)
-  console.log("jobId-global", jobId)
-  console.log("job_id-constants-milestonectx", job_id)
+//   console.log("job_Id-milestone-location", job_Id)
+//   console.log("jobId-global", jobId)
+//   console.log("job_id-constants-milestonectx", job_id)
+
+//   const completeInitialMilestone = {
+//     ...initialMilestone,
+//     user_id: userId,
+//     job_id: jobId,
+//     freelance_id: freelancerId,
+//     employer_status: "pending",
+//     freelancer_status: "pending",
+//     pay_status: "pending"
+// };
+
+// const [milestones, setMilestones] = useState([completeInitialMilestone])
+
+// console.log("appliedMilestones-milestonectx", appliedMilestones)
+
+
+const [jobId, setJobId] = useState(sessionStorage.getItem("job_id")); 
+const [sessionStorageUpdated, setSessionStorageUpdated] = useState(false);
+
+  useEffect(() => {
+    const newJobId = getJobId();
+    if (newJobId !== jobId) {
+      setJobId(newJobId);
+      setSessionStorageUpdated(true); // Signal update
+    }
+  }, [jobId]);
+
+  const job_Id = currentpath.split("/")[2];
+  const job_id = getJobId();
+
+  console.log("job_Id-milestone-location", job_Id);
+  console.log("jobId-global", jobId);
+  console.log("job_id-constants-milestonectx", job_id);
 
   const completeInitialMilestone = {
     ...initialMilestone,
@@ -56,12 +89,40 @@ const MilestoneApiDataProvider = (props) => {
     freelance_id: freelancerId,
     employer_status: "pending",
     freelancer_status: "pending",
-    pay_status: "pending"
-};
+    pay_status: "pending",
+  };
 
-const [milestones, setMilestones] = useState([completeInitialMilestone])
+  const [milestones, setMilestones] = useState([completeInitialMilestone]);
 
-console.log("appliedMilestones-milestonectx", appliedMilestones)
+  useEffect(() => {
+    if (jobId) {
+      const currentCompleteInitialMilestone = {
+        ...initialMilestone,
+        user_id: userId,
+        job_id: jobId,
+        freelance_id: freelancerId,
+        employer_status: "pending",
+        freelancer_status: "pending",
+        pay_status: "pending",
+      };
+      setMilestones([currentCompleteInitialMilestone]);
+    }
+  }, [jobId, userId, freelancerId, initialMilestone]);
+
+  
+  useEffect(() => {
+    if (sessionStorageUpdated) {
+      setSessionStorageUpdated(false); // Reset signal
+    }
+  }, [sessionStorageUpdated]);
+
+  console.log("appliedMilestones-milestonectx", appliedMilestones);
+
+
+
+
+
+
 console.log("milestones-milestonectx", milestones)
 
 const fetchProfileMilestones = async () => {

@@ -174,7 +174,7 @@ function CanProfilePage() {
           <p>{progress}% completed</p>
          )} 
 
-        {progress <= 100 ? (
+        {progress < 100 ? (
            <div >
            <p>Kindly complete the current section and click on these sections to complete them</p>
            <ul className="portfolio-lists">

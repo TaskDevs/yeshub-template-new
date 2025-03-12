@@ -22,7 +22,7 @@ function CanAppliedJobCard({ data }) {
       <div
         className="twm-jobs-list-style1 mb-5"
         onClick={() => {
-          console.log("clicked-id", data.id);
+          // console.log("clicked-id", data.id);
           setSelectedId(data.id);
         }}
       >
@@ -31,7 +31,8 @@ function CanAppliedJobCard({ data }) {
         </div>
         <div className="twm-mid-content">
           <NavLink
-            to={`/job-detail/${data?.jobDetails?.id}`}
+            // to={`/job-detail/${data?.jobDetails?.id}`}
+            to={`/dashboard-candidate/applied-job-details/${data?.job_id}`}
             className="twm-job-title apply-title"
           >
             <h4>{data?.jobDetails?.job_title}</h4>

@@ -10,6 +10,7 @@ import { popupType } from "../globals/constants";
 import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
 import { useContext } from "react";
 
+
 function CandidateLayout() {
   const currentpath = useLocation().pathname;
   const { isSidebarCollapsed } = useContext(ProfileApiData);
@@ -57,6 +58,8 @@ function CandidateLayout() {
 
         <SignUpPopup />
         <SignInPopup />
+        
+
         <YesNoPopup
           id="delete-dash-profile"
           type={popupType.DELETE}

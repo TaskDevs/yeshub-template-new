@@ -10,15 +10,12 @@ const GlobalApiDataProvider = (props) => {
     const [selectedId, setSelectedId] = useState("");
 	const [showDetailsId, setShowDetailsId] = useState("")
 	const jobId = sessionStorage.getItem("job_id")
-
-console.log("jobId-constants-storage", jobId)
-	
 	
 
 	
 
     const handleClicked = (id) => {
-			console.log("id-clicked", id);
+			
 			setSelectedId(id);
 			setShowDetailsId(id);
 		};

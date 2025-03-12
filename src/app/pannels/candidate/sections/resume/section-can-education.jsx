@@ -53,7 +53,7 @@ function SectionCanEducation() {
 
 		const educationToEdit = educationData.find((e) => e.id === id);
 
-		console.log("educationToEdit", educationToEdit);
+		// console.log("educationToEdit", educationToEdit);
 		if (educationToEdit) {
 			setFormData({
 				school: educationToEdit.school,
@@ -83,11 +83,11 @@ function SectionCanEducation() {
 					data-bs-toggle="modal"
 					href="#Education"
 					role="button"
-					title="Edit"
+					title="Add"
 					className="site-text-primary"
 					onClick={handleResetForm}
 				>
-					<span className="fa fa-edit" />
+					<span className="fa fa-plus" /> <span>Add</span>
 				</a>
 			</div>
 			<div className="panel-body wt-panel-body p-a20 ">

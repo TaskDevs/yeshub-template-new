@@ -17,7 +17,7 @@ function YesNoPopup(props) {
 	const navigate = useNavigate();
 
 	const { selectedId, setIsSubmitting, setSelectedId } = useContext(GlobalApiData);
-	const { processDeleteEducation } = useContext(EducationApiData);
+	const { handleDeleteEducation } = useContext(EducationApiData);
 	const { handleDeleteCategory } = useContext(CategoryApiData);
 	const { handleDeleteProfile } = useContext(ProfileApiData);
 	const { handleDeleteSkills } = useContext(SkillsApiData);
@@ -39,26 +39,7 @@ function YesNoPopup(props) {
 		}
 	};
 
-	const handleDeleteEducation = async () => {
-		if (!selectedId) {
-			toast.error("Please select the education profile to delete");
-			return;
-		}
-		setIsSubmitting(true);
-		try {
-			const res =await processDeleteEducation(selectedId);
-
-			if (res) {
-				toast.success("Education profile deleted successfully");
-			}
-		} catch {
-			toast.error("Failed to delete education");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-			setSelectedId("");
-		}
-	};
+	
 
 	
 	const handleDeleteFreelance = async () => {
@@ -116,6 +97,7 @@ function YesNoPopup(props) {
 		}
 	};
 
+	
 	const yesHandler = () => {
 		console.log("Popup-type-handler:", props.type);
 		switch (props.type) {

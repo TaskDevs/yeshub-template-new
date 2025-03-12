@@ -147,6 +147,7 @@ function CanProfilePage() {
     
       <div className="twm-right-section-panel site-bg-gray">
         <div className="">
+          <div className="progress-bar-wrapper">
           <div
             style={{
               width: "100%",
@@ -167,6 +168,7 @@ function CanProfilePage() {
                     : "10px 0 0 10px",
               }}
             />
+          </div>
           </div>
          {isLoading ? "Loading..." : (
           <p>{progress}% completed</p>

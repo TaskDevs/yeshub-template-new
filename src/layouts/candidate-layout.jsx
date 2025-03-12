@@ -103,7 +103,7 @@ function CandidateLayout() {
         <YesNoPopup
           id="delete-portfolio-media"
           type={popupType.DELETE_PORTFOLIO_MEDIA}
-          msg={"Are you sure you want to delete this potfolio media?"}
+          msg={"Are you sure you want to delete this portfolio media?"}
         />
       
       </div>

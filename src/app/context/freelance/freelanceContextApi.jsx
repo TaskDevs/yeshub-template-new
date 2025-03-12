@@ -32,7 +32,7 @@ const FreelanceApiDataProvider = (props) => {
   const [selectedItems, setSelectedItems] = useState([])
   const { portfolios } = useContext(PortfolioApiData)
 
- console.log("freelanceProfileData", freelanceProfileData)
+//  console.log("freelanceProfileData", freelanceProfileData)
 
   const fetchProfile = async () => {
     const res = await processFreelanceProfile(userId);

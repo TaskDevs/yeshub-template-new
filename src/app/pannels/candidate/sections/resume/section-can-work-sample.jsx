@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { PortfolioApiData } from "../../../../context/portfolio/portfolioContextApi";
 import { PortfolioPopup } from "../../../../common/popups/popup-portfolio";
 import { MdOutlineEdit } from "react-icons/md";
-import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { PiBriefcaseLight } from "react-icons/pi";
 import toast from "react-hot-toast";
@@ -15,19 +14,22 @@ function SectionCanWorkSample() {
     handleResetForm,
     setFormData,
     portfolios,
+	selectedPortfolioId, setSelectedPortfolioId
+   
   } = useContext(PortfolioApiData);
-  const { selectedId, setSelectedId } = useContext(GlobalApiData);
+  
 
-//   console.log("portfolios-sample", portfolios)
+//    console.log("selectedPortfolioId-port", selectedPortfolioId)
+
 
 
 
   const handleEditClick = (id) => {
-    if (!selectedId) {
+    if (!selectedPortfolioId) {
       toast.error("Please select a portfolio profile");
       return;
     }
-    setSelectedId(id);
+    setSelectedPortfolioId(id);
     const potfolioToEdit = portfolios.find((e) => e.id === id);
 
     if (potfolioToEdit) {
@@ -85,7 +87,7 @@ function SectionCanWorkSample() {
                     <div
                       key={i}
                       className="mb-4 sec-educ"
-                      onClick={() => setSelectedId(portfolio.id)}
+                      onClick={() => setSelectedPortfolioId(portfolio.id)}
                     >
                       <div className="">
                         <PiBriefcaseLight />
@@ -139,9 +141,7 @@ function SectionCanWorkSample() {
                         data-bs-target="#Edit-Portfolio"
                         data-bs-toggle="modal"
                         data-bs-dismiss="modal"
-                        onClick={() => {
-                          handleEditClick(selectedId);
-                        }}
+                        onClick={() => handleEditClick(selectedPortfolioId)}
                       >
                         <MdOutlineEdit color="white" />
                         <span>Edit</span>

@@ -18,8 +18,10 @@ const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
 }, {});
 
 const PortfolioApiDataProvider = (props) => {
-  const { setIsSubmitting, selectedId, setSelectedId } = useContext(GlobalApiData);
+  const { setIsSubmitting} = useContext(GlobalApiData);
+  const [selectedPortfolioId, setSelectedPortfolioId] = useState(null)
   const [portfolios, setPortfolios] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialData);
 
   const handleChange = (field, data) => {
@@ -109,14 +111,34 @@ const PortfolioApiDataProvider = (props) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await processUpdatePortfolio(selectedId, formData);
+      await processUpdatePortfolio(selectedPortfolioId, formData);
       await fetchAllPortfolio()
     } catch (err) {
       console.error("failed to update portfolio", err);
     } finally {
       setIsSubmitting(false);
       setFormData(initialData);
-      setSelectedId(null)
+      setSelectedPortfolioId(null)
+    }
+  };
+
+  
+  const handleDeletePortfolio = async () => {
+    if (!selectedPortfolioId) {
+      toast.error("Please select the portfolio profile to delete");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await processDeletePortfolio(selectedPortfolioId);
+      await fetchAllPortfolio()
+      toast.success("Portfolio deleted successfully");
+    } catch {
+      toast.error("Failed to delete portfolio");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+      setSelectedPortfolioId(null);
     }
   };
 
@@ -129,6 +151,10 @@ const PortfolioApiDataProvider = (props) => {
       value={{
         formData,
         portfolios,
+        selectedItems,
+        selectedPortfolioId, 
+        setSelectedPortfolioId, 
+        setSelectedItems,
         fetchAllPortfolio,
         setFormData,
         setPortfolios,
@@ -140,6 +166,7 @@ const PortfolioApiDataProvider = (props) => {
         processDeletePortfolio,
         handleAddPortfolio,
         handleUpdatePortfolio,
+        handleDeletePortfolio
       }}
     >
       {props.children}

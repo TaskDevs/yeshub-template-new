@@ -12,6 +12,13 @@ import SectionFreelancerInfo from "../common/section-freelacer-info";
 import { FreelanceApiData } from "../../../context/freelance/freelanceContextApi";
 import { EducationApiData } from "../../../context/education/educationContextApi";
 import { PortfolioApiData } from "../../../context/portfolio/portfolioContextApi";
+import { GlobalApiData } from "../../../context/global/globalContextApi";
+
+
+const sections = [
+  "Education", "Portfolio", "Portfolio Media"
+]
+
 
 function CanProfilePage() {
   const {
@@ -36,10 +43,10 @@ function CanProfilePage() {
   );
   const { processEducationEducation } = useContext(EducationApiData);
   const { processGetAllPortfolio } = useContext(PortfolioApiData);
+  const { setIsLoading, isLoading } = useContext(GlobalApiData)
   const [progress, setProgress] = useState(0);
-  console.log("profileData-profile", profileData);
 
-  console.log("progress-can-profile", progress);
+  // console.log("profileData-profile", profileData);
 
   const handleEditClick = () => {
     if (!skillOptions || skillOptions.length === 0) {
@@ -100,33 +107,44 @@ function CanProfilePage() {
 
   const updateProgress = async () => {
     let filledSections = 0;
+    setIsLoading(true); // Start loading
+  
+    try {
+      // Check if profile data is already available
+      if (profileData) filledSections++;
+  
+      // Check if education data is retrieved
+      const educationData = await processEducationEducation(userId);
+      if (educationData) filledSections++;
 
-    // Check if profile data is already available
-    if (profileData) filledSections++; // Use the destructured profile data
-
-    // Check if education data is retrieved
-    const educationData = await processEducationEducation(userId);
-    // console.log("educationData-can-profile", educationData);
-    if (educationData) filledSections++;
-
-    // Check if portfolio data is retrieved
-    const portfolioData = await processGetAllPortfolio(userId);
-    console.log("portfolioData-can-profile", portfolioData);
-    if (portfolioData) filledSections++;
-
-    // Check if portfolio media data is retrieved
-    // const portfolioMediaData = await fetchPortfolioMediaData();
-    if (portfolioData?.data?.data?.some((p) => p.media?.length > 0)) filledSections++;
-
-    setProgress((filledSections / 4) * 100); // Assuming 4 sections to check
+      const portfolioData = await processGetAllPortfolio(userId);
+      console.log("portfolioData-can-profile", portfolioData);
+      if (portfolioData) filledSections++;
+  
+      // Check if portfolio data is retrieved
+     
+      if (portfolioData?.data?.data?.some((p) => p.media?.length > 0)) filledSections++;
+  
+      setProgress((filledSections / 4) * 100); // Assuming 4 sections to check
+  
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      // Optionally handle the error (e.g., show a toast)
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false); 
+      }, 2000)
+      
+    }
   };
-
+   
   useEffect(() => {
     updateProgress();
   }, []);
 
   return (
     <>
+    
       <div className="twm-right-section-panel site-bg-gray">
         <div className="">
           <div
@@ -139,18 +157,37 @@ function CanProfilePage() {
             <div
               style={{
                 width: `${progress}%`,
-                backgroundColor: "#3b5998",
+                backgroundColor: "#287131",
                 height: "20px",
                 borderRadius:
                   progress === 100
-                    ? "10px 10px 0 0"
+                    ? "10px"
                     : progress > 0
                     ? "10px 0 0 10px"
                     : "10px 0 0 10px",
               }}
             />
           </div>
+         {isLoading ? "Loading..." : (
           <p>{progress}% completed</p>
+         )} 
+
+        {progress <= 100 ? (
+           <div >
+           <p>Kindly complete the current section and click on these sections to complete them</p>
+           <ul className="portfolio-lists">
+           {sections.map((s, i) => (
+             <li className="progress-bar-list" key={i}>
+               <a href={`/dashboard-candidate/my-resume`} className="progress-bar-list">
+           {s}
+         </a>
+             </li>
+           ))}
+             
+           </ul>
+           </div>
+        ) : (null)}
+       
         </div>
 
         <div className="wt-admin-right-page-header clearfix">
@@ -341,6 +378,7 @@ function CanProfilePage() {
           id="EditFreelanceProfile"
         />
       </div>
+      
     </>
   );
 }

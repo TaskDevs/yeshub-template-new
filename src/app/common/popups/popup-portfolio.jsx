@@ -94,6 +94,7 @@ export const PortfolioPopup = ({ submit, id }) => {
 													/>
 													<i className="fs-input-icon fa fa-address-card" />
 												</div>
+
 											</div>
 										</div>
 

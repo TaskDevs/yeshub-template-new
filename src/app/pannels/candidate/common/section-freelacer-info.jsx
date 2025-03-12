@@ -25,7 +25,7 @@ Portfolio(s):
 
 {portfolios?.map((portfolio) => {
     const freelancePortfolioIds = freelanceProfileData[0]?.portfolio_id;
-    console.log("freelancePortfolioIds", freelancePortfolioIds, " - ", typeof freelancePortfolioIds);
+    // console.log("freelancePortfolioIds", freelancePortfolioIds, " - ", typeof freelancePortfolioIds);
 
     const normalizedPortfolio = (() => {
         if (!freelancePortfolioIds) return [];

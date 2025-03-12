@@ -334,6 +334,10 @@ This files [Table of contents] are outlined below
   margin-right: 10px;
 }
 
+.progress-bar-list {
+  margin-right: 3rem;
+}
+
 .project_link {
   color: #007BFF;
   cursor: pointer;
@@ -341,7 +345,7 @@ This files [Table of contents] are outlined below
   text-transform: lowercase;
   
 }
-.project_link:hover, .media-lists>ul>li:hover {
+.project_link:hover, .media-lists>ul>li:hover, .progress-bar-list:hover {
   color: #0056b3;
   text-decoration: underline;
   /* border-bottom: 1px #0056b3 solid;  */

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { EducationApiData } from "../../../../context/education/educationContextApi";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -6,12 +6,12 @@ import SectionEducationForm from "./section-education-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { RiGraduationCapLine } from "react-icons/ri";
 import toast from "react-hot-toast";
-import { userId } from "../../../../../globals/constants";
+// import { userId } from "../../../../../globals/constants";
 
 
 function SectionCanEducation() {
 	const {	
-		processEducationEducation,
+		educationData,
 		handleAddEducation,
 		handleUpdateEducation,
 		initialFormData,
@@ -22,28 +22,8 @@ function SectionCanEducation() {
 		useContext(GlobalApiData);
 
 
-	const [educationData, setEducationData] = useState([]);
 
-	
-
-	useEffect(() => {
-		const fetchEducationData = async () => {
-			try {
-				const res = await processEducationEducation(userId);
-			
-				const data = res.data.data;
-				setEducationData(data);
-			} catch (err) {
-				console.error("Failed to get education", err);
-			}
-			
-		};
-		fetchEducationData();
-	}, [processEducationEducation]);
-
-
-
-
+		
 
 	const handleEditClick = (id) => {
 		if (!id) {

@@ -12,196 +12,162 @@ import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 import { ApplicationApiData } from "../../context/application/applicationContextApi";
 import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
 import { JobApiData } from "../../context/jobs/jobsContextApi";
+import { PortfolioMediaApiData } from "../../context/portfolio-media/portfolioMediaContextApi";
 
 function YesNoPopup(props) {
-	const navigate = useNavigate();
+  const navigate = useNavigate();
 
-	const { selectedId, setIsSubmitting, setSelectedId } = useContext(GlobalApiData);
-	const { processDeleteEducation } = useContext(EducationApiData);
-	const { handleDeleteCategory } = useContext(CategoryApiData);
-	const { handleDeleteProfile } = useContext(ProfileApiData);
-	const { handleDeleteSkills } = useContext(SkillsApiData);
-	const { processDeletePortfolio } = useContext(PortfolioApiData);
-    const { handleDeleteAppliedJob } = useContext(ApplicationApiData)
-	const { freelanceProfileData, processDeleteFreelance } = useContext(FreelanceApiData);
-    const {processDeleteJob} = useContext(JobApiData)
-	
-	const handleLogout = async () => {
-		const result = await logout(); // Await logout function
+  const { selectedId, setIsSubmitting } =
+    useContext(GlobalApiData);
+  const { handleDeleteEducation } = useContext(EducationApiData);
+  const { handleDeleteCategory } = useContext(CategoryApiData);
+  const { handleDeleteProfile } = useContext(ProfileApiData);
+  const { handleDeleteSkills } = useContext(SkillsApiData);
+  const { handleDeletePortfolio } = useContext(PortfolioApiData);
+  const { handleDeletePortfolioMedia } = useContext(PortfolioMediaApiData);
+  const { handleDeleteAppliedJob } = useContext(ApplicationApiData);
+  const { freelanceProfileData, processDeleteFreelance } =
+    useContext(FreelanceApiData);
+  const { processDeleteJob } = useContext(JobApiData);
 
-		if (result) {
-			// If logout is successful, navigate to login page
-			toast.success(result.message, { position: "top-right", autoClose: 3000 });
-			navigateToAfterLogin();
-		} else {
-			// Optionally handle any failure in logout (e.g., show an error message)
-			console.error("Logout failed");
-		}
-	};
+  const handleLogout = async () => {
+    const result = await logout(); // Await logout function
 
-	const handleDeleteEducation = async () => {
-		if (!selectedId) {
-			toast.error("Please select the education profile to delete");
-			return;
-		}
-		setIsSubmitting(true);
-		try {
-			const res =await processDeleteEducation(selectedId);
+    if (result) {
+      // If logout is successful, navigate to login page
+      toast.success(result.message, { position: "top-right", autoClose: 3000 });
+      navigateToAfterLogin();
+    } else {
+      // Optionally handle any failure in logout (e.g., show an error message)
+      console.error("Logout failed");
+    }
+  };
 
-			if (res) {
-				toast.success("Education profile deleted successfully");
-			}
-		} catch {
-			toast.error("Failed to delete education");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-			setSelectedId("");
-		}
-	};
+  const handleDeleteFreelance = async () => {
+    setIsSubmitting(true);
+    try {
+      if (freelanceProfileData[0]?.id) {
+        await processDeleteFreelance(freelanceProfileData[0]?.id);
+        toast.success("Freelance profile deleted successfully");
+        window.location.reload();
+      }
+    } catch {
+      toast.error("Failed to delete freelance profile");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-	
-	const handleDeleteFreelance = async () => {
-		setIsSubmitting(true);
-		try {
-			
-			if (freelanceProfileData[0]?.id) {
-				await processDeleteFreelance(freelanceProfileData[0]?.id);
-				toast.success("Freelance profile deleted successfully");
-			window.location.reload();
-			}
-			
-			
-		} catch {
-			toast.error("Failed to delete freelance profile");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
 
-	const handleDeletePortfolio = async () => {
-		if (!selectedId) {
-			toast.error("Please select the portfolio profile to delete");
-			return;
-		}
-		setIsSubmitting(true);
-		try {
-			await processDeletePortfolio(selectedId);
+  const handleDeleteJob = async () => {
+    setIsSubmitting(true);
 
-			toast.success("Portfolio deleted successfully");
-		} catch {
-			toast.error("Failed to delete portfolio");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-			setSelectedId("")
-		}
-	};
+    try {
+      await processDeleteJob(selectedId);
+      toast.success("Job deleted successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch {
+      toast.error("Failed to delete Job");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-	const handleDeleteJob = async () => {
-		setIsSubmitting(true);
 
-		try {
-			await processDeleteJob(selectedId);
-			toast.success("Job deleted successfully");
-			setTimeout(() => {
-				window.location.reload();
-			}, 1000); 
-		} catch {
-			toast.error("Failed to delete Job");
-			return false;
-		} finally {
-			setIsSubmitting(false);
-		}
-	};
+  
 
-	const yesHandler = () => {
-		console.log("Popup-type-handler:", props.type);
-		switch (props.type) {
-			case popupType.LOGOUT:
-				handleLogout();
-				navigateToAfterLogin();
-				break;
+  const yesHandler = () => {
+    console.log("Popup-type-handler:", props.type);
+    switch (props.type) {
+      case popupType.LOGOUT:
+        handleLogout();
+        navigateToAfterLogin();
+        break;
 
-			case popupType.DELETE_PROFILE:
-				return handleDeleteProfile();
+      case popupType.DELETE_PROFILE:
+        return handleDeleteProfile();
 
-			case popupType.DELETE_FREELANCE:
-				return handleDeleteFreelance();
+      case popupType.DELETE_FREELANCE:
+        return handleDeleteFreelance();
 
-			case popupType.DELETE_SKILLS:
-				return handleDeleteSkills();
+      case popupType.DELETE_SKILLS:
+        return handleDeleteSkills();
 
-			case popupType.DELETE_CATEGORY:
-				return handleDeleteCategory();
+      case popupType.DELETE_CATEGORY:
+        return handleDeleteCategory();
 
-			case popupType.DELETE_EDUCATION:
-				return handleDeleteEducation();
+      case popupType.DELETE_EDUCATION:
+        return handleDeleteEducation();
 
-			case popupType.DELETE_PORTFOLIO:
-				return handleDeletePortfolio();
+      case popupType.DELETE_PORTFOLIO:
+        return handleDeletePortfolio();
 
-			case popupType.DELETE_APPLIED_JOB:
-				return handleDeleteAppliedJob();
-			case popupType.DELETE_JOB:
-				return handleDeleteJob()
+      case popupType.DELETE_PORTFOLIO_MEDIA:
+        return handleDeletePortfolioMedia();
 
-			default:
-				console.warn("Unknown type", props.type);
-		}
-	};
+      case popupType.DELETE_APPLIED_JOB:
+        return handleDeleteAppliedJob();
 
-	
+      case popupType.DELETE_JOB:
+        return handleDeleteJob();
 
-	// Navigate to login page
-	const navigateToAfterLogin = () => {
-		navigate("/"); // Navigate to login page after logout
-	};
+      default:
+        console.warn("Unknown type", props.type);
+    }
+  };
 
-	return (
-		<div
-			className="modal fade twm-model-popup"
-			id={props.id}
-			data-bs-backdrop="static"
-			data-bs-keyboard="false"
-			tabIndex={-1}
-			aria-hidden="true"
-		>
-			<div className="modal-dialog">
-				<div className="modal-content">
-					<div className="modal-header">
-						<button
-							type="button"
-							className="btn-close"
-							data-bs-dismiss="modal"
-							aria-label="Close"
-						/>
-					</div>
-					<div className="modal-body">
-						<h4 className="modal-title">{props.msg}</h4>
-					</div>
-					<div className="modal-footer">
-						<button
-							type="button"
-							className="site-button"
-							data-bs-dismiss="modal"
-						>
-							No
-						</button>
-						<button
-							type="button"
-							className="site-button outline-primary"
-							data-bs-dismiss="modal"
-							onClick={yesHandler}
-						>
-							Yes
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+  // Navigate to login page
+  const navigateToAfterLogin = () => {
+    navigate("/"); // Navigate to login page after logout
+  };
+
+  return (
+    <div
+      className="modal fade twm-model-popup"
+      id={props.id}
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabIndex={-1}
+      aria-hidden="true"
+    >
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            />
+          </div>
+          <div className="modal-body">
+            <h4 className="modal-title">{props.msg}</h4>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="site-button"
+              data-bs-dismiss="modal"
+            >
+              No
+            </button>
+            <button
+              type="button"
+              className="site-button outline-primary"
+              data-bs-dismiss="modal"
+              onClick={yesHandler}
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default YesNoPopup;

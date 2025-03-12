@@ -18,7 +18,7 @@ const initialData = {
 }
 
 const PortfolioMediaApiDataProvider = (props) => {
-  const { setIsSubmitting, selectedId, setSelectedId } = useContext(GlobalApiData);
+  const { setIsSubmitting, selectedId, setSelectedId, setIsLoading } = useContext(GlobalApiData);
   const [portfolioMedia, setPortfolioMedia] = useState([]);
   const [selectDeleteItem, setSelectDeleteItem] = useState(null);
   const [formData, setFormData] = useState(initialData);
@@ -153,9 +153,10 @@ const PortfolioMediaApiDataProvider = (props) => {
 			return;
 		}
 		setIsSubmitting(true);
+    setIsLoading(true)
 		try {
 			const res = await processDeletePortfolioMedia(selectDeleteItem);
-      // console.log("res-del-media", res)
+      console.log("res-del-media", res)
 			if (res.statusText === 'OK') {
         await fetchAllPortfolio()
 				toast.success("Portfolio media deleted successfully");
@@ -169,6 +170,7 @@ const PortfolioMediaApiDataProvider = (props) => {
 			setIsSubmitting(false);
       setSelectedId(null)
       setSelectDeleteItem(null)
+      setIsLoading(false)
 		}
 	};
 

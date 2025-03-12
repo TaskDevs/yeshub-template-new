@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import InputField from "../../../../common/input-field";
 import { USERPROFILEFIELD } from "../../../../../globals/user-profile-data";
 import TextAreaField from "../../../../common/text-area-field";
@@ -8,42 +8,12 @@ import Select from "react-select";
 import SelectField from "../../../../common/select-field";
 import { options } from "../../../../../utils/experience";
 import { professions } from "../../../../../utils/professions";
-import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { regions } from "../../../../../utils/regions";
 
-
-
-
-
-
-
 function SectionCandicateBasicInfo({ submit, id }) {
-  const { formData, setFormData, selectedItems, setSelectedItems } = useContext(ProfileApiData);
-  const { skillOptions, processGetAllSkills, setSkillOptions } =
-    useContext(SkillsApiData);
-    const { setIsLoading } = useContext(GlobalApiData)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(true)
-    }, 200)
-  
-      const fetchSkills = async () => {
-        try {
-          const res = await processGetAllSkills();
-          setSkillOptions(res);
-        }  catch (e) {
-          throw new Error("failed to get skills", e);
-        } finally {
-          setTimeout(() => {
-            setIsLoading(false)
-          }, 2000)
-        }
-       
-      } 
-   
-    fetchSkills();
-  }, []);
+  const { formData, setFormData, selectedItems, setSelectedItems } =
+    useContext(ProfileApiData);
+  const { skillOptions } = useContext(SkillsApiData);
 
   const formattedSkills =
     skillOptions?.map((skill) => ({
@@ -58,7 +28,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
       ? selectedOptions.map((item) => item.value)
       : [];
     setFormData({
-      ...formData,  
+      ...formData,
       skills_id: selectedSkillsIds.join(","),
     });
   };
@@ -69,8 +39,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
       [data]: field,
     });
   };
-
-
 
   return (
     <>
@@ -100,7 +68,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                             handleChange(data, field);
                           }}
                         />
-                     
+
                         <i className="fs-input-icon fa fa-user " />
                       </div>
                     </div>
@@ -152,15 +120,15 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
                         <i className="fs-input-icon fa fa-user-edit" />
                       </div> */}
-                      <SelectField 
-                          field={USERPROFILEFIELD.fieldDetail[3]}
-                          value={formData}
-                          options={professions}
-                          change={(data, field) => {
-                            handleChange(data, field);
-                          }}
-                        />
-                        {/* <i className="fs-input-icon fa fa-user-edit" /> */}
+                      <SelectField
+                        field={USERPROFILEFIELD.fieldDetail[3]}
+                        value={formData}
+                        options={professions}
+                        change={(data, field) => {
+                          handleChange(data, field);
+                        }}
+                      />
+                      {/* <i className="fs-input-icon fa fa-user-edit" /> */}
                     </div>
                   </div>
 
@@ -180,15 +148,15 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         <i className="fs-input-icon fa fa-user-edit" />
                       </div> */}
 
-                      <SelectField 
-                          field={USERPROFILEFIELD.fieldDetail[4]}
-                          value={formData}
-                          options={options}
-                          change={(data, field) => {
-                            handleChange(data, field);
-                          }}
-                        />
-                        {/* <i className="fs-input-icon fa fa-user-edit" /> */}
+                      <SelectField
+                        field={USERPROFILEFIELD.fieldDetail[4]}
+                        value={formData}
+                        options={options}
+                        change={(data, field) => {
+                          handleChange(data, field);
+                        }}
+                      />
+                      {/* <i className="fs-input-icon fa fa-user-edit" /> */}
                     </div>
                   </div>
 
@@ -238,15 +206,15 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         />
                         <i className="fs-input-icon fa fa-globe-americas" />
                       </div> */}
-                      <SelectField 
-                          field={USERPROFILEFIELD.fieldDetail[6]}
-                          value={formData}
-                          options={regions}
-                          change={(data, field) => {
-                            handleChange(data, field);
-                          }}
-                          icon="globe-americas"
-                        />
+                      <SelectField
+                        field={USERPROFILEFIELD.fieldDetail[6]}
+                        value={formData}
+                        options={regions}
+                        change={(data, field) => {
+                          handleChange(data, field);
+                        }}
+                        icon="globe-americas"
+                      />
                     </div>
                   </div>
 
@@ -301,7 +269,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
                                 backgroundColor: "none",
                               }),
                             }}
-
                           />
                         </div>
                       </div>
@@ -313,7 +280,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       field={USERPROFILEFIELD.fieldDetail[10]}
                       value={formData}
                       change={handleChange}
-                      required={true} 
+                      required={true}
                     />
                   </div>
                 </div>

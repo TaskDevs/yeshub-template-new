@@ -223,9 +223,9 @@ const ProfileApiDataProvider = (props) => {
     } finally {
       setIsSubmitting(false);
       setFormData(initialFormData);
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 200)
+      setSelectedItems([])
+      setIsLoading(false)
+      
   
       
     }

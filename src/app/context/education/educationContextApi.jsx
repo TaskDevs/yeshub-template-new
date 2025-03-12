@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 
 import {
@@ -25,6 +25,30 @@ const EducationApiDataProvider = (props) => {
 
 	const [formData, setFormData] = useState(initialFormData);
 
+	const [educationData, setEducationData] = useState([]);
+
+	
+	const fetchEducationData = async () => {
+		try {
+			const res = await processEducationEducation(userId);
+		
+			const data = res.data.data;
+			setEducationData(data);
+		} catch (err) {
+			console.error("Failed to get education", err);
+		}
+		
+	};
+
+	useEffect(() => {
+		
+		fetchEducationData();
+	}, []);
+	
+	
+	
+	
+	
 	const processAddEducation = async (data) => {
 		try {
 			const res = await addEducation(data);
@@ -82,7 +106,7 @@ const EducationApiDataProvider = (props) => {
 			setIsSubmitting(true);
 			
 			const res = await processAddEducation({...formData, user_id: userId});
-			console.log("add-edu", res);
+			await fetchEducationData();
 			return res;
 		} catch (e) {
 			throw new Error("Failed to add education");
@@ -98,6 +122,7 @@ const EducationApiDataProvider = (props) => {
 		try {
 			setIsSubmitting(true);
 			const res = await processUpdateEducation(selectedId, formData);
+			await fetchEducationData();
 			console.log("update-edu", res);
 			return res;
 		} catch (e) {
@@ -109,11 +134,34 @@ const EducationApiDataProvider = (props) => {
 		}
 	};
 
+	const handleDeleteEducation = async () => {
+		if (!selectedId) {
+			toast.error("Please select the education profile to delete");
+			return;
+		}
+		setIsSubmitting(true);
+		try {
+			const res =await processDeleteEducation(selectedId);
+			await fetchEducationData();
+			if (res) {
+				toast.success("Education profile deleted successfully");
+			}
+		} catch {
+			toast.error("Failed to delete education");
+			return false;
+		} finally {
+			setIsSubmitting(false);
+			setSelectedId("");
+		}
+	};
+
 	return (
 		<EducationApiData.Provider
 			value={{
 				initialFormData,
 				formData,
+				educationData,
+				fetchEducationData,
 				setFormData,
 				processAddEducation,
 				processGetAllEducation,
@@ -123,6 +171,7 @@ const EducationApiDataProvider = (props) => {
 				processDeleteEducation,
 				handleAddEducation,
 				handleUpdateEducation,
+				handleDeleteEducation
 			}}
 		>
 			{props.children}

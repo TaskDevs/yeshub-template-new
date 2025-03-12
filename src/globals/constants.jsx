@@ -6,14 +6,11 @@ export const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
 export const HOST = window.location.hostname;
 export const timeOut = { timeout: 10000 };
 
-
 //RETRIEVE USER IDS
 export const userId = sessionStorage.getItem("user_id");
-export const OAuthUserId = sessionStorage.getItem("OAuthUserId")
+export const OAuthUserId = sessionStorage.getItem("OAuthUserId");
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
 export const getJobId = () => sessionStorage.getItem("job_id");
-
-
 
 //STATUS CODE
 export const SUCCESS_STATUS = 201;
@@ -32,10 +29,10 @@ export const popupType = {
   DELETE_CATEGORY: "DELETE_CATEGORY",
   DELETE_EDUCATION: "DELETE_EDUCATION",
   DELETE_SKILLS: "DELETE_SKILLS",
-   DELETE_PORTFOLIO: "DELETE_PORTFOLIO",
-   DELETE_APPLIED_JOB: "DELETE_APPLIED_JOB",
-   DELETE_JOB:"DELETE_JOB",
-   DELETE_PORTFOLIO_MEDIA: "DELETE_PORTFOLIO_MEDIA",
+  DELETE_PORTFOLIO: "DELETE_PORTFOLIO",
+  DELETE_APPLIED_JOB: "DELETE_APPLIED_JOB",
+  DELETE_JOB: "DELETE_JOB",
+  DELETE_PORTFOLIO_MEDIA: "DELETE_PORTFOLIO_MEDIA",
 };
 
 export const formType = {

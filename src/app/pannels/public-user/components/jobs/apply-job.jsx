@@ -7,6 +7,7 @@ import { FaPlus } from "react-icons/fa6";
 import InputField from "../../../../common/input-field";
 import { MilestoneApiData } from "../../../../context/milestone/milestoneContextApi";
 import { MILESTONEFIELD } from "../../../../../globals/milestone-data";
+import { useParams } from "react-router-dom";
 
 
 function ApplyJobPage() {
@@ -30,6 +31,8 @@ function ApplyJobPage() {
   };
 
   console.log("milestones-apply-job", milestones)
+  const { id } = useParams();
+  console.log("id-params", id)
 
   return (
     <>
@@ -108,6 +111,7 @@ function ApplyJobPage() {
                         key={index}
                         index={index}
                         milestone={milestone}
+                        id={id}
                       />
                     ))}
                     <div className="milestone-add-options">

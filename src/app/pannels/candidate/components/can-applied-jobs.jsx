@@ -19,10 +19,10 @@ function CanAppliedJobsPage() {
   const { isLoading } = useContext(GlobalApiData)
 
 
-  console.log("appliedMilestones-app-pg", appliedMilestones)
-  console.log("appliedJobs-app-pg", appliedJobs)
+  // console.log("appliedMilestones-app-pg", appliedMilestones)
+  // console.log("appliedJobs-app-pg", appliedJobs)
 
-  console.log("freelancerId === null", freelancerId === null)
+  // console.log("freelancerId === null", freelancerId === null)
 
   const _filterConfig = {
     prefix: "Applied",
@@ -38,9 +38,9 @@ function CanAppliedJobsPage() {
   });
 
 
-  console.log("freelancerid-type", typeof freelancerId)
-  console.log("freelancerid",  freelancerId)
-  console.log("freelancerid-not exist",  !freelancerId)
+  // console.log("freelancerid-type", typeof freelancerId)
+  // console.log("freelancerid",  freelancerId)
+  // console.log("freelancerid-not exist",  !freelancerId)
 
   return (
     <>
@@ -77,7 +77,7 @@ function CanAppliedJobsPage() {
               ) :
               (
                 <>
-                {console.log("typeof freelancerId === string", typeof freelancerId === "string")}
+                {/* {console.log("typeof freelancerId === string", typeof freelancerId === "string")} */}
                 {appliedJobs
                 ?.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
                 .map((job) => (

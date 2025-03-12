@@ -3,7 +3,7 @@ export const  FREELANCERFIELD = {
 		{
 			name: "rate",
 			label: "Rate",
-			type: "text",
+			type: "number",
 			placeholder: "",
 		},
 		{

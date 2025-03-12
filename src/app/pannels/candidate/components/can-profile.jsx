@@ -11,6 +11,7 @@ import FreelancePopup from "../../../common/popups/popup-freelance";
 import SectionFreelancerInfo from "../common/section-freelacer-info";
 import { FreelanceApiData } from "../../../context/freelance/freelanceContextApi";
 
+
 function CanProfilePage() {
   const {
     imageURL,
@@ -20,6 +21,7 @@ function CanProfilePage() {
     profileData,
     setFormData,
     setSelectedItems,
+   
   } = useContext(ProfileApiData);
 
   const { skillOptions } = useContext(SkillsApiData);
@@ -28,8 +30,10 @@ function CanProfilePage() {
     const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
 
 
-  console.log("profileData-profile", profileData.profile_image)
+  console.log("profileData-profile", profileData)
+  // console.log("skillOptions-can-profile", skillOptions)
     
+  
     
 
   const handleEditClick = () => {
@@ -109,15 +113,7 @@ console.log('Filtered selectedSkillObjects:',
                       <div className="form-group">
                         <div className="dashboard-profile-pic">
                           <div className="dashboard-profile-photo">
-                            {/* <img
-                              src={
-                                imageURL ||
-                                `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`
-                              }
-                              // "https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/profile_images/1740133986_add-withrawal-method.png"
-
-                              alt=""
-                            /> */}
+                            
 
                             <img
                               src={imageURL || imgSrc}
@@ -165,10 +161,11 @@ console.log('Filtered selectedSkillObjects:',
                 data-bs-toggle="modal"
                 href="#AddProfile"
                 role="button"
-                title="Edit"
+                title="Add"
                 className="site-text-primary"
+                
               >
-                <span className="fa fa-edit" />
+                <span className="fa fa-plus" /> {" "} <span>Add</span>
               </a>
             </div>
 
@@ -218,10 +215,10 @@ console.log('Filtered selectedSkillObjects:',
                 data-bs-toggle="modal"
                 href="#AddFreelancerProfile"
                 role="button"
-                title="Edit"
+                title="Add"
                 className="site-text-primary"
               >
-                <span className="fa fa-edit" />
+                <span className="fa fa-plus" /> {" "} <span>Add</span>
               </a>
             </div>
 

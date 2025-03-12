@@ -28,7 +28,7 @@ function JobDetail1Page() {
 	const addJob = useJobCartStore((state) => state.addJob);
 	const [save, setSave] = useState(false);
 
-    console.log("id-jobdetail-params", id)
+   
 	
 	useEffect(() => {
 		let newData = jobListData.filter((item) => item.id == id)[0];

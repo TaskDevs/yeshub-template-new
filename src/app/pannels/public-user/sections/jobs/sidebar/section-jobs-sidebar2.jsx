@@ -3,7 +3,7 @@ import { publicUser } from "../../../../../../globals/route-names";
 import SectionSideAdvert from "./section-side-advert";
 import JobZImage from "../../../../../common/jobz-img";
 
-function SectionJobsSidebar2({ _config = {} }) {
+function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
   // Prevent accessing undefined properties
   if (!_config) {
     return <p>Loading job details...</p>;
@@ -179,12 +179,15 @@ function SectionJobsSidebar2({ _config = {} }) {
       )}
 
       {/* Advert Section */}
-      <SectionSideAdvert
-        title="Claim Your Dream Job"
-        description="Stand out from the crowd—apply now and showcase your skills"
-        link={`${publicUser.jobs.APPLY}`}
-        action="Bid Now"
-      />
+      {showAdvert ? (
+         <SectionSideAdvert
+         title="Claim Your Dream Job"
+         description="Stand out from the crowd—apply now and showcase your skills"
+         link={`${publicUser.jobs.APPLY}`}
+         action="Bid Now"
+       />
+      ) : (null)}
+     
     </>
   );
 }

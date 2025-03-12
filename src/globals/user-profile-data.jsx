@@ -23,13 +23,13 @@ export const USERPROFILEFIELD = {
 			name: "profession",
 			label: "Profession",
 			type: "text",
-			placeholder: "teacher",
+			placeholder: "",
 		},
 		{
 			name: "experience",
-			label: "First Name",
+			label: "Experience",
 			type: "text",
-			placeholder: "05 Years",
+			placeholder: "",
 		},
 		{
 			name: "address",
@@ -38,16 +38,10 @@ export const USERPROFILEFIELD = {
 			placeholder: "Till street",
 		},
 		{
-			name: "country",
-			label: "Country",
-			type: "text",
-			placeholder: "Ghana",
-		},
-		{
 			name: "region",
 			label: "Region",
 			type: "text",
-			placeholder: "Greater Region",
+			placeholder: "",
 		},
 		{
 			name: "gps_address",

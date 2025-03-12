@@ -94,6 +94,7 @@ export const candidate = {
   CHAT: "/chat",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
+  APPLIED_JOB_DETAILS: "/applied-job-details/:id",
 };
 
 export const employer = {

@@ -3,6 +3,7 @@ function SelectField({
 	value,
 	options,
 	change,
+	icon="user-edit"
 	
 }) {
 	const handleInputChange = (e) => {
@@ -28,12 +29,11 @@ function SelectField({
 					</option>
 					{options.map((option, i) => (
 						<option key={i}>
-							{console.log("labelkey", option)}
 							{option}
 						</option>
 					))}
 				</select>
-				{/* <i className="fs-input-icon fa fa-user-edit" /> */}
+				<i className={`fs-input-icon fa fa-${icon}` }/>
 			</div>
 		</div>
 	);

@@ -11,10 +11,17 @@ function SectionMilestone({ index, milestone }) {
         handleChange(index, e.target.value, fieldDetail);
     };
 
+ 
+    // MILESTONEFIELD.fieldDetail.push({
+    //     name: "job_id",
+    //     value: id
+    // })
+    // console.log("MILESTONEFIELD",  MILESTONEFIELD.fieldDetail)
+
     return (
         <div className="milestone-section">
 			<div className="twm-sec-timelines">
-            {MILESTONEFIELD.fieldDetail.map((field, fieldIndex) => (
+            {MILESTONEFIELD.fieldDetail.slice(0,3).map((field, fieldIndex) => (
                 
 					<div className="twm-timelines" key={fieldIndex}>
 					<label htmlFor={field.label}>{field.label}</label>

@@ -52,8 +52,7 @@ const SkillsApiDataProvider = (props) => {
 
 	getAllSkills();
 
-	// const interval = setInterval(getAllSkills, 60000);
-  //   return () => clearInterval(interval); 
+	
 }, []);
 
 

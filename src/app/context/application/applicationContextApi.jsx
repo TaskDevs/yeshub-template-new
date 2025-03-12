@@ -90,7 +90,7 @@ const ApplicationApiDataProvider = (props) => {
   
   useEffect(() => {
     fetchProfileAndMatchJobs();
-  }, [userId]);
+  }, [userId, jobId]);
 
   const fetchJobProfile = async () => {
     setTimeout(() => {
@@ -116,7 +116,7 @@ const ApplicationApiDataProvider = (props) => {
   }, [jobId]);
 
 
-  console.log("freelancerId-global", freelancerId)
+
 
 
 

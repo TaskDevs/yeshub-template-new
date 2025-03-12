@@ -25,7 +25,7 @@ const PortfolioMediaApiDataProvider = (props) => {
   const [selectedItems, setSelectedItems] = useState([])
   const {  fetchAllPortfolio } = useContext(PortfolioApiData);
 
-  console.log("selectDeleteItem-media-del-global", selectDeleteItem)
+  // console.log("selectDeleteItem-media-del-global", selectDeleteItem)
 
   // portfolios,
   // const selectedPortfolio = portfolios.find(portfolio => portfolio.id === selectedId)
@@ -147,7 +147,7 @@ const PortfolioMediaApiDataProvider = (props) => {
   };
 
   const handleDeletePortfolioMedia = async () => {
-    console.log("selectedId-del", selectDeleteItem)
+    // console.log("selectedId-del", selectDeleteItem)
 		if (!selectDeleteItem) {
 			toast.error("Please select the portfolio media to delete");
 			return;
@@ -155,7 +155,7 @@ const PortfolioMediaApiDataProvider = (props) => {
 		setIsSubmitting(true);
 		try {
 			const res = await processDeletePortfolioMedia(selectDeleteItem);
-      console.log("res-del-media", res)
+      // console.log("res-del-media", res)
 			if (res.statusText === 'OK') {
         await fetchAllPortfolio()
 				toast.success("Portfolio media deleted successfully");

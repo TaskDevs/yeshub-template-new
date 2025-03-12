@@ -5,17 +5,43 @@ import TextAreaField from "../../../../common/text-area-field";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
+import SelectField from "../../../../common/select-field";
+import { options } from "../../../../../utils/experience";
+import { professions } from "../../../../../utils/professions";
+import { GlobalApiData } from "../../../../context/global/globalContextApi";
+import { regions } from "../../../../../utils/regions";
+
+
+
+
+
+
 
 function SectionCandicateBasicInfo({ submit, id }) {
   const { formData, setFormData, selectedItems, setSelectedItems } = useContext(ProfileApiData);
   const { skillOptions, processGetAllSkills, setSkillOptions } =
     useContext(SkillsApiData);
+    const { setIsLoading } = useContext(GlobalApiData)
 
   useEffect(() => {
-    const fetchSkills = async () => {
-      const res = await processGetAllSkills();
-      setSkillOptions(res);
-    };
+    setTimeout(() => {
+      setIsLoading(true)
+    }, 200)
+  
+      const fetchSkills = async () => {
+        try {
+          const res = await processGetAllSkills();
+          setSkillOptions(res);
+        }  catch (e) {
+          throw new Error("failed to get skills", e);
+        } finally {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 2000)
+        }
+       
+      } 
+   
     fetchSkills();
   }, []);
 
@@ -32,7 +58,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
       ? selectedOptions.map((item) => item.value)
       : [];
     setFormData({
-      ...formData,
+      ...formData,  
       skills_id: selectedSkillsIds.join(","),
     });
   };
@@ -43,17 +69,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
       [data]: field,
     });
   };
-
-  // const handleChange = (data, field) => {
-  //   if (data?.target) {
-  //     // Handles standard input fields
-  //     const { name, value } = data.target;
-  //     setFormData((prev) => ({ ...prev, [name]: value }));
-  //   } else if (field?.name) {
-  //     // Handles custom components like PasswordField
-  //     setFormData((prev) => ({ ...prev, [field.name]: data }));
-  //   }
-  // };
 
 
 
@@ -125,7 +140,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
-                      <label>Profession</label>
+                      {/* <label>Profession</label>
                       <div className="ls-inputicon-box">
                         <InputField
                           field={USERPROFILEFIELD.fieldDetail[3]}
@@ -136,13 +151,22 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         />
 
                         <i className="fs-input-icon fa fa-user-edit" />
-                      </div>
+                      </div> */}
+                      <SelectField 
+                          field={USERPROFILEFIELD.fieldDetail[3]}
+                          value={formData}
+                          options={professions}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        {/* <i className="fs-input-icon fa fa-user-edit" /> */}
                     </div>
                   </div>
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
-                      <label>Experience</label>
+                      {/* <label>Experience</label>
                       <div className="ls-inputicon-box">
                         <InputField
                           field={USERPROFILEFIELD.fieldDetail[4]}
@@ -151,9 +175,20 @@ function SectionCandicateBasicInfo({ submit, id }) {
                             handleChange(data, field);
                           }}
                         />
+                       
 
                         <i className="fs-input-icon fa fa-user-edit" />
-                      </div>
+                      </div> */}
+
+                      <SelectField 
+                          field={USERPROFILEFIELD.fieldDetail[4]}
+                          value={formData}
+                          options={options}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        {/* <i className="fs-input-icon fa fa-user-edit" /> */}
                     </div>
                   </div>
 
@@ -173,7 +208,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                     </div>
                   </div>
 
-                  <div className="col-xl-6 col-lg-6 col-md-12">
+                  {/* <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
                       <label>Country</label>
                       <div className="ls-inputicon-box">
@@ -186,12 +221,13 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         />
                         <i className="fs-input-icon fa fa-globe-americas" />
                       </div>
+                      
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
-                      <label>Region</label>
+                      {/* <label>Region</label>
                       <div className="ls-inputicon-box">
                         <InputField
                           field={USERPROFILEFIELD.fieldDetail[7]}
@@ -201,7 +237,16 @@ function SectionCandicateBasicInfo({ submit, id }) {
                           }}
                         />
                         <i className="fs-input-icon fa fa-globe-americas" />
-                      </div>
+                      </div> */}
+                      <SelectField 
+                          field={USERPROFILEFIELD.fieldDetail[6]}
+                          value={formData}
+                          options={regions}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                          icon="globe-americas"
+                        />
                     </div>
                   </div>
 
@@ -210,7 +255,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
                       <label>GPS Address</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[8]}
+                          field={USERPROFILEFIELD.fieldDetail[7]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -221,12 +266,12 @@ function SectionCandicateBasicInfo({ submit, id }) {
                     </div>
                   </div>
 
-                  <div className=" col-xl-6 col-lg-6 col-md-12">
+                  <div className=" col-lg-12 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
                       <label>Postal Code</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[9]}
+                          field={USERPROFILEFIELD.fieldDetail[8]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -265,7 +310,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
                   <div className="col-md-12">
                     <TextAreaField
-                      field={USERPROFILEFIELD.fieldDetail[11]}
+                      field={USERPROFILEFIELD.fieldDetail[10]}
                       value={formData}
                       change={handleChange}
                       required={true} 

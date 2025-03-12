@@ -54,7 +54,7 @@ function SectionCanWorkSample() {
 						title="Edit"
 						className="site-text-primary"
 					>
-						<span className="fa fa-edit" />
+						<span className="fa fa-plus" />
 					</a>
 				</div>
 				<p>Provide details of your work sample.</p>
@@ -65,11 +65,11 @@ function SectionCanWorkSample() {
           data-bs-toggle="modal"
           href="#Work_Sample"
           role="button"
-          title="Edit"
+          title="Add"
           className="site-text-primary"
           onClick={handleResetForm}
         >
-          <span className="fa fa-edit" />
+          <span className="fa fa-plus" /> <span>Add</span>
         </a>
       </div>
 

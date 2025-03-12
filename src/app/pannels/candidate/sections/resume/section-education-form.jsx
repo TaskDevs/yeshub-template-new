@@ -3,6 +3,9 @@ import InputField from '../../../../common/input-field';
 import { EDUCATIONFIELD } from '../../../../../globals/education-data';
 import TextAreaField from '../../../../common/text-area-field';
 import { EducationApiData } from '../../../../context/education/educationContextApi';
+import SelectField from '../../../../common/select-field';
+import { qualifications } from '../../../../../utils/qualifications';
+import { courses } from '../../../../../utils/courses';
 
 
 function SectionEducationForm({ submit, id }) {
@@ -55,7 +58,7 @@ function SectionEducationForm({ submit, id }) {
 								</div>
 
 								<div className="col-lg-12 col-xl-12">
-									<div className="form-group mb-3">
+									{/* <div className="form-group mb-3">
 										<label>Qualification</label>
 										<InputField
 											field={EDUCATIONFIELD.fieldDetail[1]}
@@ -64,12 +67,21 @@ function SectionEducationForm({ submit, id }) {
 												handleChange(data, field);
 											}}
 										/>
-									</div>
+									</div> */}
+									<SelectField 
+									field={EDUCATIONFIELD.fieldDetail[1]}
+									value={formData}
+									options={qualifications}
+									change={(data, field) => {
+										handleChange(data, field);
+									}}
+									icon="graduation-cap"
+									/>
 								</div>
 
 								<div className="col-xl-12 col-lg-12">
 									<div className="form-group">
-										<label>Course</label>
+										{/* <label>Course</label>
 										<div className="ls-inputicon-box">
 											<InputField
 												field={EDUCATIONFIELD.fieldDetail[2]}
@@ -79,7 +91,16 @@ function SectionEducationForm({ submit, id }) {
 												}}
 											/>
 											<i className="fs-input-icon fa fa-book" />
-										</div>
+										</div> */}
+										<SelectField 
+									field={EDUCATIONFIELD.fieldDetail[2]}
+									value={formData}
+									options={courses}
+									change={(data, field) => {
+										handleChange(data, field);
+									}}
+									icon="book"
+									/>
 									</div>
 								</div>
 

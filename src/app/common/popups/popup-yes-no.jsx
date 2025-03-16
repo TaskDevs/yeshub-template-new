@@ -13,6 +13,7 @@ import { ApplicationApiData } from "../../context/application/applicationContext
 import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
 import { JobApiData } from "../../context/jobs/jobsContextApi";
 import { PortfolioMediaApiData } from "../../context/portfolio-media/portfolioMediaContextApi";
+import { MilestoneApiData } from "../../context/milestone/milestoneContextApi";
 
 function YesNoPopup(props) {
   const navigate = useNavigate();
@@ -26,9 +27,11 @@ function YesNoPopup(props) {
   const { handleDeletePortfolio } = useContext(PortfolioApiData);
   const { handleDeletePortfolioMedia } = useContext(PortfolioMediaApiData);
   const { handleDeleteAppliedJob } = useContext(ApplicationApiData);
+  const { handleDeleteteMilestone } = useContext(MilestoneApiData);
   const { freelanceProfileData, processDeleteFreelance } =
     useContext(FreelanceApiData);
   const { processDeleteJob } = useContext(JobApiData);
+  
 
   const handleLogout = async () => {
     const result = await logout(); // Await logout function
@@ -114,6 +117,9 @@ function YesNoPopup(props) {
 
       case popupType.DELETE_JOB:
         return handleDeleteJob();
+
+      case popupType.DELETE_MILESTONE:
+        return handleDeleteteMilestone();
 
       default:
         console.warn("Unknown type", props.type);

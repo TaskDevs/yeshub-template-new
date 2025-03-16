@@ -29,11 +29,9 @@ export const searchMilestone = async () => {
 };
 
 // LIST Milestone
-export const milestoneList = async () => {
+export const milestoneList = async (id) => {
   try {
-    let responseOnMilestoneList = await axios.get({
-      /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnMilestoneList = await axios.get(`${REACT_BASE_URL}get-milestone/user_id/${id}`);
      return responseOnMilestoneList;
     // if (responseOnMilestoneList.status === SUCCESS_STATUS) {
     //   return responseOnMilestoneList.data;

@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { freelancerId, userId } from "../../../globals/constants";
 import { JobApiData } from "../jobs/jobsContextApi";
+import { calculateDaysLeft } from "../../../utils/readableDate";
 
 
 export const ApplicationApiData = createContext();
@@ -29,8 +30,9 @@ const ApplicationApiDataProvider = (props) => {
   const [profile, setProfile] = useState({});
   const jobId = currentpath.split("/")[2];
   const navigate = useNavigate();
+ 
 
-  // console.log("jobId-params", id)
+  // console.log("Id-params", id)
   // sessionStorage.setItem("Job_id", jobId)
 
 
@@ -41,6 +43,8 @@ const ApplicationApiDataProvider = (props) => {
   
   const fetchProfileAndMatchJobs = async () => {
     if (!userId) return;
+
+    setIsLoading(true)
 
     try {
       const res = await processApplicationProfile(userId);
@@ -85,6 +89,8 @@ const ApplicationApiDataProvider = (props) => {
       setAppliedJobs(jobsWithDetails);
     } catch (error) {
       console.error("Failed to fetch jobs data", error);
+    } finally {
+      setIsLoading(false)
     }
   };
   
@@ -93,9 +99,7 @@ const ApplicationApiDataProvider = (props) => {
   }, [userId, jobId]);
 
   const fetchJobProfile = async () => {
-    setTimeout(() => {
-      setIsLoading(true)
-    }, 200)
+    setIsLoading(true)
     try {
       
       const res = await processAJobProfile(jobId);
@@ -104,9 +108,7 @@ const ApplicationApiDataProvider = (props) => {
     } catch (e) {
       throw new Error("Failed to fetch job profile", e)
     }finally {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 2000)
+      setIsLoading(false)
     }
     
   }
@@ -173,11 +175,16 @@ const ApplicationApiDataProvider = (props) => {
   };
 
   const handleSubmmitApplication = async () => {
-
+    const days_left = calculateDaysLeft(profile?.start_date, profile?.end_date)
     
     if (!userId)
     {
       toast.error("User does not exist, Please sign in");
+      return;
+    }
+    
+    if (days_left === 0) {
+      toast.error("Can't apply, Job has expired!");
       return;
     }
 
@@ -253,6 +260,7 @@ const ApplicationApiDataProvider = (props) => {
 			toast.error("Please select the applied job to delete");
 			return;
 		}
+    // console.log("selectedId-del", selectedId)
 		setIsSubmitting(true);
 
 		try {

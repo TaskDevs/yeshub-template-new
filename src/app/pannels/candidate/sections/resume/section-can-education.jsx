@@ -8,149 +8,131 @@ import { RiGraduationCapLine } from "react-icons/ri";
 import toast from "react-hot-toast";
 // import { userId } from "../../../../../globals/constants";
 
-
 function SectionCanEducation() {
-	const {	
-		educationData,
-		handleAddEducation,
-		handleUpdateEducation,
-		initialFormData,
-		setFormData
-	} = useContext(EducationApiData);
+  const {
+    educationData,
+    handleAddEducation,
+    handleUpdateEducation,
+    initialFormData,
+    setFormData,
+  } = useContext(EducationApiData);
 
-	const { selectedId, setSelectedId } =
-		useContext(GlobalApiData);
+  const { selectedId, setSelectedId } = useContext(GlobalApiData);
 
+  const handleEditClick = (id) => {
+    if (!id) {
+      toast.error("Please select the education to edit ");
+    }
+    setSelectedId(id);
 
+    const educationToEdit = educationData.find((e) => e.id === id);
 
-		
+    // console.log("educationToEdit", educationToEdit);
+    if (educationToEdit) {
+      setFormData({
+        school: educationToEdit.school,
+        qualification: educationToEdit.qualification,
+        area_of_study: educationToEdit.area_of_study,
+        date_attended: educationToEdit.date_attended,
+        date_completed: educationToEdit.date_completed,
+        description: educationToEdit.description,
+      });
+    }
+  };
 
-	const handleEditClick = (id) => {
-		if (!id) {
-			toast.error("Please select the education to edit ")
-		}
-		setSelectedId(id);
+  const handleResetForm = () => {
+    setFormData(initialFormData);
+  };
 
-		const educationToEdit = educationData.find((e) => e.id === id);
+  return (
+    <>
+      <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+        <h4 className="panel-tittle m-a0">Education</h4>
+        <a
+          data-bs-toggle="modal"
+          href="#Education"
+          role="button"
+          title="Add"
+          className="site-text-primary"
+          onClick={handleResetForm}
+        >
+          <span className="fa fa-plus" /> <span>Add</span>
+        </a>
+      </div>
+      <div className="panel-body wt-panel-body p-a20 ">
+        <div className="twm-panel-inner">
+          {educationData.length === 0 ? (
+            <p>Add your education profile.</p>
+          ) : (
+            <div className="">
+              {educationData.map((education, i) => (
+                <div
+                  key={i}
+                  className="mb-4 sec-educ"
+                  onClick={() => setSelectedId(education.id)}
+                >
+                  <div className="">
+                    <RiGraduationCapLine />
+                  </div>
 
-		// console.log("educationToEdit", educationToEdit);
-		if (educationToEdit) {
-			setFormData({
-				school: educationToEdit.school,
-				qualification: educationToEdit.qualification,
-				area_of_study: educationToEdit.area_of_study,
-				date_attended: educationToEdit.date_attended,
-				date_completed: educationToEdit.date_completed,
-				description: educationToEdit.description,
-			});
-		}
-	};
+                  <div className="">
+                    <div className="">
+                      school : <span>{education.school} </span>
+                    </div>
+                    <div className="">
+                      Area of study : <span>{education.area_of_study} </span>
+                    </div>
 
+                    <div className="">
+                      date completed : <span>{education.date_completed} </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div className="p-a20">
+                <div className="sec-actions-btn">
+                  <button
+                    className="site-button  actions-btn"
+                    data-bs-target="#delete-education"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    <FaRegTrashCan color="white" />
+                    <span className="admin-nav-text">Delete</span>
+                  </button>
 
-	const handleResetForm = () => {
-		setFormData(initialFormData);
-	}
+                  <button
+                    className="site-button  actions-btn "
+                    data-bs-target="#Edit-Education"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    onClick={() => {
+                      handleEditClick(selectedId);
+                    }}
+                  >
+                    <MdOutlineEdit color="white" />
+                    <span>Edit</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
-	
-	
-	
-	
-	return (
-		<>
-			<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-				<h4 className="panel-tittle m-a0">Education</h4>
-				<a
-					data-bs-toggle="modal"
-					href="#Education"
-					role="button"
-					title="Add"
-					className="site-text-primary"
-					onClick={handleResetForm}
-				>
-					<span className="fa fa-plus" /> <span>Add</span>
-				</a>
-			</div>
-			<div className="panel-body wt-panel-body p-a20 ">
-				<div className="twm-panel-inner">
-					{educationData.length === 0 ? (
-						<p>Add your education profile.</p>
-					) : (
-						<div className="">
-							{educationData.map((education, i) => (
-								
-									<div key={i} className="mb-4 sec-educ" onClick={() => setSelectedId(education.id)}>
-										<div className="">
-											<RiGraduationCapLine />
-										</div>
-
-										<div className="">
-											<div className="">
-												school : <span>{education.school} </span>
-											</div>
-											<div className="">
-												Area of study : <span>{education.area_of_study} </span>
-											</div>
-										
-											<div className="">
-												date completed :{" "}
-												<span>{education.date_completed} </span>
-											</div>
-											
-										</div>
-									</div>
-
-								
-							))}
-							<div className="p-a20">
-								<div className="sec-actions-btn">
-									<button
-										className="site-button  actions-btn"
-										data-bs-target="#delete-education"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-									>
-										<FaRegTrashCan color="white" />
-										<span className="admin-nav-text">Delete</span>
-									</button>
-
-									<button
-										className="site-button  actions-btn "
-										data-bs-target="#Edit-Education"
-										data-bs-toggle="modal"
-										data-bs-dismiss="modal"
-										onClick={() => {
-											handleEditClick(selectedId);
-										}}
-									>
-										<MdOutlineEdit color="white" />
-										<span>Edit</span>
-									</button>
-								</div>
-							</div>
-						</div>
-					)}
-				</div>
-			</div>
-
-			<SectionEducationForm submit={handleAddEducation} id="Education" />
-			<SectionEducationForm
-				submit={handleUpdateEducation}
-				id="Edit-Education"
-			/>
-		</>
-	);
+      <SectionEducationForm submit={handleAddEducation} id="Education" />
+      <SectionEducationForm
+        submit={handleUpdateEducation}
+        id="Edit-Education"
+      />
+    </>
+  );
 }
 export default SectionCanEducation;
 
+/*Education Form*/
 
-
-
-
-
-	/*Education Form*/
-
-
-	/* <div
+/* <div
 					className="modal fade twm-saved-jobs-view"
 					id="Education"
 					tabIndex={-1}
@@ -289,5 +271,3 @@ export default SectionCanEducation;
 						</div>
 					</div>
 				</div> */
-
-

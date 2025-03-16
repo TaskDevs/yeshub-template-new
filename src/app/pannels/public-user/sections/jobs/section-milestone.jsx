@@ -12,16 +12,10 @@ function SectionMilestone({ index, milestone }) {
     };
 
  
-    // MILESTONEFIELD.fieldDetail.push({
-    //     name: "job_id",
-    //     value: id
-    // })
-    // console.log("MILESTONEFIELD",  MILESTONEFIELD.fieldDetail)
-
     return (
         <div className="milestone-section">
 			<div className="twm-sec-timelines">
-            {MILESTONEFIELD.fieldDetail.slice(0,3).map((field, fieldIndex) => (
+            {MILESTONEFIELD.fieldDetail.map((field, fieldIndex) => (
                 
 					<div className="twm-timelines" key={fieldIndex}>
 					<label htmlFor={field.label}>{field.label}</label>
@@ -29,13 +23,15 @@ function SectionMilestone({ index, milestone }) {
                     
                     name={field.name}
                     type={field.type}
-                    minLength={field.minLength}
-                    maxLength={field.maxLength}
+                    minLength={3}
+                    maxLength={50}
                     required={field.required}
-                    className="form-control"
+                    
+                    className="p-inputtext p-p-2 p-border-round"
                     placeholder={field.placeholder}
                     value={milestone[field.name] || ''}
                     onChange={(e) => handleInputChange(e, field)}
+                    style={{ width: '100%', fontSize: '1rem' }}
                 />
 					</div>
 				

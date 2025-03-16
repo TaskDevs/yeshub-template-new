@@ -111,7 +111,7 @@ function ApplyJobPage() {
                         key={index}
                         index={index}
                         milestone={milestone}
-                        id={id}
+                       
                       />
                     ))}
                     <div className="milestone-add-options">

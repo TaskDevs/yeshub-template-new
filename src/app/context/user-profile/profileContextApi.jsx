@@ -53,9 +53,7 @@ const ProfileApiDataProvider = (props) => {
   
 
   const fetchProfile = async () => {
-    setTimeout(() => {
-      setIsLoading(true)
-    }, 200)
+    setIsLoading(true)
     try{
       const res = await processProfileProfile(userId);
     if (res) {
@@ -64,9 +62,7 @@ const ProfileApiDataProvider = (props) => {
     } catch (e) {
       throw new Error("could not fetch profile", e);
     } finally {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 2000)
+      setIsLoading(false)
     }
     
   };
@@ -79,10 +75,8 @@ const ProfileApiDataProvider = (props) => {
 
 
   useEffect(() => {
-    const fetchAllProfile = async () => {
-      setTimeout(() =>{
-        setIsLoading(true)
-      }, 200)
+    const fetchAllUsers = async () => {
+      setIsLoading(true)
 
       try{
         const res = await profileList();
@@ -93,17 +87,12 @@ const ProfileApiDataProvider = (props) => {
     } catch (e) {
       throw new Error("could not fetch all profiles", e);  
     } finally {
-      setTimeout(() =>{
-        setIsLoading(false)
-      }, 2000)
+      setIsLoading(false)
     }
       }
 
-    fetchAllProfile();
+    fetchAllUsers();
    
-   
-    // const interval = setInterval(fetchAllProfile, 60000);
-    // return () => clearInterval(interval); 
   }, []);
 
   const processAddProfile = async (data) => {
@@ -112,6 +101,7 @@ const ProfileApiDataProvider = (props) => {
       return res;
     } catch (err) {
       console.error("add-profile", err);
+      throw err;
     }
   };
   
@@ -122,6 +112,7 @@ const ProfileApiDataProvider = (props) => {
       return res;
     } catch (e) {
       console.error("get-all-profile", e);
+      throw e;
     }
   };
 
@@ -130,16 +121,18 @@ const ProfileApiDataProvider = (props) => {
       const res = await profileProfile(id);
       return res;
     } catch (err) {
-      throw new Error(err);
+      console.error("profile-profile", err);
+      throw err;
     }
   };
 
   const processFullProfileProfile = async (id) => {
-    try {
-      const res = await fullProfileProfile(id);
+    const res = await fullProfileProfile(id);
+    if (res) {
+      
       return res;
-    } catch (err) {
-      throw new Error(err);
+    } else {
+      return false;
     }
   };
 
@@ -193,9 +186,7 @@ const ProfileApiDataProvider = (props) => {
 
   setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsLoading(true)
-    }, 200)
+  setIsLoading(true)
     
     // let base64String = imageURL.replace(/^data:image\/\w+;base64,/, '');
 

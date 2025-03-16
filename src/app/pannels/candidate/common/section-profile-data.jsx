@@ -48,6 +48,7 @@ function SectionProfileData() {
 			<p className="profile-data-attributes">
 				Bio: <span>{profileData.bio}</span>
 			</p>
+			
 		</div>
 	)
 	: 

@@ -18,7 +18,7 @@ function SectionFreelancerInfo() {
 
        
 
-<p className="profile-data-attributes">
+<div className="profile-data-attributes">
 Portfolio(s):
 <ul className="portfolio-lists" >
 
@@ -71,31 +71,32 @@ Portfolio(s):
 
 </ul>
 
-</p>
+</div>
 
 
+<div className="mb-5">
+    <p className="" style={{ fontWeight: "bold" }}>Experience: </p>
+    <div
+        className="pl-2"
+        dangerouslySetInnerHTML={{
+            __html: data?.experience
+                ? (() => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data.experience;
+                    console.log("tempDiv.innerHTML", tempDiv.innerHTML);
+                    const capitalizeFirstLetterOfSentences = (htmlString) => {
+                        return htmlString.replace(/([.!?]\s*)(\w)/g, (match, punctuation, char) => {
+                            return punctuation + char.toUpperCase();
+                        }).toLowerCase(); // Ensure the rest of the text is lowercase
+                    };
+                    return capitalizeFirstLetterOfSentences(tempDiv.innerHTML);
+                })()
+                : '',
+        }}
+    />
+</div>
 
-        <p className="profile-data-attributes">
-          Experience: <span>{data?.experience}</span>{" "}
-        </p>
-        {/* <p className="profile-data-attributes">
-					Region: <span>{freelanceProfileData.region}</span>
-				</p>
-				<p className="profile-data-attributes">
-					Address: <span>{freelanceProfileData.address}</span>
-				</p>
-				<p className="profile-data-attributes">
-					Gps address: <span>{freelanceProfileData.gps_address}</span>
-				</p>
-				<p className="profile-data-attributes">
-					Postal code: <span>{freelanceProfileData.postal_code}</span>
-				</p>
-				<p className="profile-data-attributes">
-					Years of experinece: <span>{freelanceProfileData.experience}</span>
-				</p>
-				<p className="profile-data-attributes">
-					Bio: <span>{freelanceProfileData.bio}</span>
-				</p> */}
+
       </div>
     ))
   ) : (

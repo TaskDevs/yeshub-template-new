@@ -260,6 +260,7 @@ This files [Table of contents] are outlined below
   text-transform: capitalize;
   cursor: pointer;
   transition: background 0.3s ease;
+  border-bottom: 1px solid #6c757d;
 }
 .sec-educ:hover {
    background: #D6D6D6;
@@ -276,7 +277,7 @@ This files [Table of contents] are outlined below
   width: 100%;
   background: red;
 } */
-@media (min-width > 768px) {
+@media (min-width > 830px) {
   .rightSidebar {
     display: block !important; /* Ensure sidebar is always visible on desktop */
   }
@@ -286,10 +287,11 @@ This files [Table of contents] are outlined below
   display: none!important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 830px) {
   .can-header-right {
     display: block!important;
     margin-right: 0.75rem;
+    
   }
   .rightSidebar.collapsed {
     display: none; /* Hide the sidebar when collapsed */
@@ -358,6 +360,17 @@ This files [Table of contents] are outlined below
 .apply-title:hover {
   text-decoration: underline;
 }
+
+@media (min-width: 500px) and (max-width: 1024px ) {
+  .applied-details-mid {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    /* background: green; */
+  }
+}
+
+
 
 .site-text-primary {
   color: #305718;
@@ -620,6 +633,10 @@ ol li {
   content: "\f105";
 }
 
+/**
+ * Sets the content of the .list-arrow li:before pseudo-element to
+ * "\f0da", which is the Unicode character for the right arrow.
+ */
 .list-arrow li:before {
   content: "\f0da";
 }
@@ -12499,19 +12516,27 @@ strong {
 
 .ls-inputicon-box  {
   position: relative;
+ 
 }
 .ls-inputicon-box .fs-input-icon {
   position: absolute;
   left: 0;
   top: 0;
   width: 40px;
-  height: 60px;
+  height: 50px;
   z-index: 5;
-  line-height: 60px;
+  line-height: 50px;
   text-align: center;
   font-size: 16px;
-  color: #305718;
+  color: #6c757d;
+  border-right: 1px solid #d5d5d5;
+  /* padding-right: 25px; */
 }
+
+.ls-inputicon-box .new-form-control {
+  padding-left: 45px;
+}
+
 .ls-inputicon-box .form-control {
   padding-left: 35px;
 }

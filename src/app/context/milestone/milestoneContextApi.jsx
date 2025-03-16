@@ -1,29 +1,26 @@
-import React, { createContext, useState, useContext, useEffect, } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 import {
   addMilestone,
   milestoneProfile,
   updateMilestone,
   deleteMilestone,
+  milestoneList,
 } from "./milestoneApi";
 import { MILESTONEFIELD } from "../../../globals/milestone-data";
 // import { ApplicationApiData } from "../application/applicationContextApi";
-import { freelancerId,  userId } from "../../../globals/constants";
+import { freelancerId, userId } from "../../../globals/constants";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { GlobalApiData } from "../global/globalContextApi";
-import { JobApiData } from "../jobs/jobsContextApi";
-
-
+// import { JobApiData } from "../jobs/jobsContextApi";
 
 const initialData = MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
   acc[field.name] = "";
   return acc;
 }, {});
 
-
-
-const initialMilestone =  MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
+const initialMilestone = MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
   acc[field.name] = "";
   return acc;
 }, {});
@@ -31,35 +28,36 @@ const initialMilestone =  MILESTONEFIELD.fieldDetail.reduce((acc, field) => {
 export const MilestoneApiData = createContext();
 
 const MilestoneApiDataProvider = (props) => {
-  
   const [selectedOption, setSelectedOption] = useState("milestone");
-  const [formData, setFormData] = useState(initialData)
-  const { processAJobProfile } = useContext(JobApiData)
+  const [formData, setFormData] = useState(initialData);
+  const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
   const [appliedMilestones, setAppliedMilestones] = useState([]);
-  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+  const [appliedAllMilestones, setAppliedAllMilestones] = useState([]);
+  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData);
+  const [jobMilestones, setJobMilestones] = useState([])
+  const [jobId, setJobId] = useState(
+    () => sessionStorage.getItem("job_id") || ""
+  );
+  const [sessionStorageUpdated, setSessionStorageUpdated] = useState(false);
   const navigate = useNavigate();
- 
 
-const [jobId, setJobId] = useState(() => sessionStorage.getItem("job_id") || "");
-const [sessionStorageUpdated, setSessionStorageUpdated] = useState(false);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    const newJobId = sessionStorage.getItem("job_id") || "";
-    if (newJobId !== jobId) {
-      setJobId(newJobId);
-    }
-  }, 500); 
 
-  return () => clearInterval(interval);
-}, [jobId]); // Depend on jobId so it updates properly
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newJobId = sessionStorage.getItem("job_id") || "";
+      if (newJobId !== jobId) {
+        setJobId(newJobId);
+      }
+    }, 500);
 
-  
+    return () => clearInterval(interval);
+  }, [jobId]); 
 
   const completeInitialMilestone = {
     ...initialMilestone,
     user_id: userId,
-    job_id: jobId,          
+    job_id: jobId,
     freelance_id: freelancerId,
     employer_status: "pending",
     freelancer_status: "pending",
@@ -83,214 +81,281 @@ useEffect(() => {
     }
   }, [jobId, userId, freelancerId, initialMilestone]);
 
-
   useEffect(() => {
     if (sessionStorageUpdated) {
       setSessionStorageUpdated(false); // Reset signal
     }
   }, [sessionStorageUpdated]);
 
-  // console.log("appliedMilestones-milestonectx", appliedMilestones);
+ 
+
+  const fetchMilestones = async () => {
+    if (!userId) return;
+
+    setIsLoading(true);
+    try {
+      const res = await processGetAllMilestone(userId);
+      const data = res.data.data;
+      console.log("all-milestones-mctx", data);
+
+      const uniqueJobsMap = data.reduce((acc, current) => {
+        const existingJob = acc.get(current.job_id);
+        if (
+          !existingJob ||
+          new Date(current.created_at) > new Date(existingJob.created_at)
+        ) {
+          acc.set(current.job_id, current);
+        }
+        return acc;
+      }, new Map());
+
+      const filteredJobs = Array.from(uniqueJobsMap.values());
+      console.log("filteredJobs-milectx", filteredJobs);
+
+      setAppliedMilestones(filteredJobs);
+      setAppliedAllMilestones(data);
+      setJobMilestones(data)
+    } catch (error) {
+      console.error("Failed to fetch jobs data", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMilestones();
+  }, []);
+// userId
 
 
-
-
-
-
-// console.log("milestones-milestonectx", milestones)
-
-const fetchProfileMilestones = async () => {
-  if (!jobId) return;
-
-  try {
-    const res = await processMilestoneProfile(jobId);
-    const data = res.data.data;
-       
-
-    const jobDetailsResponses = await Promise.all(
-      data?.map((job) => processAJobProfile(job.job_id))
-    );
-
-    // console.log("uniqueJobIds-appctx", jobDetailsResponses)
-
-    const jobsWithDetails = data.map((appliedJob, index) => {
-      const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
-      return {
-        ...appliedJob,
-        jobDetails,
-      };
-    });
-
-    // console.log("jobsWithDetails", jobsWithDetails)
-    setAppliedMilestones(jobsWithDetails);
-  } catch (error) {
-    console.error("Failed to fetch jobs data", error);
-  }
-};
-
-useEffect(() => {
-  fetchProfileMilestones();
-}, [jobId]);
-
-
-const handleChange = (index, data, field) => {
-  setMilestones((prevMilestones) => {
+  const handleChange = (index, data, field) => {
+    setMilestones((prevMilestones) => {
       const updatedMilestones = [...prevMilestones];
       updatedMilestones[index] = {
-          ...updatedMilestones[index],
-          [field.name]: data,
+        ...updatedMilestones[index],
+        [field.name]: data,
       };
       return updatedMilestones;
-  });
-};
+    });
+  };
 
   const processAddMilestone = async (data) => {
     try {
-            const res = await addMilestone(data);
-            // console.log("add milestone", res);
-            return res;
-          } catch (e) {
-            throw new Error("Failed to delete milestone", e);
-          }
+      const res = await addMilestone(data);
+      // console.log("add milestone", res);
+      return res;
+    } catch (e) {
+      throw new Error("Failed to add milestone", e);
+    }
   };
 
-  const processGetAllMilestone = async () => {};
+  const processGetAllMilestone = async (id) => {
+    try {
+      const res = await milestoneList(id);
+      console.log("res", res);
+      return res;
+    } catch (e) {
+      throw new Error("Failed to get milestone", e);
+    }
+  };
 
   const processMilestoneProfile = async (id) => {
     try {
-            const res = await milestoneProfile(id);
-            // console.log("milestone profile", res);
-            return res;
-          } catch (e) {
-            throw new Error("Failed to get milestone profile", e);
-          }
+      const res = await milestoneProfile(id);
+      // console.log("milestone profile", res);
+      return res;
+    } catch (e) {
+      throw new Error("Failed to get milestone profile", e);
+    }
   };
 
   const processSearchMilestone = async () => {};
 
   const processUpdateMilestone = async (id, data) => {
     try {
-            const res = await updateMilestone(id, data);
-            // console.log("delete milestone", res);
-            return res;
-          } catch (e) {
-            throw new Error("Failed to delete milestone", e);
-          }
+      const res = await updateMilestone(id, data);
+      // console.log("delete milestone", res);
+      return res;
+    } catch (e) {
+      throw new Error("Failed to update milestone", e);
+    }
   };
 
   const processDeleteMilestone = async (id) => {
-      try {
-              const res = await deleteMilestone(id);
-              // console.log("delete milestone", res);
-              return res;
-            } catch (e) {
-              throw new Error("Failed to delete milestone", e);
-            }
-};
+    try {
+      const res = await deleteMilestone(id);
+      // console.log("delete milestone", res);
+      return res;
+    } catch (e) {
+      throw new Error("Failed to delete milestone", e);
+    }
+  };
 
+  const addMilestones = () => {
+    setMilestones((prevMilestones) => [
+      ...prevMilestones,
+      completeInitialMilestone,
+    ]);
+  };
 
-const addMilestones = () => {
-  setMilestones((prevMilestones) => [...prevMilestones, completeInitialMilestone]);
-};
-
-
-const removeMilestone = () => {
-  setMilestones((prevMilestones) => {
+  const removeMilestone = () => {
+    setMilestones((prevMilestones) => {
       if (prevMilestones.length > 1) {
-          return prevMilestones.slice(0, prevMilestones.length - 1);
+        return prevMilestones.slice(0, prevMilestones.length - 1);
       } else {
-          return prevMilestones;
+        return prevMilestones;
       }
-  });
-};
+    });
+  };
 
-
-const handleSubmitMilestoneApplication = async (e) => {
+  const handleSubmitMilestoneApplication = async (e) => {
     e.preventDefault();
-    
+
     if (selectedOption === "project") {
-      toast.error("Sorry, we're still working on this project")
+      toast.error("Sorry, we're still working on this project");
       return;
     }
 
-    
     if (appliedMilestones?.some((job) => job.job_id === Number(jobId))) {
       toast.error("You have already applied for this job");
       return;
     }
-    
-    setIsSubmitting(true)
+
+    setIsSubmitting(true);
     setTimeout(() => {
-      setIsLoading(true)
-    }, 200)
+      setIsLoading(true);
+    }, 200);
 
     try {
-      const res =  await processAddMilestone({     
+      const res = await processAddMilestone({
         milestones: milestones,
-			});
+      });
       // console.log("res-milestone", res)
       if (res) {
-        await fetchProfileMilestones();
-        navigate(`/dashboard-candidate/applied-jobs`)
+        await fetchMilestones();
+        navigate(`/dashboard-candidate/applied-jobs`);
         setTimeout(() => {
-          toast.success("Job applied successfully")
-        }, 3000)
+          toast.success("Job applied successfully");
+        }, 3000);
       }
-     
     } catch {
       setTimeout(() => {
-        toast.error("Failed to apply")
-      }, 3100)
+        toast.error("Failed to apply");
+      }, 3100);
       return false;
     } finally {
       setIsSubmitting(false);
-      setMilestones([{
-        ...initialMilestone,
-        user_id: userId,
-        job_id: jobId,
-        freelance_id: freelancerId,
-        employer_status: "pending",
-        freelancer_status: "pending",
-        pay_status: "pending"
-      }]);
+      setMilestones([
+        {
+          ...initialMilestone,
+          user_id: userId,
+          job_id: jobId,
+          freelance_id: freelancerId,
+          employer_status: "pending",
+          freelancer_status: "pending",
+          pay_status: "pending",
+        },
+      ]);
       setTimeout(() => {
-        setIsLoading(false)
-      }, 3000)
+        setIsLoading(false);
+      }, 3000);
     }
-}
-  
+  };
 
-const handleUpdateMilestone = async () => {};
+  // const handleUpdateMilestone = async (e) => {
+  //   e.preventDefault();
 
+  //   setIsSubmitting(true);
+  //   setTimeout(() => {
+  //     setIsLoading(true);
+  //   }, 200);
 
+  //   try {
+  //     const res = await processUpdateMilestone({
+  //       ...initialMilestone,
+  //       user_id: userId,
+  //       job_id: jobId,
+  //       freelance_id: freelancerId,
+  //       employer_status: "pending",
+  //       freelancer_status: "pending",
+  //       pay_status: "pending",
+  //     });
+  //     // console.log("res-milestone", res)
+  //     if (res) {
+  //       await fetchMilestones();
+  //       toast.success("Job applied successfully");
+  //     }
+  //   } catch {
+  //     toast.error("Failed to apply");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //     setMilestones({
+  //       ...initialMilestone,
+  //       user_id: userId,
+  //       job_id: jobId,
+  //       freelance_id: freelancerId,
+  //       employer_status: "pending",
+  //       freelancer_status: "pending",
+  //       pay_status: "pending",
+  //     });
+  //     setIsLoading(false);
+  //   }
+  // };
 
+  const handleDeleteteMilestone = async () => {
+    if (!selectedMilestoneId) {
+      toast.error("Please select the milestone to delete");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await processDeleteMilestone(selectedMilestoneId);
+      await fetchMilestones();
+      toast.success("Portfolio deleted successfully");
+    } catch {
+      toast.error("Failed to delete portfolio");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+      setSelectedMilestoneId(null);
+    }
+  };
 
   return (
-		<MilestoneApiData.Provider
-			value={{
-				formData,
+    <MilestoneApiData.Provider
+      value={{
+        formData,
         selectedOption,
-        milestones, 
+        milestones,
+        jobMilestones, 
+        
         appliedMilestones,
+        selectedMilestoneId,
+        setJobMilestones,
+        appliedAllMilestones,
+        setAppliedAllMilestones,
+        setSelectedMilestoneId,
         setMilestones,
+        fetchMilestones,
         handleChange,
         setSelectedOption,
-				setFormData,
-				processAddMilestone,
-				processGetAllMilestone,
-				processMilestoneProfile,
-				processSearchMilestone,
-				processUpdateMilestone,
-				processDeleteMilestone,
+        setFormData,
+        processAddMilestone,
+        processGetAllMilestone,
+        processMilestoneProfile,
+        processSearchMilestone,
+        processUpdateMilestone,
+        processDeleteMilestone,
         addMilestones,
         removeMilestone,
-				handleSubmitMilestoneApplication,
-				handleUpdateMilestone,
-			}}
-		>
-			{props.children}
-		</MilestoneApiData.Provider>
-	);
+        handleSubmitMilestoneApplication,
+        // handleUpdateMilestone,
+        handleDeleteteMilestone,
+      }}
+    >
+      {props.children}
+    </MilestoneApiData.Provider>
+  );
 };
 
 export default MilestoneApiDataProvider;

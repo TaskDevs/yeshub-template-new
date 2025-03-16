@@ -111,14 +111,15 @@ function CanProfilePage() {
   
     try {
       // Check if profile data is already available
-      if (profileData) filledSections++;
-  
+      if (profileData.id) filledSections++;
+    console.log("profileData-can-profile", profileData);
+
       // Check if education data is retrieved
       const educationData = await processEducationEducation(userId);
       if (educationData) filledSections++;
 
       const portfolioData = await processGetAllPortfolio(userId);
-      console.log("portfolioData-can-profile", portfolioData);
+      
       if (portfolioData) filledSections++;
   
       // Check if portfolio data is retrieved
@@ -141,6 +142,8 @@ function CanProfilePage() {
   useEffect(() => {
     updateProgress();
   }, []);
+
+  
 
   return (
     <>
@@ -176,7 +179,7 @@ function CanProfilePage() {
 
         {progress < 100 ? (
            <div >
-           <p>Kindly complete the current section and click on these sections to complete them</p>
+           <div>Kindly complete the current section and click on these sections to complete them</div>
            <ul className="portfolio-lists">
            {sections.map((s, i) => (
              <li className="progress-bar-list" key={i}>

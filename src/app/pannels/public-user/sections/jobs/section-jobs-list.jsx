@@ -31,7 +31,7 @@ function SectionJobsList() {
     <>
       <div>
         <div className="twm-jobs-list-wrap">
-          {jobListData.map((item, index) => (
+          {jobListData?.map((item, index) => (
           
            
             <JobsCard

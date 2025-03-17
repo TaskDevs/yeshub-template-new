@@ -1,16 +1,16 @@
-function SelectField({ field, value, options, change }) {
+function SearchSelectField({ field, use, value, options, change }) {
   const handleInputChange = (e) => {
     change(field.name, e.target.value);
   };
 
   return (
     <div className="form-group">
-      <label>{field.label}</label>
+      {!use && <label>{field.label}</label>}
       <div className="ls-inputicon-box">
         <select
           // wt-select-box selectpicker
 
-          className=" form-control wt-select-box bg-red selectpicker"
+          className="wt-search-bar-select"
           data-live-search="true"
           id={field.id}
           name={field.name}
@@ -21,10 +21,7 @@ function SelectField({ field, value, options, change }) {
             {field.placeholder || "Select an option"}
           </option>
           {options.map((option, i) => (
-            <option key={i}>
-              {console.log("labelkey", option)}
-              {option}
-            </option>
+            <option key={i}>{option}</option>
           ))}
         </select>
         {/* <i className="fs-input-icon fa fa-user-edit" /> */}
@@ -33,4 +30,4 @@ function SelectField({ field, value, options, change }) {
   );
 }
 
-export default SelectField;
+export default SearchSelectField;

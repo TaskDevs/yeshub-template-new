@@ -2,40 +2,66 @@ import { NavLink } from "react-router-dom";
 import JobZImage from "../../../../common/jobz-img";
 import { publicUser } from "../../../../../globals/route-names";
 import { loadScript, publicUrlFor } from "../../../../../globals/constants";
+// import { JobApiData } from "../../../../context/jobs/jobsContextApi";
+import { CategoryApiData } from "../../../../context/category/categoryContextApi";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { useState, useEffect, useContext } from "react";
+import SearchSelectField from "../../../../common/search-select-field";
+import InputField from "../../../../common/input-field";
+import { SEARCHFORMFIELD } from "../../../../../globals/search-form-data";
 import { useNavigate } from "react-router-dom";
 import CountUp from "react-countup";
 
 function Home2Page() {
-  const { setSearchJobInfo } = useContext(JobApiData);
+  const { processSearchJob } = useContext(JobApiData);
+  const { allCategories, fetchAllCategories } = useContext(CategoryApiData);
+  const [processCategoryList, setProcessCategoryList] = useState([]);
+  const [formData, setFormData] = useState({});
+
   useEffect(() => {
     loadScript("js/custom.js");
   });
 
-  const [jobTitle, setJobTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [location, setLocation] = useState("");
+  useEffect(() => {
+    fetchAllCategories();
+  }, []);
+
+  useEffect(() => {
+    let data = [];
+    allCategories.length > 0 &&
+      allCategories.map((item) => data.push(item.category_name));
+    setProcessCategoryList(data);
+  }, [allCategories]);
+
+  // const [jobTitle, setJobTitle] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [location, setLocation] = useState("");
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    //event.preventDefault(); // Prevent default form submission
-    console.log(jobTitle);
-    setSearchJobInfo({
-      title: jobTitle,
-      category: category,
-      location: location,
+  const handleInputChange = (data, field) => {
+    setFormData({
+      ...formData,
+      [field]: data,
     });
-    // Create query string
-    const queryParams = new URLSearchParams({
-      title: jobTitle.trim(),
-      category: category.trim(),
-      locaton: location.trim(),
-    });
+  };
 
+  const handleSubmit = () => {
+    let catData = formData.category
+      ? allCategories.find((item) => item.category_name == formData.category).id
+      : null;
+
+    let newData = {
+      category: catData,
+      type: formData.type || null,
+      location: formData.location || null,
+    };
+
+    processSearchJob(newData, 1);
     // Redirect to `/jobs` with the query parameters
-    navigate(`/jobs?${queryParams.toString()}`);
+    navigate(
+      `/jobs-search/${newData.category}/${newData.type}/${newData.location}`
+    );
   };
 
   return (
@@ -162,6 +188,7 @@ function Home2Page() {
           </div>
         </div>
       </div>
+
       {/*Search Bar*/}
       <div className="twm-search-bar-2-wrap">
         <div className="container">
@@ -173,52 +200,39 @@ function Home2Page() {
                     <div className="row">
                       {/* Job Title */}
                       <div className="form-group col-lg-3 col-md-6">
-                        <label>What</label>
-                        <select
-                          className="wt-search-bar-select selectpicker"
-                          value={jobTitle}
-                          onChange={(e) => setJobTitle(e.target.value)}
-                        >
-                          <option disabled value="">
-                            Select Category
-                          </option>
-                          <option value="Job Title">Job Title</option>
-                          <option value="Web Designer">Web Designer</option>
-                          <option value="Developer">Developer</option>
-                          <option value="Accountant">Accountant</option>
-                        </select>
+                        <SearchSelectField
+                          field={SEARCHFORMFIELD.fieldDetail[0]}
+                          value={formData}
+                          options={processCategoryList}
+                          change={(data, field) => {
+                            handleInputChange(field, data);
+                          }}
+                        />
                       </div>
 
                       {/* Category */}
                       <div className="form-group col-lg-3 col-md-6">
-                        <label>Type</label>
-                        <select
-                          className="wt-search-bar-select selectpicker"
-                          value={category}
-                          onChange={(e) => setCategory(e.target.value)}
-                        >
-                          <option disabled value="">
-                            Select Category
-                          </option>
-                          <option value="All Category">All Category</option>
-                          <option value="Web Designer">Web Designer</option>
-                          <option value="Developer">Developer</option>
-                          <option value="Accountant">Accountant</option>
-                        </select>
+                        <SearchSelectField
+                          field={SEARCHFORMFIELD.fieldDetail[1]}
+                          value={formData}
+                          options={["Part Time", "Full Time"]}
+                          change={(data, field) => {
+                            handleInputChange(field, data);
+                          }}
+                        />
                       </div>
 
                       {/* Location */}
                       <div className="form-group col-lg-3 col-md-6">
                         <label>Location</label>
                         <div className="twm-inputicon-box">
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Location"
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
+                          <InputField
+                            field={SEARCHFORMFIELD.fieldDetail[2]}
+                            value={formData}
+                            change={(data, field) => {
+                              handleInputChange(field, data);
+                            }}
                           />
-                          <i className="twm-input-icon fas fa-map-marker-alt" />
                         </div>
                       </div>
 
@@ -669,34 +683,33 @@ function Home2Page() {
       </div>
 
       <div className="section-full p-t120 p-b90 site-bg-gray twm-bg-ring-wrap2">
-                <div className="twm-bg-ring-right" />
-                <div className="twm-bg-ring-left" />
-                <div className="container">
-                    <div className="wt-separator-two-part">
-                        <div className="row wt-separator-two-part-row">
-                            <div className="col-xl-6 col-lg-6 col-md-12 wt-separator-two-part-left">
-                                
-                                <div className="section-head left wt-small-separator-outer">
-                                    <div className="wt-small-separator site-text-primary">
-                                        <div>Unlock Your Freedom!</div>
-                                    </div>
-                                    <h2 className="wt-title">Ready for more control? Explore freelancing</h2>
-                                </div>
-                                
-                            </div>
-                            <div className="col-xl-6 col-lg-6 col-md-12 wt-separator-two-part-right text-right">
-                                <NavLink to="/dashboard-candidate/profile" className=" site-button">Become a Freelancer</NavLink>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+        <div className="twm-bg-ring-right" />
+        <div className="twm-bg-ring-left" />
+        <div className="container">
+          <div className="wt-separator-two-part">
+            <div className="row wt-separator-two-part-row">
+              <div className="col-xl-6 col-lg-6 col-md-12 wt-separator-two-part-left">
+                <div className="section-head left wt-small-separator-outer">
+                  <div className="wt-small-separator site-text-primary">
+                    <div>Unlock Your Freedom!</div>
+                  </div>
+                  <h2 className="wt-title">
+                    Ready for more control? Explore freelancing
+                  </h2>
+                </div>
+              </div>
+              <div className="col-xl-6 col-lg-6 col-md-12 wt-separator-two-part-right text-right">
+                <NavLink
+                  to="/dashboard-candidate/profile"
+                  className=" site-button"
+                >
+                  Become a Freelancer
+                </NavLink>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-                   
-                    
-
-
-
-
 
       {/* EXPLORE NEW LIFE END */}
       {/* JOB POST START */}

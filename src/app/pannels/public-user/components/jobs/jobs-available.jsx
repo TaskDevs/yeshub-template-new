@@ -5,7 +5,7 @@ import { useEffect, useContext, useState } from "react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { loadScript } from "../../../../../globals/constants";
 
-function JobSearchPage() {
+function JobAvailablePage() {
   const { searchPaginationData, searchJobListData, processSearchJob } =
     useContext(JobApiData);
   const [processedSearchJobListData, setProcessedSearchJobListData] = useState(
@@ -66,4 +66,4 @@ function JobSearchPage() {
   );
 }
 
-export default JobSearchPage;
+export default JobAvailablePage;

@@ -27,13 +27,11 @@ export const addJob = async (data) => {
 
 // LIST Job
 export const jobList = async (pageNo) => {
-  console.log(pageNo);
   try {
     let responseOnJobList = await axios.get(
-      `${REACT_BASE_URL}get-posted-jobs?pageNo=${pageNo}&perPage=${LIST_ON_PAGES}`,
-      {
-        page_no: pageNo || 1,
-      }
+      `${REACT_BASE_URL}get-posted-jobs?pageNo=${
+        pageNo ? pageNo : 1
+      }&perPage=${LIST_ON_PAGES}`
     );
     if (responseOnJobList.status == 200) {
       console.log(responseOnJobList);
@@ -51,7 +49,11 @@ export const searchJob = async (data, pageNo) => {
   try {
     //console.log(keywords);
     let response = await axios.get(
-      `${REACT_BASE_URL}jobs-search?pageNo=${pageNo}&perPage=${LIST_ON_PAGES}&job-category=${data.job_category}&job-type=${data.job_type}&location=${data.location}`
+      `${REACT_BASE_URL}jobs-search?pageNo=${
+        pageNo ? pageNo : 1
+      }&perPage=${LIST_ON_PAGES}&job-category=${data.job_category}&job-type=${
+        data.job_type
+      }&location=${data.location}`
     );
     console.log(response);
     if (response.status == 200) {
@@ -68,7 +70,9 @@ export const searchJob = async (data, pageNo) => {
 export const searchJobByTitle = async (data, pageNo) => {
   try {
     let response = await axios.get(
-      `${REACT_BASE_URL}jobs-search-by-title?jobTitle=${data}&pageNo=${pageNo}&perPage=${LIST_ON_PAGES}`
+      `${REACT_BASE_URL}jobs-search-by-title?jobTitle=${data}&pageNo=${
+        pageNo ? pageNo : 1
+      }&perPage=${LIST_ON_PAGES}`
     );
     console.log(response);
     if (response.status == 200) {

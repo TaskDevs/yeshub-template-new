@@ -110,9 +110,10 @@ const JobApiDataProvider = (props) => {
 
   const processAJobProfile = async (id) => {
     let response = await jobProfile(id);
-    if (response) {
-      return response;
-    }
+
+    // console.log("response-job-profile", response)
+    return response;
+   
   };
 
   // jobProfile
@@ -177,7 +178,7 @@ const JobApiDataProvider = (props) => {
   const processDeleteJob = async (id) => {
     try {
       await deleteJob(id);
-      console.log("Job deleted successfully");
+      // console.log("Job deleted successfully");
     } catch (error) {
       console.error("Error deleting job:", error.response?.data || error);
     }

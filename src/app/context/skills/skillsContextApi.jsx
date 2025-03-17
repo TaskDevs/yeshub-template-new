@@ -15,7 +15,7 @@ const initialData = SKILLSFIELD.fieldDetail.reduce((acc, field) => {
 const SkillsApiDataProvider = (props) => {
   const [skillOptions, setSkillOptions] = useState(null);
   const [formData, setFormData] = useState(initialData);
-  const { selectedId, setIsSubmitting } = useContext(GlobalApiData);
+  const { selectedId, setIsSubmitting, setSelectedId } = useContext(GlobalApiData);
   const [skills, setSkills] = useState([]);
   const [skill, setSkill] = useState({});
 
@@ -52,8 +52,7 @@ const SkillsApiDataProvider = (props) => {
 
 	getAllSkills();
 
-	// const interval = setInterval(getAllSkills, 60000);
-  //   return () => clearInterval(interval); 
+	
 }, []);
 
 
@@ -142,6 +141,7 @@ const SkillsApiDataProvider = (props) => {
       setFormData({
         skill: "",
       });
+      setSelectedId("");
     }
   };
 
@@ -157,6 +157,7 @@ const SkillsApiDataProvider = (props) => {
 			return false;
 		} finally {
 			setIsSubmitting(false);
+      setSelectedId("");
 		}
 	};
 

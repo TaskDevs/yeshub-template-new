@@ -1,13 +1,11 @@
 import axios from "axios";
-import {
-	baseURL,
-} from "../../../globals/constants";
+import { REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Milestone
 export const addMilestone = async (data) => {
   try {
     let responseOnAddMilestone = await axios.post(
-			`${baseURL}create-milestone`,
+			`${REACT_BASE_URL}create-milestone`,
 			data
 		);
     return responseOnAddMilestone;
@@ -31,11 +29,9 @@ export const searchMilestone = async () => {
 };
 
 // LIST Milestone
-export const milestoneList = async () => {
+export const milestoneList = async (id) => {
   try {
-    let responseOnMilestoneList = await axios.get({
-      /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
+    let responseOnMilestoneList = await axios.get(`${REACT_BASE_URL}get-milestone/user_id/${id}`);
      return responseOnMilestoneList;
     // if (responseOnMilestoneList.status === SUCCESS_STATUS) {
     //   return responseOnMilestoneList.data;
@@ -51,7 +47,7 @@ export const milestoneList = async () => {
 // VIEW Milestone
 export const milestoneProfile = async (id) => {
   try {
-    let responseOnMilestoneProfile = await axios.get(`${baseURL}get-milestone/${id}`);
+    let responseOnMilestoneProfile = await axios.get(`${REACT_BASE_URL}get-milestone/${id}`);
 
     return responseOnMilestoneProfile
     // if (responseOnMilestoneProfile.status === SUCCESS_STATUS) {
@@ -69,7 +65,7 @@ export const milestoneProfile = async (id) => {
 export const updateMilestone = async (id, data) => {
   try {
     let responseOnUpdateMilestone = await axios.put(
-			`${baseURL}update-milestone/${id}`,
+			`${REACT_BASE_URL}update-milestone/${id}`,
       data
 		);
     return responseOnUpdateMilestone;
@@ -87,7 +83,7 @@ export const updateMilestone = async (id, data) => {
 export const deleteMilestone = async (id) => {
   try {
     let responseOnDeleteMilestone = await axios.delete(
-			`${baseURL}delete-milestone/${id}`
+			`${REACT_BASE_URL}delete-milestone/${id}`
 		);
     return responseOnDeleteMilestone;
     // if (responseOnDeleteMilestone.status === SUCCESS_STATUS) {

@@ -36,5 +36,11 @@ export const PORTFOLIOFIELD = {
 			type: "text",
 			placeholder: "",
 		},
+		{
+			name: "url",
+			label: "Url",
+			type: "text",
+			placeholder: "",
+		},
 	],
 };

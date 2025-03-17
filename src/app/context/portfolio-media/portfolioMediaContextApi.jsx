@@ -18,14 +18,14 @@ const initialData = {
 }
 
 const PortfolioMediaApiDataProvider = (props) => {
-  const { setIsSubmitting, selectedId, setSelectedId } = useContext(GlobalApiData);
+  const { setIsSubmitting, selectedId, setSelectedId, setIsLoading } = useContext(GlobalApiData);
   const [portfolioMedia, setPortfolioMedia] = useState([]);
   const [selectDeleteItem, setSelectDeleteItem] = useState(null);
   const [formData, setFormData] = useState(initialData);
   const [selectedItems, setSelectedItems] = useState([])
   const {  fetchAllPortfolio } = useContext(PortfolioApiData);
 
-  console.log("selectDeleteItem-media-del-global", selectDeleteItem)
+  // console.log("selectDeleteItem-media-del-global", selectDeleteItem)
 
   // portfolios,
   // const selectedPortfolio = portfolios.find(portfolio => portfolio.id === selectedId)
@@ -56,6 +56,15 @@ const PortfolioMediaApiDataProvider = (props) => {
   //   fetchPortfolioMedia();
     
   // }, [selectedId]);
+
+
+
+  const handleChange = (name, e) => {
+    setFormData({
+      ...formData,
+      [name]: e.target.value,
+    });
+  };
 
   const processAddPortfolioMedia = async (data) => {
     try {
@@ -147,12 +156,13 @@ const PortfolioMediaApiDataProvider = (props) => {
   };
 
   const handleDeletePortfolioMedia = async () => {
-    console.log("selectedId-del", selectDeleteItem)
+    // console.log("selectedId-del", selectDeleteItem)
 		if (!selectDeleteItem) {
 			toast.error("Please select the portfolio media to delete");
 			return;
 		}
 		setIsSubmitting(true);
+    setIsLoading(true)
 		try {
 			const res = await processDeletePortfolioMedia(selectDeleteItem);
       console.log("res-del-media", res)
@@ -169,6 +179,7 @@ const PortfolioMediaApiDataProvider = (props) => {
 			setIsSubmitting(false);
       setSelectedId(null)
       setSelectDeleteItem(null)
+      setIsLoading(false)
 		}
 	};
 
@@ -185,6 +196,7 @@ const PortfolioMediaApiDataProvider = (props) => {
         setSelectedItems,
         setFormData,
         setPortfolioMedia,
+        handleChange,
         handleResetForm,
         processAddPortfolioMedia,
         processGetPortfolioMedia,

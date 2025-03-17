@@ -32,9 +32,9 @@ export const publicUser = {
     LIST: "/job-list",
     DETAIL1: "/job-detail/:id",
     DETAIL2: "/job-detail/2",
-    APPLY: "/apply-job",
     SEARCH: "/jobs-search/:category/:type/:location",
     AVAILABLE: "/jobs-available",
+    APPLY: "/apply-job/:id"
   },
   employer: {
     GRID: "/emp-grid",
@@ -95,6 +95,7 @@ export const candidate = {
   CHAT: "/chat",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
+  APPLIED_JOB_DETAILS: "/applied-job-details/:id",
 };
 
 export const employer = {

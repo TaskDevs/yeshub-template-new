@@ -1,3 +1,4 @@
+
 function SectionPagination({ paginationData, action, searchPag }) {
   const handleGoToPage = (pageNo) => {
     searchPag ? action(searchPag, pageNo) : action(pageNo);

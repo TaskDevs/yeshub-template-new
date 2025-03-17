@@ -22,10 +22,12 @@ function SectionJobsList({ processedJobList, actionGetAllJob }) {
     return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
   };
 
+  
   return (
     <>
       <div>
         <div className="twm-jobs-list-wrap">
+
           {jobLoad ? (
             processedJobList.length > 0 ? (
               processedJobList.map((item, index) => (
@@ -52,6 +54,7 @@ function SectionJobsList({ processedJobList, actionGetAllJob }) {
           ) : (
             <Loader />
           )}
+
         </div>
         <SectionPagination
           action={actionGetAllJob}

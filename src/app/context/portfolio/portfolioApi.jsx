@@ -19,6 +19,20 @@ export const addPortfolio = async (data) => {
   }
 };
 
+export const addPortfolioMedia = async (data) => {
+  try {
+    let responseOnAddPortfolio = await axios.post(
+			`${REACT_BASE_URL}create-portfolio-media`,
+			data
+		);
+    return responseOnAddPortfolio;
+    
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 // SEARCH Portfolio
 export const searchPortfolio = async () => {
   try {

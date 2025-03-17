@@ -37,7 +37,8 @@ const ProfileApiDataProvider = (props) => {
     return savedState ? JSON.parse(savedState) : true; 
   }); 
   
-  // console.log("profileData", profileData)
+  // console.log("selectedFile", selectedFile)
+  // console.log("imageurl", imageURL)
 
 
   const toggleSidebar = () => {
@@ -48,39 +49,34 @@ const ProfileApiDataProvider = (props) => {
     });
   };
   
-  // console.log("profileData", profileData)
 
-  const processAddProfile = async (data) => {
-    try {
-      const res = await addProfile(data);
-      return res;
-    } catch (err) {
-      console.error("add-profile", err);
-    }
-  };
+  
 
   const fetchProfile = async () => {
-    const res = await processProfileProfile(userId);
+    setIsLoading(true)
+    try{
+      const res = await processProfileProfile(userId);
     if (res) {
-      // window.location.reload();
       setProfileData(res.data.data);
     }
+    } catch (e) {
+      throw new Error("could not fetch profile", e);
+    } finally {
+      setIsLoading(false)
+    }
+    
   };
 
   useEffect(() => {
 
     fetchProfile();
     
-    // const interval = setInterval(fetchProfile, 60000);
-    // return () => clearInterval(interval); 
   }, []);
 
 
   useEffect(() => {
-    const fetchAllProfile = async () => {
-      setTimeout(() =>{
-        setIsLoading(true)
-      }, 200)
+    const fetchAllUsers = async () => {
+      setIsLoading(true)
 
       try{
         const res = await profileList();
@@ -91,19 +87,23 @@ const ProfileApiDataProvider = (props) => {
     } catch (e) {
       throw new Error("could not fetch all profiles", e);  
     } finally {
-      setTimeout(() =>{
-        setIsLoading(false)
-      }, 2000)
+      setIsLoading(false)
     }
       }
 
-    fetchAllProfile();
+    fetchAllUsers();
    
-   
-    // const interval = setInterval(fetchAllProfile, 60000);
-    // return () => clearInterval(interval); 
   }, []);
 
+  const processAddProfile = async (data) => {
+    try {
+      const res = await addProfile(data);
+      return res;
+    } catch (err) {
+      console.error("add-profile", err);
+      throw err;
+    }
+  };
   
 
   const processGetAllProfile = async () => {
@@ -112,6 +112,7 @@ const ProfileApiDataProvider = (props) => {
       return res;
     } catch (e) {
       console.error("get-all-profile", e);
+      throw e;
     }
   };
 
@@ -120,16 +121,18 @@ const ProfileApiDataProvider = (props) => {
       const res = await profileProfile(id);
       return res;
     } catch (err) {
-      throw new Error(err);
+      console.error("profile-profile", err);
+      throw err;
     }
   };
 
   const processFullProfileProfile = async (id) => {
-    try {
-      const res = await fullProfileProfile(id);
+    const res = await fullProfileProfile(id);
+    if (res) {
+      
       return res;
-    } catch (err) {
-      throw new Error(err);
+    } else {
+      return false;
     }
   };
 
@@ -152,10 +155,16 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
+
+  const handleReset = () => {
+    setFormData(initialFormData);
+  }
+  
+
   const handleSubmitProfile = async (e) => {
    
     e.preventDefault();
-    setIsSubmitting(true);
+    
 
     if (!selectedFile) {
       toast.error("Please select a profile image before submitting.");
@@ -174,12 +183,17 @@ const ProfileApiDataProvider = (props) => {
       setIsSubmitting(false);
       return;
   }
+
+  setIsSubmitting(true);
+
+  setIsLoading(true)
     
+    // let base64String = imageURL.replace(/^data:image\/\w+;base64,/, '');
 
     const profileFormData = new FormData();
-    profileFormData.append("profile_image", selectedFile);
+    profileFormData.append("profile_image", imageURL);
     profileFormData.append("user_id", userId || OAuthUserId);
-    profileFormData.append("profile_image", selectedFile);
+    profileFormData.append("country", "Ghana");
     Object.entries(formData).forEach(([key, value]) => {
       profileFormData.append(key, value);
     });
@@ -187,15 +201,23 @@ const ProfileApiDataProvider = (props) => {
 
     try {
       const response = await processAddProfile(profileFormData);
-      await fetchProfile()
-      toast.success("Profile added successfully");
+      console.log("add-user-profile", response)
+      if (response) {
+        await fetchProfile()
+        Promise.resolve().then(() => toast.success("Profile added successfully"));
+      }
+      
       return response;
     } catch (e) {
       console.error("adding profile error", e);
-      toast.error("An error occurred while adding the profile");
+      Promise.resolve().then(() => toast.error("An error occurred while adding the profile")); 
     } finally {
       setIsSubmitting(false);
       setFormData(initialFormData);
+      setSelectedItems([])
+      setIsLoading(false)
+      
+  
       
     }
   };
@@ -221,6 +243,7 @@ const ProfileApiDataProvider = (props) => {
       setImageURL(null);
     } finally {
       setFormData(initialFormData);
+      setSelectedItems([])
       
     }
   };
@@ -275,6 +298,7 @@ const ProfileApiDataProvider = (props) => {
         isSidebarCollapsed,
         imgSrc, 
         setImgSrc,
+        fetchProfile,
         processFullProfileProfile,
         toggleSidebar,
         setSelectedItems,
@@ -282,6 +306,7 @@ const ProfileApiDataProvider = (props) => {
         processAddProfile,
         processGetAllProfile,
         processProfileProfile,
+        handleReset,
         processUpdateProfile,
         processDeleteProfile,
         handleSubmitProfile,

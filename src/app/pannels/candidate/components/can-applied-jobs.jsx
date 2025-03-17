@@ -1,29 +1,54 @@
 import SectionRecordsFilter from "../../public-user/sections/common/section-records-filter";
 import SectionPagination from "../../public-user/sections/common/section-pagination";
-import { useContext, useEffect } from "react";
-import { loadScript } from "../../../../globals/constants";
+import { useContext, useEffect, useState } from "react";
+import { freelancerId, loadScript } from "../../../../globals/constants";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
-// import { JobApiData } from "../../../context/jobs/jobsContextApi";
-import { GlobalApiData } from "../../../context/global/globalContextApi";
-import Loader from "../../../common/loader";
 import { extractTime } from "../../../../utils/readableDate";
-// import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi";
+
 
 function CanAppliedJobsPage() {
   
   const {  appliedJobs } = useContext(ApplicationApiData);
-  // const { jobListData, processAJobProfile } = useContext(JobApiData);
-  const { isLoading } = useContext(GlobalApiData)
+  const { appliedMilestones } = useContext(MilestoneApiData)
+
+  console.log("appliedMilestones-app-pg", appliedMilestones)
 
 
-  // console.log("jobListData", jobListData)
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; 
+  const totalItems = freelancerId ? appliedMilestones.length : appliedJobs.length;
+
+  const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+  };
+
+  const getPaginatedItems = () => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      if (freelancerId) {
+          return appliedMilestones
+              .sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
+              .slice(startIndex, endIndex);
+      } else {
+          return appliedJobs
+              .sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
+              .slice(startIndex, endIndex);
+      }
+  };
+
+  const paginatedItems = getPaginatedItems();
+
+  
 
   const _filterConfig = {
     prefix: "Applied",
     type: "jobs",
-    total: "250",
+    total: freelancerId ? appliedMilestones.length : appliedJobs.length,
     showRange: false,
     showingUpto: "",
   };
@@ -32,79 +57,70 @@ function CanAppliedJobsPage() {
     loadScript("js/custom.js");
   });
 
-  // useEffect(() => {
-  //   const fetchProfileAndMatchJobs = async () => {
-  //     if (!userId) return;
-
-  //     try {
-  //       const res = await processApplicationProfile(userId);
-  //       const data = res.data.data;
-  //       // console.log("data", data);
-
-  //       const uniqueJobsMap = data.reduce((acc, current) => {
-  //         const existingJob = acc.get(current.job_id);
-  //         if (
-  //           !existingJob ||
-  //           new Date(current.created_at) > new Date(existingJob.created_at)
-  //         ) {
-  //           acc.set(current.job_id, current);
-  //         }
-  //         return acc;
-  //       }, new Map());
-
-  //       const filteredJobs = Array.from(uniqueJobsMap.values());
-
-  //       const uniqueJobIds = [
-  //         ...new Set(filteredJobs.map((job) => job.job_id)),
-  //       ];
-
-  //       const jobDetailsResponses = await Promise.all(
-  //         uniqueJobIds.map((jobId) => processAJobProfile(jobId))
-  //       );
-
-  //       const jobsWithDetails = filteredJobs.map((appliedJob, index) => {
-  //         const jobDetails = jobDetailsResponses[index]?.data || null; // Ensure safe access
-  //         return {
-  //           ...appliedJob,
-  //           jobDetails,
-  //         };
-  //       });
-  //       setAppliedJobs(jobsWithDetails);
-  //     } catch (error) {
-  //       console.error("Failed to fetch jobs data", error);
-  //     }
-  //   };
-
-  //   fetchProfileAndMatchJobs();
-  //   const interval = setInterval(fetchProfileAndMatchJobs, 60000);
-  //   return () => clearInterval(interval); 
-  // }, [userId, jobListData]);
-
-  console.log("appliedJobs", appliedJobs)
-
+ 
   return (
     <>
-    {isLoading && <Loader/>}
-      <div className="twm-right-section-panel candidate-save-job site-bg-gray">
-        {/*Filter Short By*/}
-        <SectionRecordsFilter _config={_filterConfig} />
+        <div className="twm-right-section-panel candidate-save-job site-bg-gray">
+            <SectionRecordsFilter _config={_filterConfig} />
+            <div className="twm-jobs-list-wrap">
+                {totalItems === 0 && (
+                    <p>No applied {freelancerId ? "milestone" : "job"} found.</p>
+                )}
+                <ul>
+                    {paginatedItems.map((item) => (
+                        <CanAppliedJobCard
+                            data={item}
+                            key={item.id}
+                        />
+                    ))}
 
-        <div className="twm-jobs-list-wrap">
-          {appliedJobs.length === 0 ? (
-            <p>No applied job found.</p>
-          ) : (
-            <ul>
-              {appliedJobs
-                ?.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
-                .map((job) => (
-                  <CanAppliedJobCard
-                    data={job}
-                    key={job.id}
+{!freelancerId && (
+              <div className="sec-actions-btn d-flex justify-content-center align-items-center mt-5 w-100">
+              <button
+                  className="site-button actions-btn"
+                  data-bs-target="#delete-applied-job"
+                  data-bs-toggle="modal"
+                  data-bs-dismiss="modal"
+              >
+                  <FaRegTrashCan color="white" />
+                  <span className="admin-nav-text">Delete</span>
+              </button>
+          </div>
+          )}
+            
+                </ul>
+            </div>
+
+            
+
+
+            {totalItems > itemsPerPage && (
+                <div>
+                    <SectionPagination
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={handlePageChange}
+                    />
                     
-                  />
-              ))}
+                </div>
+            )}
+        </div>
+    </>
+);
 
-              {/* <li>
+  
+}
+
+export default CanAppliedJobsPage;
+
+
+
+
+
+
+
+  /* <li>
               <div className="twm-jobs-list-style1 mb-5">
                 <div className="twm-media">
                   <JobZImage src="images/jobs-company/pic1.jpg" alt="#" />
@@ -189,8 +205,8 @@ function CanAppliedJobsPage() {
                   </NavLink>
                 </div>
               </div>
-            </li> */}
-              {/* <li>
+            </li> */
+              /* <li>
               <div className="twm-jobs-list-style1 mb-5">
                 <div className="twm-media">
                   <JobZImage src="images/jobs-company/pic3.jpg" alt="#" />
@@ -492,43 +508,4 @@ function CanAppliedJobsPage() {
                   </NavLink>
                 </div>
               </div>
-            </li> */}
-            </ul>
-          )}
-        </div>
-
-        <div>
-          {appliedJobs.length > 0 && (
-            <>
-              <SectionPagination />
-              <div className="sec-actions-btn d-flex justify-content-center align-items-center mt-5 w-100">
-                <button
-                  className="site-button  actions-btn"
-                  data-bs-target="#delete-applied-job"
-                  data-bs-toggle="modal"
-                  data-bs-dismiss="modal"
-                >
-                  <FaRegTrashCan color="white" />
-                  <span className="admin-nav-text">Delete</span>
-                </button>
-
-                {/* <button
-              className="site-button  actions-btn "
-              data-bs-target="#Edit-"
-              data-bs-toggle="modal"
-              data-bs-dismiss="modal"
-             
-            >
-              <MdOutlineEdit color="white" />
-              <span>Edit</span>
-            </button> */}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
-
-export default CanAppliedJobsPage;
+            </li> */

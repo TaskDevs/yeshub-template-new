@@ -5,18 +5,21 @@ export const   MILESTONEFIELD = {
 			label: "Title",
 			type: "text",
 			placeholder: "",
+			required: true
 		},
 		{
 			name: "amount",
 			label: "Amount",
-			type: "",
+			type: "number",
 			placeholder: "0.00",
+			required: true
 		},
 		{
 			name: "description",
 			label: "Description",
 			type: "text",
 			placeholder: "",
+			required: false
 		},
 		
 

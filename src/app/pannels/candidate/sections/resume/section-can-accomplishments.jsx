@@ -10,13 +10,13 @@ function SectionCanAccomplishments() {
     return (
 			<>
 				<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-					<h4 className="panel-tittle m-a0">Accomplishments</h4>
+					<h4 className="panel-tittle m-a0">Online Profiles</h4>
 				</div>
 				<div className="panel-body wt-panel-body p-a20 ">
 					<div className="twm-panel-inner">
 						<div className="twm-list-wrap">
 							<div className="twm-list-inner d-flex justify-content-between">
-								<b>Online Profile</b>
+								{/* <b>Online Profile</b> */}
 								{/* <a
 									data-bs-toggle="modal"
 									href="#Online_Profile"

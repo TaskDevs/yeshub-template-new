@@ -57,6 +57,15 @@ const PortfolioMediaApiDataProvider = (props) => {
     
   // }, [selectedId]);
 
+
+
+  const handleChange = (name, e) => {
+    setFormData({
+      ...formData,
+      [name]: e.target.value,
+    });
+  };
+
   const processAddPortfolioMedia = async (data) => {
     try {
       const res = await addPortfolioMedia(data);
@@ -187,6 +196,7 @@ const PortfolioMediaApiDataProvider = (props) => {
         setSelectedItems,
         setFormData,
         setPortfolioMedia,
+        handleChange,
         handleResetForm,
         processAddPortfolioMedia,
         processGetPortfolioMedia,

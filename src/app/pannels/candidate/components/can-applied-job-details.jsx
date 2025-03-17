@@ -4,159 +4,687 @@ import { GlobalApiData } from "../../../context/global/globalContextApi";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
 import readableDate from "../../../../utils/readableDate";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
-import { userId } from "../../../../globals/constants";
+import { freelancerId, userId } from "../../../../globals/constants";
+import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { MdOutlineEdit } from "react-icons/md";
+import SectionEditMilestone from "../../public-user/sections/jobs/section-edit-milestone";
+
 // import SectionJobsSidebar2 from '../../public-user/sections/jobs/sidebar/section-jobs-sidebar2';
+
+// function CanAppliedJobDetails() {
+//   const [profile, setProfile] = useState({});
+//   const { setIsLoading } = useContext(GlobalApiData);
+//   const { processAJobProfile } = useContext(JobApiData);
+//   const { appliedJobs } = useContext(ApplicationApiData);
+//   const {
+//     processGetAllMilestone,
+//     jobMilestones,
+//     setJobMilestones,
+//     selectedMilestoneId,
+//     setSelectedMilestoneId,
+//   } = useContext(MilestoneApiData);
+
+//   const [milestoneToEdit, setMilestoneToEdit] = useState(null);
+//   const { id } = useParams();
+
+//   const handleEditClick = (milestone) => {
+//     setMilestoneToEdit({
+//       title: milestone.title,
+//       amount: milestone.amount,
+//       description: milestone.description,
+//       freelance_id: milestone.freelance_id,
+//       employer_status: milestone.employer_status,
+//       freelancer_status: milestone.freelancer_status,
+//       pay_status: milestone.pay_status,
+//       job_id: milestone.job_id,
+//       user_id: milestone.user_id,
+//     });
+//     setSelectedMilestoneId(milestone.id);
+//   };
+
+//   const milestoneToEditData = jobMilestones.find(
+//     (m) => m.id === selectedMilestoneId
+//   );
+
+//   console.log("jobMilestones-app-details", jobMilestones);
+//   // console.log("milestoneToEdit-applied-details", milestoneToEdit);
+
+//   const milestoneJobDetails = jobMilestones[0]?.posted_job;
+//   // console.log("milestoneJobDetails", milestoneJobDetails)
+
+//   const applicationData = appliedJobs?.find(
+//     (application) => application.job_id === Number(id)
+//   );
+
+//   console.log("applicationData", applicationData);
+
+//   const getJob = async () => {
+//     try {
+//       const [data1, data2] = await Promise.all([
+//         processAJobProfile(id),
+//         processGetAllMilestone(userId),
+//       ]);
+
+//       console.log("data1-applied-details", data1);
+//       console.log("data2-applied-details", data2.data.data);
+//       const milestones = data2.data.data;
+
+//       const uniqueJobMilestones = milestones.filter((m) => m.job_id === id);
+//       console.log("uniqueJobMilestones", uniqueJobMilestones);
+
+//       setProfile(data1.data);
+//       setJobMilestones(uniqueJobMilestones);
+//     } catch (error) {
+//       console.error("Error fetching candidate data:", error);
+//     } finally {
+//       setTimeout(() => {
+//         setIsLoading(false);
+//       }, 3000);
+//     }
+//   };
+
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setIsLoading(true);
+//     }, 200);
+
+//     getJob();
+//   }, [id, userId]);
+
+//   console.log("profile-jobs-detail", profile);
+
+//   if (freelancerId && jobMilestones.length === 0) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return (
+//     <>
+//       <div className="twm-right-section-panel site-bg-gray">
+//         <div className="section-full  p-t120 p-b90 bg-white">
+        
+//           <div className="container">
+//           <h3 className="mb-5">Applied Job Details</h3>
+//             <div className="section-content">
+//               {freelancerId ? (
+//                 <div className="row ">
+//                   {/* col-lg-8 col-md-12 */}
+//                   <div className="">
+//                     <div className="cabdidate-de-info">
+//                       <div className="twm-job-self-wrap">
+//                         <div className="twm-job-self-info">
+//                           <div className="twm-job-self-top">
+//                             <div className="mt-5">
+                             
+//                               <div className="">
+//                                 <h4 className="">
+//                                   {milestoneJobDetails?.job_title}
+//                                 </h4>
+//                               </div>
+
+//                               <div className="twm-job-self-mid applied-details-mid">
+//                                 <div className="twm-job-apllication-area">
+//                                   Job Type:{" "}
+//                                   <span className="">
+//                                     {milestoneJobDetails?.job_type}
+//                                   </span>
+//                                 </div>
+
+//                                 <div className="twm-job-self-mid-left">
+//                                   <div className="twm-jobs-amount">
+//                                     {milestoneJobDetails?.salary ? (
+//                                       <p>
+//                                         {" "}
+//                                         Salary: ₵{milestoneJobDetails?.salary}
+//                                       </p>
+//                                     ) : (
+//                                       <p>
+//                                         {" "}
+//                                         Budget: ₵{milestoneJobDetails?.budget}
+//                                       </p>
+//                                     )}
+//                                   </div>
+//                                 </div>
+
+                            
+
+//                                 <div className="twm-job-apllication-area">
+//                                   Application ends:{" "}
+//                                   <span className="twm-job-apllication-date">
+//                                     {readableDate(
+//                                       milestoneJobDetails?.end_date
+//                                     )}
+//                                   </span>
+//                                 </div>
+
+//                                 {/* <div className="twm-job-apllication-area">
+//                                 Freelancer status:{" "}
+//                                 <span className="">{milestoneJobDetails?.freelancer_status}</span>
+//                               </div> */}
+//                               </div>
+//                             </div>
+//                           </div>
+//                         </div>
+//                       </div>
+
+//                       <h4 className="twm-s-title">Job Description:</h4>
+//                       <div
+//                         dangerouslySetInnerHTML={{
+//                           __html: milestoneJobDetails?.duty,
+//                         }}
+//                       />
+
+//                       <h4 className="twm-s-title">Requirments:</h4>
+
+//                       <div
+//                         dangerouslySetInnerHTML={{
+//                           __html: milestoneJobDetails?.description,
+//                         }}
+//                       />
+
+//                       <h4 className="twm-s-title">Milestones:</h4>
+//                       <ol
+//                         className="d-flex  gap-4"
+//                         style={{ flexDirection: "column" }}
+//                       >
+//                         {jobMilestones?.map((milestone) => (
+//                           <li
+//                             className="mb-2 d-flex"
+//                             style={{
+//                               borderBottom: "1px solid #d5d5d5",
+//                               justifyContent: "space-between",
+//                               alignItems: "center",
+//                             }}
+//                             key={milestone?.id}
+//                             onClick={() =>
+//                               setSelectedMilestoneId(milestone?.id)
+//                             }
+//                           >
+//                             <div className=" ">
+//                               <p className="mb-1">
+//                                 <strong className="me-1">Title:</strong>{" "}
+//                                 {milestone?.title}
+//                               </p>
+//                               <p className="mb-1">
+//                                 <strong className="me-1">Amount:</strong>{" "}
+//                                 {milestone?.amount}
+//                               </p>
+//                               <p className="mb-1">
+//                                 <strong className="me-1">Description:</strong>{" "}
+//                                 {milestone?.description}
+//                               </p>
+//                             </div>
+
+//                             <div className="actions">
+//                               <button
+//                                 className="site-button  actions"
+//                                 data-bs-target="#delete-milestone"
+//                                 data-bs-toggle="modal"
+//                                 data-bs-dismiss="modal"
+//                               >
+//                                 <FaRegTrashCan color="white" />
+//                                 <span className="admin-nav-text">Delete</span>
+//                               </button>
+
+//                               <button
+//                                 className="site-button  actions "
+//                                 data-bs-target="#edit-milestone"
+//                                 data-bs-toggle="modal"
+//                                 data-bs-dismiss="modal"
+//                                 onClick={() => handleEditClick(milestone)}
+//                               >
+//                                 <MdOutlineEdit color="white" />
+//                                 <span>Edit</span>
+//                               </button>
+//                             </div>
+//                           </li>
+//                         ))}
+//                       </ol>
+//                     </div>
+//                   </div>
+//                 </div>
+              // ) : (
+              //   <div className="row ">
+              //     <div className="cabdidate-de-info">
+              //       <div className="twm-job-self-wrap">
+              //         <div className="twm-job-self-info">
+              //           <div className="twm-job-self-top">
+              //             <div className="twm-mid-content">
+              //               <div
+              //                 className="twm-media mt-5"
+              //                 style={{
+              //                   marginTop: "5rem",
+              //                   marginBottom: "5rem",
+              //                 }}
+              //               >
+              //                 <img
+              //                   src={
+              //                     applicationData?.jobDetails?.employer?.logo
+              //                   }
+              //                   alt="#"
+              //                 />
+              //               </div>
+              //               {/* twm-job-title */}
+              //               <div className="mt-5">
+              //                 <h4 className="twm-job-title mb-2">
+              //                   {
+              //                     applicationData?.jobDetails?.employer
+              //                       ?.company_name
+              //                   }
+              //                 </h4>
+              //                 <h4 className="mb-2">
+              //                   {applicationData?.jobDetails?.job_title}
+              //                 </h4>
+              //               </div>
+
+              //               <div className="twm-job-self-mid applied-details-mid">
+              //                 <div className="twm-job-apllication-area">
+              //                   Job Type:{" "}
+              //                   <span className="">
+              //                     {applicationData?.posted_job?.job_type}
+              //                   </span>
+              //                 </div>
+
+              //                 <div className="twm-job-self-mid-left">
+              //                   <div className="twm-jobs-amount">
+              //                     {applicationData?.posted_job?.salary ? (
+              //                       <p>
+              //                         {" "}
+              //                         Salary: ₵
+              //                         {applicationData?.posted_job?.salary}
+              //                       </p>
+              //                     ) : (
+              //                       <p>
+              //                         {" "}
+              //                         Budget: ₵
+              //                         {applicationData?.posted_job?.budget}
+              //                       </p>
+              //                     )}
+              //                   </div>
+              //                 </div>
+
+              //                 <div className="twm-job-apllication-area">
+              //                   Application Status:{" "}
+              //                   <span className="text-capitalize font-weight-[400]">
+              //                     {applicationData?.status}
+              //                   </span>
+              //                 </div>
+
+              //                 <div className="twm-job-apllication-area">
+              //                   Application ends:{" "}
+              //                   <span className="twm-job-apllication-date">
+              //                     {readableDate(
+              //                       applicationData?.posted_job?.end_date
+              //                     )}
+              //                   </span>
+              //                 </div>
+              //               </div>
+              //             </div>
+              //           </div>
+              //         </div>
+              //       </div>
+              //       <h4 className="twm-s-title">Job Description:</h4>
+              //       <div
+              //         dangerouslySetInnerHTML={{
+              //           __html: applicationData?.posted_job?.duty,
+              //         }}
+              //       />
+
+              //       <h4 className="twm-s-title">Requirments:</h4>
+
+              //       <div
+              //         dangerouslySetInnerHTML={{
+              //           __html: applicationData?.posted_job?.description,
+              //         }}
+              //       />
+
+              //       <div className="twm-job-self-mid">
+              //         <h4 className="twm-s-title mt-5">Company Information</h4>
+              //         <p className="twm-job-address text-capitalize">
+              //           Email: {applicationData?.jobDetails?.employer?.email}
+              //         </p>
+              //         <p className="twm-job-address text-capitalize">
+              //           Wesite:{" "}
+              //           <a
+              //             className=""
+              //             href={applicationData?.jobDetails?.employer?.website}
+              //             target="_blank"
+              //             rel="noreferrer"
+              //           >
+              //             link
+              //           </a>
+              //         </p>
+              //         <p className="twm-job-address text-capitalize">
+              //           <i className="feather-map-pin" /> Address:
+              //           <span>
+              //             {" "}
+              //             {applicationData?.jobDetails?.employer?.address}
+              //           </span>
+              //         </p>
+              //       </div>
+              //     </div>
+              //   </div>
+              // )}
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* <SectionEditMilestone data={milestoneToEdit}/> */}
+//       <SectionEditMilestone
+//         data={milestoneToEditData}
+//         milestone={milestoneToEdit}
+//         setMilestone={setMilestoneToEdit}
+//       />
+//     </>
+//   );
+// }
+
+
 
 function CanAppliedJobDetails() {
   const [profile, setProfile] = useState({});
   const { setIsLoading } = useContext(GlobalApiData);
   const { processAJobProfile } = useContext(JobApiData);
   const { appliedJobs } = useContext(ApplicationApiData);
-  const { id } = useParams();
-  // processApplicationProfile
+  const {
+      processGetAllMilestone,
+      jobMilestones,
+      setJobMilestones,
+      selectedMilestoneId,
+      setSelectedMilestoneId,
+  } = useContext(MilestoneApiData);
 
-  console.log("appliedJobs-applied-details", appliedJobs);
-  const applicationData = appliedJobs?.find(
-    (application) => application.job_id === Number(id)
-  );
+  const [milestoneToEdit, setMilestoneToEdit] = useState(null);
+  const { id } = useParams();
+
+  const handleEditClick = (milestone) => {
+      setMilestoneToEdit({
+          title: milestone.title,
+          amount: milestone.amount,
+          description: milestone.description,
+          freelance_id: milestone.freelance_id,
+          employer_status: milestone.employer_status,
+          freelancer_status: milestone.freelancer_status,
+          pay_status: milestone.pay_status,
+          job_id: milestone.job_id,
+          user_id: milestone.user_id,
+      });
+      setSelectedMilestoneId(milestone.id);
+  };
+
+  const milestoneToEditData = jobMilestones.find((m) => m.id === selectedMilestoneId);
+
+  console.log("jobMilestones-app-details", jobMilestones);
+
+  const milestoneJobDetails = jobMilestones[0]?.posted_job;
+
+  const applicationData = appliedJobs?.find((application) => application.job_id === Number(id));
+
   console.log("applicationData", applicationData);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(true);
-    }, 200);
-    const getJob = async () => {
+  const getJob = async () => {
       try {
-        const data1 = await processAJobProfile(id);
+          const [data1, data2] = await Promise.all([
+              processAJobProfile(id),
+              processGetAllMilestone(userId),
+          ]);
 
-        console.log("data-job-details", data1);
+          console.log("data1-applied-details", data1);
+          console.log("data2-applied-details", data2.data.data);
+          const milestones = data2.data.data;
 
-        setProfile(data1.data);
+          const uniqueJobMilestones = milestones.filter((m) => m.job_id === id);
+          console.log("uniqueJobMilestones", uniqueJobMilestones);
+
+          setProfile(data1.data);
+          setJobMilestones(uniqueJobMilestones);
+
+          // Pre-select the first milestone if available
+          if (uniqueJobMilestones.length > 0 && !selectedMilestoneId) {
+              setSelectedMilestoneId(uniqueJobMilestones[0].id);
+          }
       } catch (error) {
-        console.error("Error fetching candidate data:", error);
+          console.error("Error fetching candidate data:", error);
       } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 3000);
+          setTimeout(() => {
+              setIsLoading(false);
+          }, 3000);
       }
-    };
+  };
 
-    getJob();
+  useEffect(() => {
+      setTimeout(() => {
+          setIsLoading(true);
+      }, 200);
+
+      getJob();
   }, [id, userId]);
 
   console.log("profile-jobs-detail", profile);
 
+  if (freelancerId && jobMilestones.length === 0) {
+      return <div>Loading...</div>;
+  }
+
   return (
-    <>
-      <div className="twm-right-section-panel site-bg-gray">
-        <div className="section-full  p-t120 p-b90 bg-white">
-          <div className="container">
-            <div className="section-content">
-              {/* d-flex justify-content-center */}
-              <div className="row ">
-                {/* col-lg-8 col-md-12 */}
-                <div className="">
-                  <div className="cabdidate-de-info">
-                    <div className="twm-job-self-wrap">
-                      <div className="twm-job-self-info">
-                        <div className="twm-job-self-top">
-                          <div className="twm-mid-content">
-                            <div className="twm-media">
-                              <img
-                                src={profile?.logo ? `${profile.logo}` : ""}
-                                alt="#"
-                              />
-                            </div>
-                            {/* twm-job-title */}
-                            <div className="">
-                              <h4 className="twm-job-title mb-5">
-                                {profile?.employer?.company_name}
-                              </h4>
-                              <h4 className="">{profile?.job_title}</h4>
-                            </div>
-
-                            <p className="twm-job-address text-capitalize">
-                              <i className="feather-map-pin" />
-                              {applicationData?.jobDetails?.employer?.address}
-                            </p>
-
-                            <div className="twm-job-self-mid">
-                              <div className="twm-job-apllication-area">
-                                Job Type:{" "}
-                                <span className="">{profile?.job_type}</span>
+      <>
+          <div className="twm-right-section-panel site-bg-gray">
+              <div className="section-full p-t120 p-b90 bg-white">
+                  <div className="container">
+                      <h3 className="mb-5">Applied Job Details</h3>
+                      <div className="section-content">
+                          {freelancerId ? (
+                              <div className="row ">
+                                  <div className="">
+                                      <div className="cabdidate-de-info">
+                                          <div className="twm-job-self-wrap">
+                                              <div className="twm-job-self-info">
+                                                  <div className="twm-job-self-top">
+                                                      <div className="mt-5">
+                                                          <div className="">
+                                                              <h4 className="">{milestoneJobDetails?.job_title}</h4>
+                                                          </div>
+                                                          <div className="twm-job-self-mid applied-details-mid">
+                                                              <div className="twm-job-apllication-area">
+                                                                  Job Type: <span className="">{milestoneJobDetails?.job_type}</span>
+                                                              </div>
+                                                              <div className="twm-job-self-mid-left">
+                                                                  <div className="twm-jobs-amount">
+                                                                      {milestoneJobDetails?.salary ? (
+                                                                          <p> Salary: ₵{milestoneJobDetails?.salary}</p>
+                                                                      ) : (
+                                                                          <p> Budget: ₵{milestoneJobDetails?.budget}</p>
+                                                                      )}
+                                                                  </div>
+                                                              </div>
+                                                              <div className="twm-job-apllication-area">
+                                                                  Application ends: <span className="twm-job-apllication-date">{readableDate(milestoneJobDetails?.end_date)}</span>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <h4 className="twm-s-title">Job Description:</h4>
+                                      <div dangerouslySetInnerHTML={{ __html: milestoneJobDetails?.duty }} />
+                                      <h4 className="twm-s-title">Requirments:</h4>
+                                      <div dangerouslySetInnerHTML={{ __html: milestoneJobDetails?.description }} />
+                                      <h4 className="twm-s-title">Milestones:</h4>
+                                      <ol className="d-flex gap-4" style={{ flexDirection: "column" }}>
+                                          {jobMilestones?.map((milestone) => (
+                                              <li
+                                                  className="mb-2 d-flex"
+                                                  style={{ borderBottom: "1px solid #d5d5d5", justifyContent: "space-between", alignItems: "center" }}
+                                                  key={milestone?.id}
+                                                  onClick={() => setSelectedMilestoneId(milestone?.id)}
+                                              >
+                                                  <div className=" ">
+                                                      <p className="mb-1">
+                                                          <strong className="me-1">Title:</strong> {milestone?.title}
+                                                      </p>
+                                                      <p className="mb-1">
+                                                          <strong className="me-1">Amount:</strong> {milestone?.amount}
+                                                      </p>
+                                                      <p className="mb-1">
+                                                          <strong className="me-1">Description:</strong> {milestone?.description}
+                                                      </p>
+                                                  </div>
+                                                  {selectedMilestoneId === milestone?.id && (
+                                                      <div className="actions">
+                                                          <button className="site-button actions" data-bs-target="#delete-milestone" data-bs-toggle="modal" data-bs-dismiss="modal">
+                                                              <FaRegTrashCan color="white" />
+                                                              <span className="admin-nav-text">Delete</span>
+                                                          </button>
+                                                          <button className="site-button actions " data-bs-target="#edit-milestone" data-bs-toggle="modal" data-bs-dismiss="modal" onClick={() => handleEditClick(milestone)}>
+                                                              <MdOutlineEdit color="white" />
+                                                              <span>Edit</span>
+                                                          </button>
+                                                      </div>
+                                                  )}
+                                              </li>
+                                          ))}
+                                      </ol>
+                                  </div>
                               </div>
-
-                              <div className="twm-job-self-mid-left">
-                                <div className="twm-jobs-amount">
-                                  {profile?.salary ? (
-                                    <p> Salary: ₵{profile?.salary}</p>
-                                  ) : (
-                                    <p> Budget: ₵{profile?.budget}</p>
-                                  )}
+                          ) : 
+                          (
+                            <div className="row ">
+                              <div className="cabdidate-de-info">
+                                <div className="twm-job-self-wrap">
+                                  <div className="twm-job-self-info">
+                                    <div className="twm-job-self-top">
+                                      <div className="twm-mid-content">
+                                        <div
+                                          className="twm-media mt-5"
+                                          style={{
+                                            marginTop: "5rem",
+                                            marginBottom: "5rem",
+                                          }}
+                                        >
+                                          <img
+                                            src={
+                                              applicationData?.jobDetails?.employer?.logo
+                                            }
+                                            alt="#"
+                                          />
+                                        </div>
+                                        {/* twm-job-title */}
+                                        <div className="mt-5">
+                                          <h4 className="twm-job-title mb-2">
+                                            {
+                                              applicationData?.jobDetails?.employer
+                                                ?.company_name
+                                            }
+                                          </h4>
+                                          <h4 className="mb-2">
+                                            {applicationData?.jobDetails?.job_title}
+                                          </h4>
+                                        </div>
+            
+                                        <div className="twm-job-self-mid applied-details-mid">
+                                          <div className="twm-job-apllication-area">
+                                            Job Type:{" "}
+                                            <span className="">
+                                              {applicationData?.posted_job?.job_type}
+                                            </span>
+                                          </div>
+            
+                                          <div className="twm-job-self-mid-left">
+                                            <div className="twm-jobs-amount">
+                                              {applicationData?.posted_job?.salary ? (
+                                                <p>
+                                                  {" "}
+                                                  Salary: ₵
+                                                  {applicationData?.posted_job?.salary}
+                                                </p>
+                                              ) : (
+                                                <p>
+                                                  {" "}
+                                                  Budget: ₵
+                                                  {applicationData?.posted_job?.budget}
+                                                </p>
+                                              )}
+                                            </div>
+                                          </div>
+            
+                                          <div className="twm-job-apllication-area">
+                                            Application Status:{" "}
+                                            <span className="text-capitalize font-weight-[400]">
+                                              {applicationData?.status}
+                                            </span>
+                                          </div>
+            
+                                          <div className="twm-job-apllication-area">
+                                            Application ends:{" "}
+                                            <span className="twm-job-apllication-date">
+                                              {readableDate(
+                                                applicationData?.posted_job?.end_date
+                                              )}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <h4 className="twm-s-title">Job Description:</h4>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: applicationData?.posted_job?.duty,
+                                  }}
+                                />
+            
+                                <h4 className="twm-s-title">Requirments:</h4>
+            
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: applicationData?.posted_job?.description,
+                                  }}
+                                />
+            
+                                <div className="twm-job-self-mid">
+                                  <h4 className="twm-s-title mt-5">Company Information</h4>
+                                  <p className="twm-job-address text-capitalize">
+                                    Email: {applicationData?.jobDetails?.employer?.email}
+                                  </p>
+                                  <p className="twm-job-address text-capitalize">
+                                    Wesite:{" "}
+                                    <a
+                                      className=""
+                                      href={applicationData?.jobDetails?.employer?.website}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      link
+                                    </a>
+                                  </p>
+                                  <p className="twm-job-address text-capitalize">
+                                    <i className="feather-map-pin" /> Address:
+                                    <span>
+                                      {" "}
+                                      {applicationData?.jobDetails?.employer?.address}
+                                    </span>
+                                  </p>
                                 </div>
                               </div>
-
-                              <div className="twm-job-apllication-area">
-                                Application Status:{" "}
-                                <span className="text-capitalize font-weight-[400]">
-                                  {applicationData?.status}
-                                </span>
-                              </div>
-
-                              <div className="twm-job-apllication-area">
-                                Application ends:{" "}
-                                <span className="twm-job-apllication-date">
-                                  {readableDate(profile?.end_date)}
-                                </span>
-                              </div>
                             </div>
-
-                            <div className=""></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <h4 className="twm-s-title">Job Description:</h4>
-                    <div dangerouslySetInnerHTML={{ __html: profile?.duty }} />
-
-                    <h4 className="twm-s-title">Requirments:</h4>
-
-                    <div
-                      dangerouslySetInnerHTML={{ __html: profile?.description }}
-                    />
-                  </div>
-                </div>
-
-                <div className="">
-                <div className="twm-job-self-mid">
-                              <h4 className="twm-s-title mt-5">
-                               Company Information
-                              </h4>
-                              <p className="twm-job-address text-capitalize">
-                              Email:{" "}
-                              {applicationData?.jobDetails?.employer?.email}
-                            </p>
-                            <p className="twm-job-address text-capitalize">
-                            Wesite:{" "}
-                            <a className="" href={applicationData?.jobDetails?.employer?.website} target="_blank" rel="noreferrer">link</a>
-                              
-                            </p>
-                            </div>
-                           
-                </div>
-
-
-                {/* rightSidebar col-lg-4 col-md-12 */}
-                {/* <div className=" ">
-                        <SectionJobsSidebar2 _config={profile} showAdvert={false} />
-                    </div> */}
-              </div>
-            </div>
+                          )} 
+                           </div>
           </div>
         </div>
       </div>
+
+      {/* <SectionEditMilestone data={milestoneToEdit}/> */}
+      <SectionEditMilestone
+        data={milestoneToEditData}
+        milestone={milestoneToEdit}
+        setMilestone={setMilestoneToEdit}
+      />
     </>
   );
 }
+
 
 export default CanAppliedJobDetails;

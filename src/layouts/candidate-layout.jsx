@@ -105,6 +105,11 @@ function CandidateLayout() {
           type={popupType.DELETE_PORTFOLIO_MEDIA}
           msg={"Are you sure you want to delete this portfolio media?"}
         />
+        <YesNoPopup
+          id="delete-milestone"
+          type={popupType.DELETE_MILESTONE}
+          msg={"Are you sure you want to delete this milestone?"}
+        />
       
       </div>
     </>

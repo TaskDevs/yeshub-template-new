@@ -18,17 +18,7 @@ function PopupPortfolioMedia({ submit, id }) {
       label: portfolio.project_title,
     })) || [];
 
-  // const handleSelectChange = (selectedOptions) => {
-  //   setSelectedItems(selectedOptions);
-
-  //   const selectedPortfoliosIds = selectedOptions
-  //     ? selectedOptions.map((item) => item.value)
-  //     : [];
-  //   setFormData({
-  //     ...formData,
-  //     portfolio_id: selectedPortfoliosIds.join(","),
-  //   });
-  // };
+  
 
   const handleSelectChange = (selectedOption) => {
     setSelectedItems(selectedOption); // Set the single selected item
@@ -54,6 +44,8 @@ function PopupPortfolioMedia({ submit, id }) {
       [name]: e.target.value,
     });
   };
+
+  
 
   return (
     <div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>

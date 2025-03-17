@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import readableDate, { calculateDaysLeft } from "../../../../utils/readableDate";
 import { NavLink } from "react-router-dom";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { freelancerId } from "../../../../globals/constants";
 
 // {
 // 	imageURL ||
@@ -11,6 +12,7 @@ import { GlobalApiData } from "../../../context/global/globalContextApi";
 function CanAppliedJobCard({ data }) {
 
   const { setSelectedId } = useContext(GlobalApiData);
+  // console.log("freelancerId", freelancerId)
   // const today = new Date();
   // console.log("data-app-job", data);
   
@@ -18,7 +20,7 @@ function CanAppliedJobCard({ data }) {
 
 
   return (
-    <li>
+      
       <div
         className="twm-jobs-list-style1 mb-5"
         onClick={() => {
@@ -32,10 +34,10 @@ function CanAppliedJobCard({ data }) {
         <div className="twm-mid-content">
           <NavLink
             // to={`/job-detail/${data?.jobDetails?.id}`}
-            to={`/dashboard-candidate/applied-job-details/${data?.job_id}`}
+            to={ `/dashboard-candidate/applied-job-details/${data?.job_id}`}
             className="twm-job-title apply-title"
           >
-            <h4>{data?.jobDetails?.job_title}</h4>
+            <h4>{freelancerId ? data?.posted_job?.job_title : data?.jobDetails?.job_title}</h4>
           </NavLink>
           <span className="twm-job-post-duration">
             Date Applied: {readableDate(data?.created_at)}
@@ -44,7 +46,7 @@ function CanAppliedJobCard({ data }) {
           <p className="font-weight-bold">
             Status:{" "}
             <span className="site-text-primary text-capitalize apply-status">
-              {data?.status}
+              {freelancerId ? data?.freelancer_status : data?.status}
             </span>{" "}
           </p>
           {/* <p className="twm-job-address">
@@ -77,12 +79,20 @@ function CanAppliedJobCard({ data }) {
             
           </div>
           <div className="twm-jobs-amount">
-            ₵{data?.jobDetails?.salary} <span>/ Month</span>
+            {freelancerId ? "" : 
+             (
+              <>
+                ₵ {data?.jobDetails?.salary} <span>/ Month</span>
+              </>
+            )
+            }
+           
           </div>
           
         </div>
       </div>
-    </li>
+    
+   
   );
 }
 

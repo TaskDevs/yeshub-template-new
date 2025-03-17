@@ -4,63 +4,38 @@ import { PortfolioPopup } from "../../../../common/popups/popup-portfolio";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { PiBriefcaseLight } from "react-icons/pi";
-import toast from "react-hot-toast";
-// import { userId } from "../../../../../globals/constants";
 
 function SectionCanWorkSample() {
   const {
-    handleAddPortfolio,
-    handleUpdatePortfolio,
-    handleResetForm,
-    setFormData,
     portfolios,
-	selectedPortfolioId, setSelectedPortfolioId
-   
+    setIsEditing,
+    handleAddClick,
+    selectedPortfolioId,
+    setSelectedPortfolioId,
+    setFormData,
   } = useContext(PortfolioApiData);
-  
 
-//    console.log("selectedPortfolioId-port", selectedPortfolioId)
-
-
-
-
-  const handleEditClick = (id) => {
-    if (!selectedPortfolioId) {
-      toast.error("Please select a portfolio profile");
-      return;
-    }
-    setSelectedPortfolioId(id);
-    const potfolioToEdit = portfolios.find((e) => e.id === id);
-
-    if (potfolioToEdit) {
-      setFormData({
-        project_title: potfolioToEdit.project_title,
-        role: potfolioToEdit.role,
-        skills: potfolioToEdit.skills,
-        project_start_date: potfolioToEdit.project_start_date,
-        project_end_date: potfolioToEdit.project_end_date,
-        description: potfolioToEdit.description,
-      });
-    }
+  const handleEditClick = (portfolioId) => {
+    console.log("portfolioId", portfolioId)
+    setIsEditing(true);
+    setSelectedPortfolioId(portfolioId);
+    const portfolio = portfolios.find((p) => p.id === portfolioId);
+    console.log("edit-portfolio-sample", portfolio);
+    setFormData({
+      description: portfolio.description,
+      project_end_date: portfolio.project_end_date,
+      project_start_date: portfolio.project_start_date,
+      project_title: portfolio.project_title,
+      role: portfolio.role,
+      skills: portfolio.skills,
+      url: portfolio.media,
+    });
+    console.trace("setFormData called");
   };
+
 
   return (
     <div>
-      {/* <div className="twm-list-wrap">
-				<div className="twm-list-inner d-flex justify-content-between">
-					<b>Work Sample</b>
-					<a
-						data-bs-toggle="modal"
-						href="#Work_Sample"
-						role="button"
-						title="Edit"
-						className="site-text-primary"
-					>
-						<span className="fa fa-plus" />
-					</a>
-				</div>
-				<p>Provide details of your work sample.</p>
-			</div> */}
       <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
         <h4 className="panel-tittle m-a0">Work Sample / Portfolio</h4>
         <a
@@ -69,7 +44,7 @@ function SectionCanWorkSample() {
           role="button"
           title="Add"
           className="site-text-primary"
-          onClick={handleResetForm}
+          onClick={handleAddClick}
         >
           <span className="fa fa-plus" /> <span>Add</span>
         </a>
@@ -94,16 +69,59 @@ function SectionCanWorkSample() {
                       </div>
                       <div className="">
                         <div className="">
-                          Project Title :{" "}
+                          <strong> Project Title :</strong>{" "}
                           <span>{portfolio.project_title} </span>
                         </div>
-                       
+
                         <div className="">
-                          skills : <span>{portfolio.skills} </span>
+                          <strong>skills :</strong>{" "}
+                          <span>{portfolio.skills} </span>
                         </div>
-                        
-                        <div className="">
-                          description : <span>{portfolio.description} </span>
+
+                        {/* <div className="">
+                          <strong>description :</strong>{" "}
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: portfolio?.description,
+                            }}
+                            className="pl-4"
+                          />
+                        </div> */}
+
+                        <div className="mb-5">
+                          <p className="" style={{ fontWeight: "bold", marginBottom: "0" }}>
+                            Description:{" "}
+                          </p>
+                          <div
+                            className="pl-2"
+                            dangerouslySetInnerHTML={{
+                              __html: portfolio?.description
+                                ? (() => {
+                                    const tempDiv =
+                                      document.createElement("div");
+                                    tempDiv.innerHTML = portfolio?.description;
+                                   
+                                    const capitalizeFirstLetterOfSentences = (
+                                      htmlString
+                                    ) => {
+                                      return htmlString
+                                        .replace(
+                                          /([.!?]\s*)(\w)/g,
+                                          (match, punctuation, char) => {
+                                            return (
+                                              punctuation + char.toUpperCase()
+                                            );
+                                          }
+                                        )
+                                        .toLowerCase(); // Ensure the rest of the text is lowercase
+                                    };
+                                    return capitalizeFirstLetterOfSentences(
+                                      tempDiv.innerHTML
+                                    );
+                                  })()
+                                : "",
+                            }}
+                          />
                         </div>
 
                         {portfolio.media.length > 0 &&
@@ -114,7 +132,7 @@ function SectionCanWorkSample() {
                                 href={m.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-								className="project_link"
+                                className="project_link"
                               >
                                 {m.url}
                               </a>
@@ -155,8 +173,9 @@ function SectionCanWorkSample() {
         </div>
       </div>
 
-      <PortfolioPopup submit={handleAddPortfolio} id="Work_Sample" />
-      <PortfolioPopup submit={handleUpdatePortfolio} id="Edit-Portfolio" />
+      <PortfolioPopup id="Work_Sample" />
+      <PortfolioPopup id="Edit-Portfolio" />
+      {/* submit={handleAddPortfolio} submit={handleUpdatePortfolio} */}
     </div>
   );
 }

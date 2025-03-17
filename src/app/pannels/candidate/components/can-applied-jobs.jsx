@@ -1,34 +1,54 @@
 import SectionRecordsFilter from "../../public-user/sections/common/section-records-filter";
 import SectionPagination from "../../public-user/sections/common/section-pagination";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { freelancerId, loadScript } from "../../../../globals/constants";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
-// import { JobApiData } from "../../../context/jobs/jobsContextApi";
-import { GlobalApiData } from "../../../context/global/globalContextApi";
-import Loader from "../../../common/loader";
 import { extractTime } from "../../../../utils/readableDate";
 import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi";
-// import { GlobalApiData } from "../../../context/global/globalContextApi";
+
 
 function CanAppliedJobsPage() {
   
   const {  appliedJobs } = useContext(ApplicationApiData);
   const { appliedMilestones } = useContext(MilestoneApiData)
-  const { isLoading } = useContext(GlobalApiData)
+
+  console.log("appliedMilestones-app-pg", appliedMilestones)
 
 
-  // console.log("appliedMilestones-app-pg", appliedMilestones)
-  // console.log("appliedJobs-app-pg", appliedJobs)
 
-  // console.log("freelancerId === null", freelancerId === null)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; 
+  const totalItems = freelancerId ? appliedMilestones.length : appliedJobs.length;
+
+  const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+  };
+
+  const getPaginatedItems = () => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      if (freelancerId) {
+          return appliedMilestones
+              .sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
+              .slice(startIndex, endIndex);
+      } else {
+          return appliedJobs
+              .sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
+              .slice(startIndex, endIndex);
+      }
+  };
+
+  const paginatedItems = getPaginatedItems();
+
+  
 
   const _filterConfig = {
     prefix: "Applied",
     type: "jobs",
     total: freelancerId ? appliedMilestones.length : appliedJobs.length,
-    // total: {freelancerId !== "undefined"? appliedMilestones.length : appliedJobs.length},
     showRange: false,
     showingUpto: "",
   };
@@ -37,95 +57,59 @@ function CanAppliedJobsPage() {
     loadScript("js/custom.js");
   });
 
-
-  // console.log("freelancerid-type", typeof freelancerId)
-  // console.log("freelancerid",  freelancerId)
-  // console.log("freelancerid-not exist",  !freelancerId)
-
+ 
   return (
     <>
-    {isLoading && <Loader/>}
-      <div className="twm-right-section-panel candidate-save-job site-bg-gray">
-        {/*Filter Short By*/}
-        <SectionRecordsFilter _config={_filterConfig} />
+        <div className="twm-right-section-panel candidate-save-job site-bg-gray">
+            <SectionRecordsFilter _config={_filterConfig} />
+            <div className="twm-jobs-list-wrap">
+                {totalItems === 0 && (
+                    <p>No applied {freelancerId ? "milestone" : "job"} found.</p>
+                )}
+                <ul>
+                    {paginatedItems.map((item) => (
+                        <CanAppliedJobCard
+                            data={item}
+                            key={item.id}
+                        />
+                    ))}
 
-        <div className="twm-jobs-list-wrap">
-        
-        {freelancerId? appliedMilestones.length : appliedJobs.length}
-          { freelancerId? (
-            <>
-            {appliedMilestones.length === 0 && <p>No applied milestone found.</p>}
-            </>
-          )  : (
-            <>
-            {appliedJobs.length === 0 && <p>No applied job found.</p>}
-            </>
-          )}
-            <ul>
-              
-              {freelancerId ? 
-                (
-                  appliedMilestones
-                  ?.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
-                .map((milestone) => (
-                  <CanAppliedJobCard
-                    data={milestone}
-                    key={milestone.id}
-                    
-                  />
-              ))
-              ) :
-              (
-                <>
-                {/* {console.log("typeof freelancerId === string", typeof freelancerId === "string")} */}
-                {appliedJobs
-                ?.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at))
-                .map((job) => (
-                  <CanAppliedJobCard
-                    data={job}
-                    key={job.id}
-                    
-                  />
-                ))}
-                </>
-              ) }
-              
-            </ul>
-         
-        </div>
-
-        <div>
-          { freelancerId? appliedMilestones.length > 0 : appliedJobs.length > 0 && (
-            <>
-              <SectionPagination />
+{!freelancerId && (
               <div className="sec-actions-btn d-flex justify-content-center align-items-center mt-5 w-100">
-                <button
-                  className="site-button  actions-btn"
+              <button
+                  className="site-button actions-btn"
                   data-bs-target="#delete-applied-job"
                   data-bs-toggle="modal"
                   data-bs-dismiss="modal"
-                >
+              >
                   <FaRegTrashCan color="white" />
                   <span className="admin-nav-text">Delete</span>
-                </button>
-
-                {/* <button
-              className="site-button  actions-btn "
-              data-bs-target="#Edit-"
-              data-bs-toggle="modal"
-              data-bs-dismiss="modal"
-             
-            >
-              <MdOutlineEdit color="white" />
-              <span>Edit</span>
-            </button> */}
-              </div>
-            </>
+              </button>
+          </div>
           )}
+            
+                </ul>
+            </div>
+
+            
+
+
+            {totalItems > itemsPerPage && (
+                <div>
+                    <SectionPagination
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={handlePageChange}
+                    />
+                    
+                </div>
+            )}
         </div>
-      </div>
     </>
-  );
+);
+
+  
 }
 
 export default CanAppliedJobsPage;

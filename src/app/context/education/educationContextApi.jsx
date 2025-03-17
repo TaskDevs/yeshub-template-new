@@ -16,7 +16,7 @@ import { userId } from "../../../globals/constants";
 export const EducationApiData = createContext();
 
 const EducationApiDataProvider = (props) => {
-	const { setIsSubmitting, selectedId, setSelectedId } = useContext(GlobalApiData);
+	const { setIsSubmitting, selectedId, setSelectedId, setIsLoading } = useContext(GlobalApiData);
 
 	const initialFormData = EDUCATIONFIELD.fieldDetail.reduce((acc, field) => {
 		acc[field.name] = "";
@@ -29,6 +29,7 @@ const EducationApiDataProvider = (props) => {
 
 	
 	const fetchEducationData = async () => {
+		setIsLoading(true)
 		try {
 			const res = await processEducationEducation(userId);
 		
@@ -36,6 +37,8 @@ const EducationApiDataProvider = (props) => {
 			setEducationData(data);
 		} catch (err) {
 			console.error("Failed to get education", err);
+		}finally {
+			setIsLoading(false)
 		}
 		
 	};

@@ -10,94 +10,223 @@ import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { ProfileApiData } from "../../../context/user-profile/profileContextApi";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
-import {  baseURL } from "../../../../globals/constants";
+import { baseURL } from "../../../../globals/constants";
 import FormatUrl from "../../../../utils/formatUrl";
-import imageCompression from "browser-image-compression";
+import { Avatar } from "primereact/avatar";
+
 function EmpCompanyProfilePage() {
   const {
     processEmployerProfile,
     employerProfiles,
     processUpdateEmployerLogo,
+    processUpdateEmployerBanner,
   } = useContext(EmployerApiData);
   const { isSubmitting } = useContext(GlobalApiData);
-  const {
-    handleSubmitProfile,
-    handleEditClick,
-  } = useContext(ProfileApiData);
+  const { handleSubmitProfile, handleEditClick } = useContext(ProfileApiData);
   const [imageURL, setImageURL] = useState(null);
+  const [bannerURL, setBannerURL] = useState(null);
   const [formData, setFormData] = useState({});
- 
-  // const [selectedFile, setSelectedFile] = useState(null);
-  // const [profileUpdated, setProfileUpdated] = useState(false);
 
   useEffect(() => {
     loadScript("js/custom.js");
     processEmployerProfile();
   }, []);
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     if (selectedImage) {
-      const options = {
-        maxSizeMB: 0.5, // Adjust max size in MB (e.g., 0.5MB)
-        maxWidthOrHeight: 800, // Adjust max width/height in pixels
-        useWebWorker: true,
+      const reader = new FileReader();
+      reader.onload = () => {
+        let logoFile = reader.result;
+        setFormData({ id: employerProfiles?.id, logo: logoFile });
+        setImageURL(reader.result);
       };
-  
-      try {
-        const compressedFile = await imageCompression(selectedImage, options);
-        const reader = new FileReader();
-  
-        reader.onload = () => {
-          let logoFile = reader.result;
-          const formData = { id: employerProfiles?.id, logo: logoFile };
-  
-          // Log the data being sent
-          console.log("Data being sent:", formData);
-  
-          setFormData(formData);
-          setImageURL(reader.result);
-        };
-  
-        reader.readAsDataURL(compressedFile);
-      } catch (error) {
-        console.error("Image compression error:", error);
-      }
+      reader.readAsDataURL(selectedImage);
     }
   };
-  
 
-  const handleSubmitCompanyLogo = async () => {
-    try {
-      console.log("Submitting company logo:", formData);
-  
-      const response = await processUpdateEmployerLogo(employerProfiles?.id, formData);
-      
-      console.log("Company logo update successful:", response);
-    } catch (error) {
-      console.error("Error updating company logo:", error);
+  const handleBannerChange = (e) => {
+    const selectedBanner = e.target.files[0];
+    if (selectedBanner) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const bannerFile = event.target.result; // Correct way to get Base64
+        setBannerURL(bannerFile); // Set preview URL correctly
+        setFormData((prevData) => ({
+          ...prevData,
+          id: employerProfiles?.id,
+          banner: bannerFile, // Store Base64 data in form state
+        }));
+      };
+      reader.readAsDataURL(selectedBanner);
     }
   };
-  
 
-  //   useEffect(() => {
+  const handleSubmitCompanyLogo = () => {
+    console.log(formData);
 
-  //   }, []);
+    if (formData.logo) {
+      processUpdateEmployerLogo(employerProfiles?.id, { logo: formData.logo });
+    }
 
-  // if (!imageURL) {
-  // 	return false;
-  // }
+    if (formData.banner) {
+      processUpdateEmployerBanner(employerProfiles?.id, {
+        banner: formData.banner,
+      });
+    }
+  };
+
   return (
     <>
       <div className="">
         <div className="wt-admin-right-page-header clearfix">
           <h2>Company Profile!</h2>
-          <div className="breadcrumbs">
-            <a href="/">Home</a>
+          <div className="breadcrumbs mb-3">
+            <a href="/dashboard-employer">Home</a>
             {/* <a href="#">Dasboard</a> */}
             <span>Company Profile</span>
           </div>
+          <div className="cabdidate-de-info">
+            <div className="twm-job-self-wrap">
+              <div className="twm-job-self-info">
+                <div className="twm-job-self-top">
+                  {/* Banner Section */}
+                  <div
+                    className="twm-media-bg pt-3"
+                    style={{
+                      background:
+                        employerProfiles.banner || bannerURL
+                          ? `url(${
+                              bannerURL || employerProfiles.banner
+                            }) center/cover no-repeat`
+                          : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                      height: "250px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {bannerURL || employerProfiles.banner ? (
+                      <img
+                        src={bannerURL || employerProfiles.banner}
+                        alt="Company Banner"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ) : (
+                      <h2 style={{ color: "#fff", fontWeight: "bold" }}>
+                        Welcome to Your Company&rsquo;s Profile
+                      </h2>
+                    )}
+                  </div>
+
+                  {/* Logo Section */}
+                  <div
+                    className="twm-mid-content"
+                    style={{ textAlign: "center", marginTop: "-40px" }}
+                  >
+                    <div
+                      className="twm-media"
+                     
+                    >
+                       {!employerProfiles.logo ? (
+                        imageURL ? (
+                          <JobZImage
+                            src={FormatUrl(baseURL) + formatImgUrl(imageURL)}
+                            alt="Company Image"
+                            style={{
+                              width: "110px", 
+                              height: "110px", 
+                              fontSize: "80px", 
+
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          />
+                        ) : (
+                          <Avatar
+                            icon="pi pi-user"
+                            size="xlarge"
+                            shape="circle"
+                            style={{
+                              width: "110px", 
+                              height: "110px", 
+                              fontSize: "80px", 
+
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          />
+                        )
+                      ) : (
+                        <img src={employerProfiles.logo} alt="Company Logo" />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div className=" panel panel-default m-b30 ">
+          {/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
+          <div className=" p-a20 ">
+            {/* <div className="panel-heading-with-btn"> */}
+            <div className="panel-heading wt-panel-heading panel-heading-with-btn ">
+              <h4 className="panel-tittle m-a0">Company Profile Details</h4>
+              {!isSubmitting && (
+                <a
+                  data-bs-toggle="modal"
+                  href="#AddProfile"
+                  role="button"
+                  title="Edit"
+                  className="site-text-primary"
+                >
+                  <span className="fa fa-edit" />
+                </a>
+              )}
+            </div>
+
+            <div className="panel-body wt-panel-body  ">
+              <div className="twm-panel-inner">
+                <CompanyProfileData data={employerProfiles} />
+              </div>
+
+              {/* actions */}
+              <div className="">
+                <div className="actions">
+                  <button
+                    className="site-button actions"
+                    data-bs-target="#delete-profile"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                  >
+                    <FaRegTrashCan color="white" />
+                    <span className="admin-nav-text">Delete</span>
+                  </button>
+
+                  <button
+                    className="site-button  actions "
+                    data-bs-target="#EditProfile"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal"
+                    onClick={() => {
+                      handleEditClick();
+                    }}
+                  >
+                    <MdOutlineEdit color="white" />
+                    <span>Edit</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/*Logo and Cover image*/}
         <div className="panel panel-default">
           <div className="panel-heading wt-panel-heading p-a20">
@@ -109,15 +238,30 @@ function EmpCompanyProfilePage() {
                 <div className="form-group">
                   <div className="dashboard-profile-pic">
                     <div className="dashboard-profile-photo">
-                    {!employerProfiles.logo ? (
-  <JobZImage
-    src={imageURL ? FormatUrl(baseURL) + formatImgUrl(imageURL) : ""}
-    alt="Company Image"
-  />
-) : (
-  <img src={employerProfiles.logo} alt="Company Logo" />
-)}
+                      {!employerProfiles.logo ? (
+                        imageURL ? (
+                          <JobZImage
+                            src={FormatUrl(baseURL) + formatImgUrl(imageURL)}
+                            alt="Company Image"
+                          />
+                        ) : (
+                          <Avatar
+                            icon="pi pi-user"
+                            size="xlarge"
+                            shape="circle"
+                            style={{
+                              width: "110px", // Adjust for larger avatar
+                              height: "110px", // Adjust for larger avatar
+                              fontSize: "80px", // Adjust icon size
 
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          />
+                        )
+                      ) : (
+                        <img src={employerProfiles.logo} alt="Company Logo" />
+                      )}
 
                       <div className="upload-btn-wrapper">
                         <div id="upload-image-grid" />
@@ -145,55 +289,53 @@ function EmpCompanyProfilePage() {
           </div>
         </div>
 
-        <div className=" panel panel-default m-b30 ">
-          {/* panel-heading wt-panel-heading p-a20 panel-heading-with-btn */}
-          <div className=" p-a20 ">
-            {/* <div className="panel-heading-with-btn"> */}
-            <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-              <h4 className="panel-tittle m-a0"> Profile</h4>
-              {!isSubmitting && (
-                <a
-                  data-bs-toggle="modal"
-                  href="#AddProfile"
-                  role="button"
-                  title="Edit"
-                  className="site-text-primary"
-                >
-                  <span className="fa fa-edit" />
-                </a>
-              )}
-            </div>
+        {/*BannerCover image*/}
+        <div className="panel panel-default">
+          <div className="panel-heading wt-panel-heading p-a20">
+            <h4 className="panel-tittle m-a0">Banner Cover image</h4>
+          </div>
+          <div className="panel-body wt-panel-body p-a20 p-b0 m-b30 ">
+            <div className="row">
+              <div className="col-lg-12 col-md-12">
+                <div className="form-group">
+                  <div className="dashboard-profile-pic">
+                    <div className="dashboard-profile-photo">
+                      {bannerURL ? ( // Use `bannerURL` directly
+                        <img src={bannerURL} alt="Company Banner" />
+                      ) : employerProfiles.banner ? (
+                        <img
+                        src={bannerURL || employerProfiles.banner}
+                        alt="Company Banner"
+                        
+                      />
+                      ) : (
+                        <img
+                        src={bannerURL || employerProfiles.banner}
+                        alt="Company Banner"
+                        
+                      />
+                      )}
 
-            <div className="panel-body wt-panel-body  ">
-              <div className="twm-panel-inner">
-                <CompanyProfileData data={employerProfiles} />
-              </div>
-
-              {/* actions */}
-              <div className="">
-                <div className="actions">
-                  <button
-                    className="site-button  actions"
-                    data-bs-target="#delete-profile"
-                    data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                  >
-                    <FaRegTrashCan color="white" />
-                    <span className="admin-nav-text">Delete</span>
-                  </button>
-
-                  <button
-                    className="site-button  actions "
-                    data-bs-target="#EditProfile"
-                    data-bs-toggle="modal"
-                    data-bs-dismiss="modal"
-                    onClick={() => {
-                      handleEditClick();
-                    }}
-                  >
-                    <MdOutlineEdit color="white" />
-                    <span>Edit</span>
-                  </button>
+                      <div className="upload-btn-wrapper">
+                        <div id="upload-image-grid" />
+                        <button className="site-button button-sm">
+                          Upload Banner
+                        </button>
+                        <input
+                          type="file"
+                          name="profile_banner"
+                          id="banner-uploader"
+                          accept="/*"
+                          onChange={handleBannerChange}
+                        />
+                      </div>
+                    </div>
+                    <p>
+                      <b>Company Banner :- </b> Max file size is 1MB, Minimum
+                      dimension: 869 x 350 And Suitable files are .jpg &amp;
+                      .png
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

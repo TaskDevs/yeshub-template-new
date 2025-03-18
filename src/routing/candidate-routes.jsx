@@ -13,6 +13,7 @@ import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import React from "react";
 import  { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
+import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applied-job-details";
 
 function CandidateRoutes() {
 	
@@ -35,7 +36,9 @@ function CandidateRoutes() {
 			/>
 			<Route path={candidate.CHAT} element={<CanChatPage />} />
 			<Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
+			<Route path={candidate.APPLIED_JOB_DETAILS} element={<CanAppliedJobDetails />} />
 			<Route path="*" element={<Error404Page />} />
+			
 		</Routes>
 	);
 }

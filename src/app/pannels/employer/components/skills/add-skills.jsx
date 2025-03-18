@@ -3,7 +3,6 @@ import SkillsForm from "./skills-form";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import { notify } from "../../../../../utils/responseUtils";
-
 import YesNoPopup from "../../../../common/popups/popup-yes-no";
 import { popupType } from "../../../../../globals/constants";
 import { MdOutlineEdit } from "react-icons/md";

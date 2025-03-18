@@ -1,8 +1,6 @@
-import { useContext } from "react";
-import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
-function SectionProfile({ data, isFreelancer }) {
-    const { freelanceProfileData } = useContext(FreelanceApiData)
+function SectionProfile({ data, isFreelancer, freelance, email }) {
+   console.log("data-profile-sec", data)
 
 
 
@@ -16,7 +14,7 @@ function SectionProfile({ data, isFreelancer }) {
                          <div className="twm-s-info-inner">
                              <i className="fas fa-money-bill-wave" />
                              <span className="twm-title">Rate</span>
-                             <div className="twm-s-info-discription">GHS{freelanceProfileData[0]?.rate}/ Day</div>
+                             <div className="twm-s-info-discription">GHS{freelance[0]?.rate}/ Day</div>
                          </div>
                      </li>
                     )}
@@ -48,7 +46,7 @@ telephone
                         <div className="twm-s-info-inner">
                             <i className="fas fa-at" />
                             <span className="twm-title">Email</span>
-                            <div className="twm-s-info-discription">thewebmaxdemo@gmail.com</div>
+                            <div className="twm-s-info-discription">{email || "thewebmaxdemo@gmail.com"}</div>
                         </div>
                     </li>
                     <li>
@@ -62,7 +60,7 @@ telephone
                         <div className="twm-s-info-inner">
                             <i className="fas fa-map-marker-alt" />
                             <span className="twm-title">Address</span>
-                            <div className="twm-s-info-discription">{data?.address ||"P.O. Box 111 Adabraka, Accra"}</div>
+                            <div className="twm-s-info-discription">{data?.region }, {data?.gps_address ||"P.O. Box 111 Adabraka, Accra"}</div>
                         </div>
                     </li>
                 </ul>

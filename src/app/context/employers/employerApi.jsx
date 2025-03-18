@@ -111,21 +111,15 @@ export const updateEmployer = async (id, data) => {
 //   }
 // };
 
+// Update Employer Logo
 export const updateEmployerLogo = async (id, data) => {
   try {
     let responseOnUpdateEmployer = await axios.put(
       `${REACT_BASE_URL}employers-logo/${id}`,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
+      data
     );
-
     console.log(responseOnUpdateEmployer);
-
-    if (responseOnUpdateEmployer.status === 200) {
+    if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
     } else {
       return false;
@@ -135,6 +129,22 @@ export const updateEmployerLogo = async (id, data) => {
   }
 };
 
+export const updateEmployerBanner = async (id, data) => {
+  try {
+    let responseOnUpdateEmployer = await axios.put(
+      `${REACT_BASE_URL}employers-banner/${id}`,
+      data
+    );
+    console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateEmployer.status == 200) {
+      return responseOnUpdateEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 
 // DELETE Employer

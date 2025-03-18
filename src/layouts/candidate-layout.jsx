@@ -10,6 +10,7 @@ import { popupType } from "../globals/constants";
 import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
 import { useContext } from "react";
 
+
 function CandidateLayout() {
   const currentpath = useLocation().pathname;
   const { isSidebarCollapsed } = useContext(ProfileApiData);
@@ -57,6 +58,8 @@ function CandidateLayout() {
 
         <SignUpPopup />
         <SignInPopup />
+        
+
         <YesNoPopup
           id="delete-dash-profile"
           type={popupType.DELETE}
@@ -97,6 +100,17 @@ function CandidateLayout() {
           type={popupType.DELETE_APPLIED_JOB}
           msg={"Are you sure you want to delete this job application?"}
         />
+        <YesNoPopup
+          id="delete-portfolio-media"
+          type={popupType.DELETE_PORTFOLIO_MEDIA}
+          msg={"Are you sure you want to delete this portfolio media?"}
+        />
+        <YesNoPopup
+          id="delete-milestone"
+          type={popupType.DELETE_MILESTONE}
+          msg={"Are you sure you want to delete this milestone?"}
+        />
+      
       </div>
     </>
   );

@@ -14,6 +14,7 @@ import { userId } from "../../../globals/constants";
 import toast from "react-hot-toast";
 import { FREELANCERFIELD } from "../../../globals/freelancer-data";
 import { GlobalApiData } from "../global/globalContextApi";
+import { PortfolioApiData } from "../portfolio/portfolioContextApi";
 
 export const FreelanceApiData = createContext();
 
@@ -29,14 +30,18 @@ const FreelanceApiDataProvider = (props) => {
   const [formData, setFormData] = useState(initialFormData)
   const { setIsSubmitting } = useContext(GlobalApiData)
   const [selectedItems, setSelectedItems] = useState([])
+  const { portfolios } = useContext(PortfolioApiData)
 
-  // console.log("freelanceProfileData-ctx", freelanceProfileData)
+//  console.log("freelanceProfileData", freelanceProfileData)
 
   const fetchProfile = async () => {
     const res = await processFreelanceProfile(userId);
     if (res) {
-      // console.log("freelance-profile", res)
-      setFreelanceProfileData(res.data);   
+    
+      setFreelanceProfileData(res.data); 
+      // sessionStorage.setItem("freelancer_id", res?.data[0]?.id);  
+      sessionStorage.setItem("freelancer_id", res?.data[0]?.id || "");
+
     } else {
       return false;
     }
@@ -105,7 +110,7 @@ const FreelanceApiDataProvider = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (freelanceProfileData && freelanceProfileData.id) {
+    if (freelanceProfileData.length > 1 && freelanceProfileData[0].id) {
       toast.error("A freelance profile already exists. Please edit the existing profile instead.");
       return; 
   }
@@ -145,11 +150,44 @@ const FreelanceApiDataProvider = (props) => {
   }
 
   const handleEditFreelance = () => {
-   
+    console.log("freelanceProfileData[0]", freelanceProfileData[0])
+    if (!portfolios || portfolios.length === 0) {
+      console.error("Portfolio options not loaded yet.");
+      return;
+    }
+
+
+const portfolioArray = Array.isArray(freelanceProfileData[0]?.portfolio_id)
+    ? freelanceProfileData[0]?.portfolio_id.map(String)
+    : typeof freelanceProfileData[0]?.portfolio_id === "string"
+    ? freelanceProfileData[0]?.portfolio_id.startsWith('[') && freelanceProfileData[0]?.portfolio_id.endsWith(']')
+        ? JSON.parse(freelanceProfileData[0]?.portfolio_id).map(String)
+        : freelanceProfileData[0]?.portfolio_id.split(",").map((id) => id.trim())
+    : [];
+
+console.log("portfolioArray", portfolioArray);
+
+const selectedPortfolioObjects = portfolioArray.map((id) => {
+    const portfolio = portfolios?.find(
+        (portfolio) => String(portfolio.id) === String(id)
+    );
+    if (portfolio) {
+        return { value: portfolio.id, label: portfolio.project_title };
+    } else {
+        console.log("portfolio id: " + id + " not found in portfolios.");
+        return null;
+    }
+});
+
+console.log("selectedPortfolioObjects", selectedPortfolioObjects);
+
     setFormData({
       rate: freelanceProfileData[0]?.rate,
       experience: freelanceProfileData[0]?.experience,
+      portfolio_id: selectedPortfolioObjects.map((portfolio) => portfolio.value)
     })
+
+    setSelectedItems(selectedPortfolioObjects);
   }
 
   return (

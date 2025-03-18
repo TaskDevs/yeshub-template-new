@@ -2,8 +2,9 @@
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
 import {
-	REACT_BASE_URL,
-	SUCCESS_STATUS,
+  REACT_BASE_URL,
+  SUCCESS_STATUS,
+  LIST_ON_PAGES,
 } from "../../../globals/constants";
 
 // ADD Job
@@ -24,28 +25,17 @@ export const addJob = async (data) => {
   }
 };
 
-// SEARCH Job
-export const searchJob = async () => {
-  try {
-    let responseOnSearchJob = await axios.get({
-      /**Add Search Employer API URL here like /searchEmployer?keyword=${data}**/
-    });
-    if (responseOnSearchJob.status === SUCCESS_STATUS) {
-      return responseOnSearchJob.data;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 // LIST Job
-export const jobList = async () => {
+export const jobList = async (pageNo) => {
   try {
-    let responseOnJobList = await axios.get(`${REACT_BASE_URL}get-posted-jobs`);
+    let responseOnJobList = await axios.get(
+      `${REACT_BASE_URL}get-posted-jobs?pageNo=${
+        pageNo ? pageNo : 1
+      }&perPage=${LIST_ON_PAGES}`
+    );
     if (responseOnJobList.status == 200) {
-      return responseOnJobList.data.data;
+      console.log(responseOnJobList);
+      return responseOnJobList.data;
     } else {
       return false;
     }
@@ -55,24 +45,38 @@ export const jobList = async () => {
   }
 };
 
-export const searchJobs = async (title, category, location) => {
+export const searchJob = async (data, pageNo) => {
   try {
-    // Combine title, category, and location into a single string for the "keywords" parameter
-    const keywords = `${title || ""} ${category || ""} ${
-      location || ""
-    }`.trim();
-
+    //console.log(keywords);
     let response = await axios.get(
-      `${REACT_BASE_URL}jobs-search`, // Adjust the endpoint as needed
-      {
-        params: {
-          keywords, // Send the combined keywords as a single parameter
-        },
-      }
+      `${REACT_BASE_URL}jobs-search?pageNo=${
+        pageNo ? pageNo : 1
+      }&perPage=${LIST_ON_PAGES}&job-category=${data.job_category}&job-type=${
+        data.job_type
+      }&location=${data.location}`
     );
+    console.log(response);
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error("Error fetching jobs:", err);
+    return false;
+  }
+};
 
-    if (response.status === 200) {
-      return response.data.data;
+export const searchJobByTitle = async (data, pageNo) => {
+  try {
+    let response = await axios.get(
+      `${REACT_BASE_URL}jobs-search-by-title?jobTitle=${data}&pageNo=${
+        pageNo ? pageNo : 1
+      }&perPage=${LIST_ON_PAGES}`
+    );
+    console.log(response);
+    if (response.status == 200) {
+      return response.data;
     } else {
       return false;
     }
@@ -104,7 +108,6 @@ export const employerJobList = async (id) => {
 export const countEmployerJobsPosted = async (id) => {
   try {
     let responseOnCountEmployerJobsPosted = await axios.get(
-
       `${REACT_BASE_URL}count-posted-jobs/${id}`
     );
 
@@ -119,16 +122,14 @@ export const countEmployerJobsPosted = async (id) => {
   }
 };
 
-
-export const countApplications= async (id) => {
+export const countApplications = async (id) => {
   try {
     let responseOnCountApplications = await axios.get(
-
       `${REACT_BASE_URL}applications/count/${id}`
     );
 
-    if ( responseOnCountApplications .status == 200) {
-      return responseOnCountApplications.data.data;
+    if (responseOnCountApplications.status == 200) {
+      return responseOnCountApplications.data.total_applications;
     } else {
       return false;
     }
@@ -140,7 +141,9 @@ export const countApplications= async (id) => {
 // VIEW Job
 export const jobProfile = async (id) => {
   try {
-    let responseOnJobProfile = await axios.get(`${REACT_BASE_URL}posted-jobs/${id}`);
+    let responseOnJobProfile = await axios.get(
+      `${REACT_BASE_URL}posted-jobs/${id}`
+    );
 
     return responseOnJobProfile.data;
     // if (responseOnJobProfile.status === SUCCESS_STATUS) {
@@ -153,8 +156,6 @@ export const jobProfile = async (id) => {
     return false;
   }
 };
-
-
 
 // UPDATE Job
 export const updateJob = async () => {
@@ -173,11 +174,11 @@ export const updateJob = async () => {
 };
 
 // DELETE Job
-export const deleteJob = async () => {
+export const deleteJob = async (id) => {
   try {
-    let responseOnDeleteJob = await axios.delete({
-      /**Add Delete Employer API URL here like  `/api/deleteHistory/${data}` **/
-    });
+    let responseOnDeleteJob = await axios.delete(
+      `${REACT_BASE_URL}posted-jobs/${id}`
+    );
     if (responseOnDeleteJob.status === SUCCESS_STATUS) {
       return responseOnDeleteJob.data;
     } else {

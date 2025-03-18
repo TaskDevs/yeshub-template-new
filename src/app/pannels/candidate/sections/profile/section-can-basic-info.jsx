@@ -1,23 +1,20 @@
-import { useContext, useEffect } from "react";
-import InputField from "../../../../common/input-field";
+import { useContext } from "react";
+// import InputField from "../../../../common/input-field";
 import { USERPROFILEFIELD } from "../../../../../globals/user-profile-data";
 import TextAreaField from "../../../../common/text-area-field";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 import Select from "react-select";
+import SelectField from "../../../../common/select-field";
+import { options } from "../../../../../utils/experience";
+import { professions } from "../../../../../utils/professions";
+import { regions } from "../../../../../utils/regions";
+import NewInputField from "../../../../common/new-input-field";
 
 function SectionCandicateBasicInfo({ submit, id }) {
-  const { formData, setFormData, selectedItems, setSelectedItems } = useContext(ProfileApiData);
-  const { skillOptions, processGetAllSkills, setSkillOptions } =
-    useContext(SkillsApiData);
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      const res = await processGetAllSkills();
-      setSkillOptions(res);
-    };
-    fetchSkills();
-  }, []);
+  const { formData, setFormData, selectedItems, setSelectedItems } =
+    useContext(ProfileApiData);
+  const { skillOptions } = useContext(SkillsApiData);
 
   const formattedSkills =
     skillOptions?.map((skill) => ({
@@ -44,19 +41,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
     });
   };
 
-  // const handleChange = (data, field) => {
-  //   if (data?.target) {
-  //     // Handles standard input fields
-  //     const { name, value } = data.target;
-  //     setFormData((prev) => ({ ...prev, [name]: value }));
-  //   } else if (field?.name) {
-  //     // Handles custom components like PasswordField
-  //     setFormData((prev) => ({ ...prev, [field.name]: data }));
-  //   }
-  // };
-
-
-
   return (
     <>
       <div className="modal fade twm-saved-jobs-view" id={id} tabIndex={-1}>
@@ -74,7 +58,7 @@ function SectionCandicateBasicInfo({ submit, id }) {
               </div>
               <div className="modal-body">
                 <div className="row">
-                  <div className="col-xl-6 col-lg-6 col-md-12">
+                  {/* <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group">
                       <label>First Name</label>
                       <div className="ls-inputicon-box">
@@ -85,24 +69,32 @@ function SectionCandicateBasicInfo({ submit, id }) {
                             handleChange(data, field);
                           }}
                         />
-                     
+
                         <i className="fs-input-icon fa fa-user " />
                       </div>
                     </div>
                   </div>
+
                   <div className="col-xl-6 col-lg-6 col-md-12">
-                    <div className="form-group">
-                      <label>Last Name</label>
-                      <div className="ls-inputicon-box">
-                        <InputField
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[1].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        Last Name
+                      </label>
+                      <div className=" ls-inputicon-box">
+                        <div className="">
+                          <i className="fs-input-icon fa fa-user " />
+                        </div>
+
+                        <NewInputField
                           field={USERPROFILEFIELD.fieldDetail[1]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
                           }}
                         />
-
-                        <i className="fs-input-icon fa fa-user " />
                       </div>
                     </div>
                   </div>
@@ -121,42 +113,105 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         <i className="fs-input-icon fa fa-phone-alt" />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
-                    <div className="form-group city-outer-bx has-feedback">
-                      <label>Profession</label>
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[0].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        First Name
+                      </label>
                       <div className="ls-inputicon-box">
-                        <InputField
-                          field={USERPROFILEFIELD.fieldDetail[3]}
+                        <div className="">
+                          <i className="fs-input-icon fa fa-user" />
+                        </div>
+                        <NewInputField
+                          field={USERPROFILEFIELD.fieldDetail[0]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
                           }}
                         />
+                      </div>
+                    </div>
+                  </div>
 
-                        <i className="fs-input-icon fa fa-user-edit" />
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[1].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        Last Name
+                      </label>
+                      <div className="ls-inputicon-box">
+                        <div className="">
+                          <i className="fs-input-icon fa fa-user" />
+                        </div>
+                        <NewInputField
+                          field={USERPROFILEFIELD.fieldDetail[1]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[2].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        Phone
+                      </label>
+                      <div className="ls-inputicon-box">
+                        <div className="">
+                          <i className="fs-input-icon fa fa-phone-alt" />
+                        </div>
+                        <NewInputField
+                          field={USERPROFILEFIELD.fieldDetail[2]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
                       </div>
                     </div>
                   </div>
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
-                      <label>Experience</label>
-                      <div className="ls-inputicon-box">
-                        <InputField
-                          field={USERPROFILEFIELD.fieldDetail[4]}
-                          value={formData}
-                          change={(data, field) => {
-                            handleChange(data, field);
-                          }}
-                        />
-
-                        <i className="fs-input-icon fa fa-user-edit" />
-                      </div>
+                      <SelectField
+                        field={USERPROFILEFIELD.fieldDetail[3]}
+                        value={formData}
+                        options={professions}
+                        change={(data, field) => {
+                          handleChange(data, field);
+                        }}
+                      />
+                      {/* <i className="fs-input-icon fa fa-user-edit" /> */}
                     </div>
                   </div>
 
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <SelectField
+                        field={USERPROFILEFIELD.fieldDetail[4]}
+                        value={formData}
+                        options={options}
+                        change={(data, field) => {
+                          handleChange(data, field);
+                        }}
+                      />
+                      {/* <i className="fs-input-icon fa fa-user-edit" /> */}
+                    </div>
+                  </div>
+                  {/* 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group">
                       <label>Address</label>
@@ -171,46 +226,52 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         <i className="fs-input-icon fa fa-globe-americas" />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
-                    <div className="form-group city-outer-bx has-feedback">
-                      <label>Country</label>
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[5].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        Address
+                      </label>
                       <div className="ls-inputicon-box">
-                        <InputField
-                          field={USERPROFILEFIELD.fieldDetail[6]}
+                        <div className="">
+                          <i className="fs-input-icon fa fa-globe-americas" />
+                        </div>
+                        <NewInputField
+                          field={USERPROFILEFIELD.fieldDetail[5]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
                           }}
                         />
-                        <i className="fs-input-icon fa fa-globe-americas" />
                       </div>
                     </div>
                   </div>
 
                   <div className="col-xl-6 col-lg-6 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
-                      <label>Region</label>
+                      <SelectField
+                        field={USERPROFILEFIELD.fieldDetail[6]}
+                        value={formData}
+                        options={regions}
+                        change={(data, field) => {
+                          handleChange(data, field);
+                        }}
+                        icon="globe-americas"
+                      />
+                    </div>
+                  </div>
+
+                  {/* <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>GPS Address</label>
+
                       <div className="ls-inputicon-box">
                         <InputField
                           field={USERPROFILEFIELD.fieldDetail[7]}
-                          value={formData}
-                          change={(data, field) => {
-                            handleChange(data, field);
-                          }}
-                        />
-                        <i className="fs-input-icon fa fa-globe-americas" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-xl-6 col-lg-6 col-md-12">
-                    <div className="form-group city-outer-bx has-feedback">
-                      <label>GPS Address</label>
-                      <div className="ls-inputicon-box">
-                        <InputField
-                          field={USERPROFILEFIELD.fieldDetail[8]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -221,12 +282,12 @@ function SectionCandicateBasicInfo({ submit, id }) {
                     </div>
                   </div>
 
-                  <div className=" col-xl-6 col-lg-6 col-md-12">
+                  <div className=" col-lg-12 col-md-12">
                     <div className="form-group city-outer-bx has-feedback">
                       <label>Postal Code</label>
                       <div className="ls-inputicon-box">
                         <InputField
-                          field={USERPROFILEFIELD.fieldDetail[9]}
+                          field={USERPROFILEFIELD.fieldDetail[8]}
                           value={formData}
                           change={(data, field) => {
                             handleChange(data, field);
@@ -235,14 +296,59 @@ function SectionCandicateBasicInfo({ submit, id }) {
                         <i className="fs-input-icon fas fa-map-marker-alt" />
                       </div>
                     </div>
+                  </div> */}
+                  <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[7].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        GPS Address
+                      </label>
+                      <div className="ls-inputicon-box">
+                        <div className="">
+                          <i className="fs-input-icon fas fa-map-pin" />
+                        </div>
+                        <NewInputField
+                          field={USERPROFILEFIELD.fieldDetail[7]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-lg-12 col-md-12">
+                    <div className="p-field p-mb-3">
+                      <label
+                        htmlFor={USERPROFILEFIELD.fieldDetail[8].name}
+                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                      >
+                        Postal Code
+                      </label>
+                      <div className="ls-inputicon-box">
+                        <div className="">
+                          <i className="fs-input-icon fas fa-map-marker-alt" />
+                        </div>
+                        <NewInputField
+                          field={USERPROFILEFIELD.fieldDetail[8]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className=" col-lg-12 col-md-12">
                     <div className="ls-inputicon-box ">
                       <div className="form-group">
                         <label>Skills</label>
-                        {/* selectpicker wt-select-box  form-control */}
-                        <div className="form-control">
+                        {/* selectpicker wt-select-box  form-control "1px solid #6c757d" */}
+                        <div className="p-inputtext p-p-2 p-border-round new-input-field new-form-control">
                           <Select
                             isMulti={true}
                             options={formattedSkills}
@@ -256,7 +362,6 @@ function SectionCandicateBasicInfo({ submit, id }) {
                                 backgroundColor: "none",
                               }),
                             }}
-
                           />
                         </div>
                       </div>
@@ -265,10 +370,10 @@ function SectionCandicateBasicInfo({ submit, id }) {
 
                   <div className="col-md-12">
                     <TextAreaField
-                      field={USERPROFILEFIELD.fieldDetail[11]}
+                      field={USERPROFILEFIELD.fieldDetail[10]}
                       value={formData}
                       change={handleChange}
-                      required={true} 
+                      required={true}
                     />
                   </div>
                 </div>
@@ -299,6 +404,39 @@ function SectionCandicateBasicInfo({ submit, id }) {
 }
 
 export default SectionCandicateBasicInfo;
+
+{
+  /* <label>Region</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[7]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-globe-americas" />
+                      </div> */
+}
+
+{
+  /* <div className="col-xl-6 col-lg-6 col-md-12">
+                    <div className="form-group city-outer-bx has-feedback">
+                      <label>Country</label>
+                      <div className="ls-inputicon-box">
+                        <InputField
+                          field={USERPROFILEFIELD.fieldDetail[6]}
+                          value={formData}
+                          change={(data, field) => {
+                            handleChange(data, field);
+                          }}
+                        />
+                        <i className="fs-input-icon fa fa-globe-americas" />
+                      </div>
+                      
+                    </div>
+                  </div> */
+}
 
 /* <div className="form-group">
 									<label>Skills</label>

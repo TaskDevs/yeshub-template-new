@@ -10,7 +10,7 @@ function CanSidebarSection() {
     const currentpath = useLocation().pathname;
     // const username = sessionStorage.getItem("username")
 	const { profileData, imgSrc, setImgSrc } = useContext(ProfileApiData)
-    // console.log("profileData", profileData)
+    
 
 
     return (

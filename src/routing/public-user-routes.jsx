@@ -19,9 +19,9 @@ import Home16Page from "../app/pannels/public-user/components/home/index16";
 import Home17Page from "../app/pannels/public-user/components/home/index17";
 import Home18Page from "../app/pannels/public-user/components/home/index18";
 
-
 import JobsListPage from "../app/pannels/public-user/components/jobs/jobs-list";
-import JobSearchPage from "../app/pannels/public-user/components/jobs/jobs-list";
+import JobSearchPage from "../app/pannels/public-user/components/jobs/jobs-search";
+import JobAvailablePage from "../app/pannels/public-user/components/jobs/jobs-available";
 import JobDetail1Page from "../app/pannels/public-user/components/jobs/job-detail1";
 import JobDetail2Page from "../app/pannels/public-user/components/jobs/job-detail2";
 import ApplyJobPage from "../app/pannels/public-user/components/jobs/apply-job";
@@ -56,22 +56,16 @@ import ResetPasswordPage from "../app/pannels/public-user/components/pages/reset
 import CandidatePortfolioPage from "../app/pannels/public-user/sections/candidates/candidate-portfolio-page";
 import ContractPopup from "../app/common/popups/popup-contract";
 
-
 import VerifyOtp from "../app/pannels/public-user/components/pages/verify-otp";
 import GoogleCallback from "../app/pannels/public-user/components/pages/GoogleCallback";
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgotton-password";
 import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-reset-otp";
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 
-
-
 function PublicUserRoutes() {
- 
-
   return (
     <>
       <Routes>
-        
         <Route path={publicUser.INITIAL} element={<Home1Page />} />
         <Route path={publicUser.HOME1} element={<Home1Page />} />
         <Route path={publicUser.HOME2} element={<Home2Page />} />
@@ -101,6 +95,10 @@ function PublicUserRoutes() {
         <Route path={publicUser.jobs.APPLY} element={<ApplyJobPage />} />
         <Route path={publicUser.jobs.SEARCH} element={<JobSearchPage />} />
         <Route
+          path={publicUser.jobs.AVAILABLE}
+          element={<JobAvailablePage />}
+        />
+        <Route
           path={publicUser.employer.GRID}
           element={<EmployersGridPage />}
         />
@@ -128,12 +126,24 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
-        
+
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
-        <Route path={publicUser.pages.FORGOTPASS} element={<ForgotPassword/>}/>
-        <Route path={publicUser.pages.VERIFYRESTOTP} element={<VerifyResetOtp/>}/>
-        <Route path={publicUser.pages.LINKEDINCALLBACK} element={<LinkedInCallback/>}/>
-        <Route path={publicUser.pages.GOOGLECALLBACK} element={<GoogleCallback/>}/>
+        <Route
+          path={publicUser.pages.FORGOTPASS}
+          element={<ForgotPassword />}
+        />
+        <Route
+          path={publicUser.pages.VERIFYRESTOTP}
+          element={<VerifyResetOtp />}
+        />
+        <Route
+          path={publicUser.pages.LINKEDINCALLBACK}
+          element={<LinkedInCallback />}
+        />
+        <Route
+          path={publicUser.pages.GOOGLECALLBACK}
+          element={<GoogleCallback />}
+        />
         <Route
           path={publicUser.pages.AFTER_LOGIN}
           element={<AfterLoginPage />}
@@ -155,7 +165,10 @@ function PublicUserRoutes() {
           path={publicUser.candidate.DETAIL1}
           element={<CandidateDetail1Page />}
         />
-        <Route path={publicUser.candidate.DETAIL} element={<CandidateDetail1Page/>} />
+        <Route
+          path={publicUser.candidate.DETAIL}
+          element={<CandidateDetail1Page />}
+        />
         <Route
           path={publicUser.candidate.PORTFOLIO}
           element={<CandidatePortfolioPage />}
@@ -171,7 +184,6 @@ function PublicUserRoutes() {
         <Route path={publicUser.blog.DETAIL} element={<BlogDetailPage />} />
         <Route path="*" element={<Error404Page />} />
       </Routes>
-      
     </>
   );
 }

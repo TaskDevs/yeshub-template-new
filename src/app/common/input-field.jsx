@@ -25,6 +25,7 @@ return (
 				maxLength={50}
         required={required}
         className="form-control"
+        // className="p-inputtext p-p-2 p-border-round"
         placeholder={field.placeholder}
         value={value[field.name]}
         onChange={handleInputChange}

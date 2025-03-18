@@ -1,53 +1,23 @@
+import { useContext } from "react";
+import { AuthApiData } from "../../../../context/auth/authContextApi";
 
 
 
 function SectionCanAccomplishments() {
-
-    // const [error, setError] = useState(null);
-		// const [success, setSuccess] = useState("");
-
-		// const [showTopMessage, setShowTopMessage] = useState(false);
-		// const [isLoading, setLoading] = useState(false);
-		
-
-		// const [formData, setFormData] = useState({});
-
-		// const handleChange = (field, data) => {
-		// 	setFormData({
-		// 		...formData,
-		// 		[field]: data,
-		// 	});
-		// };
-
-		// const handleAddEducation = async (e) => {
-		// 	e.preventDefault();
-		// 	setError("");
-		// 	setSuccess("");
-
-		// 	setTimeout(() => {
-		// 		setLoading(true);
-		// 	}, 200);
-
-			
-		// };
-
-
-
-
-
+	const { userProfile } = useContext(AuthApiData)
 
 
     return (
 			<>
 				<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-					<h4 className="panel-tittle m-a0">Accomplishments</h4>
+					<h4 className="panel-tittle m-a0">Online Profiles</h4>
 				</div>
 				<div className="panel-body wt-panel-body p-a20 ">
 					<div className="twm-panel-inner">
 						<div className="twm-list-wrap">
 							<div className="twm-list-inner d-flex justify-content-between">
-								<b>Online Profile</b>
-								<a
+								{/* <b>Online Profile</b> */}
+								{/* <a
 									data-bs-toggle="modal"
 									href="#Online_Profile"
 									role="button"
@@ -55,12 +25,18 @@ function SectionCanAccomplishments() {
 									className="site-text-primary"
 								>
 									<span className="fa fa-edit" />
-								</a>
+								</a> */}
 							</div>
-							<p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p>
+							{/* <p>Add link to Online profiles (e.g. Linkedin, Facebook etc.).</p> */}
+							{userProfile?.email && (<p>Email: <span>{userProfile?.email}</span></p>)}
+							
+							{userProfile?.linkedIn_id && (<p></p>)}
+							{userProfile?.google_id && (<p></p>)}
+							
+						
 						</div>
 						{/*Online Profile Modal */}
-						<div
+						{/* <div
 							className="modal fade twm-saved-jobs-view"
 							id="Online_Profile"
 							tabIndex={-1}
@@ -133,7 +109,7 @@ function SectionCanAccomplishments() {
 									</form>
 								</div>
 							</div>
-						</div>
+						</div> */}
 						{/* <div className="twm-list-wrap">
 							<div className="twm-list-inner d-flex justify-content-between">
 								<b>Work Sample</b>
@@ -153,7 +129,7 @@ function SectionCanAccomplishments() {
 					
 					
 
-						<div className="twm-list-wrap">
+						{/* <div className="twm-list-wrap">
 							<div className="twm-list-inner d-flex justify-content-between">
 								<b>Certification</b>
 								<a
@@ -167,9 +143,9 @@ function SectionCanAccomplishments() {
 								</a>
 							</div>
 							<p>Add details of Certification or License you have filed.</p>
-						</div>
+						</div> */}
 						{/*Certification Modal */}
-						<div
+						{/* <div
 							className="modal fade twm-saved-jobs-view"
 							id="Certification_modal"
 							tabIndex={-1}
@@ -247,7 +223,7 @@ function SectionCanAccomplishments() {
 														</div>
 													</div>
 												</div>
-												{/*End Date*/}
+												
 												<div className="col-md-6">
 													<div className="form-group">
 														<label>Duration to</label>
@@ -263,7 +239,38 @@ function SectionCanAccomplishments() {
 														</div>
 													</div>
 												</div>
-												{/* <div className="col-xl-12 col-lg-12">
+												
+											</div>
+										</div>
+										<div className="modal-footer">
+											<button
+												type="button"
+												className="site-button"
+												data-bs-dismiss="modal"
+											>
+												Close
+											</button>
+											<button type="button" className="site-button">
+												Save
+											</button>
+										</div>
+									</form>
+								</div>
+							</div>
+					</div> */}
+					
+						
+					</div>
+				</div>
+			</>
+		);
+}
+
+export default SectionCanAccomplishments;
+
+
+
+/* <div className="col-xl-12 col-lg-12">
 													<div className="form-group">
 														<label>License Body</label>
 														<div className="ls-inputicon-box">
@@ -306,36 +313,7 @@ function SectionCanAccomplishments() {
 															<i className="fs-input-icon fa fa-calendar-alt" />
 														</div>
 													</div>
-												</div> */}
-											</div>
-										</div>
-										<div className="modal-footer">
-											<button
-												type="button"
-												className="site-button"
-												data-bs-dismiss="modal"
-											>
-												Close
-											</button>
-											<button type="button" className="site-button">
-												Save
-											</button>
-										</div>
-									</form>
-								</div>
-							</div>
-					</div>
-					
-						
-					</div>
-				</div>
-			</>
-		);
-}
-
-export default SectionCanAccomplishments;
-
-
+												</div> */
 
 
 	

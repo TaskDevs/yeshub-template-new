@@ -10,13 +10,13 @@ export const EDUCATIONFIELD = {
 			name: "qualification",
 			label: "Qualification",
 			type: "text",
-			placeholder: "Degree",
+			placeholder: "",
 		},
 		{
 			name: "area_of_study",
 			label: "Course",
 			type: "text",
-			placeholder: "Bsc.Statistics",
+			placeholder: "",
 		},
 		{
 			name: "date_attended",

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import {
   addPortfolio,
+  addPortfolioMedia,
   portfolioList,
   updatePortfolio,
   deletePortfolio,
@@ -9,6 +10,9 @@ import { PORTFOLIOFIELD } from "../../../globals/portfolio-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import toast from "react-hot-toast";
 import { userId } from "../../../globals/constants";
+// import { useMultiStepForm } from "../../common/use-multi-step-form";
+// import PortfolioMediaForm from "../../common/portfolio-media-form";
+// import PortfolioForm from "../../common/portfolio-form";
 
 export const PortfolioApiData = createContext();
 
@@ -18,9 +22,29 @@ const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
 }, {});
 
 const PortfolioApiDataProvider = (props) => {
-  const { setIsSubmitting, selectedId } = useContext(GlobalApiData);
+  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData);
+  const [selectedPortfolioId, setSelectedPortfolioId] = useState(null);
   const [portfolios, setPortfolios] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialData);
+  const [formKey, setFormKey] = useState(0)
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedPortfolio, setSelectedPortfolio] = useState(null);
+
+  console.log("formdata-portctx", formData)
+
+
+  const firstFormData = { ...formData };
+delete firstFormData.url;
+
+const secondFormData = { url: formData.url };
+
+
+console.log("initialData-port-ctx", initialData)
+console.log("First Form Data:", firstFormData);
+console.log("Second Form Data:", secondFormData)
+
+
 
   const handleChange = (field, data) => {
     setFormData({
@@ -30,6 +54,7 @@ const PortfolioApiDataProvider = (props) => {
   };
 
   const fetchAllPortfolio = async () => {
+    setIsLoading(true);
     try {
       const res = await processGetAllPortfolio(userId);
       if (res) {
@@ -38,13 +63,111 @@ const PortfolioApiDataProvider = (props) => {
       }
     } catch (err) {
       console.error("failed to get portfolio", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchAllPortfolio();
-
   }, []);
+
+  const validateFirstForm = () => {
+    const requiredFields = [
+      "project_title",
+      "role",
+      "skills",
+      "project_start_date",
+      "project_end_date",
+      "description",
+    ];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        toast.error(`Please fill in the ${field} field.`);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  
+  const handleAddClick = () => {
+    console.log("add clicked")
+    setIsEditing(false);
+    setSelectedPortfolioId(null);
+    setSelectedPortfolio(null);
+    setFormData(initialData);
+  };
+
+  
+  
+  const submitFirstForm = async (e, onNext) => {
+    e.preventDefault();
+    if (!validateFirstForm()) return;
+    setIsSubmitting(true);
+    try {
+      if (isEditing) {
+        await processUpdatePortfolio(userId, { ...firstFormData, id: selectedPortfolioId });
+      } else {
+        await processAddPortfolio({ ...firstFormData, user_id: userId });
+        
+      }
+      await fetchAllPortfolio();
+      toast.success(
+        `Portfolio ${isEditing ? "updated" : "added"} successfully`
+      );
+      onNext();
+      
+      
+    } catch (err) {
+      console.error(
+        `failed to ${isEditing ? "update" : "add"} first form`,
+        err
+      );
+      toast.error(`Failed to ${isEditing ? "update" : "add"} first form.`);
+    } finally {
+      setIsSubmitting(false);
+      setIsEditing(false);
+      setFormData(initialData);
+      setFormKey((prevKey) => prevKey + 1);
+      setIsEditing(false);
+      setSelectedPortfolio(null);
+      setSelectedPortfolioId(null);
+    }
+  };
+
+  const submitSecondForm = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      if (isEditing) {
+        await processUpdatePortfolio(userId, { ...secondFormData, id: selectedPortfolioId });
+      } else {
+        await processAddMedia({ ...secondFormData, user_id: userId });
+      }
+      await fetchAllPortfolio();
+      toast.success(
+        `Portfolio ${isEditing ? "updated" : "added"} successfully`
+      );
+    } catch (err) {
+      console.error(`failed to ${isEditing ? "update" : "add"} portfolio`, err);
+      toast.error(`Failed to ${isEditing ? "update" : "add"} portfolio.`);
+    } finally {
+      setIsSubmitting(false);
+      setFormData(initialData);
+      setIsEditing(false);
+      setSelectedPortfolio(null);
+      setSelectedPortfolioId(null);
+    }
+  };
+
+  const setEditFirstFormData = (data) => {
+    setFormData({ ...data, ...firstFormData });
+  };
+
+  const setEditSecondFormData = (data) => {
+    setFormData({ ...data, ...secondFormData });
+  };
 
   const processAddPortfolio = async (data) => {
     try {
@@ -53,6 +176,18 @@ const PortfolioApiDataProvider = (props) => {
       return res;
     } catch (err) {
       console.error("failed to add-portfolio", err);
+      throw err
+    }
+  };
+
+  const processAddMedia = async (data) => {
+    try {
+      const res = await addPortfolioMedia(data);
+
+      return res;
+    } catch (err) {
+      console.error("failed to add-portfolio", err);
+      throw err;
     }
   };
 
@@ -63,18 +198,21 @@ const PortfolioApiDataProvider = (props) => {
       return res;
     } catch (err) {
       console.error("failed to get-portfolio", err);
+      throw err;
     }
   };
 
-  //   const processPortfolioProfile = async (id) => {};
 
   const processUpdatePortfolio = async (userid, data) => {
     try {
       const res = await updatePortfolio(userid, data);
-
+      if (res.status !== 200) {
+        throw new Error(`Update failed with status: ${res.status}`);
+    }
       return res;
     } catch (err) {
       console.error("failed to update-portfolio", err);
+      throw err;
     }
   };
 
@@ -85,16 +223,23 @@ const PortfolioApiDataProvider = (props) => {
       return res;
     } catch (err) {
       console.error("failed to delete-portfolio", err);
+      throw err;
     }
   };
 
   const handleAddPortfolio = async (e) => {
     e.preventDefault();
+    
+
     setIsSubmitting(true);
-	
+
     try {
-      await processAddPortfolio({ ...formData, user_id: userId });
-      await fetchAllPortfolio()
+      await Promise.all([
+        processAddPortfolio({ ...formData.slice(0, 6), user_id: userId }),
+        processAddMedia({ ...formData.slice(6), userId }),
+      ]);
+
+      await fetchAllPortfolio();
       toast.success("Portfolio added successfully");
     } catch (err) {
       console.error("failed to add portfolio", err);
@@ -109,13 +254,33 @@ const PortfolioApiDataProvider = (props) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await processUpdatePortfolio(selectedId, formData);
-      await fetchAllPortfolio()
+      await processUpdatePortfolio(selectedPortfolioId, formData);
+      await fetchAllPortfolio();
     } catch (err) {
       console.error("failed to update portfolio", err);
     } finally {
       setIsSubmitting(false);
       setFormData(initialData);
+      setSelectedPortfolioId(null);
+    }
+  };
+
+  const handleDeletePortfolio = async () => {
+    if (!selectedPortfolioId) {
+      toast.error("Please select the portfolio profile to delete");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      await processDeletePortfolio(selectedPortfolioId);
+      await fetchAllPortfolio();
+      toast.success("Portfolio deleted successfully");
+    } catch {
+      toast.error("Failed to delete portfolio");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+      setSelectedPortfolioId(null);
     }
   };
 
@@ -128,16 +293,32 @@ const PortfolioApiDataProvider = (props) => {
       value={{
         formData,
         portfolios,
+        selectedItems,
+        selectedPortfolioId,
+        isEditing,
+        selectedPortfolio,
+        formKey,
+        handleAddClick,
+        setIsEditing,
+        setEditFirstFormData,
+        setEditSecondFormData,
+        setSelectedPortfolio,
+        setSelectedPortfolioId,
+        setSelectedItems,
+        fetchAllPortfolio,
         setFormData,
         setPortfolios,
         handleChange,
         handleResetForm,
+        submitFirstForm,
+        submitSecondForm,
         processAddPortfolio,
         processGetAllPortfolio,
         processUpdatePortfolio,
         processDeletePortfolio,
         handleAddPortfolio,
         handleUpdatePortfolio,
+        handleDeletePortfolio,
       }}
     >
       {props.children}

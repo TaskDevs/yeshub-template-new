@@ -17,13 +17,15 @@ import SectionCandidateEducation from "../../sections/candidates/section-can-edu
 import SectionProfile from "../../sections/common/section-profile";
 import SectionCandidatePortfolio from "../../sections/candidates/detail2/section-can-portfolio";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
 function CandidateDetail1Page() {
   const { id } = useParams();
   const [candidate, setCandidate] = useState(null);
   const { processFullProfileProfile, allUsersProfile } = useContext(ProfileApiData);
   const { setIsLoading } = useContext(GlobalApiData)
-  
+  const [freelance, setFreelance] = useState([]);
+  const { processFreelanceProfile } = useContext(FreelanceApiData)
   const user = allUsersProfile?.find(user => {
     // console.log("user-find", typeof user.user_id)
     // console.log("id-params-find", typeof id);
@@ -33,18 +35,25 @@ function CandidateDetail1Page() {
 const isFreelancer = user ? user.is_freelancer : false;
 
 
-// console.log("id-params", id, "user", user);
-// console.log("is_freelancer", isFreelancer);
 
 
 
-  // console.log("id-params", id)
-  // console.log("is_freelancer", allUsersProfile?.reduce((d,acc) =>
-  // {
-  //   const isFreelancer = d.user_id === id ? d.is_freelancer : "";
-  //   return isFreelancer;
-  // }
-  // ))
+  useEffect(() => {
+ 
+    const fetchProfile = async () => {
+      const res = await processFreelanceProfile(id);
+      if (res) {
+        console.log("freelance-profile-details", res)
+        setFreelance(res.data);   
+      } else {
+        return false;
+      }
+      };
+
+  fetchProfile();
+   
+  }, [id]);
+
 
 
   useEffect(() => {
@@ -89,7 +98,7 @@ const isFreelancer = user ? user.is_freelancer : false;
           // 	)})`,
           // }}
         >
-          <SectionCandidateShortIntro1 props={candidate} isFreelancer={isFreelancer} />
+          <SectionCandidateShortIntro1 props={candidate} isFreelancer={isFreelancer} freelance={freelance} />
           <div className="overlay-main site-bg-white opacity-01" />
         </div>
       </div>
@@ -104,7 +113,7 @@ const isFreelancer = user ? user.is_freelancer : false;
                 <div className="cabdidate-de-info">
                   {/* <SectionCandidateShortIntro1 /> */}
 
-                  <SectionCandidateAbout1 props={candidate} isFreelancer={isFreelancer} />
+                  <SectionCandidateAbout1 props={candidate} isFreelancer={isFreelancer} freelance={freelance} />
 
                   <SectionCandidateSkills props={candidate.user} />
 
@@ -127,7 +136,7 @@ const isFreelancer = user ? user.is_freelancer : false;
               <div className=" col-lg-4 rightSidebar">
                 {/* <SectionEmployersCandidateSidebar type="1" /> */}
                 <div className="side-bar-2 m-t20 m-b10">
-                <SectionProfile data={candidate.user} isFreelancer={isFreelancer}/>
+                <SectionProfile data={candidate.user} isFreelancer={isFreelancer} freelance={freelance} email={candidate.email}/>
                 </div>
               </div>
 

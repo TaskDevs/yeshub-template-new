@@ -1,32 +1,54 @@
 import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
-import SkillsForm from "../../../employer/components/skills/skills-form";
+import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+// import SkillsForm from "../../../employer/components/skills/skills-form";
 import { useContext } from "react";
 
 function SectionCanKeySkills() {
+  const { skillOptions } = useContext(SkillsApiData);
+  const { profileData } = useContext(ProfileApiData);
 
-    const {
-                handleAddSkills,
-            } = useContext(SkillsApiData);
-        
-    
-    return (
-			<>
-				<div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
-					<h4 className="panel-tittle m-a0">Key Skills</h4>
-					<a
-						data-bs-toggle="modal"
-						href="#Key_Skills"
-						role="button"
-						title="Edit"
-						className="site-text-primary"
-					>
-						<span className="fa fa-edit" />
-					</a>
-				</div>
-				<div className="panel-body wt-panel-body p-a20 ">
-					<div className="tw-sidebar-tags-wrap">
-						<div className="tagcloud">
-							<a href="javascript:void(0)">Finance</a>
+  return (
+    <>
+      <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+        <h4 className="panel-tittle m-a0">Key Skills</h4>
+      </div>
+      <div className="panel-body wt-panel-body p-a20 ">
+        <div className="tw-sidebar-tags-wrap">
+          <div className="tagcloud">
+            {!profileData.id ? (
+              <p>No skills added yet.</p>
+            ) : (
+              skillOptions?.map((skill) => {
+                const normalizedSkills = (() => {
+                  if (!profileData?.skills_id) return []; // Handle null or undefined
+
+                  if (Array.isArray(profileData?.skills_id)) {
+                    return profileData.skills_id.map((skill) => Number(skill)); // Convert all elements to numbers
+                  }
+
+                  if (typeof profileData.skills_id === "string") {
+                    return profileData.skills_id
+                      .split(",") // Split by comma
+                      .map((skill) => Number(skill.trim())) // Convert each value to number
+                      .filter((skill) => !isNaN(skill)); // Remove invalid numbers
+                  }
+
+                  return []; // Fallback in case of unexpected types
+                })();
+
+                // console.log("normalizedSkills", normalizedSkills);
+
+                return (
+                  normalizedSkills.includes(skill.id) && (
+                    <a href="#" key={skill.id}>
+                      {skill.name}
+                    </a>
+                  )
+                );
+              })
+            )}
+
+            {/* <a href="javascript:void(0)">Finance</a>
 							<a href="javascript:void(0)">Sales</a>
 							<a href="javascript:void(0)">Part-time</a>
 							<a href="javascript:void(0)">Administration</a>
@@ -35,16 +57,13 @@ function SectionCanKeySkills() {
 							<a href="javascript:void(0)">Developer</a>
 							<a href="javascript:void(0)">Work from home</a>
 							<a href="javascript:void(0)">IT Consulting</a>
-							<a href="javascript:void(0)">Manufacturing</a>
-						</div>
-					</div>
-				</div>
-				{/*Modal popup */}
+							<a href="javascript:void(0)">Manufacturing</a> */}
+          </div>
+        </div>
+      </div>
+      {/*Modal popup */}
 
-				<SkillsForm submit={handleAddSkills} id="Key_Skills" />
-				<SkillsForm submit={handleAddSkills} />
-
-				{/* <div
+      {/* <div
 					className="modal fade twm-saved-jobs-view"
 					id="Key_Skills"
 					tabIndex={-1}
@@ -91,7 +110,7 @@ function SectionCanKeySkills() {
 						</div>
 					</div>
 				</div> */}
-			</>
-		);
+    </>
+  );
 }
 export default SectionCanKeySkills;

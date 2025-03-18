@@ -1,564 +1,222 @@
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { publicUser, employer } from "../../../../../../globals/route-names";
 import SectionSideAdvert from "./section-side-advert";
+import { CategoryApiData } from "../../../../../context/category/categoryContextApi";
+import { SEARCHFORMFIELD } from "../../../../../../globals/search-form-data";
+import SearchSelectField from "../../../../../common/search-select-field";
 
-function SectionJobsSidebar1() {
-    const location = useLocation();
-    const pathname = location.pathname
+function SectionJobsSidebar1({ processDataActionControls }) {
+  const location = useLocation();
+  const pathname = location.pathname;
+  const { allCategories } = useContext(CategoryApiData);
+  const [selectedExperience, setSelectedExperience] = useState("");
+  const [processCategoryList, setProcessCategoryList] = useState([]);
+  const [formData] = useState({});
+  const [searchSkillData, setSearchSkillData] = useState("");
+  const [searchLocationData, setSearchLocationData] = useState("");
 
+  useEffect(() => {
+    let data = [];
+    allCategories.length > 0 &&
+      allCategories.map((item) => data.push(item.category_name));
+    setProcessCategoryList(data);
+  }, [allCategories]);
 
+  const handleSkillInputChange = (e) => {
+    //change(field.name, e.target.value);
+    setSearchSkillData(e.target.value);
+  };
 
-    return (
-			<>
-				<div className="side-bar">
-					<div className="sidebar-elements search-bx">
-						<form>
-							<div className="form-group mb-4">
-								<h4 className="section-head-small mb-4">Category</h4>
-								<select
-									className="wt-select-bar-large selectpicker"
-									data-live-search="true"
-									data-bv-field="size"
-								>
-									<option>All Category</option>
-									<option>Web Designer</option>
-									<option>Developer</option>
-									<option>Acountant</option>
-								</select>
-							</div>
+  const handleLocationInputChange = (e) => {
+    //change(field.name, e.target.value);
+    setSearchLocationData(e.target.value);
+  };
 
-							<div className="twm-sidebar-ele-filter">
-								<h4 className="section-head-small mb-4">Project Type</h4>
-								<ul>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck1"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck1"
-											>
-												Hourly
-											</label>
+  const handleSubmitSkillSearch = () => {
+    if (searchSkillData) {
+      let filteredData = processDataActionControls[1].filter((item) =>
+        item.skills.includes(searchSkillData)
+      );
+      //console.log(filteredData);
+      processDataActionControls[0](filteredData);
+    } else {
+      processDataActionControls[0](processDataActionControls[1]);
+    }
+  };
 
-											<div className="d-flex ps-2  align-items-center gap-2">
-												<input
-													type="checkbox"
-													className="form-check-input"
-													id="exampleCheck3"
-												/>
+  const handleSubmitLocationSearch = () => {
+    if (searchLocationData) {
+      let filteredData = processDataActionControls[1].filter((item) =>
+        (item.employer?.address ?? "")
+          .toLowerCase()
+          .includes(searchLocationData.toLowerCase())
+      ); //console.log(filteredData);
+      processDataActionControls[0](filteredData);
+    } else {
+      processDataActionControls[0](processDataActionControls[1]);
+    }
+  };
 
-												<div className=" form-check d-flex align-items-center">
-													<input
-														type="text"
-														className="form-check-input checkbox-large"
-														id="exampleCheck3"
-														placeholder="min"
-														inputMode="numeric"
-														onInput="this.value = this.value.replace(/[^0-9]/g, '')"
-													/>
-													<span>/hr</span>
-												</div>
+  const handleFilter = (data, field) => {
+    console.log(`the field is ${field} and the data is ${data}`);
 
-												<div className=" form-check d-flex align-items-center">
-													<input
-														type="text"
-														className="form-check-input checkbox-large"
-														id="exampleCheck3"
-														placeholder="max"
-													/>
-													<span>/hr</span>
-												</div>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck2"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck2"
-											>
-												Fixed
-											</label>
+    if (data) {
+      let filteredData = processDataActionControls[1].filter(
+        (item) => item.job_category == data
+      );
+      processDataActionControls[0](filteredData);
+    } else {
+      processDataActionControls[0](processDataActionControls[1]);
+    }
+  };
 
-											<div className="d-flex ps-2  align-items-center gap-2">
-												<input
-													type="checkbox"
-													className="form-check-input"
-													id="exampleCheck3"
-												/>
+  const handleCheckboxChange = (event) => {
+    const { value, checked } = event.target;
+    console.log(value);
+    let filteredData;
+    switch (value) {
+      case "Entry Level":
+        filteredData = processDataActionControls[1].filter(
+          (item) => item.experience <= 2
+        );
+        break;
+      case "Intermediate":
+        filteredData = processDataActionControls[1].filter(
+          (item) => item.experience > 2 && item.experience < 4
+        );
+        break;
+      case "Expert":
+        filteredData = processDataActionControls[1].filter(
+          (item) => item.experience > 4
+        );
+        break;
+      default:
+        filteredData = processDataActionControls[1];
+    }
+    // If checked, set the selected experience; if unchecked, clear the state
+    setSelectedExperience(checked ? value : "");
+    processDataActionControls[0](filteredData);
+  };
 
-												<div className=" form-check">
-													<input
-														type="text"
-														className="form-check-input checkbox-large"
-														id="exampleCheck3"
-														placeholder="min"
-														// type="text"
-														inputMode="numeric"
-														onInput="this.value = this.value.replace(/[^0-9]/g, '')"
-													/>
-												</div>
+  return (
+    <>
+      <div className="side-bar">
+        <div className="sidebar-elements search-bx">
+          <form>
+            <div className="form-group mb-4">
+              <h4 className="section-head-small mb-4">Category</h4>
+              <SearchSelectField
+                field={SEARCHFORMFIELD.fieldDetail[0]}
+                value={formData}
+                use={"forPagination"}
+                options={processCategoryList}
+                change={(data, field) => {
+                  handleFilter(field, data);
+                }}
+              />
+            </div>
 
-												<div className=" form-check">
-													<input
-														type="text"
-														className="form-check-input checkbox-large"
-														id="exampleCheck3"
-														placeholder="max"
-													/>
-													{/* <label
-															className="form-check-label"
-															htmlFor="exampleCheck3"
-														>
-															Max
-														</label> */}
-												</div>
-											</div>
-										</div>
-										{/* <span className="twm-job-type-count">07</span> */}
-									</li>
-									{/* <li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck3"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck3"
-											>
-												Internship
-											</label>
-										</div>
-										<span className="twm-job-type-count">15</span>
-									</li> */}
-									{/* <li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck4"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck4"
-											>
-												Part Time
-											</label>
-										</div>
-										<span className="twm-job-type-count">20</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck5"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck5"
-											>
-												Temporary
-											</label>
-										</div>
-										<span className="twm-job-type-count">22</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck6"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck6"
-											>
-												Volunteer
-											</label>
-										</div>
-										<span className="twm-job-type-count">25</span>
-									</li> */}
-								</ul>
-							</div>
+            <div className="twm-sidebar-ele-filter">
+              <h4 className="section-head-small mb-4">Experience</h4>
+              <ul>
+                {["Entry Level", "Intermediate", "Expert"].map(
+                  (level, index) => (
+                    <li key={index}>
+                      <div className="form-check">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          id={`exampleCheck${index + 1}`}
+                          value={level}
+                          checked={selectedExperience === level} // Only one can be checked
+                          onChange={handleCheckboxChange}
+                        />
+                        <label
+                          className="form-check-label"
+                          htmlFor={`exampleCheck${index + 1}`}
+                        >
+                          {level}
+                        </label>
+                      </div>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
 
-							<div className="twm-sidebar-ele-filter">
-								<h4 className="section-head-small mb-4">Experience</h4>
-								<ul>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck1"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck1"
-											>
-												Entry Level
-											</label>
-										</div>
-										{/* <span className="twm-job-type-count">09</span> */}
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck2"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck2"
-											>
-												Intermediate
-											</label>
-										</div>
-										{/* <span className="twm-job-type-count">07</span> */}
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck3"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck3"
-											>
-												Expert
-											</label>
-										</div>
-										
-									</li>
-									
-								</ul>
-							</div>
+            <div className="form-group mb-4">
+              {/* <h4 className="section-head-small mb-4">Keyword</h4> */}
+              <h4 className="section-head-small mb-4">Skills</h4>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search skills"
+                  onChange={handleSkillInputChange}
+                />
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={handleSubmitSkillSearch}
+                >
+                  <i className="feather-search" />
+                </button>
+              </div>
+            </div>
 
-							<div className="form-group mb-4">
-								{/* <h4 className="section-head-small mb-4">Keyword</h4> */}
-								<h4 className="section-head-small mb-4">Skills</h4>
-								<div className="input-group">
-									<input
-										type="text"
-										className="form-control"
-										placeholder="Search skills"
-									/>
-									<button className="btn" type="button">
-										<i className="feather-search" />
-									</button>
-								</div>
-							</div>
-
-							<div className="form-group mb-4">
-								<h4 className="section-head-small mb-4">Location</h4>
-								<div className="input-group">
-									<input
-										type="text"
-										className="form-control"
-										placeholder="Search location"
-									/>
-									<button className="btn" type="button">
-										<i className="feather-map-pin" />
-									</button>
-								</div>
-							</div>
-							{/* <div className="twm-sidebar-ele-filter">
-								<h4 className="section-head-small mb-4">Job Type</h4>
-								<ul>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck1"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck1"
-											>
-												Freelance
-											</label>
-										</div>
-										<span className="twm-job-type-count">09</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck2"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck2"
-											>
-												Full Time
-											</label>
-										</div>
-										<span className="twm-job-type-count">07</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck3"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck3"
-											>
-												Internship
-											</label>
-										</div>
-										<span className="twm-job-type-count">15</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck4"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck4"
-											>
-												Part Time
-											</label>
-										</div>
-										<span className="twm-job-type-count">20</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck5"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck5"
-											>
-												Temporary
-											</label>
-										</div>
-										<span className="twm-job-type-count">22</span>
-									</li>
-									<li>
-										<div className=" form-check">
-											<input
-												type="checkbox"
-												className="form-check-input"
-												id="exampleCheck6"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleCheck6"
-											>
-												Volunteer
-											</label>
-										</div>
-										<span className="twm-job-type-count">25</span>
-									</li>
-								</ul>
-							</div> */}
-							{/* <div className="twm-sidebar-ele-filter">
-								<h4 className="section-head-small mb-4">Date Posts</h4>
-								<ul>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="exampleradio1"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleradio1"
-											>
-												Last hour
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="exampleradio2"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleradio2"
-											>
-												Last 24 hours
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="exampleradio3"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleradio3"
-											>
-												Last 7 days
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="exampleradio4"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleradio4"
-											>
-												Last 14 days
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="exampleradio5"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleradio5"
-											>
-												Last 30 days
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="exampleradio6"
-											/>
-											<label
-												className="form-check-label"
-												htmlFor="exampleradio6"
-											>
-												All
-											</label>
-										</div>
-									</li>
-								</ul>
-							</div> */}
-							{/* <div className="twm-sidebar-ele-filter">
-								<h4 className="section-head-small mb-4">Type of employment</h4>
-								<ul>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="Freelance1"
-											/>
-											<label className="form-check-label" htmlFor="Freelance1">
-												Freelance
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="FullTime1"
-											/>
-											<label className="form-check-label" htmlFor="FullTime1">
-												Full Time
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="Intership1"
-											/>
-											<label className="form-check-label" htmlFor="Intership1">
-												Intership
-											</label>
-										</div>
-									</li>
-									<li>
-										<div className="form-check">
-											<input
-												type="radio"
-												className="form-check-input"
-												id="Part-Time1"
-											/>
-											<label className="form-check-label" htmlFor="Part-Time1">
-												Part Time
-											</label>
-										</div>
-									</li>
-								</ul>
-							</div> */}
-						</form>
-					</div>
-					<div className="widget tw-sidebar-tags-wrap">
-						<h4 className="section-head-small mb-4">Tags</h4>
-						<div className="tagcloud">
-							<NavLink to={publicUser.jobs.LIST}>General</NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Jobs </NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Payment</NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Application </NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Work</NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Recruiting</NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Employer</NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Income</NavLink>
-							<NavLink to={publicUser.jobs.LIST}>Tips</NavLink>
-						</div>
-					</div>
-				</div>
-				{pathname === "/job-list" ? (
-					<SectionSideAdvert
-						title="Claim Your Dream Job"
-						description="Stand out from the crowd—apply now and showcase your skills "
-						link={`${publicUser.jobs.APPLY}`}
-						action="Bid Now"
-					/>
-				) : (
-					<SectionSideAdvert
-						title="Find Top Talent, Faster"
-						description="Connect with skilled professionals who are ready to bring your vision to life. Post your job today and discover the perfect match for your team"
-						link={`/dashboard-employer${employer.POST_A_JOB}`} //post job form
-						action="Post a Job Now"
-					/>
-				)}
-			</>
-		);
+            <div className="form-group mb-4">
+              <h4 className="section-head-small mb-4">Location</h4>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search location"
+                  onChange={handleLocationInputChange}
+                />
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={handleSubmitLocationSearch}
+                >
+                  <i className="feather-search" />
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div className="widget tw-sidebar-tags-wrap">
+          <h4 className="section-head-small mb-4">Tags</h4>
+          <div className="tagcloud">
+            <NavLink to={publicUser.jobs.LIST}>General</NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Jobs </NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Payment</NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Application </NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Work</NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Recruiting</NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Employer</NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Income</NavLink>
+            <NavLink to={publicUser.jobs.LIST}>Tips</NavLink>
+          </div>
+        </div>
+      </div>
+      {pathname === "/job-list" ? (
+        <SectionSideAdvert
+          title="Claim Your Dream Job"
+          description="Stand out from the crowd—apply now and showcase your skills "
+          link={`${publicUser.jobs.APPLY}`}
+          action="Bid Now"
+        />
+      ) : (
+        <SectionSideAdvert
+          title="Find Top Talent, Faster"
+          description="Connect with skilled professionals who are ready to bring your vision to life. Post your job today and discover the perfect match for your team"
+          link={`/dashboard-employer${employer.POST_A_JOB}`} //post job form
+          action="Post a Job Now"
+        />
+      )}
+    </>
+  );
 }
 
 export default SectionJobsSidebar1;

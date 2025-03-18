@@ -1,46 +1,71 @@
 
-function SectionPagination({ currentPage, totalItems, itemsPerPage, onPageChange }) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
+function SectionPagination({ paginationData, action, searchPag }) {
+  const handleGoToPage = (pageNo) => {
+    searchPag ? action(searchPag, pageNo) : action(pageNo);
+  };
+  return (
+    <>
+      <div className="pagination-outer">
+        <div className="pagination-style1">
+          <ul className="clearfix">
+            {paginationData?.current !== "1" && (
+              <li className="prev">
+                <a
+                  onClick={() => {
+                    handleGoToPage(paginationData?.current - 1);
+                  }}
+                >
+                  <span>
+                    {" "}
+                    <i className="fa fa-angle-left" />{" "}
+                  </span>
+                </a>
+              </li>
+            )}
 
-    const getPageNumbers = () => {
-        const pageNumbers = [];
-        for (let i = 1; i <= totalPages; i++) {
-            pageNumbers.push(i);
-        }
-        return pageNumbers;
-    };
+            {paginationData?.link?.slice(1, -1).map((item, index) => (
+              <li
+                className={paginationData?.current == index + 1 && "active"}
+                key={index}
+              >
+                <a onClick={() => handleGoToPage(index + 1)}>{index + 1}</a>
+              </li>
+            ))}
 
-    const handlePageClick = (pageNumber) => {
-        onPageChange(pageNumber);
-    };
+            {paginationData?.link?.length > 3 && (
+              <li>
+                <a className="#" href="#">
+                  <i className="fa fa-ellipsis-h" />
+                </a>
+              </li>
+            )}
+            {paginationData?.link?.length > 4 && (
+              <li>
+                <a onClick={() => handleGoToPage(paginationData?.link?.length)}>
+                  {paginationData?.link?.length}
+                </a>
+              </li>
+            )}
 
-    return (
-        <div className="pagination-outer">
-            <div className="pagination-style1">
-                <ul className="clearfix">
-                    <li className="prev">
-                        <button onClick={() => handlePageClick(currentPage - 1)} disabled={currentPage === 1}>
-                            <span>
-                                <i className="fa fa-angle-left" />
-                            </span>
-                        </button>
-                    </li>
-                    {getPageNumbers().map((pageNumber) => (
-                        <li key={pageNumber} className={currentPage === pageNumber ? "active" : ""}>
-                            <button onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
-                        </li>
-                    ))}
-                    <li className="next">
-                        <button onClick={() => handlePageClick(currentPage + 1)} disabled={currentPage === totalPages}>
-                            <span>
-                                <i className="fa fa-angle-right" />
-                            </span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
+            {paginationData?.current < paginationData?.link?.length && (
+              <li className="next">
+                <a
+                  onClick={() => {
+                    handleGoToPage(paginationData?.current + 1);
+                  }}
+                >
+                  <span>
+                    {" "}
+                    <i className="fa fa-angle-right" />{" "}
+                  </span>
+                </a>
+              </li>
+            )}
+          </ul>
         </div>
-    );
+      </div>
+    </>
+  );
 }
 
 export default SectionPagination;

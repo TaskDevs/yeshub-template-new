@@ -5,6 +5,11 @@ import { useContext, useState } from "react";
 import { AuthApiData } from "../../context/auth/authContextApi";
 import { Avatar } from "@mui/material";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
+import { JobApiData } from "../../context/jobs/jobsContextApi";
+import SearchField from "../search-field";
+import { NAVSEARCHFORMFIELD } from "../../../globals/search-form-data";
+import { useNavigate } from "react-router-dom";
+//import { JobApiData } from "../../context/jobs/jobsContextApi";
 
 function Header1({ _config }) {
   const token = sessionStorage.getItem("authToken");
@@ -13,11 +18,14 @@ function Header1({ _config }) {
   const { userProfile } = useContext(AuthApiData);
   const username = userProfile?.username || "U"; // Default to "N" if no username
   const { isSidebarCollapsed, toggleSidebar } = useContext(ProfileApiData);
+  const { processSearchJobByTitle } = useContext(JobApiData);
+  //const { processSearchJob } = useContext(JobApiData);
   const location = useLocation(); // Get the current location
   const isCandidateDashboard = location.pathname.startsWith(base.CANDIDATE_PRE);
+  const [isVisible, setIsVisible] = useState(false);
+  const [formData, setFormData] = useState({});
 
-  
-
+  const navigate = useNavigate();
 
   //navigation
   function handleNavigationClick() {
@@ -36,6 +44,26 @@ function Header1({ _config }) {
       color += ("00" + value.toString(16)).substr(-2);
     }
     return color;
+  };
+
+  const handleInputChange = (data, field) => {
+    setFormData({
+      ...formData,
+      [field]: data,
+    });
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault(); // Prevent page refresh
+
+    // Perform search logic here
+    console.log("Searching for:", formData);
+    processSearchJobByTitle(formData.search, 1);
+
+    // Close the search modal after submission
+    setIsVisible(false);
+
+    navigate("/jobs-available");
   };
 
   return (
@@ -217,7 +245,14 @@ function Header1({ _config }) {
               <div className="extra-nav header-2-nav">
                 <div className="extra-cell">
                   <div className="header-search">
-                    <a href="#search" className="header-search-icon">
+                    <a
+                      href="#search"
+                      className="header-search-icon"
+                      onClick={(e) => {
+                        e.preventDefault(); // Prevent page jump
+                        setIsVisible(true);
+                      }}
+                    >
                       <i className="feather-search" />
                     </a>
                   </div>
@@ -227,30 +262,29 @@ function Header1({ _config }) {
                     <div className="header-nav-btn-section">
                       {token ? ( // Check if token exists (User is logged in)
                         <>
-                        <div className="twm-nav-btn-left">
-                          <a
-                            className="d-flex align-items-center p-2"
-                            href={
-                              role === "user"
-                                ? base.CANDIDATE_PRE
-                                : base.EMPLOYER_PRE
-                            }
-                            role="button"
-                          >
-                            <Avatar
-                              sx={{
-                                bgcolor: stringToColor(username),
-                                width: 40,
-                                height: 40,
-                                fontSize: "1.2rem",
-                              }}
+                          <div className="twm-nav-btn-left">
+                            <a
+                              className="d-flex align-items-center p-2"
+                              href={
+                                role === "user"
+                                  ? base.CANDIDATE_PRE
+                                  : base.EMPLOYER_PRE
+                              }
+                              role="button"
                             >
-                              {username.charAt(0).toUpperCase()}
-                            </Avatar>
-                          </a>
-                        </div>
-
-                         </>
+                              <Avatar
+                                sx={{
+                                  bgcolor: stringToColor(username),
+                                  width: 40,
+                                  height: 40,
+                                  fontSize: "1.2rem",
+                                }}
+                              >
+                                {username.charAt(0).toUpperCase()}
+                              </Avatar>
+                            </a>
+                          </div>
+                        </>
                       ) : (
                         <>
                           <div className="twm-nav-btn-left">
@@ -280,50 +314,58 @@ function Header1({ _config }) {
                   </div>
                 </div>
                 {isCandidateDashboard && (
-                <div className="extra-cell" onClick={toggleSidebar}>
-                  <div className="extra-cell">
-                    <div className=" header-right can-header-right">
-                      {/* header-left  header-right*/}
-                      <div className="nav-btn-wrap">
-                        <a className="nav-btn-admin" id="sidebarCollapse">
-                          {isSidebarCollapsed? (
-                            <span className="fa fa-angle-left" />
-                          ) : (
-                            <span className="fa fa-angle-right" />
-                          )}
-                          
-                        </a>
+                  <div className="extra-cell" onClick={toggleSidebar}>
+                    <div className="extra-cell">
+                      <div className=" header-right can-header-right">
+                        {/* header-left  header-right*/}
+                        <div className="nav-btn-wrap">
+                          <a className="nav-btn-admin" id="sidebarCollapse">
+                            {isSidebarCollapsed ? (
+                              <span className="fa fa-angle-left" />
+                            ) : (
+                              <span className="fa fa-angle-right" />
+                            )}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
                 )}
               </div>
             </div>
           </div>
           {/* SITE Search */}
-          <div id="search">
-            <span className="close" />
-            <form
-              role="search"
-              id="searchform"
-              action="/search"
-              method="get"
-              className="radius-xl"
-            >
-              <input
-                className="form-control"
-                name="q"
-                type="search"
-                placeholder="Type to search"
-              />
-              <span className="input-group-append">
-                <button type="button" className="search-btn">
-                  <i className="fa fa-paper-plane" />
-                </button>
-              </span>
-            </form>
-          </div>
+          {isVisible && (
+            <div id="search">
+              {/* Close Button */}
+              <span
+                className="close"
+                onClick={() => setIsVisible(false)}
+                style={{ cursor: "pointer" }}
+              ></span>
+
+              {/* Search Form */}
+              <form
+                role="search"
+                id="searchform"
+                onSubmit={handleSearch}
+                className="radius-xl"
+              >
+                <SearchField
+                  field={NAVSEARCHFORMFIELD}
+                  value={formData}
+                  change={(data, field) => {
+                    handleInputChange(field, data);
+                  }}
+                />
+                <span className="input-group-append">
+                  <button type="submit" className="search-btn">
+                    <i className="fa fa-paper-plane" />
+                  </button>
+                </span>
+              </form>
+            </div>
+          )}
         </div>
       </header>
     </>

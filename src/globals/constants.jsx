@@ -12,12 +12,13 @@ export const OAuthUserId = sessionStorage.getItem("OAuthUserId");
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
 export const getJobId = () => sessionStorage.getItem("job_id");
 
+
 //STATUS CODE
 export const SUCCESS_STATUS = 201;
 export const SUCCESS_STATUS_TEXT = "success";
 export const BAD_REQUEST_STATUS = 401;
 export const SERVER_ERROR = 500;
-export const LIST_ON_PAGES = 20;
+export const LIST_ON_PAGES = 10;
 
 export const default_skin = "6";
 

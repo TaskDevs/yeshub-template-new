@@ -4,6 +4,7 @@ import { PortfolioPopup } from "../../../../common/popups/popup-portfolio";
 import { MdOutlineEdit } from "react-icons/md";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { PiBriefcaseLight } from "react-icons/pi";
+import { extractTime } from "../../../../../utils/readableDate";
 
 function SectionCanWorkSample() {
   const {
@@ -15,23 +16,24 @@ function SectionCanWorkSample() {
     setFormData,
   } = useContext(PortfolioApiData);
 
+
   const handleEditClick = (portfolioId) => {
-    console.log("portfolioId", portfolioId)
+    console.log("portfolioId", portfolioId);
     setIsEditing(true);
     setSelectedPortfolioId(portfolioId);
     const portfolio = portfolios.find((p) => p.id === portfolioId);
     console.log("edit-portfolio-sample", portfolio);
     setFormData({
-      description: portfolio.description,
-      project_end_date: portfolio.project_end_date,
-      project_start_date: portfolio.project_start_date,
-      project_title: portfolio.project_title,
-      role: portfolio.role,
-      skills: portfolio.skills,
-      url: portfolio.media,
+        description: portfolio.description,
+        project_end_date: portfolio.project_end_date,
+        project_start_date: portfolio.project_start_date,
+        project_title: portfolio.project_title,
+        role: portfolio.role,
+        skills: portfolio.skills,
+        media: portfolio.media, // Set the media array in formData
     });
-    console.trace("setFormData called");
-  };
+    
+};
 
 
   return (
@@ -58,7 +60,7 @@ function SectionCanWorkSample() {
                 <p>No portfolio added yet</p>
               ) : (
                 <>
-                  {portfolios.map((portfolio, i) => (
+                  {portfolios.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at)).map((portfolio, i) => (
                     <div
                       key={i}
                       className="mb-4 sec-educ"
@@ -78,19 +80,11 @@ function SectionCanWorkSample() {
                           <span>{portfolio.skills} </span>
                         </div>
 
-                        {/* <div className="">
-                          <strong>description :</strong>{" "}
-                          <div
-                            dangerouslySetInnerHTML={{
-                              __html: portfolio?.description,
-                            }}
-                            className="pl-4"
-                          />
-                        </div> */}
-
-                        <div className="mb-5">
-                          <p className="" style={{ fontWeight: "bold", marginBottom: "0" }}>
+                        <div className="mb-3">
+                          <p className="" style={{  marginBottom: "0" }}>
+                          <strong>
                             Description:{" "}
+                            </strong>
                           </p>
                           <div
                             className="pl-2"
@@ -124,10 +118,19 @@ function SectionCanWorkSample() {
                           />
                         </div>
 
-                        {portfolio.media.length > 0 &&
+                        <div className="mb-3">
+                          <p className="" style={{ marginBottom: "0" }}>
+                          <strong>
+                            Project Link:{" "}
+                            </strong>
+                          </p>
+                          <div
+                            className="pl-2"
+                           >
+                             {portfolio.media.length > 0 &&
                           portfolio.media.map((m) => (
                             <div className="" key={m.id}>
-                              Project Link:{" "}
+                              
                               <a
                                 href={m.url}
                                 target="_blank"
@@ -137,7 +140,11 @@ function SectionCanWorkSample() {
                                 {m.url}
                               </a>
                             </div>
-                          ))}
+                          ))} 
+                          </div>
+                        </div>
+
+                       
                       </div>
                     </div>
                   ))}

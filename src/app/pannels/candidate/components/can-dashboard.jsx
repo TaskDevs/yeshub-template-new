@@ -1,8 +1,8 @@
 import SectionCandidateOverview from "../sections/dashboard/section-can-overview";
-import SectionCandidateInbox from "../sections/dashboard/section-can-inbox";
-import SectionCandidateProfileViews from "../sections/dashboard/section-can-profile-views";
-import SectionCandidateRecentActivities from "../sections/dashboard/section-can-activities";
-import SectionCandidateRecentApplications from "../sections/dashboard/section-can-applications";
+// import SectionCandidateInbox from "../sections/dashboard/section-can-inbox";
+// import SectionCandidateProfileViews from "../sections/dashboard/section-can-profile-views";
+// import SectionCandidateRecentActivities from "../sections/dashboard/section-can-activities";
+// import SectionCandidateRecentApplications from "../sections/dashboard/section-can-applications";
 import { useEffect } from "react";
 import { loadScript } from "../../../../globals/constants";
 
@@ -18,7 +18,7 @@ function CanDashboardPage() {
                 
                 <SectionCandidateOverview />
 
-                <div className="twm-pro-view-chart-wrap">
+                {/* <div className="twm-pro-view-chart-wrap">
                     <div className="row">
                         <div className="col-xl-12 col-lg-12 col-md-12 mb-4">
                             <SectionCandidateProfileViews />
@@ -33,7 +33,7 @@ function CanDashboardPage() {
                             <SectionCandidateRecentApplications />
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     )

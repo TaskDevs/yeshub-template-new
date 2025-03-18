@@ -5,21 +5,40 @@ import {
   portfolioList,
   updatePortfolio,
   deletePortfolio,
+  updatePortfolioMedia
 } from "./portfolioApi";
 import { PORTFOLIOFIELD } from "../../../globals/portfolio-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import toast from "react-hot-toast";
 import { userId } from "../../../globals/constants";
-// import { useMultiStepForm } from "../../common/use-multi-step-form";
-// import PortfolioMediaForm from "../../common/portfolio-media-form";
-// import PortfolioForm from "../../common/portfolio-form";
+import * as bootstrap from 'bootstrap';
+
 
 export const PortfolioApiData = createContext();
 
-const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
-  acc[field.name] = "";
-  return acc;
-}, {});
+
+
+// const setEditFirstFormData = (data) => {
+  //   setFormData({ ...data, ...firstFormData });
+  // };
+
+  // const setEditSecondFormData = (data) => {
+  //   setFormData({ ...data, ...secondFormData });
+  // };
+
+
+  const initialData = {
+    ...PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
+        acc[field.name] = "";
+        return acc;
+    }, {}),
+    media: [],
+};
+
+// const initialData = PORTFOLIOFIELD.fieldDetail.reduce((acc, field) => {
+//   acc[field.name] = "";
+//   return acc;
+// }, {});
 
 const PortfolioApiDataProvider = (props) => {
   const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData);
@@ -32,10 +51,12 @@ const PortfolioApiDataProvider = (props) => {
   const [selectedPortfolio, setSelectedPortfolio] = useState(null);
 
   console.log("formdata-portctx", formData)
+  console.log("selectedPortfolioId-port-ctx", selectedPortfolioId)
 
 
   const firstFormData = { ...formData };
 delete firstFormData.url;
+delete firstFormData.media;
 
 const secondFormData = { url: formData.url };
 
@@ -97,6 +118,7 @@ console.log("Second Form Data:", secondFormData)
     setSelectedPortfolioId(null);
     setSelectedPortfolio(null);
     setFormData(initialData);
+    setFormKey((prevKey) => prevKey + 1);
   };
 
   
@@ -107,7 +129,7 @@ console.log("Second Form Data:", secondFormData)
     setIsSubmitting(true);
     try {
       if (isEditing) {
-        await processUpdatePortfolio(userId, { ...firstFormData, id: selectedPortfolioId });
+        await processUpdatePortfolio(selectedPortfolioId, { ...firstFormData, id: selectedPortfolioId });
       } else {
         await processAddPortfolio({ ...firstFormData, user_id: userId });
         
@@ -127,47 +149,92 @@ console.log("Second Form Data:", secondFormData)
       toast.error(`Failed to ${isEditing ? "update" : "add"} first form.`);
     } finally {
       setIsSubmitting(false);
-      setIsEditing(false);
-      setFormData(initialData);
+      if (!isEditing) {
+        setFormData(initialData);
       setFormKey((prevKey) => prevKey + 1);
       setIsEditing(false);
       setSelectedPortfolio(null);
       setSelectedPortfolioId(null);
+      }
+      
+      
     }
   };
 
-  const submitSecondForm = async (e) => {
+  // const submitSecondForm = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   try {
+  //     if (isEditing) {
+  //       await processUpdatePortfolioMedia(id, { ...secondFormData, id: selectedPortfolioId });
+  //     } else {
+  //       await processAddMedia({ ...secondFormData, user_id: userId });
+  //     }
+  //     await fetchAllPortfolio();
+  //     toast.success(
+  //       `Portfolio media ${isEditing ? "updated" : "added"} successfully`
+  //     );
+  //   } catch (err) {
+  //     console.error(`failed to ${isEditing ? "update" : "add"} portfolio`, err);
+  //     toast.error(`Failed to ${isEditing ? "update" : "add"} portfolio.`);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //     setFormData(initialData);
+  //     setIsEditing(false);
+  //     setSelectedPortfolio(null);
+  //     setSelectedPortfolioId(null);
+  //   }
+  // };
+
+
+  const submitSecondForm = async (e, modalId) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      if (isEditing) {
-        await processUpdatePortfolio(userId, { ...secondFormData, id: selectedPortfolioId });
-      } else {
-        await processAddMedia({ ...secondFormData, user_id: userId });
-      }
-      await fetchAllPortfolio();
-      toast.success(
-        `Portfolio ${isEditing ? "updated" : "added"} successfully`
-      );
+        const mediaData = formData.media.map(media => ({ url: media.url, id: media.id })); // Extract url and id
+
+        if (isEditing) {
+            // Logic to update each media URL, if you have an API to do this
+            for (const media of mediaData) {
+                if (media.id) {
+                    await processUpdatePortfolioMedia(media.id, { url: media.url, portfolio_id: selectedPortfolioId });
+                } else {
+                    await processAddMedia({ url: media.url, user_id: userId, portfolio_id: selectedPortfolioId });
+                }
+            }
+        } else {
+            // Logic to add each media URL
+            for (const media of mediaData) {
+                await processAddMedia({ url: media.url, user_id: userId });
+            }
+        }
+        await fetchAllPortfolio();
+        toast.success(
+            `Portfolio media ${isEditing ? "updated" : "added"} successfully`
+        );
     } catch (err) {
-      console.error(`failed to ${isEditing ? "update" : "add"} portfolio`, err);
-      toast.error(`Failed to ${isEditing ? "update" : "add"} portfolio.`);
+        console.error(`failed to ${isEditing ? "update" : "add"} portfolio`, err);
+        toast.error(`Failed to ${isEditing ? "update" : "add"} portfolio.`);
     } finally {
-      setIsSubmitting(false);
-      setFormData(initialData);
-      setIsEditing(false);
-      setSelectedPortfolio(null);
-      setSelectedPortfolioId(null);
+        setIsSubmitting(false);
+        setIsEditing(false);
+        setSelectedPortfolio(null);
+        setSelectedPortfolioId(null);
+        setFormData(initialData);
+      setFormKey((prevKey) => prevKey + 1);
+      const modal = document.getElementById(modalId);
+        if (modal) {
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
     }
-  };
+};
 
-  const setEditFirstFormData = (data) => {
-    setFormData({ ...data, ...firstFormData });
-  };
 
-  const setEditSecondFormData = (data) => {
-    setFormData({ ...data, ...secondFormData });
-  };
+
+
 
   const processAddPortfolio = async (data) => {
     try {
@@ -183,7 +250,10 @@ console.log("Second Form Data:", secondFormData)
   const processAddMedia = async (data) => {
     try {
       const res = await addPortfolioMedia(data);
-
+      
+      if (res.status !== 201) {
+        throw new Error(`Portfolio media failed with status: ${res.status}`);
+    }
       return res;
     } catch (err) {
       console.error("failed to add-portfolio", err);
@@ -203,9 +273,9 @@ console.log("Second Form Data:", secondFormData)
   };
 
 
-  const processUpdatePortfolio = async (userid, data) => {
+  const processUpdatePortfolio = async (id, data) => {
     try {
-      const res = await updatePortfolio(userid, data);
+      const res = await updatePortfolio(id, data);
       if (res.status !== 200) {
         throw new Error(`Update failed with status: ${res.status}`);
     }
@@ -215,6 +285,21 @@ console.log("Second Form Data:", secondFormData)
       throw err;
     }
   };
+
+  const processUpdatePortfolioMedia = async (id, data) => {
+    try {
+      const res = await updatePortfolioMedia(id, data);
+      if (res.status !== 200) {
+        throw new Error(`Update failed with status: ${res.status}`);
+    }
+      return res;
+    } catch (err) {
+      console.error("failed to update-portfolio", err);
+      throw err;
+    }
+  };
+
+
 
   const processDeletePortfolio = async (id) => {
     try {
@@ -227,43 +312,44 @@ console.log("Second Form Data:", secondFormData)
     }
   };
 
-  const handleAddPortfolio = async (e) => {
-    e.preventDefault();
+  // const handleAddPortfolio = async (e) => {
+  //   e.preventDefault();
     
 
-    setIsSubmitting(true);
+  //   setIsSubmitting(true);
 
-    try {
-      await Promise.all([
-        processAddPortfolio({ ...formData.slice(0, 6), user_id: userId }),
-        processAddMedia({ ...formData.slice(6), userId }),
-      ]);
+  //   try {
+  //     await Promise.all([
+  //       processAddPortfolio({ ...formData.slice(0, 6), user_id: userId }),
+  //       processAddMedia({ ...formData.slice(6), userId }),
+  //     ]);
 
-      await fetchAllPortfolio();
-      toast.success("Portfolio added successfully");
-    } catch (err) {
-      console.error("failed to add portfolio", err);
-      toast.error("Portfolio updated successfully");
-    } finally {
-      setIsSubmitting(false);
-      setFormData(initialData);
-    }
-  };
+  //     await fetchAllPortfolio();
+  //     toast.success("Portfolio added successfully");
+  //   } catch (err) {
+  //     console.error("failed to add portfolio", err);
+  //     toast.error("Portfolio updated successfully");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //     setFormData(initialData);
+  //   }
+  // };
 
-  const handleUpdatePortfolio = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await processUpdatePortfolio(selectedPortfolioId, formData);
-      await fetchAllPortfolio();
-    } catch (err) {
-      console.error("failed to update portfolio", err);
-    } finally {
-      setIsSubmitting(false);
-      setFormData(initialData);
-      setSelectedPortfolioId(null);
-    }
-  };
+  // const handleUpdatePortfolio = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   try {
+  //     await processUpdatePortfolio(selectedPortfolioId, formData);
+  //     await fetchAllPortfolio();
+  //   } catch (err) {
+  //     console.error("failed to update portfolio", err);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //     setFormData(initialData);
+  //     setSelectedPortfolioId(null);
+  //   }
+  // };
+
 
   const handleDeletePortfolio = async () => {
     if (!selectedPortfolioId) {
@@ -300,8 +386,8 @@ console.log("Second Form Data:", secondFormData)
         formKey,
         handleAddClick,
         setIsEditing,
-        setEditFirstFormData,
-        setEditSecondFormData,
+        // setEditFirstFormData,
+        // setEditSecondFormData,
         setSelectedPortfolio,
         setSelectedPortfolioId,
         setSelectedItems,
@@ -316,8 +402,6 @@ console.log("Second Form Data:", secondFormData)
         processGetAllPortfolio,
         processUpdatePortfolio,
         processDeletePortfolio,
-        handleAddPortfolio,
-        handleUpdatePortfolio,
         handleDeletePortfolio,
       }}
     >

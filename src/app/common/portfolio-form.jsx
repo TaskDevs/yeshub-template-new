@@ -7,28 +7,13 @@ import NewInputField from "./new-input-field";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 
+
 function PortfolioForm() {
   const { formData, handleChange } = useContext(PortfolioApiData);
 
   return (
     <div className="row">
-      {/* <div className="col-xl-12 col-lg-12">
-        <div className="form-group">
-            <label>Work Title</label>
-            <div className="ls-inputicon-box">
-               
-                <InputField
-                    field={PORTFOLIOFIELD.fieldDetail[0]}
-                    value={formData}
-                    change={(data, field) => {
-                        handleChange(data, field);
-                    }}
-                />
-                <i className="fs-input-icon fa fa-address-card" />
-            </div>
-        </div>
-    </div> */}
-
+      
       <div className="col-xl-12 col-lg-12">
         <div className="p-field p-mb-3">
           <label

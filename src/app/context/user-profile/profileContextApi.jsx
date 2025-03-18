@@ -200,9 +200,7 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
-
+  const handleUpdateProfile = async () => {
     try {
       const response = await processUpdateProfile(userId, {
         ...formData,

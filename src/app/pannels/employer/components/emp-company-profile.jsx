@@ -22,7 +22,7 @@ function EmpCompanyProfilePage() {
     processUpdateEmployerBanner,
   } = useContext(EmployerApiData);
   const { isSubmitting } = useContext(GlobalApiData);
-  const { handleSubmitProfile, handleEditClick } = useContext(ProfileApiData);
+  const { handleSubmitProfile,handleUpdateProfile } = useContext(ProfileApiData);
   const [imageURL, setImageURL] = useState(null);
   const [bannerURL, setBannerURL] = useState(null);
   const [formData, setFormData] = useState({});
@@ -215,7 +215,7 @@ function EmpCompanyProfilePage() {
                     data-bs-toggle="modal"
                     data-bs-dismiss="modal"
                     onClick={() => {
-                      handleEditClick();
+                      handleUpdateProfile();
                     }}
                   >
                     <MdOutlineEdit color="white" />
@@ -365,7 +365,7 @@ function EmpCompanyProfilePage() {
             <div className="row">
               <div className="col-lg-12 col-md-12">
                 <div className="form-group">
-                  {/* <DropzoneComponent config={componentConfig} /> */}
+                 
                 </div>
               </div>
               <div className="col-lg-12 col-md-12">

@@ -1,41 +1,53 @@
 import JobZImage from "../../../common/jobz-img";
 import CountUp from "react-countup";
 import SectionCandidateProfileViews from "../../candidate/sections/dashboard/section-can-profile-views";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
 import { AuthApiData } from "../../../context/auth/authContextApi";
-
+import { ApplicationApiData } from "../../../context/application/applicationContextApi";
 // import { useNavigate } from "react-router-dom";
 
 function EmpDashboardPage() {
   const { userProfile } = useContext(AuthApiData);
   const username = userProfile?.username;
-  const employerId = sessionStorage.getItem("user_id")
-  console.log(employerId)
-  //const { paginationData } = useContext(JobApiData);
-  // const [error, setError] = useState(null);
-  // const [postedJobs, setPostedJobs] = useState(null);
-  const { processCountJobsPostedByEmp, totalPost, totalAppliedJob ,processCountApplications} =
-    useContext(JobApiData);
-  // const [showTopMessage, setShowTopMessage] = useState(false);
- 
-
-  // processCountJobsPostedByEmp
-  // const navigate = useNavigate();
+  const employerId = sessionStorage.getItem("user_id");
+  const [recentapplied, setRecentApplied] = useState("");
+  const {
+    processCountJobsPostedByEmp,
+    totalPost,
+    totalAppliedJob,
+    processCountApplications,
+  } = useContext(JobApiData);
+  const { processGetAppliedJobsByUserId } = useContext(ApplicationApiData);
 
   useEffect(() => {
     processCountJobsPostedByEmp(employerId);
-    processCountApplications(employerId)
-  }, [employerId ]);
+    processCountApplications(employerId);
+  }, [employerId]);
 
-console.log(totalAppliedJob)
-  
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("loading data");
+      try {
+        const res = await processGetAppliedJobsByUserId(employerId);
+        const data = res.data;
+        setRecentApplied(data);
+        console.log("data-log", res.data);
+      } catch (err) {
+        console.error("Errors:", err);
+      }
+    };
+
+    fetchData();
+  }, [employerId]);
+
   return (
     <>
       <div className="">
         <div className="wt-admin-right-page-header clearfix">
-          <h2>Hello, <span className="text-capitalize">{username}</span></h2>
+          <h2>
+            Hello, <span className="text-capitalize">{username}</span>
+          </h2>
           <div className="breadcrumbs">
             <a href="#">Home</a>
             <span>Dasboard</span>
@@ -315,306 +327,85 @@ console.log(totalAppliedJob)
                 <div className="panel-body wt-panel-body bg-white">
                   <div className="twm-dashboard-candidates-wrap">
                     <div className="row">
-                      <div className="col-xl-6 col-lg-12 col-md-12">
-                        <div className="twm-dash-candidates-list">
-                          <div className="twm-media">
-                            <div className="twm-media-pic">
-                              <JobZImage
-                                src="images/candidates/pic1.jpg"
-                                alt="#"
-                              />
-                            </div>
-                          </div>
-                          <div className="twm-mid-content">
-                            <a href="#" className="twm-job-title">
-                              <h4>Wanda Montgomery </h4>
-                            </a>
-                            <p>Charted Accountant</p>
-                            <div className="twm-fot-content">
-                              <div className="twm-left-info">
-                                <p className="twm-candidate-address">
-                                  <i className="feather-map-pin" />
-                                  New York
-                                </p>
-                                <div className="twm-jobs-vacancies">
-                                  $20<span>/ Day</span>
+                      {recentapplied && recentapplied.length > 0 ? (
+                        recentapplied.map((item, index) => (
+                          <div
+                            key={index}
+                            className="col-xl-6 col-lg-12 col-md-12"
+                          >
+                            <div className="twm-dash-candidates-list">
+                              <div className="twm-media">
+                                <div className="twm-media-pic">
+                                  <JobZImage
+                                    src={
+                                      item.user?.user_info?.profileImage ||
+                                      "images/candidates/pic6.jpg"
+                                    }
+                                    alt={item.user?.user_info?.firstname || "Candidate"}
+                                  />
                                 </div>
                               </div>
-                              <div className="twm-right-btn">
-                                <ul className="twm-controls-icon list-unstyled">
-                                  <li>
-                                    <button
-                                      title="View profile"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="fa fa-eye" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Send message"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-envelope-open" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Delete"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-trash-alt" />
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-6 col-lg-12 col-md-12">
-                        <div className="twm-dash-candidates-list">
-                          <div className="twm-media">
-                            <div className="twm-media-pic">
-                              <JobZImage
-                                src="images/candidates/pic2.jpg"
-                                alt="#"
-                              />
-                            </div>
-                          </div>
-                          <div className="twm-mid-content">
-                            <a href="#" className="twm-job-title">
-                              <h4>Peter Hawkins</h4>
-                            </a>
-                            <p>Medical Professed</p>
-                            <div className="twm-fot-content">
-                              <div className="twm-left-info">
-                                <p className="twm-candidate-address">
-                                  <i className="feather-map-pin" />
-                                  New York
+                              <div className="twm-mid-content">
+                                <a href="#" className="twm-job-title">
+                                  <h4>
+                                  {`${item.user?.user_info?.firstname || "Candidate"} ${item.user?.user_info?.lastname || ""}`.trim()}
+
+                                  </h4>
+                                </a>
+                                <p>
+                                  {item.posted_job?.job_title || "No Job Title"}
                                 </p>
-                                <div className="twm-jobs-vacancies">
-                                  $7<span>/ Hour</span>
+                                <div className="twm-fot-content">
+                                  <div className="twm-left-info">
+                                    <p className="twm-candidate-address">
+                                      <i className="feather-map-pin" />
+                                      {item.user?.user_info?.address ||
+                                        "Unknown Location"}
+                                    </p>
+                                    <div className="twm-jobs-vacancies">
+                                    GH₵{item.posted_job?.salary || "N/A"}
+                                     
+                                    </div>
+                                  </div>
+                                  <div className="twm-right-btn">
+                                    <ul className="twm-controls-icon list-unstyled">
+                                      <li>
+                                        <button
+                                          title="View profile"
+                                          data-bs-toggle="tooltip"
+                                          data-bs-placement="top"
+                                        >
+                                          <span className="fa fa-eye" />
+                                        </button>
+                                      </li>
+                                      <li>
+                                        <button
+                                          title="Send message"
+                                          data-bs-toggle="tooltip"
+                                          data-bs-placement="top"
+                                        >
+                                          <span className="far fa-envelope-open" />
+                                        </button>
+                                      </li>
+                                      <li>
+                                        <button
+                                          title="Delete"
+                                          data-bs-toggle="tooltip"
+                                          data-bs-placement="top"
+                                        >
+                                          <span className="far fa-trash-alt" />
+                                        </button>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="twm-right-btn">
-                                <ul className="twm-controls-icon list-unstyled">
-                                  <li>
-                                    <button
-                                      title="View profile"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="fa fa-eye" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Send message"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-envelope-open" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Delete"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-trash-alt" />
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-6 col-lg-12 col-md-12">
-                        <div className="twm-dash-candidates-list">
-                          <div className="twm-media">
-                            <div className="twm-media-pic">
-                              <JobZImage
-                                src="images/candidates/pic3.jpg"
-                                alt="#"
-                              />
-                            </div>
-                          </div>
-                          <div className="twm-mid-content">
-                            <a href="#" className="twm-job-title">
-                              <h4>Ralph Johnson</h4>
-                            </a>
-                            <p>Bank Manger</p>
-                            <div className="twm-fot-content">
-                              <div className="twm-left-info">
-                                <p className="twm-candidate-address">
-                                  <i className="feather-map-pin" />
-                                  New York
-                                </p>
-                                <div className="twm-jobs-vacancies">
-                                  $180<span>/ Day</span>
-                                </div>
-                              </div>
-                              <div className="twm-right-btn">
-                                <ul className="twm-controls-icon list-unstyled">
-                                  <li>
-                                    <button
-                                      title="View profile"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="fa fa-eye" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Send message"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-envelope-open" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Delete"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-trash-alt" />
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-6 col-lg-12 col-md-12">
-                        <div className="twm-dash-candidates-list">
-                          <div className="twm-media">
-                            <div className="twm-media-pic">
-                              <JobZImage
-                                src="images/candidates/pic4.jpg"
-                                alt="#"
-                              />
-                            </div>
-                          </div>
-                          <div className="twm-mid-content">
-                            <a href="#" className="twm-job-title">
-                              <h4>Randall Henderson </h4>
-                            </a>
-                            <p>IT Contractor</p>
-                            <div className="twm-fot-content">
-                              <div className="twm-left-info">
-                                <p className="twm-candidate-address">
-                                  <i className="feather-map-pin" />
-                                  New York
-                                </p>
-                                <div className="twm-jobs-vacancies">
-                                  $90<span>/ Week</span>
-                                </div>
-                              </div>
-                              <div className="twm-right-btn">
-                                <ul className="twm-controls-icon list-unstyled">
-                                  <li>
-                                    <button
-                                      title="View profile"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="fa fa-eye" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Send message"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-envelope-open" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Delete"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-trash-alt" />
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-6 col-lg-12 col-md-12">
-                        <div className="twm-dash-candidates-list">
-                          <div className="twm-media">
-                            <div className="twm-media-pic">
-                              <JobZImage
-                                src="images/candidates/pic6.jpg"
-                                alt="#"
-                              />
-                            </div>
-                          </div>
-                          <div className="twm-mid-content">
-                            <a href="#" className="twm-job-title">
-                              <h4>Christina Fischer </h4>
-                            </a>
-                            <p>Charity &amp; Voluntary</p>
-                            <div className="twm-fot-content">
-                              <div className="twm-left-info">
-                                <p className="twm-candidate-address">
-                                  <i className="feather-map-pin" />
-                                  New York
-                                </p>
-                                <div className="twm-jobs-vacancies">
-                                  $19<span>/ Hour</span>
-                                </div>
-                              </div>
-                              <div className="twm-right-btn">
-                                <ul className="twm-controls-icon list-unstyled">
-                                  <li>
-                                    <button
-                                      title="View profile"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="fa fa-eye" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Send message"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-envelope-open" />
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <button
-                                      title="Delete"
-                                      data-bs-toggle="tooltip"
-                                      data-bs-placement="top"
-                                    >
-                                      <span className="far fa-trash-alt" />
-                                    </button>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        ))
+                      ) : (
+                        <p>No data found</p>
+                      )}
                     </div>
                   </div>
                 </div>

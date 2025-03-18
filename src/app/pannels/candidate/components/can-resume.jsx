@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import SectionCanAccomplishments from "../sections/resume/section-can-accomplishments";
-import SectionCanAttachment from "../sections/resume/section-can-attachment";
+// import SectionCanAttachment from "../sections/resume/section-can-attachment";
 import SectionCanEducation from "../sections/resume/section-can-education";
 import SectionCanKeySkills from "../sections/resume/section-can-keyskills";
-import SectionCanProjects from "../sections/resume/section-can-projects";
+// import SectionCanProjects from "../sections/resume/section-can-projects";
 // import SectionCanResumeHeadline from "../sections/resume/section-can-resume-headline";
 import { loadScript } from "../../../../globals/constants";
 import SectionCanWorkSample from "../sections/resume/section-can-work-sample";
@@ -42,7 +42,7 @@ function CanMyResumePage() {
 					</div>
 					{/*Project*/}
 					<div className="panel panel-default mb-3">
-						<SectionCanProjects />
+						{/* <SectionCanProjects /> */}
 					</div>
 					{/*Desired Career Profile*/}
 					<div className="panel panel-default mb-3">
@@ -54,7 +54,7 @@ function CanMyResumePage() {
 					</div>
 					{/*Attach Resume*/}
 					<div className="panel panel-default mb-3">
-						<SectionCanAttachment />
+						{/* <SectionCanAttachment /> */}
 					</div>
 					{/*Accomplishments*/}
 					<div className="panel panel-default mb-3">

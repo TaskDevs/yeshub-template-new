@@ -32,8 +32,9 @@ export const publicUser = {
     LIST: "/job-list",
     DETAIL1: "/job-detail/:id",
     DETAIL2: "/job-detail/2",
-    APPLY: "/apply-job",
-    SEARCH: "/jobs",
+    SEARCH: "/jobs-search/:category/:type/:location",
+    AVAILABLE: "/jobs-available",
+    APPLY: "/apply-job/:id"
   },
   employer: {
     GRID: "/emp-grid",
@@ -50,15 +51,15 @@ export const publicUser = {
     MAINTENANCE: "/under-maintenance",
     COMING: "/coming-soon",
     LOGIN: "/login",
-    FORGOTPASS:"/forgotton-password",
+    FORGOTPASS: "/forgotton-password",
     AFTER_LOGIN: "/after-login",
     RESET_PASSWORD: "/reset-password",
     VERIFYOTP: "/verify-otp",
-    VERIFYRESTOTP:"verify-reset-otp",
+    VERIFYRESTOTP: "verify-reset-otp",
     ICONS: "/icons",
     CONTRACT: "/contract",
     GOOGLECALLBACK: "/auth/google/callback",
-    LINKEDINCALLBACK:"/auth/google/callback"
+    LINKEDINCALLBACK: "/auth/google/callback",
   },
   candidate: {
     GRID: "/can-grid",
@@ -66,7 +67,7 @@ export const publicUser = {
     DETAIL1: "/can-detail/1",
     DETAIL2: "/can-detail/2",
     PORTFOLIO: "/can-portfolio",
-    DETAIL: '/can-detail/:id',
+    DETAIL: "/can-detail/:id",
   },
   blog: {
     GRID1: "/blog-grid/1",
@@ -94,6 +95,7 @@ export const candidate = {
   CHAT: "/chat",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
+  APPLIED_JOB_DETAILS: "/applied-job-details/:id",
 };
 
 export const employer = {

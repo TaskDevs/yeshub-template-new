@@ -28,7 +28,7 @@ function SectionCandidateOverview() {
             <div className="twm-dash-b-blocks mb-5">
                 <div className="row">
 
-                    <SectionOverviewCard id="" listing="active-listing" icon="job" count={jobListData.length} label="Posted Jobs" />
+                    <SectionOverviewCard id="" listing="active-listing" icon="job" count={jobListData?.length} label="Posted Jobs" />
                     <SectionOverviewCard id="-2" label="Total Applications" icon="resume" listing="listing-view" count={appliedJobs.length} />
                     <SectionOverviewCard id="-3" listing="listing-review" icon="envelope" count={25} label="Messages" />
                     <SectionOverviewCard id="-4" listing="listing-bookmarked" icon="bell" count={17} label="Notifications" />

@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-import readableDate from "../../../../utils/readableDate";
+import readableDate, { calculateDaysLeft } from "../../../../utils/readableDate";
 import { NavLink } from "react-router-dom";
 import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { freelancerId } from "../../../../globals/constants";
 
 // {
 // 	imageURL ||
@@ -11,18 +12,19 @@ import { GlobalApiData } from "../../../context/global/globalContextApi";
 function CanAppliedJobCard({ data }) {
 
   const { setSelectedId } = useContext(GlobalApiData);
-
+  // console.log("freelancerId", freelancerId)
+  // const today = new Date();
   // console.log("data-app-job", data);
   
 
 
 
   return (
-    <li>
+      
       <div
         className="twm-jobs-list-style1 mb-5"
         onClick={() => {
-          console.log("clicked-id", data.id);
+          // console.log("clicked-id", data.id);
           setSelectedId(data.id);
         }}
       >
@@ -31,18 +33,20 @@ function CanAppliedJobCard({ data }) {
         </div>
         <div className="twm-mid-content">
           <NavLink
-            to={`/job-detail/${data?.jobDetails?.id}`}
-            className="twm-job-title"
+            // to={`/job-detail/${data?.jobDetails?.id}`}
+            to={ `/dashboard-candidate/applied-job-details/${data?.job_id}`}
+            className="twm-job-title apply-title"
           >
-            <h4>{data?.jobDetails?.job_title}</h4>
+            <h4>{freelancerId ? data?.posted_job?.job_title : data?.jobDetails?.job_title}</h4>
           </NavLink>
           <span className="twm-job-post-duration">
-            {readableDate(data?.created_at)}
+            Date Applied: {readableDate(data?.created_at)}
+            {/* {calculateDaysLeft( data?.jobDetails?.start_date, data?.jobDetails?.end_date)} */}
           </span>
           <p className="font-weight-bold">
             Status:{" "}
-            <span className="site-text-primary text-capitalize">
-              {data?.status}
+            <span className="site-text-primary text-capitalize apply-status">
+              {freelancerId ? data?.freelancer_status : data?.status}
             </span>{" "}
           </p>
           {/* <p className="twm-job-address">
@@ -57,20 +61,38 @@ function CanAppliedJobCard({ data }) {
         </div>
         <div className="twm-right-content">
           <div className="twm-jobs-category green">
-            <span className="twm-bg-green">New</span>
+          {
+              calculateDaysLeft(data?.jobDetails?.start_date, data?.jobDetails?.end_date) > 0 ? 
+              (
+                <span className="twm-bg-green">
+            {"Active"}
+              
+            </span>
+              ) : (
+                <span className="twm-bg-brown">
+                 { "Expired"}
+              
+            </span>
+              )
+            }
+            
+            
           </div>
           <div className="twm-jobs-amount">
-            ₵{data?.jobDetails?.salary} <span>/ Month</span>
+            {freelancerId ? "" : 
+             (
+              <>
+                ₵ {data?.jobDetails?.salary} <span>/ Month</span>
+              </>
+            )
+            }
+           
           </div>
-          {/* <NavLink
-						to={publicUser.jobs.DETAIL1}
-						className="twm-jobs-browse site-text-primary"
-					>
-						Apply Job
-					</NavLink> */}
+          
         </div>
       </div>
-    </li>
+    
+   
   );
 }
 

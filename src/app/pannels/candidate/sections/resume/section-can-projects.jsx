@@ -67,8 +67,8 @@ function SectionCanProjects() {
         <>
             <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
                 <h4 className="panel-tittle m-a0">Project Media</h4>
-                <a data-bs-toggle="modal" href="#add-portfolio-media" role="button" title="Edit" className="site-text-primary">
-                    <span className="fa fa-edit" />
+                <a data-bs-toggle="modal" href="#add-portfolio-media" role="button" title="Add" className="site-text-primary">
+                    <span className="fa fa-plus" /> {" "} <span>Add</span>
                 </a>
             </div>
             <div className="panel-body wt-panel-body p-a20 ">

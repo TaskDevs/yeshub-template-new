@@ -5,7 +5,7 @@
 import SectionPagination from "../../sections/common/section-pagination";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import CandidateCard from "./candidate-card";
@@ -13,10 +13,24 @@ import CandidateCard from "./candidate-card";
 
 function CandidateListPage() {
   const { allUsersProfile } = useContext(ProfileApiData);
-  // const { skillOptions } = useContext(SkillsApiData);
+ 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; 
+  const totalItems = allUsersProfile.length;
 
-  // console.log("skillOptions", skillOptions)
-  // console.log("allUsersProfile", allUsersProfile);
+  const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+  };
+
+  const getPaginatedItems = () => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      return allUsersProfile.slice(startIndex, endIndex);
+
+  };
+
+  const paginatedItems = getPaginatedItems();
 
   const _filterConfig = {
     prefix: "Showing",
@@ -29,6 +43,10 @@ function CandidateListPage() {
   useEffect(() => {
     loadScript("js/custom.js");
   });
+
+  if (totalItems=== 0) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
@@ -48,7 +66,7 @@ function CandidateListPage() {
                     {allUsersProfile.length === 0 ? (
                       <p>No User Found.</p>
                     ) : (
-                      allUsersProfile.map((user) => {
+                      paginatedItems.map((user) => {
                         return <CandidateCard key={user._id} data={user} />;
                       })
                     )}
@@ -57,7 +75,18 @@ function CandidateListPage() {
                 </>
               </div>
 
-              <SectionPagination />
+              {/* <SectionPagination /> */}
+              {totalItems > itemsPerPage && (
+                <div>
+                    <SectionPagination
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        itemsPerPage={itemsPerPage}
+                        onPageChange={handlePageChange}
+                    />
+                    
+                </div>
+            )}
             </div>
           </div>
         </div>

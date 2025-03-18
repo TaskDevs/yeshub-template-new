@@ -10,7 +10,7 @@ function SectionCandidatePortfolio({ props }) {
     const [portfolioMedia, setPortfolioMedia] = useState([]);
     const { processGetPortfolioMedia } = useContext(PortfolioMediaApiData)
 
-    console.log("portfolios-media", portfolioMedia)
+    // console.log("portfolios-media", portfolioMedia)
 
 
     const fetchAllPortfolioMedia = async () => {

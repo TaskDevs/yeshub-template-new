@@ -1,14 +1,16 @@
 import SectionJobsSidebar1 from "../../sections/jobs/sidebar/section-jobs-sidebar1";
-import SectionJobsList from "../../sections/jobs/section-jobs-list";
-import { useSearchParams } from "react-router-dom";
+import SectionJobSearch from "../../sections/jobs/section-jobs-search";
 import SectionRecordsFilter from "../../sections/common/section-records-filter";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { loadScript } from "../../../../../globals/constants";
 
 function JobSearchPage() {
-  const { paginationData, searchJobInfo, processSearchJob } =
+  const { searchPaginationData, searchJobListData, processSearchJob } =
     useContext(JobApiData);
+  const [processedSearchJobListData, setProcessedSearchJobListData] = useState(
+    []
+  );
 
   useEffect(() => {
     loadScript("js/custom.js");
@@ -19,10 +21,14 @@ function JobSearchPage() {
   const _filterConfig = {
     prefix: "Showing",
     type: "jobs",
-    total: paginationData?.total || 0,
+    total: searchPaginationData?.total || 0,
     showRange: false,
     showingUpto: "",
   };
+
+  useEffect(() => {
+    setProcessedSearchJobListData(searchJobListData);
+  }, [searchJobListData]);
 
   return (
     <>
@@ -30,12 +36,28 @@ function JobSearchPage() {
         <div className="container">
           <div className="row">
             <div className="col-lg-4 col-md-12 rightSidebar">
-              <SectionJobsSidebar1 />
+              <SectionJobsSidebar1
+                processDataActionControls={[
+                  setProcessedSearchJobListData,
+                  searchJobListData,
+                  processedSearchJobListData,
+                ]}
+              />
             </div>
             <div className="col-lg-8 col-md-12">
               {/*Filter Short By*/}
-              <SectionRecordsFilter _config={_filterConfig} />
-              <SectionJobsList />
+              <SectionRecordsFilter
+                _config={_filterConfig}
+                processDataActionControls={[
+                  setProcessedSearchJobListData,
+                  searchJobListData,
+                  processedSearchJobListData,
+                ]}
+              />
+              <SectionJobSearch
+                processedSearchJobList={processedSearchJobListData}
+                actionSearchJob={processSearchJob}
+              />
             </div>
           </div>
         </div>

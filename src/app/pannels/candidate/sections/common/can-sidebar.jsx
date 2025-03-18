@@ -100,7 +100,8 @@ function CanSidebarSection() {
 								Saved Jobs
 							</NavLink>
 						</li>
-						<li
+						
+						{/* <li
 							className={setMenuActive(
 								currentpath,
 								canRoute(candidate.CV_MANAGER)
@@ -156,7 +157,7 @@ function CanSidebarSection() {
 								<i className="fa fa-comments" />
 								Reviews
 							</NavLink>
-						</li>
+						</li> */}
 
 						<li>
 							<a

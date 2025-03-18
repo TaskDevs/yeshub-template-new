@@ -14,19 +14,14 @@ import toast from "react-hot-toast";
 export const CategoryApiData = createContext();
 
 const CategoryApiDataProvider = (props) => {
-  const { selectedId, setSelectedId, setIsSubmitting } =
-    useContext(GlobalApiData);
+  const { selectedId, setSelectedId, setIsSubmitting } = useContext(GlobalApiData);
   const [allCategories, setAllCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(null);
- 
 	const initialData = CATEGORYFIELD.fieldDetail.reduce((acc, field) => {
 		acc[field.name] = "";
 		return acc;
 	}, {});
-
 	const [formData, setFormData] = useState(initialData);
-
-
 
 	const fetchAllCategories = async () => {
 		try {
@@ -45,15 +40,9 @@ const CategoryApiDataProvider = (props) => {
 		}
 	};
 
-
 	useEffect(() => {	
 		fetchAllCategories();
 	}, []);
-
-
-
-
-
 
 	const processAddCategory = async (data) => {
 		try {
@@ -69,20 +58,16 @@ const CategoryApiDataProvider = (props) => {
 	};
 
 	const processGetAllCategory = async () => {
-	try {
+		try {
 			const res = await catgoryList();
 			// console.log("getall-category", res);
 
-				return res;
+			return res;
 			
 		} catch (error) {
 			console.error("error getting all", error);
 		}
 	};
-
-	
-
-	
 
 	const processCategoryProfile = async (id) => {
 		try {
@@ -106,8 +91,7 @@ const CategoryApiDataProvider = (props) => {
 		try {
 			const res = await updateCategory(id, data);
 		
-			
-				return res;
+			return res;
 			
 		} catch (error) {
 			console.error("Error fetching category:", error);
@@ -134,9 +118,7 @@ const CategoryApiDataProvider = (props) => {
 		const selected = allCategories.find(cat => cat.id === id);
 		setSelectedCategory(selected);
 		setSelectedId(id);
-	};
-
-
+	};  
 
 	const handleAddCategory = async (e) => {
 		e.preventDefault();
@@ -152,144 +134,145 @@ const CategoryApiDataProvider = (props) => {
 		}
 	};
 
-	const handleUpdateCategory = async (e) => {
-		e.preventDefault();
+	// const handleUpdateCategory = async (e) => {
+	// 	e.preventDefault();
+	// };
 	
 
-  const [formData, setFormData] = useState(initialData);
+  // const [formData, setFormData] = useState(initialData);
 
-  const fetchAllCategories = async () => {
-    try {
-      const res = await processGetAllCategory();
-      const data = res.data.data;
-      //   console.log(data);
-      setAllCategories(data);
+  // const fetchAllCategories = async () => {
+  //   try {
+  //     const res = await processGetAllCategory();
+  //     const data = res.data.data;
+  //     //   console.log(data);
+  //     setAllCategories(data);
 
-      if (data.length > 0 && !selectedCategory) {
-        setSelectedCategory(data[0]);
-        setSelectedId(data[0].id);
-      }
-    } catch (err) {
-      console.error("could not fetch categories", err);
-    }
-  };
+  //     if (data.length > 0 && !selectedCategory) {
+  //       setSelectedCategory(data[0]);
+  //       setSelectedId(data[0].id);
+  //     }
+  //   } catch (err) {
+  //     console.error("could not fetch categories", err);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchAllCategories();
-  }, []);
+  // useEffect(() => {
+  //   fetchAllCategories();
+  // }, []);
 
-  const processAddCategory = async (data) => {
-    try {
-      const res = await addCategory(data);
-      console.log("add-category", res);
-      return res;
-    } catch (error) {
-      console.error("Error adding categories:", error);
-    } finally {
-      setFormData(initialData);
-    }
-  };
+  // const processAddCategory = async (data) => {
+  //   try {
+  //     const res = await addCategory(data);
+  //     console.log("add-category", res);
+  //     return res;
+  //   } catch (error) {
+  //     console.error("Error adding categories:", error);
+  //   } finally {
+  //     setFormData(initialData);
+  //   }
+  // };
 
-  const processGetAllCategory = async () => {
-    try {
-      const res = await catgoryList();
-      //console.log("getall-category", res);
+  // const processGetAllCategory = async () => {
+  //   try {
+  //     const res = await catgoryList();
+  //     //console.log("getall-category", res);
 
-      return res;
-    } catch (error) {
-      console.error("error getting all", error);
-    }
-  };
+  //     return res;
+  //   } catch (error) {
+  //     console.error("error getting all", error);
+  //   }
+  // };
 
-  const processCategoryProfile = async (id) => {
-    try {
-      const res = await categoryProfile(id);
-      console.log("add-category", res);
+  // const processCategoryProfile = async (id) => {
+  //   try {
+  //     const res = await categoryProfile(id);
+  //     console.log("add-category", res);
 
-      if (res) {
-        return res;
-      }
-    } catch (error) {
-      console.error("Error fetching category:", error);
-    }
-  };
+  //     if (res) {
+  //       return res;
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching category:", error);
+  //   }
+  // };
 
-  const processSearchCategory = async () => {};
+  // const processSearchCategory = async () => {};
 
-  const processUpdateCategory = async (id, data) => {
-    try {
-      const res = await updateCategory(id, data);
+  // const processUpdateCategory = async (id, data) => {
+  //   try {
+  //     const res = await updateCategory(id, data);
 
-      return res;
-    } catch (error) {
-      console.error("Error fetching category:", error);
-    } finally {
-      setFormData(initialData);
-    }
-  };
+  //     return res;
+  //   } catch (error) {
+  //     console.error("Error fetching category:", error);
+  //   } finally {
+  //     setFormData(initialData);
+  //   }
+  // };
 
-  const processDeleteCategory = async (id) => {
-    try {
-      const res = await deleteCategory(id);
-      return res;
-    } catch (error) {
-      return false;
-    }
-  };
+  // const processDeleteCategory = async (id) => {
+  //   try {
+  //     const res = await deleteCategory(id);
+  //     return res;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
 
-  const handleSelected = (id) => {
-    if (selectedCategory?.id === id) return;
+  // const handleSelected = (id) => {
+  //   if (selectedCategory?.id === id) return;
 
-    const selected = allCategories.find((cat) => cat.id === id);
-    setSelectedCategory(selected);
-    setSelectedId(id);
-  };
+  //   const selected = allCategories.find((cat) => cat.id === id);
+  //   setSelectedCategory(selected);
+  //   setSelectedId(id);
+  // };
 
-  const handleAddCategory = async (e) => {
-    e.preventDefault();
-    try {
-      await processAddCategory(formData);
-      await fetchAllCategories();
-      toast.success("Category added successfully");
-    } catch (err) {
-      console.error("failed to add-category", err);
-    } finally {
-      setFormData(initialData);
-    }
-  };
+  // const handleAddCategory = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await processAddCategory(formData);
+  //     await fetchAllCategories();
+  //     toast.success("Category added successfully");
+  //   } catch (err) {
+  //     console.error("failed to add-category", err);
+  //   } finally {
+  //     setFormData(initialData);
+  //   }
+  // };
 
   const handleUpdateCategory = async (e) => {
     e.preventDefault();
 
     try {
-     await processUpdateCategory(selectedId, formData);
-		await fetchAllCategories();
+      await processUpdateCategory(selectedId, formData);
+      await fetchAllCategories();
 		toast.success("Category updated successfully");
 		
 		} catch (err) {
 			
 			toast.error("Failed to update category");
-	} finally {
-		setFormData(initialData)
-		setSelectedId("");
-		}
+    } finally {
+      setFormData(initialData)
+      setSelectedId("");
+    }
   };
 
   const handleDeleteCategory = async () => {
-	setIsSubmitting(true);
+    setIsSubmitting(true);
 
-	try {
-		await processDeleteCategory(selectedId);
-		await fetchAllCategories();
-		toast.success("Category deleted successfully");
-	} catch {
-		toast.error("Failed to delete category");
-		return false;
-	} finally {
-		setIsSubmitting(false);
-		setSelectedId("");
-	}
-};
+    try {
+      await processDeleteCategory(selectedId);
+      await fetchAllCategories();
+      toast.success("Category deleted successfully");
+    } catch {
+      toast.error("Failed to delete category");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+      setSelectedId("");
+    }
+  };
 
   return (
     <CategoryApiData.Provider

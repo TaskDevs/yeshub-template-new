@@ -77,14 +77,14 @@ function SectionCanEducation() {
 
                   <div className="">
                     <div className="">
-                      school : <span>{education.school} </span>
+                      <strong>school :</strong> <span>{education.school} </span>
                     </div>
                     <div className="">
-                      Area of study : <span>{education.area_of_study} </span>
+                      <strong>Area of study :</strong> <span>{education.area_of_study} </span>
                     </div>
 
                     <div className="">
-                      date completed : <span>{education.date_completed} </span>
+                      <strong>Date completed :</strong> <span>{education.date_completed} </span>
                     </div>
                   </div>
                 </div>

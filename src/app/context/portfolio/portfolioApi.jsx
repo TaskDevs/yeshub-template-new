@@ -93,6 +93,19 @@ export const updatePortfolio = async (id, data) => {
   }
 };
 
+export const updatePortfolioMedia = async (id, data) => {
+  try {
+    let responseOnUpdatePortfolio = await axios.put(
+			`${REACT_BASE_URL}update-portfolio-media/${id}`,
+			data
+		);
+    return responseOnUpdatePortfolio;
+   
+  } catch  {
+    return false;
+  }
+};
+
 // DELETE Portfolio
 export const deletePortfolio = async (id) => {
   try {

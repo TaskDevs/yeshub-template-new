@@ -46,9 +46,7 @@ export const applicationList = async (id) => {
 
 export const getAppliedJbsByEmpid = async (id) => {
   try {
-    const response = await axios.get(`${REACT_BASE_URL}get-job-applicants-by-emp/${id}`);
-    
-    // ✅ Return only the data, not the full response object
+    const response = await axios.get(`${REACT_BASE_URL}get-emp-job-applicants-by-emp/${id}`);
     return response.data;
   } catch (err) {
     console.error("Error fetching job applications:", err);

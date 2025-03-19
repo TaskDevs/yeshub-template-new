@@ -1,7 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
+<<<<<<< HEAD
+
+import { Chip } from 'primereact/chip';
+        
+=======
 import { Badge } from "primereact/badge";
+>>>>>>> b5b969de12e240512db24bf8103eb40a8aa7dadd
 export const JobsCard = ({
   img,
   duration,
@@ -13,6 +19,21 @@ export const JobsCard = ({
   job_type,
   skills,
 }) => {
+<<<<<<< HEAD
+  let skillsArray = [];
+
+  try {
+    skillsArray = JSON.parse(skills);
+    if (!Array.isArray(skillsArray)) {
+      skillsArray = []; // Ensure it's an array
+    }
+  } catch (error) {
+    console.error("Error parsing skills:", error);
+    skillsArray = []; // Fallback to empty array
+  }
+
+=======
+>>>>>>> b5b969de12e240512db24bf8103eb40a8aa7dadd
   return (
      
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
@@ -24,6 +45,26 @@ export const JobsCard = ({
         {/* <JobZImage src={`${baseURL}/assets/images/no-logo.png`} alt="#" /> */}
       </div>
       <div className="twm-mid-content">
+<<<<<<< HEAD
+        <h4 className="twm-job-title">
+          {title}
+          <span className="twm-job-post-duration">
+            / <TimeAgo date={duration} />
+          </span>
+        </h4>
+        <p className="twm-job-address twm-exp-profile text-capitalize">
+          {location}
+        </p>
+
+        <div className="flex flex-wrap gap-2">
+          {skillsArray.map((skill, index) => (
+              <div className=" flex flex-wrap gap-2" key={index}>
+                 <Chip label={skill} /> 
+           
+            </div>
+          ))}
+        </div>
+=======
         <h4 className="twm-job-title">{title}</h4>
         <span className="twm-job-post-duration">
           <TimeAgo date={duration} />
@@ -37,6 +78,7 @@ export const JobsCard = ({
               <Badge key={index} value={skill} severity="secondary" />
             ))}
         </ul>
+>>>>>>> b5b969de12e240512db24bf8103eb40a8aa7dadd
       </div>
       <div className="twm-right-content">
         <div className="twm-jobs-category green">

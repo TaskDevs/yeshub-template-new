@@ -7,6 +7,7 @@ import {
   applicationProfile,
   updateApplication,
   deleteApplication,
+  getAppliedJbsByEmpid,
 } from "./applicationApi";
 // import { APPLICATIONFIELD } from "../../../globals/application-data";
 
@@ -142,6 +143,15 @@ const ApplicationApiDataProvider = (props) => {
 			}
   };
 
+  const processGetAppliedJobsByUserId = async (id) => {
+    try {
+       const res = await getAppliedJbsByEmpid(id);
+       // console.log("get all applications", res);
+       return res;
+     } catch (e) {
+       throw new Error("Failed to get all applications", e);
+     }
+ };
   
   const processApplicationProfile = async (id) => {
      try {
@@ -294,6 +304,7 @@ const ApplicationApiDataProvider = (props) => {
 				processDeleteApplication,
         handleDeleteAppliedJob,
 				handleSubmmitApplication,
+        processGetAppliedJobsByUserId,
 			}}
 		>
 			{props.children}

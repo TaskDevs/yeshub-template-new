@@ -3,19 +3,19 @@ import { publicUser } from "../../../../../../globals/route-names";
 import SectionSideAdvert from "./section-side-advert";
 import JobZImage from "../../../../../common/jobz-img";
 
-function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
+function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
   // Prevent accessing undefined properties
   if (!_config) {
     return <p>Loading job details...</p>;
   }
 
   // Format date safely
-  const formattedDate = _config?.created_at
+  const formattedDate = _config?.start_date
     ? new Intl.DateTimeFormat("en-US", {
         year: "numeric",
         month: "long",
         day: "2-digit",
-      }).format(new Date(_config.created_at))
+      }).format(new Date(_config.start_date))
     : "N/A";
 
   // Parse skills_id safely
@@ -63,28 +63,36 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
                 <div className="twm-s-info-inner">
                   <i className="fas fa-map-marker-alt" />
                   <span className="twm-title">Location</span>
-                  <div className="twm-s-info-discription">{_config?.address || "N/A"}</div>
+                  <div className="twm-s-info-discription">
+                    {_config?.employer?.address || "N/A"}
+                  </div>
                 </div>
               </li>
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-user-tie" />
                   <span className="twm-title">Job Title</span>
-                  <div className="twm-s-info-discription">{_config?.job_title || "N/A"}</div>
+                  <div className="twm-s-info-discription">
+                    {_config?.job_title || "N/A"}
+                  </div>
                 </div>
               </li>
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-clock" />
                   <span className="twm-title">Experience</span>
-                  <div className="twm-s-info-discription">{_config?.experience || "N/A"}</div>
+                  <div className="twm-s-info-discription">
+                    {_config?.experience || "N/A"}
+                  </div>
                 </div>
               </li>
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-suitcase" />
                   <span className="twm-title">Qualification</span>
-                  <div className="twm-s-info-discription">{_config?.qualification || "N/A"}</div>
+                  <div className="twm-s-info-discription">
+                    {_config?.qualification || "N/A"}
+                  </div>
                 </div>
               </li>
               <li>
@@ -93,12 +101,16 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
                   {_config?.salary ? (
                     <>
                       <span className="twm-title">Salary</span>
-                      <div className="twm-s-info-discription">₵{_config.salary}</div>
+                      <div className="twm-s-info-discription">
+                        ₵{_config.salary}
+                      </div>
                     </>
                   ) : (
                     <>
                       <span className="twm-title">Budget</span>
-                      <div className="twm-s-info-discription">₵{_config?.budget || "N/A"}</div>
+                      <div className="twm-s-info-discription">
+                        ₵{_config?.budget || "N/A"}
+                      </div>
                     </>
                   )}
                 </div>
@@ -128,7 +140,10 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
           <div className="twm-s-info3">
             <div className="twm-s-info-logo-section">
               <div className="twm-media">
-                <JobZImage src="images/jobs-company/pic1.jpg" alt="Company Logo" />
+                <JobZImage
+                  src="images/jobs-company/pic1.jpg"
+                  alt="Company Logo"
+                />
               </div>
               <h4 className="twm-title">Senior Web Designer , Developer</h4>
             </div>
@@ -137,7 +152,9 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
                 <div className="twm-s-info-inner">
                   <i className="fas fa-building" />
                   <span className="twm-title">Company</span>
-                  <div className="twm-s-info-discription">Software Development</div>
+                  <div className="twm-s-info-discription">
+                    Software Development
+                  </div>
                 </div>
               </li>
               <li>
@@ -151,14 +168,18 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
                 <div className="twm-s-info-inner">
                   <i className="fas fa-at" />
                   <span className="twm-title">Email</span>
-                  <div className="twm-s-info-discription">thewebmaxdemo@gmail.com</div>
+                  <div className="twm-s-info-discription">
+                    thewebmaxdemo@gmail.com
+                  </div>
                 </div>
               </li>
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-desktop" />
                   <span className="twm-title">Website</span>
-                  <div className="twm-s-info-discription">https://themeforest.net</div>
+                  <div className="twm-s-info-discription">
+                    https://themeforest.net
+                  </div>
                 </div>
               </li>
               <li>
@@ -166,7 +187,8 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
                   <i className="fas fa-map-marker-alt" />
                   <span className="twm-title">Address</span>
                   <div className="twm-s-info-discription">
-                    Independence Avenue No. 10, Accra, Greater Accra Region, Ghana
+                    Independence Avenue No. 10, Accra, Greater Accra Region,
+                    Ghana
                   </div>
                 </div>
               </li>
@@ -180,14 +202,13 @@ function SectionJobsSidebar2({ _config = {} , showAdvert=true }) {
 
       {/* Advert Section */}
       {showAdvert ? (
-         <SectionSideAdvert
-         title="Claim Your Dream Job"
-         description="Stand out from the crowd—apply now and showcase your skills"
-         link={`${publicUser.jobs.APPLY}`}
-         action="Bid Now"
-       />
-      ) : (null)}
-     
+        <SectionSideAdvert
+          title="Claim Your Dream Job"
+          description="Stand out from the crowd—apply now and showcase your skills"
+          link={`${publicUser.jobs.APPLY}`}
+          action="Bid Now"
+        />
+      ) : null}
     </>
   );
 }

@@ -12,8 +12,9 @@ const AuthApiDataProvider = (props) => {
   const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   sessionStorage.setItem("OAuthUserId", userProfile?.id)
+  
  
-  // console.log("userProfile", userProfile)
+
 
 
   useEffect(() => {
@@ -27,10 +28,12 @@ const AuthApiDataProvider = (props) => {
         setIsAuthenticated(true);
       }
     }
+    
   };
 
   const processLogin = async (data) => {
-    let response = await login(data);
+    
+    let response = await login(data);    
     if (response.data) {
       setUserProfile(response.data);
       axios.defaults.headers.common[
@@ -39,13 +42,16 @@ const AuthApiDataProvider = (props) => {
       setRole(response.data.role);
       cookieMethods.setCookies(response.accessToken);
       setRole(response.data.role);
+      
     } else {
       notify(BAD_REQUEST_STATUS, "Failed to login");
+      
     }
   };
 
   const processRetrieve = async () => {
     let cookieData = cookieMethods.getCookies();
+    console.log("res-cookieData", cookieData)
     if (!cookieData.accessToken) return false;
     axios.defaults.headers.common[
       "Authorization"
@@ -57,10 +63,12 @@ const AuthApiDataProvider = (props) => {
       setRole(response.data.role);
       setIsAuthenticated(true);
       return true;
+      
     } else {
       return false;
     }
   };
+
 
   const processLogout = async () => {
     let cookieData = cookieMethods.getCookies();
@@ -83,7 +91,9 @@ const AuthApiDataProvider = (props) => {
       value={{
         userProfile,
         role,
+        fetchUser,
         isAuthenticated,
+        setUserProfile,
         processRetrieve,
         processLogin,
         processLogout,
@@ -92,6 +102,6 @@ const AuthApiDataProvider = (props) => {
       {props.children}
     </AuthApiData.Provider>
   );
-};
+}
 
 export default AuthApiDataProvider;

@@ -37,7 +37,9 @@ function CanProfilePage() {
     freelanceProfileData,
     handleUpdateFreelanceProfile,
     handleEditFreelance,
+    handleAddClick
   } = useContext(FreelanceApiData);
+
   const [imgSrc, setImgSrc] = useState(
     `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`
   );
@@ -112,7 +114,7 @@ function CanProfilePage() {
     try {
       // Check if profile data is already available
       if (profileData.id) filledSections++;
-    console.log("profileData-can-profile", profileData);
+    // console.log("profileData-can-profile", profileData);
 
       // Check if education data is retrieved
       const educationData = await processEducationEducation(userId);
@@ -125,7 +127,8 @@ function CanProfilePage() {
       // Check if portfolio data is retrieved
      
       if (portfolioData?.data?.data?.some((p) => p.media?.length > 0)) filledSections++;
-  
+      console.log("portfolioData-profile", portfolioData?.data.data)
+
       setProgress((filledSections / 4) * 100); // Assuming 4 sections to check
   
     } catch (error) {
@@ -318,6 +321,7 @@ function CanProfilePage() {
                 role="button"
                 title="Add"
                 className="site-text-primary"
+                onClick={handleAddClick}
               >
                 <span className="fa fa-plus" /> <span>Add</span>
               </a>

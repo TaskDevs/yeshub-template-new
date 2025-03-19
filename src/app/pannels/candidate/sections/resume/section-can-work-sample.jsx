@@ -18,11 +18,11 @@ function SectionCanWorkSample() {
 
 
   const handleEditClick = (portfolioId) => {
-    console.log("portfolioId", portfolioId);
+    // console.log("portfolioId", portfolioId);
     setIsEditing(true);
     setSelectedPortfolioId(portfolioId);
     const portfolio = portfolios.find((p) => p.id === portfolioId);
-    console.log("edit-portfolio-sample", portfolio);
+    // console.log("edit-portfolio-sample", portfolio);
     setFormData({
         description: portfolio.description,
         project_end_date: portfolio.project_end_date,

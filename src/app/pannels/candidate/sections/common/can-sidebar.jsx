@@ -9,6 +9,7 @@ import { useContext } from "react";
 function CanSidebarSection() {
     const currentpath = useLocation().pathname;
     // const username = sessionStorage.getItem("username")
+	const localUsername = sessionStorage.getItem("username");
 	const { profileData, imgSrc, setImgSrc } = useContext(ProfileApiData)
     
 
@@ -42,7 +43,7 @@ function CanSidebarSection() {
 						to={canRoute(publicUser.candidate.DETAIL1)}
 						className="twm-job-title"
 					>
-						<h4>{profileData?.firstname} {profileData?.lastname}</h4>
+						<h4>{profileData?.firstname || localUsername} {profileData?.lastname || ""}</h4>
 					</NavLink>
 					{/* <p>IT Contractor</p> */}
 				</div>

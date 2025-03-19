@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import JobViewPopup from "../../../common/popups/popup-job-view";
 import { loadScript } from "../../../../globals/constants";
 import { useJobCartStore } from "../../../../utils/useJobCartStore";
-
+import { NavLink } from "react-router-dom";
+import { Chip } from 'primereact/chip';
 function CanSavedJobsPage() {
     const { jobs, removeJob } = useJobCartStore();
     const [loading, setLoading] = useState(true);
@@ -33,32 +34,63 @@ console.log(jobs)
                         <div className="text-center py-4">No saved jobs found.</div>
                     ) : (
                         jobs.map((job) => (
-                            <div key={job.id} className="list-group-item d-flex align-items-center justify-content-between p-3">
-                                <div className="d-flex align-items-center">
-                                    <div style={{ width: '60px', height: '60px', overflow: 'hidden', borderRadius: '8px' }}>
-                                        <img src={job?.image}  
-                                        alt={job.title}  
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                             <div className="twm-jobs-list-style1 mb-5" key={job.id}>
+                              <NavLink to={`/job-detail/${job.id}`}>
+                                  <div className="twm-media">
+                                    <img
+                                      src={ `${job.image}`}
+                                      alt="#"
+                                    />
+                                    {/* <JobZImage src={`${baseURL}/assets/images/no-logo.png`} alt="#" /> */}
+                                  </div>
+                                  <div className="twm-mid-content">
+                            
+                                    <h4 className="twm-job-title">
+                                      {job.title}
+                                      <span className="twm-job-post-duration">
+                                        {/* / <TimeAgo date={duration} /> */}
+                                      </span>
+                                    </h4>
+                                    {/* <p className="twm-job-address twm-exp-profile text-capitalize">
+                                      {location}
+                                    </p> */}
+                            
+                                    <div className="flex flex-wrap gap-2">
+                                      {job?.skill.map((skill, index) => (
+                                          <div className=" flex flex-wrap gap-2" key={index}>
+                                             <Chip label={skill} /> 
+                                       
+                                        </div>
+                                      ))}
                                     </div>
-                                    <div className="ms-3">
-                                        <h5 className="mb-1">{job.title}</h5>
-                                        <p className="mb-0 text-muted">{job.company}</p>
+                                    
+                                  </div>
+                                  </NavLink>
+                                  <div className="twm-right-content">
+                                    <div className="twm-jobs-category green">
+                                      <span className="twm-bg-red"
+                                      onClick={() => handleRemoveJob(job.id)}
+                                      disabled={deleting}
+                                      style={{cursor:'pointer'}}
+                                      >X</span>
                                     </div>
+                                    <div className="twm-jobs-amount">
+                                     
+                                      {job.salary ? (
+																	<p>₵{job?.salary}</p>
+																):(
+																	<p>	₵{job?.budget}</p>
+																)}
+                                      {/* <span>/ daily</span> */}
+                                    </div>
+                                    {/* <p
+                                      className="twm-jobs-browse bids"
+                                      style={{ color: days_left === 0 ? "red" : "inherit" }}
+                                    >
+                                      {days_left === 0 ? "Expired" : `${days_left} days left`}
+                                    </p> */}
+                                  </div>
                                 </div>
-                                <div className="text-muted small">{new Date().toLocaleDateString()}</div>
-                                <div className="d-flex gap-2">
-                                    <button className="btn btn-success" data-bs-toggle="modal" data-bs-target="#saved-jobs-view">
-                                        View
-                                    </button>
-                                    <button className="btn btn-danger" onClick={() => handleRemoveJob(job.id)} disabled={deleting}>
-                                        {deleting ? (
-                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                        ) : (
-                                            "Delete"
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
                         ))
                     )}
                 </div>

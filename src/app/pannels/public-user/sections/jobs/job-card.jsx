@@ -1,7 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
+
+import { Chip } from 'primereact/chip';
+        
+
 import { Badge } from "primereact/badge";
+
 export const JobsCard = ({
   img,
   duration,
@@ -13,6 +18,18 @@ export const JobsCard = ({
   job_type,
   skills,
 }) => {
+  let skillsArray = [];
+
+  try {
+    skillsArray = JSON.parse(skills);
+    if (!Array.isArray(skillsArray)) {
+      skillsArray = []; // Ensure it's an array
+    }
+  } catch (error) {
+    console.error("Error parsing skills:", error);
+    skillsArray = []; // Fallback to empty array
+  }
+
   return (
      
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
@@ -24,13 +41,25 @@ export const JobsCard = ({
         {/* <JobZImage src={`${baseURL}/assets/images/no-logo.png`} alt="#" /> */}
       </div>
       <div className="twm-mid-content">
-        <h4 className="twm-job-title">{title}</h4>
-        <span className="twm-job-post-duration">
-          <TimeAgo date={duration} />
-        </span>
+
+        <h4 className="twm-job-title">
+          {title}
+          <span className="twm-job-post-duration">
+            / <TimeAgo date={duration} />
+          </span>
+        </h4>
         <p className="twm-job-address twm-exp-profile text-capitalize">
           {location}
         </p>
+
+        <div className="flex flex-wrap gap-2">
+          {skillsArray.map((skill, index) => (
+              <div className=" flex flex-wrap gap-2" key={index}>
+                 <Chip label={skill} /> 
+           
+            </div>
+          ))}
+        </div>
         <ul className="ul-skills">
           {skills &&
             skills.map((skill, index) => (

@@ -89,7 +89,8 @@ const JobApiDataProvider = (props) => {
     try {
       let response = await employerJobList(id);
       if (response) {
-        setEmpJobListData(response.data);
+        console.log("jobs emp", response)
+        setEmpJobListData(response);
         setEmpPaginationData({
           total: response.total,
         });

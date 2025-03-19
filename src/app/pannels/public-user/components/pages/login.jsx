@@ -120,6 +120,7 @@ function LoginPage() {
     }));
   };
   const googleSignin = async ()=>{
+    console.log(formData.role)
     const res = await loginWithGoogle(formData.role)
     console.log(res)
   }

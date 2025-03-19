@@ -32,7 +32,6 @@ function JobDetail1Page() {
 	
 	useEffect(() => {
 		let newData = jobListData.filter((item) => item.id == id)[0];
-		
 		setProfile(newData);
 	}, []);
 
@@ -44,10 +43,7 @@ function JobDetail1Page() {
 	})
 	sessionStorage.setItem("job_id", job?.id || id)
 
-	// console.log("josnss", job)
-	// const sidebarConfig = {
-	// 	showJobInfo: true,
-	// };
+	console.log("josnss", job)
 
 	useEffect(() => {
 		loadScript("js/custom.js");
@@ -64,8 +60,11 @@ function JobDetail1Page() {
 				id: job.id,
 				title: job.job_title,
 				salary: job.salary,
-				company: job.company_name,
-				image: job.logo,
+				budget:job.budget,
+				company: job?.employer?.company_name,
+				image: job?.employer?.logo,
+				skill:job.skills,
+
 			});
 	
 			setSave(true); // ✅ Update state to "Saved"
@@ -90,8 +89,8 @@ function JobDetail1Page() {
 												<div className="twm-media-bg">
 												<img
 												src={
-													profile?.banner
-													? `${profile.banner}`
+													job?.employer?.banner
+													? `${job?.employer?.banner}`
 													: `${baseURL}/assets/images/no-logo.png`
 												}
 												alt="#"
@@ -104,8 +103,8 @@ function JobDetail1Page() {
 													<div className="twm-media">
 														<img
 															src={
-																profile?.logo
-																	? `${profile.logo}`
+																job?.employer?.logo
+																	? `${job?.employer?.logo}`
 																	: `${baseURL}/assets/images/no-logo.png`
 															}
 															alt="#"

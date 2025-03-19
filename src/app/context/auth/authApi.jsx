@@ -181,9 +181,16 @@ export const changePassword = async (data) => {
   
   
 
-export const loginWithGoogle = (data) => {
-  window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect?role=${data}`;
+// export const loginWithGoogle = (data) => {
+//   window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect?role=${data}`;
+// };
+
+export const loginWithGoogle = (role) => {
+  const url = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect?role=${role}`;
+  console.log("Redirecting to:", url); // Debugging
+  window.location.href = url;
 };
+
 
 export const loginWithLinkedIn = async (data) => {
   window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/redirect/linkedin?role=${data}`;

@@ -1,13 +1,12 @@
 import { NavLink } from "react-router-dom";
 import { baseURL } from "../../../../../globals/constants";
 import TimeAgo from "../../../../../utils/formateDate";
-<<<<<<< HEAD
 
 import { Chip } from 'primereact/chip';
         
-=======
+
 import { Badge } from "primereact/badge";
->>>>>>> b5b969de12e240512db24bf8103eb40a8aa7dadd
+
 export const JobsCard = ({
   img,
   duration,
@@ -19,7 +18,6 @@ export const JobsCard = ({
   job_type,
   skills,
 }) => {
-<<<<<<< HEAD
   let skillsArray = [];
 
   try {
@@ -32,8 +30,6 @@ export const JobsCard = ({
     skillsArray = []; // Fallback to empty array
   }
 
-=======
->>>>>>> b5b969de12e240512db24bf8103eb40a8aa7dadd
   return (
      
     <NavLink to={link} className="twm-jobs-list-style1 mb-5">
@@ -45,7 +41,7 @@ export const JobsCard = ({
         {/* <JobZImage src={`${baseURL}/assets/images/no-logo.png`} alt="#" /> */}
       </div>
       <div className="twm-mid-content">
-<<<<<<< HEAD
+
         <h4 className="twm-job-title">
           {title}
           <span className="twm-job-post-duration">
@@ -64,21 +60,12 @@ export const JobsCard = ({
             </div>
           ))}
         </div>
-=======
-        <h4 className="twm-job-title">{title}</h4>
-        <span className="twm-job-post-duration">
-          <TimeAgo date={duration} />
-        </span>
-        <p className="twm-job-address twm-exp-profile text-capitalize">
-          {location}
-        </p>
         <ul className="ul-skills">
           {skills &&
             skills.map((skill, index) => (
               <Badge key={index} value={skill} severity="secondary" />
             ))}
         </ul>
->>>>>>> b5b969de12e240512db24bf8103eb40a8aa7dadd
       </div>
       <div className="twm-right-content">
         <div className="twm-jobs-category green">

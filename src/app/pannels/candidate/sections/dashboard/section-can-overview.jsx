@@ -1,20 +1,24 @@
 // import CountUp from "react-countup";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { useContext, useEffect } from "react";
-import { AuthApiData } from "../../../../context/auth/authContextApi";
+// import { AuthApiData } from "../../../../context/auth/authContextApi";
 import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
 import SectionOverviewCard from "./section-overview-card";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { freelancerId } from "../../../../../globals/constants";
+import { useJobCartStore } from "../../../../../utils/useJobCartStore";
 
 
 function SectionCandidateOverview() {
     const { profileData } = useContext(ProfileApiData)
-    const { userProfile } = useContext(AuthApiData);
-	const username = userProfile?.username || "Loading....";
+    // const { userProfile } = useContext(AuthApiData);
+	const username = sessionStorage.getItem("username");
+    // const username = userProfile?.username || "Loading....";
     const { appliedJobs } = useContext(ApplicationApiData)
    const {  processGetAllJob } = useContext(JobApiData)
-    
+   const { jobs } = useJobCartStore();
+
+//    console.log("saved-jobs", jobs)
 
     useEffect(() => {
         processGetAllJob();
@@ -29,7 +33,7 @@ function SectionCandidateOverview() {
             <div className="twm-dash-b-blocks mb-5">
                 <div className="row">
 
-                    <SectionOverviewCard id="" listing="active-listing" icon="job" count={0} label="Posted Jobs" />
+                    <SectionOverviewCard id="" listing="active-listing" icon="job" count={jobs?.length} label="Saved Jobs" />
                     <SectionOverviewCard id="-2" label="Total Applications" icon="resume" listing="listing-view" count={freelancerId ? "" : appliedJobs.length} />
                     <SectionOverviewCard id="-3" listing="listing-review" icon="envelope" count={0} label="Messages" />
                     <SectionOverviewCard id="-4" listing="listing-bookmarked" icon="bell" count={0} label="Notifications" />

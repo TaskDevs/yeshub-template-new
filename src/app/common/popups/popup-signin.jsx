@@ -8,6 +8,7 @@ import { login , loginWithLinkedIn, loginWithGoogle} from "../../context/auth/au
 import cookieMethods from "../../../utils/cookieUtils";
 import toast from 'react-hot-toast';
 import { base } from "../../../globals/route-names";
+import { AuthApiData } from "../../context/auth/authContextApi";
 
 function SignInPopup() {
   const {
@@ -17,6 +18,7 @@ function SignInPopup() {
   } = useContext(GlobalApiData);
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
+  const { processRetrieve } = useContext(AuthApiData)
 
   const [formData, setFormData] = useState(() => {
     const savedUser = JSON.parse(localStorage.getItem("rememberedUser"));
@@ -56,7 +58,7 @@ function SignInPopup() {
         [name]: value,
       }));
     };
-    const googleSignin = async ()=> {
+    const googleSignin = async () => {
       const res = await loginWithGoogle(formData.role)
       console.log(res)
     }
@@ -74,7 +76,7 @@ function SignInPopup() {
   
     try {
       const response = await login(formData);
-  
+      
       if (response.success && response.data.token && response.data.refresh_token) {
         const { token, refresh_token, role, user_id } = response.data;
   
@@ -91,7 +93,9 @@ function SignInPopup() {
   
         // ✅ Show success message
         toast.success(response.message, { position: "top-right", autoClose: 3000 });
-  
+        await processRetrieve();
+      
+
         setTimeout(() => {
           switch (role) {
             case "admin":

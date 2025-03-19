@@ -106,6 +106,13 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
+  const handleAddClick = () => {
+    if (portfolios.length === 0) {
+      toast.error("Please add a portfolio before proceeding.");
+    }
+    
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -199,6 +206,7 @@ console.log("selectedPortfolioObjects", selectedPortfolioObjects);
         setSelectedItems,
         setFormData,
         handleSubmit,
+        handleAddClick,
         handleUpdateFreelanceProfile,
         handleEditFreelance,
         processAddFreelance,

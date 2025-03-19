@@ -109,7 +109,7 @@ export const retrieve = async () => {
     let responseOnRetrieve = await axios.get(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/user`
     );
-    console.log("user info", responseOnRetrieve);
+   
     return responseOnRetrieve;
     // if (responseOnRetrieve.status === SUCCESS_STATUS) {
     //   return responseOnRetrieve.data;

@@ -50,20 +50,20 @@ const PortfolioApiDataProvider = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState(null);
 
-  console.log("formdata-portctx", formData)
-  console.log("selectedPortfolioId-port-ctx", selectedPortfolioId)
+  // console.log("formdata-portctx", formData)
+  // console.log("selectedPortfolioId-port-ctx", selectedPortfolioId)
 
 
   const firstFormData = { ...formData };
 delete firstFormData.url;
 delete firstFormData.media;
 
-const secondFormData = { url: formData.url };
+// const secondFormData = { url: formData.url };
 
 
-console.log("initialData-port-ctx", initialData)
-console.log("First Form Data:", firstFormData);
-console.log("Second Form Data:", secondFormData)
+// console.log("initialData-port-ctx", initialData)
+// console.log("First Form Data:", firstFormData);
+// console.log("Second Form Data:", secondFormData)
 
 
 
@@ -112,15 +112,24 @@ console.log("Second Form Data:", secondFormData)
   };
 
   
+  // const handleAddClick = () => {
+  //   if (portfolios.length === 0) {
+  //     toast.error("No portfolio added!, create some")
+  //   }
+  //   setIsEditing(false);
+  //   setSelectedPortfolioId(null);
+  //   setSelectedPortfolio(null);
+  //   setFormData(initialData);
+  //   setFormKey((prevKey) => prevKey + 1);
+  // };
+
   const handleAddClick = () => {
-    console.log("add clicked")
     setIsEditing(false);
     setSelectedPortfolioId(null);
     setSelectedPortfolio(null);
     setFormData(initialData);
     setFormKey((prevKey) => prevKey + 1);
-  };
-
+};
   
   
   const submitFirstForm = async (e, onNext) => {

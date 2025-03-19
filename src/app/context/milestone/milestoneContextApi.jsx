@@ -96,7 +96,7 @@ const MilestoneApiDataProvider = (props) => {
     try {
       const res = await processGetAllMilestone(userId);
       const data = res.data.data;
-      console.log("all-milestones-mctx", data);
+      // console.log("all-milestones-mctx", data);
 
       const uniqueJobsMap = data.reduce((acc, current) => {
         const existingJob = acc.get(current.job_id);
@@ -110,7 +110,7 @@ const MilestoneApiDataProvider = (props) => {
       }, new Map());
 
       const filteredJobs = Array.from(uniqueJobsMap.values());
-      console.log("filteredJobs-milectx", filteredJobs);
+      
 
       setAppliedMilestones(filteredJobs);
       setAppliedAllMilestones(data);
@@ -152,7 +152,7 @@ const MilestoneApiDataProvider = (props) => {
   const processGetAllMilestone = async (id) => {
     try {
       const res = await milestoneList(id);
-      console.log("res", res);
+      // console.log("res", res);
       return res;
     } catch (e) {
       throw new Error("Failed to get milestone", e);
@@ -262,45 +262,7 @@ const MilestoneApiDataProvider = (props) => {
     }
   };
 
-  // const handleUpdateMilestone = async (e) => {
-  //   e.preventDefault();
 
-  //   setIsSubmitting(true);
-  //   setTimeout(() => {
-  //     setIsLoading(true);
-  //   }, 200);
-
-  //   try {
-  //     const res = await processUpdateMilestone({
-  //       ...initialMilestone,
-  //       user_id: userId,
-  //       job_id: jobId,
-  //       freelance_id: freelancerId,
-  //       employer_status: "pending",
-  //       freelancer_status: "pending",
-  //       pay_status: "pending",
-  //     });
-  //     // console.log("res-milestone", res)
-  //     if (res) {
-  //       await fetchMilestones();
-  //       toast.success("Job applied successfully");
-  //     }
-  //   } catch {
-  //     toast.error("Failed to apply");
-  //   } finally {
-  //     setIsSubmitting(false);
-  //     setMilestones({
-  //       ...initialMilestone,
-  //       user_id: userId,
-  //       job_id: jobId,
-  //       freelance_id: freelancerId,
-  //       employer_status: "pending",
-  //       freelancer_status: "pending",
-  //       pay_status: "pending",
-  //     });
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const handleDeleteteMilestone = async () => {
     if (!selectedMilestoneId) {
@@ -349,7 +311,6 @@ const MilestoneApiDataProvider = (props) => {
         addMilestones,
         removeMilestone,
         handleSubmitMilestoneApplication,
-        // handleUpdateMilestone,
         handleDeleteteMilestone,
       }}
     >

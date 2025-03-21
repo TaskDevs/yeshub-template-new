@@ -9,7 +9,7 @@ import { PortfolioApiData } from "../../context/portfolio/portfolioContextApi";
 import Select from "react-select";
 import NewInputField from "../new-input-field";
 import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 
 function FreelancePopup({ submit, id }) {
   const { formData, setFormData, selectedItems, setSelectedItems } =
@@ -85,27 +85,27 @@ function FreelancePopup({ submit, id }) {
                           </div> */}
 
                           <div className="col-lg-12 ">
-                    <div className="p-field p-mb-3">
-                      <label
-                        htmlFor={FREELANCERFIELD.fieldDetail[0].name}
-                        className="p-text-secondary p-d-block p-mb-2 p-font-bold"
-                      >
-                        Rate
-                      </label>
-                      <div className="ls-inputicon-box">
-                        {/* <div className="">
+                            <div className="p-field p-mb-3">
+                              <label
+                                htmlFor={FREELANCERFIELD.fieldDetail[0].name}
+                                className="p-text-secondary p-d-block p-mb-2 p-font-bold"
+                              >
+                                Rate
+                              </label>
+                              <div className="ls-inputicon-box">
+                                {/* <div className="">
                           <i className="fs-input-icon fas fa-map-marker-alt" />
                         </div> */}
-                        <NewInputField
-                          field={FREELANCERFIELD.fieldDetail[0]}
-                          value={formData}
-                          change={(data, field) => {
-                            handleChange(data, field);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+                                <NewInputField
+                                  field={FREELANCERFIELD.fieldDetail[0]}
+                                  value={formData}
+                                  change={(data, field) => {
+                                    handleChange(data, field);
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          </div>
 
                           <div className=" col-lg-12 col-md-12">
                             <div className="ls-inputicon-box ">
@@ -134,26 +134,24 @@ function FreelancePopup({ submit, id }) {
                             </div>
                           </div>
 
-                          {/* <div className="col-md-12">
-                            <TextAreaField
-                              field={FREELANCERFIELD.fieldDetail[1]}
-                              value={formData}
-                              change={handleChange}
-                            />
-                          </div> */}
-
                           <div className="col-md-12">
-                <p  className="p-text-secondary p-d-block p-mb-2 p-font-bold">Description</p>
-                <ReactQuill
-                  theme="snow"
-                  value={formData[FREELANCERFIELD.fieldDetail[1].name] || ""}
-                  onChange={(content) =>
-                    handleChange(FREELANCERFIELD.fieldDetail[1].name, content)
-                  }
-                  style={{ height: "200px" }}
-                  className="mb-5 pb-5"
-                />
-              </div>
+                            <h4> Description</h4>
+                            <ReactQuill
+                              theme="snow"
+                              value={
+                                formData[FREELANCERFIELD.fieldDetail[1].name] ||
+                                ""
+                              }
+                              onChange={(content) =>
+                                handleChange(
+                                  FREELANCERFIELD.fieldDetail[1].name,
+                                  content
+                                )
+                              }
+                              style={{ height: "200px" }}
+                              className="mb-5 pb-4"
+                            />
+                          </div>
 
                           <div className="py-4">
                             <div className="d-flex justify-end gap-3">

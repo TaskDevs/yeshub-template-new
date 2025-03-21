@@ -15,6 +15,8 @@ function CanAppliedJobsPage() {
   const { appliedMilestones } = useContext(MilestoneApiData)
 
   console.log("appliedMilestones-app-pg", appliedMilestones)
+  // console.log("appliedJobs-applied", appliedJobs)
+  console.log("freeleancerid", freelancerId)
 
 
 
@@ -42,6 +44,8 @@ function CanAppliedJobsPage() {
   };
 
   const paginatedItems = getPaginatedItems();
+
+  console.log("paginatedItems", paginatedItems)
 
   
 

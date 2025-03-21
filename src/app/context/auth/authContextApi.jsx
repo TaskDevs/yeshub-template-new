@@ -51,7 +51,7 @@ const AuthApiDataProvider = (props) => {
 
   const processRetrieve = async () => {
     let cookieData = cookieMethods.getCookies();
-    console.log("res-cookieData", cookieData)
+ 
     if (!cookieData.accessToken) return false;
     axios.defaults.headers.common[
       "Authorization"

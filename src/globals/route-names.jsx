@@ -96,6 +96,9 @@ export const candidate = {
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
   APPLIED_JOB_DETAILS: "/applied-job-details/:id",
+  SAVED_JOBS_DETAILS: "/saved-job-details/:id",
+  APPLY_MILESTONE_JOB: "/apply-job/:id",
+  
 };
 
 export const employer = {

@@ -48,7 +48,7 @@ function CanProfilePage() {
   const { setIsLoading, isLoading } = useContext(GlobalApiData)
   const [progress, setProgress] = useState(0);
 
-  // console.log("profileData-profile", profileData);
+  console.log("profileData-profile", profileData);
 
   const handleEditClick = () => {
     if (!skillOptions || skillOptions.length === 0) {
@@ -110,11 +110,12 @@ function CanProfilePage() {
   const updateProgress = async () => {
     let filledSections = 0;
     setIsLoading(true); // Start loading
+    console.log("filledSections", filledSections)
   
     try {
       // Check if profile data is already available
       if (profileData.id) filledSections++;
-    // console.log("profileData-can-profile", profileData);
+    console.log("profileData-profile-progress", profileData);
 
       // Check if education data is retrieved
       const educationData = await processEducationEducation(userId);
@@ -135,9 +136,10 @@ function CanProfilePage() {
       console.error("Error fetching data:", error);
       // Optionally handle the error (e.g., show a toast)
     } finally {
-      setTimeout(() => {
-        setIsLoading(false); 
-      }, 2000)
+      setIsLoading(false); 
+      // setTimeout(() => {
+      //   setIsLoading(false); 
+      // }, 2000)
       
     }
   };

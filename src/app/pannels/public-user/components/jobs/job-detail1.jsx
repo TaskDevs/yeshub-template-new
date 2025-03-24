@@ -156,7 +156,7 @@ function JobDetail1Page() {
 
 														<button
 															type="submit"
-															onClick={() => handleSubmmitApplication()}
+															onClick={() => handleSubmmitApplication(id)}
 															className="site-button"
 														>
 															{" "}

@@ -12,9 +12,6 @@ import { freelancerId } from "../../../../globals/constants";
 function CanAppliedJobCard({ data }) {
 
   const { setSelectedId } = useContext(GlobalApiData);
-  // console.log("freelancerId", freelancerId)
-  // const today = new Date();
-  // console.log("data-app-job", data);
   
 
 
@@ -37,7 +34,7 @@ function CanAppliedJobCard({ data }) {
             to={ `/dashboard-candidate/applied-job-details/${data?.job_id}`}
             className="twm-job-title apply-title"
           >
-            <h4>{freelancerId ? data?.posted_job?.job_title : data?.jobDetails?.job_title}</h4>
+            <h4>{freelancerId ? data?.title : data?.jobDetails?.job_title}</h4>
           </NavLink>
           <span className="twm-job-post-duration">
             Date Applied: {readableDate(data?.created_at)}
@@ -89,6 +86,10 @@ function CanAppliedJobCard({ data }) {
            
           </div>
           
+          <a href={`/dashboard-candidate/applied-job-details/${data?.job_id}`}
+          >
+            <button className="site-button">View Job</button>
+          </a>
         </div>
       </div>
     

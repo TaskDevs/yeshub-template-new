@@ -14,6 +14,8 @@ import React from "react";
 import  { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applied-job-details";
+import CanSavedJobsDetails from "../app/pannels/candidate/components/can-saved-jobs-details";
+import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-milestone";
 
 function CandidateRoutes() {
 	
@@ -37,6 +39,8 @@ function CandidateRoutes() {
 			<Route path={candidate.CHAT} element={<CanChatPage />} />
 			<Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
 			<Route path={candidate.APPLIED_JOB_DETAILS} element={<CanAppliedJobDetails />} />
+			<Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
+			<Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />
 			<Route path="*" element={<Error404Page />} />
 			
 		</Routes>

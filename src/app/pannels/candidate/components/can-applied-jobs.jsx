@@ -5,24 +5,20 @@ import { freelancerId, loadScript } from "../../../../globals/constants";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
 import CanAppliedJobCard from "./can-applied-job-card";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { extractTime } from "../../../../utils/readableDate";
+import { calculateDaysLeft, extractTime } from "../../../../utils/readableDate";
 import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi";
+import Loader from "../../../common/loader";
 
 
 function CanAppliedJobsPage() {
   
-  const {  appliedJobs } = useContext(ApplicationApiData);
-  const { appliedMilestones } = useContext(MilestoneApiData)
-
-  console.log("appliedMilestones-app-pg", appliedMilestones)
-  // console.log("appliedJobs-applied", appliedJobs)
-  console.log("freeleancerid", freelancerId)
-
-
-
+  const {  appliedJobs, isLoading: isLoadingJobs } = useContext(ApplicationApiData);
+  const { appliedMilestones, isLoading  } = useContext(MilestoneApiData)
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; 
   const totalItems = freelancerId ? appliedMilestones.length : appliedJobs.length;
+
+ 
 
   const handlePageChange = (pageNumber) => {
       setCurrentPage(pageNumber);
@@ -31,6 +27,7 @@ function CanAppliedJobsPage() {
   const getPaginatedItems = () => {
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
+      // const days_left = calculateDaysLeft(profile?.start_date, profile?.end_date)
 
       if (freelancerId) {
           return appliedMilestones
@@ -45,7 +42,7 @@ function CanAppliedJobsPage() {
 
   const paginatedItems = getPaginatedItems();
 
-  console.log("paginatedItems", paginatedItems)
+  const combinedIsLoading = isLoading || isLoadingJobs; 
 
   
 
@@ -61,9 +58,14 @@ function CanAppliedJobsPage() {
     loadScript("js/custom.js");
   });
 
+  useEffect(() => {
+    console.log("combinedIsLoading", combinedIsLoading)
+  }, [combinedIsLoading])
+
  
   return (
     <>
+    {combinedIsLoading && <Loader />}
         <div className="twm-right-section-panel candidate-save-job site-bg-gray">
             <SectionRecordsFilter _config={_filterConfig} />
             <div className="twm-jobs-list-wrap">
@@ -71,7 +73,7 @@ function CanAppliedJobsPage() {
                     <p>No applied {freelancerId ? "milestone" : "job"} found.</p>
                 )}
                 <ul>
-                    {paginatedItems.map((item) => (
+                    {paginatedItems.filter((item) =>  calculateDaysLeft(item?.start_date, item?.end_date) > 0).map((item) => (
                         <CanAppliedJobCard
                             data={item}
                             key={item.id}

@@ -4,7 +4,7 @@ export const  FREELANCERFIELD = {
 			name: "rate",
 			label: "Rate",
 			type: "number",
-			placeholder: "",
+			placeholder: "0.00",
 		},
 		{
 			name: "experience",

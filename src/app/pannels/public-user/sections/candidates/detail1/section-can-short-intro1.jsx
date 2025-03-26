@@ -1,10 +1,10 @@
 // import JobZImage from "../../../../../common/jobz-img";
-import {  useState } from "react";
+// import {  useState } from "react";
 import { publicUrlFor } from "../../../../../../globals/constants";
 
 
 function SectionCandidateShortIntro1({ props, isFreelancer, freelance }) {
-	const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.user?.profile_image}`);
+	// const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.user?.profile_image}`);
 
 
 
@@ -22,14 +22,16 @@ function SectionCandidateShortIntro1({ props, isFreelancer, freelance }) {
 					<div className="twm-candi-self-info">
 						<div className="twm-candi-self-top">
 							{isFreelancer && (<div className="twm-candi-fee">₵{freelance[0]?.rate || "200"} / Day</div>)}
-							<div className="twm-media can-banner-logo">
-								{/* <JobZImage src="images/candidates/pic2.jpg" alt="#" /> */}
-								{/* <img src={`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${props?.profile_image}`} alt="user picture" /> */}
+							{/* can-logo-wrapper */}
+							<div className="">
+							<div className=" can-banner-logo twm-media-pic ">
+							{/* twm-media can-banner-logo twm-media-pic */}
 								<img 
-                    src={imgSrc} 
+                    src={props?.user?.profile_image || "/assets/images/candidates/user-avatar-fallback.jpg"} 
                     alt="user picture" 
-                    onError={() => setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")} 
+                    // onError={() => setImgSrc("/assets/images/candidates/user-avatar-fallback.jpg")} 
                 />
+							</div>
 							</div>
 							<div className="twm-mid-content">
 								<h4 className="twm-job-title">{props?.user?.firstname} {props?.user?.lastname} </h4>

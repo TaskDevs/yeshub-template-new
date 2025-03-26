@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import CandidateCard from "./candidate-card";
+import Loader from "../../../../common/loader";
 // import { SkillsApiData } from "../../../../context/skills/skillsContextApi";
 
 function CandidateListPage() {
@@ -45,7 +46,7 @@ function CandidateListPage() {
   });
 
   if (totalItems=== 0) {
-    return <div>Loading...</div>
+    return <Loader />
   }
 
   return (

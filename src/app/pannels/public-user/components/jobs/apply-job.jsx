@@ -34,6 +34,13 @@ function ApplyJobPage() {
   const { id } = useParams();
   console.log("id-params", id)
 
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSubmitMilestoneApplication(id)
+  }
+
+
   return (
     <>
       <div
@@ -52,7 +59,7 @@ function ApplyJobPage() {
                 Apply For This Job
               </h3>
 
-              <form onSubmit={handleSubmitMilestoneApplication}>
+              <form onSubmit={handleSubmit}>
                 <div className="">
                   <p className="twm-s-title-text">
                     How do you want to be paid?

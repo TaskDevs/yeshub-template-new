@@ -13,7 +13,7 @@ function CanAppliedJobCard({ data }) {
 
   const { setSelectedId } = useContext(GlobalApiData);
   
-
+  // console.log("appliedMilestones", data)
 
 
   return (
@@ -26,7 +26,7 @@ function CanAppliedJobCard({ data }) {
         }}
       >
         <div className="twm-media">
-          <img src={data?.jobDetails?.employer?.logo} alt="company logo" />
+          <img src={ data?.jobDetails?.employer?.logo} alt="company logo" />
         </div>
         <div className="twm-mid-content">
           <NavLink
@@ -34,7 +34,7 @@ function CanAppliedJobCard({ data }) {
             to={ `/dashboard-candidate/applied-job-details/${data?.job_id}`}
             className="twm-job-title apply-title"
           >
-            <h4>{freelancerId ? data?.title : data?.jobDetails?.job_title}</h4>
+            <h4>{freelancerId ? data?.posted_job?.job_title : data?.jobDetails?.job_title}</h4>
           </NavLink>
           <span className="twm-job-post-duration">
             Date Applied: {readableDate(data?.created_at)}

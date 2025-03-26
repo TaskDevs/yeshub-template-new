@@ -83,7 +83,7 @@ Portfolio(s):
                 ? (() => {
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = data.experience;
-                    console.log("tempDiv.innerHTML", tempDiv.innerHTML);
+                    // console.log("tempDiv.innerHTML", tempDiv.innerHTML);
                     const capitalizeFirstLetterOfSentences = (htmlString) => {
                         return htmlString.replace(/([.!?]\s*)(\w)/g, (match, punctuation, char) => {
                             return punctuation + char.toUpperCase();

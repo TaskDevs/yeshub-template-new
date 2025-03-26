@@ -4,26 +4,37 @@ import InputField from "../../../common/input-field";
 import { useContext } from "react";
 import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi";
 import { MILESTONEFIELD } from "../../../../globals/milestone-data";
+import { GlobalApiData } from "../../../context/global/globalContextApi";
+import { useParams } from "react-router-dom";
 
 function CanApplyMilestone() {
-    const {
-        formData,
-        selectedOption,
-        setSelectedOption,
-        setFormData,
-        milestones,
-        addMilestones,
-        removeMilestone,
-        handleSubmitMilestoneApplication,
-      } = useContext(MilestoneApiData);
+  const {
+    formData,
+    selectedOption,
+    setSelectedOption,
+    setFormData,
+    milestones,
+    addMilestones,
+    removeMilestone,
+    handleSubmitMilestoneApplication,
+  } = useContext(MilestoneApiData);
 
-    
+  const { isSubmitting } = useContext(GlobalApiData);
+  const { id } = useParams();
+  console.log("id-params", id);
+
   const handleChange = (field, data) => {
     setFormData({
       ...formData,
       [field]: data,
     });
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSubmitMilestoneApplication(id)
+  }
+
 
 
   return (
@@ -41,7 +52,7 @@ function CanApplyMilestone() {
               Apply For This Job
             </h3>
 
-            <form onSubmit={handleSubmitMilestoneApplication}>
+            <form onSubmit={handleSubmit}>
               <div className="">
                 <p className="twm-s-title-text">How do you want to be paid?</p>
                 <div className="">
@@ -152,7 +163,7 @@ function CanApplyMilestone() {
 
               <div className="btn-show-more  ">
                 <button className="site-button" type="submit">
-                  Submit
+                  {isSubmitting ? "Submitting" : "Submit"}
                 </button>
               </div>
             </form>
@@ -162,6 +173,5 @@ function CanApplyMilestone() {
     </>
   );
 }
-
 
 export default CanApplyMilestone;

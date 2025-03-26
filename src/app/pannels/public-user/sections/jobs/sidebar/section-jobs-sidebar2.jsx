@@ -32,7 +32,8 @@ function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
 
   return (
     <>
-      <div className="side-bar mb-4">
+    
+      <div className= "side-bar mb-4" >
         <div className="twm-s-info2-wrap mb-5">
           <div className="twm-s-info2">
             <h4 className="section-head-small mb-4">Job Information</h4>

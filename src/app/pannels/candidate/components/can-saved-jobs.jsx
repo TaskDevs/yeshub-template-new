@@ -5,6 +5,7 @@ import { useJobCartStore } from "../../../../utils/useJobCartStore";
 import { NavLink } from "react-router-dom";
 import { Chip } from 'primereact/chip';
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
+import Loader from "../../../common/loader";
 
 function CanSavedJobsPage() {
     const { jobs, removeJob } = useJobCartStore();
@@ -12,7 +13,7 @@ function CanSavedJobsPage() {
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState(false);
 
-console.log("appliedJobs-saved", appliedJobs)
+// console.log("appliedJobs-saved", appliedJobs)
 
     useEffect(() => {
         loadScript("js/custom.js");
@@ -27,7 +28,7 @@ console.log("appliedJobs-saved", appliedJobs)
     };
 
    if (appliedJobs.length === 0 ) {
-    return <div className="">Loading...</div>
+    return <Loader />
    }
 
     return (

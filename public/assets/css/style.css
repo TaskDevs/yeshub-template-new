@@ -6525,6 +6525,7 @@ button.scroltop span {
   padding: 30px;
   border-radius: 10px;
 }
+
 @media (max-width: 991px) {
   .side-bar {
     margin-bottom: 30px;
@@ -13444,8 +13445,17 @@ strong {
   }
 }
 .can-banner-logo {
-  width: 150px;
+  width: 50%;
+  
+  
 }
+.can-logo-wrapper {
+  display: flex;
+  justify-content: center;
+  background: red;
+  width: 100%;
+}
+
 .twm-dashboard-candidates-wrap .twm-dash-candidates-list .twm-media {
   width: 70px;
   display: inline-block;

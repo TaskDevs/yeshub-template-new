@@ -33,7 +33,8 @@ const MilestoneApiDataProvider = (props) => {
   const [selectedMilestoneId, setSelectedMilestoneId] = useState(null);
   const [appliedMilestones, setAppliedMilestones] = useState([]);
   const [appliedAllMilestones, setAppliedAllMilestones] = useState([]);
-  const { setIsSubmitting, setIsLoading } = useContext(GlobalApiData);
+  const { setIsSubmitting } = useContext(GlobalApiData);
+  const [isLoading, setIsLoading ] = useState(false);
   const [jobMilestones, setJobMilestones] = useState([])
   const [jobId, setJobId] = useState(
     () => sessionStorage.getItem("job_id") || ""
@@ -83,7 +84,7 @@ const MilestoneApiDataProvider = (props) => {
 
   useEffect(() => {
     if (sessionStorageUpdated) {
-      setSessionStorageUpdated(false); // Reset signal
+      setSessionStorageUpdated(false); 
     }
   }, [sessionStorageUpdated]);
 
@@ -208,32 +209,29 @@ const MilestoneApiDataProvider = (props) => {
     });
   };
 
-  const handleSubmitMilestoneApplication = async (e) => {
-    e.preventDefault();
-
+  const handleSubmitMilestoneApplication = async (id) => {
+   console.log("handleSubmitMilestoneApplication-id", id)
     if (selectedOption === "project") {
       toast.error("Sorry, we're still working on this project");
       return;
     }
 
-    if (appliedMilestones?.some((job) => job.job_id === Number(jobId))) {
+    if (appliedMilestones?.some((job) => job.job_id === Number(id))) {
       toast.error("You have already applied for this job");
       return;
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsLoading(true);
-    }, 200);
+    setIsLoading(true);
 
     try {
       const res = await processAddMilestone({
         milestones: milestones,
       });
       // console.log("res-milestone", res)
-      if (res) {
-        await fetchMilestones();
+      if (res) {     
         navigate(`/dashboard-candidate/applied-jobs`);
+        await fetchMilestones();
         setTimeout(() => {
           toast.success("Job applied successfully");
         }, 3000);
@@ -249,16 +247,14 @@ const MilestoneApiDataProvider = (props) => {
         {
           ...initialMilestone,
           user_id: userId,
-          job_id: jobId,
+          job_id: id,
           freelance_id: freelancerId,
           employer_status: "pending",
           freelancer_status: "pending",
           pay_status: "pending",
         },
       ]);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
+      setIsLoading(false);
     }
   };
 
@@ -290,7 +286,7 @@ const MilestoneApiDataProvider = (props) => {
         selectedOption,
         milestones,
         jobMilestones, 
-        
+        isLoading,
         appliedMilestones,
         selectedMilestoneId,
         setJobMilestones,

@@ -25,7 +25,8 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
 
   const [appliedJobs, setAppliedJobs] = useState([]);
-  const {  selectedId, setSelectedId, setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+  const {  selectedId, setSelectedId, setIsSubmitting } = useContext(GlobalApiData)
+  const [isLoading, setIsLoading ] = useState(false);
   const { processAJobProfile } = useContext(JobApiData)
   const currentpath = useLocation().pathname;
   const [profile, setProfile] = useState({});
@@ -293,7 +294,8 @@ const ApplicationApiDataProvider = (props) => {
 		<ApplicationApiData.Provider
       value={{
         
-        appliedJobs, 
+        appliedJobs,
+        isLoading, 
         setAppliedJobs,
         fetchProfileAndMatchJobs,    
 				processAddApplication,

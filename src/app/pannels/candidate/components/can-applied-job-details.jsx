@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GlobalApiData } from "../../../context/global/globalContextApi";
+// import { GlobalApiData } from "../../../context/global/globalContextApi";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
 import readableDate from "../../../../utils/readableDate";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
@@ -9,26 +9,30 @@ import { MilestoneApiData } from "../../../context/milestone/milestoneContextApi
 import { FaRegTrashCan } from "react-icons/fa6";
 import { MdOutlineEdit } from "react-icons/md";
 import SectionEditMilestone from "../../public-user/sections/jobs/section-edit-milestone";
+import Loader from "../../../common/loader";
 
 
 
 
 function CanAppliedJobDetails() {
-  const [profile, setProfile] = useState({});
-  const { setIsLoading } = useContext(GlobalApiData);
+  // const [_profile, setProfile] = useState({});
+  const [isLoading, setIsLoading ] = useState(false);
+  // const { setIsLoading } = useContext(GlobalApiData);
   const { processAJobProfile } = useContext(JobApiData);
   const { appliedJobs } = useContext(ApplicationApiData);
   const {
       processGetAllMilestone,
       jobMilestones,
-      setJobMilestones,
+      // setJobMilestones,
       selectedMilestoneId,
       setSelectedMilestoneId,
   } = useContext(MilestoneApiData);
 
+  const [milestoneData, setMilestoneData] = useState([])
   const [milestoneToEdit, setMilestoneToEdit] = useState(null);
   const { id } = useParams();
- 
+
+  // console.log("selectedMilestoneId-details", selectedMilestoneId)
 
   const handleEditClick = (milestone) => {
       setMilestoneToEdit({
@@ -47,30 +51,32 @@ function CanAppliedJobDetails() {
 
   const milestoneToEditData = jobMilestones.find((m) => m.id === selectedMilestoneId);
 
-  // console.log("jobMilestones-app-details", jobMilestones);
+  console.log("jobMilestones-app-details", jobMilestones);
+  console.log("milestoneData-details", milestoneData)
 
-  const milestoneJobDetails = jobMilestones[0]?.posted_job;
+  const milestoneJobDetails = milestoneData[0]?.posted_job;
 
   const applicationData = appliedJobs?.find((application) => application.job_id === Number(id));
 
   // console.log("applicationData", applicationData);
 
   const getJob = async () => {
+    setIsLoading(true);
       try {
           const [data1, data2] = await Promise.all([
               processAJobProfile(id),
               processGetAllMilestone(userId),
           ]);
 
-          // console.log("data1-applied-details", data1);
+          console.log("data1-applied-details", data1);
           // console.log("data2-applied-details", data2.data.data);
           const milestones = data2.data.data;
 
           const uniqueJobMilestones = milestones.filter((m) => m.job_id === id);
           console.log("uniqueJobMilestones", uniqueJobMilestones);
 
-          setProfile(data1.data);
-          setJobMilestones(uniqueJobMilestones);
+          // setProfile(data1.data);
+          setMilestoneData(uniqueJobMilestones);
 
           // Pre-select the first milestone if available
           if (uniqueJobMilestones.length > 0 && !selectedMilestoneId) {
@@ -79,33 +85,31 @@ function CanAppliedJobDetails() {
       } catch (error) {
           console.error("Error fetching candidate data:", error);
       } finally {
-          setTimeout(() => {
-              setIsLoading(false);
-          }, 3000);
+        setIsLoading(false);
       }
   };
 
   useEffect(() => {
-      setTimeout(() => {
-          setIsLoading(true);
-      }, 200);
-
       getJob();
   }, [id, userId]);
 
-  console.log("profile-jobs-detail", profile);
+  
+  // console.log("profile-jobs-detail", profile);
 
-  if (freelancerId && jobMilestones.length === 0) {
-      return <div>Loading...</div>;
-  }
+  // if (freelancerId && jobMilestones.length === 0) {
+  //     return <Loader />;
+  // }
 
-  if (!freelancerId && !applicationData?.id) {
-    return <div>Loading...</div>;
-  }
+  // if (!freelancerId && !applicationData?.id) {
+  //   return <Loader />;
+  // }
 
   return (
       <>
-        
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
           <div className="twm-right-section-panel site-bg-gray applied-wrapper">
             
               <div className="section-full p-t120 p-b90 bg-white">
@@ -157,7 +161,7 @@ function CanAppliedJobDetails() {
                                       <div dangerouslySetInnerHTML={{ __html: milestoneJobDetails?.description }} />
                                       <h4 className="twm-s-title">Milestones:</h4>
                                       <ol className="d-flex gap-4" style={{ flexDirection: "column" }}>
-                                          {jobMilestones?.map((milestone) => (
+                                          {milestoneData?.map((milestone) => (
                                               <li
                                                   className="mb-2 d-flex"
                                                   style={{ borderBottom: "1px solid #d5d5d5", justifyContent: "space-between", alignItems: "center" }}
@@ -298,8 +302,7 @@ function CanAppliedJobDetails() {
                                     <a
                                       className=""
                                       href={applicationData?.jobDetails?.employer?.website}
-                                      target="_blank"
-                                      rel="noreferrer"
+                                      
                                     >
                                       link
                                     </a>
@@ -320,12 +323,13 @@ function CanAppliedJobDetails() {
         </div>
       </div>
 
-      {/* <SectionEditMilestone data={milestoneToEdit}/> */}
       <SectionEditMilestone
         data={milestoneToEditData}
         milestone={milestoneToEdit}
         setMilestone={setMilestoneToEdit}
       />
+      </>
+                        )}
     </>
   );
 }

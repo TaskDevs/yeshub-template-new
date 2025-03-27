@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 import { JobApiData } from '../../../context/jobs/jobsContextApi';
 import { ApplicationApiData } from '../../../context/application/applicationContextApi';
 import readableDate from '../../../../utils/readableDate';
-import { baseURL } from '../../../../globals/constants';
+import { baseURL, publicUrlFor } from '../../../../globals/constants';
 import { GlobalApiData } from '../../../context/global/globalContextApi';
 import SectionJobsSidebar2 from '../../public-user/sections/jobs/sidebar/section-jobs-sidebar2';
+import Loader from '../../../common/loader';
 
 function CanSavedJobsDetails() {
     const { id } = useParams();
@@ -14,6 +15,7 @@ function CanSavedJobsDetails() {
     const [job, setJobs] = useState(null)
     const { handleSubmmitApplication } = useContext(ApplicationApiData);
 
+    sessionStorage.setItem("job_id", id)
 
     useEffect(() =>{
         
@@ -34,8 +36,11 @@ function CanSavedJobsDetails() {
 
 
     if (!job?.id) {
-        return <div>Loading...</div>
+        return <Loader />
     }
+
+
+   
 
     return (
         <>
@@ -56,18 +61,32 @@ function CanSavedJobsDetails() {
                                 <div className="cabdidate-de-info">
                                 <div className="twm-job-self-wrap">
                                     <div className="twm-job-self-info">
+                                    
                                         <div className="twm-job-self-top">
-                                            <div className="twm-media-bg">
-                                            <img
-                                            src={
-                                                job?.employer?.banner
-                                                ? `${job?.employer?.banner}`
-                                                : `${baseURL}/assets/images/no-logo.png`
-                                            }
-                                            alt="#"
-                                            />
+                                            { job?.employer?.banner ? (
+                                                // twm-media-bg
+                                                <div className="">
+                                                <img
+                                                src={`${job?.employer?.banner}`} 
+                                                alt="#"
+                                                />
+                                                   
+                                                </div>
+                                            ) : (
+                                                <div
+                                                className="wt-bnr-inr overlay-wraper bg-center"
+                                              //   className="twm-candi-self-wrap overlay-wraper"
+                                                style={{
+                                                    backgroundImage: `url(${publicUrlFor(
+                                                        "images/candidates/candidate-bg.jpg"
+                                                    )})`,
+                                                }}
+                                              >
                                                
-                                            </div>
+                                                <div className="overlay-main site-bg-white opacity-01" />
+                                              </div>
+                                            )}
+                                            
                                             <div className="twm-mid-content">
                                                 <div className="twm-media">
                                                     <img
@@ -136,8 +155,8 @@ function CanSavedJobsDetails() {
              
                                 
                             </div>
-
-                            <div className="col-lg-4 col-md-12 rightSidebar">
+                            {/* col-lg-4 col-md-12 rightSidebar */}
+                            <div className="">
 								<SectionJobsSidebar2 _config={job} showAdvert={false} />
 							</div>
                                 

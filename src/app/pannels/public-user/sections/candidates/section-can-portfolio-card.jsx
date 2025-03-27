@@ -15,12 +15,33 @@ function SectionCanPortfolioCard({data}) {
     )}</div>
     <div className="twm-time-list-title">{data?.project_title}</div>
     {/* <div className="twm-time-list-position">{data?.qualification}</div> */}
-    <div className="twm-time-list-position">{data?.
+    <div className="twm-time-list-discription">{data?.
 skills
 }</div>
-    <div className="twm-time-list-discription">
+    {/* <div className="twm-time-list-discription">
         <p>{data?.description}</p>
-    </div>
+    </div> */}
+    <div className="twm-time-list-discription">
+    {/* <p className="" style={{ fontWeight: "bold" }}>Experience: </p> */}
+    <div
+        className=""
+        dangerouslySetInnerHTML={{
+            __html: data?.description
+                ? (() => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data.description;
+                    // console.log("tempDiv.innerHTML", tempDiv.innerHTML);
+                    const capitalizeFirstLetterOfSentences = (htmlString) => {
+                        return htmlString.replace(/([.!?]\s*)(\w)/g, (match, punctuation, char) => {
+                            return punctuation + char.toUpperCase();
+                        }).toLowerCase(); // Ensure the rest of the text is lowercase
+                    };
+                    return capitalizeFirstLetterOfSentences(tempDiv.innerHTML);
+                })()
+                : '',
+        }}
+    />
+</div>
     <div className="twm-time-list-position">
       {data?.media?.map((url) => (
         <a key={url.id} href={url.url} target="_blank" rel="noreferrer">

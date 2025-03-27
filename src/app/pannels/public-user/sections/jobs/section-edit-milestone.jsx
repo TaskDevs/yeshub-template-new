@@ -50,7 +50,7 @@ function SectionEditMilestone({  data, milestone, setMilestone }) {
     }, 200);
 
     try {
-        const res = await processUpdateMilestone(milestone?.id, {
+        const res = await processUpdateMilestone(data?.id, {
             ...milestone, 
         });
 

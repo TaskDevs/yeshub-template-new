@@ -38,6 +38,24 @@ export const searchProfile = async () => {
   }
 };
 
+export const updateUserLogo = async (id, data) => {
+  try {
+    let responseOnUpdateUser = await axios.put(
+      `${REACT_BASE_URL}upload/user-logo/${id}`,
+      data
+    );
+    console.log(responseOnUpdateUser);
+    return responseOnUpdateUser.data;
+    // if (responseOnUpdateUser.status == 200) {
+    //   return responseOnUpdateUser.data;
+    // } else {
+    //   return false;
+    // }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // LIST Profile
 /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
 export const profileList = async () => {

@@ -25,6 +25,7 @@ export const publicUser = {
   HOME17: "/index17",
   HOME18: "/index18",
   TEST: "/test",
+  ONBOARD: "/dashboard/onboard",
 
   jobs: {
     GRID: "/job-grid",
@@ -34,7 +35,7 @@ export const publicUser = {
     DETAIL2: "/job-detail/2",
     SEARCH: "/jobs-search/:category/:type/:location",
     AVAILABLE: "/jobs-available",
-    APPLY: "/apply-job/:id"
+    APPLY: "/apply-job/:id",
   },
   employer: {
     GRID: "/emp-grid",

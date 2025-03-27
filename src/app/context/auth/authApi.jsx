@@ -185,15 +185,15 @@ export const changePassword = async (data) => {
 //   window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect?role=${data}`;
 // };
 
-export const loginWithGoogle = (role) => {
-  const url = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect?role=${role}`;
+export const loginWithGoogle = () => {
+  const url = `${process.env.REACT_APP_BACKEND_HOST}/auth/google/redirect`;
   console.log("Redirecting to:", url); // Debugging
   window.location.href = url;
 };
 
 
-export const loginWithLinkedIn = async (data) => {
-  window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/redirect/linkedin?role=${data}`;
+export const loginWithLinkedIn = async () => {
+  window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/redirect/linkedin`;
 };
 
 // Logout

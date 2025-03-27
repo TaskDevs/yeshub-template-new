@@ -43,39 +43,14 @@ function SignUpPopup() {
     }
   };
 
-  // const handleChange = (data, field) => {
-  //   setFormData({
-  //     ...formData,
-  //     [data]: field,
-  //   });
-  // };
-
-
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
-
-  
-
-
-
-
-
   const googleSignin = async ()=>{
-    await loginWithGoogle(formData.role)
+    await loginWithGoogle()
     
   }
-
     const linkedinSignin = async ()=>{
-      await loginWithLinkedIn(formData.role)
+      await loginWithLinkedIn()
       
     }
-
     const handleSubmit = async (e) => {
       e.preventDefault();
       setIsSubmitting(true);
@@ -163,44 +138,6 @@ function SignUpPopup() {
                       </div>
                     )}
 
-                    <ul className="nav nav-tabs" id="myTab" role="tablist">
-                      {/* Signup Candidate */}
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
-                            formData.role === "user" ? "active" : ""
-                          }`}
-                          data-bs-toggle="tab"
-                          type="button"
-                          aria-selected={formData.role === "user"}
-                          onClick={() =>
-                            handleChange({
-                              target: { name: "role", value: "user" },
-                            })
-                          }
-                        >
-                          <i className="fas fa-user-tie" /> Candidate
-                        </button>
-                      </li>
-                      {/* Signup Employer */}
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
-                            formData.role === "employer" ? "active" : ""
-                          }`}
-                          data-bs-toggle="tab"
-                          type="button"
-                          aria-selected={formData.role === "employer"}
-                          onClick={() =>
-                            handleChange({
-                              target: { name: "role", value: "employer" },
-                            })
-                          }
-                        >
-                          <i className="fas fa-building" /> Employer
-                        </button>
-                      </li>
-                    </ul>
 
                     {SIGNUPFIELD.fieldDetail.map((field, index) =>
                       field.name !== "role" ? ( // Exclude role from the mapped fields

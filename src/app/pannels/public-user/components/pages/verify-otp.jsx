@@ -34,11 +34,14 @@ function VerifyOtp() {
     try {
       const response = await verifyOtp({ email, otp });
       console.log("API Response:", response);
+    
 
       if (response?.success === true) { // Ensure response is true boolean
         setSuccess(true);
         setErrorMessage("");
-        setTimeout(() => navigate("/login"), 2000);
+        const userId = response?.user?.id
+     
+        setTimeout(() => navigate("/welcome-onboarding",  { state: {  userId:userId } }), 2000);
       } else {
         setSuccess(false);
         setErrorMessage(response?.message || "Invalid OTP. Please try again.");

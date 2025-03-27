@@ -100,6 +100,14 @@ function CanSidebarSection() {
 								Saved Jobs
 							</NavLink>
 						</li>
+						<li
+							className={setMenuActive(currentpath, canRoute(candidate.CHAT))}
+						>
+							<NavLink to={canRoute(candidate.CHAT)}>
+								<i className="fa fa-comments" />
+								Chat
+							</NavLink>
+						</li>
 						
 						{/* <li
 							className={setMenuActive(
@@ -139,14 +147,7 @@ function CanSidebarSection() {
 								Change Password
 							</NavLink>
 						</li>
-						<li
-							className={setMenuActive(currentpath, canRoute(candidate.CHAT))}
-						>
-							<NavLink to={canRoute(candidate.CHAT)}>
-								<i className="fa fa-comments" />
-								Chat
-							</NavLink>
-						</li>
+						
 						<li
 							className={setMenuActive(
 								currentpath,

@@ -56,7 +56,7 @@ console.log(jobs)
                                     </p> */}
                             
                                     <div className="flex flex-wrap gap-2">
-                                      {job?.skill.map((skill, index) => (
+                                      {job?.skill?.map((skill, index) => (
                                           <div className=" flex flex-wrap gap-2" key={index}>
                                              <Chip label={skill} /> 
                                        

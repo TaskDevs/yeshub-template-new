@@ -5,9 +5,10 @@ import { useEffect, useContext, useState } from "react";
 import { JobApiData } from "../../../context/jobs/jobsContextApi";
 import { AuthApiData } from "../../../context/auth/authContextApi";
 import { ApplicationApiData } from "../../../context/application/applicationContextApi";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function EmpDashboardPage() {
+  const navgate = useNavigate()
   const { userProfile } = useContext(AuthApiData);
   const username = userProfile?.username;
   const employerId = sessionStorage.getItem("user_id");
@@ -40,6 +41,11 @@ function EmpDashboardPage() {
 
     fetchData();
   }, [employerId]);
+
+
+  const navigateEmp =(id) =>{
+    navgate(`/can-detail/${id}`)
+  }
 
   return (
     <>
@@ -347,7 +353,7 @@ function EmpDashboardPage() {
                               </div>
                               <div className="twm-mid-content">
                                 <a href="#" className="twm-job-title">
-                                  <h4>
+                                  <h4 className="text-capitalize">
                                   {`${item.user?.user_info?.firstname || "Candidate"} ${item.user?.user_info?.lastname || ""}`.trim()}
 
                                   </h4>
@@ -370,13 +376,16 @@ function EmpDashboardPage() {
                                   <div className="twm-right-btn">
                                     <ul className="twm-controls-icon list-unstyled">
                                       <li>
+                                       
                                         <button
                                           title="View profile"
                                           data-bs-toggle="tooltip"
                                           data-bs-placement="top"
+                                          onClick={()=>navigateEmp(item.user?.id)}
                                         >
                                           <span className="fa fa-eye" />
                                         </button>
+                                       
                                       </li>
                                       <li>
                                         <button

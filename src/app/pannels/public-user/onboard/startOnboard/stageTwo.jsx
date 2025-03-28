@@ -1,8 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaBriefcase, FaUserTie } from "react-icons/fa6";
 
 const StageTwo = () => {
   const [selectedOption, setSelectedOption] = useState("");
+
+  const navigate = useNavigate();
+
+  let handleCreateAccount = () => {
+    selectedOption == "client" && navigate("client");
+    selectedOption == "freelancer" && navigate("freelancer");
+  };
 
   return (
     <div className="container mt-8 text-center">
@@ -10,7 +18,7 @@ const StageTwo = () => {
         What do you want to do on Yeshub?
       </h4>
 
-      <div className="d-flex flex-row flex-md-row justify-content-center gap-4">
+      <div className="d-flex flex-sm-col flex-md-row justify-content-center gap-4">
         {/* Client Option */}
         <div
           className={`option-card ${
@@ -59,7 +67,18 @@ const StageTwo = () => {
       </div>
 
       <div className="mt-6">
-        <button className="btn btn-success text-sm">Create Account</button>
+        {selectedOption !== "" ? (
+          <button
+            className="btn btn-success text-sm"
+            onClick={handleCreateAccount}
+          >
+            Create Account
+          </button>
+        ) : (
+          <span className="btn btn-secondary text-sm disabled">
+            Create Account
+          </span>
+        )}
       </div>
     </div>
   );

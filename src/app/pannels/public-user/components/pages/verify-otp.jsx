@@ -41,7 +41,8 @@ function VerifyOtp() {
         setErrorMessage("");
         const userId = response?.user?.id
      
-        setTimeout(() => navigate("/welcome-onboarding",  { state: {  userId:userId } }), 2000);
+        setTimeout(() => navigate(`/dashboard/onboard?user=${userId}`), 2000);
+
       } else {
         setSuccess(false);
         setErrorMessage(response?.message || "Invalid OTP. Please try again.");

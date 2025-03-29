@@ -2,18 +2,18 @@ import Header1 from "../app/common/header/header1";
 import CandidateRoutes from "../routing/candidate-routes";
 import SignUpPopup from "../app/common/popups/popup-signup";
 import SignInPopup from "../app/common/popups/popup-signin";
-import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
+// import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
 import { useLocation } from "react-router-dom";
 import { getHeaderConfig } from "../globals/layout-config";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
-import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
-import { useContext } from "react";
+// import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
+// import { useContext } from "react";
 
 
 function CandidateLayout() {
   const currentpath = useLocation().pathname;
-  const { isSidebarCollapsed } = useContext(ProfileApiData);
+  // const { isSidebarCollapsed } = useContext(ProfileApiData);
 
   return (
     <>
@@ -25,8 +25,9 @@ function CandidateLayout() {
           {/* "col-xl-3 col-lg-4 col-md-12 rightSidebar m-b30 */}
 
           <div className="section-full p-t120  p-b90 site-bg-white">
-            <div className="container">
-              {/* row */}
+          <CandidateRoutes />
+            {/* <div className="container">
+              row
               <div className="row">
                 <div
                   // col-md-12 col-xl-3 col-lg-4 col-md-12
@@ -34,7 +35,7 @@ function CandidateLayout() {
                     isSidebarCollapsed ? "collapsed" : ""
                   }`}
                 >
-                  {/* side-bar-st-1 */}
+                  side-bar-st-1
                   <div className="side-bar-st-1">
                     <CanSidebarSection />
                   </div>
@@ -43,7 +44,7 @@ function CandidateLayout() {
                   <CandidateRoutes />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

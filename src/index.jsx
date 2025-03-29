@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 //import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
+import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import "primereact/resources/themes/lara-light-blue/theme.css"; // Theme
 import "primereact/resources/primereact.min.css"; // Core CSS

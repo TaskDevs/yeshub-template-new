@@ -8,6 +8,7 @@ import ProgressBar from "../progressbar";
 
 const FreelancerOnboard = () => {
   const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({});
   useEffect(() => {
     loadScript("js/anm.js");
     loadScript("js/custom.js");
@@ -30,6 +31,7 @@ const FreelancerOnboard = () => {
   };
 
   const handleCreateAccount = () => {
+    console.log(formData);
     navigate("/dashboard/Onboard/create-account");
   };
 
@@ -38,9 +40,9 @@ const FreelancerOnboard = () => {
       <div className="container mt-6">
         <span className="text-sm">{step}/3</span>
       </div>
-      {step == 1 && <FreelanceStageOne />}
-      {step == 2 && <FreelanceStageTwo />}
-      {step == 3 && <FreelanceStageThree />}
+      {step == 1 && <FreelanceStageOne forms={[formData, setFormData]} />}
+      {step == 2 && <FreelanceStageTwo forms={[formData, setFormData]} />}
+      {step == 3 && <FreelanceStageThree forms={[formData, setFormData]} />}
       <div className="progressbar-container">
         <ProgressBar step={[step, total]} />
       </div>

@@ -147,8 +147,66 @@ export const START_USER_PROFILE_FIELD = {
   fieldDetailFour: [
     {
       name: "bio",
-      label: "Bio",
+      label: "",
       type: "text",
+      rows: 7,
+      placeholder: "",
+    },
+  ],
+};
+
+export const START_CLIENT_PROFILE_FIELD = {
+  fieldDetailOne: [
+    {
+      name: "company-name",
+      label: "Company Name",
+      type: "text",
+      placeholder: "Eg Yeshub",
+    },
+    {
+      name: "website",
+      label: "Website",
+      type: "text",
+      placeholder: "www.yeshub.com",
+    },
+  ],
+  fieldDetailTwo: {
+    name: "job-title",
+    label: "Write a title for your Job post",
+    type: "text",
+    placeholder: "Eg Graphic design needed",
+  },
+  fieldDetailThree: {
+    name: "skills",
+    label: "Search skills or add your own",
+    type: "text",
+    placeholder: "",
+  },
+  fieldDetailFour: [
+    {
+      name: "hourly_rate_start",
+      label: "From (GH)",
+      type: "number",
+      placeholder: "50.00",
+    },
+    {
+      name: "hourly_rate_end",
+      label: "End (GH)",
+      type: "number",
+      placeholder: "200.00",
+    },
+
+    {
+      name: "fixed_rate",
+      label: "Fixed Rate (GH)",
+      type: "number",
+      placeholder: "2000.00",
+    },
+    {
+      name: "bio",
+      label: "Describe what you need",
+      type: "text",
+      rows: 7,
       placeholder: "",
     },
   ],

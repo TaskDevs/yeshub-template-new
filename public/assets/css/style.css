@@ -27853,6 +27853,20 @@ HOME PAGE 15 START
   object-fit: cover; /* Prevent distortion */
 }
 
+.img-fill-page {
+  object-fit: cover;
+  width: 70%;
+  margin: auto;
+}
+
+.test-border {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 55vh;
+  text-align: center;
+}
+
 .img-fixed-two {
   width: 100px; /* Set fixed width */
   height: 100px; /* Set fixed height */
@@ -27925,6 +27939,18 @@ HOME PAGE 15 START
   display: flex;
   align-items: center;
   margin-top: 5%;
+}
+
+.progress-container-two {
+  width: 100vw;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  margin-top: 0%;
+}
+
+.w-text {
+  width: 100%;
 }
 
 .progress-bar {

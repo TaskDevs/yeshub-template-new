@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const FreelanceStageOne = () => {
+const FreelanceStageOne = ({ forms }) => {
   const [selectedOption, setSelectedOption] = useState("");
+
+  useEffect(() => {
+    forms[1]({ ...forms[0], freelanceExperience: selectedOption });
+  }, [selectedOption]);
 
   return (
     <>
-      <div className="container d-flex flex-column  mt-2">
-        <div className="row mb-4 w-50">
+      <div className="container d-flex flex-column mt-2">
+        <div className="row mb-4 w-50 ">
           <h4 className="twm-title text-3xl text-gray">
             A few quick questions: First, have you freelanced before?{" "}
           </h4>
@@ -19,7 +23,7 @@ const FreelanceStageOne = () => {
       <div className="container w-full ">
         <div className="row w-full justify-content-space-between">
           {/* Option 1 */}
-          <div className="col-md-4 col-sm-10 card-container">
+          <div className="col-md-4 col-sm-10 mt-4 mt-md-0 card-container">
             <div
               className={`option-card card-two w-full ${
                 selectedOption === "new" ? "selected" : ""
@@ -45,7 +49,7 @@ const FreelanceStageOne = () => {
           </div>
 
           {/* Option 2 */}
-          <div className="col-md-4 col-sm-10 card-container">
+          <div className="col-md-4 col-sm-10 mt-4 mt-md-0 card-container">
             <div
               className={`option-card w-full card-two ${
                 selectedOption === "some" ? "selected" : ""
@@ -71,7 +75,7 @@ const FreelanceStageOne = () => {
           </div>
 
           {/* Option 3 */}
-          <div className="col-md-4 col-sm-10 card-container">
+          <div className="col-md-4 col-sm-10 mt-4 mt-md-0 card-container">
             <div
               className={`option-card card-two w-full ${
                 selectedOption === "expert" ? "selected" : ""

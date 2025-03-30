@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const FreelanceStageThree = () => {
+const FreelanceStageThree = ({ forms }) => {
   const [selectedOption, setSelectedOption] = useState("");
+
+  useEffect(() => {
+    forms[1]({
+      ...forms[0],
+      freelancerChoice: selectedOption,
+    });
+  }, [selectedOption]);
 
   return (
     <>

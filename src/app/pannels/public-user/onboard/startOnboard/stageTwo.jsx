@@ -72,11 +72,13 @@ const StageTwo = () => {
             className="btn btn-success text-sm"
             onClick={handleCreateAccount}
           >
-            Create Account
+            {selectedOption == "client"
+              ? "Get Started as Client"
+              : "Get started as freelance"}
           </button>
         ) : (
           <span className="btn btn-secondary text-sm disabled">
-            Create Account
+            Choose Role
           </span>
         )}
       </div>

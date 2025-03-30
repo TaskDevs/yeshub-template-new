@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const FreelanceStageTwo = () => {
+const FreelanceStageTwo = ({ forms }) => {
   const [selectedOption, setSelectedOption] = useState("");
+
+  useEffect(() => {
+    forms[1]({
+      ...forms[0],
+      jobType: selectedOption,
+    });
+  }, [selectedOption]);
 
   return (
     <>
@@ -34,7 +41,7 @@ const FreelanceStageTwo = () => {
                 />
                 <input
                   type="radio"
-                  name="job-type"
+                  name="jobType"
                   value="fulltime"
                   className="checker"
                   checked={selectedOption === "fulltime"}
@@ -60,7 +67,7 @@ const FreelanceStageTwo = () => {
                 />
                 <input
                   type="radio"
-                  name="job-type"
+                  name="jobType"
                   value="part-time"
                   className="checker"
                   checked={selectedOption === "part-time"}
@@ -86,7 +93,7 @@ const FreelanceStageTwo = () => {
                 />
                 <input
                   type="radio"
-                  name="job-type"
+                  name="jobType"
                   value="learn"
                   className="checker"
                   checked={selectedOption === "learn"}
@@ -112,7 +119,7 @@ const FreelanceStageTwo = () => {
                 />
                 <input
                   type="radio"
-                  name="job-type"
+                  name="jobType"
                   value="hobby"
                   className="checker"
                   checked={selectedOption === "hobby"}

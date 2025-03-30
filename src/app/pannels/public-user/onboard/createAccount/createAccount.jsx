@@ -32,13 +32,17 @@ const CreateAccount = () => {
   };
 
   const handleCreateAccount = () => {
+    console.log(formData);
     console.log("formdat is working");
+    alert("Form submitted successfully");
   };
 
   return (
     <>
       <div className="container mt-6">
-        <span className="text-sm">{step}/4</span>
+        <span className="text-sm">
+          {step}/{total}
+        </span>
       </div>
       {step == 1 && (
         <StageOne

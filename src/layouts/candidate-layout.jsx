@@ -1,24 +1,26 @@
-import Header1 from "../app/common/header/header1";
+// import Header1 from "../app/common/header/header1";
 import CandidateRoutes from "../routing/candidate-routes";
 import SignUpPopup from "../app/common/popups/popup-signup";
 import SignInPopup from "../app/common/popups/popup-signin";
 // import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
-import { useLocation } from "react-router-dom";
-import { getHeaderConfig } from "../globals/layout-config";
+// import { useLocation } from "react-router-dom";
+// import { getHeaderConfig } from "../globals/layout-config";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
+import { Header } from "../app/common/header/new-header";
 // import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
 // import { useContext } from "react";
 
 
 function CandidateLayout() {
-  const currentpath = useLocation().pathname;
+  // const currentpath = useLocation().pathname;
   // const { isSidebarCollapsed } = useContext(ProfileApiData);
 
   return (
     <>
       <div className="page-wraper">
-        <Header1 _config={getHeaderConfig(currentpath)} />
+        {/* <Header1 _config={getHeaderConfig(currentpath)} /> */}
+        <Header isDashboard={false} />
 
         <div className="page-content m-t40">
           {/* <InnerPageBanner _data={setBanner(currentpath)} /> */}

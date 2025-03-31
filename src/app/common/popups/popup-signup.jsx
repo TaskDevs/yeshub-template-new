@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-
 import Loader from "../loader";
 import { register, loginWithGoogle, loginWithLinkedIn} from "../../context/auth/authApi";
 

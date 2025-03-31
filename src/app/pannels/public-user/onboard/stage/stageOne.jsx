@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const StageOne = ({ setStage }) => {
   const [loading, setLoading] = useState(false);
-
+    const username = sessionStorage.getItem("username")
   const handleClick = () => {
     setLoading(true); // Show spinner
     setTimeout(() => {
@@ -20,7 +20,7 @@ const StageOne = ({ setStage }) => {
         <div className="col-sm-12 col-md-6 d-flex justify-content-center">
           <div>
             <h4 className="twm-title text-3xl text-gray">
-              Hey Rebecca, Ready for your next big opportunity?
+              Hey {username}, Ready for your next big opportunity?
             </h4>
             <div className="mt-6">
               <FiUser size={24} className="mr-4" />
@@ -43,12 +43,13 @@ const StageOne = ({ setStage }) => {
                   >
                     {loading ? (
                       <>
+                       <span className="text-sm">Loading...</span>
                       <ProgressSpinner
-                        style={{ width: "20px", height: "20px" }}
+                        style={{ width: "18px", height: "18px" }}
                         strokeWidth="5"
-                     
+                        fill="var(--surface-ground)" animationDuration="1s"
                       />
-                      <span>Please wait</span></>
+                     </>
                       
                     ) : (
                       "Get Started"

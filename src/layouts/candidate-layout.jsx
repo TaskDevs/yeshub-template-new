@@ -20,14 +20,14 @@ function CandidateLayout() {
     <>
       <div className="page-wraper">
         {/* <Header1 _config={getHeaderConfig(currentpath)} /> */}
-        <Header isDashboard={false} />
+        <Header isDashboard={true} />
 
         <div className="page-content m-t40">
           {/* <InnerPageBanner _data={setBanner(currentpath)} /> */}
           {/* "col-xl-3 col-lg-4 col-md-12 rightSidebar m-b30 */}
 
           <div className="section-full p-t120  p-b90 site-bg-white">
-          <CandidateRoutes />
+            <CandidateRoutes />
             {/* <div className="container">
               row
               <div className="row">
@@ -61,7 +61,7 @@ function CandidateLayout() {
 
         <SignUpPopup />
         <SignInPopup />
-        
+
 
         <YesNoPopup
           id="delete-dash-profile"
@@ -113,7 +113,7 @@ function CandidateLayout() {
           type={popupType.DELETE_MILESTONE}
           msg={"Are you sure you want to delete this milestone?"}
         />
-      
+
       </div>
     </>
   );

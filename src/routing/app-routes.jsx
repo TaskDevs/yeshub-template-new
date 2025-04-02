@@ -10,12 +10,12 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path={base.PUBLIC_PRE + "/*"} element={<PublicUserLayout />} />
-       <Route element={<ProtectedRoute allowedRoles={['employer']} />}>
-                <Route path={base.EMPLOYER_PRE + "/*"} element={<EmployerLayout />} />
-            </Route>
-            <Route element={<ProtectedRoute allowedRoles={['candidate']} />}>
-                <Route path={base.CANDIDATE_PRE + "/*"} element={<CandidateLayout />} />
-            </Route>
+      <Route element={<ProtectedRoute allowedRoles={['employer']} />}>
+        <Route path={base.EMPLOYER_PRE + "/*"} element={<EmployerLayout />} />
+      </Route>
+      <Route element={<ProtectedRoute allowedRoles={['candidate']} />}>
+        <Route path={base.CANDIDATE_PRE + "/*"} element={<CandidateLayout />} />
+      </Route>
     </Routes>
   );
 }

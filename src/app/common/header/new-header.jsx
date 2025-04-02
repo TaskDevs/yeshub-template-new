@@ -1,16 +1,23 @@
 import React, { useState, useRef } from "react";
-import { Mail, Search } from "@mui/icons-material";
+import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { RiSettings3Fill } from "react-icons/ri";
 import { BiSolidLogOut } from "react-icons/bi";
 import { ImStatsDots } from "react-icons/im";
 import { ToggleSwitch } from "../ToggleSwitch";
+import { SearchInput } from "../search-box";
+import { IoSearch } from "react-icons/io5";
 
 export const Header = ({ isDashboard = true }) => {
-  const [activeNav, setActiveNav] = useState("Find Talent");
-  const [openMenu, setOpenMenu] = useState(null);
   const menuRef = useRef(null);
   const profileRef = useRef(null);
+  const [openMenu, setOpenMenu] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [activeNav, setActiveNav] = useState("Find Talent");
+
+  const handleSearch = (value) => {
+    console.log("Searching for:", value);
+  };
 
   const navItems = [
     { id: "find-talent", label: "Find Talent", menu: null },
@@ -112,9 +119,8 @@ export const Header = ({ isDashboard = true }) => {
                 onMouseLeave={() => setOpenMenu(null)}
               >
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${
-                    activeNav === item.label ? "text-[#111827]" : "text-[#6B7280]"
-                  }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${activeNav === item.label ? "text-[#111827]" : "text-[#6B7280]"
+                    }`}
                   onClick={() => handleNavClick(item)}
                 >
                   {item.label}
@@ -155,16 +161,15 @@ export const Header = ({ isDashboard = true }) => {
         <div className="flex items-center space-x-2 justify-end flex-1">
           {/* Search Box - Only show on dashboard */}
           {isDashboard && (
-            <div className="relative flex w-full flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-0"
-              />
-            </div>
+            <SearchInput
+              className="w-full flex-1"
+              rightIcon={null}
+              value={searchValue}
+              onSearch={handleSearch}
+              onChange={setSearchValue}
+              placeholder="Search here..."
+              leftIcon={<IoSearch size={18} />}
+            />
           )}
 
           {/* show Auth buttons if not dashboard */}

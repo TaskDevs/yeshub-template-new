@@ -17,7 +17,7 @@ import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applie
 import CanSavedJobsDetails from "../app/pannels/candidate/components/can-saved-jobs-details";
 import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-milestone";
 import ContractsHistory from "../app/pannels/candidate/sections/dashboard/contracts-history";
-import CanNewProfile from "../app/pannels/candidate/components/can-new-profile";
+
 
 function CandidateRoutes() {
 	

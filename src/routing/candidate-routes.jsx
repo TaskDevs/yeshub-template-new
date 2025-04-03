@@ -28,7 +28,6 @@ function CandidateRoutes() {
 		<Routes>
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
 			{/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
-			<Route path={candidate.PROFILE} element={<CanNewProfile />} />
 			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
 			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
 			<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />

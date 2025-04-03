@@ -16,3 +16,11 @@
 .zIndex{
   z-index: 10000;
 }
+
+/* .main-nav {
+  @apply hidden sm:flex
+} */
+
+/* .toggle-bar {
+  @apply block sm:hidden
+} */

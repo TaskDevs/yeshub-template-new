@@ -13,7 +13,7 @@ function SectionCanEducation() {
     educationData,
     handleAddEducation,
     handleUpdateEducation,
-    initialFormData,
+    // initialFormData,
     setFormData,
   } = useContext(EducationApiData);
 
@@ -40,13 +40,13 @@ function SectionCanEducation() {
     }
   };
 
-  const handleResetForm = () => {
-    setFormData(initialFormData);
-  };
+  //   const handleResetForm = () => {
+  //     setFormData(initialFormData);
+  //   };
 
   return (
     <>
-      <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+      {/* <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
         <h4 className="panel-tittle m-a0">Education</h4>
         <a
           data-bs-toggle="modal"
@@ -62,7 +62,7 @@ function SectionCanEducation() {
       <div className="panel-body wt-panel-body p-a20 ">
         <div className="twm-panel-inner">
           {educationData.length === 0 ? (
-            <p>Add your education profile.</p>
+            <p>Add your educational background.</p>
           ) : (
             <div className="">
               {educationData.map((education, i) => (
@@ -118,6 +118,67 @@ function SectionCanEducation() {
             </div>
           )}
         </div>
+      </div> */}
+
+      <div className="">
+        {educationData.length === 0 ? (
+          <p>Add your educational background.</p>
+        ) : (
+          <div className="">
+            {educationData.map((education, i) => (
+              <div
+                key={i}
+                className="mb-4 sec-educ"
+                onClick={() => setSelectedId(education.id)}
+              >
+                <div className="">
+                  <RiGraduationCapLine />
+                </div>
+
+                <div className="">
+                  <div className="">
+                    <strong>school :</strong> <span>{education.school} </span>
+                  </div>
+                  <div className="">
+                    <strong>Area of study :</strong>{" "}
+                    <span>{education.area_of_study} </span>
+                  </div>
+
+                  <div className="">
+                    <strong>Date completed :</strong>{" "}
+                    <span>{education.date_completed} </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="p-a20">
+              <div className="sec-actions-btn">
+                <button
+                  className="site-button  actions-btn"
+                  data-bs-target="#delete-education"
+                  data-bs-toggle="modal"
+                  data-bs-dismiss="modal"
+                >
+                  <FaRegTrashCan color="white" />
+                  <span className="admin-nav-text">Delete</span>
+                </button>
+
+                <button
+                  className="site-button  actions-btn "
+                  data-bs-target="#Edit-Education"
+                  data-bs-toggle="modal"
+                  data-bs-dismiss="modal"
+                  onClick={() => {
+                    handleEditClick(selectedId);
+                  }}
+                >
+                  <MdOutlineEdit color="white" />
+                  <span>Edit</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <SectionEducationForm submit={handleAddEducation} id="Education" />

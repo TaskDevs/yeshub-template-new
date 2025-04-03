@@ -23,8 +23,8 @@ function SectionCandidateShortIntro1({ props, isFreelancer, freelance }) {
 						<div className="twm-candi-self-top">
 							{isFreelancer && (<div className="twm-candi-fee">₵{freelance[0]?.rate || "200"} / Day</div>)}
 							{/* can-logo-wrapper */}
-							<div className="">
-							<div className=" can-banner-logo twm-media-pic ">
+							<div className="mt-5">
+							<div className=" twm-media-pic ">
 							{/* twm-media can-banner-logo twm-media-pic */}
 								<img 
                     src={props?.user?.profile_image || "/assets/images/candidates/user-avatar-fallback.jpg"} 

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { candidate } from "../globals/route-names";
 import CanDashboardPage from "../app/pannels/candidate/components/can-dashboard";
-import CanProfilePage from "../app/pannels/candidate/components/can-profile";
+// import CanProfilePage from "../app/pannels/candidate/components/can-profile";
 import CanAppliedJobs from "../app/pannels/candidate/components/can-applied-jobs";
 import CanMyResumePage from "../app/pannels/candidate/components/can-resume";
 import CanSavedJobsPage from "../app/pannels/candidate/components/can-saved-jobs";
@@ -17,6 +17,7 @@ import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applie
 import CanSavedJobsDetails from "../app/pannels/candidate/components/can-saved-jobs-details";
 import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-milestone";
 import ContractsHistory from "../app/pannels/candidate/sections/dashboard/contracts-history";
+import CanNewProfile from "../app/pannels/candidate/components/can-new-profile";
 
 function CandidateRoutes() {
 	
@@ -26,7 +27,8 @@ function CandidateRoutes() {
 	return (
 		<Routes>
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
-			<Route path={candidate.PROFILE} element={<CanProfilePage />} />
+			{/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
+			<Route path={candidate.PROFILE} element={<CanNewProfile />} />
 			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
 			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
 			<Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />

@@ -11,10 +11,8 @@ const AuthApiDataProvider = (props) => {
   const [userProfile, setUserProfile] = useState(null);
   const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  sessionStorage.setItem("OAuthUserId", userProfile?.id)
   
- 
-
+  
 
 
   useEffect(() => {

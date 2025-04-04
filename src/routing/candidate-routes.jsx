@@ -19,6 +19,7 @@ import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-mil
 import ContractsHistory from "../app/pannels/candidate/sections/dashboard/contracts-history";
 import CandidateProfile from "../app/pannels/candidate/sections/new-profile/cand-profile";
 
+
 function CandidateRoutes() {
 	return (
 		<Routes>

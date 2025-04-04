@@ -311,6 +311,20 @@ This files [Table of contents] are outlined below
   }
   
 }
+.main-nav{
+  display: flex;
+}
+.toggle-bar {
+  display: none;
+}
+@media (max-width: 640px ) {
+  .main-nav{
+    display: none;
+  }
+  .toggle-bar {
+    display: block;
+  }
+}
 /* header-nav navbar-collapse collapse */
 .freelancer-btn {
   width: 100%;
@@ -383,6 +397,95 @@ This files [Table of contents] are outlined below
   }
 }
 
+.profile-info-wrapper, .profile-cards-wrapper {
+  background: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.user-profile-header {
+  display: flex;
+  gap: 1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap:0.75rem;
+  text-transform: capitalize;
+}
+
+/* .profile-share-btn {
+  background: #305718;
+  color: white;
+  width: 250px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 0.7rem;
+} */
+
+.profile-share-btn button {
+  border: none;
+  outline: none;
+  background: #305718;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+.user-profile-bio {
+  display: flex; 
+  flex-direction: column; 
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.user-profile-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-rows: auto auto; */
+  gap: 1rem;
+  border-bottom: 1px solid #d5d5d5;
+  padding-bottom: 0.5rem;
+}
+
+.user-details {
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+
+}
+
+
+.user-details-label {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+.skills-wrapper {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 0.5rem;
+  width: 70%;
+  /* margin: 0 auto; */
+
+
+}
+.can-skills-card {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  padding: 5px;
+  text-transform: capitalize;
+  font-size: 1rem;
+}
 
 
 .site-text-primary {

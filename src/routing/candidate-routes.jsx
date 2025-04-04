@@ -11,22 +11,20 @@ import CanChangePasswordPage from "../app/pannels/candidate/components/can-chang
 import CanChatPage from "../app/pannels/candidate/components/can-chat";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import React from "react";
-import  { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
+import { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applied-job-details";
 import CanSavedJobsDetails from "../app/pannels/candidate/components/can-saved-jobs-details";
 import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-milestone";
 import ContractsHistory from "../app/pannels/candidate/sections/dashboard/contracts-history";
+import CandidateProfile from "../app/pannels/candidate/sections/new-profile/cand-profile";
 
 
 function CandidateRoutes() {
-	
-    
-  
-
 	return (
 		<Routes>
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
+			<Route path={candidate.PROFILE} element={<CandidateProfile />} />
 			{/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
 			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
 			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
@@ -45,7 +43,7 @@ function CandidateRoutes() {
 			<Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
 			<Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />
 			<Route path="*" element={<Error404Page />} />
-			
+
 		</Routes>
 	);
 }

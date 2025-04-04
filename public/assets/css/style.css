@@ -311,6 +311,20 @@ This files [Table of contents] are outlined below
   }
   
 }
+.main-nav{
+  display: flex;
+}
+.toggle-bar {
+  display: none;
+}
+@media (max-width: 640px ) {
+  .main-nav{
+    display: none;
+  }
+  .toggle-bar {
+    display: block;
+  }
+}
 /* header-nav navbar-collapse collapse */
 .freelancer-btn {
   width: 100%;

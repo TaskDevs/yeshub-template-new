@@ -11,13 +11,14 @@ import {
 import { CustomDropdown } from "../../../common/Dropdown";
 
 export const CandidateChart = ({
+  styles,
   chartData,
   timePeriodOptions,
   updateChartData,
   selectedTimePeriod,
 }) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm w-2/3">
+    <div className={`bg-white p-4 rounded-lg shadow-sm ${styles}`}>
       {/* Earnings Overview */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-base font-medium">Earnings Overview</h2>

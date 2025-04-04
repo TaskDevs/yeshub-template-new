@@ -319,7 +319,7 @@ export const Header = ({ isDashboard = true }) => {
         {/* Mobile Menu */}
 
         {navOpen && (
-          <div className="fixed top-0 left-0 w-[70%] h-screen bg-white shadow-lg zIndex">
+          <div className="fixed top-0 left-0 w-[70%] h-screen bg-white shadow-lg ">
             {/* mobile menu content */}
 
             {getNavItems().map((item) => (
@@ -330,7 +330,6 @@ export const Header = ({ isDashboard = true }) => {
                       ? "text-[#111827]"
                       : "text-[#6B7280]"
                   }`}
-                  onClick={() => handleNavClick(item)}
                   onMouseEnter={() => {
                     console.log("Mouse entered:", item.label);
                     handleNavHover(item);
@@ -352,7 +351,7 @@ export const Header = ({ isDashboard = true }) => {
                 {openMenu === item.label && item.menu && (
                   <div
                     ref={menuRef}
-                    className="absolute top-[20%] left-20 bg-white rounded-lg shadow-lg w-64  py-2"
+                    className="absolute top-[20%] left-20 bg-white rounded-lg shadow-lg w-64  py-2 "
                   >
                     <div className="px-6 py-3 text-base font-medium ">
                       {item.menu.title}

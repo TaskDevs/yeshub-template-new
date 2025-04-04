@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { loadScript } from "../../../../globals/constants";
-
-import StageOne from "./stage/stageOne";
-import StageTwo from "./stage/stageTwo";
+import StageOne from "./startOnboard/stageOne";
+import StageTwo from "./startOnboard/stageTwo";
 
 const Onboard = () => {
   const [stage, setStage] = useState(1);

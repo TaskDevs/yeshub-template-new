@@ -44,6 +44,7 @@ function VerifyOtp() {
         setSuccess(true);
         setErrorMessage("");
         const userId = response?.user?.id;
+        
         const username = response?.user?.username;
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("userId", userId);

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaBriefcase, FaUserTie } from "react-icons/fa6";
 import { updateUserRole } from "../../../../context/auth/authApi";
 import { useLocation } from "react-router-dom";
@@ -10,7 +11,18 @@ const StageTwo = () => {
   const queryParams = new URLSearchParams(location.search);
   const userId = queryParams.get("user"); // Get 'user' parameter
 
-  const updateRole = async () => {
+
+
+  const navigate = useNavigate();
+
+  let handleCreateAccount = async() => {
+
+    if (!selectedOption) {
+      toast.error("Please select a role before proceeding.");
+      return;
+    }
+    selectedOption == "client" && navigate("client");
+    selectedOption == "freelancer" && navigate("freelancer");
     try {
       setLoading(true); // Start loading
 
@@ -20,6 +32,10 @@ const StageTwo = () => {
       const res = await updateUserRole({ user_id, role }); // Await API response
       if (res) {
         toast.success("User role updated successfully!");
+        sessionStorage.setItem("userRole", selectedOption);
+        navigate(selectedOption === "client" ? "client" : "freelancer", {
+          state: { user_id }, // Pass user_id in state
+        });
       }
       // Show success message (if needed)
     } catch (err) {
@@ -36,7 +52,7 @@ const StageTwo = () => {
         What do you want to do on Yeshub?
       </h4>
 
-      <div className="d-flex flex-row flex-md-row justify-content-center gap-4">
+      <div className="d-flex flex-sm-col flex-md-row justify-content-center gap-4">
         {/* Client Option */}
         <div
           className={`option-card ${
@@ -85,23 +101,28 @@ const StageTwo = () => {
       </div>
 
       <div className="mt-6">
-        <button
-          className="btn btn-success text-sm "
-          onClick={() => updateRole()}
-          disabled={loading} // Disable button while loading
-        >
-          {loading ? (
-            <>
+      {selectedOption !== "" ? (
+        loading ? (
+           <>
               <span className="pi pi-spin pi-spinner"></span>
               <span>Processing...</span>
             </>
-          ) : (
-            <>
-              Proceed to Next <span className="pi pi-arrow-right"></span>
-            </>
-          )}
-        </button>
-      </div>
+        ) : (
+          <button
+            className="btn btn-success text-sm"
+            onClick={handleCreateAccount}
+          >
+            {selectedOption === "client"
+              ? "Get Started as Client"
+              : "Get started as Freelance"}
+          </button>
+        )
+      ) : (
+        <span className="btn btn-secondary text-sm disabled">
+          Choose Role
+        </span>
+      )}
+    </div>
     </div>
   );
 };

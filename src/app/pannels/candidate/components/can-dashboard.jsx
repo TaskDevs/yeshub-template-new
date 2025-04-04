@@ -3,22 +3,40 @@ import SectionCandidateOverview from "../sections/dashboard/section-can-overview
 // import SectionCandidateProfileViews from "../sections/dashboard/section-can-profile-views";
 // import SectionCandidateRecentActivities from "../sections/dashboard/section-can-activities";
 // import SectionCandidateRecentApplications from "../sections/dashboard/section-can-applications";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadScript } from "../../../../globals/constants";
+import { Link } from "react-router-dom";
+import { Alert, AlertTitle } from "@mui/material";
 
 function CanDashboardPage() {
+  useEffect(() => {
+    loadScript("js/custom.js");
+  });
 
-    useEffect(()=>{
-        loadScript("js/custom.js")
-    })
+  const [showAlert, setShowAlert] = useState(false);
 
-    return (
-        <>
-            <div className="twm-right-section-panel site-bg-gray">
-                
-                <SectionCandidateOverview />
+  useEffect(() => {
+    if (localStorage.getItem("onboarding_incomplete") === "true") {
+      setShowAlert(true);
+      localStorage.removeItem("onboarding_incomplete"); // Clear flag after showing alert
+    }
+  }, []);
 
-                {/* <div className="twm-pro-view-chart-wrap">
+  return (
+    <>
+    {showAlert && (
+        <Alert severity="warning" onClose={() => setShowAlert(false)} className="mt-4">
+          <AlertTitle>Incomplete Profile set up</AlertTitle>
+          You haven not completed your profile.{" "}
+          <Link to="/dashboard/onboard/freelancer" style={{ color: "blue" }}>
+            Click here to finish
+          </Link>
+        </Alert>
+      )}
+      <div className="twm-right-section-panel site-bg-gray">
+        <SectionCandidateOverview />
+
+        {/* <div className="twm-pro-view-chart-wrap">
                     <div className="row">
                         <div className="col-xl-12 col-lg-12 col-md-12 mb-4">
                             <SectionCandidateProfileViews />
@@ -34,9 +52,9 @@ function CanDashboardPage() {
                         </div>
                     </div>
                 </div> */}
-            </div>
-        </>
-    )
+      </div>
+    </>
+  );
 }
 
 export default CanDashboardPage;

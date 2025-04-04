@@ -100,3 +100,20 @@ export const deleteFreelance = async (id) => {
     console.error(err);
   }
 };
+
+
+
+export const freelanceResponse = async (formData) => {
+  try {
+    let responseFreelance = await axios.post(`${REACT_BASE_URL}freelancer-responses`, formData);
+
+    if (responseFreelance?.data) {
+      return responseFreelance.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error("Error in freelanceResponse:", err);
+    return false;
+  }
+};

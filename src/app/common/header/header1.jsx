@@ -266,7 +266,7 @@ function Header1({ _config }) {
                             <a
                               className="d-flex align-items-center p-2"
                               href={
-                                role === "user"
+                                role === "freelancer"
                                   ? base.CANDIDATE_PRE
                                   : base.EMPLOYER_PRE
                               }

@@ -104,6 +104,7 @@ function EmpCompanyProfilePage() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      borderRadius:'20px'
                     }}
                   >
                     {bannerURL || employerProfiles.banner ? (

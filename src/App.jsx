@@ -22,6 +22,8 @@ import WalletApiDataProvider from "./app/context/wallet/walletContextApi";
 import { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 import PortfolioMediaApiDataProvider from "./app/context/portfolio-media/portfolioMediaContextApi";
+import { ChatProvider } from "./app/context/chat/chatContext";
+
 
 function App() {
   //   const [isLoading, setLoading] = useState(true);
@@ -45,6 +47,7 @@ function App() {
   return (
     <GlobalApiDataProvider>
       <AuthApiDataProvider>
+        < ChatProvider>
         <CategoryApiDataProvider>
           <EducationApiDataProvider>
             <HistoryApiDataProvider>
@@ -79,6 +82,7 @@ function App() {
             </HistoryApiDataProvider>
           </EducationApiDataProvider>
         </CategoryApiDataProvider>
+        </ChatProvider>
       </AuthApiDataProvider>
     </GlobalApiDataProvider>
   );

@@ -4,11 +4,14 @@ import { IoMdEye, IoIosEyeOff } from "react-icons/io";
 import Loader from "../loader";
 import { GlobalApiData } from "../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../globals/sign-in-data";
-import { login , loginWithLinkedIn, loginWithGoogle} from "../../context/auth/authApi";
+import { login} from "../../context/auth/authApi";
 import cookieMethods from "../../../utils/cookieUtils";
 import toast from 'react-hot-toast';
 import { base } from "../../../globals/route-names";
 import { AuthApiData } from "../../context/auth/authContextApi";
+import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
+import { LinkedIn } from "react-linkedin-login-oauth2";
 
 function SignInPopup() {
   const {
@@ -19,7 +22,7 @@ function SignInPopup() {
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
   const { processRetrieve } = useContext(AuthApiData)
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(() => {
     const savedUser = JSON.parse(localStorage.getItem("rememberedUser"));
     return (
@@ -51,22 +54,88 @@ function SignInPopup() {
     }));
   };
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
-    };
-    const googleSignin = async () => {
-      const res = await loginWithGoogle(formData.role)
-      console.log(res)
-    }
+    
+  const handleLinkedInSuccess = async (response) => {
+    console.log("LinkedIn Login Success:", response);
 
-      const linkedinSignin = async ()=>{
-        const res = await loginWithLinkedIn(formData.role)
-        console.log(res)
+    setLoading(true);
+    try {
+      // Send the LinkedIn token to your Laravel backend for verification
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/v1/auth/linkedin",
+        {
+          token: response.code, // The token is in 'code', not 'access_token'
+        }
+      );
+
+      const { token, refresh_token, user } = res.data;
+      console.log("User from LinkedIn:", user);
+
+      // Store the access token and refresh token
+      localStorage.setItem("access_token", token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      // Redirect based on user role
+      if (user.role === "user") {
+        setTimeout(() => navigate(`/dashboard/onboard?user=${user.id}`), 2000);
+      } else {
+        setTimeout(() => navigate("/dashboard"), 2000);
       }
+    } catch (err) {
+      console.error("LinkedIn login failed:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFailure = (error) => {
+    console.error("LinkedIn login error:", error);
+  };
+
+  // Google login
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
+        {
+          token: credentialResponse.credential,
+        }
+      );
+
+      const { token, refresh_token, user } = res.data;
+      console.log(res.data);
+      sessionStorage.setItem("authToken", token);
+
+      cookieMethods.setCookies(token, refresh_token);
+      sessionStorage.setItem("username", user?.username);
+      sessionStorage.setItem("userId", user?.user_id);
+      const role = user.role;
+
+      // Check if role exists
+      setTimeout(() => {
+        switch (role) {
+          case "user":
+            navigate(`/dashboard/onboard?user=${user.id}`);
+            break;
+          case "client":
+            navigate(base.EMPLOYER_PRE);
+            break;
+          case "freelancer":
+          default:
+            navigate(base.CANDIDATE_PRE);
+            break;
+        }
+      },1000);
+    } catch (err) {
+      console.error("Google login failed", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleGoogleError = () => {
+    console.error("Google Sign-In Error");
+  };
     
 
   const handleLogin = async (e) => {
@@ -101,10 +170,10 @@ function SignInPopup() {
             case "admin":
               navigate("/admin");
               break;
-            case "employer":
+            case "client":
               navigate(base.EMPLOYER_PRE);
               break;
-            case "user":
+            case "freelancer":
             default:
               navigate(base.CANDIDATE_PRE);
               break;
@@ -179,44 +248,7 @@ function SignInPopup() {
                   <div className="tab-content">
                     <form onSubmit={handleLogin} className="tab-pane fade show active">
                       <div className="row">
-                      <ul className="nav nav-tabs" id="myTab" role="tablist">
-                      {/* Signup Candidate */}
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
-                            formData.role === "user" ? "active" : ""
-                          }`}
-                          data-bs-toggle="tab"
-                          type="button"
-                          aria-selected={formData.role === "user"}
-                          onClick={() =>
-                            handleChange({
-                              target: { name: "role", value: "user" },
-                            })
-                          }
-                        >
-                          <i className="fas fa-user-tie" /> Candidate
-                        </button>
-                      </li>
-                      {/* Signup Employer */}
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
-                            formData.role === "employer" ? "active" : ""
-                          }`}
-                          data-bs-toggle="tab"
-                          type="button"
-                          aria-selected={formData.role === "employer"}
-                          onClick={() =>
-                            handleChange({
-                              target: { name: "role", value: "employer" },
-                            })
-                          }
-                        >
-                          <i className="fas fa-building" /> Employer
-                        </button>
-                      </li>
-                    </ul>
+                    
                     {message.text && (
                     <div
                       className={`alert ${message.type === "success" ? "alert-success" : "alert-danger"} fade show`}
@@ -317,19 +349,42 @@ function SignInPopup() {
               <div className="modal-footer">
              
                 <span className="modal-f-title">Login or Sign up with</span>
-                <ul className="twm-modal-social">
-                  <li>
-                      <a onClick={googleSignin} className="google-clr m-2">
-                        <i className="fab fa-google" />
-                      </a>
-                    </li>
-                    <li>
-                      <a onClick={linkedinSignin} className="linkedin-clr m-2">
-                        <i className="fab fa-linkedin-in" />
-                      </a>
-                    </li>
-                    
-                  </ul>
+                <ul className="twm-modal-social flex justify-between gap-4">
+                  <li className="flex-1">
+                    {loading ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleError}
+                      />
+                    )}
+                  </li>
+                  <li className="flex-1">
+                    <LinkedIn
+                      clientId="78cj9ms7zti6zz"
+                      redirectUri="http://localhost:3000/linkedin"
+                      onSuccess={handleLinkedInSuccess}
+                      onError={handleFailure}
+                      scope="r_liteprofile"
+                    >
+                      {({ linkedInLogin }) => (
+                        <button
+                          onClick={linkedInLogin}
+                          className="flex items-center justify-center gap-2 w-full text-white border-0 py-2 mx-2 hover:bg-[#0a14c9] focus:outline-none focus:ring-2 focus:ring-[#1017ea] rounded-md"
+                          style={{
+                            backgroundColor: "blue",
+                            borderRadius: "3px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          <i className="fab fa-linkedin-in text-lg" />
+                          Login with LinkedIn
+                        </button>
+                      )}
+                    </LinkedIn>
+                  </li>
+                </ul>
 
                
                 

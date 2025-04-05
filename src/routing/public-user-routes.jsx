@@ -64,6 +64,8 @@ import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-r
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 import WelcomePopup from "../app/common/popups/welcome-popup";
 
+
+
 function PublicUserRoutes() {
   return (
     <>
@@ -180,6 +182,8 @@ function PublicUserRoutes() {
           path={publicUser.candidate.DETAIL2}
           element={<CandidateDetail2Page />}
         />
+    
+        
         <Route path={publicUser.blog.GRID1} element={<BlogGrid1Page />} />
         <Route path={publicUser.blog.GRID2} element={<BlogGrid2Page />} />
         <Route path={publicUser.blog.GRID3} element={<BlogGrid3Page />} />

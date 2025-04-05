@@ -17,8 +17,10 @@ function Header1({ _config }) {
   const [menuActive, setMenuActive] = useState(false);
   const { userProfile } = useContext(AuthApiData);
   const username = userProfile?.username || "U"; // Default to "N" if no username
+
   const { isSidebarCollapsed, toggleSidebar } = useContext(ProfileApiData);
   const { processSearchJobByTitle } = useContext(JobApiData);
+
   //const { processSearchJob } = useContext(JobApiData);
   const location = useLocation(); // Get the current location
   const isCandidateDashboard = location.pathname.startsWith(base.CANDIDATE_PRE);

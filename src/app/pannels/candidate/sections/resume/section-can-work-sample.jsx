@@ -10,7 +10,7 @@ function SectionCanWorkSample() {
   const {
     portfolios,
     setIsEditing,
-    handleAddClick,
+    // handleAddClick,
     selectedPortfolioId,
     setSelectedPortfolioId,
     setFormData,
@@ -18,11 +18,11 @@ function SectionCanWorkSample() {
 
 
   const handleEditClick = (portfolioId) => {
-    console.log("portfolioId", portfolioId);
+    // console.log("portfolioId", portfolioId);
     setIsEditing(true);
     setSelectedPortfolioId(portfolioId);
     const portfolio = portfolios.find((p) => p.id === portfolioId);
-    console.log("edit-portfolio-sample", portfolio);
+    // console.log("edit-portfolio-sample", portfolio);
     setFormData({
         description: portfolio.description,
         project_end_date: portfolio.project_end_date,
@@ -38,7 +38,7 @@ function SectionCanWorkSample() {
 
   return (
     <div>
-      <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
+      {/* <div className="panel-heading wt-panel-heading p-a20 panel-heading-with-btn ">
         <h4 className="panel-tittle m-a0">Work Sample / Portfolio</h4>
         <a
           data-bs-toggle="modal"
@@ -57,7 +57,7 @@ function SectionCanWorkSample() {
           <div className="panel-body wt-panel-body  ">
             <div className="twm-panel-inner">
               {portfolios.length === 0 ? (
-                <p>No portfolio added yet</p>
+                <p>showcase your projects</p>
               ) : (
                 <>
                   {portfolios.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at)).map((portfolio, i) => (
@@ -178,6 +178,128 @@ function SectionCanWorkSample() {
             </div>
           </div>
         </div>
+      </div> */}
+
+      <div className="">
+      {portfolios.length === 0 ? (
+                <p>showcase your projects</p>
+              ) : (
+                <>
+                  {portfolios.sort((a, b) => extractTime(b.created_at) - extractTime(a.created_at)).map((portfolio, i) => (
+                    <div
+                      key={i}
+                      className="mb-4 sec-educ"
+                      onClick={() => setSelectedPortfolioId(portfolio.id)}
+                    >
+                      <div className="">
+                        <PiBriefcaseLight />
+                      </div>
+                      <div className="">
+                        <div className="">
+                          <strong> Project Title :</strong>{" "}
+                          <span>{portfolio.project_title} </span>
+                        </div>
+
+                        <div className="">
+                          <strong>skills :</strong>{" "}
+                          <span>{portfolio.skills} </span>
+                        </div>
+
+                        <div className="mb-3">
+                          <p className="" style={{  marginBottom: "0" }}>
+                          <strong>
+                            Description:{" "}
+                            </strong>
+                          </p>
+                          <div
+                            className="pl-2"
+                            dangerouslySetInnerHTML={{
+                              __html: portfolio?.description
+                                ? (() => {
+                                    const tempDiv =
+                                      document.createElement("div");
+                                    tempDiv.innerHTML = portfolio?.description;
+                                   
+                                    const capitalizeFirstLetterOfSentences = (
+                                      htmlString
+                                    ) => {
+                                      return htmlString
+                                        .replace(
+                                          /([.!?]\s*)(\w)/g,
+                                          (match, punctuation, char) => {
+                                            return (
+                                              punctuation + char.toUpperCase()
+                                            );
+                                          }
+                                        )
+                                        .toLowerCase(); // Ensure the rest of the text is lowercase
+                                    };
+                                    return capitalizeFirstLetterOfSentences(
+                                      tempDiv.innerHTML
+                                    );
+                                  })()
+                                : "",
+                            }}
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <p className="" style={{ marginBottom: "0" }}>
+                          <strong>
+                            Project Link:{" "}
+                            </strong>
+                          </p>
+                          <div
+                            className="pl-2"
+                           >
+                             {portfolio.media.length > 0 &&
+                          portfolio.media.map((m) => (
+                            <div className="" key={m.id}>
+                              
+                              <a
+                                href={m.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="project_link"
+                              >
+                                {m.url}
+                              </a>
+                            </div>
+                          ))} 
+                          </div>
+                        </div>
+
+                       
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="p-a20">
+                    <div className="sec-actions-btn">
+                      <button
+                        className="site-button  actions-btn"
+                        data-bs-target="#delete-portfolio"
+                        data-bs-toggle="modal"
+                        data-bs-dismiss="modal"
+                      >
+                        <FaRegTrashCan color="white" />
+                        <span className="admin-nav-text">Delete</span>
+                      </button>
+
+                      <button
+                        className="site-button  actions-btn "
+                        data-bs-target="#Edit-Portfolio"
+                        data-bs-toggle="modal"
+                        data-bs-dismiss="modal"
+                        onClick={() => handleEditClick(selectedPortfolioId)}
+                      >
+                        <MdOutlineEdit color="white" />
+                        <span>Edit</span>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
       </div>
 
       <PortfolioPopup id="Work_Sample" />

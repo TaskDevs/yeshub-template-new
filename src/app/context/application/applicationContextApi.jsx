@@ -25,7 +25,8 @@ export const ApplicationApiData = createContext();
 const ApplicationApiDataProvider = (props) => {
 
   const [appliedJobs, setAppliedJobs] = useState([]);
-  const {  selectedId, setSelectedId, setIsSubmitting, setIsLoading } = useContext(GlobalApiData)
+  const {  selectedId, setSelectedId, setIsSubmitting } = useContext(GlobalApiData)
+  const [isLoading, setIsLoading ] = useState(false);
   const { processAJobProfile } = useContext(JobApiData)
   const currentpath = useLocation().pathname;
   const [profile, setProfile] = useState({});
@@ -33,7 +34,7 @@ const ApplicationApiDataProvider = (props) => {
   const navigate = useNavigate();
  
 
-  // console.log("Id-params", id)
+
   // sessionStorage.setItem("Job_id", jobId)
 
 
@@ -184,7 +185,7 @@ const ApplicationApiDataProvider = (props) => {
 			}
   };
 
-  const handleSubmmitApplication = async () => {
+  const handleSubmmitApplication = async (id) => {
     const days_left = calculateDaysLeft(profile?.start_date, profile?.end_date)
     
     if (!userId)
@@ -203,7 +204,7 @@ const ApplicationApiDataProvider = (props) => {
         toast.error("Please sign up as freelancer to apply.")
         return;
       }
-      navigate(`/apply-job/${jobId}`)
+      navigate(`/apply-job/${id}`)
      return;
     }
 
@@ -217,27 +218,31 @@ const ApplicationApiDataProvider = (props) => {
     }
 
     
-    if (appliedJobs?.some((job) => job.job_id === Number(jobId))) {
+    if (appliedJobs?.some((job) => job.job_id === Number(id))) {
       toast.error("You have already applied for this job");
       return;
     }
     
     if (freelancerId)
       {
-       navigate(`/apply-job/${jobId}`)
-       return;
+        if (currentpath.startsWith("/dashboard-candidate")) {
+          navigate(`/dashboard-candidate/apply-job/${id}`)
+          return;
+        } else {
+          navigate(`/apply-job/${id}`)
+         return;
+        }
+       
       }
     
 
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsLoading(true)
-    }, 200)
+    setIsLoading(true)
  
     try {
       const res =  await processAddApplication({
 				user_id: userId,
-				job_id: jobId,
+				job_id: id,
 				status: "pending",
 				freelance_id: "",
         
@@ -252,15 +257,11 @@ const ApplicationApiDataProvider = (props) => {
       }
      
     } catch {
-      setTimeout(() => {
-        toast.error("Failed to apply")
-      }, 3100)
+      toast.error("Failed to apply")
       return false;
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 3000)
+      setIsLoading(false)
     }
   }
 
@@ -293,7 +294,8 @@ const ApplicationApiDataProvider = (props) => {
 		<ApplicationApiData.Provider
       value={{
         
-        appliedJobs, 
+        appliedJobs,
+        isLoading, 
         setAppliedJobs,
         fetchProfileAndMatchJobs,    
 				processAddApplication,

@@ -39,7 +39,7 @@ const FreelanceApiDataProvider = (props) => {
     if (res) {
     
       setFreelanceProfileData(res.data); 
-      // sessionStorage.setItem("freelancer_id", res?.data[0]?.id);  
+      
       sessionStorage.setItem("freelancer_id", res?.data[0]?.id || "");
 
     } else {
@@ -104,6 +104,13 @@ const FreelanceApiDataProvider = (props) => {
     } else {
       return false;
     }
+  };
+
+  const handleAddClick = () => {
+    if (portfolios.length === 0) {
+      toast.error("Please add a portfolio before proceeding.");
+    }
+    
   };
 
 
@@ -199,6 +206,7 @@ console.log("selectedPortfolioObjects", selectedPortfolioObjects);
         setSelectedItems,
         setFormData,
         handleSubmit,
+        handleAddClick,
         handleUpdateFreelanceProfile,
         handleEditFreelance,
         processAddFreelance,

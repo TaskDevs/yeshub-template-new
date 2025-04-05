@@ -1,10 +1,11 @@
-import Header1 from "../app/common/header/header1";
+// import Header1 from "../app/common/header/header1";
 import Header2 from "../app/common/header/header2";
 // import Footer1 from "../app/common/footer/footer1";
 import Footer2 from "../app/common/footer/footer2";
 // import Footer3 from "../app/common/footer/footer3";
 // import Footer4 from "../app/common/footer/footer4";
 import { publicUser } from "./route-names"
+import { Header } from "../app/common/header/new-header";
 
 export function showFloatingMenus(currentpath) {
     switch (currentpath) {
@@ -49,9 +50,12 @@ export function setHeaderType(currentpath) {
         currentpath === publicUser.HOME17) {
         return <Header2 _config={getHeaderConfig(currentpath)} />
     } else {
-        return <Header1 _config={getHeaderConfig(currentpath)} />
+        return <Header isDashboard={false} />
+		
     }
+	// <Header1 _config={getHeaderConfig(currentpath)} />
 }
+
 
 export function showFooter(currentpath) {
     if (

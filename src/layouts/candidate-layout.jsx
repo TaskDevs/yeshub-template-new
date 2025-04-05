@@ -1,32 +1,35 @@
-import Header1 from "../app/common/header/header1";
+// import Header1 from "../app/common/header/header1";
 import CandidateRoutes from "../routing/candidate-routes";
 import SignUpPopup from "../app/common/popups/popup-signup";
 import SignInPopup from "../app/common/popups/popup-signin";
-import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
-import { useLocation } from "react-router-dom";
-import { getHeaderConfig } from "../globals/layout-config";
+// import CanSidebarSection from "../app/pannels/candidate/sections/common/can-sidebar";
+// import { useLocation } from "react-router-dom";
+// import { getHeaderConfig } from "../globals/layout-config";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
-import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
-import { useContext } from "react";
+import { Header } from "../app/common/header/new-header";
+// import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
+// import { useContext } from "react";
 
 
 function CandidateLayout() {
-  const currentpath = useLocation().pathname;
-  const { isSidebarCollapsed } = useContext(ProfileApiData);
+  // const currentpath = useLocation().pathname;
+  // const { isSidebarCollapsed } = useContext(ProfileApiData);
 
   return (
     <>
       <div className="page-wraper">
-        <Header1 _config={getHeaderConfig(currentpath)} />
+        {/* <Header1 _config={getHeaderConfig(currentpath)} /> */}
+        <Header isDashboard={true} />
 
         <div className="page-content m-t40">
           {/* <InnerPageBanner _data={setBanner(currentpath)} /> */}
           {/* "col-xl-3 col-lg-4 col-md-12 rightSidebar m-b30 */}
 
           <div className="section-full p-t120  p-b90 site-bg-white">
-            <div className="container">
-              {/* row */}
+            <CandidateRoutes />
+            {/* <div className="container">
+              row
               <div className="row">
                 <div
                   // col-md-12 col-xl-3 col-lg-4 col-md-12
@@ -34,7 +37,7 @@ function CandidateLayout() {
                     isSidebarCollapsed ? "collapsed" : ""
                   }`}
                 >
-                  {/* side-bar-st-1 */}
+                  side-bar-st-1
                   <div className="side-bar-st-1">
                     <CanSidebarSection />
                   </div>
@@ -43,7 +46,7 @@ function CandidateLayout() {
                   <CandidateRoutes />
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -58,7 +61,7 @@ function CandidateLayout() {
 
         <SignUpPopup />
         <SignInPopup />
-        
+
 
         <YesNoPopup
           id="delete-dash-profile"
@@ -110,7 +113,7 @@ function CandidateLayout() {
           type={popupType.DELETE_MILESTONE}
           msg={"Are you sure you want to delete this milestone?"}
         />
-      
+
       </div>
     </>
   );

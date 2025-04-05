@@ -19,7 +19,6 @@ import TestimonialApiDataProvider from "./app/context/testimonial/testimonialCon
 import ProfileApiDataProvider from "./app/context/user-profile/profileContextApi";
 import WalletApiDataProvider from "./app/context/wallet/walletContextApi";
 
-
 import { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 import PortfolioMediaApiDataProvider from "./app/context/portfolio-media/portfolioMediaContextApi";
@@ -59,20 +58,20 @@ function App() {
                       <PaymentApiDataProvider>
                         <PortfolioApiDataProvider>
                           <PortfolioMediaApiDataProvider>
-                          <SkillsApiDataProvider>
-                            <TestimonialApiDataProvider>
-                              <ProfileApiDataProvider>
-                                <FreelanceApiDataProvider>
-                                  <WalletApiDataProvider>
-                                    {isLoading && <Loader />}
-                                    <Toaster />
-                                    <ScrollToTop />
-                                    <RootLayout />
-                                  </WalletApiDataProvider>
-                                </FreelanceApiDataProvider>
-                              </ProfileApiDataProvider>
-                            </TestimonialApiDataProvider>
-                          </SkillsApiDataProvider>
+                            <SkillsApiDataProvider>
+                              <TestimonialApiDataProvider>
+                                <ProfileApiDataProvider>
+                                  <FreelanceApiDataProvider>
+                                    <WalletApiDataProvider>
+                                      {isLoading && <Loader />}
+                                      <Toaster />
+                                      <ScrollToTop />
+                                      <RootLayout />
+                                    </WalletApiDataProvider>
+                                  </FreelanceApiDataProvider>
+                                </ProfileApiDataProvider>
+                              </TestimonialApiDataProvider>
+                            </SkillsApiDataProvider>
                           </PortfolioMediaApiDataProvider>
                         </PortfolioApiDataProvider>
                       </PaymentApiDataProvider>

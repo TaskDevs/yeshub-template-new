@@ -8,7 +8,6 @@ export const timeOut = { timeout: 10000 };
 
 //RETRIEVE USER IDS
 export const userId = sessionStorage.getItem("user_id");
-export const OAuthUserId = sessionStorage.getItem("OAuthUserId");
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
 export const getJobId = () => sessionStorage.getItem("job_id");
 

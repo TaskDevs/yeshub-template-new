@@ -1,16 +1,18 @@
 import { MdOutlineStarRate } from "react-icons/md";
-import JobZImage from "../../../../common/jobz-img";
+// import JobZImage from "../../../../common/jobz-img";
 
-function SectionReview() {
+function SectionReview({ props }) {
+	console.log("review-props", props)
   return (
 		<>
 			<h4 className="twm-s-title">Reviews</h4>
 			<div className="tw-sidebar-tags-wrap reviews-wrapper">
 				<div className="twm-s-info">
 					<div className="twm-sec-reviews">
-						<div className="twm-media">
-							<div className="twm-media-pic">
-								<JobZImage src="images/candidates/pic4.jpg" alt="#" />
+						<div className="twm-media-pic">
+							<div className=" dashboard-profile-photo">
+								{/* <JobZImage src="images/candidates/pic4.jpg" alt="#" /> */}
+								<img src={props?.profile_image ||"/assets/images/candidates/user-avatar-fallback.jpg"} alt="user-picture" />
 							</div>
 							{/* <div className="twm-candidates-tag">
 							<span>Featured</span>

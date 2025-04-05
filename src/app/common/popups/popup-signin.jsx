@@ -8,7 +8,7 @@ import { login} from "../../context/auth/authApi";
 import cookieMethods from "../../../utils/cookieUtils";
 import toast from 'react-hot-toast';
 import { base } from "../../../globals/route-names";
-import { AuthApiData } from "../../context/auth/authContextApi";
+// import { AuthApiData } from "../../context/auth/authContextApi";
 import axios from "axios";
 import { GoogleLogin } from "@react-oauth/google";
 import { LinkedIn } from "react-linkedin-login-oauth2";
@@ -21,7 +21,7 @@ function SignInPopup() {
   } = useContext(GlobalApiData);
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
-  const { processRetrieve } = useContext(AuthApiData)
+  // const { processRetrieve } = useContext(AuthApiData)
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState(() => {
     const savedUser = JSON.parse(localStorage.getItem("rememberedUser"));

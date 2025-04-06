@@ -93,25 +93,6 @@ function CanDashboardPage() {
           </div>
         </div>
       </div>
-      {/* <SectionCandidateOverview /> */}
-      
-      {/* <div className="twm-pro-view-chart-wrap">
-                    <div className="row">
-                        <div className="col-xl-12 col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateProfileViews />
-                        </div>
-                        <div className="col-xl-12 col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateInbox />
-                        </div>
-                        <div className="col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateRecentActivities />
-                        </div>
-                        <div className="col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateRecentApplications />
-                        </div>
-                    </div>
-                </div> */}
-    </>
   );
 }
 

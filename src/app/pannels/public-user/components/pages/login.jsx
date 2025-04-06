@@ -6,10 +6,12 @@ import Loader from "../../../../common/loader";
 import { IoIosEyeOff, IoMdEye } from "react-icons/io";
 import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { SIGNINFIELD } from "../../../../../globals/sign-in-data";
-import { login, loginWithLinkedIn, loginWithGoogle } from "../../../../context/auth/authApi";
+import { login } from "../../../../context/auth/authApi";
 import cookieMethods from "../../../../../utils/cookieUtils";
 import toast from "react-hot-toast";
-
+import axios from "axios";
+import { GoogleLogin } from "@react-oauth/google";
+import { LinkedIn } from "react-linkedin-login-oauth2";
 
 function LoginPage() {
   const {
@@ -19,7 +21,7 @@ function LoginPage() {
     isSubmitting,
     setIsSubmitting,
   } = useContext(GlobalApiData);
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState(() => {
@@ -112,62 +114,93 @@ function LoginPage() {
     }
   };
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+ 
+ 
+
+  // linkedin login
+
+  const handleLinkedInSuccess = async (response) => {
+    console.log("LinkedIn Login Success:", response);
+
+    setLoading(true);
+    try {
+      // Send the LinkedIn token to your Laravel backend for verification
+      const res = await axios.post(
+        "http://127.0.0.1:8000/api/v1/auth/linkedin",
+        {
+          token: response.code, // The token is in 'code', not 'access_token'
+        }
+      );
+
+      const { token, refresh_token, user } = res.data;
+      console.log("User from LinkedIn:", user);
+
+      // Store the access token and refresh token
+      localStorage.setItem("access_token", token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      // Redirect based on user role
+      if (user.role === "user") {
+        setTimeout(() => navigate(`/dashboard/onboard?user=${user.id}`), 2000);
+      } else {
+        setTimeout(() => navigate("/dashboard"), 2000);
+      }
+    } catch (err) {
+      console.error("LinkedIn login failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
-  const googleSignin = async ()=>{
-    console.log(formData.role)
-    const res = await loginWithGoogle(formData.role)
-    console.log(res)
-  }
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setIsSubmitting(true);
-  //   try {
-  //     const response = await login(formData);
-  //     if (response && response.token) {
-  //       // Store token and user role
-  //       sessionStorage.setItem("authToken", response.token);
-  //       sessionStorage.setItem("userRole", response.role);
+  const handleFailure = (error) => {
+    console.error("LinkedIn login error:", error);
+  };
 
-  //       if (formData.rememberMe) {
-  //         sessionStorage.setItem("rememberedUser", JSON.stringify(formData));
-  //       } else {
-  //         sessionStorage.removeItem("rememberedUser");
-  //       }
+  // Google login
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
+        {
+          token: credentialResponse.credential,
+        }
+      );
 
-  //       // Redirect based on role
-  //       switch (response.role) {
-  //         case "admin":
-  //           navigate("/admin");
-  //           break;
-  //         case "employer":
-  //           navigate(base.EMPLOYER_PRE);
-  //           break;
-  //         case "user":
-  //         default:
-  //           navigate(base.CANDIDATE_PRE);
-  //           break;
-  //       }
-  //     } else {
-  //       console.error("Login failed: No token received");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed", error);
-  //   } finally {
-  //     setIsSubmitting(false);
-  //   }
-  // };
+      const { token, refresh_token, user } = res.data;
+      console.log(res.data);
+      sessionStorage.setItem("authToken", token);
 
-  const linkedinSignin = async ()=>{
-    const res = await loginWithLinkedIn(formData.role)
-    console.log(res)
-  }
+      cookieMethods.setCookies(token, refresh_token);
+      sessionStorage.setItem("username", user?.username);
+      sessionStorage.setItem("userId", user?.user_id);
+      const role = user.role;
+
+      // Check if role exists
+      setTimeout(() => {
+        switch (role) {
+          case "user":
+            navigate(`/dashboard/onboard?user=${user.id}`);
+            break;
+          case "client":
+            navigate(base.EMPLOYER_PRE);
+            break;
+          case "freelancer":
+          default:
+            navigate(base.CANDIDATE_PRE);
+            break;
+        }
+      },1000);
+    } catch (err) {
+      console.error("Google login failed", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleGoogleError = () => {
+    console.error("Google Sign-In Error");
+  };
+
 
   return (
     <>
@@ -196,49 +229,7 @@ function LoginPage() {
                       <span className="log-reg-form-title">Log In</span>
                     </div>
 
-                    <div className="twm-tabs-style-2">
                   
-                    <ul className="nav nav-tabs" id="myTab" role="tablist">
-                      {/* Signup Candidate */}
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
-                            formData.role === "user" ? "active" : ""
-                          }`}
-                          data-bs-toggle="tab"
-                          type="button"
-                          aria-selected={formData.role === "user"}
-                          onClick={() =>
-                            handleChange({
-                              target: { name: "role", value: "user" },
-                            })
-                          }
-                        >
-                          <i className="fas fa-user-tie" /> Candidate
-                        </button>
-                      </li>
-                      {/* Signup Employer */}
-                      <li className="nav-item" role="presentation">
-                        <button
-                          className={`nav-link ${
-                            formData.role === "employer" ? "active" : ""
-                          }`}
-                          data-bs-toggle="tab"
-                          type="button"
-                          aria-selected={formData.role === "employer"}
-                          onClick={() =>
-                            handleChange({
-                              target: { name: "role", value: "employer" },
-                            })
-                          }
-                        >
-                          <i className="fas fa-building" /> Employer
-                        </button>
-                      </li>
-                    </ul>
-
-                                      
-                  </div>
 
                   {/* Display success/error message */}
                   {message.text && (
@@ -330,19 +321,42 @@ function LoginPage() {
                   </form>
                   <div className="text-center align-items-center">
                   <span className="modal-f-title">Login or Sign up with</span>
-                  <ul className="twm-modal-social">
-                  <li>
-                      <a onClick={googleSignin} className="google-clr m-2">
-                        <i className="fab fa-google" />
-                      </a>
-                    </li>
-                    <li>
-                      <a onClick={linkedinSignin} className="linkedin-clr m-2">
-                        <i className="fab fa-linkedin-in" />
-                      </a>
-                    </li>
-                    
-                  </ul>
+                  <ul className="twm-modal-social flex justify-between gap-4">
+                  <li className="flex-1">
+                    {loading ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleError}
+                      />
+                    )}
+                  </li>
+                  <li className="flex-1">
+                    <LinkedIn
+                      clientId="78cj9ms7zti6zz"
+                      redirectUri="http://localhost:3000/linkedin"
+                      onSuccess={handleLinkedInSuccess}
+                      onError={handleFailure}
+                      scope="r_liteprofile"
+                    >
+                      {({ linkedInLogin }) => (
+                        <button
+                          onClick={linkedInLogin}
+                          className="flex items-center justify-center gap-2 w-full text-white border-0 py-2 mx-2 hover:bg-[#0a14c9] focus:outline-none focus:ring-2 focus:ring-[#1017ea] rounded-md"
+                          style={{
+                            backgroundColor: "blue",
+                            borderRadius: "3px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          <i className="fab fa-linkedin-in text-lg" />
+                          LinkedIn
+                        </button>
+                      )}
+                    </LinkedIn>
+                  </li>
+                </ul>
                   </div>
                 </div>
               </div>

@@ -74,9 +74,12 @@ function EmpCandidatesPage() {
     }
   };
 
-
   const handleViewCandidates = (userid) => {
     navigate(`/can-detail/${userid}`);
+  };
+
+  const handlemsg = (receiverid) => {
+    navigate(`/dashboard-employer/messages-style-1?user=${receiverid}`);
   };
 
   const statusBodyTemplate = (rowData) => (
@@ -115,35 +118,31 @@ function EmpCandidatesPage() {
 
   const actionsBodyTemplate = (rowData) => (
     <div className="flex gap-2">
-      <Button 
-      icon="pi pi-eye"
-      className="p-button p-button-sm p-button-info"
-      onClick={() => handleViewCandidates(rowData.user.user_info?.user_id)}
-      />
-      
-    
-      <Button 
-      icon="pi pi-envelope"
-      className="p-button p-button-primary"
-      
-      />
-      
-     
       <Button
-          icon="pi pi-trash"
-          className="p-button-sm p-button-danger"
-          data-bs-target="#delete-application"
-          data-bs-toggle="modal"
-          data-bs-dismiss="modal"
-          title="Delete Job"
-          onClick={() => setSelectedId(rowData.id)}
-        />
-
+        icon="pi pi-eye"
+        className="p-button p-button-sm p-button-info"
+        onClick={() => handleViewCandidates(rowData.user.user_info?.user_id)}
+      />
+      <Button
+        icon="pi pi-envelope"
+        className="p-button p-button-primary"
+        onClick={() => handlemsg(rowData.user?.id)}
+      />
+    
+      <Button
+        icon="pi pi-trash"
+        className="p-button-sm p-button-danger"
+        data-bs-target="#delete-application"
+        data-bs-toggle="modal"
+        data-bs-dismiss="modal"
+        title="Delete Job"
+        onClick={() => setSelectedId(rowData.id)}
+      />
       <YesNoPopup
-				id="delete-application"
-				type={popupType.DELETE_APPLIED_JOB}
-				msg={"Are you sure you want to delete this application?"}
-			/>
+        id="delete-application"
+        type={popupType.DELETE_APPLIED_JOB}
+        msg={"Are you sure you want to delete this application?"}
+      />
     </div>
   );
 

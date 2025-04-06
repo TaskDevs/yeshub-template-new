@@ -8,6 +8,7 @@ import SignInPopup from "../app/common/popups/popup-signin";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
 import { Header } from "../app/common/header/new-header";
+import { MobileNav } from "../app/common/footer/mobile-nav";
 // import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
 // import { useContext } from "react";
 
@@ -22,11 +23,12 @@ function CandidateLayout() {
         {/* <Header1 _config={getHeaderConfig(currentpath)} /> */}
         <Header isDashboard={true} />
 
+     
         <div className="page-content m-t40">
           {/* <InnerPageBanner _data={setBanner(currentpath)} /> */}
           {/* "col-xl-3 col-lg-4 col-md-12 rightSidebar m-b30 */}
-
-          <div className="section-full p-t120  p-b90 site-bg-white">
+          {/* site-bg-white p-b90 */}
+          <div className="section-full p-t60    site-bg-gray">
             <CandidateRoutes />
             {/* <div className="container">
               row
@@ -50,6 +52,8 @@ function CandidateLayout() {
           </div>
         </div>
 
+        
+        <MobileNav isDashboard={true} />
         {/* Footer */}
         {/* <Footer1 /> */}
         {/* {showFooter(currentpath) && setFooterType(currentpath)} */}

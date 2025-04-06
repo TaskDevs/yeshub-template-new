@@ -9,7 +9,7 @@ import { SearchInput } from "../search-box";
 import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-// import { base, candidate } from "../../../globals/route-names";
+
 
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
@@ -18,6 +18,8 @@ export const Header = ({ isDashboard = true }) => {
   const [searchValue, setSearchValue] = useState("");
   const [activeNav, setActiveNav] = useState("Find Talent");
   const [navOpen, setNavOpen] = useState(false);
+  const username = sessionStorage.getItem("username");
+  const token = sessionStorage.getItem("authToken");
 
   const toggleNav = () => {
     setNavOpen(!navOpen);
@@ -30,13 +32,15 @@ export const Header = ({ isDashboard = true }) => {
 
   const navItems = [
     { id: "find-talent", label: "Find Talent", menu: null },
+    { id: "home", label: "Home", menu: null, to: "/dashboard-candidate" },
     {
       id: "find-work",
       label: "Find Work",
+      to: "/dashboard-candidate/find-work",
       menu: {
         title: "Find Work",
         items: [
-          { id: "find-work-main", label: "Find Work", selected: true },
+          { id: "find-work-main", label: "Find Work", selected: true, to: "/dashboard-candidate/find-work" },
           { id: "saved-jobs", label: "Saved Jobs" },
           { id: "proposals-offers", label: "Proposals & Offers" },
         ],
@@ -84,7 +88,7 @@ export const Header = ({ isDashboard = true }) => {
   const getNavItems = () => {
     if (isDashboard) {
       return navItems.filter((item) =>
-        ["Find Work", "Deliver Work", "Manage Finances", "Messages"].includes(
+        ["Home", "Find Work", "Deliver Work", "Manage Finances", "Messages"].includes(
           item.label
         )
       );
@@ -96,7 +100,6 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const handleNavHover = (item) => {
-    console.log("item", item);
     if (item.menu) {
       setOpenMenu(item.label);
     } else {
@@ -116,13 +119,23 @@ export const Header = ({ isDashboard = true }) => {
     setOpenMenu(openMenu === "profile" ? null : "profile");
   };
 
+  const handleLogoClick = () => {
+    if (token) {
+      navigate("/dashboard-candidate")
+    } else {
+      navigate("/")
+    }
+  }
+
+
+
   return (
     <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 z-50 zIndex">
       <div className="tw-css max-w-[1280px] w-full mx-auto flex justify-start items-center z-50">
         {/* Navigation */}
         <div className="flex items-center">
           {/* Logo */}
-          <div className="flex items-center mr-4" onClick={() => navigate("/")}>
+          <div className="flex items-center mr-4" onClick={() => handleLogoClick()}>
             <img src="/yes-logo-1.png" alt="YesHub" className="h-14 w-auto" />
           </div>
 
@@ -184,7 +197,7 @@ export const Header = ({ isDashboard = true }) => {
           {/* Search Box - Only show on dashboard */}
           {isDashboard && (
             <SearchInput
-              className="w-full flex-1"
+              className="w-full flex-1 search-input"
               rightIcon={null}
               value={searchValue}
               onSearch={handleSearch}
@@ -228,7 +241,7 @@ export const Header = ({ isDashboard = true }) => {
               <button className="text-gray-600 hover:text-green-700">
                 <FaBell className="h-5 w-5" />
               </button>
-              <button className="text-gray-600 hover:text-green-700">
+              <button className="text-gray-600 hover:text-green-700 mail-icon">
                 <Mail className="h-5 w-5" />
               </button>
 
@@ -258,7 +271,7 @@ export const Header = ({ isDashboard = true }) => {
                         </div>
                         <div>
                           <div className="font-medium text-gray-800">
-                            John Doe
+                            {username}
                           </div>
                           <div className="text-sm text-gray-500">
                             Freelancer

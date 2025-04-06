@@ -161,7 +161,7 @@ const CandidateProfile = () => {
           <ProfileSection title={profileSections[3].title} description={profileSections[3].description} onClick={profileSections[3].onClick} />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
           <ProfileSection title={profileSections[4].title} description={profileSections[4].description} onClick={profileSections[4].onClick} />
           <ProfileSection title={profileSections[5].title} description={profileSections[5].description} onClick={profileSections[5].onClick} />
         </div>

@@ -96,6 +96,7 @@ function CanDashboardPage() {
         </div>
       </div>
       {/* <SectionCandidateOverview /> */}
+      
 
       {/* <div className="twm-pro-view-chart-wrap">
                     <div className="row">

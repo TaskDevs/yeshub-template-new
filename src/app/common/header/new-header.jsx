@@ -9,7 +9,7 @@ import { SearchInput } from "../search-box";
 import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { base, candidate } from "../../../globals/route-names";
+import { publicUser, base, candidate } from "../../../globals/route-names";
 
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
@@ -31,16 +31,18 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "find-talent", label: "Find Talent", menu: null },
-    { id: "home", label: "Home", menu: null, to: base.CANDIDATE_PRE, },
+    { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
+    { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
+    { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
+    { id: "my-home", label: "My Home", menu: null, selected: true, to: "/dashboard-candidate" },
     {
       id: "find-work",
-      label: "Find Work",
-      to: `${base.CANDIDATE_PRE}${candidate.FIND_WORK}`,
+      label: "Find Jobs",
+      to: "/dashboard-candidate/find-work",
       menu: {
-        title: "Find Work",
+        // title: "Find Work",
         items: [
-          { id: "find-work-main", label: "Find Work", selected: true, to: `${base.CANDIDATE_PRE}${candidate.FIND_WORK}`, },
+          { id: "find-work-main", label: "Find Jobs", selected: true, to: "/dashboard-candidate/find-work" },
           { id: "saved-jobs", label: "Saved Jobs" },
           { id: "proposals-offers", label: "Proposals & Offers" },
         ],
@@ -51,7 +53,7 @@ export const Header = ({ isDashboard = true }) => {
       label: "Deliver Work",
       to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
       menu: {
-        title: "Deliver Work",
+        // title: "Deliver Work",
         items: [
           {
             id: "active-contracts",
@@ -69,12 +71,12 @@ export const Header = ({ isDashboard = true }) => {
     },
     { id: "assessment-training", label: "Assessment & Training", menu: null },
     { id: "why-yeshub", label: "Why YesHub", menu: null },
-    { id: "enterprise", label: "Enterprise", menu: null },
+    // { id: "enterprise", label: "Enterprise", menu: null },
     {
       id: "manage-finances",
       label: "Manage Finances",
       menu: {
-        title: "Manage Finances",
+        // title: "Manage Finances",
         items: [
           {
             id: "financial-overview",
@@ -94,14 +96,14 @@ export const Header = ({ isDashboard = true }) => {
   const getNavItems = () => {
     if (isDashboard) {
       return navItems.filter((item) =>
-        ["Home", "Find Work", "Deliver Work", "Manage Finances", "Messages"].includes(
+        ["My Home", "Find Jobs", "Deliver Work", "Manage Finances", "Messages"].includes(
           item.label
         )
       );
     }
     return navItems.filter(
       (item) =>
-        !["Manage Finances", "Deliver Work", "Messages"].includes(item.label)
+        !["My Home", "Find Jobs", "Manage Finances", "Deliver Work", "Messages"].includes(item.label)
     );
   };
 

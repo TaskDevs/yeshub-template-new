@@ -16,10 +16,10 @@ import FinancesPage from "../app/common/payment/accounts/finances-page";
 import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applied-job-details";
 import CanSavedJobsDetails from "../app/pannels/candidate/components/can-saved-jobs-details";
 import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-milestone";
-import ContractsHistory from "../app/pannels/candidate/sections/dashboard/contracts-history";
+import ContractsHistory from "../app/pannels/candidate/sections/deliver-work/contracts-history";
 import CandidateProfile from "../app/pannels/candidate/sections/new-profile/cand-profile";
 import FindWorkPage from "../app/pannels/candidate/sections/find-work/find-work-page";
-
+import ActiveContracts from "../app/pannels/candidate/sections/deliver-work/active-contracts";
 
 function CandidateRoutes() {
 	return (
@@ -41,6 +41,7 @@ function CandidateRoutes() {
 			<Route path={candidate.CHAT} element={<CanChatPage />} />
 			<Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
 			<Route path={candidate.Contracts_History} element={<ContractsHistory />} />
+			<Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
 			<Route path={candidate.APPLIED_JOB_DETAILS} element={<CanAppliedJobDetails />} />
 			<Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
 			<Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />

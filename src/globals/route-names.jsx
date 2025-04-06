@@ -60,7 +60,7 @@ export const publicUser = {
     CONTRACT: "/contract",
     GOOGLECALLBACK: "/auth/google/callback",
     LINKEDINCALLBACK: "/auth/google/callback",
-    WELCOME:"/welcome-onboarding",
+    WELCOME: "/welcome-onboarding",
 
   },
   candidate: {
@@ -90,6 +90,7 @@ export const candidate = {
   DASHBOARD: "/",
   PROFILE: "/profile",
   Contracts_History: "/contracts-history",
+  Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
   APPLIED_JOBS: "/applied-jobs",
   RESUME: "/my-resume",

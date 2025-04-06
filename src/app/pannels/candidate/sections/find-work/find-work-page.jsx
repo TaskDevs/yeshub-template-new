@@ -10,7 +10,7 @@ import CanJobCard from "../../components/can-job-card";
 import ProfileInfoSection from "./profile-info-section";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
-import Loader from "../../../../common/loader";
+
 
 
 function FindWorkPage() {
@@ -30,9 +30,7 @@ function FindWorkPage() {
 
   
 
-  if (!profileData?.id) {
-    return (<div><Loader/></div>)
-  }
+ 
 
   return (
     <div className="tw-css  min-h-screen">

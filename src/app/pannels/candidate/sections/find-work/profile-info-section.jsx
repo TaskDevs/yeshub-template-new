@@ -7,16 +7,17 @@ function ProfileInfoSection() {
   // const [profileProgress, _setProfileProgress] = useState(85);
   const profileProgress = 85;
   const { profileData } = useContext(ProfileApiData);
+  const username = sessionStorage.getItem("username");
 
   return (
     <div className="border rounded-lg shadow-md p-4 flex flex-col bg-white w-[35%] ">
       <div className="w-full flex flex-col gap-3">
         <div className="w-full profile-header">
          
-            <img src={profileData?.profile_image} alt={profileData?.firstname} className="w-16 h-16 rounded-full" />
+            <img src={profileData?.profile_image || "/assets/images/candidates/user-avatar-fallback.jpg"} alt={profileData?.firstname} className="w-16 h-16 rounded-full" />
           
           <div className="">
-            <p>{profileData?.firstname} {profileData?.lastname}</p>
+            <p>{profileData?.firstname || username} </p>
             <p>{profileData?.profession}</p>
           </div>
         </div>

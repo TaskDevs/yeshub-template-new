@@ -9,7 +9,7 @@ export const sort = ["most recent", "least recent"]
 export const jobData = [
     {
         "budget": "4000.00",
-        "description": "Looking for an experienced frontend developer with React expertise...",
+        "description": "Looking for an experienced frontend developer with React expertise",
         "duty": "<ul><li>Financial analysis and risk assessment (as previously described)</li><li>Portfolio management and investment advice</li><li>Loan origination and underwriting</li></ul><p><br></p>",
         "employer": {
           "address": null,
@@ -37,7 +37,7 @@ export const jobData = [
       },
       {
         "budget": null,
-        "description": "Join our fast-growing team to build innovative solutions...",
+        "description": "Join our fast-growing team to build innovative solutions",
         "duty": "<p>test</p>",
         "employer": {
           "address": "Nii Martey Tsuru, st.",

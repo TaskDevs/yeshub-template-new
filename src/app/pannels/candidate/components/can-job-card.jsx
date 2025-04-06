@@ -64,7 +64,7 @@ const CanJobCard = ({
               <span className="">{ratings}</span>
               <span className="text-gray-500">({reviews} reviews)</span>
             </div>
-            <p className="text-truncate">{description}</p>
+            <p className="truncate">{description}</p>
             {skills &&
               skills.map((skill, i) => (
                 <div

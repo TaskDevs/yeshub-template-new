@@ -40,7 +40,7 @@ export const Header = ({ isDashboard = true }) => {
       menu: {
         title: "Find Work",
         items: [
-          { id: "find-work-main", label: "Find Work", selected: true, to: "/dashboard-candidate/find-work" },
+          // { id: "find-work-main", label: "Find Work", selected: true, to: "/dashboard-candidate/find-work" },
           { id: "saved-jobs", label: "Saved Jobs" },
           { id: "proposals-offers", label: "Proposals & Offers" },
         ],
@@ -95,11 +95,16 @@ export const Header = ({ isDashboard = true }) => {
     }
     return navItems.filter(
       (item) =>
-        !["Manage Finances", "Deliver Work", "Messages"].includes(item.label)
+        !["Home", "Manage Finances", "Deliver Work", "Messages", "Enterprise"].includes(item.label)
     );
   };
 
   const handleNavHover = (item) => {
+    
+    if (!isDashboard && item.label === "Find Work") {
+      setOpenMenu(null);
+      return;
+    }
     if (item.menu) {
       setOpenMenu(item.label);
     } else {
@@ -110,6 +115,16 @@ export const Header = ({ isDashboard = true }) => {
   const handleNavClick = (item) => {
     setOpenMenu(null);
     setActiveNav(item.label);
+
+    if (!isDashboard && item.label === "Find Work") {
+      navigate("/job-list")
+      return;
+    }
+    if (!isDashboard && item.id === "find-talent") {
+      navigate("/can-list")
+      return;
+    }
+  
     if (item.to) {
       navigate(item.to);
     }
@@ -118,6 +133,11 @@ export const Header = ({ isDashboard = true }) => {
   const handleProfileClick = () => {
     setOpenMenu(openMenu === "profile" ? null : "profile");
   };
+
+  const handleUserProfile = () => {
+    setOpenMenu(openMenu === "profile" && null );
+    navigate("/dashboard-candidate/profile")
+  }
 
   const handleLogoClick = () => {
     if (token) {
@@ -291,7 +311,7 @@ export const Header = ({ isDashboard = true }) => {
                     <div className="py-1">
                       <button
                         className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start"
-                        onClick={() => navigate("/dashboard-candidate/profile")}
+                        onClick={() => handleUserProfile()}
                       >
                         <FaUserCircle className="text-[#A6A6A6] h-5 w-5" />
                         <span>Your Profile</span>

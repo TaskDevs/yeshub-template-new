@@ -54,7 +54,7 @@ const JobApiDataProvider = (props) => {
     setJobLoad(false);
     let response = await jobList(pageNo);
     if (response) {
-      //console.log(response);
+      // console.log(response);
       setJobListData(response.data);
       setPaginationData({
         total: response.pagination.total,
@@ -89,7 +89,8 @@ const JobApiDataProvider = (props) => {
     try {
       let response = await employerJobList(id);
       if (response) {
-        setEmpJobListData(response.data);
+        console.log("jobs emp", response)
+        setEmpJobListData(response);
         setEmpPaginationData({
           total: response.total,
         });
@@ -110,8 +111,6 @@ const JobApiDataProvider = (props) => {
 
   const processAJobProfile = async (id) => {
     let response = await jobProfile(id);
-
-    // console.log("response-job-profile", response)
     return response;
    
   };

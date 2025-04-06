@@ -6,12 +6,13 @@ import {
   profileProfile,
   updateProfile,
   deleteProfile,
-  fullProfileProfile
+  fullProfileProfile,
+  updateUserLogo
 } from "./profileApi";
 import { USERPROFILEFIELD } from "../../../globals/user-profile-data";
 import { GlobalApiData } from "../global/globalContextApi";
 import toast from "react-hot-toast";
-import { OAuthUserId, userId } from "../../../globals/constants";
+import { userId } from "../../../globals/constants";
 
 export const ProfileApiData = createContext();
 
@@ -32,12 +33,13 @@ const ProfileApiDataProvider = (props) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const [imgSrc, setImgSrc] = useState(`https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`);
+  const [isImagePreview, setIsImagePreview] = useState(false);
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(() => {
     const savedState = localStorage.getItem('isSidebarCollapsed');
     return savedState ? JSON.parse(savedState) : true; 
   }); 
   
-  // console.log("selectedFile", selectedFile)
+  console.log("selectedFile", selectedFile)
   // console.log("imageurl", imageURL)
 
 
@@ -104,6 +106,16 @@ const ProfileApiDataProvider = (props) => {
       throw err;
     }
   };
+
+  const processUpdateUserLogo = async (id, data) => {
+    try {
+      const res = await updateUserLogo(id, data);
+      return res;
+    } catch (err) {
+      console.error("update-user-logo", err);
+      throw err;
+    }
+  };
   
 
   const processGetAllProfile = async () => {
@@ -166,12 +178,6 @@ const ProfileApiDataProvider = (props) => {
     e.preventDefault();
     
 
-    if (!selectedFile) {
-      toast.error("Please select a profile image before submitting.");
-      setIsSubmitting(false);
-      return;
-    }
-
     if (selectedItems.length <= 2) {
       toast.error("Please select at least 3 skills");
       setIsSubmitting(false);
@@ -188,11 +194,9 @@ const ProfileApiDataProvider = (props) => {
 
   setIsLoading(true)
     
-    // let base64String = imageURL.replace(/^data:image\/\w+;base64,/, '');
-
     const profileFormData = new FormData();
-    profileFormData.append("profile_image", imageURL);
-    profileFormData.append("user_id", userId || OAuthUserId);
+    // profileFormData.append("profile_image", imageURL);
+    profileFormData.append("user_id", userId);
     profileFormData.append("country", "Ghana");
     Object.entries(formData).forEach(([key, value]) => {
       profileFormData.append(key, value);
@@ -201,8 +205,9 @@ const ProfileApiDataProvider = (props) => {
 
     try {
       const response = await processAddProfile(profileFormData);
-      console.log("add-user-profile", response)
-      if (response) {
+      // console.log("add-user-profile", response)
+      window.location.reload();
+      if (response) { 
         await fetchProfile()
         Promise.resolve().then(() => toast.success("Profile added successfully"));
       }
@@ -222,9 +227,43 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
-  const handleUpdateProfile = async (e) => {
-    e.preventDefault();
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
 
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        let logoFile = reader.result;
+        setFormData({ id: profileData?.id, logo: logoFile });
+        setImageURL(reader.result);
+        setIsImagePreview(true); 
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      setImageURL(null);
+      setIsImagePreview(false); 
+    }
+  };
+
+  const handleSubmitUserLogo = async () => {
+    if (!profileData?.id) {
+      toast.error("Create a user profile first!")
+      return;
+    }
+
+    if (formData.logo) {
+      const res = await processUpdateUserLogo(profileData?.id, { profile_image: formData.logo });
+       await fetchProfile();
+      if (res) {
+        setIsImagePreview(false);
+      }
+    }
+  };
+
+  const handleUpdateProfile = async () => {
     try {
       const response = await processUpdateProfile(userId, {
         ...formData,
@@ -248,22 +287,7 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setImageURL(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-    } else {
-      setImageURL(null);
-    }
-  };
+  
 
   const handleDeleteProfile = async () => {
     
@@ -297,6 +321,8 @@ const ProfileApiDataProvider = (props) => {
         allUsersProfile,
         isSidebarCollapsed,
         imgSrc, 
+        isImagePreview, 
+        setIsImagePreview,
         setImgSrc,
         fetchProfile,
         processFullProfileProfile,
@@ -306,6 +332,7 @@ const ProfileApiDataProvider = (props) => {
         processAddProfile,
         processGetAllProfile,
         processProfileProfile,
+        processUpdateUserLogo,
         handleReset,
         processUpdateProfile,
         processDeleteProfile,
@@ -313,6 +340,7 @@ const ProfileApiDataProvider = (props) => {
         handleUpdateProfile,
         handleDeleteProfile,
         setFormData,
+        handleSubmitUserLogo,
         handleImageChange,
       }}
     >

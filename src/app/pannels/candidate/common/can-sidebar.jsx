@@ -12,7 +12,7 @@ function CanSidebarSection() {
 	const { userProfile } = useContext(AuthApiData);
 	const username = userProfile?.username;
 	
-	// console.log("username-sidebar", username)
+
 
     return (
 			<>

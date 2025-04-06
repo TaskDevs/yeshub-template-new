@@ -30,7 +30,8 @@ function EmpManageJobsPage() {
 
   useEffect(() => {
     if (userId && !hasFetched) {
-      processGetAllJobPostByEmployer(userId).then(() => setHasFetched(true));
+     processGetAllJobPostByEmployer(userId).then(() => setHasFetched(true));
+   
     }
   }, [userId, hasFetched]);
 
@@ -47,7 +48,6 @@ function EmpManageJobsPage() {
 
   // Job type renderer
   const jobTypeBodyTemplate = (rowData) => {
-    console.log("job_type:", rowData.job_type); // 🔍 Debugging log to check value
 
     const jobTypes = {
       "Full Time": { label: "Full Time", severity: "success" },
@@ -65,6 +65,8 @@ function EmpManageJobsPage() {
 
     return <Tag severity={jobType.severity} value={jobType.label} />;
   };
+
+
 
   // Handle View Candidates
   const handleViewCandidates = (jobId) => {
@@ -162,9 +164,7 @@ function EmpManageJobsPage() {
                 header="Category"
                 filter
                 body={(rowData) =>
-                  rowData.job_category_id === 1
-                    ? "Graphic Designer"
-                    : "Video Production"
+                  rowData.job_category
                 }
               />
               <Column header="Job Type" body={jobTypeBodyTemplate} filter />

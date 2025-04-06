@@ -8,7 +8,7 @@ function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
   if (!_config) {
     return <p>Loading job details...</p>;
   }
-
+console.log(_config.skills)
   // Format date safely
   const formattedDate = _config?.start_date
     ? new Intl.DateTimeFormat("en-US", {
@@ -21,7 +21,8 @@ function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
   // Parse skills_id safely
   let skillsArray = [];
   try {
-    skillsArray = JSON.parse(_config?.skills_id || "[]"); // Default to empty array if parsing fails
+    skillsArray = _config?.skills; // Default to empty array if parsing fails
+    console.log(skillsArray)
     if (!Array.isArray(skillsArray)) {
       skillsArray = [];
     }
@@ -32,7 +33,8 @@ function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
 
   return (
     <>
-      <div className="side-bar mb-4">
+    
+      <div className= "side-bar mb-4" >
         <div className="twm-s-info2-wrap mb-5">
           <div className="twm-s-info2">
             <h4 className="section-head-small mb-4">Job Information</h4>
@@ -42,23 +44,23 @@ function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
                 <span className="twm-title">Date Posted</span>
                 <p>{formattedDate}</p>
               </li>
-              <li>
+              {/* <li>
                 <i className="fas fa-eye" />
                 <span className="twm-title">8160 Views</span>
               </li>
               <li>
                 <i className="fas fa-file-signature" />
                 <span className="twm-title">6 Applicants</span>
-              </li>
+              </li> */}
             </ul>
             <ul className="twm-job-hilites2">
-              <li>
+              {/* <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-calendar-alt" />
                   <span className="twm-title">Date Posted</span>
                   <div className="twm-s-info-discription">{formattedDate}</div>
                 </div>
-              </li>
+              </li> */}
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-map-marker-alt" />

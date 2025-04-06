@@ -1,24 +1,33 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 // import axios from "../../../utils/axios.config";
 import axios from "axios";
-import {
-	SUCCESS_STATUS,
-	REACT_BASE_URL,
-} from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Profile
 export const addProfile = async (data) => {
-
   try {
     let responseOnAddProfile = await axios.post(
-			`${REACT_BASE_URL}create-profile`,
-			data
-		);
-  
+      `${REACT_BASE_URL}create-profile`,
+      data
+    );
+
     return responseOnAddProfile;
   } catch (err) {
     console.error(err);
     return false;
+  }
+};
+
+export const addCv = async (data) => {
+  try {
+    let responseOnAddCv = await axios.post(
+      `${REACT_BASE_URL}user-cvs`,
+      data
+    );
+
+    return responseOnAddCv;
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -38,11 +47,31 @@ export const searchProfile = async () => {
   }
 };
 
+export const updateUserLogo = async (id, data) => {
+  try {
+    let responseOnUpdateUser = await axios.put(
+      `${REACT_BASE_URL}upload/user-logo/${id}`,
+      data
+    );
+    console.log(responseOnUpdateUser);
+    return responseOnUpdateUser.data;
+    // if (responseOnUpdateUser.status == 200) {
+    //   return responseOnUpdateUser.data;
+    // } else {
+    //   return false;
+    // }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // LIST Profile
 /**Add Get Profile API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
 export const profileList = async () => {
   try {
-    let responseOnProfileList = await axios.get(`${REACT_BASE_URL}get-all-users`);
+    let responseOnProfileList = await axios.get(
+      `${REACT_BASE_URL}get-all-users`
+    );
 
     return responseOnProfileList.data;
     // if (responseOnProfileList.status === SUCCESS_STATUS) {
@@ -56,17 +85,14 @@ export const profileList = async () => {
   }
 };
 
-
 // VIEW Profile  get-profile  `user-full-info/1`
- /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
+/**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
 export const profileProfile = async (id) => {
   try {
     let responseOnProfile = await axios.get(
-			`${REACT_BASE_URL}get-profile/${id}`
-      
-		);
+      `${REACT_BASE_URL}get-profile/${id}`
+    );
     return responseOnProfile;
-  
   } catch (err) {
     console.log(err);
     return false;
@@ -76,11 +102,9 @@ export const profileProfile = async (id) => {
 export const fullProfileProfile = async (id) => {
   try {
     let responseOnProfile = await axios.get(
-			`${REACT_BASE_URL}user-full-info/${id}`
-      
-		);
+      `${REACT_BASE_URL}user-full-info/${id}`
+    );
     return responseOnProfile;
-  
   } catch (err) {
     console.log(err);
     return false;
@@ -92,10 +116,10 @@ export const fullProfileProfile = async (id) => {
 export const updateProfile = async (id, data) => {
   try {
     let responseOnUpdateProfile = await axios.put(
-			`${REACT_BASE_URL}update-profile/${id}`,
-			data
-		);
-   return responseOnUpdateProfile;
+      `${REACT_BASE_URL}update-profile/${id}`,
+      data
+    );
+    return responseOnUpdateProfile;
   } catch (err) {
     console.log(err);
   }
@@ -105,13 +129,12 @@ export const updateProfile = async (id, data) => {
 export const deleteProfile = async (id) => {
   try {
     let responseOnDeleteProfile = await axios.delete(
-			`${REACT_BASE_URL}delete-profile/${id}`
-		);
-   return responseOnDeleteProfile;
+      `${REACT_BASE_URL}delete-profile/${id}`
+    );
+    return responseOnDeleteProfile;
   } catch (err) {
     console.error(err);
   }
 };
-
 
 // /user-full-info/1

@@ -12,13 +12,9 @@ import SectionFreelancerInfo from "../common/section-freelacer-info";
 import { FreelanceApiData } from "../../../context/freelance/freelanceContextApi";
 import { EducationApiData } from "../../../context/education/educationContextApi";
 import { PortfolioApiData } from "../../../context/portfolio/portfolioContextApi";
-import { GlobalApiData } from "../../../context/global/globalContextApi";
+import Loader from "../../../common/loader";
 
-
-const sections = [
-  "Education", "Portfolio", "Portfolio Media"
-]
-
+const sections = ["Education", "Portfolio", "Portfolio Media"];
 
 function CanProfilePage() {
   const {
@@ -26,9 +22,13 @@ function CanProfilePage() {
     handleSubmitProfile,
     handleUpdateProfile,
     handleImageChange,
+    isImagePreview,
+    // setIsImagePreview,
     profileData,
     setFormData,
     setSelectedItems,
+    processProfileProfile,
+    handleSubmitUserLogo,
   } = useContext(ProfileApiData);
 
   const { skillOptions } = useContext(SkillsApiData);
@@ -37,16 +37,19 @@ function CanProfilePage() {
     freelanceProfileData,
     handleUpdateFreelanceProfile,
     handleEditFreelance,
+    handleAddClick,
   } = useContext(FreelanceApiData);
-  const [imgSrc, setImgSrc] = useState(
-    `https://yeshub-api-v2-fd6c52bb29a5.herokuapp.com/${profileData?.profile_image}`
-  );
+
+  // const [imgSrc, setImgSrc] = useState(  profileData?.profile_image );
   const { processEducationEducation } = useContext(EducationApiData);
   const { processGetAllPortfolio } = useContext(PortfolioApiData);
-  const { setIsLoading, isLoading } = useContext(GlobalApiData)
+  const [isLoading, setIsLoading ] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  // console.log("profileData-profile", profileData);
+
+  console.log("isLoading-global", isLoading)
+  
+
 
   const handleEditClick = () => {
     if (!skillOptions || skillOptions.length === 0) {
@@ -75,13 +78,13 @@ function CanProfilePage() {
       }
     });
 
-    console.log("Raw selectedSkillObjects:", selectedSkillObjects);
-    console.log(
-      "Filtered selectedSkillObjects:",
-      selectedSkillObjects.filter(
-        (skill) => skill && skill.value !== undefined && skill.value !== null
-      )
-    );
+    // console.log("Raw selectedSkillObjects:", selectedSkillObjects);
+    // console.log(
+    //   "Filtered selectedSkillObjects:",
+    //   selectedSkillObjects.filter(
+    //     (skill) => skill && skill.value !== undefined && skill.value !== null
+    //   )
+    // );
 
     setFormData({
       firstname: profileData.firstname,
@@ -107,92 +110,100 @@ function CanProfilePage() {
 
   const updateProgress = async () => {
     let filledSections = 0;
-    setIsLoading(true); // Start loading
-  
+    setIsLoading(true); 
+
     try {
+      
       // Check if profile data is already available
-      if (profileData.id) filledSections++;
-    console.log("profileData-can-profile", profileData);
+      const profileData = await processProfileProfile(userId);
+      console.log("profileData-profile-progress", profileData);
+      if (profileData) filledSections++;
 
       // Check if education data is retrieved
       const educationData = await processEducationEducation(userId);
       if (educationData) filledSections++;
 
       const portfolioData = await processGetAllPortfolio(userId);
-      
+
       if (portfolioData) filledSections++;
-  
+
       // Check if portfolio data is retrieved
-     
-      if (portfolioData?.data?.data?.some((p) => p.media?.length > 0)) filledSections++;
-  
+
+      if (portfolioData?.data?.data?.some((p) => p.media?.length > 0))
+        filledSections++;
+      // console.log("portfolioData-profile", portfolioData?.data.data);
+
       setProgress((filledSections / 4) * 100); // Assuming 4 sections to check
-  
     } catch (error) {
       console.error("Error fetching data:", error);
       // Optionally handle the error (e.g., show a toast)
     } finally {
-      setTimeout(() => {
-        setIsLoading(false); 
-      }, 2000)
+      setIsLoading(false);
       
     }
   };
-   
+
   useEffect(() => {
     updateProgress();
+   
   }, []);
 
-  
+  // useEffect(() => {
+  //   console.log("isLoading-eff", isLoading)
+  // }, [isLoading])
 
   return (
     <>
-    
+    {isLoading ? (
+      <Loader />
+    ) : (
       <div className="twm-right-section-panel site-bg-gray">
         <div className="">
           <div className="progress-bar-wrapper">
-          <div
-            style={{
-              width: "100%",
-              backgroundColor: "#e0e0e0",
-              borderRadius: "10px",
-            }}
-          >
             <div
               style={{
-                width: `${progress}%`,
-                backgroundColor: "#287131",
-                height: "20px",
-                borderRadius:
-                  progress === 100
-                    ? "10px"
-                    : progress > 0
-                    ? "10px 0 0 10px"
-                    : "10px 0 0 10px",
+                width: "100%",
+                backgroundColor: "#e0e0e0",
+                borderRadius: "10px",
               }}
-            />
+            >
+              <div
+                style={{
+                  width: `${progress}%`,
+                  backgroundColor: "#287131",
+                  height: "20px",
+                  borderRadius:
+                    progress === 100
+                      ? "10px"
+                      : progress > 0
+                      ? "10px 0 0 10px"
+                      : "10px 0 0 10px",
+                }}
+              />
+            </div>
           </div>
-          </div>
-         {isLoading ? "Loading..." : (
-          <p>{progress}% completed</p>
-         )} 
+          {isLoading ? "Loading..." : <p>{progress}% completed</p>}
 
-        {progress < 100 ? (
-           <div >
-           <div>Kindly complete the current section and click on these sections to complete them</div>
-           <ul className="portfolio-lists">
-           {sections.map((s, i) => (
-             <li className="progress-bar-list" key={i}>
-               <a href={`/dashboard-candidate/my-resume`} className="progress-bar-list">
-           {s}
-         </a>
-             </li>
-           ))}
-             
-           </ul>
-           </div>
-        ) : (null)}
-       
+          {progress < 100 ? (
+            <div>
+              <div>
+                Kindly complete the current section and click on these sections
+                to complete them
+              </div>
+              <ul className="portfolio-lists">
+                {sections.map((s, i) => (
+                  <li className="progress-bar-list" key={i}>
+                    <a
+                      href={`/dashboard-candidate/my-resume`}
+                      className="progress-bar-list"
+                    >
+                      {s}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </div>
 
         <div className="wt-admin-right-page-header clearfix">
@@ -215,21 +226,31 @@ function CanProfilePage() {
                   <div className="row">
                     <div className="col-lg-12 col-md-12">
                       <div className="form-group">
-                        <div className="dashboard-profile-pic">
-                          <div className="dashboard-profile-photo">
+                      <div className="dashboard-profile-pic">
+                      <div className="dashboard-profile-photo">
+                          {/* ||  profileData?.profile_image */}
                             <img
-                              src={imageURL || imgSrc}
+                              src={imageURL || profileData?.profile_image ||"/assets/images/candidates/user-avatar-fallback.jpg" }
                               alt="user picture"
-                              onError={() =>
-                                setImgSrc(
-                                  "/assets/images/candidates/user-avatar-fallback.jpg"
-                                )
-                              }
+                              // onError={() =>
+                              //   setImgSrc(
+                              //     "/assets/images/candidates/user-avatar-fallback.jpg"
+                              //   )
+                              // }
                             />
                             <div className="upload-btn-wrapper">
                               <div id="upload-image-grid" />
-                              <button className="site-button button-sm">
-                                Upload Photo
+                             
+                              <button
+                                className="site-button button-sm"
+                                onClick={
+                                  isImagePreview ? handleSubmitUserLogo() : null
+                                }
+              
+                              >
+                                {isImagePreview && profileData?.id
+                                  ? "Saving"
+                                  :"Upload Photo"}
                               </button>
                               <input
                                 type="file"
@@ -318,6 +339,7 @@ function CanProfilePage() {
                 role="button"
                 title="Add"
                 className="site-text-primary"
+                onClick={handleAddClick}
               >
                 <span className="fa fa-plus" /> <span>Add</span>
               </a>
@@ -383,7 +405,7 @@ function CanProfilePage() {
           id="EditFreelanceProfile"
         />
       </div>
-      
+    )}
     </>
   );
 }

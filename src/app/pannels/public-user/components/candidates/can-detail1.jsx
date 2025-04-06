@@ -16,14 +16,16 @@ import { ProfileApiData } from "../../../../context/user-profile/profileContextA
 import SectionCandidateEducation from "../../sections/candidates/section-can-education";
 import SectionProfile from "../../sections/common/section-profile";
 import SectionCandidatePortfolio from "../../sections/candidates/detail2/section-can-portfolio";
-import { GlobalApiData } from "../../../../context/global/globalContextApi";
+// import { GlobalApiData } from "../../../../context/global/globalContextApi";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
+import Loader from "../../../../common/loader";
 
 function CandidateDetail1Page() {
   const { id } = useParams();
   const [candidate, setCandidate] = useState(null);
   const { processFullProfileProfile, allUsersProfile } = useContext(ProfileApiData);
-  const { setIsLoading } = useContext(GlobalApiData)
+  // const { setIsLoading } = useContext(GlobalApiData)
+  const [isLoading, setIsLoading] = useState(false);
   const [freelance, setFreelance] = useState([]);
   const { processFreelanceProfile } = useContext(FreelanceApiData)
   const user = allUsersProfile?.find(user => {
@@ -63,9 +65,7 @@ const isFreelancer = user ? user.is_freelancer : false;
   // console.log("candidate", candidate);
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(true);
-    }, 200);
+    setIsLoading(true);
     const getCandidate = async () => {
       try {
         const data = await processFullProfileProfile(id);
@@ -74,20 +74,18 @@ const isFreelancer = user ? user.is_freelancer : false;
       } catch (error) {
         console.error("Error fetching candidate data:", error);
       } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 3000);
+        setIsLoading(false);
       }
     };
 
     getCandidate();
   }, [id]);
 
-  if (!candidate) return <div>Candidate not found.</div>;
+  if (!candidate) return <Loader />;
 
   return (
     <>
-      
+      {isLoading && <Loader />}
       <div className="container">
         <div
           className="wt-bnr-inr overlay-wraper bg-center"
@@ -126,7 +124,7 @@ const isFreelancer = user ? user.is_freelancer : false;
 
                   <SectionCandidatePortfolio props={candidate.portfolio} />
 
-                  <SectionReview />
+                  <SectionReview props={candidate.user}/>
                 </div>
               </div>
 

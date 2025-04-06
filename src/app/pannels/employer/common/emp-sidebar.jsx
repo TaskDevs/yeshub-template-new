@@ -107,17 +107,7 @@ function EmpSidebarSection(props) {
                 <span className="admin-nav-text">Bookmark Resumes</span>
               </NavLink>
             </li>
-            <li
-              className={setMenuActive(
-                currentpath,
-                empRoute(employer.PACKAGES)
-              )}
-            >
-              <NavLink to={empRoute(employer.PACKAGES)}>
-                <i className="fa fa-money-bill-alt" />
-                <span className="admin-nav-text">Packages</span>
-              </NavLink>
-            </li>
+          
             <li
               className={
                 setMenuActive(currentpath, empRoute(employer.MESSAGES1)) +
@@ -151,7 +141,17 @@ function EmpSidebarSection(props) {
                 <span className="admin-nav-text">Resume Alerts</span>
               </NavLink>
             </li>
-
+            <li
+              className={setMenuActive(
+                currentpath,
+                empRoute(employer.PACKAGES)
+              )}
+            >
+              <NavLink to={empRoute(employer.PACKAGES)}>
+                <i className="fa fa-money-bill-alt" />
+                <span className="admin-nav-text">Packages</span>
+              </NavLink>
+            </li>
             <li
               className={setMenuActive(currentpath, empRoute(employer.REVIEWS))}
             >

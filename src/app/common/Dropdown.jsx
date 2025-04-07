@@ -1,7 +1,7 @@
 import { GoChevronDown } from "react-icons/go";
 import { useState, useEffect, useRef } from "react";
 
-export const CustomDropdown = ({ selected, options, onChange }) => {
+export const CustomDropdown = ({ selected, styles, options, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -27,7 +27,7 @@ export const CustomDropdown = ({ selected, options, onChange }) => {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
-        className="border rounded px-3 py-1 text-sm flex items-center space-x-1"
+        className={`border rounded px-3 py-1 text-sm flex items-center space-x-1 ${styles}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>{selected}</span>

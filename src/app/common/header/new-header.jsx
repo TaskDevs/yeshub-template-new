@@ -9,6 +9,7 @@ import { SearchInput } from "../search-box";
 import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { publicUser, base, candidate } from "../../../globals/route-names";
 
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
@@ -30,18 +31,20 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "find-talent", label: "Find Talent", menu: null },
-    { id: "home", label: "Home", menu: null, to: "/dashboard-candidate" },
+    { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
+    { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
+    { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
+    { id: "my-home", label: "My Home", menu: null, selected: true, to: "/dashboard-candidate" },
     {
       id: "find-work",
-      label: "Find Work",
+      label: "Find Jobs",
       to: "/dashboard-candidate/find-work",
       menu: {
-        title: "Find Work",
+        // title: "Find Work",
         items: [
           {
             id: "find-work-main",
-            label: "Find Work",
+            label: "Find Jobs",
             selected: true,
             to: "/dashboard-candidate/find-work",
           },
@@ -57,26 +60,32 @@ export const Header = ({ isDashboard = true }) => {
     {
       id: "deliver-work",
       label: "Deliver Work",
+      to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
       menu: {
-        title: "Deliver Work",
+        // title: "Deliver Work",
         items: [
-          { id: "active-contracts", label: "Active Contracts", selected: true },
+          {
+            id: "active-contracts",
+            label: "Active Contracts",
+            to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
+            selected: true
+          },
           {
             id: "contract-history",
             label: "Contract History",
-            to: "/dashboard-candidate/contracts-history",
+            to: `${base.CANDIDATE_PRE}${candidate.Contracts_History}`,
           },
         ],
       },
     },
     { id: "assessment-training", label: "Assessment & Training", menu: null },
     { id: "why-yeshub", label: "Why YesHub", menu: null },
-    { id: "enterprise", label: "Enterprise", menu: null },
+    // { id: "enterprise", label: "Enterprise", menu: null },
     {
       id: "manage-finances",
       label: "Manage Finances",
       menu: {
-        title: "Manage Finances",
+        // title: "Manage Finances",
         items: [
           {
             id: "financial-overview",
@@ -97,8 +106,8 @@ export const Header = ({ isDashboard = true }) => {
     if (isDashboard) {
       return navItems.filter((item) =>
         [
-          "Home",
-          "Find Work",
+          "My Home",
+          "Find Jobs",
           "Deliver Work",
           "Manage Finances",
           "Messages",
@@ -107,7 +116,7 @@ export const Header = ({ isDashboard = true }) => {
     }
     return navItems.filter(
       (item) =>
-        !["Manage Finances", "Deliver Work", "Messages"].includes(item.label)
+        !["My Home", "Find Jobs", "Manage Finances", "Deliver Work", "Messages"].includes(item.label)
     );
   };
 
@@ -138,6 +147,7 @@ export const Header = ({ isDashboard = true }) => {
       navigate("/");
     }
   };
+  }
 
   return (
     <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 z-50 zIndex">
@@ -162,11 +172,10 @@ export const Header = ({ isDashboard = true }) => {
                 onMouseLeave={() => setOpenMenu(null)}
               >
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${
-                    activeNav === item.label
-                      ? "text-[#111827]"
-                      : "text-[#6B7280]"
-                  }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${activeNav === item.label
+                    ? "text-[#111827]"
+                    : "text-[#6B7280]"
+                    }`}
                   onClick={() => handleNavClick(item)}
                 >
                   {item.label}
@@ -351,11 +360,10 @@ export const Header = ({ isDashboard = true }) => {
             {getNavItems().map((item) => (
               <div key={item.id} className="relative px-5">
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative  ${
-                    activeNav === item.label
-                      ? "text-[#111827]"
-                      : "text-[#6B7280]"
-                  }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative  ${activeNav === item.label
+                    ? "text-[#111827]"
+                    : "text-[#6B7280]"
+                    }`}
                   onMouseEnter={() => {
                     console.log("Mouse entered:", item.label);
                     handleNavHover(item);

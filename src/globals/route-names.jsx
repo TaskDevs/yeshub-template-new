@@ -89,6 +89,7 @@ export const candidate = {
   DASHBOARD: "/",
   PROFILE: "/profile",
   Contracts_History: "/contracts-history",
+  Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",

@@ -35,44 +35,6 @@ function CandidateRoutes() {
       <Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
       <Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
       <Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
-      <Route
-        path={candidate.CHANGE_PASSWORD}
-        element={<CanChangePasswordPage />}
-      />
-      <Route path={candidate.CHAT} element={<CanChatPage />} />
-      <Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
-      <Route
-        path={candidate.Contracts_History}
-        element={<ContractsHistory />}
-      />
-      <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
-      <Route
-        path={candidate.APPLIED_JOB_DETAILS}
-        element={<CanAppliedJobDetails />}
-      />
-      <Route
-        path={candidate.SAVED_JOBS_DETAILS}
-        element={<CanSavedJobsDetails />}
-      />
-      <Route
-        path={candidate.APPLY_MILESTONE_JOB}
-        element={<CanApplyMilestone />}
-      />
-      <Route path="*" element={<Error404Page />} />
-    </Routes>
-  );
-  return (
-    <Routes>
-      <Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
-      <Route path={candidate.PROFILE} element={<CandidateProfile />} />
-      <Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
-      {/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
-      <Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
-      <Route path={candidate.RESUME} element={<CanMyResumePage />} />
-      <Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} />
-      <Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
-      <Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
-      <Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
       <Route path={candidate.OFFERS} element={<Offers />} />
       <Route
         path={candidate.CHANGE_PASSWORD}
@@ -84,6 +46,7 @@ function CandidateRoutes() {
         path={candidate.Contracts_History}
         element={<ContractsHistory />}
       />
+      <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
       <Route
         path={candidate.APPLIED_JOB_DETAILS}
         element={<CanAppliedJobDetails />}

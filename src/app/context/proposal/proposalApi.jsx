@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOCALHOST_BACKEND, REACT_BASE_URL } from "../../../globals/constants";
+import { REACT_BASE_URL } from "../../../globals/constants";
 
 // LIST User Proposals
 export const getUserProposals = async () => {

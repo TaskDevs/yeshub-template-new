@@ -1,10 +1,10 @@
 import { GoPlus } from "react-icons/go";
 
-export const ProfileSection = ({ title, description }) => (
+export const ProfileSection = ({ title, description, onClick }) => (
   <div className="bg-white rounded-lg shadow p-6">
     <div className="flex justify-between mb-2">
       <h2 className="font-bold">{title}</h2>
-      <button>
+      <button onClick={onClick}>
         <GoPlus className="w-6 h-6 text-gray-400" />
       </button>
     </div>

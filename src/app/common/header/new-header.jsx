@@ -34,7 +34,13 @@ export const Header = ({ isDashboard = true }) => {
     { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
     { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
     { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
-    { id: "my-home", label: "My Home", menu: null, selected: true, to: "/dashboard-candidate" },
+    {
+      id: "my-home",
+      label: "My Home",
+      menu: null,
+      selected: true,
+      to: "/dashboard-candidate",
+    },
     {
       id: "find-work",
       label: "Find Jobs",
@@ -68,7 +74,7 @@ export const Header = ({ isDashboard = true }) => {
             id: "active-contracts",
             label: "Active Contracts",
             to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
-            selected: true
+            selected: true,
           },
           {
             id: "contract-history",
@@ -116,7 +122,13 @@ export const Header = ({ isDashboard = true }) => {
     }
     return navItems.filter(
       (item) =>
-        !["My Home", "Find Jobs", "Manage Finances", "Deliver Work", "Messages"].includes(item.label)
+        ![
+          "My Home",
+          "Find Jobs",
+          "Manage Finances",
+          "Deliver Work",
+          "Messages",
+        ].includes(item.label)
     );
   };
 
@@ -147,7 +159,6 @@ export const Header = ({ isDashboard = true }) => {
       navigate("/");
     }
   };
-  }
 
   return (
     <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 z-50 zIndex">
@@ -172,10 +183,11 @@ export const Header = ({ isDashboard = true }) => {
                 onMouseLeave={() => setOpenMenu(null)}
               >
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${activeNav === item.label
-                    ? "text-[#111827]"
-                    : "text-[#6B7280]"
-                    }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${
+                    activeNav === item.label
+                      ? "text-[#111827]"
+                      : "text-[#6B7280]"
+                  }`}
                   onClick={() => handleNavClick(item)}
                 >
                   {item.label}
@@ -360,10 +372,11 @@ export const Header = ({ isDashboard = true }) => {
             {getNavItems().map((item) => (
               <div key={item.id} className="relative px-5">
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative  ${activeNav === item.label
-                    ? "text-[#111827]"
-                    : "text-[#6B7280]"
-                    }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative  ${
+                    activeNav === item.label
+                      ? "text-[#111827]"
+                      : "text-[#6B7280]"
+                  }`}
                   onMouseEnter={() => {
                     console.log("Mouse entered:", item.label);
                     handleNavHover(item);

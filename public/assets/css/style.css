@@ -273,10 +273,8 @@ This files [Table of contents] are outlined below
   top: 4rem;
   right: 5rem;
   margin-bottom: 2rem;
-
 }
 .bg-red {
- 
   width: 100%;
   background: red;
 }
@@ -299,26 +297,29 @@ This files [Table of contents] are outlined below
   }
 }
 
-.main-nav{
+.main-nav {
   display: flex;
 }
-.toggle-bar, .mobile-nav {
+.toggle-bar,
+.mobile-nav {
   display: none;
 }
 /* .mobile-nav-links {
   display: flex;
 } */
-@media (max-width: 640px ) {
-  .main-nav, .search-input, .mail-icon {
+@media (max-width: 640px) {
+  .main-nav,
+  .search-input,
+  .mail-icon {
     display: none;
   }
-  .toggle-bar, .mobile-nav {
+  .toggle-bar,
+  .mobile-nav {
     display: block;
   }
-
 }
-@media (max-width: 640px ) {
-  .main-nav{
+@media (max-width: 640px) {
+  .main-nav {
     display: none;
   }
   .toggle-bar {
@@ -343,7 +344,6 @@ This files [Table of contents] are outlined below
   background: none;
   font-weight: 500;
 }
-
 
 @media (max-width: 480px) {
   .freelancer-btn {
@@ -14117,8 +14117,6 @@ strong {
 }
 .can-banner-logo {
   width: 50%;
-  
-  
 }
 .can-logo-wrapper {
   display: flex;
@@ -27954,6 +27952,19 @@ HOME PAGE 15 START
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
   width: 100%; /* Full width on small screens */
   max-width: 350px; /* Limit width on larger screens */
+}
+
+.invite-card {
+  border: 2px solid #ddd; /* Light gray border */
+  border-radius: 12px; /* Smooth rounded edges */
+  padding: 20px; /* Add padding for spacing */
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  justify-content: center;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .card-two {

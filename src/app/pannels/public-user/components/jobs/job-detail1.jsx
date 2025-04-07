@@ -27,24 +27,6 @@ function JobDetail1Page() {
   const [save, setSave] = useState(false);
 
   useEffect(() => {
-<<<<<<< HEAD
-    let newData = jobListData.filter((item) => item.id == id)[0];
-    console.log(newData);
-    setProfile(newData);
-  }, []);
-
-  useEffect(() => {
-    let newData = jobListData.filter((item) => item.id == id)[0];
-
-    setJobs(newData);
-  });
-  sessionStorage.setItem("job_id", job?.id || id);
-
-  // console.log("josnss", job)
-  // const sidebarConfig = {
-  // 	showJobInfo: true,
-  // };
-=======
     if (jobListData.length > 0) {
       let newData = jobListData.find((item) => item.id == id);
       setProfile(newData);
@@ -61,7 +43,6 @@ function JobDetail1Page() {
   sessionStorage.setItem("job_id", job?.id || id);
 
   console.log("josnss", job);
->>>>>>> 494fa21f36dadfe1c2523c9fba7563f33cddd948
 
   useEffect(() => {
     loadScript("js/custom.js");
@@ -77,15 +58,10 @@ function JobDetail1Page() {
         id: job.id,
         title: job.job_title,
         salary: job.salary,
-<<<<<<< HEAD
-        company: job.company_name,
-        image: job.logo,
-=======
         budget: job.budget,
         company: job?.employer?.company_name,
         image: job?.employer?.logo,
         skill: job.skills,
->>>>>>> 494fa21f36dadfe1c2523c9fba7563f33cddd948
       });
 
       setSave(true); // ✅ Update state to "Saved"
@@ -113,13 +89,6 @@ function JobDetail1Page() {
                         <div className="twm-media-bg">
                           <img
                             src={
-<<<<<<< HEAD
-                              profile?.employer?.banner
-                                ? `${profile.employer.banner}`
-                                : `${baseURL}/assets/images/no-logo.png`
-                            }
-                            alt="#"
-=======
                               job?.employer?.banner
                                 ? `${job?.employer?.banner}`
                                 : `${baseURL}/assets/images/no-logo.png`
@@ -133,7 +102,6 @@ function JobDetail1Page() {
                               justifyContent: "center",
                               borderRadius: "20px",
                             }}
->>>>>>> 494fa21f36dadfe1c2523c9fba7563f33cddd948
                           />
                           {/* <div className="twm-jobs-category green">
 															<span className="twm-bg-green">New</span>
@@ -143,13 +111,8 @@ function JobDetail1Page() {
                           <div className="twm-media">
                             <img
                               src={
-<<<<<<< HEAD
-                                profile?.employer?.logo
-                                  ? `${profile?.employer?.logo}`
-=======
                                 job?.employer?.logo
                                   ? `${job?.employer?.logo}`
->>>>>>> 494fa21f36dadfe1c2523c9fba7563f33cddd948
                                   : `${baseURL}/assets/images/no-logo.png`
                               }
                               alt="#"

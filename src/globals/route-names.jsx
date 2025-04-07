@@ -60,8 +60,7 @@ export const publicUser = {
     CONTRACT: "/contract",
     GOOGLECALLBACK: "/auth/google/callback",
     LINKEDINCALLBACK: "/auth/google/callback",
-    WELCOME:"/welcome-onboarding",
-
+    WELCOME: "/welcome-onboarding",
   },
   candidate: {
     GRID: "/can-grid",
@@ -91,6 +90,7 @@ export const candidate = {
   PROFILE: "/profile",
   Contracts_History: "/contracts-history",
   FIND_WORK: "/find-work",
+  OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
   RESUME: "/my-resume",
   SAVED_JOBS: "/saved-jobs",
@@ -103,7 +103,6 @@ export const candidate = {
   APPLIED_JOB_DETAILS: "/applied-job-details/:id",
   SAVED_JOBS_DETAILS: "/saved-job-details/:id",
   APPLY_MILESTONE_JOB: "/apply-job/:id",
-
 };
 
 export const employer = {
@@ -148,8 +147,9 @@ export function canRoute(_route, id = "") {
 export const withId = (id, routes) => {
   const updatedRoutes = {};
   for (const key in routes) {
-    updatedRoutes[key] = `${routes[key].startsWith("/") ? "" : "/"}${id}${routes[key]
-      }`;
+    updatedRoutes[key] = `${routes[key].startsWith("/") ? "" : "/"}${id}${
+      routes[key]
+    }`;
   }
   return updatedRoutes;
 };

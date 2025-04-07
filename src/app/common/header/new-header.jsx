@@ -10,7 +10,6 @@ import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
   const profileRef = useRef(null);
@@ -40,9 +39,18 @@ export const Header = ({ isDashboard = true }) => {
       menu: {
         title: "Find Work",
         items: [
-          { id: "find-work-main", label: "Find Work", selected: true, to: "/dashboard-candidate/find-work" },
+          {
+            id: "find-work-main",
+            label: "Find Work",
+            selected: true,
+            to: "/dashboard-candidate/find-work",
+          },
           { id: "saved-jobs", label: "Saved Jobs" },
-          { id: "proposals-offers", label: "Proposals & Offers" },
+          {
+            id: "proposals-offers",
+            label: "Proposals & Offers",
+            to: "/dashboard-candidate/candidate-offers",
+          },
         ],
       },
     },
@@ -88,9 +96,13 @@ export const Header = ({ isDashboard = true }) => {
   const getNavItems = () => {
     if (isDashboard) {
       return navItems.filter((item) =>
-        ["Home", "Find Work", "Deliver Work", "Manage Finances", "Messages"].includes(
-          item.label
-        )
+        [
+          "Home",
+          "Find Work",
+          "Deliver Work",
+          "Manage Finances",
+          "Messages",
+        ].includes(item.label)
       );
     }
     return navItems.filter(
@@ -121,13 +133,11 @@ export const Header = ({ isDashboard = true }) => {
 
   const handleLogoClick = () => {
     if (token) {
-      navigate("/dashboard-candidate")
+      navigate("/dashboard-candidate");
     } else {
-      navigate("/")
+      navigate("/");
     }
-  }
-
-
+  };
 
   return (
     <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 z-50 zIndex">
@@ -135,7 +145,10 @@ export const Header = ({ isDashboard = true }) => {
         {/* Navigation */}
         <div className="flex items-center">
           {/* Logo */}
-          <div className="flex items-center mr-4" onClick={() => handleLogoClick()}>
+          <div
+            className="flex items-center mr-4"
+            onClick={() => handleLogoClick()}
+          >
             <img src="/yes-logo-1.png" alt="YesHub" className="h-14 w-auto" />
           </div>
 

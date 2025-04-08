@@ -271,7 +271,6 @@ export const SkillItem = ({ skill, onSelect }) => {
     </div>
   );
 };
-
 export const SelectedSkill = ({ skill, onRemove }) => {
   return (
     <div className="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 mb-2">

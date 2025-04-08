@@ -44,6 +44,21 @@ export const candidateData = {
 //  empty profile sections content
 export const profileSections = [
   {
+    title: "About Me",
+    description: "Add about your yourself",
+    onClick: () => {},
+  },
+  {
+    title: "Skills",
+    description: "Add your skills info",
+    onClick: () => {},
+  },
+  {
+    title: "Work History",
+    description: "Add your work history ",
+    onClick: () => {},
+  },
+  {
     title: "Education",
     description: "Add your educational background",
     onClick: () => {},

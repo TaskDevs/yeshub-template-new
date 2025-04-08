@@ -34,7 +34,13 @@ export const Header = ({ isDashboard = true }) => {
     { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
     { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
     { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
-    { id: "my-home", label: "My Home", menu: null, selected: true, to: "/dashboard-candidate" },
+    {
+      id: "my-home",
+      label: "My Home",
+      menu: null,
+      selected: true,
+      to: "/dashboard-candidate",
+    },
     {
       id: "find-work",
       label: "Find Jobs",
@@ -42,9 +48,18 @@ export const Header = ({ isDashboard = true }) => {
       menu: {
         // title: "Find Work",
         items: [
-          { id: "find-work-main", label: "Find Jobs", selected: true, to: "/dashboard-candidate/find-work" },
+          {
+            id: "find-work-main",
+            label: "Find Jobs",
+            selected: true,
+            to: "/dashboard-candidate/find-work",
+          },
           { id: "saved-jobs", label: "Saved Jobs" },
-          { id: "proposals-offers", label: "Proposals & Offers" },
+          {
+            id: "proposals-offers",
+            label: "Proposals & Offers",
+            to: "/dashboard-candidate/candidate-offers",
+          },
         ],
       },
     },
@@ -59,7 +74,7 @@ export const Header = ({ isDashboard = true }) => {
             id: "active-contracts",
             label: "Active Contracts",
             to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
-            selected: true
+            selected: true,
           },
           {
             id: "contract-history",
@@ -96,14 +111,24 @@ export const Header = ({ isDashboard = true }) => {
   const getNavItems = () => {
     if (isDashboard) {
       return navItems.filter((item) =>
-        ["My Home", "Find Jobs", "Deliver Work", "Manage Finances", "Messages"].includes(
-          item.label
-        )
+        [
+          "My Home",
+          "Find Jobs",
+          "Deliver Work",
+          "Manage Finances",
+          "Messages",
+        ].includes(item.label)
       );
     }
     return navItems.filter(
       (item) =>
-        !["My Home", "Find Jobs", "Manage Finances", "Deliver Work", "Messages"].includes(item.label)
+        ![
+          "My Home",
+          "Find Jobs",
+          "Manage Finances",
+          "Deliver Work",
+          "Messages",
+        ].includes(item.label)
     );
   };
 
@@ -149,11 +174,11 @@ export const Header = ({ isDashboard = true }) => {
 
   const handleLogoClick = () => {
     if (token) {
-      navigate("/dashboard-candidate")
+      navigate("/dashboard-candidate");
     } else {
-      navigate("/")
+      navigate("/");
     }
-  }
+  };
 
   return (
     <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 z-50 zIndex">
@@ -161,7 +186,10 @@ export const Header = ({ isDashboard = true }) => {
         {/* Navigation */}
         <div className="flex items-center">
           {/* Logo */}
-          <div className="flex items-center mr-4" onClick={() => handleLogoClick()}>
+          <div
+            className="flex items-center mr-4"
+            onClick={() => handleLogoClick()}
+          >
             <img src="/yes-logo-1.png" alt="YesHub" className="h-14 w-auto" />
           </div>
 
@@ -175,10 +203,11 @@ export const Header = ({ isDashboard = true }) => {
                 onMouseLeave={() => setOpenMenu(null)}
               >
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${activeNav === item.label
-                    ? "text-[#111827]"
-                    : "text-[#6B7280]"
-                    }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative ${
+                    activeNav === item.label
+                      ? "text-[#111827]"
+                      : "text-[#6B7280]"
+                  }`}
                   onClick={() => handleNavClick(item)}
                 >
                   {item.label}
@@ -363,10 +392,11 @@ export const Header = ({ isDashboard = true }) => {
             {getNavItems().map((item) => (
               <div key={item.id} className="relative px-5">
                 <button
-                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative  ${activeNav === item.label
-                    ? "text-[#111827]"
-                    : "text-[#6B7280]"
-                    }`}
+                  className={`py-2 text-gray-700 hover:text-green-700 font-medium relative  ${
+                    activeNav === item.label
+                      ? "text-[#111827]"
+                      : "text-[#6B7280]"
+                  }`}
                   onMouseEnter={() => {
                     console.log("Mouse entered:", item.label);
                     handleNavHover(item);

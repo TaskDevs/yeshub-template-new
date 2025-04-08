@@ -35,7 +35,7 @@ export const ProfileSectionModal = ({
   return (
     <div className="fixed inset-0 zIndex2 bg-black bg-opacity-50 flex justify-end">
       <div
-        className={`bg-white w-full ${isSkillsSection ? "max-w-4xl" : "max-w-2xl"}  zIndex2 mx-auto h-full flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
+        className={`bg-white w-full ${isSkillsSection ? "max-w-4xl" : "max-w-2xl"}  zIndex2 mx-auto h-[95%] rounded-lg flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
       >
         <div className="flex justify-between items-center px-6 p-5 border-b w-full">
           <h2 className="text-xl font-bold">{title} {currentStepTitle ?? ""}</h2>

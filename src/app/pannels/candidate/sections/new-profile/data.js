@@ -38,6 +38,26 @@ export const candidateData = {
       period: "2016 - 2018",
     },
   ],
+  education: [
+    {
+      institutionName: "UENR",
+      degree: "Bachelor",
+      fieldOfStudy: "Computer Science",
+      startDate: "2025",
+      endDate: "2025",
+      description: "A four year degree",
+      current: false
+    },
+    {
+      institutionName: "KNUST",
+      degree: "Masters",
+      fieldOfStudy: "Emotional Intelligence",
+      startDate: "2025",
+      endDate: "2025", 
+      description: "A two year masters program",
+      current: false
+    }
+  ],
   avatar: "https://i.pravatar.cc/150?img=4",
 };
 

@@ -62,9 +62,10 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
       {/* Education and Portfolio */}
       <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
-          data={candidateData}
+          data={candidateData?.education}
           title={profileSections[3]?.title}
           onClick={profileSections[3]?.onClick}
+          noData={!candidateData?.education.length}
           description={profileSections[3]?.description}
           activeSection={sectionKeyMap[profileSections[3]?.title]}
         />
@@ -1524,7 +1525,7 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-4 border-t">
+        <div className="flex items-center justify-between pt-4 border-t pb-5">
           <TertiaryButton
             onClick={() => { }}
             icon={<FaTrash size={14} />}

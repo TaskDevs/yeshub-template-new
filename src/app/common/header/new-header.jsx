@@ -54,6 +54,18 @@ export const Header = ({ isDashboard = true }) => {
             selected: true,
             to: "/dashboard-candidate/find-work",
           },
+          { id: "saved-jobs", label: "Saved Jobs" },
+          {
+            id: "proposals-offers",
+            label: "Proposals & Offers",
+            to: "/dashboard-candidate/candidate-offers",
+          },
+          {
+            id: "find-work-main",
+            label: "Find Jobs",
+            selected: true,
+            to: "/dashboard-candidate/find-work",
+          },
           {
             id: "saved-jobs",
             label: "Saved Jobs",
@@ -129,9 +141,9 @@ export const Header = ({ isDashboard = true }) => {
           "Deliver Work",
           "Messages",
         ].includes(item.label)
-    );
-  };
-
+      );
+    }
+    
   const handleNavHover = (item) => {
     if (!isDashboard && item.label === "Find Work") {
       setOpenMenu(null);
@@ -174,10 +186,13 @@ export const Header = ({ isDashboard = true }) => {
   const handleLogoClick = () => {
     if (token) {
       navigate("/dashboard-candidate");
+      
     } else {
       navigate("/");
+      
     }
   };
+  
 
   return (
     <>
@@ -450,3 +465,17 @@ export const Header = ({ isDashboard = true }) => {
     </>
   );
 };
+
+
+
+
+// return navItems.filter(
+//   (item) =>
+//     ![
+//       "My Home",
+//       "Find Jobs",
+//       "Manage Finances",
+//       "Deliver Work",
+//       "Messages",
+//     ].includes(item.label)
+//   );

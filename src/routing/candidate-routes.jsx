@@ -13,6 +13,7 @@ import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import React from "react";
 import { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
+import Offers from "../app/pannels/candidate/sections/offers/offers";
 import CanAppliedJobDetails from "../app/pannels/candidate/components/can-applied-job-details";
 import CanSavedJobsDetails from "../app/pannels/candidate/components/can-saved-jobs-details";
 import CanApplyMilestone from "../app/pannels/candidate/components/can-apply-milestone";

@@ -6,22 +6,91 @@ import {
 } from 'react-icons/md';
 import { BiSolidEdit } from 'react-icons/bi';
 import { FaCediSign } from 'react-icons/fa6';
-import { ProfileSection } from './ProfileSection';
 import { InfoGridItem } from './InfoGridItem';
 import { ShareProfileModal } from './ShareProfileModal';
 import { candidateData, profileSections } from './data';
+import { AboutMeSection, CertificationsSection, EducationSection, LicensesSection, PortfolioSection, ProfileSectionsManager, SkillsSection, TestimonialsSection, WorkHistorySection, WorkHoursSection } from './ProfileSectionsManager';
+import { ProfileSectionModal } from './profile-components';
+import { useProfileForm } from './hooks/useProfileForm';
 
-const SectionHeader = ({ title, icon = <BiSolidEdit className="w-4 h-4 text-[#305718]" /> }) => (
+const SectionHeader = ({ title, icon = <BiSolidEdit className="w-4 h-4 text-[#305718]" />, onClick }) => (
   <div className="flex justify-between mb-4">
     <h2 className="font-bold">{title}</h2>
-    <button className="text-green-700">
+    <button className="text-green-700" onClick={onClick}>
       {icon}
     </button>
   </div>
 );
-
 const CandidateProfile = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [currentStepTitle, setCurrentStepTitle] = useState('');
+
+  const { formData } = useProfileForm();
+
+  console.log(formData)
+
+  // Close modal handler
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setActiveSection(null);
+  };
+
+  // Open modal handler with section
+  const handleOpenSectionModal = (sectionKey) => {
+    setActiveSection(sectionKey);
+    setModalOpen(true);
+  };
+
+  // Get the appropriate modal content based on active section
+  const getModalContent = () => {
+    if (!activeSection) return null;
+
+    switch (activeSection) {
+      case 'skills':
+        return <SkillsSection onClose={handleCloseModal} />;
+      case 'workHistory':
+        return <WorkHistorySection onClose={handleCloseModal} />;
+      case 'education':
+        return <EducationSection onClose={handleCloseModal} />;
+      case 'portfolio':
+        return <PortfolioSection onClose={handleCloseModal} setCurrentStepTitle={setCurrentStepTitle} />;
+      case 'certifications':
+        return <CertificationsSection onClose={handleCloseModal} />;
+      case 'license':
+        return <LicensesSection onClose={handleCloseModal} />;
+      case 'testimonials':
+        return <TestimonialsSection onClose={handleCloseModal} />;
+      case 'workHours':
+        return <WorkHoursSection onClose={handleCloseModal} />;
+      case 'aboutMe':
+        return <AboutMeSection onClose={handleCloseModal} />;
+      default:
+        return null;
+    }
+  };
+
+  // Map profile sections to keys
+  const sectionKeyMap = {
+    'Skills': 'skills',
+    'Licenses': 'license',
+    'About me': 'aboutMe',
+    'Education': 'education',
+    'Portfolio': 'portfolio',
+    'Work Hours': 'workHours',
+    'Work History': 'workHistory',
+    'Testimonials': 'testimonials',
+    'Certifications': 'certifications',
+  };
+
+  // Setup section click handlers
+  const enhancedProfileSections = profileSections.map(section => ({
+    ...section,
+    onClick: () => {
+      handleOpenSectionModal(sectionKeyMap[section.title])
+    }
+  }));
 
   const handleShareProfile = () => {
     setShowShareModal(true);
@@ -31,10 +100,11 @@ const CandidateProfile = () => {
     setShowShareModal(false);
   };
 
+  const isSkillsSection = activeSection === 'skills';
+
   return (
     <div className="tw-css site-bg-gray min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-6 ">
-
         <div className='bg-white w-full px-4'>
           {/* Header Section - Top Card */}
           <div className="bg-white rounded-lg shadow-sm mb-6">
@@ -68,7 +138,7 @@ const CandidateProfile = () => {
           {/* About Me Section */}
           <div className="bg-white rounded-lg shadow-sm mb-6">
             <div className="p-6">
-              <SectionHeader title="About Me" />
+              <SectionHeader title="About Me" onClick={() => handleOpenSectionModal('aboutMe')} />
               <p className="text-gray-700">
                 {candidateData.about}
               </p>
@@ -123,7 +193,7 @@ const CandidateProfile = () => {
         <div className="grid md:grid-cols-2 gap-6 mb-10 ">
           {/* Skills */}
           <div className="bg-white rounded-lg shadow p-6">
-            <SectionHeader title="Skills" />
+            <SectionHeader title="Skills" onClick={() => handleOpenSectionModal('skills')} />
             <div className="flex flex-wrap items-start justify-start gap-2">
               {candidateData.skills.map((skill, index) => (
                 <span
@@ -138,7 +208,7 @@ const CandidateProfile = () => {
 
           {/* Work History */}
           <div className="bg-white rounded-lg shadow p-6">
-            <SectionHeader title="Work History" />
+            <SectionHeader title="Work History" onClick={() => handleOpenSectionModal('workHistory')} />
             <div className="space-y-4">
               {candidateData.workHistory.map((job, index) => (
                 <div key={index} className="pb-3">
@@ -150,21 +220,30 @@ const CandidateProfile = () => {
           </div>
         </div>
 
-        {/* Empty profile sections */}
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <ProfileSection title={profileSections[0].title} description={profileSections[0].description} onClick={profileSections[0].onClick} />
-          <ProfileSection title={profileSections[1].title} description={profileSections[1].description} onClick={profileSections[1].onClick} />
-        </div>
+        <ProfileSectionsManager
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          activeSection={activeSection}
+          getModalContent={getModalContent}
+          setActiveSection={setActiveSection}
+          handleCloseModal={handleCloseModal}
+          setCurrentStepTitle={setCurrentStepTitle}
+          handleOpenSectionModal={handleOpenSectionModal}
+          enhancedProfileSections={enhancedProfileSections}
+        />
 
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <ProfileSection title={profileSections[2].title} description={profileSections[2].description} onClick={profileSections[2].onClick} />
-          <ProfileSection title={profileSections[3].title} description={profileSections[3].description} onClick={profileSections[3].onClick} />
-        </div>
-
-        <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
-          <ProfileSection title={profileSections[4].title} description={profileSections[4].description} onClick={profileSections[4].onClick} />
-          <ProfileSection title={profileSections[5].title} description={profileSections[5].description} onClick={profileSections[5].onClick} />
-        </div>
+        {/* Modal for active section */}
+        {modalOpen && activeSection && (
+          <ProfileSectionModal
+            isOpen={modalOpen}
+            onClose={handleCloseModal}
+            isSkillsSection={isSkillsSection}
+            currentStepTitle={activeSection === "portfolio" ? "-" + " " + currentStepTitle : ""}
+            title={`${isSkillsSection ? 'Skills Selection' : activeSection === "aboutMe" ? "About Yourself" : `Add ${activeSection.replace(/([A-Z])/g, ' $1').trim()}`}`}
+          >
+            {getModalContent()}
+          </ProfileSectionModal>
+        )}
 
         {/* Share Modal */}
         {showShareModal && (

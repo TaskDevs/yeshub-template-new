@@ -34,7 +34,7 @@ export const publicUser = {
     DETAIL2: "/job-detail/2",
     SEARCH: "/jobs-search/:category/:type/:location",
     AVAILABLE: "/jobs-available",
-    APPLY: "/apply-job/:id"
+    APPLY: "/apply-job/:id",
   },
   employer: {
     GRID: "/emp-grid",
@@ -60,6 +60,8 @@ export const publicUser = {
     CONTRACT: "/contract",
     GOOGLECALLBACK: "/auth/google/callback",
     LINKEDINCALLBACK: "/auth/google/callback",
+    WELCOME: "/welcome-onboarding",
+
   },
   candidate: {
     GRID: "/can-grid",
@@ -88,6 +90,7 @@ export const candidate = {
   DASHBOARD: "/",
   PROFILE: "/profile",
   Contracts_History: "/contracts-history",
+  Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
   APPLIED_JOBS: "/applied-jobs",
   RESUME: "/my-resume",

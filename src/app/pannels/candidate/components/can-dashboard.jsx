@@ -1,16 +1,11 @@
-// import SectionCandidateOverview from "../sections/dashboard/section-can-overview";
-// import SectionCandidateInbox from "../sections/dashboard/section-can-inbox";
-// import SectionCandidateProfileViews from "../sections/dashboard/section-can-profile-views";
-// import SectionCandidateRecentActivities from "../sections/dashboard/section-can-activities";
-// import SectionCandidateRecentApplications from "../sections/dashboard/section-can-applications";
-import { loadScript } from "../../../../globals/constants";
-
+import { CandidateChart } from "./can-chart";
+import { CandidateStats } from "./can-stats";
 import React, { useState, useEffect } from "react";
+import { CanActiveProjects } from "./can-active-projects";
+import { loadScript } from "../../../../globals/constants";
+import styles from "../sections/dashboard/dashboard.module.css"
 import { CanQuickActions } from "../sections/dashboard/can-quick-actions";
 import { CanRecentActivity } from "../sections/dashboard/can-recent-activity";
-import { CandidateChart } from "./can-chart";
-import { CanActiveProjects } from "./can-active-projects";
-import { CandidateStats } from "./can-stats";
 
 function CanDashboardPage() {
   useEffect(() => {
@@ -18,6 +13,7 @@ function CanDashboardPage() {
   });
 
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("Last 30 Days");
+  
   const timePeriodOptions = [
     "Last 7 Days",
     "Last 30 Days",
@@ -72,49 +68,31 @@ function CanDashboardPage() {
       ]);
     }
   };
+  
   return (
-    <>
-      <div className="tw-css twm-right-section-panel site-bg-gray">
-        <div className="max-w-7xl mx-auto">
-          <CandidateStats />
+      <div className={`tw-css ${styles.twm_right_section_panel} twm-right-section-panel site-bg-gray`}>
+        <div className={styles.dashboardContainer}>
+          <CandidateStats cssModule={styles} />
+          
           {/* Earnings Overview and Quick Actions */}
-          <div className="flex flex-row gap-6 mb-6 items-start">
+          <div className={styles.cardRow}>
             <CandidateChart
               chartData={chartData}
+              styles={styles.chart}
               updateChartData={updateChartData}
               timePeriodOptions={timePeriodOptions}
               selectedTimePeriod={selectedTimePeriod}
             />
-            <CanQuickActions />
+            <CanQuickActions styles={styles.quickActions} />
           </div>
 
           {/* Active Projects and Recent Activities */}
-          <div className="flex flex-row gap-6">
+          <div className={`${styles.cardRow} ${styles.projectsRow}`}>
             <CanActiveProjects />
             <CanRecentActivity />
           </div>
         </div>
       </div>
-      {/* <SectionCandidateOverview /> */}
-      
-
-      {/* <div className="twm-pro-view-chart-wrap">
-                    <div className="row">
-                        <div className="col-xl-12 col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateProfileViews />
-                        </div>
-                        <div className="col-xl-12 col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateInbox />
-                        </div>
-                        <div className="col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateRecentActivities />
-                        </div>
-                        <div className="col-lg-12 col-md-12 mb-4">
-                            <SectionCandidateRecentApplications />
-                        </div>
-                    </div>
-                </div> */}
-    </>
   );
 }
 

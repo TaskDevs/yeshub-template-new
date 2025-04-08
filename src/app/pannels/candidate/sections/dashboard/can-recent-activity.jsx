@@ -2,6 +2,7 @@ import React from "react";
 import { FaBriefcase } from "react-icons/fa";
 import { IoChatbubbleSharp, IoCheckmarkSharp } from "react-icons/io5";
 import { TiStarFullOutline } from "react-icons/ti";
+import styles from "./dashboard.module.css";
 
 //  Activity Item Component
 const ActivityItem = ({ icon, iconBgColor, title, time }) => (
@@ -16,7 +17,7 @@ const ActivityItem = ({ icon, iconBgColor, title, time }) => (
 
 export const CanRecentActivity = () => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm w-1/3">
+    <div className={`bg-white p-4 rounded-lg shadow-sm ${styles.recentActivities}`}>
       <h2 className="text-base font-medium mb-4">Recent Activity</h2>
 
       <div className="space-y-4">

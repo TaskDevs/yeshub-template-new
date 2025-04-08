@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { login, retrieve, logout } from "./authApi";
+import { login, retrieve, logout, updateUserRole } from "./authApi";
 import { notify } from "../../../utils/responseUtils";
 import axios from "../../../utils/axios.config";
 import { BAD_REQUEST_STATUS } from "../../../globals/constants";
@@ -46,6 +46,24 @@ const AuthApiDataProvider = (props) => {
       
     }
   };
+
+  const processUpdateUserRole = async (data) => {
+    try {
+        let response = await updateUserRole(data);
+        
+        if (response.data) {
+            // Handle successful update
+            console.log("User role updated successfully:", response.data);
+            return response.data
+            // Optionally, show a success message to the user
+        } else {
+            console.error("Unexpected response format:", response);
+        }
+    } catch (error) {
+        console.error("Error updating user role:", error.response?.data || error.message);
+        // Optionally, show an error message to the user
+    }
+};
 
   const processRetrieve = async () => {
     let cookieData = cookieMethods.getCookies();
@@ -95,6 +113,7 @@ const AuthApiDataProvider = (props) => {
         processRetrieve,
         processLogin,
         processLogout,
+        processUpdateUserRole,
       }}
     >
       {props.children}

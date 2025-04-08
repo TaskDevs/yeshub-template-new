@@ -1,0 +1,17 @@
+
+@media (min-width: 281px) and (max-width: 679px) {
+  .candSearchBar {
+    display: block !important;
+    align-items: center;
+    width: 100%;
+    border-radius: 1rem;
+  }
+  .mobileJobCards {
+    display: grid !important;
+  }
+}
+
+
+.mobileJobCards, .candSearchBar {
+  display: none!important;
+}

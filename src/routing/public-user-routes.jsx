@@ -25,6 +25,7 @@ import JobAvailablePage from "../app/pannels/public-user/components/jobs/jobs-av
 import JobDetail1Page from "../app/pannels/public-user/components/jobs/job-detail1";
 import JobDetail2Page from "../app/pannels/public-user/components/jobs/job-detail2";
 import ApplyJobPage from "../app/pannels/public-user/components/jobs/apply-job";
+import OnBoardPage from "../app/pannels/public-user/onboard/onboard";
 
 import EmployersGridPage from "../app/pannels/public-user/components/employers/emp-grid";
 import EmployersListPage from "../app/pannels/public-user/components/employers/emp-list";
@@ -61,6 +62,7 @@ import GoogleCallback from "../app/pannels/public-user/components/pages/GoogleCa
 import ForgotPassword from "../app/pannels/public-user/components/pages/forgotton-password";
 import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-reset-otp";
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
+import WelcomePopup from "../app/common/popups/welcome-popup";
 
 
 
@@ -88,6 +90,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.HOME17} element={<Home17Page />} />
         <Route path={publicUser.HOME18} element={<Home18Page />} />
         <Route path={publicUser.TEST} element={<test-login />} />
+        <Route path={publicUser.ONBOARD} element={<OnBoardPage />} />
 
         {/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
         {/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
@@ -128,7 +131,7 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
-
+        <Route path={publicUser.pages.WELCOME} element={<WelcomePopup/>} />
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route
           path={publicUser.pages.FORGOTPASS}

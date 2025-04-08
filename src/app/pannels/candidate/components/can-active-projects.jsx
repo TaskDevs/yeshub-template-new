@@ -1,5 +1,6 @@
 import React from "react";
 import { FaChartPie, FaCode, FaPaintBrush } from "react-icons/fa";
+import styles from "../sections/dashboard/dashboard.module.css"
 
 //  Project Item Component
 const ProjectItem = ({
@@ -10,20 +11,17 @@ const ProjectItem = ({
   amount,
   isLastItem = false,
 }) => (
-  <div
-    className={`flex items-center justify-between cursor-pointer ${
-      !isLastItem ? "border-b pb-4 mb-4" : ""
-    }`}
-  >
+  <div className={`flex items-center justify-between cursor-pointer ${!isLastItem ? "border-b pb-4 mb-4" : ""}`}>
     <div className="flex items-center space-x-3">
       <div className="bg-gray-100 p-2 rounded-full">{icon}</div>
       <div>
         <h3 className="text-sm font-medium">{title}</h3>
         <p className="text-xs text-gray-500">Client: {client}</p>
+        <p className={`text-sm mt-1 ${styles.active_proj_date_sm}`}>{dueText}</p>
       </div>
     </div>
     <div className="text-right">
-      <p className="text-sm font-medium">{dueText}</p>
+      <p className={`text-sm font-medium ${styles.active_proj_date_lg}`}>{dueText}</p>
       <p className="text-xs text-gray-500">{amount}</p>
     </div>
   </div>
@@ -31,9 +29,8 @@ const ProjectItem = ({
 
 export const CanActiveProjects = () => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm w-2/3">
+    <div className={`bg-white p-4 rounded-lg shadow-sm ${styles.activeProjects}`}>
       <h2 className="text-base font-medium mb-4">Active Projects</h2>
-
       <div>
         <ProjectItem
           icon={<FaCode className="h-4 w-4 text-[#305718]" />}

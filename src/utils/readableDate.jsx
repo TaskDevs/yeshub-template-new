@@ -36,6 +36,27 @@ export const extractTime = (dateString) => {
 };
 
 
+export const extractYearAndMonth = (dateString) => {
+  if (!dateString) return "Invalid date";
+  
+  const date = new Date(dateString);
+  
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+
+  // Get month (0-11) and add 1 to get 1-12
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  // Format month as two digits
+  const formattedMonth = month.toString().padStart(2, '0');
+
+  return `${formattedMonth}/${year}`;
+};
+
+
 
   // Function to calculate the number of days left
   export const calculateDaysLeft = (start_date, end_date) => {

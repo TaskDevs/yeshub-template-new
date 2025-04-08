@@ -18,7 +18,7 @@ function ProfileInfoSection() {
           
           <div className="">
             <p>{profileData?.firstname || username} </p>
-            <p>{profileData?.profession}</p>
+            <p className="w-fit truncate">{profileData?.profession}</p>
           </div>
         </div>
 
@@ -53,7 +53,7 @@ function ProfileInfoSection() {
 
           {candSkills.map((skill) => (
             <div key={skill.id} className="flex justify-between w-full">
-              <p>{skill.title}</p>
+              <p className="w-full md:w-4 truncate ">{skill.title}</p>
 
              
           <div className="w-2/3 pl-4"> 

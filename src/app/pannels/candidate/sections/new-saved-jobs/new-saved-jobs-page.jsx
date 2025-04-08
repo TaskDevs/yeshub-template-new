@@ -20,6 +20,8 @@ import CanSlider from "../../components/can-slider";
 import Pagination from "../../../../common/Pagination";
 import { useFilterForm } from "../../../../../utils/useFilterFormHook";
 import { filterElements } from "../../common/filter-elements";
+import styles from "./new-saved-job.module.css"
+import MobileFindSavedWork from "../find-work/mobile-find-work";
 
 function NewSavedJobsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,6 +47,27 @@ function NewSavedJobsPage() {
 
   return (
     <div className="tw-css  min-h-screen">
+      <div className={`${styles.mobileSavedWork} h-min-h-screen px-4`}>
+        <MobileFindSavedWork >
+        {jobData.map((job) => (
+                    <CanJobCard
+                      key={job.id}
+                      role={job.job_title}
+                      ratings="4.9"
+                      reviews="23k"
+                      companyName={job.employer.company_name}
+                      submitProposalBtn={job?.submitProposalBtn}
+                      jobType={job?.job_type}
+                      isMobile={true}
+                      jobLocation={job?.location}
+                      datePosted={job?.start_date}
+                      salaryRange={job?.salary}
+                      // isFindWork={false}
+                    />
+                  ))}
+        </MobileFindSavedWork>
+        </div>
+        <div className={`${styles.findWorkDesktop}`}>
       <div className=" mx-auto px-4 py-6 ">
         <div className="w-full px-4 py-4">
           <div className="grid-container-saved">
@@ -157,6 +180,7 @@ function NewSavedJobsPage() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

@@ -1,17 +1,35 @@
 
-@media (min-width: 281px) and (max-width: 679px) {
-  .candSearchBar {
-    display: block !important;
-    align-items: center;
-    width: 100%;
-    border-radius: 1rem;
-  }
-  .mobileJobCards {
-    display: grid !important;
-  }
-}
-
 
 .mobileJobCards, .candSearchBar {
   display: none!important;
+}
+
+.findWorkDesktop {
+  width: 100%;
+  padding: 0 1rem;
+  display: block;
+   
+}
+
+
+
+@media screen and (max-width: 480px) {
+  .findWorkDesktop {
+    display: none;
+  }
+  
+  .mobileFindWork {
+    display: block!important;
+  }
+
+}
+
+@media screen and (min-width: 768px) {
+  .mobileFindWork {
+    display: none!important;
+  }
+  
+  .findWorkDesktop {
+    display: block;
+  }
 }

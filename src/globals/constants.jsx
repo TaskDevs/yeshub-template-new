@@ -8,7 +8,7 @@ export const HOST = window.location.hostname;
 export const timeOut = { timeout: 10000 };
 
 //RETRIEVE USER IDS
-export const userId = sessionStorage.getItem("user_id");
+export const userId = sessionStorage.getItem("userId");
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
 export const getJobId = () => sessionStorage.getItem("job_id");
 

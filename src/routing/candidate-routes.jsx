@@ -40,6 +40,7 @@ function CandidateRoutes() {
 				path={candidate.CHANGE_PASSWORD}
 				element={<CanChangePasswordPage />}
 			/>
+       <Route path={candidate.OFFERS} element={<Offers />} />
 			<Route path={candidate.CHAT} element={<CanChatPage />} />
 			<Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
 			<Route path={candidate.Contracts_History} element={<ContractsHistory />} />

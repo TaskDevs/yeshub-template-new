@@ -74,7 +74,7 @@ const CanJobCard = ({
                       </button>
                     )}
 
-                    <p className="rounded-xl bg-[#F3F4F6] text-sm text-[#1F2937] w-fit ">
+                    <p className="rounded-xl bg-[#F3F4F6] text-sm md:text-[0.5rem] text-[#1F2937] w-fit p-1 md:p-0">
                       {" "}
                       {numberOfProposals} proposals
                     </p>
@@ -166,28 +166,29 @@ const CanJobCard = ({
                   <p className="text-gray-700 mb-0">{companyName}</p>
 
                   <div className=" job-card-skills mt-2">
-                    <div className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2">
+                    <div className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-full p-2">
                       {jobLocation}
                     </div>
-                    <div className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2">
+                    <div className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-full p-2">
                       {jobType}
                     </div>
                   </div>
                 </div>
 
                 {isFindWork && (
-                  <div className="flex flex-col  items-start h-full ">
+                  <div className="flex flex-col  items-start h-full ">     
                     <button className=" border-0 ">
                       <CiBookmark className="size-4" />
                     </button>
-                    <p>{calculateDaysSincePosted(datePosted)} days ago</p>
+                    <p className="text-sm">{calculateDaysSincePosted(datePosted)} days ago</p>
                   </div>
                 )}
               </div>
 
               <div className="flex justify-between w-full ">
-                <button className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
-                  submit proposal
+              <p className="text-[#374151] ">{salaryRange}</p>
+                <button className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10">
+                  submit
                 </button>
               </div>
             </>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FaCalendar, FaShareAlt, FaStar } from 'react-icons/fa';
 import {
   MdLocationOn,
@@ -12,6 +12,8 @@ import { candidateData, profileSections } from './data';
 import { AboutMeSection, CertificationsSection, EducationSection, LicensesSection, PortfolioSection, ProfileSectionsManager, SkillsSection, TestimonialsSection, WorkHistorySection, WorkHoursSection } from './ProfileSectionsManager';
 import { ProfileSectionModal } from './profile-components';
 import { useProfileForm } from './hooks/useProfileForm';
+import { ProfileApiData } from '../../../../context/user-profile/profileContextApi';
+import { extractYearAndMonth } from '../../../../../utils/readableDate';
 
 const SectionHeader = ({ title, icon = <BiSolidEdit className="w-4 h-4 text-[#305718]" />, onClick }) => (
   <div className="flex justify-between mb-4">
@@ -26,6 +28,8 @@ const CandidateProfile = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [currentStepTitle, setCurrentStepTitle] = useState('');
+  const { profileData } = useContext(ProfileApiData);
+  console.log("profileData-cand", profileData)
 
   const { formData } = useProfileForm();
 
@@ -112,11 +116,11 @@ const CandidateProfile = () => {
               <div className="flex justify-between">
                 <div className="flex">
                   <div className="mr-4">
-                    <img src={candidateData.avatar} alt={candidateData.name} className="w-16 h-16 rounded-full" />
+                    <img src={candidateData.avatar} alt={profileData.firstname} className="w-16 h-16 rounded-full" />
                   </div>
                   <div>
-                    <h1 className="text-xl font-bold">{candidateData.name}</h1>
-                    <p className="text-gray-600">{candidateData.title}</p>
+                    <h1 className="text-xl font-bold">{profileData.firstname} {profileData.lastname}</h1>
+                    <p className="text-gray-600">{profileData.profession}</p>
                     <div className="flex items-center mt-1">
                       <FaStar className="h-5 w-5 text-[#FACC15]" />
                       <span className="ml-1">{candidateData.rating}</span>
@@ -140,7 +144,7 @@ const CandidateProfile = () => {
             <div className="p-6">
               <SectionHeader title="About Me" onClick={() => handleOpenSectionModal('aboutMe')} />
               <p className="text-gray-700">
-                {candidateData.about}
+                {profileData.bio}
               </p>
             </div>
           </div>
@@ -183,7 +187,7 @@ const CandidateProfile = () => {
                 icon={<FaCalendar className="w-4 h-4 text-[#4B5563]" />}
                 title="Member Since"
               >
-                <p className="text-[#4B5563]">{candidateData.memberSince}</p>
+                <p className="text-[#4B5563]">{extractYearAndMonth(profileData?.created_at)}</p>
               </InfoGridItem>
             </div>
           </div>

@@ -54,18 +54,6 @@ export const Header = ({ isDashboard = true }) => {
             selected: true,
             to: "/dashboard-candidate/find-work",
           },
-          { id: "saved-jobs", label: "Saved Jobs" },
-          {
-            id: "proposals-offers",
-            label: "Proposals & Offers",
-            to: "/dashboard-candidate/candidate-offers",
-          },
-          {
-            id: "find-work-main",
-            label: "Find Jobs",
-            selected: true,
-            to: "/dashboard-candidate/find-work",
-          },
           {
             id: "saved-jobs",
             label: "Saved Jobs",
@@ -235,7 +223,7 @@ export const Header = ({ isDashboard = true }) => {
 
                     {/* active nav indicator*/}
                     {activeNav === item.label && (
-                      // -bottom-4
+                    
                       <div className="absolute -bottom-0 left-0 right-0 h-1 bg-green-700 rounded-t-md transform translate-y-4 transition-all duration-300"></div>
                     )}
                   </button>
@@ -334,10 +322,10 @@ export const Header = ({ isDashboard = true }) => {
                   </button>
 
                   {openMenu === "profile" && (
-                    <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg w-64 z-10">
+                    <div className="absolute top-full w-32 right-0 mt-1 bg-white rounded-lg shadow-lg  zIndex2">
                       <div className="p-4 border-b">
                         <div className="flex items-center justify-start gap-3">
-                          <div className="h-12 w-12 rounded-full overflow-hidden mr-3">
+                          <div className="size-8 rounded-full overflow-hidden mr-3">
                             <img
                               src="/yes-logo-1.png"
                               alt="John Doe"
@@ -469,13 +457,3 @@ export const Header = ({ isDashboard = true }) => {
 
 
 
-// return navItems.filter(
-//   (item) =>
-//     ![
-//       "My Home",
-//       "Find Jobs",
-//       "Manage Finances",
-//       "Deliver Work",
-//       "Messages",
-//     ].includes(item.label)
-//   );

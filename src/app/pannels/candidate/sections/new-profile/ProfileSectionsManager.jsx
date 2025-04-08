@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import { IoSearch } from 'react-icons/io5';
 import { ProfileSection } from './ProfileSection';
@@ -17,6 +17,7 @@ import {
 import { SearchInput } from '../../../../common/search-box';
 import { CustomDropdown } from '../../../../common/Dropdown';
 import { useFileUpload, useProfileForm, useSkillsForm } from './hooks/useProfileForm';
+import { EducationApiData } from '../../../../context/education/educationContextApi';
 
 /**
  * ProfileSectionsManager 
@@ -212,24 +213,65 @@ export const SkillsSection = ({ onClose }) => {
 export const EducationSection = ({ onClose }) => {
   const {
     formData,
+    setFormData,
     handleInputChange,
     handleDateChange,
-    isSubmitting
+    isSubmitting,
+    setIsSubmitting
   } = useProfileForm({
-    institutionName: '',
-    degree: '',
-    fieldOfStudy: '',
-    startDate: '',
-    endDate: '',
+    school: '',
+    qualification: '',
+    area_of_study: '',
+    date_attended: '',
+    date_completed: '',
     description: '',
     current: false
   });
 
-  const handleSave = () => {
-    // Save logic would go here
-    console.log('Saving education:', formData);
-    onClose();
+  const { handleAddEducation } = useContext(EducationApiData);
+
+  const handleSaveEducation = async (e) => {
+    e.preventDefault();
+
+    try {
+      setIsSubmitting(true);
+      
+      // Transform form data to match the education context's expected format
+      const educationData = {
+        school: formData.school,
+        qualification: formData.qualification,
+        area_of_study: formData.area_of_study,
+        date_attended: formData.date_attended,
+        date_completed: formData.current ? null : formData.date_completed,
+        description: formData.description,
+        current: formData.current
+      };
+
+      const res = await handleAddEducation(educationData);
+      
+      // Reset form after successful submission
+      setFormData({
+        school: '',
+        qualification: '',
+        area_of_study: '',
+        date_attended: '',
+        date_completed: '',
+        description: '',
+        current: false
+      });
+      
+      onClose();
+      return res;
+    } catch (error) {
+      console.error('Failed to add education:', error);
+      throw new Error('Failed to add education');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+
+
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
@@ -238,8 +280,8 @@ export const EducationSection = ({ onClose }) => {
         <FormInput
           field="institutionName"
           label="Institution Name"
-          value={formData.institutionName}
-          onChange={handleInputChange}
+          value={formData.school}
+          onChange={(e) => handleInputChange('school', e.target.value)} 
           required={true}
           placeholder="Enter university, college or school name"
         />
@@ -247,8 +289,8 @@ export const EducationSection = ({ onClose }) => {
         <FormInput
           field="degree"
           label="Degree"
-          value={formData.degree}
-          onChange={handleInputChange}
+          value={formData.qualification}
+          onChange={(e) => handleInputChange('qualification', e.target.value)}
           required={true}
           placeholder="e.g. Bachelor's, Master's, High School Diploma"
         />
@@ -256,8 +298,8 @@ export const EducationSection = ({ onClose }) => {
         <FormInput
           field="fieldOfStudy"
           label="Field of Study"
-          value={formData.fieldOfStudy}
-          onChange={handleInputChange}
+          value={formData.area_of_study}
+          onChange={(e) => handleInputChange('area_of_study', e.target.value)}
           placeholder="e.g. Computer Science, Mathematics"
         />
 
@@ -265,17 +307,19 @@ export const EducationSection = ({ onClose }) => {
           <DateInput
             name="startDate"
             label="Start Date"
-            value={formData.startDate}
-            onChange={handleDateChange}
+            value={formData.date_attended}
+            onChange={(fieldName, selectedDate) => handleDateChange('date_attended', selectedDate)}  
             required={true}
+            field="date_attended"
           />
 
           <DateInput
             name="endDate"
             label="End Date"
-            value={formData.endDate}
-            onChange={handleDateChange}
+            value={formData.date_completed}
+            onChange={(fieldName, selectedDate) => handleDateChange('date_completed', selectedDate)}
             disabled={formData.current}
+            field="date_completed"
           />
         </div>
 
@@ -293,7 +337,7 @@ export const EducationSection = ({ onClose }) => {
           field="description"
           label="Description"
           value={formData.description}
-          onChange={handleInputChange}
+          onChange={(e) => handleInputChange('description', e.target.value)}
           placeholder="Describe your studies, achievements, etc."
           rows={4}
         />
@@ -313,7 +357,7 @@ export const EducationSection = ({ onClose }) => {
           <SecondaryButton onClick={onClose}>
             Cancel
           </SecondaryButton>
-          <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
+          <PrimaryButton onClick={handleSaveEducation} disabled={isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </PrimaryButton>
         </div>
@@ -322,7 +366,7 @@ export const EducationSection = ({ onClose }) => {
   );
 };
 
-/**
+/**\
  * WorkHistorySection
  */
 export const WorkHistorySection = ({ onClose }) => {
@@ -381,16 +425,18 @@ export const WorkHistorySection = ({ onClose }) => {
             name="startDate"
             label="Start Date"
             value={formData.startDate}
-            onChange={handleDateChange}
+            onChange={(date) => handleDateChange('startDate', date)}
             required={true}
+            field="startDate"
           />
 
           <DateInput
             name="endDate"
             label="End Date"
             value={formData.endDate}
-            onChange={handleDateChange}
+            onChange={(date) => handleDateChange('endDate', date)}
             disabled={formData.current}
+            field="endDate"
           />
         </div>
 
@@ -447,16 +493,17 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
     formData,
     handleInputChange,
     handleDateChange,
-    isSubmitting
+    isSubmitting,
+    // setIsSubmitting,
   } = useProfileForm({
-    projectTitle: '',
+    project_title: '',  
     role: '',
     skills: '',
-    startDate: '',
-    endDate: '',
+    start_date: '',
+    end_date: '',
     description: '',
     current: false,
-    projectUrl: ''
+    project_url: ''
   });
 
   const {
@@ -502,9 +549,9 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
           <div className="space-y-6 w-full">
             <FormInput
               required={true}
-              field="projectTitle"
+              field="project_title"
               label="Project Title"
-              value={formData.projectTitle}
+              value={formData.project_title}
               onChange={handleInputChange}
               placeholder="e.g. Web Development Project"
             />
@@ -531,16 +578,18 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
                 name="startDate"
                 label="Project Start Date"
                 value={formData.startDate}
-                onChange={handleDateChange}
+                onChange={(date) => handleDateChange('startDate', date)}
                 required={true}
+                field="startDate"
               />
 
               <DateInput
                 name="endDate"
                 label="Project End Date"
                 value={formData.endDate}
-                onChange={handleDateChange}
+                onChange={(date) => handleDateChange('endDate', date)}
                 disabled={formData.current}
+                field="endDate"
               />
             </div>
 
@@ -680,16 +729,18 @@ export const CertificationsSection = ({ onClose }) => {
             name="issueDate"
             label="Issue Date"
             value={formData.issueDate}
-            onChange={handleDateChange}
+            onChange={(date) => handleDateChange('issueDate', date)}
             required={true}
+            field="issueDate"
           />
 
           <DateInput
             name="expiryDate"
             label="Expiry Date"
             value={formData.expiryDate}
-            onChange={handleDateChange}
+            onChange={(date) => handleDateChange('expiryDate', date)}
             disabled={!formData.hasExpiry}
+            field="expiryDate"
           />
         </div>
 
@@ -1006,16 +1057,18 @@ export const LicensesSection = ({ onClose }) => {
             name="issueDate"
             label="Issue Date"
             value={formData.issueDate}
-            onChange={handleDateChange}
+            onChange={(date) => handleDateChange('issueDate', date)}
             required={true}
+            field="issueDate"
           />
 
           <DateInput
             name="expirationDate"
             label="Expiration Date"
             value={formData.expirationDate}
-            onChange={handleDateChange}
+            onChange={(date) => handleDateChange('expirationDate', date)}
             disabled={formData.neverExpires}
+            field="expirationDate"
           />
         </div>
 
@@ -1129,7 +1182,8 @@ export const TestimonialsSection = ({ onClose }) => {
           name="testimonialDate"
           label="Testimonial Date"
           value={formData.testimonialDate}
-          onChange={handleDateChange}
+          onChange={(date) => handleDateChange('testimonialDate', date)}
+          field="testimonialDate"
         />
 
         <div className="w-full">

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { CiBookmark } from "react-icons/ci";
 import { experinceLevel, jobData, jobTypes, skills, sort } from "./filter-data";
 import CanSelectField from "../../components/can-select-field";
@@ -9,37 +9,54 @@ import readableDate from "../../../../../utils/readableDate";
 import CanJobCard from "../../components/can-job-card";
 import ProfileInfoSection from "./profile-info-section";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
-import { JobApiData } from "../../../../context/jobs/jobsContextApi";
+// import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { useNavigate } from "react-router-dom";
-import { SearchInput } from "../../../../common/search-box";
-import { IoSearch } from "react-icons/io5";
 import styles from "./find-work.module.css";
+import MobileFindSavedWork from "./mobile-find-work";
 
 function FindWorkPage() {
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
-  const { jobListData, processGetAllJob } = useContext(JobApiData);
+  // const { jobListData, processGetAllJob } = useContext(JobApiData);
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState("");
+  
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      const res = await processGetAllJob(1);
-      console.log("jobs-res", res);
-    };
-    fetchJobs();
-  }, []);
+  // useEffect(() => {
+  //   const fetchJobs = async () => {
+  //     const res = await processGetAllJob(1);
+  //     console.log("jobs-res", res);
+  //   };
+  //   fetchJobs();
+  // }, []);
 
-  console.log("jobListData", jobListData);
+  // console.log("jobListData", jobListData);
 
-  const handleSearch = (value) => {
-    console.log("Searching for:", value);
-  };
 
   return (
     <div className="tw-css  min-h-screen px-4 py-6">
+     
+     <div className={`${styles.mobileFindWork} h-min-h-screen `}>
+        <MobileFindSavedWork >
+        {jobData.map((job) => (
+                    <CanJobCard
+                      key={job.id}
+                      role={job.job_title}
+                      ratings="4.9"
+                      reviews="23k"
+                      companyName={job.employer.company_name}
+                      submitProposalBtn={job?.submitProposalBtn}
+                      jobType={job?.job_type}
+                      isMobile={true}
+                      jobLocation={job?.location}
+                      datePosted={job?.start_date}
+                      salaryRange={job?.salary}
+                    />
+                  ))}
+        </MobileFindSavedWork>
+        </div>
+     
       <div className=" mx-auto  ">
-        <div className="w-full px-4 py-4">
+        <div className={`${styles.findWorkDesktop}`}>
           {/* Greetings Section */}
           <div className="greetings-wrapper">
             <div className="p-6">
@@ -63,39 +80,7 @@ function FindWorkPage() {
               </div>
             </div>
           </div>
-          
-          <div className={`${styles.candSearchBar}`}>
-            <SearchInput
-              className="w-full flex-1 search-input"
-              rightIcon={null}
-              value={searchValue}
-              onSearch={handleSearch}
-              onChange={setSearchValue}
-              placeholder="Search here..."
-              leftIcon={<IoSearch size={18} />}
-            />
-          </div>
-          <h1 className="text-xl font-medium mobile-title my-6">Popular Jobs</h1>
-          
-          <div className={`${styles.mobileJobCards} `}>
-            <div className="grid grid-cols-1 gap-4 w-full">
-                  {jobData.map((job) => (
-                    <CanJobCard
-                      key={job.id}
-                      role={job.job_title}
-                      ratings="4.9"
-                      reviews="23k"
-                      companyName={job.employer.company_name}
-                      submitProposalBtn={job?.submitProposalBtn}
-                      jobType={job?.job_type}
-                      isMobile={true}
-                      jobLocation={job?.location}
-                      datePosted={job?.start_date}
-                    />
-                  ))}
-                </div>
-            </div>
-
+        
           <div className="grid-container">
             <div className="section-one">
               <FilterPanel>

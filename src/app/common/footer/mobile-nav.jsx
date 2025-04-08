@@ -18,12 +18,13 @@ export function MobileNav({ isDashboard = true }) {
       id: "find-work",
       label: "Find Work",
       icon: <IoIosSearch/>,
+      to: "/dashboard-candidate/find-work",
       menu: {
         title: "Find Work",
         items: [
           { id: "find-work-main", label: "Find Work", selected: true },
-          { id: "saved-jobs", label: "Saved Jobs" },
-          { id: "proposals-offers", label: "Proposals & Offers" },
+          { id: "saved-jobs", label: "Saved Jobs", to: "/dashboard-candidate/saved-jobs" },
+          { id: "proposals-offers", label: "Proposals & Offers", to: "/dashboard-candidate/offers" },
         ],
       },
     },
@@ -31,6 +32,7 @@ export function MobileNav({ isDashboard = true }) {
       id: "deliver-work",
       label: "Deliver Work",
       icon: <AiOutlineBars />,
+      to: "/dashboard-candidate/active-contracts",
       menu: {
         title: "Deliver Work",
         items: [
@@ -83,7 +85,7 @@ export function MobileNav({ isDashboard = true }) {
   };
 
   const handleNavClick = (item) => {
-    console.log("item-hovered")
+    console.log("item-clicked", item)
     setOpenMenu(null);
     setActiveNav(item.label);
     if (item.to) {

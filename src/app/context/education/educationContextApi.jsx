@@ -103,13 +103,14 @@ const EducationApiDataProvider = (props) => {
 		}
 	};
 
-	const handleAddEducation = async (e) => {
-		e.preventDefault();
+	const handleAddEducation = async (formData) => {
+		
 		try {
 			setIsSubmitting(true);
 			
 			const res = await processAddEducation({...formData, user_id: userId});
 			await fetchEducationData();
+			toast.success("Education added successfully");
 			return res;
 		} catch (e) {
 			throw new Error("Failed to add education");

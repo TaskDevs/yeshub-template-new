@@ -1,0 +1,36 @@
+
+
+.mobileJobCards, .candSearchBar {
+    display: none!important;
+  }
+  
+  .savedWorkDesktop {
+    width: 100%;
+    padding: 0 1rem;
+    display: block;
+     
+  }
+  
+  
+  
+  @media screen and (max-width: 480px) {
+    .savedWorkDesktop {
+      display: none;
+    }
+    
+    .mobileSavedWork {
+      display: block!important;
+    }
+  
+  }
+  
+  @media screen and (min-width: 768px) {
+    .mobileSavedWork {
+      display: none!important;
+    }
+    
+    .savedWorkDesktop {
+      display: block;
+    }
+  }
+  

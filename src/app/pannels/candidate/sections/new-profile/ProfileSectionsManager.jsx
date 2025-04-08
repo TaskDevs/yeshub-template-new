@@ -53,7 +53,7 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           data={candidateData?.workHistory}
           title={profileSections[2]?.title}
           onClick={profileSections[2]?.onClick}
-          noData={!candidateData?.workHistory.length }
+          noData={!candidateData?.workHistory.length}
           description={profileSections[2]?.description}
           activeSection={sectionKeyMap[profileSections[2]?.title]}
         />
@@ -70,9 +70,10 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           activeSection={sectionKeyMap[profileSections[3]?.title]}
         />
         <ProfileSection
-          data={candidateData}
+          data={candidateData?.portfolio}
           title={profileSections[4]?.title}
           onClick={profileSections[4]?.onClick}
+          noData={!candidateData?.portfolio.length}
           description={profileSections[4]?.description}
           activeSection={sectionKeyMap[profileSections[4]?.title]}
         />
@@ -81,17 +82,19 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
       {/* Certifications and Work hours */}
       <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
-          data={candidateData}
           title={profileSections[5]?.title}
+          data={candidateData?.certifications}
           onClick={profileSections[5]?.onClick}
+          noData={!candidateData?.certifications.length}
           description={profileSections[5]?.description}
           activeSection={sectionKeyMap[profileSections[5]?.title]}
         />
         <ProfileSection
-          data={candidateData}
+          data={candidateData?.workHours}
           title={profileSections[6]?.title}
           onClick={profileSections[6]?.onClick}
           description={profileSections[6]?.description}
+          noData={!candidateData?.workHours.hoursPerWeek}
           activeSection={sectionKeyMap[profileSections[6]?.title]}
         />
       </div>
@@ -99,16 +102,18 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
       {/* Licenses and Testimonials */}
       <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
-          data={candidateData}
+          data={candidateData?.licenses}
           title={profileSections[7]?.title}
           onClick={profileSections[7]?.onClick}
+          noData={!candidateData?.licenses.length}
           description={profileSections[7]?.description}
           activeSection={sectionKeyMap[profileSections[7]?.title]}
         />
         <ProfileSection
-          data={candidateData}
+          data={candidateData.testimonials}
           title={profileSections[8]?.title}
           onClick={profileSections[8]?.onClick}
+          noData={!candidateData?.testimonials.length}
           description={profileSections[8]?.description}
           activeSection={sectionKeyMap[profileSections[8]?.title]}
         />
@@ -646,9 +651,17 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
             </SecondaryButton>
           )}
           {currentStep < totalSteps ? (
-            <PrimaryButton onClick={handleNext}>
-              Next
-            </PrimaryButton>
+
+            <div className="flex items-center justify-start gap-3">
+              <SecondaryButton onClick={onClose}>
+                Cancel
+              </SecondaryButton>
+              <PrimaryButton onClick={handleNext}>
+                Next
+              </PrimaryButton>
+
+            </div>
+
           ) : (
             <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
               {isSubmitting ? 'Saving...' : 'Save Changes'}
@@ -1282,7 +1295,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     setFormData,
     handleInputChange,
     isSubmitting,
-    setIsSubmitting
   } = useProfileForm({
     fullName: initialData.fullName || '',
     profession: initialData.profession || '',
@@ -1340,7 +1352,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
 
   // Save all changes
   const handleSave = () => {
-    setIsSubmitting(true);
 
     // Combine form data with languages
     const profileData = {
@@ -1352,7 +1363,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     setTimeout(() => {
       console.log('Saving profile data:', profileData);
       if (onSave) onSave(profileData);
-      setIsSubmitting(false);
     }, 800);
   };
 
@@ -1543,7 +1553,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

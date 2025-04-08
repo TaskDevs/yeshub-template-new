@@ -23,50 +23,103 @@ import { EducationApiData } from '../../../../context/education/educationContext
  * ProfileSectionsManager 
  */
 
-export const ProfileSectionsManager = ({ enhancedProfileSections }) => {
-
+export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSections }) => {
   return (
-    <>
+    <div className='space-y-5'>
       {/* Render profile sections */}
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
+
+      {/* About me */}
+      <div className="grid grid-cols-1 gap-6 mb-6">
         <ProfileSection
-          title={enhancedProfileSections[0]?.title}
-          description={enhancedProfileSections[0]?.description}
-          onClick={enhancedProfileSections[0]?.onClick}
-        />
-        <ProfileSection
-          title={enhancedProfileSections[1]?.title}
-          description={enhancedProfileSections[1]?.description}
-          onClick={enhancedProfileSections[1]?.onClick}
+          data={candidateData}
+          title={profileSections[0]?.title}
+          onClick={profileSections[0]?.onClick}
+          noData={candidateData?.name ? false : true}
+          description={profileSections[0]?.description}
+          activeSection={sectionKeyMap[profileSections[0]?.title]}
         />
       </div>
 
+      {/* Skills and Work history  */}
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <ProfileSection
-          title={enhancedProfileSections[2]?.title}
-          description={enhancedProfileSections[2]?.description}
-          onClick={enhancedProfileSections[2]?.onClick}
+          data={candidateData?.skills}
+          title={profileSections[1]?.title}
+          onClick={profileSections[1]?.onClick}
+          noData={!candidateData?.skills.length}
+          description={profileSections[1]?.description}
+          activeSection={sectionKeyMap[profileSections[1]?.title]}
         />
         <ProfileSection
-          title={enhancedProfileSections[3]?.title}
-          description={enhancedProfileSections[3]?.description}
-          onClick={enhancedProfileSections[3]?.onClick}
+          data={candidateData?.workHistory}
+          title={profileSections[2]?.title}
+          onClick={profileSections[2]?.onClick}
+          noData={!candidateData?.workHistory.length}
+          description={profileSections[2]?.description}
+          activeSection={sectionKeyMap[profileSections[2]?.title]}
         />
       </div>
 
+      {/* Education and Portfolio */}
       <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
-          title={enhancedProfileSections[4]?.title}
-          description={enhancedProfileSections[4]?.description}
-          onClick={enhancedProfileSections[4]?.onClick}
+          data={candidateData?.education}
+          title={profileSections[3]?.title}
+          onClick={profileSections[3]?.onClick}
+          noData={!candidateData?.education.length}
+          description={profileSections[3]?.description}
+          activeSection={sectionKeyMap[profileSections[3]?.title]}
         />
         <ProfileSection
-          title={enhancedProfileSections[5]?.title}
-          description={enhancedProfileSections[5]?.description}
-          onClick={enhancedProfileSections[5]?.onClick}
+          data={candidateData?.portfolio}
+          title={profileSections[4]?.title}
+          onClick={profileSections[4]?.onClick}
+          noData={!candidateData?.portfolio.length}
+          description={profileSections[4]?.description}
+          activeSection={sectionKeyMap[profileSections[4]?.title]}
         />
       </div>
-    </>
+
+      {/* Certifications and Work hours */}
+      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+        <ProfileSection
+          title={profileSections[5]?.title}
+          data={candidateData?.certifications}
+          onClick={profileSections[5]?.onClick}
+          noData={!candidateData?.certifications.length}
+          description={profileSections[5]?.description}
+          activeSection={sectionKeyMap[profileSections[5]?.title]}
+        />
+        <ProfileSection
+          data={candidateData?.workHours}
+          title={profileSections[6]?.title}
+          onClick={profileSections[6]?.onClick}
+          description={profileSections[6]?.description}
+          noData={!candidateData?.workHours.hoursPerWeek}
+          activeSection={sectionKeyMap[profileSections[6]?.title]}
+        />
+      </div>
+
+      {/* Licenses and Testimonials */}
+      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+        <ProfileSection
+          data={candidateData?.licenses}
+          title={profileSections[7]?.title}
+          onClick={profileSections[7]?.onClick}
+          noData={!candidateData?.licenses.length}
+          description={profileSections[7]?.description}
+          activeSection={sectionKeyMap[profileSections[7]?.title]}
+        />
+        <ProfileSection
+          data={candidateData.testimonials}
+          title={profileSections[8]?.title}
+          onClick={profileSections[8]?.onClick}
+          noData={!candidateData?.testimonials.length}
+          description={profileSections[8]?.description}
+          activeSection={sectionKeyMap[profileSections[8]?.title]}
+        />
+      </div>
+    </div>
   );
 };
 
@@ -185,7 +238,7 @@ export const SkillsSection = ({ onClose }) => {
 
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={clearAllSkills}
           icon={<FaTrash size={14} />}
@@ -344,7 +397,7 @@ export const EducationSection = ({ onClose }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={() => { }}
           icon={<FaTrash size={14} />}
@@ -461,7 +514,7 @@ export const WorkHistorySection = ({ onClose }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={() => { }}
           icon={<FaTrash size={14} />}
@@ -647,9 +700,17 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
             </SecondaryButton>
           )}
           {currentStep < totalSteps ? (
-            <PrimaryButton onClick={handleNext}>
-              Next
-            </PrimaryButton>
+
+            <div className="flex items-center justify-start gap-3">
+              <SecondaryButton onClick={onClose}>
+                Cancel
+              </SecondaryButton>
+              <PrimaryButton onClick={handleNext}>
+                Next
+              </PrimaryButton>
+
+            </div>
+
           ) : (
             <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
               {isSubmitting ? 'Saving...' : 'Save Changes'}
@@ -765,7 +826,7 @@ export const CertificationsSection = ({ onClose }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={() => { }}
           icon={<FaTrash size={14} />}
@@ -977,7 +1038,7 @@ export const WorkHoursSection = ({ onClose }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={() => { }}
           icon={<FaTrash size={14} />}
@@ -1093,7 +1154,7 @@ export const LicensesSection = ({ onClose }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={() => { }}
           icon={<FaTrash size={14} />}
@@ -1227,7 +1288,7 @@ export const TestimonialsSection = ({ onClose }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-between w-full pt-4 gap-3">
+      <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
         <TertiaryButton
           onClick={() => { }}
           icon={<FaTrash size={14} />}
@@ -1288,7 +1349,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     setFormData,
     handleInputChange,
     isSubmitting,
-    setIsSubmitting
   } = useProfileForm({
     fullName: initialData.fullName || '',
     profession: initialData.profession || '',
@@ -1346,7 +1406,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
 
   // Save all changes
   const handleSave = () => {
-    setIsSubmitting(true);
 
     // Combine form data with languages
     const profileData = {
@@ -1358,7 +1417,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     setTimeout(() => {
       console.log('Saving profile data:', profileData);
       if (onSave) onSave(profileData);
-      setIsSubmitting(false);
     }, 800);
   };
 
@@ -1531,7 +1589,7 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-4 border-t">
+        <div className="flex items-center justify-between pt-4 border-t pb-5">
           <TertiaryButton
             onClick={() => { }}
             icon={<FaTrash size={14} />}
@@ -1549,7 +1607,6 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };

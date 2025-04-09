@@ -108,6 +108,7 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
     handleDateChange,
     handleSubmit,
     isSubmitting,
+    setIsSubmitting,
     resetForm,
     clearAll,
     validate

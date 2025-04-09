@@ -1,0 +1,35 @@
+
+
+.mobileJobCards, .candSearchBar {
+  display: none!important;
+}
+
+.findWorkDesktop {
+  width: 100%;
+  padding: 0 1rem;
+  display: block;
+   
+}
+
+
+
+@media screen and (max-width: 480px) {
+  .findWorkDesktop {
+    display: none;
+  }
+  
+  .mobileFindWork {
+    display: block!important;
+  }
+
+}
+
+@media screen and (min-width: 768px) {
+  .mobileFindWork {
+    display: none!important;
+  }
+  
+  .findWorkDesktop {
+    display: block;
+  }
+}

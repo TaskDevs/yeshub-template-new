@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { candidateData, profileSections } from './data';
 import { AboutMeSection, CertificationsSection, EducationSection, LicensesSection, PortfolioSection, ProfileSectionsManager, SkillsSection, TestimonialsSection, WorkHistorySection, WorkHoursSection } from './ProfileSectionsManager';
 import { ProfileSectionModal } from './profile-components';
 import { useProfileForm } from './hooks/useProfileForm';
+import { ProfileApiData } from '../../../../context/user-profile/profileContextApi';
 
 const CandidateProfile = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [currentStepTitle, setCurrentStepTitle] = useState('');
+  const { profileData } = useContext(ProfileApiData);
+  console.log("profileData-cand", profileData)
 
   const { formData } = useProfileForm();
 

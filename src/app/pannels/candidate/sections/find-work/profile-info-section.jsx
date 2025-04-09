@@ -7,17 +7,18 @@ function ProfileInfoSection() {
   // const [profileProgress, _setProfileProgress] = useState(85);
   const profileProgress = 85;
   const { profileData } = useContext(ProfileApiData);
+  const username = sessionStorage.getItem("username");
 
   return (
-    <div className="border rounded-lg shadow-md p-4 flex flex-col bg-white w-[35%] ">
+    
       <div className="w-full flex flex-col gap-3">
         <div className="w-full profile-header">
          
-            <img src={profileData?.profile_image} alt={profileData?.firstname} className="w-16 h-16 rounded-full" />
+            <img src={profileData?.profile_image || "/assets/images/candidates/user-avatar-fallback.jpg"} alt={profileData?.firstname} className="w-16 h-16 rounded-full" />
           
           <div className="">
-            <p>{profileData?.firstname} {profileData?.lastname}</p>
-            <p>{profileData?.profession}</p>
+            <p>{profileData?.firstname || username} </p>
+            <p className="w-fit truncate">{profileData?.profession}</p>
           </div>
         </div>
 
@@ -52,7 +53,7 @@ function ProfileInfoSection() {
 
           {candSkills.map((skill) => (
             <div key={skill.id} className="flex justify-between w-full">
-              <p>{skill.title}</p>
+              <p className="w-full md:w-4 truncate ">{skill.title}</p>
 
              
           <div className="w-2/3 pl-4"> 
@@ -110,7 +111,7 @@ function ProfileInfoSection() {
           update profile
         </button>
       </div>
-    </div>
+    
   );
 }
 

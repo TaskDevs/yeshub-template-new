@@ -67,7 +67,7 @@ export const ProfileSection = ({ data, noData = true, activeSection, title, desc
                 </div>
                 <button
                   onClick={handleShareProfile}
-                  className="bg-green-800 text-white px-4 py-2 rounded flex items-center gap-2 h-10"
+                  className="bg-[#305718] text-white px-4 py-2 rounded flex items-center gap-2 h-10"
                 >
                   <FaShareAlt className="w-4 h-4" />
                   <span>Share Profile</span>
@@ -78,7 +78,7 @@ export const ProfileSection = ({ data, noData = true, activeSection, title, desc
         </div>
       )}
       <div className="flex justify-between mb-4">
-        <h2 className="font-bold">{title}</h2>
+        <h2 className="font-semibold text-lg -mb-2">{title}</h2>
 
         {noData ? (<button onClick={onClick}>
           <GoPlus className="w-6 h-6 text-gray-400" />

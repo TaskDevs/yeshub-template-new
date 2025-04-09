@@ -4,6 +4,7 @@ import { useState } from 'react';
  * Custom hook for managing form state across different profile sections
  * Provides functionality for form handling, validation, and submission
  */
+
 export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
   const [formData, setFormData] = useState(initialState);
   const [errors, setErrors] = useState({});
@@ -113,102 +114,94 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
   };
 };
 
-/**
- * Custom hook for managing skills selection
- */
-export const useSkillsForm = (initialSelectedSkills = []) => {
+export const useSkillsForm = (
+  initialSelectedSkills = [],
+  customCategories = [],
+  customAvailableSkillsData = {}
+) => {
   const [searchValue, setSearchValue] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [selectedSkills, setSelectedSkills] = useState(initialSelectedSkills);
-  
-  // Sample skill categories for dropdown
-  const categories = ['All Categories', 'Programming', 'Framework', 'Backend', 'Database', 'DevOps'];
-  
-  // Sample available skills by category
-  const availableSkillsData = {
-    'Programming': [
-      { name: 'JavaScript', category: 'Programming' },
-      { name: 'TypeScript', category: 'Programming' },
-      { name: 'Python', category: 'Programming' },
-      { name: 'Java', category: 'Programming' },
-      { name: 'C#', category: 'Programming' },
-    ],
-    'Framework': [
-      { name: 'React', category: 'Framework' },
-      { name: 'Angular', category: 'Framework' },
-      { name: 'Vue.js', category: 'Framework' },
-      { name: 'Express', category: 'Framework' },
-    ],
-    'Backend': [
-      { name: 'Node.js', category: 'Backend' },
-      { name: 'Django', category: 'Backend' },
-      { name: 'Flask', category: 'Backend' },
-      { name: 'Ruby on Rails', category: 'Backend' },
-    ],
-    'Database': [
-      { name: 'MongoDB', category: 'Database' },
-      { name: 'PostgreSQL', category: 'Database' },
-      { name: 'MySQL', category: 'Database' },
-      { name: 'Redis', category: 'Database' },
-    ],
-    'DevOps': [
-      { name: 'Docker', category: 'DevOps' },
-      { name: 'Kubernetes', category: 'DevOps' },
-      { name: 'AWS', category: 'DevOps' },
-      { name: 'Azure', category: 'DevOps' },
-      { name: 'GraphQL', category: 'DevOps' },
-    ],
-  };
 
-  // Sample recommended skills
+  // Fallback to default categories if none are provided
+  const categories = customCategories.length > 0
+    ? ['All Categories', ...customCategories]
+    : ['All Categories', 'Programming', 'Framework', 'Backend', 'Database', 'DevOps'];
+
+  // Fallback to default available skills if none are provided
+  const availableSkillsData = Object.keys(customAvailableSkillsData).length > 0
+    ? customAvailableSkillsData
+    : {
+        'Programming': [
+          { name: 'JavaScript', category: 'Programming' },
+          { name: 'TypeScript', category: 'Programming' },
+          { name: 'Python', category: 'Programming' },
+          { name: 'Java', category: 'Programming' },
+          { name: 'C#', category: 'Programming' },
+        ],
+        'Framework': [
+          { name: 'React', category: 'Framework' },
+          { name: 'Angular', category: 'Framework' },
+          { name: 'Vue.js', category: 'Framework' },
+          { name: 'Express', category: 'Framework' },
+        ],
+        'Backend': [
+          { name: 'Node.js', category: 'Backend' },
+          { name: 'Django', category: 'Backend' },
+          { name: 'Flask', category: 'Backend' },
+          { name: 'Ruby on Rails', category: 'Backend' },
+        ],
+        'Database': [
+          { name: 'MongoDB', category: 'Database' },
+          { name: 'PostgreSQL', category: 'Database' },
+          { name: 'MySQL', category: 'Database' },
+          { name: 'Redis', category: 'Database' },
+        ],
+        'DevOps': [
+          { name: 'Docker', category: 'DevOps' },
+          { name: 'Kubernetes', category: 'DevOps' },
+          { name: 'AWS', category: 'DevOps' },
+          { name: 'Azure', category: 'DevOps' },
+          { name: 'GraphQL', category: 'DevOps' },
+        ],
+      };
+
   const recommendedSkills = [
     { name: 'Docker', category: 'DevOps' },
     { name: 'AWS', category: 'DevOps' },
     { name: 'GraphQL', category: 'DevOps' },
   ];
 
-  // Get filtered skills based on search and category
   const getFilteredSkills = () => {
-    let filtered = [];
-    
-    // If All Categories is selected, combine all skills
-    if (selectedCategory === 'All Categories') {
-      filtered = Object.values(availableSkillsData).flat();
-    } else {
-      filtered = availableSkillsData[selectedCategory] || [];
-    }
-    
-    // Filter by search term if present
+    let filtered = selectedCategory === 'All Categories'
+      ? Object.values(availableSkillsData).flat()
+      : availableSkillsData[selectedCategory] || [];
+
     if (searchValue) {
-      filtered = filtered.filter(skill => 
+      filtered = filtered.filter(skill =>
         skill.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
-    
-    // Filter out already selected skills
-    return filtered.filter(skill => 
+
+    return filtered.filter(skill =>
       !selectedSkills.some(selected => selected.name === skill.name)
     );
   };
 
-  // Add a skill to selected skills
   const addSkill = (skill) => {
     if (!selectedSkills.some(s => s.name === skill.name)) {
       setSelectedSkills([...selectedSkills, skill]);
     }
   };
 
-  // Remove a skill from selected skills
   const removeSkill = (skillName) => {
     setSelectedSkills(selectedSkills.filter(skill => skill.name !== skillName));
   };
 
-  // Clear all selected skills
   const clearAllSkills = () => {
     setSelectedSkills([]);
   };
 
-  // Handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
@@ -225,9 +218,10 @@ export const useSkillsForm = (initialSelectedSkills = []) => {
     addSkill,
     removeSkill,
     clearAllSkills,
-    handleCategoryChange
+    handleCategoryChange,
   };
 };
+
 
 /**
  * Custom hook for file upload handling

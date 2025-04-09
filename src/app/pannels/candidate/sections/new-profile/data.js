@@ -222,3 +222,23 @@ export const profileSections = [
     onClick: () => {},
   },
 ];
+
+
+export const serviceCategories = ['Digital', 'IT Services', 'Consulting'];
+
+export const availableServicesData = {
+  Digital: [
+    { name: 'Digital Transformation', category: 'Digital' },
+    { name: 'UX/UI Design', category: 'Digital' },
+    { name: 'Mobile App Development', category: 'Digital' },
+  ],
+  'IT Services': [
+    { name: 'Cloud Solutions', category: 'IT Services' },
+    { name: 'IT Consulting', category: 'IT Services' },
+    { name: 'System Integration', category: 'IT Services' },
+  ],
+  Consulting: [
+    { name: 'Strategy Consulting', category: 'Consulting' },
+    { name: 'Technology Advisory', category: 'Consulting' },
+  ],
+};

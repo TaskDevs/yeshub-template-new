@@ -17,6 +17,7 @@ import {
 import { SearchInput } from '../../../../common/search-box';
 import { CustomDropdown } from '../../../../common/Dropdown';
 import { useFileUpload, useProfileForm, useSkillsForm } from './hooks/useProfileForm';
+import { countryData } from '../../../../../utils/countryData';
 
 /**
  * ProfileSectionsManager 
@@ -1260,25 +1261,6 @@ export const TestimonialsSection = ({ onClose }) => {
  */
 
 export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
-  // Ghana regions and cities
-  const ghanaRegionsAndCities = {
-    'Greater Accra': ['Adabraka', 'Accra', 'Tema', 'Madina'],
-    'Ashanti': ['Kumasi', 'Obuasi'],
-    'Western': ['Takoradi', 'Sekondi'],
-    'Eastern': ['Koforidua', 'Akosombo'],
-    'Central': ['Cape Coast', 'Winneba'],
-    'Volta': ['Ho', 'Keta'],
-    'Northern': ['Tamale', 'Yendi'],
-    'Upper East': ['Bolgatanga', 'Bawku'],
-    'Upper West': ['Wa', 'Lawra'],
-    'Bono': ['Sunyani', 'Dormaa Ahenkro'],
-    'Bono East': ['Techiman', 'Kintampo'],
-    'Ahafo': ['Goaso', 'Mim'],
-    'Western North': ['Sefwi Wiawso', 'Bibiani'],
-    'Oti': ['Dambai', 'Jasikan'],
-    'North East': ['Nalerigu', 'Walewale'],
-    'Savannah': ['Damongo', 'Salaga'],
-  };
 
   // Proficiency levels
   const proficiencyLevels = [
@@ -1315,17 +1297,17 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
 
   // Cities for selected region
   const [availableCities, setAvailableCities] = useState(
-    ghanaRegionsAndCities[formData.region] || []
+    countryData[formData.region] || []
   );
 
   // Update cities when region changes
   useEffect(() => {
-    setAvailableCities(ghanaRegionsAndCities[formData.region] || []);
+    setAvailableCities(countryData[formData.region] || []);
     // If current city is not in the new region, set to first city
-    if (!ghanaRegionsAndCities[formData.region]?.includes(formData.city)) {
+    if (!countryData[formData.region]?.includes(formData.city)) {
       setFormData(prev => ({
         ...prev,
-        city: ghanaRegionsAndCities[formData.region]?.[0] || ''
+        city: countryData[formData.region]?.[0] || ''
       }));
     }
   }, [formData.region]);
@@ -1411,7 +1393,7 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
                 onChange={(e) => handleInputChange('region', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                {Object.keys(ghanaRegionsAndCities).map((region) => (
+                {Object.keys(countryData).map((region) => (
                   <option key={region} value={region}>
                     {region}
                   </option>

@@ -1,0 +1,45 @@
+/* Main container */
+.profileContainer {
+  display: flex;
+  align-items: start;
+  max-width: 1280px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Card rows */
+.cardRow {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-start;
+}
+
+.clientLeftColumn {
+  width: 66.6667% !important;
+}
+
+.clientRightColumn {
+  width: 33.3333% !important;
+}
+
+/* Tablet Styles */
+@media screen and (max-width: 1024px) {
+  .cardRow {
+    flex-direction: column;
+  }
+
+  .cardRow > * {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 640px) {
+  .clientLeftColumn,
+  .clientRightColumn {
+    width: 100% !important;
+  }
+}

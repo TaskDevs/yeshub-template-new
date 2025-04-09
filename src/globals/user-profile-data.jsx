@@ -193,7 +193,7 @@ export const START_CLIENT_PROFILE_FIELD = {
   fieldDetailFour: [
     {
       name: "hourly_rate_start",
-      label: "From (GH)",
+      label: "Per/Hour (GH)",
       type: "number",
       placeholder: "50.00",
     },
@@ -218,4 +218,5 @@ export const START_CLIENT_PROFILE_FIELD = {
       placeholder: "",
     },
   ],
+
 };

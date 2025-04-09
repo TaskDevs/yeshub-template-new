@@ -167,14 +167,14 @@ function LoginPage() {
         }
       );
 
-      const { token, refresh_token, user } = res.data;
+      const { token, refresh_token, user ,role} = res.data;
       console.log(res.data);
       sessionStorage.setItem("authToken", token);
 
       cookieMethods.setCookies(token, refresh_token);
       sessionStorage.setItem("username", user?.username);
       sessionStorage.setItem("userId", user?.user_id);
-      const role = user.role;
+      
 
       // Check if role exists
       setTimeout(() => {

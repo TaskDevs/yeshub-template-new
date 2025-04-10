@@ -61,6 +61,7 @@ export const publicUser = {
     GOOGLECALLBACK: "/auth/google/callback",
     LINKEDINCALLBACK: "/auth/google/callback",
     WELCOME: "/welcome-onboarding",
+    PROFILE: "/profile",
   },
   candidate: {
     GRID: "/can-grid",

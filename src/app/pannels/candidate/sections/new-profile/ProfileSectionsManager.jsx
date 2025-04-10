@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { FaTrash } from 'react-icons/fa';
-import { IoSearch } from 'react-icons/io5';
-import { ProfileSection } from './ProfileSection';
+import React, { useContext, useEffect, useState } from "react";
+import { FaTrash } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
+import { ProfileSection } from "./ProfileSection";
+
 import {
   FormInput,
   FormTextarea,
@@ -12,21 +13,34 @@ import {
   PrimaryButton,
   SecondaryButton,
   TertiaryButton,
-  FileUpload
-} from './profile-components';
-import { SearchInput } from '../../../../common/search-box';
-import { CustomDropdown } from '../../../../common/Dropdown';
-import { useFileUpload, useProfileForm, useSkillsForm } from './hooks/useProfileForm';
+import {
+  FileUpload,
+} from "./profile-components";
+import { SearchInput } from "../../../../common/search-box";
+import { CustomDropdown } from "../../../../common/Dropdown";
+import {
+  useFileUpload,
+  useProfileForm,
+  useSkillsForm,
+} from "./hooks/useProfileForm";
+import { EducationApiData } from "../../../../context/education/educationContextApi";
+import { addProfile, updateProfile } from "../../../../context/user-profile/profileApi";
+import { skillsList } from "../../../../context/skills/skillsApi";
 import { countryData } from '../../../../../utils/countryData';
-import { EducationApiData } from '../../../../context/education/educationContextApi';
+import toast from "react-hot-toast";
 
+const userId = sessionStorage.getItem("userId");
 /**
- * ProfileSectionsManager 
+ * ProfileSectionsManager
  */
 
-export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSections }) => {
+export const ProfileSectionsManager = ({
+  sectionKeyMap,
+  candidateData,
+  profileSections,
+}) => {
   return (
-    <div className='space-y-5'>
+    <div className="space-y-5">
       {/* Render profile sections */}
 
       {/* About me */}
@@ -35,7 +49,7 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           data={candidateData}
           title={profileSections[0]?.title}
           onClick={profileSections[0]?.onClick}
-          noData={candidateData?.name ? false : true}
+          noData={candidateData?.firstname ? false : true}
           description={profileSections[0]?.description}
           activeSection={sectionKeyMap[profileSections[0]?.title]}
         />
@@ -44,10 +58,10 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
       {/* Skills and Work history  */}
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <ProfileSection
-          data={candidateData?.skills}
+          data={candidateData}
           title={profileSections[1]?.title}
           onClick={profileSections[1]?.onClick}
-          noData={!candidateData?.skills.length}
+          noData={!candidateData?.skills}
           description={profileSections[1]?.description}
           activeSection={sectionKeyMap[profileSections[1]?.title]}
         />
@@ -55,14 +69,14 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           data={candidateData?.workHistory}
           title={profileSections[2]?.title}
           onClick={profileSections[2]?.onClick}
-          noData={!candidateData?.workHistory.length}
+          noData={!candidateData?.workHistory?.length}
           description={profileSections[2]?.description}
           activeSection={sectionKeyMap[profileSections[2]?.title]}
         />
       </div>
 
       {/* Education and Portfolio */}
-      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
           data={candidateData?.education}
           title={profileSections[3]?.title}
@@ -79,10 +93,10 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           description={profileSections[4]?.description}
           activeSection={sectionKeyMap[profileSections[4]?.title]}
         />
-      </div>
+      </div> */}
 
       {/* Certifications and Work hours */}
-      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
           title={profileSections[5]?.title}
           data={candidateData?.certifications}
@@ -99,10 +113,10 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           noData={!candidateData?.workHours.hoursPerWeek}
           activeSection={sectionKeyMap[profileSections[6]?.title]}
         />
-      </div>
+      </div> */}
 
       {/* Licenses and Testimonials */}
-      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
           data={candidateData?.licenses}
           title={profileSections[7]?.title}
@@ -119,13 +133,13 @@ export const ProfileSectionsManager = ({ sectionKeyMap, candidateData, profileSe
           description={profileSections[8]?.description}
           activeSection={sectionKeyMap[profileSections[8]?.title]}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
 
 /**
- * SkillsSection 
+ * SkillsSection
  */
 export const SkillsSection = ({ onClose }) => {
   const {
@@ -134,30 +148,83 @@ export const SkillsSection = ({ onClose }) => {
     selectedCategory,
     categories,
     selectedSkills,
-    availableSkills,
     recommendedSkills,
     addSkill,
     removeSkill,
     clearAllSkills,
-    handleCategoryChange
-  } = useSkillsForm([
-    { name: 'TypeScript', category: 'Programming' },
-    { name: 'Python', category: 'Programming' }
-  ]);
+    handleCategoryChange,
+  } = useSkillsForm([]);
 
-  const handleSave = () => {
-    // Save logic would go here
-    console.log('Saving skills:', selectedSkills);
-    onClose();
-  };
+
+ const [skillList, setSkillList] = useState([]);
+
+    // Fetch skills
+    const fetchSkills = async () => {
+      try {
+        let res = await skillsList();
+        if (res && res.data) {
+          const skills = res.data.map((skill) => ({
+            id: skill.id,
+            name: skill.skill,
+          }));
+          setSkillList(skills);
+          console.log("skills", skills)
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  
+    useEffect(() => {
+      
+      fetchSkills();
+    }, []);
+
+   
+
+    
+    const handleSave = async () => {
+      const formattedSkills = selectedSkills.map(skill => skill.name).join(',');
+    
+      console.log("Sending formatted skills:", formattedSkills);
+      const data = {
+        skills_id: formattedSkills
+      };
+    
+      try {
+        const response = await updateProfile(userId, data);
+    
+        // Log the response to confirm success
+        console.log('Profile update response:', response);
+    
+        // Show success toast
+        toast.success('Profile updated successfully!');
+    
+        // Close modal or perform any other action after success
+        onClose();
+    
+        // Reload the page
+        window.location.reload();
+      } catch (error) {
+        console.error('Error updating profile:', error);
+    
+        // Show error toast
+        toast.error('Failed to update profile. Please try again.');
+      }
+    };
+    
+    
+    
 
   const handleSearch = (value) => {
-    console.log('Searching for:', value);
+    console.log("Searching for:", value);
   };
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full justify-start">
-      <p className="flex items-start w-full justify-start text-start text-gray-600 mb-3">Select and manage your professional skills</p>
+      <p className="flex items-start w-full justify-start text-start text-gray-600 mb-3">
+        Select and manage your professional skills
+      </p>
 
       {/* Search and filter */}
       <div className="flex gap-4 mb-6 w-full">
@@ -184,8 +251,8 @@ export const SkillsSection = ({ onClose }) => {
         <div>
           <h3 className="font-semibold text-lg mb-2">Available Skills</h3>
           <div className="border rounded-md bg-white h-64 overflow-y-scroll">
-            {availableSkills.length > 0 ? (
-              availableSkills.map((skill) => (
+            {skillList.length > 0 ? (
+              skillList.map((skill) => (
                 <SkillItem
                   key={skill.name}
                   skill={skill}
@@ -193,7 +260,9 @@ export const SkillsSection = ({ onClose }) => {
                 />
               ))
             ) : (
-              <p className="p-4 text-gray-500 text-center">No skills found for the selected filters</p>
+              <p className="p-4 text-gray-500 text-center">
+                No skills found for the selected filters
+              </p>
             )}
           </div>
         </div>
@@ -216,7 +285,9 @@ export const SkillsSection = ({ onClose }) => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center">No skills selected yet</p>
+              <p className="text-gray-500 text-center">
+                No skills selected yet
+              </p>
             )}
           </div>
           {/* Recommended Skills */}
@@ -237,24 +308,15 @@ export const SkillsSection = ({ onClose }) => {
         </div>
       </div>
 
-
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={clearAllSkills}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={clearAllSkills} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
-
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
-          <PrimaryButton onClick={handleSave}>
-            Save Changes
-          </PrimaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+          <PrimaryButton onClick={handleSave}>Save Changes</PrimaryButton>
         </div>
       </div>
     </div>
@@ -271,15 +333,15 @@ export const EducationSection = ({ onClose }) => {
     handleInputChange,
     handleDateChange,
     isSubmitting,
-    setIsSubmitting
+    setIsSubmitting,
   } = useProfileForm({
-    school: '',
-    qualification: '',
-    area_of_study: '',
-    date_attended: '',
-    date_completed: '',
-    description: '',
-    current: false
+    school: "",
+    qualification: "",
+    area_of_study: "",
+    date_attended: "",
+    date_completed: "",
+    description: "",
+    current: false,
   });
 
   const { handleAddEducation } = useContext(EducationApiData);
@@ -289,7 +351,7 @@ export const EducationSection = ({ onClose }) => {
 
     try {
       setIsSubmitting(true);
-      
+
       // Transform form data to match the education context's expected format
       const educationData = {
         school: formData.school,
@@ -298,44 +360,40 @@ export const EducationSection = ({ onClose }) => {
         date_attended: formData.date_attended,
         date_completed: formData.current ? null : formData.date_completed,
         description: formData.description,
-        current: formData.current
+        current: formData.current,
       };
 
       const res = await handleAddEducation(educationData);
-      
+
       // Reset form after successful submission
       setFormData({
-        school: '',
-        qualification: '',
-        area_of_study: '',
-        date_attended: '',
-        date_completed: '',
-        description: '',
-        current: false
+        school: "",
+        qualification: "",
+        area_of_study: "",
+        date_attended: "",
+        date_completed: "",
+        description: "",
+        current: false,
       });
-      
+
       onClose();
       return res;
     } catch (error) {
-      console.error('Failed to add education:', error);
-      throw new Error('Failed to add education');
+      console.error("Failed to add education:", error);
+      throw new Error("Failed to add education");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
-
-
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
-
       <div className="space-y-6  w-full">
         <FormInput
           field="institutionName"
           label="Institution Name"
           value={formData.school}
-          onChange={(e) => handleInputChange('school', e.target.value)} 
+          onChange={(e) => handleInputChange("school", e.target.value)}
           required={true}
           placeholder="Enter university, college or school name"
         />
@@ -344,7 +402,7 @@ export const EducationSection = ({ onClose }) => {
           field="degree"
           label="Degree"
           value={formData.qualification}
-          onChange={(e) => handleInputChange('qualification', e.target.value)}
+          onChange={(e) => handleInputChange("qualification", e.target.value)}
           required={true}
           placeholder="e.g. Bachelor's, Master's, High School Diploma"
         />
@@ -353,7 +411,7 @@ export const EducationSection = ({ onClose }) => {
           field="fieldOfStudy"
           label="Field of Study"
           value={formData.area_of_study}
-          onChange={(e) => handleInputChange('area_of_study', e.target.value)}
+          onChange={(e) => handleInputChange("area_of_study", e.target.value)}
           placeholder="e.g. Computer Science, Mathematics"
         />
 
@@ -362,7 +420,9 @@ export const EducationSection = ({ onClose }) => {
             name="startDate"
             label="Start Date"
             value={formData.date_attended}
-            onChange={(fieldName, selectedDate) => handleDateChange('date_attended', selectedDate)}  
+            onChange={(fieldName, selectedDate) =>
+              handleDateChange("date_attended", selectedDate)
+            }
             required={true}
             field="date_attended"
           />
@@ -371,7 +431,9 @@ export const EducationSection = ({ onClose }) => {
             name="endDate"
             label="End Date"
             value={formData.date_completed}
-            onChange={(fieldName, selectedDate) => handleDateChange('date_completed', selectedDate)}
+            onChange={(fieldName, selectedDate) =>
+              handleDateChange("date_completed", selectedDate)
+            }
             disabled={formData.current}
             field="date_completed"
           />
@@ -382,7 +444,7 @@ export const EducationSection = ({ onClose }) => {
             type="checkbox"
             id="current"
             checked={formData.current}
-            onChange={() => handleInputChange('current', !formData.current)}
+            onChange={() => handleInputChange("current", !formData.current)}
           />
           <label htmlFor="current">I currently study here</label>
         </div>
@@ -391,7 +453,7 @@ export const EducationSection = ({ onClose }) => {
           field="description"
           label="Description"
           value={formData.description}
-          onChange={(e) => handleInputChange('description', e.target.value)}
+          onChange={(e) => handleInputChange("description", e.target.value)}
           placeholder="Describe your studies, achievements, etc."
           rows={4}
         />
@@ -399,20 +461,14 @@ export const EducationSection = ({ onClose }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={() => { }}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
-
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
           <PrimaryButton onClick={handleSaveEducation} disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </PrimaryButton>
         </div>
       </div>
@@ -423,25 +479,21 @@ export const EducationSection = ({ onClose }) => {
 /**\
  * WorkHistorySection
  */
-export const WorkHistorySection = ({ onClose }) => {
-  const {
-    formData,
-    handleInputChange,
-    handleDateChange,
-    isSubmitting
-  } = useProfileForm({
-    jobTitle: '',
-    companyName: '',
-    location: '',
-    startDate: '',
-    endDate: '',
-    responsibilities: '',
-    current: false
-  });
+export const WorkHistorySection = ({ onClose ,initialData = {}}) => {
+  const { formData, handleInputChange, handleDateChange, isSubmitting } =
+    useProfileForm({
+      job_title:initialData.job_title || "",
+      company_name:initialData.company_name ||"",
+      location:initialData.location ||  "",
+      start_date:initialData.start_tate ||"",
+      end_date:initialData.end_date || "",
+      duty:initialData.duty || "",
+      current:initialData.current || false,
+    });
 
   const handleSave = () => {
     // Save logic would go here
-    console.log('Saving work history:', formData);
+    console.log("Saving work history:", formData);
     onClose();
   };
 
@@ -449,18 +501,18 @@ export const WorkHistorySection = ({ onClose }) => {
     <div className="flex flex-col h-full bg-white z-50 w-full">
       <div className="space-y-6 w-full">
         <FormInput
-          field="jobTitle"
+          field="job_title"
           label="Job Title"
-          value={formData.jobTitle}
+          value={formData.job_title}
           onChange={handleInputChange}
           required={true}
           placeholder="e.g. Senior Software Engineer"
         />
 
         <FormInput
-          field="companyName"
+          field="company_name"
           label="Company Name"
-          value={formData.companyName}
+          value={formData.company_name}
           onChange={handleInputChange}
           required={true}
           placeholder="e.g. Tech Corp"
@@ -476,21 +528,21 @@ export const WorkHistorySection = ({ onClose }) => {
 
         <div className="grid grid-cols-2 gap-4">
           <DateInput
-            name="startDate"
+            name="start_date"
             label="Start Date"
-            value={formData.startDate}
-            onChange={(date) => handleDateChange('startDate', date)}
+            value={formData.start_date}
+            onChange={(date) => handleDateChange("start_date", date)}
             required={true}
-            field="startDate"
+            field="start_ate"
           />
 
           <DateInput
-            name="endDate"
+            name="end_date"
             label="End Date"
-            value={formData.endDate}
-            onChange={(date) => handleDateChange('endDate', date)}
+            value={formData.end_date}
+            onChange={(date) => handleDateChange("end_ate", date)}
             disabled={formData.current}
-            field="endDate"
+            field="end_date"
           />
         </div>
 
@@ -499,15 +551,15 @@ export const WorkHistorySection = ({ onClose }) => {
             type="checkbox"
             id="current"
             checked={formData.current}
-            onChange={() => handleInputChange('current', !formData.current)}
+            onChange={() => handleInputChange("current", !formData.current)}
           />
           <label htmlFor="current">I currently work here</label>
         </div>
 
         <FormTextarea
-          field="responsibilities"
+          field="duty"
           label="Responsibilities"
-          value={formData.responsibilities}
+          value={formData.duty}
           onChange={handleInputChange}
           placeholder="Describe your key responsibilities and achievements..."
           rows={4}
@@ -516,19 +568,14 @@ export const WorkHistorySection = ({ onClose }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={() => { }}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
           <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </PrimaryButton>
         </div>
       </div>
@@ -550,14 +597,14 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
     isSubmitting,
     // setIsSubmitting,
   } = useProfileForm({
-    project_title: '',  
-    role: '',
-    skills: '',
-    start_date: '',
-    end_date: '',
-    description: '',
+    project_title: "",
+    role: "",
+    skills: "",
+    start_date: "",
+    end_date: "",
+    description: "",
     current: false,
-    project_url: ''
+    project_url: "",
   });
 
   const {
@@ -568,32 +615,32 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
     handleFileDrop,
     removeFile,
     // clearFiles,
-    cleanup
+    cleanup,
   } = useFileUpload(10); // 10MB max file size
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
-    setCurrentStepTitle("Project Assets")
+    setCurrentStepTitle("Project Assets");
   };
 
   const handleBack = () => {
     setCurrentStep(currentStep - 1);
-    setCurrentStepTitle("Project Details")
+    setCurrentStepTitle("Project Details");
   };
 
   const handleSave = () => {
-    console.log('Saving portfolio project:', formData, files);
+    console.log("Saving portfolio project:", formData, files);
     onClose();
   };
 
   useEffect(() => {
-    setCurrentStepTitle("Project Details")
+    setCurrentStepTitle("Project Details");
 
     // Cleanup object URLs when component unmounts
     return () => {
       cleanup();
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
@@ -632,7 +679,7 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
                 name="startDate"
                 label="Project Start Date"
                 value={formData.startDate}
-                onChange={(date) => handleDateChange('startDate', date)}
+                onChange={(date) => handleDateChange("startDate", date)}
                 required={true}
                 field="startDate"
               />
@@ -641,7 +688,7 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
                 name="endDate"
                 label="Project End Date"
                 value={formData.endDate}
-                onChange={(date) => handleDateChange('endDate', date)}
+                onChange={(date) => handleDateChange("endDate", date)}
                 disabled={formData.current}
                 field="endDate"
               />
@@ -652,7 +699,7 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
                 type="checkbox"
                 id="current"
                 checked={formData.current}
-                onChange={() => handleInputChange('current', !formData.current)}
+                onChange={() => handleInputChange("current", !formData.current)}
               />
               <label htmlFor="current">I currently work on this project</label>
             </div>
@@ -696,25 +743,16 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
       <div className="flex items-center justify-between w-full mt-auto pt-6">
         <div className="flex items-center justify-end ml-auto gap-3">
           {currentStep > 1 && (
-            <SecondaryButton onClick={handleBack}>
-              Back
-            </SecondaryButton>
+            <SecondaryButton onClick={handleBack}>Back</SecondaryButton>
           )}
           {currentStep < totalSteps ? (
-
             <div className="flex items-center justify-start gap-3">
-              <SecondaryButton onClick={onClose}>
-                Cancel
-              </SecondaryButton>
-              <PrimaryButton onClick={handleNext}>
-                Next
-              </PrimaryButton>
-
+              <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+              <PrimaryButton onClick={handleNext}>Next</PrimaryButton>
             </div>
-
           ) : (
             <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </PrimaryButton>
           )}
         </div>
@@ -724,28 +762,24 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
 };
 
 /**
- * CertificationsSection 
+ * CertificationsSection
  */
 export const CertificationsSection = ({ onClose }) => {
-  const {
-    formData,
-    handleInputChange,
-    handleDateChange,
-    isSubmitting
-  } = useProfileForm({
-    certificationName: '',
-    issuingOrganization: '',
-    credentialID: '',
-    issueDate: '',
-    expiryDate: '',
-    description: '',
-    hasExpiry: true,
-    credentialUrl: ''
-  });
+  const { formData, handleInputChange, handleDateChange, isSubmitting } =
+    useProfileForm({
+      certificationName: "",
+      issuingOrganization: "",
+      credentialID: "",
+      issueDate: "",
+      expiryDate: "",
+      description: "",
+      hasExpiry: true,
+      credentialUrl: "",
+    });
 
   const handleSave = () => {
     // Save logic would go here
-    console.log('Saving certification:', formData);
+    console.log("Saving certification:", formData);
     onClose();
   };
 
@@ -791,7 +825,7 @@ export const CertificationsSection = ({ onClose }) => {
             name="issueDate"
             label="Issue Date"
             value={formData.issueDate}
-            onChange={(date) => handleDateChange('issueDate', date)}
+            onChange={(date) => handleDateChange("issueDate", date)}
             required={true}
             field="issueDate"
           />
@@ -800,7 +834,7 @@ export const CertificationsSection = ({ onClose }) => {
             name="expiryDate"
             label="Expiry Date"
             value={formData.expiryDate}
-            onChange={(date) => handleDateChange('expiryDate', date)}
+            onChange={(date) => handleDateChange("expiryDate", date)}
             disabled={!formData.hasExpiry}
             field="expiryDate"
           />
@@ -811,7 +845,7 @@ export const CertificationsSection = ({ onClose }) => {
             type="checkbox"
             id="hasExpiry"
             checked={formData.hasExpiry}
-            onChange={() => handleInputChange('hasExpiry', !formData.hasExpiry)}
+            onChange={() => handleInputChange("hasExpiry", !formData.hasExpiry)}
           />
           <label htmlFor="hasExpiry">This certification expires</label>
         </div>
@@ -828,19 +862,14 @@ export const CertificationsSection = ({ onClose }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={() => { }}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
           <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </PrimaryButton>
         </div>
       </div>
@@ -849,19 +878,15 @@ export const CertificationsSection = ({ onClose }) => {
 };
 
 /**
- * WorkHoursSection 
+ * WorkHoursSection
  */
 export const WorkHoursSection = ({ onClose }) => {
-  const {
-    formData,
-    handleInputChange,
-    isSubmitting
-  } = useProfileForm({
-    availability: 'full-time',
+  const { formData, handleInputChange, isSubmitting } = useProfileForm({
+    availability: "full-time",
     hoursPerWeek: 40,
-    preferredWorkingHours: 'standard',
-    customStartHour: '09:00',
-    customEndHour: '17:00',
+    preferredWorkingHours: "standard",
+    customStartHour: "09:00",
+    customEndHour: "17:00",
     workDays: {
       monday: true,
       tuesday: true,
@@ -869,45 +894,45 @@ export const WorkHoursSection = ({ onClose }) => {
       thursday: true,
       friday: true,
       saturday: false,
-      sunday: false
+      sunday: false,
     },
-    timeZone: 'UTC',
-    notice: '2 weeks'
+    timeZone: "UTC",
+    notice: "2 weeks",
   });
 
   const availabilityOptions = [
-    { value: 'full-time', label: 'Full-time' },
-    { value: 'part-time', label: 'Part-time' },
-    { value: 'contract', label: 'Contract' },
-    { value: 'freelance', label: 'Freelance' },
-    { value: 'internship', label: 'Internship' }
+    { value: "full-time", label: "Full-time" },
+    { value: "part-time", label: "Part-time" },
+    { value: "contract", label: "Contract" },
+    { value: "freelance", label: "Freelance" },
+    { value: "internship", label: "Internship" },
   ];
 
   const workingHoursOptions = [
-    { value: 'standard', label: 'Standard (9AM - 5PM)' },
-    { value: 'flexible', label: 'Flexible Hours' },
-    { value: 'custom', label: 'Custom Hours' }
+    { value: "standard", label: "Standard (9AM - 5PM)" },
+    { value: "flexible", label: "Flexible Hours" },
+    { value: "custom", label: "Custom Hours" },
   ];
 
   const noticeOptions = [
-    { value: 'immediate', label: 'Immediately' },
-    { value: '1 week', label: '1 Week' },
-    { value: '2 weeks', label: '2 Weeks' },
-    { value: '1 month', label: '1 Month' },
-    { value: 'custom', label: 'Custom' }
+    { value: "immediate", label: "Immediately" },
+    { value: "1 week", label: "1 Week" },
+    { value: "2 weeks", label: "2 Weeks" },
+    { value: "1 month", label: "1 Month" },
+    { value: "custom", label: "Custom" },
   ];
 
   const handleWorkDayChange = (day) => {
     const updatedWorkDays = {
       ...formData.workDays,
-      [day]: !formData.workDays[day]
+      [day]: !formData.workDays[day],
     };
-    handleInputChange('workDays', updatedWorkDays);
+    handleInputChange("workDays", updatedWorkDays);
   };
 
   const handleSave = () => {
     // Save logic would go here
-    console.log('Saving work hours:', formData);
+    console.log("Saving work hours:", formData);
     onClose();
   };
 
@@ -917,13 +942,18 @@ export const WorkHoursSection = ({ onClose }) => {
         <div className="form-group">
           <label className="block text-sm font-medium mb-2">Availability</label>
           <div className="flex items-start justify-start flex-col gap-3">
-            {availabilityOptions.map(option => (
-              <div key={option.value} className="flex items-center justify-start">
+            {availabilityOptions.map((option) => (
+              <div
+                key={option.value}
+                className="flex items-center justify-start"
+              >
                 <input
                   type="radio"
                   id={option.value}
                   checked={formData.availability === option.value}
-                  onChange={() => handleInputChange('availability', option.value)}
+                  onChange={() =>
+                    handleInputChange("availability", option.value)
+                  }
                   className="mr-2"
                 />
                 <label htmlFor={option.value}>{option.label}</label>
@@ -932,15 +962,19 @@ export const WorkHoursSection = ({ onClose }) => {
           </div>
         </div>
 
-        {formData.availability !== 'full-time' && (
+        {formData.availability !== "full-time" && (
           <div className="form-group">
-            <label className="block text-sm font-medium mb-2">Hours Per Week</label>
+            <label className="block text-sm font-medium mb-2">
+              Hours Per Week
+            </label>
             <input
               type="range"
               min="1"
               max="60"
               value={formData.hoursPerWeek}
-              onChange={(e) => handleInputChange('hoursPerWeek', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleInputChange("hoursPerWeek", parseInt(e.target.value))
+              }
               className="w-full cursor-pointer"
             />
             <div className="flex justify-between text-sm text-gray-500">
@@ -952,15 +986,22 @@ export const WorkHoursSection = ({ onClose }) => {
         )}
 
         <div className="form-group">
-          <label className="block text-sm font-medium mb-2">Preferred Working Hours</label>
+          <label className="block text-sm font-medium mb-2">
+            Preferred Working Hours
+          </label>
           <div className="space-y-2">
-            {workingHoursOptions.map(option => (
-              <div key={option.value} className="flex items-center justify-start">
+            {workingHoursOptions.map((option) => (
+              <div
+                key={option.value}
+                className="flex items-center justify-start"
+              >
                 <input
                   type="radio"
                   id={`hours-${option.value}`}
                   checked={formData.preferredWorkingHours === option.value}
-                  onChange={() => handleInputChange('preferredWorkingHours', option.value)}
+                  onChange={() =>
+                    handleInputChange("preferredWorkingHours", option.value)
+                  }
                   className="mr-2"
                 />
                 <label htmlFor={`hours-${option.value}`}>{option.label}</label>
@@ -969,14 +1010,18 @@ export const WorkHoursSection = ({ onClose }) => {
           </div>
         </div>
 
-        {formData.preferredWorkingHours === 'custom' && (
+        {formData.preferredWorkingHours === "custom" && (
           <div className="grid grid-cols-2 gap-4">
             <div className="form-group">
-              <label className="block text-sm font-medium mb-2">Start Time</label>
+              <label className="block text-sm font-medium mb-2">
+                Start Time
+              </label>
               <input
                 type="time"
                 value={formData.customStartHour}
-                onChange={(e) => handleInputChange('customStartHour', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("customStartHour", e.target.value)
+                }
                 className="w-full p-2 border rounded-md"
               />
             </div>
@@ -985,7 +1030,9 @@ export const WorkHoursSection = ({ onClose }) => {
               <input
                 type="time"
                 value={formData.customEndHour}
-                onChange={(e) => handleInputChange('customEndHour', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("customEndHour", e.target.value)
+                }
                 className="w-full p-2 border rounded-md"
               />
             </div>
@@ -1000,10 +1047,11 @@ export const WorkHoursSection = ({ onClose }) => {
                 key={day}
                 type="button"
                 onClick={() => handleWorkDayChange(day)}
-                className={`px-3 py-1 rounded-full text-sm border ${formData.workDays[day]
-                  ? 'bg-green-100 border-green-600 text-green-800'
-                  : 'bg-gray-100 border-gray-300 text-gray-600'
-                  }`}
+                className={`px-3 py-1 rounded-full text-sm border ${
+                  formData.workDays[day]
+                    ? "bg-green-100 border-green-600 text-green-800"
+                    : "bg-gray-100 border-gray-300 text-gray-600"
+                }`}
               >
                 {day.charAt(0).toUpperCase() + day.slice(1, 3)}
               </button>
@@ -1020,15 +1068,20 @@ export const WorkHoursSection = ({ onClose }) => {
         />
 
         <div className="form-group">
-          <label className="block text-sm font-medium mb-2">Notice Period</label>
+          <label className="block text-sm font-medium mb-2">
+            Notice Period
+          </label>
           <div className="space-y-2">
-            {noticeOptions.map(option => (
-              <div key={option.value} className="flex items-center justify-start">
+            {noticeOptions.map((option) => (
+              <div
+                key={option.value}
+                className="flex items-center justify-start"
+              >
                 <input
                   type="radio"
                   id={`notice-${option.value}`}
                   checked={formData.notice === option.value}
-                  onChange={() => handleInputChange('notice', option.value)}
+                  onChange={() => handleInputChange("notice", option.value)}
                   className="mr-2"
                 />
                 <label htmlFor={`notice-${option.value}`}>{option.label}</label>
@@ -1040,19 +1093,14 @@ export const WorkHoursSection = ({ onClose }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={() => { }}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
           <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </PrimaryButton>
         </div>
       </div>
@@ -1061,27 +1109,23 @@ export const WorkHoursSection = ({ onClose }) => {
 };
 
 /**
- * LicensesSection 
+ * LicensesSection
  */
 export const LicensesSection = ({ onClose }) => {
-  const {
-    formData,
-    handleInputChange,
-    handleDateChange,
-    isSubmitting
-  } = useProfileForm({
-    licenseName: '',
-    issuingOrganization: '',
-    licenseNumber: '',
-    issueDate: '',
-    expirationDate: '',
-    description: '',
-    neverExpires: false
-  });
+  const { formData, handleInputChange, handleDateChange, isSubmitting } =
+    useProfileForm({
+      licenseName: "",
+      issuingOrganization: "",
+      licenseNumber: "",
+      issueDate: "",
+      expirationDate: "",
+      description: "",
+      neverExpires: false,
+    });
 
   const handleSave = () => {
     // Save logic would go here
-    console.log('Saving license:', formData);
+    console.log("Saving license:", formData);
     onClose();
   };
 
@@ -1119,7 +1163,7 @@ export const LicensesSection = ({ onClose }) => {
             name="issueDate"
             label="Issue Date"
             value={formData.issueDate}
-            onChange={(date) => handleDateChange('issueDate', date)}
+            onChange={(date) => handleDateChange("issueDate", date)}
             required={true}
             field="issueDate"
           />
@@ -1128,7 +1172,7 @@ export const LicensesSection = ({ onClose }) => {
             name="expirationDate"
             label="Expiration Date"
             value={formData.expirationDate}
-            onChange={(date) => handleDateChange('expirationDate', date)}
+            onChange={(date) => handleDateChange("expirationDate", date)}
             disabled={formData.neverExpires}
             field="expirationDate"
           />
@@ -1139,7 +1183,9 @@ export const LicensesSection = ({ onClose }) => {
             type="checkbox"
             id="neverExpires"
             checked={formData.neverExpires}
-            onChange={() => handleInputChange('neverExpires', !formData.neverExpires)}
+            onChange={() =>
+              handleInputChange("neverExpires", !formData.neverExpires)
+            }
           />
           <label htmlFor="neverExpires">This license never expires</label>
         </div>
@@ -1156,19 +1202,14 @@ export const LicensesSection = ({ onClose }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={() => { }}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
           <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </PrimaryButton>
         </div>
       </div>
@@ -1177,27 +1218,23 @@ export const LicensesSection = ({ onClose }) => {
 };
 
 /**
- * TestimonialsSection 
+ * TestimonialsSection
  */
 export const TestimonialsSection = ({ onClose }) => {
-  const {
-    formData,
-    handleInputChange,
-    handleDateChange,
-    isSubmitting
-  } = useProfileForm({
-    clientName: '',
-    clientCompany: '',
-    clientPosition: '',
-    relationship: '',
-    testimonialDate: '',
-    testimonialText: '',
-    rating: '5'
-  });
+  const { formData, handleInputChange, handleDateChange, isSubmitting } =
+    useProfileForm({
+      clientName: "",
+      clientCompany: "",
+      clientPosition: "",
+      relationship: "",
+      testimonialDate: "",
+      testimonialText: "",
+      rating: "5",
+    });
 
   const handleSave = () => {
     // Save logic would go here
-    console.log('Saving testimonial:', formData);
+    console.log("Saving testimonial:", formData);
     onClose();
   };
 
@@ -1244,34 +1281,37 @@ export const TestimonialsSection = ({ onClose }) => {
           name="testimonialDate"
           label="Testimonial Date"
           value={formData.testimonialDate}
-          onChange={(date) => handleDateChange('testimonialDate', date)}
+          onChange={(date) => handleDateChange("testimonialDate", date)}
           field="testimonialDate"
         />
 
         <div className="w-full">
-          <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="rating"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Rating (1-5 stars)
           </label>
           <CustomDropdown
             selected={
               {
-                '5': '5 Stars (Outstanding)',
-                '4': '4 Stars (Excellent)',
-                '3': '3 Stars (Good)',
-                '2': '2 Stars (Fair)',
-                '1': '1 Star (Poor)'
-              }[formData.rating] || 'Select Rating'
+                5: "5 Stars (Outstanding)",
+                4: "4 Stars (Excellent)",
+                3: "3 Stars (Good)",
+                2: "2 Stars (Fair)",
+                1: "1 Star (Poor)",
+              }[formData.rating] || "Select Rating"
             }
             options={[
-              '5 Stars (Outstanding)',
-              '4 Stars (Excellent)',
-              '3 Stars (Good)',
-              '2 Stars (Fair)',
-              '1 Star (Poor)'
+              "5 Stars (Outstanding)",
+              "4 Stars (Excellent)",
+              "3 Stars (Good)",
+              "2 Stars (Fair)",
+              "1 Star (Poor)",
             ]}
             onChange={(option) => {
               const value = option[0]; // First character is the number (e.g., '5' from '5 Stars (Outstanding)')
-              handleInputChange('rating', value);
+              handleInputChange("rating", value);
             }}
             styles="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
@@ -1290,19 +1330,14 @@ export const TestimonialsSection = ({ onClose }) => {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-        <TertiaryButton
-          onClick={() => { }}
-          icon={<FaTrash size={14} />}
-        >
+        <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
           Clear All
         </TertiaryButton>
 
         <div className="flex items-center justify-start gap-3">
-          <SecondaryButton onClick={onClose}>
-            Cancel
-          </SecondaryButton>
+          <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
           <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-            {isSubmitting ? 'Saving...' : 'Save Changes'}
+            {isSubmitting ? "Saving..." : "Save Changes"}
           </PrimaryButton>
         </div>
       </div>
@@ -1311,43 +1346,66 @@ export const TestimonialsSection = ({ onClose }) => {
 };
 
 /**
- * AboutMeSection 
+ * AboutMeSection
  */
 
 export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
+const userId = sessionStorage.getItem("userId");
+// Ghana regions and cities
+const ghanaRegionsAndCities = {
+  "Greater Accra": ["Adabraka", "Accra", "Tema", "Madina"],
+  Ashanti: ["Kumasi", "Obuasi"],
+  Western: ["Takoradi", "Sekondi"],
+  Eastern: ["Koforidua", "Akosombo"],
+  Central: ["Cape Coast", "Winneba"],
+  Volta: ["Ho", "Keta"],
+  Northern: ["Tamale", "Yendi"],
+  "Upper East": ["Bolgatanga", "Bawku"],
+  "Upper West": ["Wa", "Lawra"],
+  Bono: ["Sunyani", "Dormaa Ahenkro"],
+  "Bono East": ["Techiman", "Kintampo"],
+  Ahafo: ["Goaso", "Mim"],
+  "Western North": ["Sefwi Wiawso", "Bibiani"],
+  Oti: ["Dambai", "Jasikan"],
+  "North East": ["Nalerigu", "Walewale"],
+  Savannah: ["Damongo", "Salaga"],
+};
 
   // Proficiency levels
   const proficiencyLevels = [
-    { value: 'beginner', label: 'Beginner' },
-    { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' },
-    { value: 'fluent', label: 'Fluent' },
-    { value: 'native', label: 'Native' }
+    { value: "beginner", label: "Beginner" },
+    { value: "intermediate", label: "Intermediate" },
+    { value: "advanced", label: "Advanced" },
+    { value: "fluent", label: "Fluent" },
+    { value: "native", label: "Native" },
   ];
 
   // Initialize with profile form hook
-  const {
-    formData,
-    setFormData,
-    handleInputChange,
-    isSubmitting,
-  } = useProfileForm({
-    fullName: initialData.fullName || '',
-    profession: initialData.profession || '',
-    bio: initialData.bio || '',
-    region: initialData.region || 'Greater Accra',
-    city: initialData.city || 'Adabraka',
-    hourlyRate: initialData.hourlyRate || '75',
-  });
+  const { formData, setFormData, handleInputChange, isSubmitting } =
+    useProfileForm({
+      firstname: initialData.firstname || "",
+      lastname: initialData.lastname || "",
+      profession: initialData.profession || "",
+      bio: initialData.bio || "",
+      region: initialData.region || "Greater Accra",
+      city: initialData.city || "Adabraka",
+      hourly_rate: initialData.hourlyRate || "75",
+      user_id: userId,
+      address: initialData.address,
+      gps_address:initialData.gps_address,
+      telephone: initialData.telephone,
+    });
 
   // Language management
-  const [language, setLanguage] = useState('');
-  const [proficiency, setProficiency] = useState('intermediate');
-  const [languages, setLanguages] = useState(initialData.languages || [
-    { language: 'English', proficiency: 'native' },
-    { language: 'French', proficiency: 'intermediate' },
-    { language: 'Spanish', proficiency: 'fluent' }
-  ]);
+  const [language, setLanguage] = useState("");
+  const [proficiency, setProficiency] = useState("intermediate");
+  const [languages, setLanguages] = useState(
+    initialData.languages || [
+      { language: "English", proficiency: "native" },
+      { language: "Ewe", proficiency: "intermediate" },
+      { language: "Twi", proficiency: "fluent" },
+    ]
+  );
 
   // Cities for selected region
   const [availableCities, setAvailableCities] = useState(
@@ -1358,10 +1416,13 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
   useEffect(() => {
     setAvailableCities(countryData[formData.region] || []);
     // If current city is not in the new region, set to first city
-    if (!countryData[formData.region]?.includes(formData.city)) {
-      setFormData(prev => ({
-        ...prev,
-        city: countryData[formData.region]?.[0] || ''
+if (!ghanaRegionsAndCities[formData.region]?.includes(formData.city)) {
+  setFormData((prev) => ({
+    ...prev,
+    city: ghanaRegionsAndCities[formData.region]?.[0] || "",
+  }));
+}
+
       }));
     }
   }, [formData.region]);
@@ -1369,13 +1430,16 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
   // Add a new language
   const handleAddLanguage = () => {
     if (language.trim()) {
-      setLanguages([...languages, {
-        language: language,
-        proficiency: proficiency
-      }]);
+      setLanguages([
+        ...languages,
+        {
+          language: language,
+          proficiency: proficiency,
+        },
+      ]);
       // Reset form
-      setLanguage('');
-      setProficiency('intermediate');
+      setLanguage("");
+      setProficiency("intermediate");
     }
   };
 
@@ -1388,16 +1452,16 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
 
   // Save all changes
   const handleSave = () => {
-
     // Combine form data with languages
     const profileData = {
       ...formData,
-      languages
+      languages,
     };
 
     // Simulate API call
     setTimeout(() => {
-      console.log('Saving profile data:', profileData);
+      console.log("Saving profile data:", profileData);
+      addProfile(profileData);
       if (onSave) onSave(profileData);
     }, 800);
   };
@@ -1409,12 +1473,45 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormInput
-              field="fullName"
-              label="Full Name"
+              field="firstname"
+              label="First Name"
               required={true}
-              value={formData.fullName}
+              value={formData.firstname}
               onChange={handleInputChange}
               placeholder="Your name"
+            />
+            <FormInput
+              field="lastname"
+              label="Surname"
+              required={true}
+              value={formData.lastname}
+              onChange={handleInputChange}
+              placeholder="Your name"
+            />
+            <FormInput
+              field="address"
+              label="address"
+              required={true}
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Your address"
+            />
+
+            <FormInput
+              field="gps_address"
+              label=""
+              required={true}
+              value={formData.gps_address}
+              onChange={handleInputChange}
+              placeholder="Your GPS"
+            />
+            <FormInput
+              field="telephone"
+              label="telephone"
+              required={true}
+              value={formData.telephone}
+              onChange={handleInputChange}
+              placeholder="+233 200000000"
             />
 
             <FormInput
@@ -1444,7 +1541,7 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
               </label>
               <select
                 value={formData.region}
-                onChange={(e) => handleInputChange('region', e.target.value)}
+                onChange={(e) => handleInputChange("region", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 {Object.keys(countryData).map((region) => (
@@ -1461,7 +1558,7 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
               </label>
               <select
                 value={formData.city}
-                onChange={(e) => handleInputChange('city', e.target.value)}
+                onChange={(e) => handleInputChange("city", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 {availableCities.map((city) => (
@@ -1475,16 +1572,18 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Hourly Rate (USD)
+              Hourly Rate (GH₵)
             </label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                $
+                ₵
               </span>
               <input
                 type="number"
                 value={formData.hourlyRate}
-                onChange={(e) => handleInputChange('hourlyRate', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("hourlyRate", e.target.value)
+                }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="75"
               />
@@ -1518,11 +1617,16 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
                 Proficiency Level
               </label>
               <CustomDropdown
-                selected={proficiencyLevels.find(level => level.value === proficiency)?.label || 'Intermediate'}
+                selected={
+                  proficiencyLevels.find((level) => level.value === proficiency)
+                    ?.label || "Intermediate"
+                }
                 styles="w-full py-2.5"
-                options={proficiencyLevels.map(level => level.label)}
+                options={proficiencyLevels.map((level) => level.label)}
                 onChange={(selectedLabel) => {
-                  const selected = proficiencyLevels.find(level => level.label === selectedLabel);
+                  const selected = proficiencyLevels.find(
+                    (level) => level.label === selectedLabel
+                  );
                   if (selected) setProficiency(selected.value);
                 }}
               />
@@ -1551,7 +1655,9 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
                   {languages.map((lang, index) => (
                     <tr key={index} className="border-t">
                       <td className="px-4 py-2">{lang.language}</td>
-                      <td className="px-4 py-2 capitalize">{lang.proficiency}</td>
+                      <td className="px-4 py-2 capitalize">
+                        {lang.proficiency}
+                      </td>
                       <td className="px-4 py-2 text-right">
                         <button
                           onClick={() => handleRemoveLanguage(index)}
@@ -1566,25 +1672,22 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
               </table>
             </div>
           ) : (
-            <p className="text-gray-500 text-center p-4 border rounded-md">No languages added yet</p>
+            <p className="text-gray-500 text-center p-4 border rounded-md">
+              No languages added yet
+            </p>
           )}
         </div>
 
         {/* Action Buttons */}
         <div className="flex items-center justify-between pt-4 border-t pb-5">
-          <TertiaryButton
-            onClick={() => { }}
-            icon={<FaTrash size={14} />}
-          >
+          <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
             Clear All
           </TertiaryButton>
 
           <div className="flex items-center justify-start gap-3">
-            <SecondaryButton onClick={onClose}>
-              Cancel
-            </SecondaryButton>
+            <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
             <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </PrimaryButton>
           </div>
         </div>

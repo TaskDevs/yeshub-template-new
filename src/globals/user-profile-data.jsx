@@ -93,10 +93,10 @@ export const START_USER_PROFILE_FIELD = {
       placeholder: "(+233) 554-456-789",
     },
     {
-      name: "country",
-      label: "Country",
+      name: "city",
+      label: "City",
       type: "text",
-      placeholder: "Ghana",
+      options: ["ben", "Intermediate", "Expert"],
     },
     {
       name: "region",
@@ -193,7 +193,7 @@ export const START_CLIENT_PROFILE_FIELD = {
   fieldDetailFour: [
     {
       name: "hourly_rate_start",
-      label: "From (GH)",
+      label: "Per/Hour (GH)",
       type: "number",
       placeholder: "50.00",
     },
@@ -218,4 +218,5 @@ export const START_CLIENT_PROFILE_FIELD = {
       placeholder: "",
     },
   ],
+
 };

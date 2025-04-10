@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { candidateData, profileSections } from './data';
+import {  profileSections } from './data';
 import { AboutMeSection, CertificationsSection, EducationSection, LicensesSection, PortfolioSection, ProfileSectionsManager, SkillsSection, TestimonialsSection, WorkHistorySection, WorkHoursSection } from './ProfileSectionsManager';
 import { ProfileSectionModal } from './profile-components';
 import { useProfileForm } from './hooks/useProfileForm';
@@ -10,11 +10,10 @@ const CandidateProfile = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [currentStepTitle, setCurrentStepTitle] = useState('');
   const { profileData } = useContext(ProfileApiData);
-  console.log("profileData-cand", profileData)
-
+  
   const { formData } = useProfileForm();
 
-  console.log(formData)
+  console.log("profile",formData)
 
   // Close modal handler
   const handleCloseModal = () => {
@@ -34,7 +33,7 @@ const CandidateProfile = () => {
 
     switch (activeSection) {
       case 'skills':
-        return <SkillsSection onClose={handleCloseModal} />;
+        return <SkillsSection initialSelectedSkills={profileData} onClose={handleCloseModal} />;
       case 'workHistory':
         return <WorkHistorySection onClose={handleCloseModal} />;
       case 'education':
@@ -50,7 +49,7 @@ const CandidateProfile = () => {
       case 'workHours':
         return <WorkHoursSection onClose={handleCloseModal} />;
       case 'aboutMe':
-        return <AboutMeSection onClose={handleCloseModal} />;
+        return <AboutMeSection initialData={profileData} onClose={handleCloseModal} />;
       default:
         return null;
     }
@@ -83,7 +82,7 @@ const CandidateProfile = () => {
     <div className="tw-css site-bg-gray min-h-screen">
       <div className="max-w-6xl mx-auto px-4 py-6 ">
         <ProfileSectionsManager
-          candidateData={candidateData}
+          candidateData={profileData}
           sectionKeyMap={sectionKeyMap}
           profileSections={enhancedProfileSections}
         />

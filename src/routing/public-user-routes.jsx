@@ -39,7 +39,7 @@ import FaqPage from "../app/pannels/public-user/components/pages/faq";
 import ContactUsPage from "../app/pannels/public-user/components/pages/contact-us";
 import UnderMaintenancePage from "../app/pannels/public-user/components/pages/under-maintenance";
 import ComingSoonPage from "../app/pannels/public-user/components/pages/coming-soon";
-import LoginPage from "../app/pannels/public-user/components/pages/login";
+// import LoginPage from "../app/pannels/public-user/components/pages/login";
 import AfterLoginPage from "../app/pannels/public-user/components/pages/after-login";
 import IconsPage from "../app/pannels/public-user/components/pages/icons";
 
@@ -63,6 +63,7 @@ import ForgotPassword from "../app/pannels/public-user/components/pages/forgotto
 import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-reset-otp";
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 import WelcomePopup from "../app/common/popups/welcome-popup";
+import NewAuth from "../app/pannels/public-user/components/pages/new-auth";
 import ClientProfile from "../app/pannels/public-user/sections/profile/client-profile";
 import ClientFindTalent from "../app/pannels/public-user/sections/find-talent/ClientFindTalent";
 
@@ -130,7 +131,10 @@ function PublicUserRoutes() {
           element={<UnderMaintenancePage />}
         />
         <Route path={publicUser.pages.COMING} element={<ComingSoonPage />} />
-        <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
+        {/* <Route path={publicUser.pages.LOGIN} element={<LoginPage />} /> */}
+        <Route path={publicUser.pages.SIGN_UP} element={<NewAuth state="signUp"  />} />
+        <Route path={publicUser.pages.LOGIN} element={<NewAuth state="signIn"  />} />
+        <Route path={publicUser.pages.AUTH} element={<NewAuth />} />
         <Route path={publicUser.pages.WELCOME} element={<WelcomePopup />} />
         <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} />
         <Route path={publicUser.pages.FIND_TALENT} element={<ClientFindTalent />} />

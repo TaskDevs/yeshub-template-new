@@ -46,7 +46,7 @@ function NewSavedJobsPage() {
   }, [filters, jobData]);
 
   return (
-    <div className="tw-css  min-h-screen">
+    <div className="tw-css mx-auto p-6  min-h-screen">
       <div className={`${styles.mobileSavedWork} h-min-h-screen px-4`}>
         <MobileFindSavedWork >
           {jobData.map((job) => (
@@ -66,40 +66,40 @@ function NewSavedJobsPage() {
             />
           ))}
         </MobileFindSavedWork>
-      </div>
-      <div className={`${styles.findWorkDesktop}`}>
-        <div className=" mx-auto px-4 py-6 ">
-          <div className="w-full px-4 py-4">
-            <div className="grid-container-saved">
-              <div className="section-one">
-                <FilterPanel>
-                  <CanSelectField
-                    options={dates}
-                    label="Date Saved"
-                    onChange={handleChange("date")}
-                  />
-                  <CanCheckbox
-                    options={jobStatus}
-                    label="Job Status"
-                    onChange={handleChange("status")}
-                  />
-                  <CanCheckbox
-                    options={jobTypes.slice(1)}
-                    label="Job Types"
-                    onChange={handleChange("jobTypes")}
-                  />
-                  <CanSlider
-                    values={["0", "100k", "200k+"]}
-                    label="Salary"
-                    onChange={handleChange("salaryRange")}
-                  />
-                  <CanCheckbox
-                    options={experinceLevel.slice(1)}
-                    label="Experience Level"
-                    onChange={handleChange("experienceLevel")}
-                  />
-                </FilterPanel>
-              </div>
+        </div>
+        <div className={`${styles.findWorkDesktop}`}>
+      <div className=" mx-auto  max-w-7xl">
+        <div className="w-full px-4 py-4">
+          <div className="grid-container-saved">
+            <div className="section-one">
+              <FilterPanel>
+                <CanSelectField
+                  options={dates}
+                  label="Date Saved"
+                  onChange={handleChange("date")}
+                />
+                <CanCheckbox
+                  options={jobStatus}
+                  label="Job Status"
+                  onChange={handleChange("status")}
+                />
+                <CanCheckbox
+                  options={jobTypes.slice(1)}
+                  label="Job Types"
+                  onChange={handleChange("jobTypes")}
+                />
+                <CanSlider
+                  values={["0", "100k", "200k+"]}
+                  label="Salary"
+                  onChange={handleChange("salaryRange")}
+                />
+                <CanCheckbox
+                  options={experinceLevel.slice(1)}
+                  label="Experience Level"
+                  onChange={handleChange("experienceLevel")}
+                />
+              </FilterPanel>
+            </div>
 
               <div className="section-two">
                 <div className="p-6 flex flex-col space-y-4">

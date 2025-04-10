@@ -38,7 +38,10 @@ export function showHeader(currentpath) {
 			currentpath === publicUser.pages.MAINTENANCE ||
 			currentpath === publicUser.pages.LOGIN ||
 			currentpath === publicUser.pages.AFTER_LOGIN ||
-			currentpath === publicUser.pages.RESET_PASSWORD
+			currentpath === publicUser.pages.RESET_PASSWORD ||
+			currentpath === publicUser.pages.AUTH ||
+			currentpath === publicUser.pages.SIGN_UP
+
 		) {
 			return false;
 		}
@@ -62,7 +65,10 @@ export function showFooter(currentpath) {
 			currentpath === publicUser.pages.MAINTENANCE ||
 			currentpath === publicUser.pages.COMING ||
 			// currentpath === publicUser.jobs.GRID_MAP ||
-			currentpath === publicUser.jobs.LIST
+			currentpath === publicUser.jobs.LIST ||
+			currentpath === publicUser.pages.AUTH ||
+			currentpath === publicUser.pages.SIGN_UP ||
+			currentpath === publicUser.pages.LOGIN
 		) {
 			return false;
 		}

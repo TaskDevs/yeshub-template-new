@@ -17,6 +17,10 @@
   align-items: flex-start;
 }
 
+.sectionsColumnContainer{
+  flex-direction: row;
+}
+
 .clientLeftColumn {
   width: 66.6667% !important;
 }
@@ -35,10 +39,11 @@
     width: 100% !important;
     max-width: 100% !important;
   }
-}
 
-/* Mobile Styles */
-@media screen and (max-width: 640px) {
+  .sectionsColumnContainer{
+    flex-direction: column;
+  }
+  
   .clientLeftColumn,
   .clientRightColumn {
     width: 100% !important;

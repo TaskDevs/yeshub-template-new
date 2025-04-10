@@ -63,8 +63,8 @@ const ClientProfile = () => {
         return <CompanyStatsFormSection onClose={handleCloseModal} />;
       case "certifications":
         return <CertificationsFormSection onClose={handleCloseModal} />;
-      // case 'companyOverview':
-      //   return <CompanyOverviewFormSection onClose={handleCloseModal} />;
+      case "companyOverview":
+        return <CompanyOverviewFormSection onClose={handleCloseModal} />;
       default:
         return null;
     }

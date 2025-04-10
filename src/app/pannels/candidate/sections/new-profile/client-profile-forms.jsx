@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import {
@@ -619,3 +619,453 @@ export const CertificationsFormSection = ({ onClose }) => {
     </div>
   );
 };
+
+/**
+ * AboutMeFormSection
+ */
+export const AboutMeFormSection = ({ onClose, initialData = {} }) => {
+  const { formData, setFormData, handleInputChange, isSubmitting, clearAll } =
+    useProfileForm({
+      companyName: initialData.companyName || "Tech Solutions Ghana Ltd",
+      headline: initialData.headline || "Digital Transformation & IT Services",
+      city: initialData.city || "Accra",
+      region: initialData.region || "Greater Accra",
+      country: initialData.country || "Ghana",
+      timezone: initialData.timezone || "GMT+0",
+      email: initialData.email || "john.doe@example.com",
+      about:
+        initialData.about ||
+        "Leading IT solutions provider in Ghana with over 10 years of experience delivering digital transformation, software development, and IT consulting services to enterprise clients across West Africa.",
+    });
+
+  // Countries
+  const countries = [
+    "Ghana",
+    "Nigeria",
+    "Kenya",
+    "South Africa",
+    "Ivory Coast",
+  ];
+
+  // Timezones
+  const timezones = ["GMT-12", "GMT-11", "GMT+10", "GMT+11", "GMT+12"];
+
+  // Cities for selected region
+  const [availableCities, setAvailableCities] = useState(
+    countryData[formData.region] || []
+  );
+
+  // For file handling
+  const {
+    files: logoFiles,
+    handleFileSelect: handleLogoSelect,
+    handleFileDrop: handleLogoDrop,
+    removeFile: removeLogoFile,
+    uploadError: logoUploadError,
+  } = useFileUpload();
+
+  const {
+    files: coverFiles,
+    handleFileSelect: handleCoverSelect,
+    handleFileDrop: handleCoverDrop,
+    removeFile: removeCoverFile,
+    uploadError: coverUploadError,
+  } = useFileUpload();
+
+  // Update cities when region changes
+  useEffect(() => {
+    setAvailableCities(countryData[formData.region] || []);
+    // If current city is not in the new region, set to first city
+    if (!countryData[formData.region]?.includes(formData.city)) {
+      setFormData((prev) => ({
+        ...prev,
+        city: countryData[formData.region]?.[0] || "",
+      }));
+    }
+  }, [formData.region]);
+
+  // Save changes
+  const handleSave = () => {
+    // Combine form data with file info
+    const profileData = {
+      ...formData,
+      logo: logoFiles.length > 0 ? logoFiles[0] : null,
+      coverImage: coverFiles.length > 0 ? coverFiles[0] : null,
+    };
+
+    console.log("Saving company profile data:", profileData);
+
+    setTimeout(() => {
+      onClose();
+    }, 800);
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-white z-50 w-full">
+      <div className="space-y-6 w-full">
+        {/* Company Info Section */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormInput
+              field="companyName"
+              label="Company Name"
+              required={true}
+              value={formData.companyName}
+              onChange={handleInputChange}
+              placeholder="Your company name"
+            />
+
+            <FormInput
+              field="headline"
+              label="Headline"
+              required={true}
+              value={formData.headline}
+              onChange={handleInputChange}
+              placeholder="e.g. Digital Transformation & IT Services"
+            />
+          </div>
+
+          <FormTextarea
+            field="about"
+            label="About"
+            required={true}
+            value={formData.about}
+            onChange={handleInputChange}
+            placeholder="Tell us about your company, services and expertise"
+            rows={4}
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Country
+              </label>
+              <CustomDropdown
+                selected={formData.country}
+                styles="w-full py-2.5"
+                options={countries}
+                onChange={(value) => handleInputChange("country", value)}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Region
+              </label>
+              <CustomDropdown
+                selected={formData.region}
+                styles="w-full py-2.5"
+                options={Object.keys(countryData)}
+                onChange={(value) => handleInputChange("region", value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                City
+              </label>
+              <CustomDropdown
+                selected={formData.city}
+                styles="w-full py-2.5"
+                options={availableCities}
+                onChange={(value) => handleInputChange("city", value)}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Timezone
+              </label>
+              <CustomDropdown
+                selected={formData.timezone}
+                styles="w-full py-2.5"
+                options={timezones}
+                onChange={(value) => handleInputChange("timezone", value)}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormInput
+              field="email"
+              label="Email"
+              type="email"
+              required={true}
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="company@example.com"
+            />
+          </div>
+        </div>
+
+        {/* Company Media Section */}
+        <div className="space-y-5 pt-4 border-t">
+          <div className="space-y-2 mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Company Logo
+            </label>
+            <p className="text-gray-500 text-sm">
+              Upload your company logo (recommended size: 800x400px)
+            </p>
+
+            <FileUpload
+              files={logoFiles}
+              onFileSelect={handleLogoSelect}
+              onFileDrop={handleLogoDrop}
+              onFileRemove={removeLogoFile}
+              error={logoUploadError}
+            />
+          </div>
+
+          {/* Cover Image Upload */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Cover Image
+            </label>
+            <p className="text-gray-500 text-sm">
+              Upload your company cover image (recommended size: 800x400px)
+            </p>
+
+            <FileUpload
+              isCoverImage={true}
+              files={coverFiles}
+              onFileSelect={handleCoverSelect}
+              onFileDrop={handleCoverDrop}
+              onFileRemove={removeCoverFile}
+              error={coverUploadError}
+            />
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between pt-4 border-t pb-5">
+          <TertiaryButton onClick={clearAll} icon={<FaTrash size={14} />}>
+            Clear All
+          </TertiaryButton>
+
+          <div className="flex items-center justify-start gap-3">
+            <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+            <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </PrimaryButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * CompanyOverviewSection
+ * Handles multiple experience additional
+ * Has the delete functionality as well
+ */
+// export const CompanyOverviewFormSection = ({ onClose, initialData = {} }) => {
+//    const {
+//       formData,
+//       setFormData,
+//       handleInputChange,
+//       handleDateChange,
+//       isSubmitting,
+//       clearAll
+//    } = useProfileForm({
+//       experiences: initialData.experience || [
+//          {
+//             title: "",
+//             organization: "",
+//             startDate: "",
+//             endDate: "",
+//             employmentType: "Full-time",
+//             revenue: "",
+//             description: ""
+//          }
+//       ]
+//    });
+
+//    // Employment types
+//    const employmentTypes = [
+//       'Full-time',
+//       'Part-time',
+//       'Contract',
+//       'Freelance',
+//       'Seasonal'
+//    ];
+
+//    // Add a new experience entry
+//    const addExperience = () => {
+//       setFormData(prev => ({
+//          ...prev,
+//          experiences: [
+//             ...prev.experiences,
+//             {
+//                title: "",
+//                organization: "",
+//                startDate: "",
+//                endDate: "",
+//                employmentType: "Full-time",
+//                revenue: "",
+//                description: ""
+//             }
+//          ]
+//       }));
+//    };
+
+//    // Remove an experience entry
+//    const removeExperience = (index) => {
+//       setFormData(prev => {
+//          const updatedExperiences = [...prev.experiences];
+//          updatedExperiences.splice(index, 1);
+//          return {
+//             ...prev,
+//             experiences: updatedExperiences
+//          };
+//       });
+//    };
+
+//    // Update a specific experience field
+//    const updateExperienceField = (index, field, value) => {
+//       setFormData(prev => {
+//          const updatedExperiences = [...prev.experiences];
+//          updatedExperiences[index] = {
+//             ...updatedExperiences[index],
+//             [field]: value
+//          };
+//          return {
+//             ...prev,
+//             experiences: updatedExperiences
+//          };
+//       });
+//    };
+
+//    // Save changes
+//    const handleSave = () => {
+//       console.log('Saving company experience data:', formData);
+//       setTimeout(() => {
+//          onClose();
+//       }, 800);
+//    };
+
+//    return (
+//       <div className="flex flex-col h-full bg-white z-50 w-full">
+//          <div className="space-y-6 w-full">
+//             <div className="space-y-4">
+//                <p className="text-gray-600">Add details about your company`s divisions, departments, or major milestones</p>
+
+//                {formData.experiences.map((experience, index) => (
+//                   <div key={index} className="border p-4 rounded-md space-y-4">
+//                      <div className="flex justify-between items-center">
+//                         <h4 className="font-medium -ml-1">Experience {index + 1}</h4>
+//                         {formData.experiences.length > 1 && (
+//                            <button
+//                               onClick={() => removeExperience(index)}
+//                               className="text-red-500"
+//                            >
+//                               <FaTrash size={14} />
+//                            </button>
+//                         )}
+//                      </div>
+
+//                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                         <FormInput
+//                            field={`title-${index}`}
+//                            label="Title/Division Name"
+//                            required={true}
+//                            value={experience.title}
+//                            onChange={(_, value) => updateExperienceField(index, 'title', value)}
+//                            placeholder="e.g. Enterprise Solutions Division"
+//                         />
+
+//                         <FormInput
+//                            field={`organization-${index}`}
+//                            label="Organization"
+//                            required={true}
+//                            value={experience.organization}
+//                            onChange={(_, value) => updateExperienceField(index, 'organization', value)}
+//                            placeholder="e.g. Your Company Name"
+//                         />
+//                      </div>
+
+//                      <div className="grid grid-cols-2 gap-4">
+//                         <DateInput
+//                            name="startDate"
+//                            label="Start Date"
+//                            value={formData.startDate}
+//                            onChange={handleDateChange}
+//                            required={true}
+//                         />
+
+//                         <DateInput
+//                            name="endDate"
+//                            label="End Date"
+//                            value={formData.endDate}
+//                            onChange={handleDateChange}
+//                            disabled={!formData.startDate}
+//                         />
+//                      </div>
+
+//                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                         <div>
+//                            <label className="block text-sm font-medium text-gray-700 mb-1">
+//                               Employment Type
+//                            </label>
+//                            <CustomDropdown
+//                               selected={experience.employmentType}
+//                               styles="w-full py-2.5"
+//                               options={employmentTypes}
+//                               onChange={(value) => handleInputChange('employmentType', value)}
+//                            />
+//                         </div>
+
+//                         <FormInput
+//                            field={`revenue-${index}`}
+//                            label="Revenue (if applicable)"
+//                            value={experience.revenue}
+//                            onChange={(_, value) => updateExperienceField(index, 'revenue', value)}
+//                            placeholder="e.g. $5M+ annually"
+//                         />
+//                      </div>
+
+//                      <FormTextarea
+//                         field={`description-${index}`}
+//                         label="Description"
+//                         required={true}
+//                         value={experience.description}
+//                         onChange={(_, value) => updateExperienceField(index, 'description', value)}
+//                         placeholder="Describe this division, department, or milestone's achievements and responsibilities"
+//                         rows={4}
+//                      />
+//                   </div>
+//                ))}
+
+//                <button
+//                   onClick={addExperience}
+//                   className="w-full py-2 border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:bg-gray-50 transition-colors"
+//                >
+//                   + Add Another Experience
+//                </button>
+//             </div>
+
+//             {/* Action Buttons */}
+//             <div className="flex items-center justify-between pt-4 border-t pb-5">
+//                <TertiaryButton
+//                   onClick={clearAll}
+//                   icon={<FaTrash size={14} />}
+//                >
+//                   Clear All
+//                </TertiaryButton>
+
+//                <div className="flex items-center justify-start gap-3">
+//                   <SecondaryButton onClick={onClose}>
+//                      Cancel
+//                   </SecondaryButton>
+//                   <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
+//                      {isSubmitting ? 'Saving...' : 'Save Changes'}
+//                   </PrimaryButton>
+//                </div>
+//             </div>
+//          </div>
+//       </div>
+//    );
+// };

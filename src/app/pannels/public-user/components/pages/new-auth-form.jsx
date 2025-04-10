@@ -186,7 +186,7 @@ const NewAuthForm = ({ currentState }) => {
               placeholder="Password"
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" /> : <AiOutlineEye className="h-5 w-5 text-gray-500" />}
+            {showPassword ? < AiOutlineEye className="h-5 w-5 text-gray-500" /> : <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />}
             </div>
           </div>
           {errors.password && (

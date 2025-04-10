@@ -101,7 +101,7 @@ function SignUpPopup() {
 
       cookieMethods.setCookies(token, refresh_token);
       sessionStorage.setItem("username", user?.username);
-      sessionStorage.setItem("userId", user?.user_id);
+      sessionStorage.setItem("userId", user?.id);
       console.log(role)
       // Check if role exists
       setTimeout(() => {

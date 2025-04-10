@@ -1,5 +1,5 @@
 export const ShareProfileModal = ({ onClose, profileName }) => {
-          const profileLink = `https://yeshub.com/dashboard-candiadte/profile/${profileName.toLowerCase().replace(' ', '-')}`;
+          const profileLink = `https://yeshub.com/dashboard-candidate/profile/${profileName.toLowerCase().replace(' ', '-')}`;
         
           const copyProfileLink = () => {
             navigator.clipboard.writeText(profileLink);

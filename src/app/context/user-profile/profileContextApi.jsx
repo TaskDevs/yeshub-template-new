@@ -55,6 +55,7 @@ const ProfileApiDataProvider = (props) => {
   
 
   const fetchProfile = async () => {
+    console.log("userid", userId)
     setIsLoading(true)
     try{
       const res = await processProfileProfile(userId);

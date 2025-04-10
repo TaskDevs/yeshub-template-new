@@ -29,11 +29,12 @@ function AppRoutes() {
         path={base.PUBLIC_PRE + "/dashboard/Onboard/create-account"}
         element={<CreateAccount />}
       />
+
       <Route path={base.PUBLIC_PRE + "/*"} element={<PublicUserLayout />} />
-      <Route element={<ProtectedRoute allowedRoles={['employer']} />}>
+      <Route element={<ProtectedRoute allowedRoles={["employer"]} />}>
         <Route path={base.EMPLOYER_PRE + "/*"} element={<EmployerLayout />} />
       </Route>
-      <Route element={<ProtectedRoute allowedRoles={['candidate']} />}>
+      <Route element={<ProtectedRoute allowedRoles={["candidate"]} />}>
         <Route path={base.CANDIDATE_PRE + "/*"} element={<CandidateLayout />} />
       </Route>
     </Routes>

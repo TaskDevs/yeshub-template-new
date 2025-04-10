@@ -173,7 +173,7 @@ function LoginPage() {
 
       cookieMethods.setCookies(token, refresh_token);
       sessionStorage.setItem("username", user?.username);
-      sessionStorage.setItem("userId", user?.user_id);
+      sessionStorage.setItem("userId", user?.id);
       
 
       // Check if role exists

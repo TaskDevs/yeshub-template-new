@@ -273,10 +273,8 @@ This files [Table of contents] are outlined below
   top: 4rem;
   right: 5rem;
   margin-bottom: 2rem;
-
 }
 .bg-red {
- 
   width: 100%;
   background: red;
 }
@@ -298,14 +296,45 @@ This files [Table of contents] are outlined below
     display: none; /* Hide the sidebar when collapsed */
   }
 }
-.main-nav{
+
+.main-nav {
   display: flex;
 }
-.toggle-bar {
+.toggle-bar,
+.mobile-nav {
   display: none;
 }
+
+.new-header-wrapper {
+  display: flex; 
+  align-items: center;
+ 
+}
 @media (max-width: 640px ) {
-  .main-nav{
+  .main-nav, .search-input, .mail-icon, .new-profile-menu {
+    display: none;
+  }
+  .toggle-bar,
+  .mobile-nav {
+    display: block;
+  }
+
+  .new-header-wrapper {
+    /* background: blue!important; */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+  }
+  .new-header-logo {
+    position: absolute;
+    left: auto;
+    /* background: teal!important; */
+  }
+}
+@media (max-width: 640px) {
+  .main-nav {
     display: none;
   }
   .toggle-bar {
@@ -338,6 +367,161 @@ This files [Table of contents] are outlined below
     right: -30px;
   }
 }
+
+.job-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 80%;
+}
+.job-profile-saved {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  width: 100%;
+}
+
+
+.profile-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.job-card-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr; 
+  gap: 1rem; 
+}
+
+.grid-container-saved {
+  display: grid;
+  grid-template-columns: auto 2fr; 
+  gap: 1rem; 
+}
+
+.section-one {
+  background-color: white;
+  border-radius: 0.5rem; /* Equivalent to Tailwind's rounded-lg */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to Tailwind's shadow-sm */
+  margin-bottom: 1.5rem; /* Equivalent to Tailwind's mb-6 */
+  width: 100%;
+}
+
+.section-two {
+  background-color: white;
+  border-radius: 0.5rem; /* Equivalent to Tailwind's rounded-lg */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to Tailwind's shadow-sm */
+  margin-bottom: 1.5rem; /* Equivalent to Tailwind's mb-6 */
+  /* Add any specific styles for section two here */
+}
+
+.section-three {
+  border: 1px solid #e5e7eb; /* Equivalent to Tailwind's border */
+  border-radius: 0.5rem; /* Equivalent to Tailwind's rounded-lg */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to Tailwind's shadow-sm */
+  padding: 1rem; /* Equivalent to Tailwind's p-4 */
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  /* Add any specific styles for section three here */
+}
+
+@media (max-width: 756px) {
+  .job-card-desc {
+    max-width: 200px;
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  }
+
+  .greetings-wrapper {
+    display: none;
+  }
+  
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: 1fr 2fr 1fr; 
+  }
+  .mobile-title, .cand-search-bar {
+    display: none!important;
+  }  
+}
+
+@media (min-width: 768px ) {
+  .grid-container {
+    grid-template-columns: 1fr 2fr 1fr; /* Three columns with 1:2:1 ratio */
+  }
+  .mobile-title, .cand-search-bar {
+    display: none!important;
+  }
+}
+
+
+
+@media (max-width: 480px) { 
+  .section-one, .section-three, .section-two {
+    display: none;
+  }
+  
+  .mobile-title {
+    display: block!important;
+  }
+  .candSearchBar {
+    display: block !important;
+    align-items: center;
+    width: 100%;
+    border-radius: 1rem;
+  }
+  .mobileJobCards {
+    display: block !important;
+  }
+  .section-two-header {
+    display: none!important;
+  }
+  .section-two {
+    background: none!important;
+    box-shadow: none!important;
+
+  }
+
+}
+
+.section-two-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+   margin-bottom: 1rem; 
+   width: 100%
+}
+
+
+
+
+.job-card-desc {
+  width: 100%;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.greetings-wrapper {
+  background: white;
+  border-radius: 0.5rem; /* Equivalent to Tailwind's rounded-lg */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to Tailwind's shadow-sm */
+  margin-bottom: 1.5rem; /* Equivalent to Tailwind's mb-6 */
+  width: 100%;
+}
+
+
 
 .portfolio-lists {
   font-weight: 400;
@@ -385,100 +569,6 @@ This files [Table of contents] are outlined below
   }
 }
 
-<<<<<<< HEAD
-=======
-.profile-info-wrapper, .profile-cards-wrapper {
-  background: white;
-  border-radius: 1rem;
-  padding: 1rem;
-  margin-bottom: 2rem;
-}
-
-.user-profile-header {
-  display: flex;
-  gap: 1rem;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap:0.75rem;
-  text-transform: capitalize;
-}
-
-/* .profile-share-btn {
-  background: #305718;
-  color: white;
-  width: 250px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5rem;
-  padding: 0.2rem 0.7rem;
-  border-radius: 0.7rem;
-} */
-
-.profile-share-btn button {
-  border: none;
-  outline: none;
-  background: #305718;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5rem;
-}
-.user-profile-bio {
-  display: flex; 
-  flex-direction: column; 
-  gap: 1rem;
-  padding-bottom: 0.5rem;
-}
-
-.user-profile-details {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  /* grid-template-rows: auto auto; */
-  gap: 1rem;
-  border-bottom: 1px solid #d5d5d5;
-  padding-bottom: 0.5rem;
-}
-
-.user-details {
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-start;
-
-}
-
-
-.user-details-label {
-  font-weight: bold;
-  text-transform: capitalize;
-}
-.skills-wrapper {
-  display: flex;
-  flex-wrap: wrap; 
-  gap: 0.5rem;
-  width: 70%;
-  /* margin: 0 auto; */
-
-
-}
-.can-skills-card {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 1rem;
-  padding: 5px;
-  text-transform: capitalize;
-  font-size: 1rem;
-}
-
-
->>>>>>> ccb9b6e49ba11eaf5901e8d5adab9da165dcebbb
 .site-text-primary {
   color: #305718;
 }
@@ -14182,8 +14272,6 @@ strong {
 }
 .can-banner-logo {
   width: 50%;
-  
-  
 }
 .can-logo-wrapper {
   display: flex;
@@ -28019,6 +28107,19 @@ HOME PAGE 15 START
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
   width: 100%; /* Full width on small screens */
   max-width: 350px; /* Limit width on larger screens */
+}
+
+.invite-card {
+  border: 2px solid #ddd; /* Light gray border */
+  border-radius: 12px; /* Smooth rounded edges */
+  padding: 20px; /* Add padding for spacing */
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  justify-content: center;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .card-two {

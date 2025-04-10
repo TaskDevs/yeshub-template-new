@@ -2,15 +2,15 @@ export const baseURL = process.env.PUBLIC_URL;
 export const REACT_BASE_URL = process.env.REACT_APP_BASE_URL;
 export const LOCAL_BACKEND_URL = process.env.REACT_APP_LOCAL_BACKEND_URL;
 export const BACKEND_HOST = process.env.REACT_APP_BACKEND_HOST;
+export const LOCALHOST_BACKEND = process.env.REACT_APP_LOCALHOST_BACKEND;
 //export const BACKEND_FULL_URL = process.env.REACT_APP_BACKEND_FULL_URL;
 export const HOST = window.location.hostname;
 export const timeOut = { timeout: 10000 };
 
 //RETRIEVE USER IDS
-export const userId = sessionStorage.getItem("user_id");
+export const userId = sessionStorage.getItem("userId");
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
 export const getJobId = () => sessionStorage.getItem("job_id");
-
 
 //STATUS CODE
 export const SUCCESS_STATUS = 201;

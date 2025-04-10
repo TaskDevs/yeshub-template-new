@@ -93,10 +93,10 @@ export const START_USER_PROFILE_FIELD = {
       placeholder: "(+233) 554-456-789",
     },
     {
-      name: "country",
-      label: "Country",
+      name: "city",
+      label: "City",
       type: "text",
-      placeholder: "Ghana",
+      options: ["ben", "Intermediate", "Expert"],
     },
     {
       name: "region",

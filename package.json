@@ -34,6 +34,7 @@
     "pusher-js": "^8.4.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
+    "react-country-state-city": "^1.1.12",
     "react-countup": "^6.4.2",
     "react-dom": "^18.2.0",
     "react-dropzone-component": "^3.2.0",

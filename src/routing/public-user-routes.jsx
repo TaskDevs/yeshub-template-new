@@ -64,6 +64,7 @@ import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-r
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 import WelcomePopup from "../app/common/popups/welcome-popup";
 import ClientProfile from "../app/pannels/public-user/sections/profile/client-profile";
+import ClientFindTalent from "../app/pannels/public-user/sections/find-talent/ClientFindTalent";
 
 function PublicUserRoutes() {
   return (
@@ -132,6 +133,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.pages.LOGIN} element={<LoginPage />} />
         <Route path={publicUser.pages.WELCOME} element={<WelcomePopup />} />
         <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} />
+        <Route path={publicUser.pages.FIND_TALENT} element={<ClientFindTalent />} />
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route
           path={publicUser.pages.FORGOTPASS}

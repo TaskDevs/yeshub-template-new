@@ -3,6 +3,7 @@ import styles from "./profile.module.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClientProfileSectionsManager } from "./client-profile-sections-manager";
+import { CompanyOverviewFormSection } from "../../../candidate/sections/new-profile/client-profile-forms";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import { useProfileForm } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
 import { clientProfileData, profileSections } from "./data";

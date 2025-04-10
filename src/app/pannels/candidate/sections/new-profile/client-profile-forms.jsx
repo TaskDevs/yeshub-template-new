@@ -21,7 +21,150 @@ import {
 } from "./hooks/useProfileForm";
 import { availableServicesData, serviceCategories } from "./data";
 import { clientProfileData } from "../../../public-user/sections/profile/data";
+import { countryData } from "../../../../../utils/countryData";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+
+/**
+ * CompanyOverviewSection
+ */
+export const CompanyOverviewFormSection = ({ onClose, initialData = {} }) => {
+  const { formData, setFormData, handleInputChange, isSubmitting, clearAll } =
+    useProfileForm({
+      title: initialData.title || "",
+      organization: initialData.organization || "",
+      startDate: initialData.startDate || "",
+      endDate: initialData.endDate || "",
+      employmentType: initialData.employmentType || "Full-time",
+      revenue: initialData.revenue || "",
+      description: initialData.description || "",
+    });
+
+  // Employment types
+  const employmentTypes = [
+    "Full-time",
+    "Part-time",
+    "Contract",
+    "Freelance",
+    "Seasonal",
+  ];
+
+  // Handle date changes
+  const handleDateChange = (name, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Save changes
+  const handleSave = () => {
+    console.log("Saving company experience data:", formData);
+    setTimeout(() => {
+      onClose();
+    }, 800);
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-white z-50 w-full">
+      <div className="space-y-6 w-full">
+        <div className="space-y-4 -mt-2">
+          <p className="text-gray-600">
+            Add details about your company&apos;s division, department, or major
+            milestone
+          </p>
+
+          <div className="space-y-4 mt-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormInput
+                field="title"
+                label="Title/Division Name"
+                required={true}
+                value={formData.title}
+                onChange={handleInputChange}
+                placeholder="e.g. Enterprise Solutions Division"
+              />
+
+              <FormInput
+                field="organization"
+                label="Organization"
+                required={true}
+                value={formData.organization}
+                onChange={handleInputChange}
+                placeholder="e.g. Your Company Name"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <DateInput
+                name="startDate"
+                label="Start Date"
+                value={formData.startDate}
+                onChange={(name, value) => handleDateChange(name, value)}
+                required={true}
+              />
+
+              <DateInput
+                name="endDate"
+                label="End Date"
+                value={formData.endDate}
+                onChange={(name, value) => handleDateChange(name, value)}
+                disabled={!formData.startDate}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Employment Type
+                </label>
+                <CustomDropdown
+                  selected={formData.employmentType}
+                  styles="w-full py-2.5"
+                  options={employmentTypes}
+                  onChange={(value) =>
+                    handleInputChange("employmentType", value)
+                  }
+                />
+              </div>
+
+              <FormInput
+                field="revenue"
+                label="Revenue (if applicable)"
+                value={formData.revenue}
+                onChange={handleInputChange}
+                placeholder="e.g. $5M+ annually"
+              />
+            </div>
+
+            <FormTextarea
+              field="description"
+              label="Description"
+              required={true}
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Describe this division, department, or milestone's achievements and responsibilities"
+              rows={4}
+            />
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between pt-4 border-t pb-5">
+          <TertiaryButton onClick={clearAll} icon={<FaTrash size={14} />}>
+            Clear All
+          </TertiaryButton>
+
+          <div className="flex items-center justify-start gap-3">
+            <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+            <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </PrimaryButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 /**
  * ServicesSection

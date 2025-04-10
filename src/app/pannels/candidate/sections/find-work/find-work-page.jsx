@@ -17,25 +17,16 @@ import MobileFindSavedWork from "./mobile-find-work";
 function FindWorkPage() {
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
-  // const { jobListData, processGetAllJob } = useContext(JobApiData);
   const navigate = useNavigate();
+
+
+
   
 
-  // useEffect(() => {
-  //   const fetchJobs = async () => {
-  //     const res = await processGetAllJob(1);
-  //     console.log("jobs-res", res);
-  //   };
-  //   fetchJobs();
-  // }, []);
-
-  // console.log("jobListData", jobListData);
-
-
   return (
-    <div className="tw-css  min-h-screen px-4 py-6">
+    <div className=" tw-css mx-auto p-6">
      
-     <div className={`${styles.mobileFindWork} h-min-h-screen `}>
+     <div className={`${styles.mobileFindWork} min-h-screen `}>
         <MobileFindSavedWork >
         {jobData.map((job) => (
                     <CanJobCard
@@ -55,7 +46,8 @@ function FindWorkPage() {
         </MobileFindSavedWork>
         </div>
      
-      <div className=" mx-auto  ">
+      <div className=" mx-auto  max-w-7xl">
+
         <div className={`${styles.findWorkDesktop}`}>
           {/* Greetings Section */}
           <div className="greetings-wrapper">

@@ -187,7 +187,7 @@ export const FormTextarea = ({
 /**
  * File Upload Component for Projects
  */
-export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, error }) => {
+export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, error, isCoverImage = false }) => {
   const fileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
@@ -227,7 +227,7 @@ export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, erro
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       {files.length > 0 && (
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className={`mt-4 grid ${isCoverImage ?"grid-cols-1":"grid-cols-2 sm:grid-cols-3"}  gap-4`}>
           {files.map((file, index) => (
             <div key={index} className="relative">
               <img

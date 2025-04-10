@@ -4,7 +4,7 @@ import styles from "./profile.module.css"
 
 export const ClientProfileSectionsManager = ({ sectionKeyMap, clientData, profileSections }) => {
    return (
-      <div className='space-y-5 mt-24'>
+      <div className='space-y-5 mt-24 w-full'>
          {/* Render profile sections */}
 
          {/* About client */}
@@ -19,7 +19,7 @@ export const ClientProfileSectionsManager = ({ sectionKeyMap, clientData, profil
             />
          </div>
 
-         <div className='flex flex-row w-full items-start space-x-3'>
+         <div className={`flex ${styles.sectionsColumnContainer} w-full items-start space-x-3`}>
             {/* Left column */}
             {/* Company overview, Core Services and Our Offices  */}
             <div className={`flex flex-col items-start justify-start ${styles.clientLeftColumn}`}>
@@ -58,7 +58,7 @@ export const ClientProfileSectionsManager = ({ sectionKeyMap, clientData, profil
                   onClick={profileSections[4]?.onClick}
                   description={profileSections[4]?.description}
                   activeSection={sectionKeyMap[profileSections[4]?.title]}
-                  noData={!clientData?.contact.phone && !clientData?.contact.website && !clientData?.contact.linkedin}
+                  noData={!clientData?.contact?.phone && !clientData?.contact?.website && !clientData?.contact?.linkedin}
                />
                <ProfileSection
                   data={clientData?.stats}
@@ -66,7 +66,7 @@ export const ClientProfileSectionsManager = ({ sectionKeyMap, clientData, profil
                   onClick={profileSections[5]?.onClick}
                   description={profileSections[5]?.description}
                   activeSection={sectionKeyMap[profileSections[5]?.title]}
-                  noData={!clientData?.stats.foundedYear && !clientData?.stats.employeesCount && !clientData?.stats.clientsCount}
+                  noData={!clientData?.stats?.foundedYear && !clientData?.stats?.employeesCount && !clientData?.stats?.clientsCount}
                />
                <ProfileSection
                   data={clientData?.certifications}

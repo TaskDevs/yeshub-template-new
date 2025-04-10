@@ -4,7 +4,7 @@ import { ClientProfileSectionsManager } from './client-profile-sections-manager'
 import { ProfileSectionModal } from '../../../candidate/sections/new-profile/profile-components';
 import { useProfileForm } from '../../../candidate/sections/new-profile/hooks/useProfileForm';
 import { clientProfileData, profileSections } from './data';
-import { BusinessInfoFormSection, CertificationsFormSection, CompanyStatsFormSection, OfficesFormSection, ServicesFormSection } from '../../../candidate/sections/new-profile/client-profile-forms';
+import { AboutMeFormSection, BusinessInfoFormSection, CertificationsFormSection, CompanyOverviewFormSection, CompanyStatsFormSection, OfficesFormSection, ServicesFormSection } from '../../../candidate/sections/new-profile/client-profile-forms';
 
 const ClientProfile = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,8 +31,8 @@ const ClientProfile = () => {
     if (!activeSection) return null;
 
     switch (activeSection) {
-      // case 'aboutMe':
-      //   return <AboutMeFormSection onClose={handleCloseModal} />;
+      case 'aboutMe':
+        return <AboutMeFormSection onClose={handleCloseModal} />;
       case 'services':
         return <ServicesFormSection onClose={handleCloseModal} />;
       case 'offices':
@@ -43,8 +43,8 @@ const ClientProfile = () => {
         return <CompanyStatsFormSection onClose={handleCloseModal} />;
       case 'certifications':
         return <CertificationsFormSection onClose={handleCloseModal} />;
-      // case 'companyOverview':
-      //   return <CompanyOverviewFormSection onClose={handleCloseModal} />;
+      case 'companyOverview':
+        return <CompanyOverviewFormSection onClose={handleCloseModal} />;
       default:
         return null;
     }
@@ -70,7 +70,7 @@ const ClientProfile = () => {
     }
   }));
   return (
-    <div className={`tw-css site-bg-gray`}>
+    <div className={`tw-css site-bg-gray w-full`}>
       <div className={styles.profileContainer}>
         <ClientProfileSectionsManager
           sectionKeyMap={sectionKeyMap}

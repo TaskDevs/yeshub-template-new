@@ -79,7 +79,7 @@ const ClientOnboard = () => {
         if(jobRes){
         
           toast.success("Job posted successfully!");
-          setTimeout(() => navigate(`/dashboard-employer`), 2000);
+          setTimeout(() => navigate(`/profile`), 2000);
         }
  
       }

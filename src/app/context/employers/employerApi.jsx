@@ -4,6 +4,7 @@ import axios from "axios";
 import {
   SUCCESS_STATUS,
   REACT_BASE_URL,
+  LOCALHOST_BACKEND,
 } from "../../../globals/constants";
 
 // ADD Employer
@@ -60,10 +61,10 @@ export const employerList = async () => {
 export const employerProfile = async (id) => {
   try {
     let responseOnEmployerProfile = await axios.get(
-      `${REACT_BASE_URL}employer-companies/${id}`
+      `${LOCALHOST_BACKEND}/api/v1/employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
     );
-    console.log(responseOnEmployerProfile.data.data);
+    console.log(responseOnEmployerProfile);
     if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
     } else {
@@ -79,7 +80,7 @@ export const employerProfile = async (id) => {
 export const updateEmployer = async (id, data) => {
   try {
     let responseOnUpdateEmployer = await axios.put(
-      `${REACT_BASE_URL}employers/${id}`,
+      `${LOCALHOST_BACKEND}/api/v1/employers/${id}`,
       data
     );
     //console.log(responseOnUpdateEmployer);
@@ -145,7 +146,6 @@ export const updateEmployerBanner = async (id, data) => {
     console.log(err);
   }
 };
-
 
 // DELETE Employer
 export const deleteEmployer = async (id) => {

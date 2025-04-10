@@ -31,7 +31,7 @@ export const OfferCard = ({ info }) => {
           <span className="badge bg-warning text-dark rounded-pill text-capitalize py-2">
             {info.job_type}
           </span>
-          <span className="text-capitalize">GH {info.budget}</span>
+          <span className="text-capitalize">GH {info.fixed_rate}</span>
         </div>
 
         <div className="mt-3">

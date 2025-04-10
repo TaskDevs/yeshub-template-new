@@ -5,6 +5,7 @@ import SelectField from "../../../../../common/select-field";
 import SkillSelector from "../../../../../common/skill-selector";
 import { skillsList } from "../../../../../context/skills/skillsApi";
 
+
 const StageThree = ({ forms, handleInputChange }) => {
   const [selectedSkill, setSelectedSkill] = useState([]);
 
@@ -50,7 +51,7 @@ const StageThree = ({ forms, handleInputChange }) => {
               <h4 className="twm-title text-3xl text-gray">
                 Profession Information
               </h4>
-              <span>Professional information for beeter metrics</span>
+              <span>Professional information for better metrics</span>
             </div>
             <div className="container text-left mt-6">
               <div className="row">

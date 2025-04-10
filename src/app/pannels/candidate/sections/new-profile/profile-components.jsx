@@ -38,7 +38,7 @@ export const ProfileSectionModal = ({
         className={`bg-white w-full ${isSkillsSection ? "max-w-4xl" : "max-w-2xl"}  zIndex2 mx-auto h-[95%] rounded-lg flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
       >
         <div className="flex justify-between items-center px-6 p-5 border-b w-full">
-          <h2 className="text-xl font-bold">{title} {currentStepTitle ?? ""}</h2>
+          <h2 className="text-xl font-bold capitalize">{title} {currentStepTitle ?? ""}</h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -58,6 +58,8 @@ export const ProfileSectionModal = ({
 /**
  * Date input component
  */
+
+
 export const DateInput = ({
   value = '',
   onChange,
@@ -187,7 +189,7 @@ export const FormTextarea = ({
 /**
  * File Upload Component for Projects
  */
-export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, error }) => {
+export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, error, isCoverImage = false }) => {
   const fileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
@@ -227,7 +229,7 @@ export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, erro
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       {files.length > 0 && (
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className={`mt-4 grid ${isCoverImage ?"grid-cols-1":"grid-cols-2 sm:grid-cols-3"}  gap-4`}>
           {files.map((file, index) => (
             <div key={index} className="relative">
               <img
@@ -255,7 +257,7 @@ export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, erro
 export const SkillItem = ({ skill, onSelect }) => {
   return (
     <div className="flex items-center justify-between p-2 ">
-      <div className="flex items-center">
+      <div className="flex gap-0 items-center">
         <input
           type="checkbox"
           id={`skill-${skill.name}`}

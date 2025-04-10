@@ -28,21 +28,21 @@ function FindWorkPage() {
      
      <div className={`${styles.mobileFindWork} min-h-screen `}>
         <MobileFindSavedWork >
-        {jobData.map((job) => (
-                    <CanJobCard
-                      key={job.id}
-                      role={job.job_title}
-                      ratings="4.9"
-                      reviews="23k"
-                      companyName={job.employer.company_name}
-                      submitProposalBtn={job?.submitProposalBtn}
-                      jobType={job?.job_type}
-                      isMobile={true}
-                      jobLocation={job?.location}
-                      datePosted={job?.start_date}
-                      salaryRange={job?.salary}
-                    />
-                  ))}
+          {jobData.map((job) => (
+            <CanJobCard
+              key={job.id}
+              role={job.job_title}
+              ratings="4.9"
+              reviews="23k"
+              companyName={job.employer.company_name}
+              submitProposalBtn={job?.submitProposalBtn}
+              jobType={job?.job_type}
+              isMobile={true}
+              jobLocation={job?.location}
+              datePosted={job?.start_date}
+              salaryRange={job?.salary}
+            />
+          ))}
         </MobileFindSavedWork>
         </div>
      
@@ -72,7 +72,7 @@ function FindWorkPage() {
               </div>
             </div>
           </div>
-        
+
           <div className="grid-container">
             <div className="section-one">
               <FilterPanel>
@@ -86,11 +86,11 @@ function FindWorkPage() {
               </FilterPanel>
             </div>
 
-           
+
 
             <div className="section-two">
               <div className=" p-6 flex flex-col gap-4">
-              
+
                 <div className=" section-two-header ">
                   <h2 className="font-medium capitalize">available jobs</h2>
                   <CanSelectField options={sort} width="240px" />
@@ -110,7 +110,7 @@ function FindWorkPage() {
                       isMobile={false}
                       newTag={
                         readableDate(job.start_date) ===
-                          new Date().toDateString() && "new"
+                        new Date().toDateString() && "new"
                       }
                       numberOfProposals="23"
                       salaryRange={job?.salary}

@@ -41,7 +41,7 @@ export default function CanCheckbox({ options, label, onChange }) {
   };
 
   return (
-    <div className="flex items-start flex-col w-full">
+    <div className="tw-css flex items-start flex-col w-full">
       <p className="text-gray-700 font-medium">{label}</p>
       <div className="flex flex-col space-y-2 items-start">
         {options.map((option, index) => (
@@ -51,7 +51,7 @@ export default function CanCheckbox({ options, label, onChange }) {
               value={option}
               checked={selectedOptions.includes(option)}
               onChange={handleCheckboxChange}
-              className="size-4"
+              className="size-4 cursor-pointer"
             />
             <label className="text-gray-500 capitalize ml-1">{option}</label>
           </div>

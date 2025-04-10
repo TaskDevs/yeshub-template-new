@@ -44,6 +44,7 @@ const CreateAccount = () => {
   };
 
   const handleUserProfile = async () => {
+    console.log(formData)
     const UserFormData = { ...formData, user_id: parseInt(userId) };
     try {
       setIsLoading(true); // Show spinner when starting the submission

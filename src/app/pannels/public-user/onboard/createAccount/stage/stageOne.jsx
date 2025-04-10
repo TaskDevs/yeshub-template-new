@@ -3,9 +3,26 @@ import { START_USER_PROFILE_FIELD } from "../../../../../../globals/user-profile
 import InputField from "../../../../../common/input-field";
 import { allCountries } from "country-region-data";
 import SelectField from "../../../../../common/select-field";
+
+const cities = [
+  'Accra', 'Tema', 'Dodowa', 'Amasaman', 'Madina', 'Nungua', 'Lashibi', 'Teshie', 'Gbawe',
+  'Kumasi', 'Obuasi', 'Konongo', 'Mampong', 'Ejisu', 'Asokore Mampong', 'Bekwai', 'Manso Nkwanta', 'Tepa',
+  'Takoradi', 'Sekondi', 'Bogoso', 'Shama', 'Axim', 'Dixcove', 'Sewhi Wiawso', 'Bia East', 'Enchi',
+  'Cape Coast', 'Elmina', 'Winneba', 'Saltpond', 'Agona Swedru', 'Abura', 'Ajumako', 'Mankessim',
+  'Koforidua', 'Nsawam', 'Berekum', 'Akropong', 'Asamankese', 'Akyem Oda', 'Nkawkaw', 'Abetifi', 'Suhum',
+  'Tamale', 'Yendi', 'Gushegu', 'Savelugu', 'Bole', 'Mankarigu', 'Zabzugu', 'Kpandai', 'Buipe',
+  'Ho', 'Aflao', 'Denu', 'Hohoe', 'Keta', 'Anfoega', 'Dzodze', 'Peki', 'Nkwanta',
+  'Bolgatanga', 'Bawku', 'Navrongo', 'Tongo', 'Zuarungu', 'Sandema', 'Chiana', 'Bongo', 'Fumbisi',
+  'Wa', 'Tumu', 'Jirapa', 'Lawra', 'Nandom', 'Issa', 'Wechiau', 'Sissala East', 'Fian',
+  'Sunyani', 'Berekum', 'Chiraa', 'Dormaa', 'Sampa', 'Wamfie', 'Kokrokoo', 'Nkrankwanta',
+  'Techiman', 'Nkoranza', 'Kintampo', 'Sampa', 'Prang', 'Jema', 'Seikwa', 'Kintampo South',
+  'Dambai', 'Nkwanta', 'Kete Krachi', 'Chinderi', 'Nkonya', 'Ahamansu', 'Nkonya Ahinkro',
+  'Goaso', 'Kukuom', 'Nobekaw', 'Tano North', 'Asunafo', 'Asutifi', 'Kenfokrom', 'Ahenkro'
+];
+
 const StageOne = ({ forms, handleInputChange }) => {
   const [region, setRegions] = useState();
-  
+  const [city, setCity] = useState()
   const getRegionsInGhana = () => {
     const ghanaData = allCountries.find((country) => country[1] === "GH");
 
@@ -18,11 +35,15 @@ const StageOne = ({ forms, handleInputChange }) => {
     return [];
   };
 
+
+
+
   useEffect(() => {
     setRegions(getRegionsInGhana());
+    setCity(cities)
   }, []);
 
-
+console.log(city)
 
   return (
     <div className="container">
@@ -71,21 +92,6 @@ const StageOne = ({ forms, handleInputChange }) => {
               </div>
               <div className="row">
               <div className="col-sm-12 col-md-6">
-                  <InputField
-                    noIcon={"yes"}
-                    field={START_USER_PROFILE_FIELD.fieldDetailOne[3]}
-                    label={START_USER_PROFILE_FIELD.fieldDetailOne[3].label}
-                  
-                    value={forms[0] || "GHANA"}
-                    change={(data, field) => {
-                      handleInputChange(field, data);
-                    }}
-                    readOnly
-                  />
-                </div>
-          
-            
-              <div className="col-sm-12 col-md-6">
                   <SelectField
                     noIcon={"yes"}
                     field={START_USER_PROFILE_FIELD.fieldDetailOne[4]}
@@ -99,6 +105,24 @@ const StageOne = ({ forms, handleInputChange }) => {
                     }}
                   />
                 </div>
+              <div className="col-sm-12 col-md-6">
+                  <SelectField
+                    noIcon={"yes"}
+                    field={START_USER_PROFILE_FIELD.fieldDetailOne[3]}
+                    label={START_USER_PROFILE_FIELD.fieldDetailOne[3].label}
+                    options={
+                      city?.length > 0 ? city : ["Loading..."]
+                    }
+                    value={forms[0]}
+                    change={(data, field) => {
+                      handleInputChange(field, data);
+                    }}
+                    readOnly
+                  />
+                </div>
+          
+            
+           
               </div>
             </div>
           </div>

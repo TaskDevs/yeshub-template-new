@@ -63,6 +63,8 @@ export const publicUser = {
     LINKEDINCALLBACK: "/auth/google/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
+    PROFILE: "/profile",
+    FIND_TALENT: "/find-talent",
   },
   candidate: {
     GRID: "/can-grid",

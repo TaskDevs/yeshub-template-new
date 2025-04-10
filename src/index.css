@@ -9,14 +9,14 @@
   @tailwind utilities;
 }
 
-.hoverHeaderItem:hover {
+.hoverHeaderItem:hover,
+.hoverDropdownItem:hover {
   background-color: #f3f4f6 !important;
 }
 
-.zIndex{
+.zIndex {
   z-index: 10000;
 }
-.zIndex2{
+.zIndex2 {
   z-index: 1000000;
 }
-

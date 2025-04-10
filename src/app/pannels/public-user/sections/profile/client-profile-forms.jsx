@@ -11,12 +11,12 @@ import {
    TertiaryButton,
    FileUpload,
    DateInput
-} from './profile-components';
+} from '../../../candidate/sections/new-profile/profile-components';
 import { SearchInput } from '../../../../common/search-box';
 import { CustomDropdown } from '../../../../common/Dropdown';
-import { useFileUpload, useProfileForm, useSkillsForm } from './hooks/useProfileForm';
-import { availableServicesData, serviceCategories } from './data';
-import { clientProfileData } from '../../../public-user/sections/profile/data';
+import { useFileUpload, useProfileForm, useSkillsForm } from '../../../candidate/sections/new-profile/hooks/useProfileForm';
+import { availableServicesData, serviceCategories } from '../../../candidate/sections/new-profile/data';
+import { clientProfileData } from './data';
 import { countryData } from '../../../../../utils/countryData';
 
 /**

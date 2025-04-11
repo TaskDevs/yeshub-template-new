@@ -170,7 +170,7 @@ function SignInPopup() {
               navigate("/admin");
               break;
             case "client":
-              navigate(base.EMPLOYER_PRE);
+              navigate('/profile');
               break;
             case "freelancer":
             default:

@@ -141,6 +141,7 @@ const EmployerApiDataProvider = (props) => {
 
   const processUpdateEmployer = async (id, data) => {
     //const userId = sessionStorage.getItem("user_id");
+    console.log(data);
     let response = await updateEmployer(id, data);
     // console.log(userId);
     console.log(response);

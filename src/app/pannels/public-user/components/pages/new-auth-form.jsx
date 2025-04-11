@@ -377,13 +377,23 @@ const NewAuthForm = ({ currentState }) => {
               <input
                 className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="password_confirmation"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password_confirmation"
                 value={formData.password_confirmation}
                 onChange={handleChange}
                 required
-                placeholder="Cpassword_confirmation"
+                placeholder="Repeat Password"
               />
+               <div
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <AiOutlineEye className="h-5 w-5 text-gray-500" />
+                ) : (
+                  <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
+                )}
+              </div>
             </div>
             {errors.password_confirmation && (
               <p className="text-red-500 text-xs italic">
@@ -426,7 +436,7 @@ const NewAuthForm = ({ currentState }) => {
 
         <div className="relative my-4">
           <span className="absolute left-1/2 -top-3 transform -translate-x-1/2 bg-white px-2 text-gray-500 text-sm whitespace-nowrap">
-            Or continue with
+            or continue with
           </span>
 
           <div className="border-t border-gray-300" />
@@ -434,7 +444,7 @@ const NewAuthForm = ({ currentState }) => {
       </form>
 
       <div className="mt-5">
-        <div className="flex justify-between">
+        <div className="">
           {loading ? (
             <p>Loading...</p>
           ) : (

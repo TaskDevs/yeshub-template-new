@@ -13,12 +13,11 @@ import { addEmployer } from "../../../../context/employers/employerApi";
 import { addJob } from "../../../../context/jobs/jobsApi";
 import toast from "react-hot-toast";
 
-
 const ClientOnboard = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false); // 🔄 Loading state
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const total = 6;
   const location = useLocation();
   const userId = location.state?.user_id;
@@ -29,14 +28,17 @@ const ClientOnboard = () => {
   }, []);
 
   const handleInputChange = (data, field) => {
-    const numericFields = ["hourly_rate_start", "hourly_rate_end", "fixed_rate"];
-  
+    const numericFields = [
+      "hourly_rate_start",
+      "hourly_rate_end",
+      "fixed_rate",
+    ];
+
     setFormData((prev) => ({
       ...prev,
       [field]: numericFields.includes(field) ? Number(data) : data,
     }));
   };
-  
 
   const handleNext = () => {
     if (step < 7) {
@@ -67,21 +69,23 @@ const ClientOnboard = () => {
           skills: formData.skills?.join(", ") || "",
           category: formData.category,
           scope: formData.workScope,
-          hourly_rate_start: formData.budgetType === "hourly" ? formData.hourly_rate_start : null,
-          hourly_rate_end: formData.budgetType === "hourly" ? formData.hourly_rate_end : null,
-          fixed_rate: formData.budgetType === "fixed" ? formData.fixed_rate : null,
+          hourly_rate_start:
+            formData.budgetType === "hourly"
+              ? formData.hourly_rate_start
+              : null,
+          hourly_rate_end:
+            formData.budgetType === "hourly" ? formData.hourly_rate_end : null,
+          fixed_rate:
+            formData.budgetType === "fixed" ? formData.fixed_rate : null,
           description: formData.bio,
           end_date: formData.end_date || null,
         };
-        
 
         const jobRes = await addJob(jobData);
-        if(jobRes){
-        
+        if (jobRes) {
           toast.success("Job posted successfully!");
           setTimeout(() => navigate(`/profile`), 2000);
         }
- 
       }
     } catch (err) {
       toast.error("Error creating, check required fields");
@@ -101,22 +105,40 @@ const ClientOnboard = () => {
       </div>
 
       {step === 1 && (
-        <ClientStageOne handleInputChange={handleInputChange} forms={[formData, setFormData]} />
+        <ClientStageOne
+          handleInputChange={handleInputChange}
+          forms={[formData, setFormData]}
+        />
       )}
       {step === 2 && (
-        <ClientStageTwo handleInputChange={handleInputChange} forms={[formData, setFormData]} />
+        <ClientStageTwo
+          handleInputChange={handleInputChange}
+          forms={[formData, setFormData]}
+        />
       )}
       {step === 3 && (
-        <ClientStageThree handleInputChange={handleInputChange} forms={[formData, setFormData]} />
+        <ClientStageThree
+          handleInputChange={handleInputChange}
+          forms={[formData, setFormData]}
+        />
       )}
       {step === 4 && (
-        <ClientStageFour handleInputChange={handleInputChange} forms={[formData, setFormData]} />
+        <ClientStageFour
+          handleInputChange={handleInputChange}
+          forms={[formData, setFormData]}
+        />
       )}
       {step === 5 && (
-        <ClientStageFive handleInputChange={handleInputChange} forms={[formData, setFormData]} />
+        <ClientStageFive
+          handleInputChange={handleInputChange}
+          forms={[formData, setFormData]}
+        />
       )}
       {step === 6 && (
-        <ClientStageSix handleInputChange={handleInputChange} forms={[formData, setFormData]} />
+        <ClientStageSix
+          handleInputChange={handleInputChange}
+          forms={[formData, setFormData]}
+        />
       )}
       {step === 7 && (
         <ClientStageSeven
@@ -133,8 +155,16 @@ const ClientOnboard = () => {
         </div>
       )}
 
-      <div className="container d-flex justify-content-lg-end gap-3 mt-3">
-        {step < 7 && <span className="text-gray cursor-pointer">Skip</span>}
+      <div className="container d-flex justify-content-lg-end gap-3 mt-3 mb-3">
+        {step < 7 && (
+          <button
+            className="text-gray cursor-pointer btn-danger btn"
+            onClick={() => navigate("/profile")}
+          >
+            Skip
+          </button>
+        )}
+
         <button className="btn btn-secondary" onClick={handlePrevious}>
           Back
         </button>

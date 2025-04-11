@@ -3,7 +3,7 @@ import styles from "./profile.module.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClientProfileSectionsManager } from "./client-profile-sections-manager";
-import { CompanyOverviewFormSection } from "../../../candidate/sections/new-profile/client-profile-forms";
+import { CompanyOverviewFormSection } from "./client-profile-forms";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import { useProfileForm } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
 import { clientProfileData, profileSections } from "./data";
@@ -13,7 +13,8 @@ import {
   CompanyStatsFormSection,
   OfficesFormSection,
   ServicesFormSection,
-} from "../../../candidate/sections/new-profile/client-profile-forms";
+  AboutMeFormSection,
+} from "./client-profile-forms";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 const ClientProfile = () => {
@@ -30,10 +31,6 @@ const ClientProfile = () => {
   useEffect(() => {
     processEmployerProfile();
   }, []);
-
-  useEffect(() => {
-    console.log(employerProfiles);
-  }, [employerProfiles]);
 
   // Close modal handler
   const handleCloseModal = () => {
@@ -52,8 +49,8 @@ const ClientProfile = () => {
     if (!activeSection) return null;
 
     switch (activeSection) {
-      // case 'aboutMe':
-      //   return <AboutMeFormSection onClose={handleCloseModal} />;
+      case "aboutMe":
+        return <AboutMeFormSection onClose={handleCloseModal} />;
       case "services":
         return <ServicesFormSection onClose={handleCloseModal} />;
       case "offices":

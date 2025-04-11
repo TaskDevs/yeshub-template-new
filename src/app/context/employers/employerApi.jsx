@@ -1,11 +1,7 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 //import axios from "../../../utils/axios.config";
 import axios from "axios";
-import {
-  SUCCESS_STATUS,
-  REACT_BASE_URL,
-  LOCALHOST_BACKEND,
-} from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
@@ -18,6 +14,40 @@ export const addEmployer = async (data) => {
       return responseOnAddEmployer.data;
     } else {
       return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const addCertification = async (data) => {
+  console.log(data);
+  try {
+    let responseOnAddCertification = await axios.post(
+      `${REACT_BASE_URL}store-certification`,
+      data
+    );
+    console.log(responseOnAddCertification);
+    if (responseOnAddCertification.status === SUCCESS_STATUS) {
+      return responseOnAddCertification.data;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const addExperience = async (data) => {
+  console.log(data);
+  try {
+    let responseOnAddExperience = await axios.post(
+      `${REACT_BASE_URL}store-experience`,
+      data
+    );
+    console.log(responseOnAddExperience);
+    if (responseOnAddExperience.status === SUCCESS_STATUS) {
+      return responseOnAddExperience.data;
     }
   } catch (err) {
     console.log(err);
@@ -61,10 +91,10 @@ export const employerList = async () => {
 export const employerProfile = async (id) => {
   try {
     let responseOnEmployerProfile = await axios.get(
-      `${LOCALHOST_BACKEND}/api/v1/employer-companies/${id}`
+      `${REACT_BASE_URL}employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
     );
-    console.log(responseOnEmployerProfile);
+    // console.log(responseOnEmployerProfile);
     if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
     } else {
@@ -80,12 +110,30 @@ export const employerProfile = async (id) => {
 export const updateEmployer = async (id, data) => {
   try {
     let responseOnUpdateEmployer = await axios.put(
-      `${LOCALHOST_BACKEND}/api/v1/employers/${id}`,
+      `${REACT_BASE_URL}employers/${id}`,
       data
     );
     //console.log(responseOnUpdateEmployer);
     if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// Add Or Update Office Info
+export const updateOfficeImage = async (id, data) => {
+  try {
+    let responseOnUpdateOfficeImage = await axios.put(
+      `${REACT_BASE_URL}office-image/${id}`,
+      data
+    );
+    console.log(responseOnUpdateOfficeImage);
+    if (responseOnUpdateOfficeImage.status == 201) {
+      return responseOnUpdateOfficeImage.data;
     } else {
       return false;
     }

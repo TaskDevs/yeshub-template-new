@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
+import Compressor from "compressorjs";
 import {
   FormInput,
   FormTextarea,
@@ -11,16 +12,19 @@ import {
   TertiaryButton,
   FileUpload,
   DateInput,
-} from "./profile-components";
+} from "../../../candidate/sections/new-profile/profile-components";
 import { SearchInput } from "../../../../common/search-box";
 import { CustomDropdown } from "../../../../common/Dropdown";
 import {
   useFileUpload,
   useProfileForm,
   useSkillsForm,
-} from "./hooks/useProfileForm";
-import { availableServicesData, serviceCategories } from "./data";
-import { clientProfileData } from "../../../public-user/sections/profile/data";
+} from "../../../candidate/sections/new-profile/hooks/useProfileForm";
+import {
+  availableServicesData,
+  serviceCategories,
+} from "../../../candidate/sections/new-profile/data";
+import { clientProfileData } from "./data";
 import { countryData } from "../../../../../utils/countryData";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
@@ -28,6 +32,8 @@ import { EmployerApiData } from "../../../../context/employers/employerContextAp
  * CompanyOverviewSection
  */
 export const CompanyOverviewFormSection = ({ onClose, initialData = {} }) => {
+  const { processAddExperience, employerProfiles } =
+    useContext(EmployerApiData);
   const { formData, setFormData, handleInputChange, isSubmitting, clearAll } =
     useProfileForm({
       title: initialData.title || "",
@@ -38,6 +44,8 @@ export const CompanyOverviewFormSection = ({ onClose, initialData = {} }) => {
       revenue: initialData.revenue || "",
       description: initialData.description || "",
     });
+
+  //processAddExperience;
 
   // Employment types
   const employmentTypes = [
@@ -58,6 +66,17 @@ export const CompanyOverviewFormSection = ({ onClose, initialData = {} }) => {
 
   // Save changes
   const handleSave = () => {
+    let newExperience = {
+      company_id: employerProfiles.id,
+      title: formData.title,
+      organization: formData.organization,
+      employmentType: formData.employmentType,
+      revenue: formData.revenue,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      description: formData.description,
+    };
+    processAddExperience(newExperience);
     console.log("Saving company experience data:", formData);
     setTimeout(() => {
       onClose();
@@ -170,7 +189,8 @@ export const CompanyOverviewFormSection = ({ onClose, initialData = {} }) => {
  * ServicesSection
  */
 export const ServicesFormSection = ({ onClose }) => {
-  //   const { processUpdateEmployer } = useContext(EmployerApiData);
+  const { processUpdateEmployer, employerProfiles } =
+    useContext(EmployerApiData);
   const {
     searchValue,
     setSearchValue,
@@ -193,7 +213,21 @@ export const ServicesFormSection = ({ onClose }) => {
   );
 
   const handleSave = () => {
-    console.log("Saving services:", selectedServices);
+    let fullString = "";
+    selectedServices.length > 0 &&
+      selectedServices.map((item) => {
+        let data = `name:${item.name}, category: ${item.category} ||`;
+        fullString += data;
+      });
+
+    let newData = {
+      status: "service",
+      services: fullString,
+    };
+
+    processUpdateEmployer(employerProfiles.id, newData);
+
+    console.log("Saving services:", fullString);
     onClose();
   };
 
@@ -293,6 +327,8 @@ export const ServicesFormSection = ({ onClose }) => {
  * OfficesSection
  */
 export const OfficesFormSection = ({ onClose }) => {
+  const { employerProfiles, processUpdateOfficeImage } =
+    useContext(EmployerApiData);
   const {
     files,
     // uploading,
@@ -303,12 +339,47 @@ export const OfficesFormSection = ({ onClose }) => {
     clearFiles,
   } = useFileUpload(10); // 10MB max file size
 
-  const handleSave = () => {
-    const officeImages = {
-      images: files,
+  const handleSave = async () => {
+    if (!files || files.length === 0) return;
+
+    const getCompressedBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        new Compressor(file.file, {
+          quality: 0.6,
+          success: (compressedResult) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result); // base64 string
+            reader.onerror = reject;
+            reader.readAsDataURL(compressedResult);
+          },
+          error(err) {
+            reject(err);
+          },
+        });
+      });
     };
-    console.log("Saving office data:", officeImages);
-    onClose();
+
+    try {
+      // Compress all images and get base64 strings
+      const compressedImages = await Promise.all(
+        files.map((file) => getCompressedBase64(file))
+      );
+
+      const newData = {
+        company_id: employerProfiles.id,
+        images: compressedImages.join("||"), // Join into a single string
+      };
+
+      processUpdateOfficeImage(employerProfiles.id, newData);
+
+      console.log("Saving office data:", newData);
+
+      // TODO: send `newData` to backend here...
+
+      onClose();
+    } catch (error) {
+      console.error("Error compressing or processing images:", error);
+    }
   };
 
   return (
@@ -369,6 +440,7 @@ export const BusinessInfoFormSection = ({ onClose }) => {
     console.log(`Your submited from data is ${formData}`);
     formData.company_name = employerProfiles.companyName;
     let newData = {
+      status: "businessInfo",
       company_name: formData.companyName,
       headline: formData.headline,
       email: formData.email,
@@ -377,7 +449,7 @@ export const BusinessInfoFormSection = ({ onClose }) => {
       linkedin: formData.linkedIn,
       timezone: formData.timezone,
     };
-    processUpdateEmployer(1, newData);
+    processUpdateEmployer(employerProfiles.id, newData);
     console.log("Saving business info:", newData);
     onClose();
   };
@@ -475,17 +547,33 @@ export const BusinessInfoFormSection = ({ onClose }) => {
  * CompanyStatsSection
  */
 export const CompanyStatsFormSection = ({ onClose }) => {
+  const { processUpdateEmployer, employerProfiles } =
+    useContext(EmployerApiData);
   const { formData, handleInputChange, isSubmitting } = useProfileForm({
-    foundedYear: "2013",
-    employeesCount: "150+",
-    clientsCount: "200+",
-    annualRevenue: "$5M+",
-    completedProjects: "500+",
-    industryExperience: "10+ years",
+    foundedYear: employerProfiles ? employerProfiles.foundedYear : "",
+    employeesCount: employerProfiles ? employerProfiles.employeesCount : "",
+    clientsCount: employerProfiles ? employerProfiles.clientsCount : "",
+    annualRevenue: employerProfiles ? employerProfiles.annualRevenue : "",
+    completedProjects: employerProfiles
+      ? employerProfiles.completedProjects
+      : "",
+    industryExperience: employerProfiles
+      ? employerProfiles.industryExperience
+      : "",
   });
 
   const handleSave = () => {
-    console.log("Saving company stats:", formData);
+    let newData = {
+      status: "stats",
+      est_date: formData.foundedYear,
+      employeesCount: formData.employeesCount,
+      clientsCount: formData.clientsCount,
+      annualRevenue: formData.annualRevenue,
+      completedProjects: formData.completedProjects,
+      industryExperience: formData.industryExperience,
+    };
+    processUpdateEmployer(employerProfiles.id, newData);
+    console.log("Saving company stats:", newData);
     onClose();
   };
 
@@ -576,6 +664,9 @@ export const CompanyStatsFormSection = ({ onClose }) => {
  * CertificationsSection
  */
 export const CertificationsFormSection = ({ onClose }) => {
+  const { processAddCertification, employerProfiles } =
+    useContext(EmployerApiData);
+
   const { formData, handleInputChange, handleDateChange, isSubmitting } =
     useProfileForm({
       certificationName: "",
@@ -588,14 +679,18 @@ export const CertificationsFormSection = ({ onClose }) => {
       credentialUrl: "",
     });
 
+  //processAddCertification
+
   // State for managing certifications list
   const [certifications, setCertifications] = useState(
     clientProfileData.certifications
   );
 
   const handleSave = () => {
+    let newCertification;
     if (formData.certificationName && formData.issuingOrganization) {
-      const newCertification = {
+      newCertification = {
+        company_id: employerProfiles.id,
         title: formData.certificationName,
         organization: formData.issuingOrganization,
         startDate: formData.issueDate,
@@ -604,6 +699,8 @@ export const CertificationsFormSection = ({ onClose }) => {
         credentialID: formData.credentialID,
         description: formData.description,
       };
+
+      processAddCertification(newCertification);
 
       setCertifications([...certifications, newCertification]);
     }
@@ -766,19 +863,19 @@ export const CertificationsFormSection = ({ onClose }) => {
 /**
  * AboutMeFormSection
  */
-export const AboutMeFormSection = ({ onClose, initialData = {} }) => {
+export const AboutMeFormSection = ({ onClose }) => {
+  const { employerProfiles, processUpdateEmployer } =
+    useContext(EmployerApiData);
   const { formData, setFormData, handleInputChange, isSubmitting, clearAll } =
     useProfileForm({
-      companyName: initialData.companyName || "Tech Solutions Ghana Ltd",
-      headline: initialData.headline || "Digital Transformation & IT Services",
-      city: initialData.city || "Accra",
-      region: initialData.region || "Greater Accra",
-      country: initialData.country || "Ghana",
-      timezone: initialData.timezone || "GMT+0",
-      email: initialData.email || "john.doe@example.com",
-      about:
-        initialData.about ||
-        "Leading IT solutions provider in Ghana with over 10 years of experience delivering digital transformation, software development, and IT consulting services to enterprise clients across West Africa.",
+      companyName: employerProfiles.companyName || "",
+      headline: employerProfiles.headline || "",
+      city: employerProfiles.city || "",
+      region: employerProfiles.region || "",
+      country: employerProfiles.country || "",
+      timezone: employerProfiles.timezone || "",
+      email: employerProfiles.email || "",
+      about: employerProfiles.about || "",
     });
 
   // Countries
@@ -829,18 +926,70 @@ export const AboutMeFormSection = ({ onClose, initialData = {} }) => {
 
   // Save changes
   const handleSave = () => {
-    // Combine form data with file info
-    const profileData = {
-      ...formData,
-      logo: logoFiles.length > 0 ? logoFiles[0] : null,
-      coverImage: coverFiles.length > 0 ? coverFiles[0] : null,
+    // Compress and convert to base64
+    const getCompressedBase64 = (file) => {
+      return new Promise((resolve, reject) => {
+        new Compressor(file, {
+          quality: 0.6,
+          success: (compressedResult) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result); // base64 string
+            reader.onerror = reject;
+            reader.readAsDataURL(compressedResult);
+          },
+          error(err) {
+            reject(err);
+          },
+        });
+      });
     };
 
-    console.log("Saving company profile data:", profileData);
+    // Async handling
+    const processAndSubmit = async () => {
+      try {
+        const compressedLogoBase64 =
+          logoFiles.length > 0
+            ? await getCompressedBase64(logoFiles[0].file)
+            : null;
 
-    setTimeout(() => {
-      onClose();
-    }, 800);
+        const compressedBannerBase64 =
+          coverFiles.length > 0
+            ? await getCompressedBase64(coverFiles[0].file)
+            : null;
+
+        const profileData = {
+          ...formData,
+          logo: compressedLogoBase64,
+          coverImage: compressedBannerBase64,
+        };
+
+        let newData = {
+          status: "info",
+          company_name: profileData.companyName,
+          headline: profileData.headline,
+          city: profileData.city,
+          region: profileData.region,
+          country: profileData.country,
+          timezone: profileData.timezone,
+          email: profileData.email,
+          description: profileData.description,
+          logo: profileData.logo || employerProfiles.logo,
+          banner: profileData.coverImage || employerProfiles.banner,
+        };
+
+        processUpdateEmployer(employerProfiles.id, newData);
+
+        console.log("Saving company profile data:", profileData);
+
+        setTimeout(() => {
+          onClose();
+        }, 800);
+      } catch (error) {
+        console.error("Error compressing images:", error);
+      }
+    };
+
+    processAndSubmit(); // Call async function
   };
 
   return (

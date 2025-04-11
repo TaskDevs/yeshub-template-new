@@ -2,9 +2,12 @@ import React, { createContext, useState } from "react";
 import { notify } from "../../../utils/responseUtils";
 import {
   addEmployer,
+  addCertification,
+  addExperience,
   updateEmployerLogo,
   employerProfile,
   updateEmployer,
+  updateOfficeImage,
   deleteEmployer,
   updateEmployerBanner,
 } from "./employerApi";
@@ -42,7 +45,55 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
-  const processGetAllEmployer = async () => {};
+  const processAddCertification = async (data) => {
+    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
+
+    // Ensure the user ID is included in the request data
+    const requestData = {
+      ...data,
+      user_id: userId, // Use the logged-in user ID
+    };
+
+    let response = await addCertification(requestData);
+
+    if (response) {
+      console.log("API Response:", response); // Log the API response
+      processEmployerProfile();
+      notify(200, "Certification Added Successfully");
+      // Reload the page after a short delay (optional)
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+      console.error("Failed to Add Company, API Response:", response);
+      notify(400, "Failed to Add Company");
+    }
+  };
+
+  const processAddExperience = async (data) => {
+    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
+
+    // Ensure the user ID is included in the request data
+    const requestData = {
+      ...data,
+      user_id: userId, // Use the logged-in user ID
+    };
+
+    let response = await addExperience(requestData);
+
+    if (response) {
+      console.log("API Response:", response); // Log the API response
+      processEmployerProfile();
+      notify(200, "Experience Added Successfully");
+      // Reload the page after a short delay (optional)
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+      console.error("Failed to Add Company, API Response:", response);
+      notify(400, "Failed to Add Company");
+    }
+  };
 
   const processEmployerProfile = async () => {
     const userId = sessionStorage.getItem("user_id");
@@ -54,7 +105,7 @@ const EmployerApiDataProvider = (props) => {
     // }
 
     console.log("Hi after returning esponds");
-    let response = await employerProfile(userId || 19);
+    let response = await employerProfile(userId || 3);
     console.log(response);
 
     if (response) {
@@ -101,6 +152,20 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  //updateOfficeImage;
+  const processUpdateOfficeImage = async (id, data) => {
+    //const userId = sessionStorage.getItem("user_id");
+    let response = await updateOfficeImage(id, data);
+    // console.log(userId);
+    console.log(response);
+    if (response) {
+      processEmployerProfile();
+      notify(200, "Profile updated successfully");
+    } else {
+      notify(400, "Failed to update profile");
+    }
+  };
+
   const processDeleteEmployer = async () => {
     const userId = sessionStorage.getItem("user_id");
     if (!userId) {
@@ -119,10 +184,12 @@ const EmployerApiDataProvider = (props) => {
     <EmployerApiData.Provider
       value={{
         processAddEmployer,
-        processGetAllEmployer,
+        processAddCertification,
+        processAddExperience,
         processEmployerProfile,
         processSearchEmployer,
         processUpdateEmployer,
+        processUpdateOfficeImage,
         processUpdateEmployerLogo,
         processUpdateEmployerBanner,
         processDeleteEmployer,

@@ -25,7 +25,7 @@ export const CustomDropdown = ({ selected, styles, options, onChange }) => {
   }, [isOpen]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="tw-css relative" ref={dropdownRef}>
       <button
         className={`border rounded px-3 py-1 text-sm flex items-center space-x-1 ${styles}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -39,7 +39,7 @@ export const CustomDropdown = ({ selected, styles, options, onChange }) => {
           {options.map((option) => (
             <div
               key={option}
-              className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
+              className="px-4 py-2 text-sm hoverDropdownItem cursor-pointer"
               onClick={() => {
                 onChange(option);
                 setIsOpen(false);

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { RiSettings3Fill } from "react-icons/ri";
@@ -10,6 +10,10 @@ import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { publicUser, base, candidate } from "../../../globals/route-names";
+import { ProfileApiData } from "../../context/user-profile/profileContextApi";
+import { Avatar } from "@mui/material";
+
+
 
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
@@ -20,6 +24,24 @@ export const Header = ({ isDashboard = true }) => {
   const [navOpen, setNavOpen] = useState(false);
   const username = sessionStorage.getItem("username");
   const token = sessionStorage.getItem("authToken");
+  const { profileData } = useContext(ProfileApiData);
+
+  const { firstname, profession } = profileData;
+  console.log("profileData", firstname, profession, profileData);
+  const role = sessionStorage.getItem("userRole");
+  // colors for the username
+  const stringToColor = (string) => {
+    let hash = 0;
+    for (let i = 0; i < string.length; i++) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += ("00" + value.toString(16)).substr(-2);
+    }
+    return color;
+  };
 
   const toggleNav = () => {
     setNavOpen(!navOpen);
@@ -129,9 +151,9 @@ export const Header = ({ isDashboard = true }) => {
           "Deliver Work",
           "Messages",
         ].includes(item.label)
-      );
-    }
-    
+    );
+  };
+
   const handleNavHover = (item) => {
     if (!isDashboard && item.label === "Find Work") {
       setOpenMenu(null);
@@ -174,17 +196,13 @@ export const Header = ({ isDashboard = true }) => {
   const handleLogoClick = () => {
     if (token) {
       navigate("/dashboard-candidate");
-      
     } else {
       navigate("/");
-      
     }
   };
-  
 
   return (
     <>
-    
       <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 zIndex ">
         <div className="tw-css max-w-[1280px] w-full mx-auto flex justify-start items-center z-50">
           {/* Mobile  */}
@@ -223,7 +241,6 @@ export const Header = ({ isDashboard = true }) => {
 
                     {/* active nav indicator*/}
                     {activeNav === item.label && (
-                    
                       <div className="absolute -bottom-0 left-0 right-0 h-1 bg-green-700 rounded-t-md transform translate-y-4 transition-all duration-300"></div>
                     )}
                   </button>
@@ -271,18 +288,18 @@ export const Header = ({ isDashboard = true }) => {
             )}
 
             {/* show Auth buttons if not dashboard */}
+            {/* data-bs-toggle="modal"
+            data-bs-target="#sign_up_popup2" */}
             {!isDashboard && (
               <div className="flex space-x-2">
                 <button
                   className="text-gray-700 hover:text-green-700 font-medium"
-                  data-bs-toggle="modal"
-                  data-bs-target="#sign_up_popup2"
+                  onClick={() => navigate("/login")}
                 >
                   Log In
                 </button>
                 <button
-                  data-bs-toggle="modal"
-                  data-bs-target="#sign_up_popup"
+                 onClick={() => navigate("/sign-up")}
                   className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
                 >
                   Sign Up
@@ -310,69 +327,71 @@ export const Header = ({ isDashboard = true }) => {
 
                 {/* Profile Menu */}
                 <div className="relative new-profile-menu" ref={profileRef}>
-                  <button
-                    className="h-8 w-8 rounded-full bg-gray-300 overflow-hidden flex items-center justify-center"
-                    onClick={handleProfileClick}
+                  <Avatar
+                    sx={{
+                      bgcolor: stringToColor(username),
+                      width: 40,
+                      height: 40,
+                      fontSize: "1.2rem",
+                    }}
+                    onClick={()=>handleProfileClick()}
                   >
-                    <img
-                      src="/yes-logo-1.png"
-                      alt="Profile"
-                      className="h-full w-full object-cover"
-                    />
-                  </button>
+                    {username.charAt(0).toUpperCase()}
+                  </Avatar>
 
                   {openMenu === "profile" && (
-                    <div className="absolute top-full w-32 right-0 mt-1 bg-white rounded-lg shadow-lg  zIndex2">
+                    <div className="absolute top-full w-64 right-0 mt-1 bg-white rounded-lg shadow-lg zIndex">
                       <div className="p-4 border-b">
                         <div className="flex items-center justify-start gap-3">
-                          <div className="size-8 rounded-full overflow-hidden mr-3">
+                          <div className="size-12 rounded-full overflow-hidden mr-3">
                             <img
                               src="/yes-logo-1.png"
                               alt="John Doe"
                               className="h-full w-full object-cover"
                             />
                           </div>
-                          <div>
-                            <div className="font-medium text-gray-800">
-                              {username}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              Freelancer
-                            </div>
+                          <div className="text-sm text-gray-500 text-capitalize">
+                           {role}
                           </div>
                         </div>
-                        <div className="mt-2 flex items-center">
-                          <span className="text-sm">Online for messages</span>
-                          <ToggleSwitch
-                            initialState={true}
-                            onChange={(state) =>
-                              console.log("Online status:", state)
-                            }
-                          />
-                        </div>
                       </div>
+
+                      {/* Online Status */}
+                      <div className="p-4 border-b flex items-center justify-between">
+                        <span className="text-sm text-gray-500">
+                          Online for messages
+                        </span>
+                        <ToggleSwitch
+                          initialState={true}
+                          onChange={(state) =>
+                            console.log("Online status:", state)
+                          }
+                        />
+                      </div>
+
+                      {/* Menu Items */}
                       <div className="py-1">
                         <button
-                          className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start"
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
                           onClick={() => handleUserProfile()}
                         >
-                          <FaUserCircle className="text-[#A6A6A6] h-5 w-5" />
+                          <FaUserCircle className="text-gray-600 h-5 w-5" />
                           <span>Your Profile</span>
                         </button>
-                        <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
-                          <ImStatsDots className="text-[#A6A6A6] h-5 w-5" />
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
+                          <ImStatsDots className="text-gray-600 h-5 w-5" />
                           <span>Stats & Trends</span>
                         </button>
-                        <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
-                          <RiSettings3Fill className="text-[#A6A6A6] h-5 w-5" />
+                        <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
+                          <RiSettings3Fill className="text-gray-600 h-5 w-5" />
                           <span>Account Settings</span>
                         </button>
                         <button
                           data-bs-toggle="modal"
                           data-bs-target="#logout-dash-profile"
-                          className="w-full text-left px-4 py-2 hoverHeaderItemointer flex items-center justify-start"
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
                         >
-                          <BiSolidLogOut className="text-[#A6A6A6] h-5 w-5" />
+                          <BiSolidLogOut className="text-gray-600 h-5 w-5" />
                           <span>Logout</span>
                         </button>
                       </div>
@@ -382,78 +401,69 @@ export const Header = ({ isDashboard = true }) => {
               </div>
             )}
           </div>
-
-          {/* Mobile Menu */}
         </div>
       </header>
-
+      {/* Mobile Menu */}
       {navOpen && (
-        <div className=" w-full h-screen bg-[white] absolute shadow-lg z-400">
-          <div className="flex justify-end w-full">
-            <FaTimes className="size-8" />
+        // <div className=" w-full min-h-screen zIndex2 bg-[red]  shadow-lg -t-10 z-10 relative">
+
+        <div className="absolute top-full min-h-screen right-0 mt-1 p-4 bg-white rounded-lg shadow-lg w-32 zIndex2">
+          <div className="flex justify-end w-full bg-[red]">
+            <FaTimes className="size-24" onClick={() => toggleNav()} />
           </div>
 
-          <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg w-64 z-10">
-                      <div className="p-4 border-b">
-                        <div className="flex items-center justify-start gap-3">
-                          <div className="h-12 w-12 rounded-full overflow-hidden mr-3">
-                            <img
-                              src="/yes-logo-1.png"
-                              alt="John Doe"
-                              className="h-full w-full object-cover"
-                            />
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-800">
-                              {username}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              Freelancer
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mt-2 flex items-center">
-                          <span className="text-sm">Online for messages</span>
-                          <ToggleSwitch
-                            initialState={true}
-                            onChange={(state) =>
-                              console.log("Online status:", state)
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="py-1">
-                        <button
-                          className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start"
-                          onClick={() => handleUserProfile()}
-                        >
-                          <FaUserCircle className="text-[#A6A6A6] h-5 w-5" />
-                          <span>Your Profile</span>
-                        </button>
-                        <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
-                          <ImStatsDots className="text-[#A6A6A6] h-5 w-5" />
-                          <span>Stats & Trends</span>
-                        </button>
-                        <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
-                          <RiSettings3Fill className="text-[#A6A6A6] h-5 w-5" />
-                          <span>Account Settings</span>
-                        </button>
-                        <button
-                          data-bs-toggle="modal"
-                          data-bs-target="#logout-dash-profile"
-                          className="w-full text-left px-4 py-2 hoverHeaderItemointer flex items-center justify-start"
-                        >
-                          <BiSolidLogOut className="text-[#A6A6A6] h-5 w-5" />
-                          <span>Logout</span>
-                        </button>
-                      </div>
-                    </div>
+          <div className="p-4 border-b">
+            <div className="flex items-center justify-start gap-3">
+              <div className="size-8 rounded-full overflow-hidden mr-3">
+                <img
+                  src="/yes-logo-1.png"
+                  alt="John Doe"
+                  // h-full w-full object-cover
+                  className=""
+                />
+              </div>
+              <div>
+                <div className="font-medium text-gray-800">
+                  {firstname || username}
+                </div>
+                <div className="text-sm text-gray-500">{profession}</div>
+              </div>
+            </div>
+            <div className="mt-2 flex items-center">
+              <span className="text-sm">Online for messages</span>
+              <ToggleSwitch
+                initialState={true}
+                onChange={(state) => console.log("Online status:", state)}
+              />
+            </div>
+          </div>
+          <div className="py-1">
+            <button
+              className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start"
+              onClick={() => handleUserProfile()}
+            >
+              <FaUserCircle className="text-[#A6A6A6] h-5 w-5" />
+              <span>Your Profile</span>
+            </button>
+            <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
+              <ImStatsDots className="text-[#A6A6A6] h-5 w-5" />
+              <span>Stats & Trends</span>
+            </button>
+            <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
+              <RiSettings3Fill className="text-[#A6A6A6] h-5 w-5" />
+              <span>Account Settings</span>
+            </button>
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#logout-dash-profile"
+              className="w-full text-left px-4 py-2 hoverHeaderItemointer flex items-center justify-start"
+            >
+              <BiSolidLogOut className="text-[#A6A6A6] h-5 w-5" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       )}
     </>
   );
 };
-
-
-
-

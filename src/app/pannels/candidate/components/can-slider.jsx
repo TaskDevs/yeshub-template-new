@@ -44,7 +44,7 @@ export default function CanSlider({ values, label, onChange }) {
           type="range"
           min={values[0]}
           max={values[2]}
-          className="w-full"
+          className="w-full cursor-pointer"
           onChange={handleSliderChange}
           value={activeVal}
         />

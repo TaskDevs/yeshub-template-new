@@ -17,45 +17,37 @@ import MobileFindSavedWork from "./mobile-find-work";
 function FindWorkPage() {
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
-  // const { jobListData, processGetAllJob } = useContext(JobApiData);
   const navigate = useNavigate();
+
+
+
   
 
-  // useEffect(() => {
-  //   const fetchJobs = async () => {
-  //     const res = await processGetAllJob(1);
-  //     console.log("jobs-res", res);
-  //   };
-  //   fetchJobs();
-  // }, []);
-
-  // console.log("jobListData", jobListData);
-
-
   return (
-    <div className="tw-css  min-h-screen px-4 py-6">
+    <div className=" tw-css mx-auto p-6">
      
-     <div className={`${styles.mobileFindWork} h-min-h-screen `}>
+     <div className={`${styles.mobileFindWork} min-h-screen `}>
         <MobileFindSavedWork >
-        {jobData.map((job) => (
-                    <CanJobCard
-                      key={job.id}
-                      role={job.job_title}
-                      ratings="4.9"
-                      reviews="23k"
-                      companyName={job.employer.company_name}
-                      submitProposalBtn={job?.submitProposalBtn}
-                      jobType={job?.job_type}
-                      isMobile={true}
-                      jobLocation={job?.location}
-                      datePosted={job?.start_date}
-                      salaryRange={job?.salary}
-                    />
-                  ))}
+          {jobData.map((job) => (
+            <CanJobCard
+              key={job.id}
+              role={job.job_title}
+              ratings="4.9"
+              reviews="23k"
+              companyName={job.employer.company_name}
+              submitProposalBtn={job?.submitProposalBtn}
+              jobType={job?.job_type}
+              isMobile={true}
+              jobLocation={job?.location}
+              datePosted={job?.start_date}
+              salaryRange={job?.salary}
+            />
+          ))}
         </MobileFindSavedWork>
         </div>
      
-      <div className=" mx-auto  ">
+      <div className=" mx-auto  max-w-7xl">
+
         <div className={`${styles.findWorkDesktop}`}>
           {/* Greetings Section */}
           <div className="greetings-wrapper">
@@ -80,7 +72,7 @@ function FindWorkPage() {
               </div>
             </div>
           </div>
-        
+
           <div className="grid-container">
             <div className="section-one">
               <FilterPanel>
@@ -94,11 +86,11 @@ function FindWorkPage() {
               </FilterPanel>
             </div>
 
-           
+
 
             <div className="section-two">
               <div className=" p-6 flex flex-col gap-4">
-              
+
                 <div className=" section-two-header ">
                   <h2 className="font-medium capitalize">available jobs</h2>
                   <CanSelectField options={sort} width="240px" />
@@ -118,7 +110,7 @@ function FindWorkPage() {
                       isMobile={false}
                       newTag={
                         readableDate(job.start_date) ===
-                          new Date().toDateString() && "new"
+                        new Date().toDateString() && "new"
                       }
                       numberOfProposals="23"
                       salaryRange={job?.salary}

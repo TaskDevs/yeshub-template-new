@@ -455,18 +455,9 @@ This files [Table of contents] are outlined below
   }  
 }
 
-@media (min-width: 768px ) {
-  .grid-container {
-    grid-template-columns: 1fr 2fr 1fr; /* Three columns with 1:2:1 ratio */
-  }
-  .mobile-title, .cand-search-bar {
-    display: none!important;
-  }
-}
 
 
-
-@media (max-width: 480px) { 
+@media (max-width: 1023px) { 
   .section-one, .section-three, .section-two {
     display: none;
   }

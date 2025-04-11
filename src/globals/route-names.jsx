@@ -51,6 +51,7 @@ export const publicUser = {
     MAINTENANCE: "/under-maintenance",
     COMING: "/coming-soon",
     LOGIN: "/login",
+    SIGN_UP: "/sign-up",
     FORGOTPASS: "/forgotton-password",
     AFTER_LOGIN: "/after-login",
     RESET_PASSWORD: "/reset-password",
@@ -61,7 +62,9 @@ export const publicUser = {
     GOOGLECALLBACK: "/auth/google/callback",
     LINKEDINCALLBACK: "/auth/google/callback",
     WELCOME: "/welcome-onboarding",
+    AUTH: "/auth",
     PROFILE: "/profile",
+    FIND_TALENT: "/find-talent",
   },
   candidate: {
     GRID: "/can-grid",

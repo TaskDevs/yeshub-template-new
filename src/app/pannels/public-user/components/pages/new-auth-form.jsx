@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { IoMdMail } from "react-icons/io";
 import { FaLock, FaUser } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FaLinkedin } from "react-icons/fa";
+// import { FaLinkedin } from "react-icons/fa";
+// import { LinkedIn } from "react-linkedin-login-oauth2";
 import { login, register } from "../../../../context/auth/authApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast from "react-hot-toast";
@@ -11,7 +12,7 @@ import { base } from "../../../../../globals/route-names";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { LinkedIn } from "react-linkedin-login-oauth2";
+
 
 
 const NewAuthForm = ({ currentState }) => {
@@ -214,42 +215,42 @@ const NewAuthForm = ({ currentState }) => {
 
   // Linked in Login
 
-  const handleLinkedInSuccess = async (response) => {
-    console.log("LinkedIn Login Success:", response);
+  // const handleLinkedInSuccess = async (response) => {
+  //   console.log("LinkedIn Login Success:", response);
 
-    setLoading(true);
-    try {
-      // Send the LinkedIn token to your Laravel backend for verification
-      const res = await axios.post(
-        "http://127.0.0.1:8000/api/v1/auth/linkedin",
-        {
-          token: response.code, // The token is in 'code', not 'access_token'
-        }
-      );
+  //   setLoading(true);
+  //   try {
+  //     // Send the LinkedIn token to your Laravel backend for verification
+  //     const res = await axios.post(
+  //       "http://127.0.0.1:8000/api/v1/auth/linkedin",
+  //       {
+  //         token: response.code, // The token is in 'code', not 'access_token'
+  //       }
+  //     );
 
-      const { token, refresh_token, user } = res.data;
-      console.log("User from LinkedIn:", user);
+  //     const { token, refresh_token, user } = res.data;
+  //     console.log("User from LinkedIn:", user);
 
-      // Store the access token and refresh token
-      localStorage.setItem("access_token", token);
-      localStorage.setItem("refresh_token", refresh_token);
+  //     // Store the access token and refresh token
+  //     localStorage.setItem("access_token", token);
+  //     localStorage.setItem("refresh_token", refresh_token);
 
-      // Redirect based on user role
-      if (user.role === "user") {
-        setTimeout(() => navigate(`/dashboard/onboard?user=${user.id}`), 2000);
-      } else {
-        setTimeout(() => navigate("/dashboard"), 2000);
-      }
-    } catch (err) {
-      console.error("LinkedIn login failed:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // Redirect based on user role
+  //     if (user.role === "user") {
+  //       setTimeout(() => navigate(`/dashboard/onboard?user=${user.id}`), 2000);
+  //     } else {
+  //       setTimeout(() => navigate("/dashboard"), 2000);
+  //     }
+  //   } catch (err) {
+  //     console.error("LinkedIn login failed:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const handleFailure = (error) => {
-    console.error("LinkedIn login error:", error);
-  };
+  // const handleFailure = (error) => {
+  //   console.error("LinkedIn login error:", error);
+  // };
 
   return (
     <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-md">

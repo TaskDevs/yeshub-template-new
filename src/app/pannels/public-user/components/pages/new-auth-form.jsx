@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { IoMdMail } from "react-icons/io";
 import { FaLock, FaUser } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -12,10 +12,10 @@ import { base } from "../../../../../globals/route-names";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-
-
+import { AuthApiData } from "../../../../context/auth/authContextApi";
 
 const NewAuthForm = ({ currentState }) => {
+  const { setAuthInfo } = useContext(AuthApiData);
   const [formData, setFormData] = useState({
     identifier: "",
     username: "",
@@ -72,6 +72,7 @@ const NewAuthForm = ({ currentState }) => {
             sessionStorage.setItem("authToken", token);
             sessionStorage.setItem("userRole", role);
             sessionStorage.setItem("userId", user_id);
+            setAuthInfo({ userId: user_id });
             cookieMethods.setCookies(token, refresh_token);
             // ✅ Show success message
             toast.success(response.message, {
@@ -195,7 +196,7 @@ const NewAuthForm = ({ currentState }) => {
             navigate(`/dashboard/onboard?user=${user.id}`);
             break;
           case "client":
-            navigate('/profile');
+            navigate("/profile");
             break;
           case "freelancer":
           default:
@@ -449,8 +450,8 @@ const NewAuthForm = ({ currentState }) => {
             </span>
             Google
           </button> */}
-       
-            {/* <LinkedIn
+
+          {/* <LinkedIn
               clientId="78cj9ms7zti6zz"
               redirectUri="http://localhost:3000/linkedin"
               onSuccess={handleLinkedInSuccess}
@@ -468,7 +469,6 @@ const NewAuthForm = ({ currentState }) => {
                 </button>
               )}
             </LinkedIn> */}
-       
         </div>
       </div>
     </div>

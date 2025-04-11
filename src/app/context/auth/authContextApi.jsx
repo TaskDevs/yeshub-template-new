@@ -9,11 +9,9 @@ export const AuthApiData = createContext();
 
 const AuthApiDataProvider = (props) => {
   const [userProfile, setUserProfile] = useState(null);
+  const [authInfo, setAuthInfo] = useState({});
   const [role, setRole] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-  
-
 
   useEffect(() => {
     fetchUser();
@@ -26,12 +24,10 @@ const AuthApiDataProvider = (props) => {
         setIsAuthenticated(true);
       }
     }
-    
   };
 
   const processLogin = async (data) => {
-    
-    let response = await login(data);    
+    let response = await login(data);
     if (response.data) {
       setUserProfile(response.data);
       axios.defaults.headers.common[
@@ -40,34 +36,35 @@ const AuthApiDataProvider = (props) => {
       setRole(response.data.role);
       cookieMethods.setCookies(response.accessToken);
       setRole(response.data.role);
-      
     } else {
       notify(BAD_REQUEST_STATUS, "Failed to login");
-      
     }
   };
 
   const processUpdateUserRole = async (data) => {
     try {
-        let response = await updateUserRole(data);
-        
-        if (response.data) {
-            // Handle successful update
-            console.log("User role updated successfully:", response.data);
-            return response.data
-            // Optionally, show a success message to the user
-        } else {
-            console.error("Unexpected response format:", response);
-        }
+      let response = await updateUserRole(data);
+
+      if (response.data) {
+        // Handle successful update
+        console.log("User role updated successfully:", response.data);
+        return response.data;
+        // Optionally, show a success message to the user
+      } else {
+        console.error("Unexpected response format:", response);
+      }
     } catch (error) {
-        console.error("Error updating user role:", error.response?.data || error.message);
-        // Optionally, show an error message to the user
+      console.error(
+        "Error updating user role:",
+        error.response?.data || error.message
+      );
+      // Optionally, show an error message to the user
     }
-};
+  };
 
   const processRetrieve = async () => {
     let cookieData = cookieMethods.getCookies();
- 
+
     if (!cookieData.accessToken) return false;
     axios.defaults.headers.common[
       "Authorization"
@@ -79,12 +76,10 @@ const AuthApiDataProvider = (props) => {
       setRole(response.data.role);
       setIsAuthenticated(true);
       return true;
-      
     } else {
       return false;
     }
   };
-
 
   const processLogout = async () => {
     let cookieData = cookieMethods.getCookies();
@@ -109,6 +104,8 @@ const AuthApiDataProvider = (props) => {
         role,
         fetchUser,
         isAuthenticated,
+        authInfo,
+        setAuthInfo,
         setUserProfile,
         processRetrieve,
         processLogin,
@@ -119,6 +116,6 @@ const AuthApiDataProvider = (props) => {
       {props.children}
     </AuthApiData.Provider>
   );
-}
+};
 
 export default AuthApiDataProvider;

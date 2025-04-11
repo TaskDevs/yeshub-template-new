@@ -5,6 +5,7 @@ import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
+  console.log(data);
   try {
     let responseOnAddEmployer = await axios.post(
       `${REACT_BASE_URL}create-employers`,

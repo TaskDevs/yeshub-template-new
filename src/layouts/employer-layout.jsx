@@ -34,8 +34,8 @@ function EmployerLayout() {
           type={popupType.DELETE}
           msg={"Do you want to delete your profile?"}
         />
-        <YesNoPopup
-          id="logout-dash-profile"
+         <YesNoPopup
+          id="logout-dash-emp-profile"
           type={popupType.LOGOUT}
           msg={"Do you want to Logout your profile?"}
         />

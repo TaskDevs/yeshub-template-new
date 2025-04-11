@@ -18,9 +18,10 @@ import { GoDotFill } from "react-icons/go";
 
 export const WorkHistoryDetails = ({ data }) => (
   <div className="space-y-4">
-    {data?.map((job, index) => (
+    
+    {data?.work_history?.map((job, index) => (
       <div key={index} className="pb-3">
-        <h3 className="font-medium">{job.role}</h3>
+        <h3 className="font-medium">{job.job_title}</h3>
         <p className="text-gray-500 text-sm">{job.period}</p>
       </div>
     ))}

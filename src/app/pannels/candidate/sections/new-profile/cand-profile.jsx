@@ -35,7 +35,7 @@ const CandidateProfile = () => {
       case 'skills':
         return <SkillsSection initialSelectedSkills={profileData} onClose={handleCloseModal} />;
       case 'workHistory':
-        return <WorkHistorySection onClose={handleCloseModal} />;
+        return <WorkHistorySection initialData={profileData} onClose={handleCloseModal} />;
       case 'education':
         return <EducationSection onClose={handleCloseModal} />;
       case 'portfolio':

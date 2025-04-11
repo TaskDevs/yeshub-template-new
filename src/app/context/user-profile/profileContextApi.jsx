@@ -28,6 +28,7 @@ const ProfileApiDataProvider = (props) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileData, setProfileData] = useState({});
   const [allUsersProfile, setAllUsersProfile] = useState([]);
+  const [talentListData, setTalentListData] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const [imgSrc, setImgSrc] = useState(
@@ -122,7 +123,26 @@ const ProfileApiDataProvider = (props) => {
   const processGetAllProfile = async () => {
     try {
       const res = await profileList();
-      return res;
+      if (res) {
+        let newData = [];
+        res.data.data.map((item) => {
+          newData.push({
+            name: `${item.firstname} ${item.lastname}`,
+            role: item.profession,
+            image: item.profile_image,
+            experience: item.experience,
+            badge: "Top Rated",
+            rating: 5.0,
+            reviews: 50,
+            description: item.bio,
+            skills: ["React", "Node.js", "AWS"],
+            hourlyRate: 75,
+            location: "Ghana",
+          });
+        });
+        setTalentListData(newData);
+        return res;
+      }
     } catch (e) {
       console.error("get-all-profile", e);
       throw e;
@@ -308,6 +328,7 @@ const ProfileApiDataProvider = (props) => {
         isSidebarCollapsed,
         imgSrc,
         isImagePreview,
+        talentListData,
         setIsImagePreview,
         setImgSrc,
         fetchProfile,

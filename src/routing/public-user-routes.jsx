@@ -66,6 +66,7 @@ import WelcomePopup from "../app/common/popups/welcome-popup";
 import NewAuth from "../app/pannels/public-user/components/pages/new-auth";
 import ClientProfile from "../app/pannels/public-user/sections/profile/client-profile";
 import ClientFindTalent from "../app/pannels/public-user/sections/find-talent/ClientFindTalent";
+import ClientDashboard from "../app/pannels/public-user/sections/dashboard/client-dashboard";
 
 function PublicUserRoutes() {
   return (
@@ -138,6 +139,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.pages.WELCOME} element={<WelcomePopup />} />
         <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} />
         <Route path={publicUser.pages.FIND_TALENT} element={<ClientFindTalent />} />
+        <Route path={publicUser.pages.DASHBOARD} element={<ClientDashboard />} />
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route
           path={publicUser.pages.FORGOTPASS}

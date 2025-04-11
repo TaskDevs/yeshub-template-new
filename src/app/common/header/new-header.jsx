@@ -12,7 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { publicUser, base, candidate } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { Avatar } from "@mui/material";
-
+import { logout } from "../../context/auth/authApi";
+import toast from "react-hot-toast";
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
   const profileRef = useRef(null);
@@ -25,6 +26,7 @@ export const Header = ({ isDashboard = true }) => {
   const { profileData } = useContext(ProfileApiData);
 
   const { firstname, profession } = profileData;
+  console.log("profileData", firstname, profession, profileData);
   const role = sessionStorage.getItem("userRole");
   // colors for the username
   const stringToColor = (string) => {
@@ -187,21 +189,35 @@ export const Header = ({ isDashboard = true }) => {
 
   const handleUserProfile = () => {
     setOpenMenu(openMenu === "profile" && null);
-    if (role == "client") {
-      navigate("/profile");
-    } else {
-      navigate("/dashboard-candidate/profile");
-    }
+    navigate("/dashboard-candidate/profile");
   };
 
   const handleLogoClick = () => {
-    if (token) {
+    if (token && role == "client") {
+      navigate("/profile");
+    } else if (token && role == "freelancer") {
       navigate("/dashboard-candidate");
     } else {
       navigate("/");
     }
   };
 
+  const handleLogout = async () => {
+    const result = await logout(); // Await logout function
+
+    if (result) {
+      // If logout is successful, navigate to login page
+      toast.success(result.message, { position: "top-right", autoClose: 3000 });
+      navigateToAfterLogin();
+    } else {
+      // Optionally handle any failure in logout (e.g., show an error message)
+      console.error("Logout failed");
+    }
+  };
+
+  const navigateToAfterLogin = () => {
+    navigate("/"); // Navigate to login page after logout
+  };
   return (
     <>
       <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 zIndex ">
@@ -291,8 +307,33 @@ export const Header = ({ isDashboard = true }) => {
             {/* show Auth buttons if not dashboard */}
             {/* data-bs-toggle="modal"
             data-bs-target="#sign_up_popup2" */}
-            {token ? (
-              // If token exists, show Dashboard stuff
+            {!isDashboard && (
+              <div className="flex space-x-2">
+                <button
+                  className="text-gray-700 hover:text-green-700 font-medium"
+                  onClick={() => navigate("/login")}
+                >
+                  Log In
+                </button>
+                <button
+                  onClick={() => navigate("/sign-up")}
+                  className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
+                >
+                  Sign Up
+                </button>
+                {/* Mobile Menu */}
+                <button className="toggle-bar" onClick={() => toggleNav()}>
+                  {navOpen ? (
+                    <FaTimes className="h-5 w-5" />
+                  ) : (
+                    <FaBars className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            )}
+
+            {/* Notification Icons - Only show on dashboard */}
+            {isDashboard && (
               <div className="flex items-center space-x-4">
                 <button className="text-gray-600 hover:text-green-700">
                   <FaBell className="h-5 w-5" />
@@ -362,54 +403,29 @@ export const Header = ({ isDashboard = true }) => {
                           <RiSettings3Fill className="text-gray-600 h-5 w-5" />
                           <span>Account Settings</span>
                         </button>
-                        {role=="client" ?(
-                           <button
-                           data-bs-toggle="modal"
-                           data-bs-target="#logout-dash-emp-profile"
-                           className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                         >
-                           <BiSolidLogOut className="text-gray-600 h-5 w-5" />
-                           <span>Logout</span>
-                         </button>
-                        ):(
+                        {role == "client" ? (
                           <button
-                          data-bs-toggle="modal"
-                          data-bs-target="#logout-dash-profile"
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                        >
-                          <BiSolidLogOut className="text-gray-600 h-5 w-5" />
-                          <span>Logout</span>
-                        </button>
+                            onClick={()=>handleLogout()}
+                         
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                          >
+                            <BiSolidLogOut className="text-gray-600 h-5 w-5" />
+                            <span>Logout</span>
+                          </button>
+                        ) : (
+                          <button
+                            data-bs-toggle="modal"
+                            data-bs-target="#logout-dash-profile"
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                          >
+                            <BiSolidLogOut className="text-gray-600 h-5 w-5" />
+                            <span>Logout</span>
+                          </button>
                         )}
-                       
                       </div>
                     </div>
                   )}
                 </div>
-              </div>
-            ) : (
-              // If token does NOT exist, show login/sign-up
-              <div className="flex space-x-2">
-                <button
-                  className="text-gray-700 hover:text-green-700 font-medium"
-                  onClick={() => navigate("/login")}
-                >
-                  Log In
-                </button>
-                <button
-                  onClick={() => navigate("/sign-up")}
-                  className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
-                >
-                  Sign Up
-                </button>
-                {/* Mobile Menu */}
-                <button className="toggle-bar" onClick={() => toggleNav()}>
-                  {navOpen ? (
-                    <FaTimes className="h-5 w-5" />
-                  ) : (
-                    <FaBars className="h-5 w-5" />
-                  )}
-                </button>
               </div>
             )}
           </div>

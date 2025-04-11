@@ -194,7 +194,7 @@ const NewAuthForm = ({ currentState }) => {
             navigate(`/dashboard/onboard?user=${user.id}`);
             break;
           case "client":
-            navigate(base.EMPLOYER_PRE);
+            navigate('/profile');
             break;
           case "freelancer":
           default:
@@ -449,7 +449,7 @@ const NewAuthForm = ({ currentState }) => {
             Google
           </button> */}
        
-            <LinkedIn
+            {/* <LinkedIn
               clientId="78cj9ms7zti6zz"
               redirectUri="http://localhost:3000/linkedin"
               onSuccess={handleLinkedInSuccess}
@@ -466,7 +466,7 @@ const NewAuthForm = ({ currentState }) => {
                   Linkedin
                 </button>
               )}
-            </LinkedIn>
+            </LinkedIn> */}
        
         </div>
       </div>

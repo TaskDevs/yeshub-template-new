@@ -12,8 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { publicUser, base, candidate } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { Avatar } from "@mui/material";
-import { logout } from "../../context/auth/authApi";
-import toast from "react-hot-toast";
+
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
   const profileRef = useRef(null);
@@ -195,29 +194,13 @@ export const Header = ({ isDashboard = true }) => {
   const handleLogoClick = () => {
     if (token && role == "client") {
       navigate("/profile");
-    } else if (token && role == "freelancer") {
+    } else if (token && role == "freelncer") {
       navigate("/dashboard-candidate");
     } else {
       navigate("/");
     }
   };
 
-  const handleLogout = async () => {
-    const result = await logout(); // Await logout function
-
-    if (result) {
-      // If logout is successful, navigate to login page
-      toast.success(result.message, { position: "top-right", autoClose: 3000 });
-      navigateToAfterLogin();
-    } else {
-      // Optionally handle any failure in logout (e.g., show an error message)
-      console.error("Logout failed");
-    }
-  };
-
-  const navigateToAfterLogin = () => {
-    navigate("/"); // Navigate to login page after logout
-  };
   return (
     <>
       <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 zIndex ">
@@ -403,25 +386,14 @@ export const Header = ({ isDashboard = true }) => {
                           <RiSettings3Fill className="text-gray-600 h-5 w-5" />
                           <span>Account Settings</span>
                         </button>
-                        {role == "client" ? (
-                          <button
-                            onClick={()=>handleLogout()}
-                         
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                          >
-                            <BiSolidLogOut className="text-gray-600 h-5 w-5" />
-                            <span>Logout</span>
-                          </button>
-                        ) : (
-                          <button
-                            data-bs-toggle="modal"
-                            data-bs-target="#logout-dash-profile"
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                          >
-                            <BiSolidLogOut className="text-gray-600 h-5 w-5" />
-                            <span>Logout</span>
-                          </button>
-                        )}
+                        <button
+                          data-bs-toggle="modal"
+                          data-bs-target="#logout-dash-profile"
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                        >
+                          <BiSolidLogOut className="text-gray-600 h-5 w-5" />
+                          <span>Logout</span>
+                        </button>
                       </div>
                     </div>
                   )}

@@ -18,12 +18,23 @@ export const addProfile = async (data) => {
   }
 };
 
-export const addCv = async (data) => {
+export const saveProfileLatest = async (data) => {
   try {
-    let responseOnAddCv = await axios.post(
-      `${REACT_BASE_URL}user-cvs`,
+    let responseOnAddProfile = await axios.post(
+      `${REACT_BASE_URL}create-profile`,
       data
     );
+
+    return responseOnAddProfile;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const addCv = async (data) => {
+  try {
+    let responseOnAddCv = await axios.post(`${REACT_BASE_URL}user-cvs`, data);
 
     return responseOnAddCv;
   } catch (err) {

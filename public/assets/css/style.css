@@ -340,6 +340,15 @@ This files [Table of contents] are outlined below
   .toggle-bar {
     display: block;
   }
+  .new-auth-image {
+    display: hidden;
+  }
+
+}
+
+.new-auth-image {
+  display: block;
+ 
 }
 /* header-nav navbar-collapse collapse */
 .freelancer-btn {
@@ -457,7 +466,7 @@ This files [Table of contents] are outlined below
 
 
 
-@media (max-width: 1023px) { 
+@media (max-width: 600px) { 
   .section-one, .section-three, .section-two {
     display: none;
   }

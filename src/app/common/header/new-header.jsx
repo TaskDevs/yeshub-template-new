@@ -25,10 +25,9 @@ export const Header = ({ isDashboard = true }) => {
   const username = sessionStorage.getItem("username");
   const token = sessionStorage.getItem("authToken");
   const { profileData } = useContext(ProfileApiData);
-
   const { firstname, profession } = profileData;
-  console.log("profileData", firstname, profession, profileData);
   const role = sessionStorage.getItem("userRole");
+  
   // colors for the username
   const stringToColor = (string) => {
     let hash = 0;
@@ -54,7 +53,7 @@ export const Header = ({ isDashboard = true }) => {
 
   const navItems = [
     { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
-    { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
+    { id: "find-talent", label: "Find Talent", to: publicUser.pages.FIND_TALENT },
     { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
     {
       id: "my-home",
@@ -175,7 +174,7 @@ export const Header = ({ isDashboard = true }) => {
       return;
     }
     if (!isDashboard && item.id === "find-talent") {
-      navigate("/can-list");
+      navigate("/find-talent");
       return;
     }
 

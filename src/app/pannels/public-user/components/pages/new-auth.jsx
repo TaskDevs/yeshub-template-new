@@ -11,9 +11,9 @@ function NewAuth({ state: initialState }) {
   };
 
   return (
-    <div className="tw-css flex flex-col md:flex-row w-full min-h-screen bg-[#D1D5DB]">
+    <div className="tw-css flex flex-col md:flex-row w-full min-h-screen bg-[#D1D5DB] new-auth-wrapper">
       {/* Slanted image section */}
-      <div className="relative w-full md:w-1/2 md:h-auto overflow-hidden min-h-screen bg-[#f0f6fe]" style={{
+      <div className="relative w-full md:w-1/2 md:h-auto overflow-hidden min-h-screen bg-[#f0f6fe] new-auth-image" style={{
         clipPath: "polygon(0 0, 90% 0, 100% 100%, 0% 100%)",
       }}>
         <img src="/assets/images/login-bg.png" alt="" className="size-full object-cover absolute inset-0 bg-cover bg-center" />

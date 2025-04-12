@@ -24,6 +24,7 @@ import { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 import PortfolioMediaApiDataProvider from "./app/context/portfolio-media/portfolioMediaContextApi";
 import { ChatProvider } from "./app/context/chat/chatContext";
+import SavedJobsApiDataProvider from "./app/context/saved-jobs/savedJobsContextApi";
 
 function App() {
   //   const [isLoading, setLoading] = useState(true);
@@ -54,6 +55,7 @@ function App() {
                 <EmployerApiDataProvider>
                   <JobApiDataProvider>
                     <ProposalApiDataProvider>
+                    <SavedJobsApiDataProvider>
                       <ApplicationApiDataProvider>
                         <MilestoneApiDataProvider>
                           <PaymentApiDataProvider>
@@ -78,6 +80,7 @@ function App() {
                           </PaymentApiDataProvider>
                         </MilestoneApiDataProvider>
                       </ApplicationApiDataProvider>
+                      </SavedJobsApiDataProvider>
                     </ProposalApiDataProvider>
                   </JobApiDataProvider>
                 </EmployerApiDataProvider>

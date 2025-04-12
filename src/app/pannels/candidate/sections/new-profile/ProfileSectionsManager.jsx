@@ -13,9 +13,7 @@ import {
   PrimaryButton,
   SecondaryButton,
   TertiaryButton,
-import {
-  FileUpload,
-} from "./profile-components";
+FileUpload } from "./profile-components";
 import { SearchInput } from "../../../../common/search-box";
 import { CustomDropdown } from "../../../../common/Dropdown";
 import {
@@ -540,7 +538,7 @@ export const WorkHistorySection = ({ onClose ,initialData = {}}) => {
             name="end_date"
             label="End Date"
             value={formData.end_date}
-            onChange={(date) => handleDateChange("end_ate", date)}
+            onChange={(date) => handleDateChange("end_date", date)}
             disabled={formData.current}
             field="end_date"
           />
@@ -1422,9 +1420,6 @@ if (!ghanaRegionsAndCities[formData.region]?.includes(formData.city)) {
     city: ghanaRegionsAndCities[formData.region]?.[0] || "",
   }));
 }
-
-      }));
-    }
   }, [formData.region]);
 
   // Add a new language

@@ -192,7 +192,12 @@ export const Header = ({ isDashboard = true }) => {
 
   const handleUserProfile = () => {
     setOpenMenu(openMenu === "profile" && null);
-    navigate("/dashboard-candidate/profile");
+
+    if (role === "client") {
+      navigate("/profile");
+    } else {
+      navigate("/dashboard-candidate/profile");
+    }
   };
 
   const handleLogoClick = () => {

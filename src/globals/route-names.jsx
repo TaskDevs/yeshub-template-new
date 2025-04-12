@@ -60,7 +60,7 @@ export const publicUser = {
     ICONS: "/icons",
     CONTRACT: "/contract",
     GOOGLECALLBACK: "/auth/google/callback",
-    LINKEDINCALLBACK: "/linkedin",
+    LINKEDINCALLBACK: "/linkedin/auth/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
     PROFILE: "/profile",

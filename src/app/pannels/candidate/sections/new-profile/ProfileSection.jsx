@@ -20,10 +20,14 @@ import { Avatar } from "@mui/material";
 const getInfoContent = (data, activeSection) => {
   if (!activeSection) return null;
 
+  const { profileData } = useContext(ProfileApiData);
+  data = profileData;
+  
   switch (activeSection) {
     case "skills":
       return <SkillsDetails data={data} />;
     case "workHistory":
+      console.log('work test',data)
       return <WorkHistoryDetails data={data} />;
     case "education":
       return <EducationDetails data={data} />;
@@ -53,8 +57,8 @@ export const ProfileSection = ({
   onClick,
 }) => {
   const [showShareModal, setShowShareModal] = useState(false);
-  const { profileData } = useContext(ProfileApiData);
-console.log(profileData)
+
+
   const username = sessionStorage.getItem("username");
   const stringToColor = (string) => {
     let hash = 0;
@@ -135,6 +139,8 @@ console.log(profileData)
           </div>
         </div>
       )}
+
+      
       <div className="flex justify-between mb-4">
         <h2 className="font-semibold text-lg -mb-2">{title}</h2>
 

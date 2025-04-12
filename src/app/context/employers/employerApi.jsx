@@ -87,6 +87,25 @@ export const employerList = async () => {
   }
 };
 
+// GET Client Dashboard
+export const getClientDashboardStats = async (id) => {
+  try {
+    console.log(`my userId ${id}`);
+    let responseOnClientDashboardStats = await axios.get(
+      `${REACT_BASE_URL}client-stats/${id}`
+    );
+
+    if (responseOnClientDashboardStats.status === 200) {
+      return responseOnClientDashboardStats.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 // VIEW Employer
 export const employerProfile = async (id) => {
   try {

@@ -1,19 +1,30 @@
-import styles from "./dashboard.module.css"
+import styles from "./dashboard.module.css";
 import { ClientStats } from "./client-stats";
 import { ClientChart } from "./client-overview";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { ClientHiringActivity } from "./client-hiring-activity";
 import { ClientQuickActions } from "./client-hiring-quick-actions";
 import { ClientActiveJobPostings } from "./client-active-job-posts";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 function ClientDashboard() {
+  const { processGetEmployerStats, employerStats } =
+    useContext(EmployerApiData);
   useEffect(() => {
     loadScript("js/custom.js");
   });
 
+  useEffect(() => {
+    processGetEmployerStats();
+  }, []);
+
+  useEffect(() => {
+    console.log(employerStats);
+  }, [employerStats]);
+
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("Last 30 Days");
-  
+
   const timePeriodOptions = [
     "Last 7 Days",
     "Last 30 Days",
@@ -68,31 +79,33 @@ function ClientDashboard() {
       ]);
     }
   };
-  
-  return (
-      <div className={`tw-css ${styles.twm_right_section_panel} twm-right-section-panel site-bg-gray`}>
-        <div className={`mt-16 ${styles.dashboardContainer}`}>
-          <ClientStats cssModule={styles} />
-          
-          {/* Earnings Overview and Hiring Quick Actions */}
-          <div className={styles.cardRow}>
-            <ClientChart
-              chartData={chartData}
-              styles={styles.chart}
-              updateChartData={updateChartData}
-              timePeriodOptions={timePeriodOptions}
-              selectedTimePeriod={selectedTimePeriod}
-            />
-            <ClientQuickActions styles={styles.quickActions} />
-          </div>
 
-          {/* Active Job Postings and Hiring Activities */}
-          <div className={`mb-10 ${styles.cardRow} ${styles.jobPostRow}$`}>
-            <ClientActiveJobPostings />
-            <ClientHiringActivity />
-          </div>
+  return (
+    <div
+      className={`tw-css ${styles.twm_right_section_panel} twm-right-section-panel site-bg-gray`}
+    >
+      <div className={`mt-16 ${styles.dashboardContainer}`}>
+        <ClientStats cssModule={styles} employerStats={employerStats} />
+
+        {/* Earnings Overview and Hiring Quick Actions */}
+        <div className={styles.cardRow}>
+          <ClientChart
+            chartData={chartData}
+            styles={styles.chart}
+            updateChartData={updateChartData}
+            timePeriodOptions={timePeriodOptions}
+            selectedTimePeriod={selectedTimePeriod}
+          />
+          <ClientQuickActions styles={styles.quickActions} />
+        </div>
+
+        {/* Active Job Postings and Hiring Activities */}
+        <div className={`mb-10 ${styles.cardRow} ${styles.jobPostRow}$`}>
+          <ClientActiveJobPostings employerStats={employerStats} />
+          <ClientHiringActivity employerStats={employerStats} />
         </div>
       </div>
+    </div>
   );
 }
 

@@ -4,6 +4,7 @@ import {
   addEmployer,
   addCertification,
   addExperience,
+  getClientDashboardStats,
   updateEmployerLogo,
   employerProfile,
   updateEmployer,
@@ -16,6 +17,7 @@ export const EmployerApiData = createContext();
 
 const EmployerApiDataProvider = (props) => {
   const [employerProfiles, setEmployerProfiles] = useState([]);
+  const [employerStats, setEmployerStats] = useState({});
 
   const processAddEmployer = async (data) => {
     const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
@@ -104,12 +106,22 @@ const EmployerApiDataProvider = (props) => {
     //   return;
     // }
 
-    console.log("Hi after returning esponds");
+    //console.log("Hi after returning esponds");
     let response = await employerProfile(userId || 3);
     console.log(response);
 
     if (response) {
       setEmployerProfiles(response.data);
+    } else {
+      return false;
+    }
+  };
+
+  const processGetEmployerStats = async () => {
+    const userId = sessionStorage.getItem("user_id");
+    let response = await getClientDashboardStats(userId);
+    if (response) {
+      setEmployerStats(response);
     } else {
       return false;
     }
@@ -194,6 +206,8 @@ const EmployerApiDataProvider = (props) => {
         processUpdateEmployerLogo,
         processUpdateEmployerBanner,
         processDeleteEmployer,
+        processGetEmployerStats,
+        employerStats,
         employerProfiles,
       }}
     >

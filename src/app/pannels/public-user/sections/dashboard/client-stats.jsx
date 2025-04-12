@@ -16,37 +16,37 @@ const StatsCard = ({ title, value, subtitle, icon: Icon, cssModule }) => (
   </div>
 );
 
-export const ClientStats = ({ cssModule }) => {
+export const ClientStats = ({ cssModule, employerStats }) => {
   return (
     <div className={cssModule.statsGrid}>
       <StatsCard
         title="Active Jobs"
-        value="8"
-        subtitle="3 need review"
+        value={employerStats.total_jobs_posted}
+        subtitle={`${employerStats.total_application_to_review} need review`}
         icon={FaBriefcase}
         cssModule={cssModule}
       />
 
       <StatsCard
         title="Total Spent"
-        value="GH₵4,250.00"
-        subtitle="This month budget: GH₵10,000"
+        value={`GH₵${employerStats.total_spent}`}
+        subtitle={`This month budget: GH₵${employerStats.total_spent_month}`}
         icon={FaWallet}
         cssModule={cssModule}
       />
 
       <StatsCard
         title="Hire Rate"
-        value="98%"
-        subtitle="15 hires this month"
+        value={`${employerStats.hire_percentage_last_30_days}%`}
+        subtitle={`${employerStats.hires_last_30_days} hires this month`}
         icon={TiStarFullOutline}
         cssModule={cssModule}
       />
 
       <StatsCard
         title="Average Time to Hire"
-        value="98%"
-        subtitle="3.5 days average"
+        value={`${employerStats.averge_time_to_hire_percent}%`}
+        subtitle={`${employerStats.average_time_to_hire_days} days average`}
         icon={FaClock}
         cssModule={cssModule}
       />

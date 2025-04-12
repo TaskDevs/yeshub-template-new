@@ -40,7 +40,7 @@ export const addCertification = async (data) => {
 };
 
 export const addExperience = async (data) => {
-  console.log(data);
+  //console.log(data);
   try {
     let responseOnAddExperience = await axios.post(
       `${REACT_BASE_URL}store-experience`,
@@ -53,6 +53,21 @@ export const addExperience = async (data) => {
   } catch (err) {
     console.log(err);
     return false;
+  }
+};
+
+export const addJobPost = async (data) => {
+  try {
+    let responseOnAddJobPost = await axios.post(
+      `${REACT_BASE_URL}create-job`,
+      data
+    );
+    console.log(responseOnAddJobPost);
+    if (responseOnAddJobPost.status === SUCCESS_STATUS) {
+      return responseOnAddJobPost.data;
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -79,6 +94,27 @@ export const employerList = async () => {
 
     if (responseOnEmployerList.data.status === SUCCESS_STATUS) {
       return responseOnEmployerList.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+// GET Client Dashboard
+export const getClientDashboardStats = async (id) => {
+  try {
+    console.log(`my userId ${id}`);
+    let responseOnClientDashboardStats = await axios.get(
+      `${REACT_BASE_URL}client-stats/${id}`
+    );
+
+    console.log(responseOnClientDashboardStats);
+
+    if (responseOnClientDashboardStats.status === 200) {
+      return responseOnClientDashboardStats.data;
     } else {
       return false;
     }
@@ -117,6 +153,24 @@ export const updateEmployer = async (id, data) => {
     //console.log(responseOnUpdateEmployer);
     if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// UPDATE Job
+export const updateJob = async (id, data) => {
+  try {
+    let responseOnUpdateJob = await axios.put(
+      `${REACT_BASE_URL}update-job/${id}`,
+      data
+    );
+    //console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateJob.status == 200) {
+      return responseOnUpdateJob.data;
     } else {
       return false;
     }
@@ -204,6 +258,22 @@ export const deleteEmployer = async (id) => {
     );
     if (responseOnDeleteEmployer.status == 200) {
       return responseOnDeleteEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// DELETE Job
+export const deleteJob = async (id) => {
+  try {
+    let responseOnDeleteJob = await axios.delete(
+      `${REACT_BASE_URL}delete-job/${id}`
+    );
+    if (responseOnDeleteJob.status == 200) {
+      return responseOnDeleteJob.data;
     } else {
       return false;
     }

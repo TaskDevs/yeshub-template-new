@@ -28,6 +28,7 @@ const JobApiDataProvider = (props) => {
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [searchJobListData, setSearchJobListData] = useState([]);
   const [searchLoad, setSearchLoad] = useState(false);
+  // const [clientDashboardData, setClientDashboardData] = useState({});
   const [jobLoad, setJobLoad] = useState(false);
   const [searchData, setSearchData] = useState({
     job_category: null,

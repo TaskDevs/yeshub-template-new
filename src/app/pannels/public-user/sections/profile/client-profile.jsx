@@ -32,9 +32,9 @@ const ClientProfile = () => {
   console.log(authInfo);
 
   useEffect(async () => {
-    // const userId = sessionStorage.getItem("user_id");
+    const userId = sessionStorage.getItem("userId");
     // userId && (await processEmployerProfile(userId));
-    processEmployerProfile(authInfo.userId);
+    processEmployerProfile(userId);
   }, []);
 
   // Close modal handler

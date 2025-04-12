@@ -120,7 +120,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processGetEmployerStats = async () => {
-    const userId = sessionStorage.getItem("user_id");
+    const userId = sessionStorage.getItem("userId");
     let response = await getClientDashboardStats(userId);
     if (response) {
       setEmployerStats(response);

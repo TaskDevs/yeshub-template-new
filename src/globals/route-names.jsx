@@ -65,6 +65,7 @@ export const publicUser = {
     AUTH: "/auth",
     PROFILE: "/profile",
     FIND_TALENT: "/find-talent",
+    DASHBOARD: "/dashboard-client",
   },
   candidate: {
     GRID: "/can-grid",

@@ -1,429 +1,174 @@
-import React, { useState } from "react";
-import { IoMdMail } from "react-icons/io";
-import { FaLock, FaUser } from "react-icons/fa";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FaLinkedin } from "react-icons/fa";
-// import { LinkedIn } from "react-linkedin-login-oauth2";
-import { login, register } from "../../../../context/auth/authApi";
-import CircularProgress from "@mui/material/CircularProgress";
-import toast from "react-hot-toast";
-import cookieMethods from "../../../../../utils/cookieUtils";
-import { base } from "../../../../../globals/route-names";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import { FaGoogle, FaLinkedin } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+import { AuthApiData } from "../../../../context/auth/authContextApi";
+import { useAuth } from "../../../../context/auth/AuthContext";
 
-const NewAuthForm = ({ currentState }) => {
-  const [formData, setFormData] = useState({
-    identifier: "",
-    username: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
-  });
-  const navigate = useNavigate();
+const NewAuthForm = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { loginWithGoogle, loginWithLinkedIn } = AuthApiData();
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
+    if (!isLogin && !formData.name) newErrors.name = "Name is required";
+    return newErrors;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    setLoading(true);
-
-    let isValid = true;
-    const newErrors = {};
-
-    if (currentState === "signIn") {
-      // Sign In Validation
-      if (!formData.identifier) {
-        newErrors.identifier = "Username or email is required.";
-        isValid = false;
-      }
-      if (!formData.password) {
-        newErrors.password = "Password is required.";
-        isValid = false;
-      }
-
-      if (isValid) {
-        const data = {
-          identifier: formData.identifier,
-          password: formData.password,
-        };
-
-        try {
-          const response = await login(data); // Assume login is an async function
-          if (
-            response.success &&
-            response.data.token &&
-            response.data.refresh_token
-          ) {
-            console.log("Sign In Data:", response.data);
-            const { token, refresh_token, role, user_id } = response.data;
-            sessionStorage.setItem("authToken", token);
-            sessionStorage.setItem("userRole", role);
-            sessionStorage.setItem("userId", user_id);
-            cookieMethods.setCookies(token, refresh_token);
-            // ✅ Show success message
-            toast.success(response.message, {
-              position: "top-right",
-              autoClose: 3000,
-            });
-            // await processRetrieve();
-
-            setTimeout(() => {
-              switch (role) {
-                case "admin":
-                  navigate("/admin");
-                  break;
-                case "client":
-                  navigate("/profile");
-                  break;
-                case "freelancer":
-                default:
-                  navigate(base.CANDIDATE_PRE);
-                  break;
-              }
-            }, 1000);
-          }
-        } catch (err) {
-          console.error("Login error:", err);
-          newErrors.general = err?.response?.data?.message || "Login failed.";
-        }
-      }
-    } else {
-      // Sign Up Validation
-      if (!formData.username) {
-        newErrors.username = "Username is required.";
-        isValid = false;
-      }
-      if (!formData.email) {
-        newErrors.email = "Email is required.";
-        isValid = false;
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        newErrors.email = "Invalid email format.";
-        isValid = false;
-      }
-      if (!formData.password) {
-        newErrors.password = "Password is required.";
-        isValid = false;
-      } else if (formData.password.length < 6) {
-        newErrors.password = "Password must be at least 6 characters long.";
-        isValid = false;
-      }
-      if (!formData.password_confirmation) {
-        newErrors.password_confirmation = "Confirm password is required.";
-        isValid = false;
-      } else if (formData.password !== formData.password_confirmation) {
-        newErrors.password_confirmation = "Passwords do not match.";
-        isValid = false;
-      }
-
-      if (isValid) {
-        const registerData = {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          password_confirmation: formData.password_confirmation,
-        };
-
-        try {
-          const res = await register(registerData); // Assume register is an async function
-
-          if (res.success) {
-            setTimeout(() => {
-              navigate("/verify-otp", { state: { email: formData.email } });
-              window.location.reload();
-            }, 1000);
-
-            toast.success(res.message, {
-              position: "top-right",
-              autoClose: 3000,
-            });
-          } else {
-            const errorMessages = Object.values(res.errors || {})
-              .flat()
-              .join("\n");
-            toast.error(errorMessages, {
-              position: "top-right",
-              autoClose: 3000,
-            });
-          }
-        } catch (err) {
-          console.error("Registration error:", err);
-          newErrors.general =
-            err?.response?.data?.message || "Registration failed.";
-        }
-      }
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
 
-    setErrors(newErrors);
-    setLoading(false);
-  };
-  // google log n
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
+      const response = await fetch(
+        isLogin ? "/api/auth/login" : "/api/auth/register",
         {
-          token: credentialResponse.credential,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
         }
       );
 
-      const { token, refresh_token, user, role } = res.data;
-      console.log(res.data);
-      sessionStorage.setItem("authToken", token);
+      if (!response.ok) {
+        const errorData = await response.json();
+        setErrors({ general: errorData.message || "Something went wrong" });
+        return;
+      }
 
-      cookieMethods.setCookies(token, refresh_token);
-      sessionStorage.setItem("username", user?.username);
-      sessionStorage.setItem("userId", user?.id);
-      console.log(role);
-      // Check if role exists
-      setTimeout(() => {
-        switch (role) {
-          case "user":
-            navigate(`/dashboard/onboard?user=${user.id}`);
-            break;
-          case "client":
-            navigate("/profile");
-            break;
-          case "freelancer":
-          default:
-            navigate(base.CANDIDATE_PRE);
-            break;
-        }
-      }, 1000);
+      const data = await response.json();
+      login(data.token);
+      navigate("/dashboard");
     } catch (err) {
-      console.error("Google login failed", err);
-    } finally {
-      setLoading(false);
+      console.error("Error during authentication:", err);
+      setErrors({ general: "Network error. Please try again." });
     }
   };
-  const handleGoogleError = () => {
-    console.error("Google Sign-In Error");
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode(credentialResponse.credential);
+      const res = await loginWithGoogle(decoded);
+      if (res.success) {
+        login(res.token);
+        navigate("/dashboard");
+      } else {
+        setErrors({ general: res.message || "Google login failed" });
+      }
+    } catch (err) {
+      console.error("Google login error:", err);
+      setErrors({ general: "Google login failed" });
+    }
   };
 
-  const loginWithLinkedIn = async () => {
-    window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/redirect/linkedin`;
+  const handleGoogleError = () => {
+    setErrors({ general: "Google login failed" });
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {currentState === "signIn" ? (
-          <>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IoMdMail className="h-5 w-5 text-gray-500" />
-              </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-xl">
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          {isLogin ? "Login to Your Account" : "Create a New Account"}
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {!isLogin && (
+            <div>
+              <label className="block mb-1 font-medium">Name</label>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="identifier"
                 type="text"
-                name="identifier"
-                value={formData.identifier}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
-                required
-                placeholder="Email address"
+                className="w-full border border-gray-300 p-2 rounded"
               />
+              {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
             </div>
-            {errors.identifier && (
-              <p className="text-red-500 text-xs italic">{errors.identifier}</p>
-            )}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-500" />
-              </div>
-              <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="Password"
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <AiOutlineEye className="h-5 w-5 text-gray-500" />
-                ) : (
-                  <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-                )}
-              </div>
-            </div>
-            {errors.password && (
-              <p className="text-red-500 text-xs italic">{errors.password}</p>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaUser className="h-5 w-5 text-gray-500" />
-              </div>
-              <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="username"
-                type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                required
-                placeholder="Username"
-              />
-            </div>
-            {errors.username && (
-              <p className="text-red-500 text-xs italic">{errors.username}</p>
-            )}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IoMdMail className="h-5 w-5 text-gray-500" />
-              </div>
-              <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="Email"
-              />
-            </div>
-            {errors.email && (
-              <p className="text-red-500 text-xs italic">{errors.email}</p>
-            )}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-500" />
-              </div>
-              <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="Password"
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <AiOutlineEye className="h-5 w-5 text-gray-500" />
-                ) : (
-                  <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-                )}
-              </div>
-            </div>
-            {errors.password && (
-              <p className="text-red-500 text-xs italic">{errors.password}</p>
-            )}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-500" />
-              </div>
-              <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="password_confirmation"
-                type={showPassword ? "text" : "password"}
-                name="password_confirmation"
-                value={formData.password_confirmation}
-                onChange={handleChange}
-                required
-                placeholder="Repeat Password"
-              />
-              <div
-                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <AiOutlineEye className="h-5 w-5 text-gray-500" />
-                ) : (
-                  <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
-                )}
-              </div>
-            </div>
-            {errors.password_confirmation && (
-              <p className="text-red-500 text-xs italic">
-                {errors.password_confirmation}
-              </p>
-            )}
-          </>
-        )}
+          )}
 
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <input type="checkbox" id="remember" className="mr-2" />
-            <label htmlFor="remember" className="text-gray-700 text-sm">
-              Remember me
-            </label>
-          </div>
-          <button
-            type="button"
-            className="border-0 bg-none focus:outline-none text-green-800 hover:text-green-700 text-sm"
-          >
-            Forgot Password
-          </button>
-        </div>
-        {loading ? (
-          <button
-            className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            disabled
-          >
-            Please wait...
-            <CircularProgress size="20px" color="white" />
-          </button>
-        ) : (
-          <button
-            className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            {currentState === "signIn" ? "Sign In" : "Sign Up"}
-          </button>
-        )}
-
-        <div className="relative my-4">
-          <span className="absolute left-1/2 -top-3 transform -translate-x-1/2 bg-white px-2 text-gray-500 text-sm whitespace-nowrap">
-            or continue with
-          </span>
-
-          <div className="border-t border-gray-300" />
-        </div>
-      </form>
-
-      <div className="mt-5">
-        <div className="">
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={handleGoogleError}
+          <div>
+            <label className="block mb-1 font-medium">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full border border-gray-300 p-2 rounded"
             />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border border-gray-300 p-2 rounded"
+            />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          </div>
+
+          {errors.general && (
+            <p className="text-red-500 text-sm italic text-center">{errors.general}</p>
           )}
 
           <button
-            onClick={loginWithLinkedIn}
-            className="relative flex items-center justify-center w-full py-2 px-4 my-3 bg-[#0A66C2] text-white  rounded-lg shadow-md hover:bg-[#004182] transition-colors duration-200"
+            type="submit"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded transition duration-200"
           >
-            <span className="absolute left-4">
-              <FaLinkedin size={20} />
-            </span>
+            {isLogin ? "Login" : "Register"}
+          </button>
+        </form>
+
+        <div className="flex justify-between items-center mt-4 text-sm">
+          <button
+            type="button"
+            className="text-green-800 hover:text-green-700"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password?
+          </button>
+
+          <button
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-blue-600 hover:underline"
+          >
+            {isLogin ? "Create an account" : "Already have an account?"}
+          </button>
+        </div>
+
+        <div className="my-6 text-center text-gray-500">Or continue with</div>
+
+        <div className="flex flex-col gap-3">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            useOneTap
+          />
+
+          <button
+            onClick={loginWithLinkedIn}
+            className="flex items-center justify-center w-full py-2 px-4 bg-[#0A66C2] text-white rounded-lg shadow-md hover:bg-[#004182] transition-colors duration-200"
+          >
+            <FaLinkedin className="mr-2" size={20} />
             Sign in with LinkedIn
           </button>
         </div>

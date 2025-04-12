@@ -16,9 +16,11 @@ import {
   AboutMeFormSection,
 } from "./client-profile-forms";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import { AuthApiData } from "../../../../context/auth/authContextApi";
 
 const ClientProfile = () => {
-  const { processEmployerProfile, employerProfiles } =
+  const { authInfo } = useContext(AuthApiData);
+  const { employerProfiles, processEmployerProfile } =
     useContext(EmployerApiData);
   const [modalOpen, setModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
@@ -27,9 +29,12 @@ const ClientProfile = () => {
 
   console.log(formData);
   console.log(clientProfileData);
+  console.log(authInfo);
 
-  useEffect(() => {
-    processEmployerProfile();
+  useEffect(async () => {
+    // const userId = sessionStorage.getItem("user_id");
+    // userId && (await processEmployerProfile(userId));
+    processEmployerProfile(authInfo.userId);
   }, []);
 
   // Close modal handler

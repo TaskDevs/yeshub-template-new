@@ -861,6 +861,220 @@ export const CertificationsFormSection = ({ onClose }) => {
 };
 
 /**
+ * PostAJobSection
+ */
+export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
+  const { processAddJobPost, processUpdateJob, employerProfiles } =
+    useContext(EmployerApiData);
+
+  const [formData, setFormData] = useState({
+    title: isEdit ? itemsToEdit.title : "",
+    skills: isEdit ? itemsToEdit.skills : "",
+    category: isEdit ? itemsToEdit.category : "",
+    scope: isEdit ? itemsToEdit.scope : "Small",
+    fixedRateSelected: isEdit ? (itemsToEdit.fixed_rate ? false : true) : true,
+    fixed_rate: isEdit
+      ? itemsToEdit.fixed_rate
+        ? itemsToEdit.fixed_rate
+        : ""
+      : "",
+    hourly_rate_start: isEdit
+      ? itemsToEdit.hourly_rate_start
+        ? itemsToEdit.hourly_rate_start
+        : ""
+      : "",
+    hourly_rate_end: isEdit
+      ? itemsToEdit.hourly_rate_end
+        ? itemsToEdit.hourly_rate_end
+        : ""
+      : "",
+    end_date: isEdit ? itemsToEdit.end_date : "",
+    description: isEdit ? itemsToEdit.description : "",
+  });
+
+  const scopes = ["Small", "Medium", "Large"];
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSave = () => {
+    const data = {
+      title: formData.title,
+      skills: formData.skills,
+      category: formData.category,
+      scope: formData.scope,
+      fixed_rate: formData.fixedRateSelected
+        ? formData.fixed_rate
+        : `${formData.hourly_rate_start} - ${formData.hourly_rate_end}`,
+      description: formData.description,
+      company_id: employerProfiles.id,
+      end_date: formData.end_date,
+    };
+    isEdit ? processUpdateJob(itemsToEdit.id, data) : processAddJobPost(data);
+    console.log("Posting job:", data);
+    onClose();
+  };
+
+  const clearAll = () => {
+    setFormData({
+      title: "",
+      skills: "",
+      category: "",
+      scope: "Small",
+      fixedRateSelected: true,
+      fixed_rate: "",
+      hourly_rate_start: "",
+      hourly_rate_end: "",
+      description: "",
+      end_date: "",
+    });
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-white z-50 w-full">
+      <div className="space-y-6 w-full">
+        <p className="text-gray-600">
+          {isEdit
+            ? "Edit your job to attract more candidates"
+            : "Fill in the details to post a new job opportunity"}
+          :
+        </p>
+
+        <div className="space-y-4 mt-3">
+          <FormInput
+            field="title"
+            label="Job Title"
+            required={true}
+            value={formData.title}
+            onChange={handleInputChange}
+            placeholder="e.g. Frontend Developer"
+          />
+
+          <FormInput
+            field="skills"
+            label="Skills Required"
+            required={true}
+            value={formData.skills}
+            onChange={handleInputChange}
+            placeholder="e.g. React, JavaScript"
+          />
+
+          <FormInput
+            field="category"
+            label="Category"
+            required={true}
+            value={formData.category}
+            onChange={handleInputChange}
+            placeholder="e.g. Development"
+          />
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Scope
+            </label>
+            <CustomDropdown
+              selected={formData.scope}
+              styles="w-full py-2.5"
+              options={scopes}
+              onChange={(value) => handleInputChange("scope", value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Payment Type
+            </label>
+            <div className="flex items-center gap-4">
+              <button
+                className={`py-2 px-4 rounded-md border text-sm font-medium ${
+                  formData.fixedRateSelected
+                    ? "bg-green-600 text-white"
+                    : "bg-white text-gray-700 border-gray-300"
+                }`}
+                onClick={() => handleInputChange("fixedRateSelected", true)}
+              >
+                Fixed Rate
+              </button>
+              <button
+                className={`py-2 px-4 rounded-md border text-sm font-medium ${
+                  !formData.fixedRateSelected
+                    ? "bg-green-600 text-white"
+                    : "bg-white text-gray-700 border-gray-300"
+                }`}
+                onClick={() => handleInputChange("fixedRateSelected", false)}
+              >
+                Hourly Rate
+              </button>
+            </div>
+          </div>
+
+          {formData.fixedRateSelected ? (
+            <FormInput
+              field="fixed_rate"
+              label="Fixed Rate"
+              value={formData.fixed_rate}
+              onChange={handleInputChange}
+              placeholder="e.g. GH500"
+            />
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              <FormInput
+                field="hourly_rate_start"
+                label="Hourly Rate Start"
+                value={formData.hourlyRateStart}
+                onChange={handleInputChange}
+                placeholder="e.g. GH25"
+              />
+              <FormInput
+                field="hourly_rate_end"
+                label="Hourly Rate End"
+                value={formData.hourlyRateEnd}
+                onChange={handleInputChange}
+                placeholder="e.g. GH50"
+              />
+            </div>
+          )}
+
+          <FormInput
+            field="end_date"
+            label="Application End Date"
+            required={true}
+            type="date"
+            value={formData.end_date}
+            onChange={handleInputChange}
+          />
+
+          <FormTextarea
+            field="description"
+            label="Job Description"
+            required={true}
+            value={formData.description}
+            onChange={handleInputChange}
+            placeholder="Describe the responsibilities, expectations, and other relevant job details"
+            rows={5}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-between pt-4 border-t pb-5">
+          <TertiaryButton onClick={clearAll} icon={<FaTrash size={14} />}>
+            Clear All
+          </TertiaryButton>
+
+          <div className="flex items-center justify-start gap-3">
+            <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+            <PrimaryButton onClick={handleSave}>
+              {isEdit ? "Update Job" : "Post Job"}
+            </PrimaryButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
  * AboutMeFormSection
  */
 export const AboutMeFormSection = ({ onClose }) => {

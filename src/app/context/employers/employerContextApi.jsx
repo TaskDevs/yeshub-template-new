@@ -4,12 +4,15 @@ import {
   addEmployer,
   addCertification,
   addExperience,
+  addJobPost,
   getClientDashboardStats,
   updateEmployerLogo,
   employerProfile,
   updateEmployer,
+  updateJob,
   updateOfficeImage,
   deleteEmployer,
+  deleteJob,
   updateEmployerBanner,
 } from "./employerApi";
 
@@ -48,7 +51,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processAddCertification = async (data) => {
-    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
+    const userId = sessionStorage.getItem("userId"); // Get logged-in user ID=
 
     // Ensure the user ID is included in the request data
     const requestData = {
@@ -73,7 +76,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processAddExperience = async (data) => {
-    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
+    const userId = sessionStorage.getItem("userId"); // Get logged-in user ID=
 
     // Ensure the user ID is included in the request data
     const requestData = {
@@ -97,18 +100,22 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processAddJobPost = async (data) => {
+    const userId = sessionStorage.getItem("userId");
+    data.company_id = userId;
+    console.log(data);
+    let response = await addJobPost(data);
+    if (response) {
+      processGetEmployerStats(userId);
+      notify(200, "Job posted successfully");
+    } else {
+      return false;
+    }
+  };
+
   const processEmployerProfile = async (id) => {
     const userId = sessionStorage.getItem("userId");
-    // console.log(userId);
-    // const userId = sessionStorage.getItem("user_id");
-    // console.log("Retrieved User ID:", id || userId); // Debugging step
 
-    // if (!userId) {
-    //   notify(400, "User ID not found");
-    //   return;
-    // }
-
-    console.log("Hi after returning esponds");
     let response = await employerProfile(id || userId);
     console.log(response);
 
@@ -167,6 +174,18 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processUpdateJob = async (id, data) => {
+    let response = await updateJob(id, data);
+    // console.log(userId);
+    //console.log(response);
+    if (response) {
+      processGetEmployerStats();
+      notify(200, "Job updated successfully");
+    } else {
+      notify(400, "Failed to update profile");
+    }
+  };
+
   //updateOfficeImage;
   const processUpdateOfficeImage = async (id, data) => {
     //const userId = sessionStorage.getItem("user_id");
@@ -182,7 +201,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processDeleteEmployer = async () => {
-    const userId = sessionStorage.getItem("user_id");
+    const userId = sessionStorage.getItem("userId");
     if (!userId) {
       notify(400, "User ID not found");
       return;
@@ -195,6 +214,17 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  //deleteJob
+  const processDeleteJob = async (id) => {
+    let response = await deleteJob(id);
+    if (response) {
+      processGetEmployerStats();
+      notify(200, "Job deleted successfully");
+    } else {
+      notify(400, "Failed to delete job");
+    }
+  };
+
   return (
     <EmployerApiData.Provider
       value={{
@@ -203,12 +233,15 @@ const EmployerApiDataProvider = (props) => {
         processAddExperience,
         processEmployerProfile,
         processSearchEmployer,
+        processAddJobPost,
         processUpdateEmployer,
+        processUpdateJob,
         processUpdateOfficeImage,
         processUpdateEmployerLogo,
         processUpdateEmployerBanner,
         processDeleteEmployer,
         processGetEmployerStats,
+        processDeleteJob,
         employerStats,
         employerProfiles,
       }}

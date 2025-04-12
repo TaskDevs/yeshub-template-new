@@ -19,32 +19,25 @@ export const ProposalCard = ({ applicant, onStatusChange, onViewMore }) => {
             <p className="text-xs text-gray-500">
               {applicant?.experience} | {applicant?.badge}
             </p>
+            <div className="mt-1">
+              <RatingStars rating={applicant?.rating} />
+            </div>
           </div>
         </div>
         <div className="text-right">
-          <p className="font-bold text-green-600">
-            ${applicant?.hourlyRate}/hr
-          </p>
-          <p className="text-sm text-gray-600">{applicant?.location}</p>
+          <p className="font-bold text-green-600">Applied Job</p>
+          <p className="text-sm text-gray-600">{applicant?.jobTitle}</p>
         </div>
       </div>
 
-      {/* Job Title */}
-      <p className="text-sm text-gray-800 mb-2">
-        <span className="font-semibold">Applied for:</span>{" "}
-        {applicant?.jobTitle}
-      </p>
-
       {/* Ratings */}
-      <div className="flex items-center justify-start gap-2 mt-1 mb-2">
-        <RatingStars rating={applicant?.rating} />
-        <span className="text-sm">
-          {applicant?.rating} ({applicant?.reviews} reviews)
-        </span>
-      </div>
 
       {/* Description */}
-      <p className="text-sm text-gray-700 mb-2">{applicant?.description}</p>
+      <div className=" mb-3 w-full">
+        <h3 className="font-bold text-black">Bio</h3>
+        <hr className="my-2" />
+        <p className="text-sm text-gray-700 mb-2">{applicant?.description}</p>
+      </div>
 
       {/* Skills */}
       <div className="flex flex-wrap gap-2 mb-3">

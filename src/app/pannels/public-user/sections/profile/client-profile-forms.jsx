@@ -904,9 +904,13 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
       skills: formData.skills,
       category: formData.category,
       scope: formData.scope,
-      fixed_rate: formData.fixedRateSelected
-        ? formData.fixed_rate
-        : `${formData.hourly_rate_start} - ${formData.hourly_rate_end}`,
+      fixed_rate: formData.fixedRateSelected ? formData.fixed_rate : null,
+      hourly_rate_start: formData.hourly_rate_start
+        ? formData.hourly_rate_start
+        : null,
+      hourly_rate_end: formData.hourly_rate_end
+        ? formData.hourly_rate_end
+        : null,
       description: formData.description,
       company_id: employerProfiles.id,
       end_date: formData.end_date,

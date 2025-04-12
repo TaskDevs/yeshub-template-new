@@ -10,6 +10,7 @@ export const applicants = [
     image: talentImg1,
     experience: "5 years experience",
     badge: "Top Rated",
+    jobTitle: "React Frontend",
     rating: 5.0,
     reviews: 50,
     description:
@@ -25,6 +26,7 @@ export const applicants = [
     image: talentImg2,
     experience: "3 years experience",
     badge: "Rising Talent",
+    jobTitle: "Graphic Design",
     rating: 4.8,
     reviews: 35,
     description:

@@ -16,7 +16,7 @@ function NewAuth({ state: initialState }) {
       <div className="relative w-full md:w-1/2 md:h-auto overflow-hidden min-h-screen bg-[#f0f6fe]" style={{
         clipPath: "polygon(0 0, 90% 0, 100% 100%, 0% 100%)",
       }}>
-        <img src="/assets/images/login-bg.png" alt="" className="size-full object-cover absolute inset-0 bg-cover bg-center" />
+        <img src="/assets/images/logav.png" alt="" className="size-full object-cover absolute inset-0 bg-cover bg-center" />
       </div>
 
       {/* Auth form section */}

@@ -12,8 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { publicUser, base, candidate } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { Avatar } from "@mui/material";
-
-
+import { logout } from "../../context/auth/authApi";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
@@ -25,6 +26,7 @@ export const Header = ({ isDashboard = true }) => {
   const username = sessionStorage.getItem("username");
   const token = sessionStorage.getItem("authToken");
   const { profileData } = useContext(ProfileApiData);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const { firstname, profession } = profileData;
   console.log("profileData", firstname, profession, profileData);
@@ -194,10 +196,47 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const handleLogoClick = () => {
-    if (token) {
+    if (token && role == "client") {
+      navigate("/profile");
+    } else if (token && role == "freelncer") {
       navigate("/dashboard-candidate");
     } else {
       navigate("/");
+    }
+  };
+  const handleLogout = async () => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to log out?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#305718",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out",
+    });
+
+    if (confirmation.isConfirmed) {
+      setIsLoggingOut(true);
+
+      try {
+        const result = await logout(); // Your logout logic
+
+        if (result) {
+          toast.success(result.message, {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          navigate("/");
+        } else {
+          console.error("Logout failed");
+          toast.error("Logout failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Logout error:", error);
+        toast.error("Something went wrong!");
+      } finally {
+        setIsLoggingOut(false);
+      }
     }
   };
 
@@ -290,22 +329,109 @@ export const Header = ({ isDashboard = true }) => {
             {/* show Auth buttons if not dashboard */}
             {/* data-bs-toggle="modal"
             data-bs-target="#sign_up_popup2" */}
+
             {!isDashboard && (
               <div className="flex space-x-2">
-                <button
-                  className="text-gray-700 hover:text-green-700 font-medium"
-                  onClick={() => navigate("/login")}
-                >
-                  Log In
-                </button>
-                <button
-                 onClick={() => navigate("/sign-up")}
-                  className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
-                >
-                  Sign Up
-                </button>
-                {/* Mobile Menu */}
-                <button className="toggle-bar" onClick={() => toggleNav()}>
+                {!token ? (
+                  <>
+                    <button
+                      className="text-gray-700 hover:text-green-700 font-medium"
+                      onClick={() => navigate("/login")}
+                    >
+                      Log In
+                    </button>
+                    <button
+                      onClick={() => navigate("/sign-up")}
+                      className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
+                    >
+                      Sign Up
+                    </button>
+                  </>
+                ) : (
+                  <div className="relative new-profile-menu" ref={profileRef}>
+                    <Avatar
+                      sx={{
+                        bgcolor: stringToColor(username),
+                        width: 40,
+                        height: 40,
+                        fontSize: "1.2rem",
+                      }}
+                      onClick={() => handleProfileClick()}
+                    >
+                      {username.charAt(0).toUpperCase()}
+                    </Avatar>
+
+                    {openMenu === "profile" && (
+                      <div className="absolute top-full w-64 right-0 mt-1 bg-white rounded-lg shadow-lg zIndex">
+                        <div className="p-4 border-b">
+                          <div className="flex items-center justify-start gap-3">
+                            <div className="size-12 rounded-full overflow-hidden mr-3">
+                              <img
+                                src="/yes-logo-1.png"
+                                alt="User Avatar"
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                            <div className="text-sm text-gray-500 text-capitalize">
+                              {role}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-4 border-b flex items-center justify-between">
+                          <span className="text-sm text-gray-500">
+                            Online for messages
+                          </span>
+                          <ToggleSwitch
+                            initialState={true}
+                            onChange={(state) =>
+                              console.log("Online status:", state)
+                            }
+                          />
+                        </div>
+
+                        <div className="py-1">
+                          <button
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                            onClick={handleUserProfile}
+                          >
+                            <FaUserCircle className="text-gray-600 h-5 w-5" />
+                            <span>Your Profile</span>
+                          </button>
+                          <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
+                            <ImStatsDots className="text-gray-600 h-5 w-5" />
+                            <span>Stats & Trends</span>
+                          </button>
+                          <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
+                            <RiSettings3Fill className="text-gray-600 h-5 w-5" />
+                            <span>Account Settings</span>
+                          </button>
+                          <button
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-2 ${
+                              isLoggingOut
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            {isLoggingOut ? (
+                              <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <BiSolidLogOut className="text-gray-600 h-5 w-5" />
+                            )}
+                            <span>
+                              {isLoggingOut ? "Logging out..." : "Logout"}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Mobile Menu Toggle */}
+                <button className="toggle-bar" onClick={toggleNav}>
                   {navOpen ? (
                     <FaTimes className="h-5 w-5" />
                   ) : (
@@ -315,7 +441,7 @@ export const Header = ({ isDashboard = true }) => {
               </div>
             )}
 
-            {/* Notification Icons - Only show on dashboard */}
+            {/* Dashboard-specific content */}
             {isDashboard && (
               <div className="flex items-center space-x-4">
                 <button className="text-gray-600 hover:text-green-700">
@@ -334,7 +460,7 @@ export const Header = ({ isDashboard = true }) => {
                       height: 40,
                       fontSize: "1.2rem",
                     }}
-                    onClick={()=>handleProfileClick()}
+                    onClick={() => handleProfileClick()}
                   >
                     {username.charAt(0).toUpperCase()}
                   </Avatar>
@@ -346,17 +472,16 @@ export const Header = ({ isDashboard = true }) => {
                           <div className="size-12 rounded-full overflow-hidden mr-3">
                             <img
                               src="/yes-logo-1.png"
-                              alt="John Doe"
+                              alt="User Avatar"
                               className="h-full w-full object-cover"
                             />
                           </div>
                           <div className="text-sm text-gray-500 text-capitalize">
-                           {role}
+                            {role}
                           </div>
                         </div>
                       </div>
 
-                      {/* Online Status */}
                       <div className="p-4 border-b flex items-center justify-between">
                         <span className="text-sm text-gray-500">
                           Online for messages
@@ -369,11 +494,10 @@ export const Header = ({ isDashboard = true }) => {
                         />
                       </div>
 
-                      {/* Menu Items */}
                       <div className="py-1">
                         <button
                           className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                          onClick={() => handleUserProfile()}
+                          onClick={handleUserProfile}
                         >
                           <FaUserCircle className="text-gray-600 h-5 w-5" />
                           <span>Your Profile</span>
@@ -387,12 +511,22 @@ export const Header = ({ isDashboard = true }) => {
                           <span>Account Settings</span>
                         </button>
                         <button
-                          data-bs-toggle="modal"
-                          data-bs-target="#logout-dash-profile"
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                          onClick={handleLogout}
+                          disabled={isLoggingOut}
+                          className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-2 ${
+                            isLoggingOut
+                              ? "opacity-50 cursor-not-allowed"
+                              : "hover:bg-gray-100"
+                          }`}
                         >
-                          <BiSolidLogOut className="text-gray-600 h-5 w-5" />
-                          <span>Logout</span>
+                          {isLoggingOut ? (
+                            <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+                          ) : (
+                            <BiSolidLogOut className="text-gray-600 h-5 w-5" />
+                          )}
+                          <span>
+                            {isLoggingOut ? "Logging out..." : "Logout"}
+                          </span>
                         </button>
                       </div>
                     </div>

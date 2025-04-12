@@ -20,7 +20,7 @@ const EmployerApiDataProvider = (props) => {
   const [employerStats, setEmployerStats] = useState({});
 
   const processAddEmployer = async (data) => {
-    const userId = sessionStorage.getItem("user_id"); // Get logged-in user ID=
+    const userId = sessionStorage.getItem("userId"); // Get logged-in user ID=
     if (!userId) {
       notify(400, "User ID not found. Please log in again.");
       return;
@@ -97,8 +97,10 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
-  const processEmployerProfile = async () => {
-    const userId = sessionStorage.getItem("user_id");
+  const processEmployerProfile = async (id) => {
+    const userId = sessionStorage.getItem("userId");
+    // console.log(userId);
+    // const userId = sessionStorage.getItem("user_id");
     // console.log("Retrieved User ID:", id || userId); // Debugging step
 
     // if (!userId) {
@@ -106,8 +108,8 @@ const EmployerApiDataProvider = (props) => {
     //   return;
     // }
 
-    //console.log("Hi after returning esponds");
-    let response = await employerProfile(userId || 3);
+    console.log("Hi after returning esponds");
+    let response = await employerProfile(id || userId);
     console.log(response);
 
     if (response) {

@@ -93,6 +93,7 @@ const ClientStageOne = ({ forms, handleInputChange }) => {
               />
             </div>
             <div className="mt-2 w-full">
+              {/* website */}
               <InputField
                 field={START_CLIENT_PROFILE_FIELD.fieldDetailOne[1]}
                 label={START_CLIENT_PROFILE_FIELD.fieldDetailOne[1].label}

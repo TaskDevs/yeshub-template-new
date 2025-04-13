@@ -1,24 +1,48 @@
-import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
-const LinkedinCallback = () => {
-  const { search } = useLocation();
-  const query = new URLSearchParams(search);
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import cookieMethods from "../../../../../utils/cookieUtils";
+import { base } from "../../../../../globals/route-names";
+
+const LinkedInCallback = () => {
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const error = query.get('error');
-    const errorDesc = query.get('error_description');
-    const code = query.get('code');
-    
-    if (error) {
-      console.error('LinkedIn OAuth Error:', errorDesc || error);
-      // You can redirect or show a message
-    } else if (code) {
-      console.log('Authorization code:', code);
-      // Send to backend to exchange for access token
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const refresh_token = params.get("refresh_token");
+    const name = params.get("name");
+    const userId = params.get("userid");
+    const role = params.get("role");
+    if (token && refresh_token) {
+      sessionStorage.setItem("authToken", token);
+      cookieMethods.setCookies(token, refresh_token);
+      // Store user info if needed
+      sessionStorage.setItem("username", name);
+      sessionStorage.setItem("userId", userId);
+      setTimeout(() => {
+        switch (role) {
+          case "user":
+            navigate(`/dashboard/onboard?user=${userId}`);
+            break;
+          case "client":
+            navigate("/profile");
+            break;
+          case "freelancer":
+          default:
+            navigate(base.CANDIDATE_PRE);
+            break;
+        }
+      }, 800);
+    } else {
+      navigate("/login");
     }
-  }, [query]);
+  }, []);
 
-  return <div>Processing LinkedIn login...</div>;
+  return (
+    <div>
+      <h1>Processing LinkedIn Callback...</h1>
+    </div>
+  );
 };
 
-export default LinkedinCallback;
+export default LinkedInCallback;

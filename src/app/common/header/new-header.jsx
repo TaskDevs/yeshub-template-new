@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext , useEffect} from "react";
 import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { RiSettings3Fill } from "react-icons/ri";
@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
   const profileRef = useRef(null);
+  const dropdownRef = useRef(null);
   const [openMenu, setOpenMenu] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const [activeNav, setActiveNav] = useState("Home");
@@ -58,6 +59,7 @@ export const Header = ({ isDashboard = true }) => {
     { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
     { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
     { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
+    { id: "post-jobs", label: "Post Jobs", to: "/post-a-job" },
     {
       id: "my-home",
       label: "My Home",
@@ -133,8 +135,11 @@ export const Header = ({ isDashboard = true }) => {
 
   // Conditional rendering of nav items based on page type
   const getNavItems = () => {
+    let items;
+
     if (isDashboard) {
-      return navItems.filter((item) =>
+      // Show only dashboard-related items
+      items = navItems.filter((item) =>
         [
           "My Home",
           "Find Jobs",
@@ -143,17 +148,28 @@ export const Header = ({ isDashboard = true }) => {
           "Messages",
         ].includes(item.label)
       );
+    } else {
+      // Show only public nav items
+      items = navItems.filter(
+        (item) =>
+          ![
+            "My Home",
+            "Find Jobs",
+            "Manage Finances",
+            "Deliver Work",
+            "Messages",
+          ].includes(item.label)
+      );
     }
-    return navItems.filter(
-      (item) =>
-        ![
-          "My Home",
-          "Find Jobs",
-          "Manage Finances",
-          "Deliver Work",
-          "Messages",
-        ].includes(item.label)
-    );
+
+    // Apply role-based filtering
+    return items.filter((item) => {
+      if (role === "client") {
+        return item.label !== "Find Work";
+      } else {
+        return item.label !== "Post Jobs";
+      }
+    });
   };
 
   const handleNavHover = (item) => {
@@ -167,6 +183,24 @@ export const Header = ({ isDashboard = true }) => {
       setOpenMenu(null);
     }
   };
+
+    // Close dropdown on outside click
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setOpenMenu(null);
+        }
+      };
+  
+      if (openMenu === "profile") {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [openMenu, setOpenMenu]);
+
 
   const handleNavClick = (item) => {
     setOpenMenu(null);
@@ -192,7 +226,15 @@ export const Header = ({ isDashboard = true }) => {
 
   const handleUserProfile = () => {
     setOpenMenu(openMenu === "profile" && null);
-    navigate("/dashboard-candidate/profile");
+
+    if (role === "freelancer") {
+      navigate("/dashboard-candidate/profile");
+    } else if (role === "client") {
+      navigate("/profile");
+    } else {
+      console.warn("Unknown role, redirecting to default profile");
+      navigate("/profile");
+    }
   };
 
   const handleLogoClick = () => {
@@ -362,71 +404,70 @@ export const Header = ({ isDashboard = true }) => {
                     </Avatar>
 
                     {openMenu === "profile" && (
-                      <div className="absolute top-full w-64 right-0 mt-1 bg-white rounded-lg shadow-lg zIndex">
-                        <div className="p-4 border-b">
-                          <div className="flex items-center justify-start gap-3">
-                            <div className="size-12 rounded-full overflow-hidden mr-3">
-                              <img
-                                src="/yes-logo-1.png"
-                                alt="User Avatar"
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                            <div className="text-sm text-gray-500 text-capitalize">
-                              {role}
-                            </div>
-                          </div>
-                        </div>
+  <div className="absolute top-full right-0 mt-2 w-72 bg-white rounded-xl shadow-xl z-50"  ref={dropdownRef}>
+    {/* User Info */}
+    <div className="p-4 border-b">
+      <div className="flex items-center gap-4">
+        <div className="w-12 h-12 rounded-full overflow-hidden">
+          <img
+            src="/yes-logo-1.png"
+            alt="User Avatar"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="text-sm text-gray-600 capitalize">{role}</div>
+      </div>
+    </div>
 
-                        <div className="p-4 border-b flex items-center justify-between">
-                          <span className="text-sm text-gray-500">
-                            Online for messages
-                          </span>
-                          <ToggleSwitch
-                            initialState={true}
-                            onChange={(state) =>
-                              console.log("Online status:", state)
-                            }
-                          />
-                        </div>
+    {/* Online Toggle */}
+    <div className="p-4 border-b flex items-center justify-between">
+      <span className="text-sm text-gray-500">Online for messages</span>
+      <ToggleSwitch
+        initialState={true}
+        onChange={(state) => console.log("Online status:", state)}
+      />
+    </div>
 
-                        <div className="py-1">
-                          <button
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                            onClick={handleUserProfile}
-                          >
-                            <FaUserCircle className="text-gray-600 h-5 w-5" />
-                            <span>Your Profile</span>
-                          </button>
-                          <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
-                            <ImStatsDots className="text-gray-600 h-5 w-5" />
-                            <span>Stats & Trends</span>
-                          </button>
-                          <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
-                            <RiSettings3Fill className="text-gray-600 h-5 w-5" />
-                            <span>Account Settings</span>
-                          </button>
-                          <button
-                            onClick={handleLogout}
-                            disabled={isLoggingOut}
-                            className={`w-full text-left px-4 py-2 rounded-lg flex items-center gap-2 ${
-                              isLoggingOut
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:bg-gray-100"
-                            }`}
-                          >
-                            {isLoggingOut ? (
-                              <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
-                            ) : (
-                              <BiSolidLogOut className="text-gray-600 h-5 w-5" />
-                            )}
-                            <span>
-                              {isLoggingOut ? "Logging out..." : "Logout"}
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
+    {/* Menu Items */}
+    <div className="py-2">
+      <button
+        className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700"
+        onClick={handleUserProfile}
+      >
+        <FaUserCircle className="h-5 w-5" />
+        <span>Your Profile</span>
+      </button>
+
+      <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
+        <ImStatsDots className="h-5 w-5" />
+        <span>Stats & Trends</span>
+      </button>
+
+      <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
+        <RiSettings3Fill className="h-5 w-5" />
+        <span>Account Settings</span>
+      </button>
+
+      <button
+        onClick={handleLogout}
+        disabled={isLoggingOut}
+        className={`w-full text-left px-5 py-2 rounded-b-xl flex items-center gap-3 text-gray-700 transition-all ${
+          isLoggingOut
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-gray-100"
+        }`}
+      >
+        {isLoggingOut ? (
+          <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+        ) : (
+          <BiSolidLogOut className="h-5 w-5" />
+        )}
+        <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
+      </button>
+    </div>
+  </div>
+)}
+
                   </div>
                 )}
 
@@ -539,60 +580,69 @@ export const Header = ({ isDashboard = true }) => {
       </header>
       {/* Mobile Menu */}
       {navOpen && (
-        // <div className=" w-full min-h-screen zIndex2 bg-[red]  shadow-lg -t-10 z-10 relative">
-
-        <div className="absolute top-full min-h-screen right-0 mt-1 p-4 bg-white rounded-lg shadow-lg w-32 zIndex2">
-          <div className="flex justify-end w-full bg-[red]">
-            <FaTimes className="size-24" onClick={() => toggleNav()} />
+        <div className="absolute top-full right-4 mt-3 w-72 bg-white rounded-2xl shadow-xl z-50 p-4">
+          {/* Close Button */}
+          <div className="flex justify-end mb-3">
+            <button
+              onClick={toggleNav}
+              className="text-gray-500 hover:text-gray-800"
+            >
+              <FaTimes className="h-6 w-6" />
+            </button>
           </div>
 
-          <div className="p-4 border-b">
-            <div className="flex items-center justify-start gap-3">
-              <div className="size-8 rounded-full overflow-hidden mr-3">
+          {/* User Info Section */}
+          <div className="border-b pb-4 mb-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full overflow-hidden border">
                 <img
                   src="/yes-logo-1.png"
-                  alt="John Doe"
-                  // h-full w-full object-cover
-                  className=""
+                  alt="User Avatar"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <div>
-                <div className="font-medium text-gray-800">
+                <div className="font-semibold text-gray-900 text-sm">
                   {firstname || username}
                 </div>
-                <div className="text-sm text-gray-500">{profession}</div>
+                <div className="text-xs text-gray-500">{profession}</div>
               </div>
             </div>
-            <div className="mt-2 flex items-center">
-              <span className="text-sm">Online for messages</span>
+            <div className="flex items-center gap-2 mt-3 text-xs text-gray-600">
+              <span>Online for messages</span>
               <ToggleSwitch
                 initialState={true}
                 onChange={(state) => console.log("Online status:", state)}
               />
             </div>
           </div>
-          <div className="py-1">
+
+          {/* Navigation Links */}
+          <div className="space-y-2 text-sm">
             <button
-              className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start"
-              onClick={() => handleUserProfile()}
+              className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition"
+              onClick={handleUserProfile}
             >
-              <FaUserCircle className="text-[#A6A6A6] h-5 w-5" />
+              <FaUserCircle className="text-gray-500 w-5 h-5" />
               <span>Your Profile</span>
             </button>
-            <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
-              <ImStatsDots className="text-[#A6A6A6] h-5 w-5" />
+
+            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
+              <ImStatsDots className="text-gray-500 w-5 h-5" />
               <span>Stats & Trends</span>
             </button>
-            <button className="w-full text-left px-4 py-2 hoverHeaderItem cursor-pointer flex items-center justify-start">
-              <RiSettings3Fill className="text-[#A6A6A6] h-5 w-5" />
+
+            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
+              <RiSettings3Fill className="text-gray-500 w-5 h-5" />
               <span>Account Settings</span>
             </button>
+
             <button
               data-bs-toggle="modal"
               data-bs-target="#logout-dash-profile"
-              className="w-full text-left px-4 py-2 hoverHeaderItemointer flex items-center justify-start"
+              className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
             >
-              <BiSolidLogOut className="text-[#A6A6A6] h-5 w-5" />
+              <BiSolidLogOut className="text-red-500 w-5 h-5" />
               <span>Logout</span>
             </button>
           </div>

@@ -1,8 +1,8 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { IoMdMail } from "react-icons/io";
 import { FaLock, FaUser } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-// import { FaLinkedin } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 // import { LinkedIn } from "react-linkedin-login-oauth2";
 import { login, register } from "../../../../context/auth/authApi";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,10 +12,8 @@ import { base } from "../../../../../globals/route-names";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { AuthApiData } from "../../../../context/auth/authContextApi";
 
 const NewAuthForm = ({ currentState }) => {
-  const { setAuthInfo } = useContext(AuthApiData);
   const [formData, setFormData] = useState({
     identifier: "",
     username: "",
@@ -72,7 +70,6 @@ const NewAuthForm = ({ currentState }) => {
             sessionStorage.setItem("authToken", token);
             sessionStorage.setItem("userRole", role);
             sessionStorage.setItem("userId", user_id);
-            setAuthInfo({ userId: user_id });
             cookieMethods.setCookies(token, refresh_token);
             // ✅ Show success message
             toast.success(response.message, {
@@ -214,44 +211,9 @@ const NewAuthForm = ({ currentState }) => {
     console.error("Google Sign-In Error");
   };
 
-  // Linked in Login
-
-  // const handleLinkedInSuccess = async (response) => {
-  //   console.log("LinkedIn Login Success:", response);
-
-  //   setLoading(true);
-  //   try {
-  //     // Send the LinkedIn token to your Laravel backend for verification
-  //     const res = await axios.post(
-  //       "http://127.0.0.1:8000/api/v1/auth/linkedin",
-  //       {
-  //         token: response.code, // The token is in 'code', not 'access_token'
-  //       }
-  //     );
-
-  //     const { token, refresh_token, user } = res.data;
-  //     console.log("User from LinkedIn:", user);
-
-  //     // Store the access token and refresh token
-  //     localStorage.setItem("access_token", token);
-  //     localStorage.setItem("refresh_token", refresh_token);
-
-  //     // Redirect based on user role
-  //     if (user.role === "user") {
-  //       setTimeout(() => navigate(`/dashboard/onboard?user=${user.id}`), 2000);
-  //     } else {
-  //       setTimeout(() => navigate("/dashboard"), 2000);
-  //     }
-  //   } catch (err) {
-  //     console.error("LinkedIn login failed:", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const handleFailure = (error) => {
-  //   console.error("LinkedIn login error:", error);
-  // };
+  const loginWithLinkedIn = async () => {
+    window.location.href = `${process.env.REACT_APP_BACKEND_HOST}/auth/redirect/linkedin`;
+  };
 
   return (
     <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-md">
@@ -385,7 +347,7 @@ const NewAuthForm = ({ currentState }) => {
                 required
                 placeholder="Repeat Password"
               />
-               <div
+              <div
                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
@@ -454,31 +416,16 @@ const NewAuthForm = ({ currentState }) => {
               onError={handleGoogleError}
             />
           )}
-          {/* <button className="flex border border-gray-300 p-1 shadow-sm w-full rounded justify-center items-center">
-            <span>
-              <FaGoogle color="#4285F4" />
-            </span>
-            Google
-          </button> */}
 
-          {/* <LinkedIn
-              clientId="78cj9ms7zti6zz"
-              redirectUri="http://localhost:3000/linkedin"
-              onSuccess={handleLinkedInSuccess}
-              onError={handleFailure}
-              scope="r_liteprofile"
-            >
-              {({ linkedInLogin }) => (
-                <button 
-                onClick={linkedInLogin}
-                className="flex border border-gray-300 p-1 shadow-sm w-full rounded justify-center items-center">
-                  <span>
-                    <FaLinkedin color="#4285F4" />
-                  </span>
-                  Linkedin
-                </button>
-              )}
-            </LinkedIn> */}
+          <button
+            onClick={loginWithLinkedIn}
+            className="relative flex items-center justify-center w-full py-2 px-4 my-3 bg-[#0A66C2] text-white  rounded-lg shadow-md hover:bg-[#004182] transition-colors duration-200"
+          >
+            <span className="absolute left-4">
+              <FaLinkedin size={20} />
+            </span>
+            Sign in with LinkedIn
+          </button>
         </div>
       </div>
     </div>

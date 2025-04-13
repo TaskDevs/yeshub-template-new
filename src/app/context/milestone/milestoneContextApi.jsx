@@ -246,12 +246,12 @@ const MilestoneApiDataProvider = (props) => {
       setMilestones([
         {
           ...initialMilestone,
-          user_id: userId,
-          job_id: id,
-          freelance_id: freelancerId,
-          employer_status: "pending",
-          freelancer_status: "pending",
-          pay_status: "pending",
+          // user_id: userId,
+          // job_id: id,
+          // freelance_id: freelancerId,
+          // employer_status: "pending",
+          // freelancer_status: "pending",
+          // pay_status: "pending",
         },
       ]);
       setIsLoading(false);

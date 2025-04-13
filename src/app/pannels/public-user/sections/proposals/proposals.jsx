@@ -3,19 +3,27 @@ import { CustomDropdown } from "../../../../common/Dropdown";
 import styles from "./proposals.module.css";
 import { ProposalCard } from "./proposal-card";
 import { skills, sortOptions, applicants } from "./data";
+import { StatusSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import FilterPanel from "../../../candidate/sections/find-work/filter-panel";
 import { useFilterForm } from "../../../../../utils/useFilterFormHook";
 import CanSlider from "../../../candidate/components/can-slider";
 import CanCheckbox from "../../../candidate/components/can-checkbox";
+import { StatusUpdateForm } from "./proposal-forms";
 //import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 
 const Proposals = () => {
   //   const { talentListData } = useContext(ProfileApiData);
   const { filters, handleChange } = useFilterForm();
   console.log("filters", filters);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Dropdown options
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
+
+  // Close modal handler
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <div className="tw-css flex site-bg-gray w-full">
@@ -55,7 +63,11 @@ const Proposals = () => {
           <div className="space-y-4">
             {applicants?.length > 0 &&
               applicants.map((applicant) => (
-                <ProposalCard key={applicant.id} applicant={applicant} />
+                <ProposalCard
+                  key={applicant.id}
+                  applicant={applicant}
+                  actions={() => setModalOpen(true)}
+                />
               ))}
           </div>
 
@@ -69,6 +81,19 @@ const Proposals = () => {
           </div>
         </div>
       </div>
+      {modalOpen && (
+        <StatusSectionModal
+          isOpen={modalOpen}
+          onClose={handleCloseModal}
+          title={"Status"}
+        >
+          <StatusUpdateForm
+            initialStatus="Interview"
+            onSave={(newStatus) => console.log("Updated to:", newStatus)}
+            onClose={() => setModalOpen(false)}
+          />
+        </StatusSectionModal>
+      )}
     </div>
   );
 };

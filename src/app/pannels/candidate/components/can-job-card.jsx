@@ -28,6 +28,8 @@ const CanJobCard = ({
   newTag,
   isFindWork = true,
   status,
+  action,
+  jobId,
   dateSaved,
   jobType,
   isMobile = false,
@@ -88,9 +90,13 @@ const CanJobCard = ({
                   <span>save</span>
                 </button>
 
-                <p className="text-[#374151]">{salaryRange}</p>
+                <p className="text-[#374151]">{`GHS ${salaryRange}`}</p>
 
-                <button className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
+                <button
+                  className="bg-green-800 text-white px-4 py-2 
+                rounded capitalize text-center h-10"
+                  onClick={() => action(jobId)}
+                >
                   submit proposal
                 </button>
               </div>
@@ -117,7 +123,11 @@ const CanJobCard = ({
                     <button>
                       <FaRegTrashAlt />
                     </button>
-                    <button className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
+                    <button
+                      className="bg-green-800 text-white px-4 py-2 
+                    rounded capitalize text-center h-10"
+                      onClick={() => action(jobId)}
+                    >
                       submit proposal
                     </button>
                   </div>
@@ -144,7 +154,7 @@ const CanJobCard = ({
                   ) : (
                     <Tags bg="#DBEAFE" color=" #1E40AF" text="Contract" />
                   )}
-                  <p>{salaryRange}</p>
+                  <p>{salaryRange}GHS</p>
                   <p>{dateSaved}</p>
                 </div>
                 <div className="w-[60%] truncate py-2">
@@ -176,18 +186,24 @@ const CanJobCard = ({
                 </div>
 
                 {isFindWork && (
-                  <div className="flex flex-col  items-start h-full ">     
+                  <div className="flex flex-col  items-start h-full ">
                     <button className=" border-0 ">
                       <CiBookmark className="size-4" />
                     </button>
-                    <p className="text-sm">{calculateDaysSincePosted(datePosted)} days ago</p>
+                    <p className="text-sm">
+                      {calculateDaysSincePosted(datePosted)} days ago
+                    </p>
                   </div>
                 )}
               </div>
 
               <div className="flex justify-between w-full ">
-              <p className="text-[#374151] ">{salaryRange}</p>
-                <button className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10">
+                <p className="text-[#374151] ">{salaryRange}</p>
+                <button
+                  className="bg-green-800 w-fit text-white 
+                px-4 py-2 rounded capitalize text-center h-10"
+                  onClick={() => action(jobId)}
+                >
                   submit
                 </button>
               </div>
@@ -214,7 +230,11 @@ const CanJobCard = ({
                     <button>
                       <FaRegTrashAlt />
                     </button>
-                    <button className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
+                    <button
+                      className="bg-green-800 text-white px-4 py-2 
+                    rounded capitalize text-center h-10"
+                      onClick={() => action(jobId)}
+                    >
                       submit proposal
                     </button>
                   </div>

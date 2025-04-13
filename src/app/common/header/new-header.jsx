@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext , useEffect} from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { RiSettings3Fill } from "react-icons/ri";
@@ -56,10 +56,9 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "home", label: "Home", selected: true, to: publicUser.HOME1 },
-    { id: "find-talent", label: "Find Talent", to: publicUser.candidate.LIST },
+    { id: "home", label: "Home", selected: true, to: "/dashboard-candidate" },
+    { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
     { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
-    { id: "post-jobs", label: "Post Jobs", to: "/post-a-job" },
     {
       id: "my-home",
       label: "My Home",
@@ -162,13 +161,11 @@ export const Header = ({ isDashboard = true }) => {
       );
     }
 
-    // Apply role-based filtering
     return items.filter((item) => {
       if (role === "client") {
         return item.label !== "Find Work";
-      } else {
-        return item.label !== "Post Jobs";
       }
+      return true; // keep everything else
     });
   };
 
@@ -184,23 +181,22 @@ export const Header = ({ isDashboard = true }) => {
     }
   };
 
-    // Close dropdown on outside click
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-          setOpenMenu(null);
-        }
-      };
-  
-      if (openMenu === "profile") {
-        document.addEventListener("mousedown", handleClickOutside);
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenMenu(null);
       }
-  
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [openMenu, setOpenMenu]);
+    };
 
+    if (openMenu === "profile") {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openMenu, setOpenMenu]);
 
   const handleNavClick = (item) => {
     setOpenMenu(null);
@@ -404,70 +400,80 @@ export const Header = ({ isDashboard = true }) => {
                     </Avatar>
 
                     {openMenu === "profile" && (
-  <div className="absolute top-full right-0 mt-2 w-72 bg-white rounded-xl shadow-xl z-50"  ref={dropdownRef}>
-    {/* User Info */}
-    <div className="p-4 border-b">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-full overflow-hidden">
-          <img
-            src="/yes-logo-1.png"
-            alt="User Avatar"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="text-sm text-gray-600 capitalize">{role}</div>
-      </div>
-    </div>
+                      <div
+                        className="absolute top-full right-0 mt-2 w-72 bg-white rounded-xl shadow-xl z-50"
+                        ref={dropdownRef}
+                      >
+                        {/* User Info */}
+                        <div className="p-4 border-b">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-full overflow-hidden">
+                              <img
+                                src="/yes-logo-1.png"
+                                alt="User Avatar"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="text-sm text-gray-600 capitalize">
+                              {role}
+                            </div>
+                          </div>
+                        </div>
 
-    {/* Online Toggle */}
-    <div className="p-4 border-b flex items-center justify-between">
-      <span className="text-sm text-gray-500">Online for messages</span>
-      <ToggleSwitch
-        initialState={true}
-        onChange={(state) => console.log("Online status:", state)}
-      />
-    </div>
+                        {/* Online Toggle */}
+                        <div className="p-4 border-b flex items-center justify-between">
+                          <span className="text-sm text-gray-500">
+                            Online for messages
+                          </span>
+                          <ToggleSwitch
+                            initialState={true}
+                            onChange={(state) =>
+                              console.log("Online status:", state)
+                            }
+                          />
+                        </div>
 
-    {/* Menu Items */}
-    <div className="py-2">
-      <button
-        className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700"
-        onClick={handleUserProfile}
-      >
-        <FaUserCircle className="h-5 w-5" />
-        <span>Your Profile</span>
-      </button>
+                        {/* Menu Items */}
+                        <div className="py-2">
+                          <button
+                            className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700"
+                            onClick={handleUserProfile}
+                          >
+                            <FaUserCircle className="h-5 w-5" />
+                            <span>Your Profile</span>
+                          </button>
 
-      <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
-        <ImStatsDots className="h-5 w-5" />
-        <span>Stats & Trends</span>
-      </button>
+                          <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
+                            <ImStatsDots className="h-5 w-5" />
+                            <span>Stats & Trends</span>
+                          </button>
 
-      <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
-        <RiSettings3Fill className="h-5 w-5" />
-        <span>Account Settings</span>
-      </button>
+                          <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
+                            <RiSettings3Fill className="h-5 w-5" />
+                            <span>Account Settings</span>
+                          </button>
 
-      <button
-        onClick={handleLogout}
-        disabled={isLoggingOut}
-        className={`w-full text-left px-5 py-2 rounded-b-xl flex items-center gap-3 text-gray-700 transition-all ${
-          isLoggingOut
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-100"
-        }`}
-      >
-        {isLoggingOut ? (
-          <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
-        ) : (
-          <BiSolidLogOut className="h-5 w-5" />
-        )}
-        <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
-      </button>
-    </div>
-  </div>
-)}
-
+                          <button
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            className={`w-full text-left px-5 py-2 rounded-b-xl flex items-center gap-3 text-gray-700 transition-all ${
+                              isLoggingOut
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            {isLoggingOut ? (
+                              <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                              <BiSolidLogOut className="h-5 w-5" />
+                            )}
+                            <span>
+                              {isLoggingOut ? "Logging out..." : "Logout"}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 

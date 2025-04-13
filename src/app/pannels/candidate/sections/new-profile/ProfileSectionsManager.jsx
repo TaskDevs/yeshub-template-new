@@ -71,10 +71,10 @@ export const ProfileSectionsManager = ({
           data={candidateData?.workHistory}
           title={profileSections[2]?.title}
           onClick={profileSections[2]?.onClick}
-          noData={!candidateData?.work_hostory?.length}
+          noData={!candidateData?.work_history?.length}
           description={profileSections[2]?.description}
           activeSection={sectionKeyMap[profileSections[2]?.title]}
-        />
+        /> 
       </div>
       <ProfileSection
         title={profileSections[5]?.title}

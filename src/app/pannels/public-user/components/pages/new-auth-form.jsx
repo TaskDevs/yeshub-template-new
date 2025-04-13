@@ -84,7 +84,7 @@ const NewAuthForm = ({ currentState }) => {
                   navigate("/admin");
                   break;
                 case "client":
-                  navigate("/profile");
+                  navigate("/dashboard-client");
                   break;
                 case "freelancer":
                 default:
@@ -185,6 +185,8 @@ const NewAuthForm = ({ currentState }) => {
       cookieMethods.setCookies(token, refresh_token);
       sessionStorage.setItem("username", user?.username);
       sessionStorage.setItem("userId", user?.id);
+      sessionStorage.setItem("userRole", role);
+
       console.log(role);
       // Check if role exists
       setTimeout(() => {
@@ -193,7 +195,7 @@ const NewAuthForm = ({ currentState }) => {
             navigate(`/dashboard/onboard?user=${user.id}`);
             break;
           case "client":
-            navigate("/profile");
+            navigate("/dashboard-client");
             break;
           case "freelancer":
           default:

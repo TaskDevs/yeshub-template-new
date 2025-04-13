@@ -19,13 +19,14 @@ const LinkedInCallback = () => {
       // Store user info if needed
       sessionStorage.setItem("username", name);
       sessionStorage.setItem("userId", userId);
+      sessionStorage.setItem("userRole", role);
       setTimeout(() => {
         switch (role) {
           case "user":
             navigate(`/dashboard/onboard?user=${userId}`);
             break;
           case "client":
-            navigate("/profile");
+            navigate("/dashboard-client");
             break;
           case "freelancer":
           default:

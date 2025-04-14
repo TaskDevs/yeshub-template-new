@@ -1,157 +1,86 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { savedJobs } from "./savedJobsApi";
+import { savedJobs, savedjobsList, deleteSavedJobs } from "./savedJobsApi";
 import toast from "react-hot-toast";
+import { GlobalApiData } from "../global/globalContextApi";
+import { userId } from "../../../globals/constants";
 
 export const SavedJobsApiData = createContext();
 
-
 const SavedJobsApiDataProvider = (props) => {
-//   const [skillOptions, setSkillOptions] = useState(null);
-//   const [formData, setFormData] = useState(initialData);
+  const [savedjobsData, setSavedJobsData] = useState([]);
+  const { setIsSubmitting } = useContext(GlobalApiData);
 
-//   const [skills, setSkills] = useState([]);
-//   const [skill, setSkill] = useState({});
-
-//   const getAllSkills = async () => {
-// 		try {
-// 			const res = await processGetAllSkills();
-// 			let newData = [];
-
-// 			res.map((item) => {
-// 				let newObj = {
-// 					id: item.id,
-// 					name: item.skill,
-// 				};
-// 				newData.push(newObj);
-// 			});
-// 			setSkillOptions(newData);
-
-
-// 			// Safely set skills
-// 			if (Array.isArray(res)) {
-// 				setSkills(res);
-// 			} else {
-// 				setSkills([]);
-// 				notify("No skills found", "warning");
-// 			}
-// 		} catch (error) {
-// 			console.error("get-all-skills-failed", error);
-// 			setSkills([]);
-// 		}
-// 	};
-
-//   useEffect(() => {
-	
-
-// 	getAllSkills();
-
-	
-// }, []);
-
-
-
-//   const processAddSavedJobs = async (data) => {
-//     try {
-//       const res = await savedJobs(data);
-
-//       if (res && res.data) {
-       
-//         toast.success("Job saved successfully")
-//       } 
-//     } catch (error) {
-//       console.error("Add Skills Error:", error);
-//       toast.success("Job saved successfully");
-//     }
-//   };
-
-
-const processAddSavedJobs = async (data) => {
+  const getAllSavedJobs = async () => {
     try {
-        const token = sessionStorage.getItem("authToken"); 
+      const res = await processGetAllSavedJobs();
+    
+      setSavedJobsData(res.data);
+    } catch (error) {
+      console.error("get-all-savedjobs-failed", error);
+      setSavedJobsData([]);
+    }
+  };
+
+  useEffect(() => {
+    getAllSavedJobs();
+  }, []);
+
+
+  const processAddSavedJobs = async (data) => {
+    try {
+      const token = sessionStorage.getItem("authToken");
+
       const res = await savedJobs(data, token);
-      console.log("res", res)
+      await getAllSavedJobs();
+     
       if (res && res.data) {
         toast.success("Job saved successfully");
       }
     } catch (error) {
-      
       toast.error("Failed to save job");
     }
   };
-  
 
+  const processGetAllSavedJobs = async () => {
+    const token = sessionStorage.getItem("authToken");
+    try {
+      const res = await savedjobsList(token, userId);
+      return res;
+    } catch (error) {
+      return false;
+    }
+  };
 
+  const processDeleteSavedJobs = async (job_id, id) => {
+    const res = await deleteSavedJobs(job_id, id);
+    return res;
+  };
 
-
-//   const processGetAllSkills = async () => {
-//     try {
-//       const res = await skillsList();
-
-//       const skills = res.data;
-
-//       return skills;
-//     } catch (error) {
-//       setSkills([]);
-//     }
-//   };
-
-
-
-//   const processDeleteSkills = async (id) => {
-//     const res = await deleteSkills(id);
-//     return res;
-//   };
-
-
-
-//   const handleUpdateSkills = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await processUpdateSkills(selectedId, formData);
-//       await getAllSkills();
-//       toast.success("Skills updated successfully");
-//       return res;
-//     } catch (e) {
-//       toast.error("Failed to update Skills");
-//       throw new Error("failed to update skills", e);
-//     } finally {
-//       setFormData({
-//         skill: "",
-//       });
-//       setSelectedId("");
-//     }
-//   };
-
-//   const handleDeleteSkills = async () => {
-// 		setIsSubmitting(true);
-// 		try {
-// 			await processDeleteSkills(selectedId);
-//       await getAllSkills();
-
-// 			toast.success("skills deleted successfully");
-// 		} catch (error) {
-// 			toast.error("Failed to delete skills");
-// 			return false;
-// 		} finally {
-// 			setIsSubmitting(false);
-//       setSelectedId("");
-// 		}
-// 	};
-
-
+  const handleDeleteSavedJobs = async (job_id, id) => {
+    
+    setIsSubmitting(true);
+    try {
+      await processDeleteSavedJobs(job_id, id);
+      await getAllSavedJobs();
+      toast.success("savedjobs deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete savedjobs");
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <SavedJobsApiData.Provider
       value={{
-        
+        savedjobsData,
+        setSavedJobsData,
         processAddSavedJobs,
-        // processGetAllSkills,
-        // processUpdateSkills,
-        // processDeleteSkills,
-  
-        // handleUpdateSkills,
-        // handleDeleteSkills
+        processGetAllSavedJobs,
+        processDeleteSavedJobs,
+        handleDeleteSavedJobs,
       }}
     >
       {props.children}

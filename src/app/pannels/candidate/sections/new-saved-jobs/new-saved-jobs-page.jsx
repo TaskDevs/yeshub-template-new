@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   dates,
   experinceLevel,
-  jobData,
   jobStatus,
   jobTypes,
   sortTwo,
@@ -11,7 +10,7 @@ import { AiOutlineBars } from "react-icons/ai";
 import { MdOutlineWindow } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiCircleCheck } from "react-icons/ci";
-import { calculateDaysLeft } from "../../../../../utils/readableDate";
+import { calculateDaysLeft, calculateDaysSincePosted } from "../../../../../utils/readableDate";
 import CanJobCard from "../../components/can-job-card";
 import CanSelectField from "../../components/can-select-field";
 import FilterPanel from "../find-work/filter-panel";
@@ -22,47 +21,71 @@ import { useFilterForm } from "../../../../../utils/useFilterFormHook";
 import { filterElements } from "../../common/filter-elements";
 import styles from "./new-saved-job.module.css"
 import MobileFindSavedWork from "../find-work/mobile-find-work";
+import { SavedJobsApiData } from "../../../../context/saved-jobs/savedJobsContextApi";
+import Loader from "../../../../common/loader";
+
 
 function NewSavedJobsPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredJobs, setFilteredJobs] = useState(jobData); // initially show all jobs
-
+  const { savedjobsData } = useContext(SavedJobsApiData)
+  const [filteredJobs, setFilteredJobs] = useState([]); 
   const { filters, handleChange } = useFilterForm();
 
   const itemsPerPage = 10;
-  const totalItems = jobData.length;
+  const totalItems = savedjobsData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const isLoading = !savedjobsData || savedjobsData.length === 0;
+
+useEffect(() => {
+  if (!isLoading) {
+    const results = filterElements(savedjobsData, filters);
+    setFilteredJobs(results);
+  }
+}, [filters, savedjobsData]);
+
+
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
-
+ 
   useEffect(() => {
-    const results = filterElements(jobData, filters);
-    console.log("filter-results", results);
-    setFilteredJobs(results);
-  }, [filters, jobData]);
+    if (savedjobsData?.length > 0 && Object.keys(filters).length === 0) {
+      setFilteredJobs(savedjobsData);
+    }
+  }, [savedjobsData]);
+  
+  console.log("filteredJobs", filteredJobs)
 
   return (
+    <>
+    {isLoading && ( <Loader />)}
+    
     <div className="tw-css mx-auto   min-h-screen">
       <div className={`${styles.mobileSavedWork} h-min-h-screen px-4`}>
         <MobileFindSavedWork >
-          {jobData.map((job) => (
+          {savedjobsData?.map((data) => (
             <CanJobCard
-              key={job.id}
-              role={job.job_title}
+              key={data?.id}
+              id={data?.job_id}
+              role={data?.job?.title}
               ratings="4.9"
               reviews="23k"
-              companyName={job.employer.company_name}
-              submitProposalBtn={job?.submitProposalBtn}
-              jobType={job?.job_type}
+              companyName={data?.job?.category}     
+              jobType={data?.job_type || "contract"}
               isMobile={true}
-              jobLocation={job?.location}
-              datePosted={job?.start_date}
-              salaryRange={job?.salary}
-            // isFindWork={false}
+              jobLocation={data?.location}
+              datePosted={data?.created_at}
+              salaryRange={data?.job?.fixed_rate || "400"}
+              status={
+                calculateDaysLeft(data?.job?.created_at, data?.job?.end_date) > 0
+                  ? "Active"
+                  : "Closed"
+              }
+              isFindWork={false}
             />
           ))}
         </MobileFindSavedWork>
@@ -71,7 +94,7 @@ function NewSavedJobsPage() {
       <div className=" mx-auto  max-w-7xl p-6">
         <div className="w-full px-4 py-4">
           <div className="grid-container-saved">
-            <div className="section-one">
+            <div className= {`${styles.gridOne} section-one`}>
               <FilterPanel>
                 <CanSelectField
                   options={dates}
@@ -144,26 +167,26 @@ function NewSavedJobsPage() {
 
                   {/*job cards */}
                   <div className="grid grid-cols-1 gap-4 w-full">
-                    {filteredJobs.map((job) => (
+                    {savedjobsData?.map((data) => (
                       <CanJobCard
-                        key={job.id}
-                        image={job?.employer?.logo}
-                        role={job?.job_title}
+                        key={data.id}
+                        id={data.job_id}
+                        image={data?.job?.logo}
+                        role={data?.job?.title}
                         ratings="4.8"
                         reviews="23k"
-                        companyName={job?.employer?.company_name}
-                        description={job?.description}
-                        skills={job?.skills}
+                        companyName={data?.job?.category}
+                        description={data?.job?.description}
+                        skills={data?.job?.skills}
                         numberOfProposals="23"
-                        salaryRange={job?.salary}
-                        submitProposalBtn={job?.submitProposalBtn}
-                        jobType={job?.job_type}
+                        salaryRange={data?.job?.fixed_rate || "400"}
+                        jobType={data?.job?.job_type}
                         status={
-                          calculateDaysLeft(job?.start_date, job?.end_date) > 0
+                          calculateDaysLeft(data?.job?.created_at, data?.job?.end_date) > 0
                             ? "Active"
                             : "Closed"
                         }
-                        dateSaved="2 days ago"
+                        dateSaved={calculateDaysSincePosted(data?.created_at)}
                         isFindWork={false}
                       />
                     ))}
@@ -183,6 +206,7 @@ function NewSavedJobsPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

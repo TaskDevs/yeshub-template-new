@@ -17,7 +17,7 @@ import {
 
 
 
-// LIST Skills
+// LIST SavedJobs
 export const savedJobs = async (data, token) => {
     try {
       const responseOnSavedJobs = await axios.post(
@@ -38,58 +38,32 @@ export const savedJobs = async (data, token) => {
   
 
 
-
-
-export const skillsList = async () => {
+export const savedjobsList = async (token, id) => {
   try {
-    const responseOnSkillsList = await axios.get(`${REACT_BASE_URL}skills`);
-    return responseOnSkillsList.data || [];
+    const responseOnSavedJobsList = await axios.get(`${REACT_BASE_URL}saved-jobs?user_id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return responseOnSavedJobsList;
   } catch (err) {
-    console.error("failed to get all skills", err);
+    console.error("failed to get all savedjobs", err);
     return false;
   }
 };
 
-// VIEW Skills
-/**Add View History API URL here like ${URL}api/getSkillsProfile/${id}**/
-export const skillsProfile = async () => {
-  try {
-    let responseOnSkillsProfile = await axios.get(
-			// `${REACT_BASE_URL}skills/${id}`
-		);
+// saved-jobs/{job_id}
 
-    return responseOnSkillsProfile.data || null;
-  } catch {
-    // console.error(`Skills Profile Error for ID ${id}`, err);
-    return false;
-  }
-};
-
-// UPDATE Skills
-export const updateSkills = async (id, data) => {
+// DELETE SavedJobs
+export const deleteSavedJobs = async (job_id, id) => {
   try {
-    let responseOnUpdateSkills = await axios.put(
-			`${REACT_BASE_URL}skills/${id}`,
-			data
+    let responseOnDeleteSavedJobs = await axios.delete(
+			`${REACT_BASE_URL}saved-jobs/${job_id}?user_id=${id}`
 		);
-    
-    return responseOnUpdateSkills.data || [];
+    console.log("responseOnDeleteSavedJobs", responseOnDeleteSavedJobs)
+    return responseOnDeleteSavedJobs;
   } catch (err) {
-    console.error(`failed to update skills for ID ${id}`, err);
-    return false;
-  }
-};
-
-// DELETE Skills
-export const deleteSkills = async (id) => {
-  try {
-    let responseOnDeleteSkills = await axios.delete(
-			`${REACT_BASE_URL}skills/${id}`
-		);
-    
-    return responseOnDeleteSkills.data || [];
-  } catch (err) {
-    console.error(`failed to delete skills for ID ${id}`, err);
+    console.error(`failed to delete savedjobs for ID ${id}`, err);
     return false;
   }
 };

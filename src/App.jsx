@@ -27,11 +27,7 @@ import { ChatProvider } from "./app/context/chat/chatContext";
 import SavedJobsApiDataProvider from "./app/context/saved-jobs/savedJobsContextApi";
 
 function App() {
-  //   const [isLoading, setLoading] = useState(true);
-
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 500);
+ 
 
   const [isLoading, setLoading] = useState(true);
   const location = useLocation();

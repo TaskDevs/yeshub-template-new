@@ -39,9 +39,4 @@ export const applicants = [
 
 export const skills = ["javascript", "python", "react"];
 
-export const sortOptions = [
-  "Most Relevant",
-  "Highest Rated",
-  "Lowest Rate",
-  "Highest Rate",
-];
+export const sortOptions = ["All", "Pending", "Interview", "Probation", "Fail"];

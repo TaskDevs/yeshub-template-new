@@ -11,6 +11,7 @@ import {
   jobProfile,
   countApplications,
   deleteJob,
+  applyForJob,
 } from "./jobsApi";
 import { useNavigate } from "react-router-dom";
 
@@ -51,9 +52,19 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  const processGetAllJob = async (pageNo) => {
+  const processApplyForJob = async (data) => {
+    let response = await applyForJob(data);
+    if (response) {
+      processGetAllJob(1, data.user_id);
+      notify(200, "Job applied successfully");
+    } else {
+      notify(null, 400, "Oops Something went wrong");
+    }
+  };
+
+  const processGetAllJob = async (pageNo, userId) => {
     setJobLoad(false);
-    let response = await jobList(pageNo);
+    let response = await jobList(pageNo, userId);
     if (response) {
       // console.log(response);
       setJobListData(response.data);
@@ -199,6 +210,7 @@ const JobApiDataProvider = (props) => {
         processUpdateJob,
         processDeleteJob,
         processAJobProfile,
+        processApplyForJob,
         jobListData,
         setJobListData,
         searchJobListData,

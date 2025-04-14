@@ -124,6 +124,25 @@ export const getClientDashboardStats = async (id) => {
   }
 };
 
+export const getJobAppliedToCompany = async (id, page) => {
+  try {
+    let responseOnJobApplyToCompany = await axios.get(
+      `${REACT_BASE_URL}get-applied-job-to-company?user_id=${id}&page=${
+        page || 1
+      }`
+    );
+    //console.log(responseOnJobApplyToCompany);
+    if (responseOnJobApplyToCompany.status == 201) {
+      return responseOnJobApplyToCompany;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 // VIEW Employer
 export const employerProfile = async (id) => {
   try {
@@ -239,11 +258,24 @@ export const updateEmployerBanner = async (id, data) => {
       `${REACT_BASE_URL}employers-banner/${id}`,
       data
     );
-    console.log(responseOnUpdateEmployer);
     if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
     } else {
       return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const updateJobStatus = async (data) => {
+  try {
+    let responseOnChangeJobStatus = await axios.put(
+      `${REACT_BASE_URL}update-application-status/${data.job_apply_id}`,
+      data
+    );
+    if (responseOnChangeJobStatus.status == 200) {
+      return responseOnChangeJobStatus;
     }
   } catch (err) {
     console.log(err);

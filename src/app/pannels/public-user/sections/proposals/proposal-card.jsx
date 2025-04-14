@@ -1,8 +1,9 @@
 import { BiSolidEdit } from "react-icons/bi";
 import { FaEye } from "react-icons/fa";
 import { RatingStars } from "../../../../common/RatingStars";
+import ProposalTypeBadge from "./proposal-type-badge";
 
-export const ProposalCard = ({ applicant, onStatusChange, onViewMore }) => {
+export const ProposalCard = ({ applicant, actions, onViewMore }) => {
   return (
     <div className="border rounded p-4 flex flex-col justify-start w-full shadow-sm bg-white">
       {/* Top Section: Image + Rate + Location */}
@@ -33,19 +34,34 @@ export const ProposalCard = ({ applicant, onStatusChange, onViewMore }) => {
       {/* Ratings */}
 
       {/* Description */}
-      <div className=" mb-3 w-full">
+      <div className=" mb-2 w-full">
         <h3 className="font-bold text-black">Bio</h3>
         <hr className="my-2" />
         <p className="text-sm text-gray-700 mb-2">{applicant?.description}</p>
       </div>
 
       {/* Skills */}
-      <div className="flex flex-wrap gap-2 mb-3">
+      <div className=" mb-2 w-full">
+        <h3 className="font-bold text-black">Skills</h3>
+        <hr className="my-2" />
         {applicant?.skills?.map((skill, index) => (
-          <span key={index} className="bg-gray-100 px-3 py-1 rounded text-sm">
+          <span
+            key={index}
+            className="bg-gray-100 px-3 py-1 rounded text-sm mr-2"
+          >
             {skill}
           </span>
         ))}
+      </div>
+
+      <div className=" mb-2 w-full">
+        <ProposalTypeBadge
+          applicant={{
+            type: "Fix",
+            description: "click to view milestone",
+          }}
+          onViewMilestones={() => console.log("Show milestone modal")}
+        />
       </div>
 
       {/* Bottom: Status + Action Buttons */}
@@ -69,7 +85,7 @@ export const ProposalCard = ({ applicant, onStatusChange, onViewMore }) => {
         {/* Action Buttons */}
         <div className="flex items-center gap-3">
           <button
-            onClick={() => onStatusChange(applicant)}
+            onClick={actions}
             className="text-blue-600 hover:text-blue-800"
             title="Change Status"
           >

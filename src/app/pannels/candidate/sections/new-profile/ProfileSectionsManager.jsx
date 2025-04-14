@@ -13,7 +13,8 @@ import {
   PrimaryButton,
   SecondaryButton,
   TertiaryButton,
-FileUpload } from "./profile-components";
+  FileUpload,
+} from "./profile-components";
 import { SearchInput } from "../../../../common/search-box";
 import { CustomDropdown } from "../../../../common/Dropdown";
 import {
@@ -22,10 +23,13 @@ import {
   useSkillsForm,
 } from "./hooks/useProfileForm";
 import { EducationApiData } from "../../../../context/education/educationContextApi";
-import { addProfile, updateProfile } from "../../../../context/user-profile/profileApi";
+import {
+  addProfile,
+  updateProfile,
+} from "../../../../context/user-profile/profileApi";
 import { skillsList } from "../../../../context/skills/skillsApi";
-import { countryData } from '../../../../../utils/countryData';
 import toast from "react-hot-toast";
+import { addHistory } from "../../../../context/employee-history/historyApi";
 
 const userId = sessionStorage.getItem("userId");
 /**
@@ -67,12 +71,29 @@ export const ProfileSectionsManager = ({
           data={candidateData?.workHistory}
           title={profileSections[2]?.title}
           onClick={profileSections[2]?.onClick}
-          noData={!candidateData?.workHistory?.length}
+          noData={!candidateData?.work_history?.length}
           description={profileSections[2]?.description}
           activeSection={sectionKeyMap[profileSections[2]?.title]}
-        />
+        /> 
       </div>
+      <ProfileSection
+        title={profileSections[5]?.title}
+        data={candidateData?.certifications}
+        onClick={profileSections[5]?.onClick}
+        noData={!candidateData?.certifications?.length}
+        description={profileSections[5]?.description}
+        activeSection={sectionKeyMap[profileSections[5]?.title]}
+      />
 
+      <ProfileSection
+        data={candidateData?.education}
+        title={profileSections[3]?.title}
+        onClick={profileSections[3]?.onClick}
+        noData={!candidateData?.education?.length}
+        description={profileSections[3]?.description}
+        activeSection={sectionKeyMap[profileSections[3]?.title]}
+      />
+      
       {/* Education and Portfolio */}
       {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
@@ -153,66 +174,58 @@ export const SkillsSection = ({ onClose }) => {
     handleCategoryChange,
   } = useSkillsForm([]);
 
+  const [skillList, setSkillList] = useState([]);
 
- const [skillList, setSkillList] = useState([]);
-
-    // Fetch skills
-    const fetchSkills = async () => {
-      try {
-        let res = await skillsList();
-        if (res && res.data) {
-          const skills = res.data.map((skill) => ({
-            id: skill.id,
-            name: skill.skill,
-          }));
-          setSkillList(skills);
-          console.log("skills", skills)
-        }
-      } catch (err) {
-        console.log(err);
+  // Fetch skills
+  const fetchSkills = async () => {
+    try {
+      let res = await skillsList();
+      if (res && res.data) {
+        const skills = res.data.map((skill) => ({
+          id: skill.id,
+          name: skill.skill,
+        }));
+        setSkillList(skills);
+        console.log("skills", skills);
       }
-    };
-  
-    useEffect(() => {
-      
-      fetchSkills();
-    }, []);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-   
+  useEffect(() => {
+    fetchSkills();
+  }, []);
 
-    
-    const handleSave = async () => {
-      const formattedSkills = selectedSkills.map(skill => skill.name).join(',');
-    
-      console.log("Sending formatted skills:", formattedSkills);
-      const data = {
-        skills_id: formattedSkills
-      };
-    
-      try {
-        const response = await updateProfile(userId, data);
-    
-        // Log the response to confirm success
-        console.log('Profile update response:', response);
-    
-        // Show success toast
-        toast.success('Profile updated successfully!');
-    
-        // Close modal or perform any other action after success
-        onClose();
-    
-        // Reload the page
-        window.location.reload();
-      } catch (error) {
-        console.error('Error updating profile:', error);
-    
-        // Show error toast
-        toast.error('Failed to update profile. Please try again.');
-      }
+  const handleSave = async () => {
+    const formattedSkills = selectedSkills.map((skill) => skill.name).join(",");
+
+    console.log("Sending formatted skills:", formattedSkills);
+    const data = {
+      skills_id: formattedSkills,
     };
-    
-    
-    
+
+    try {
+      const response = await updateProfile(userId, data);
+
+      // Log the response to confirm success
+      console.log("Profile update response:", response);
+
+      // Show success toast
+      toast.success("Profile updated successfully!");
+
+      // Close modal or perform any other action after success
+      onClose();
+
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+
+      // Show error toast
+      toast.error("Failed to update profile. Please try again.");
+    }
+  };
 
   const handleSearch = (value) => {
     console.log("Searching for:", value);
@@ -477,23 +490,31 @@ export const EducationSection = ({ onClose }) => {
 /**\
  * WorkHistorySection
  */
-export const WorkHistorySection = ({ onClose ,initialData = {}}) => {
+export const WorkHistorySection = ({ onClose, initialData = {} }) => {
   const { formData, handleInputChange, handleDateChange, isSubmitting } =
     useProfileForm({
-      job_title:initialData.job_title || "",
-      company_name:initialData.company_name ||"",
-      location:initialData.location ||  "",
-      start_date:initialData.start_tate ||"",
-      end_date:initialData.end_date || "",
-      duty:initialData.duty || "",
-      current:initialData.current || false,
+      job_title: initialData.job_title || "",
+      company_name: initialData.company_name || "",
+      location: initialData.location || "",
+      start_date: initialData.start_tate || "",
+      end_date: initialData.end_date || "",
+      duty: initialData.duty || "",
+      current: initialData.current || false,
     });
 
-  const handleSave = () => {
-    // Save logic would go here
-    console.log("Saving work history:", formData);
-    onClose();
-  };
+    const handleSave = async () => {
+      try {
+        const res = await addHistory({ ...formData, user_id: userId });
+        if (res) {
+          console.log("Saving work history:", formData);
+          onClose(); // Close modal or form
+          window.location.reload(); // Refresh page to show the new data
+        }
+      } catch (err) {
+        console.error("Error saving work history:", err);
+      }
+    };
+    
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
@@ -529,7 +550,7 @@ export const WorkHistorySection = ({ onClose ,initialData = {}}) => {
             name="start_date"
             label="Start Date"
             value={formData.start_date}
-            onChange={(date) => handleDateChange("start_date", date)}
+            onChange={(name, date) => handleDateChange("start_date", date)}
             required={true}
             field="start_ate"
           />
@@ -538,7 +559,7 @@ export const WorkHistorySection = ({ onClose ,initialData = {}}) => {
             name="end_date"
             label="End Date"
             value={formData.end_date}
-            onChange={(date) => handleDateChange("end_date", date)}
+            onChange={(name, date) => handleDateChange("end_ate", date)}
             disabled={formData.current}
             field="end_date"
           />
@@ -1348,26 +1369,25 @@ export const TestimonialsSection = ({ onClose }) => {
  */
 
 export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
-const userId = sessionStorage.getItem("userId");
-// Ghana regions and cities
-const ghanaRegionsAndCities = {
-  "Greater Accra": ["Adabraka", "Accra", "Tema", "Madina"],
-  Ashanti: ["Kumasi", "Obuasi"],
-  Western: ["Takoradi", "Sekondi"],
-  Eastern: ["Koforidua", "Akosombo"],
-  Central: ["Cape Coast", "Winneba"],
-  Volta: ["Ho", "Keta"],
-  Northern: ["Tamale", "Yendi"],
-  "Upper East": ["Bolgatanga", "Bawku"],
-  "Upper West": ["Wa", "Lawra"],
-  Bono: ["Sunyani", "Dormaa Ahenkro"],
-  "Bono East": ["Techiman", "Kintampo"],
-  Ahafo: ["Goaso", "Mim"],
-  "Western North": ["Sefwi Wiawso", "Bibiani"],
-  Oti: ["Dambai", "Jasikan"],
-  "North East": ["Nalerigu", "Walewale"],
-  Savannah: ["Damongo", "Salaga"],
-};
+  // Ghana regions and cities
+  const ghanaRegionsAndCities = {
+    "Greater Accra": ["Adabraka", "Accra", "Tema", "Madina"],
+    Ashanti: ["Kumasi", "Obuasi"],
+    Western: ["Takoradi", "Sekondi"],
+    Eastern: ["Koforidua", "Akosombo"],
+    Central: ["Cape Coast", "Winneba"],
+    Volta: ["Ho", "Keta"],
+    Northern: ["Tamale", "Yendi"],
+    "Upper East": ["Bolgatanga", "Bawku"],
+    "Upper West": ["Wa", "Lawra"],
+    Bono: ["Sunyani", "Dormaa Ahenkro"],
+    "Bono East": ["Techiman", "Kintampo"],
+    Ahafo: ["Goaso", "Mim"],
+    "Western North": ["Sefwi Wiawso", "Bibiani"],
+    Oti: ["Dambai", "Jasikan"],
+    "North East": ["Nalerigu", "Walewale"],
+    Savannah: ["Damongo", "Salaga"],
+  };
 
   // Proficiency levels
   const proficiencyLevels = [
@@ -1390,7 +1410,7 @@ const ghanaRegionsAndCities = {
       hourly_rate: initialData.hourlyRate || "75",
       user_id: userId,
       address: initialData.address,
-      gps_address:initialData.gps_address,
+      gps_address: initialData.gps_address,
       telephone: initialData.telephone,
     });
 
@@ -1407,19 +1427,19 @@ const ghanaRegionsAndCities = {
 
   // Cities for selected region
   const [availableCities, setAvailableCities] = useState(
-    countryData[formData.region] || []
+    ghanaRegionsAndCities[formData.region] || []
   );
 
   // Update cities when region changes
   useEffect(() => {
-    setAvailableCities(countryData[formData.region] || []);
+    setAvailableCities(ghanaRegionsAndCities[formData.region] || []);
     // If current city is not in the new region, set to first city
-if (!ghanaRegionsAndCities[formData.region]?.includes(formData.city)) {
-  setFormData((prev) => ({
-    ...prev,
-    city: ghanaRegionsAndCities[formData.region]?.[0] || "",
-  }));
-}
+    if (!ghanaRegionsAndCities[formData.region]?.includes(formData.city)) {
+      setFormData((prev) => ({
+        ...prev,
+        city: ghanaRegionsAndCities[formData.region]?.[0] || "",
+      }));
+    }
   }, [formData.region]);
 
   // Add a new language
@@ -1539,7 +1559,7 @@ if (!ghanaRegionsAndCities[formData.region]?.includes(formData.city)) {
                 onChange={(e) => handleInputChange("region", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                {Object.keys(countryData).map((region) => (
+                {Object.keys(ghanaRegionsAndCities).map((region) => (
                   <option key={region} value={region}>
                     {region}
                   </option>

@@ -1,42 +1,49 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import cookieMethods from '../../../../../utils/cookieUtils';
-import toast from 'react-hot-toast';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import cookieMethods from "../../../../../utils/cookieUtils";
+import { base } from "../../../../../globals/route-names";
 
-const LinkedinCallback = () => {
+const LinkedInCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Parse the query params from the URL
-    const queryParams = new URLSearchParams(window.location.search);
-    const token = queryParams.get('token');
-    const refreshToken = queryParams.get("refresh_token");
-
-    if (token) {
-      // Store the token in sessionStorage or localStorage
-      sessionStorage.setItem('authToken', token);
-      // Store tokens in cookies
-      cookieMethods.setCookies(token, refreshToken || ""); // Ensure no null values
-
-      // ✅ Show success toast
-      toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
-
-      // Redirect after successful login
-      navigate('/'); 
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const refresh_token = params.get("refresh_token");
+    const name = params.get("name");
+    const userId = params.get("userid");
+    const role = params.get("role");
+    if (token && refresh_token) {
+      sessionStorage.setItem("authToken", token);
+      cookieMethods.setCookies(token, refresh_token);
+      // Store user info if needed
+      sessionStorage.setItem("username", name);
+      sessionStorage.setItem("userId", userId);
+      sessionStorage.setItem("userRole", role);
+      setTimeout(() => {
+        switch (role) {
+          case "user":
+            navigate(`/dashboard/onboard?user=${userId}`);
+            break;
+          case "client":
+            navigate("/dashboard-client");
+            break;
+          case "freelancer":
+          default:
+            navigate(base.CANDIDATE_PRE);
+            break;
+        }
+      }, 800);
     } else {
-      
-      toast.error("Login failed. Please try again.", { position: "top-right", autoClose: 3000 });
-
-      navigate('/login'); // Redirect the user to login if there's no token
+      navigate("/login");
     }
-  }, [navigate]); // Removed `location` since it's not used
+  }, []);
 
   return (
     <div>
-      <h2>Processing LinkedIn Login...</h2>
-      <p>Redirecting...</p>
+      <h1>Processing LinkedIn Callback...</h1>
     </div>
   );
 };
 
-export default LinkedinCallback;
+export default LinkedInCallback;

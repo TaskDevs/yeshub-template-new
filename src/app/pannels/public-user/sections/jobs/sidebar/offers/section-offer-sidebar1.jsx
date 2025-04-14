@@ -106,6 +106,7 @@ function SectionOfferSidebar1({ processDataActionControls }) {
           <form>
             <div className="form-group mb-4">
               <h4 className="section-head-small mb-4">Filter By</h4>
+              <span>Proposal Status</span>
               <SearchSelectField
                 field={SEARCHFORMFIELD.fieldDetail[0]}
                 value={formData}

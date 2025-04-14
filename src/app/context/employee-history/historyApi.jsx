@@ -1,14 +1,12 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS } from "../../../globals/constants";
+import { REACT_BASE_URL, SUCCESS_STATUS } from "../../../globals/constants";
 
 // ADD History
 export const addHistory = async (data) => {
   try {
     let responseOnAddHistory = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+      `${REACT_BASE_URL}create-employment-history`,
       data
     );
     if (responseOnAddHistory.status === SUCCESS_STATUS) {
@@ -41,9 +39,7 @@ export const searchHistory = async () => {
 // LIST History
 export const historyList = async () => {
   try {
-    let responseOnHistoryList = await axios.get(
-      `${REACT_BASE_URL}get-history`
-    );
+    let responseOnHistoryList = await axios.get(`${REACT_BASE_URL}get-history`);
 
     if (responseOnHistoryList.status === SUCCESS_STATUS) {
       return responseOnHistoryList.data;

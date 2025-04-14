@@ -9,7 +9,6 @@ import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextAp
 import { GlobalApiData } from "../../../context/global/globalContextApi";
 import { userId } from "../../../../globals/constants";
 
-
 const Tags = ({ bg, color, text }) => {
   return (
     <div
@@ -19,6 +18,20 @@ const Tags = ({ bg, color, text }) => {
     </div>
   );
 };
+
+const getCleanTruncatedDescription = (description) => {
+  if (!description) return "No description provided."; // handle null/undefined
+
+  // remove all HTML tags
+  const cleanText = description.replace(/<[^>]*>/g, '').trim();
+
+  // fallback if empty after cleaning
+  if (!cleanText) return "No description provided.";
+
+  // truncate to 100 chars max (you can adjust this)
+  return cleanText.length > 100 ? cleanText.slice(0, 97) + "..." : cleanText;
+};
+
 
 const CanJobCard = ({
   role,
@@ -40,57 +53,48 @@ const CanJobCard = ({
   jobLocation,
   datePosted,
 }) => {
-
-  const { processAddSavedJobs} = useContext(SavedJobsApiData)
-  const {  setIsSubmitting } = useContext(GlobalApiData);
+  const { processAddSavedJobs } = useContext(SavedJobsApiData);
+  const { setIsSubmitting } = useContext(GlobalApiData);
   const navigate = useNavigate();
 
-  // const getFirstListItem = (html) => {
-  //   const match = html?.match(/<li>(.*?)<\/li>/);
-  //   return match ? `<ul><li>${match[1]}</li></ul>` : '';
+  const skillArray = skills?.split(",").map((skill) => skill.trim());
+
+
+  // const getFirstBlock = (html) => {
+  //   if (!html) return "";
+
+  //   const parser = new DOMParser();
+  //   const doc = parser.parseFromString(html, "text/html");
+
+  //   // Define allowed tags to extract
+  //   const allowedTags = ["h1", "h2", "h3", "p", "li"];
+
+  //   // Find the first allowed tag
+  //   for (let tag of allowedTags) {
+  //     const element = doc.querySelector(tag);
+  //     if (element) {
+  //       if (tag === "li") {
+  //         return `<ul><li>${element.innerHTML}</li></ul>`; // wrap <li> in a <ul>
+  //       }
+  //       return `<${tag}>${element.innerHTML}</${tag}>`;
+  //     }
+  //   }
+
+  //   return "";
   // };
 
-  const getFirstBlock = (html) => {
-    if (!html) return '';
-  
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-  
-    // Define allowed tags to extract
-    const allowedTags = ['h1', 'h2', 'h3', 'p', 'li'];
-  
-    // Find the first allowed tag
-    for (let tag of allowedTags) {
-      const element = doc.querySelector(tag);
-      if (element) {
-        if (tag === 'li') {
-          return `<ul><li>${element.innerHTML}</li></ul>`; // wrap <li> in a <ul>
-        }
-        return `<${tag}>${element.innerHTML}</${tag}>`;
-      }
-    }
-  
-    return '';
-  };
-  
-
   const handleAddSavedJobs = async (userId, jobId) => {
-    console.log("userId, jobId",  userId,  typeof parseInt(jobId))
-    setIsSubmitting(true)
-   
+    console.log("userId, jobId", userId, typeof parseInt(jobId));
+    setIsSubmitting(true);
+
     try {
-      await processAddSavedJobs({user_id: userId, job_id: parseInt(jobId) });
-     
-      // toast.success("Skills added successfully");
+      await processAddSavedJobs({ user_id: userId, job_id: parseInt(jobId) });
     } catch (e) {
-      // toast.error("Failed to add Skills ");
-      console.error("Failed to save job")
+      console.error("Failed to save job");
     } finally {
-        setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   };
-
-  
 
   return (
     <>
@@ -107,37 +111,29 @@ const CanJobCard = ({
                     <span className="">{ratings}</span>
                     <span className="text-gray-500">({reviews} reviews)</span>
                   </div>
-                 
-                  <div
-  className="mt-2 job-card-desc"
-  dangerouslySetInnerHTML={{
-    __html: getFirstBlock(description),
-  }}
-/>
+
+                  {/* <div
+                    className="mt-2 job-card-desc"
+                    dangerouslySetInnerHTML={{
+                      __html: getFirstBlock(description),
+                    }}
+                  /> */}
+
+<p className="truncate w-[70%] text-sm text-gray-700">
+  {getCleanTruncatedDescription(description)}
+</p>
 
 
-
-                  <div className=" job-card-skills mt-2">
-                    {skills &&
-                    (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {skillArray?.map((skill, i) => (
                       <div
-                      
-                          className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2"
-                        >
-                          {skills}
-                        </div>
-                    )
-                      // skills?.map((skill, i) => (
-                      //   <div
-                      //     key={i}
-                      //     className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2"
-                      //   >
-                      //     {skill}
-                      //   </div>
-                      // ))
-                      }
+                        key={i}
+                        className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2"
+                      >
+                        {skill}
+                      </div>
+                    ))}
                   </div>
-
                 </div>
 
                 {isFindWork && (
@@ -157,18 +153,21 @@ const CanJobCard = ({
               </div>
 
               <div className="flex justify-between w-full ">
-                <button 
-                onClick={() => handleAddSavedJobs(userId, id)}
-                className="border rounded py-2 px-2 flex text-[#374151] capitalize text-md">
+                <button
+                  onClick={() => handleAddSavedJobs(userId, id)}
+                  className="border rounded py-2 px-2 flex text-[#374151] capitalize text-md"
+                >
                   <CiBookmark className="size-4" />
                   <span>save</span>
                 </button>
 
                 <p className="text-[#374151]">{salaryRange}</p>
 
-                <button 
-                className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
-                onClick={() => navigate(`/dashboard-candidate/apply-job/${id}`)}
+                <button
+                  className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
+                  onClick={() =>
+                    navigate(`/dashboard-candidate/apply-job/${id}`)
+                  }
                 >
                   submit proposal
                 </button>
@@ -196,9 +195,12 @@ const CanJobCard = ({
                     <button>
                       <FaRegTrashAlt />
                     </button>
-                    <button 
-                     onClick={() => navigate(`/dashboard-candidate/apply-job/${id}`)}
-                    className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
+                    <button
+                      onClick={() =>
+                        navigate(`/dashboard-candidate/apply-job/${id}`)
+                      }
+                      className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
+                    >
                       submit proposal
                     </button>
                   </div>
@@ -257,20 +259,25 @@ const CanJobCard = ({
                 </div>
 
                 {isFindWork && (
-                  <div className="flex flex-col  items-start h-full ">     
+                  <div className="flex flex-col  items-start h-full ">
                     <button className=" border-0 ">
                       <CiBookmark className="size-4" />
                     </button>
-                    <p className="text-sm">{calculateDaysSincePosted(datePosted)} days ago</p>
+                    <p className="text-sm">
+                      {calculateDaysSincePosted(datePosted)} days ago
+                    </p>
                   </div>
                 )}
               </div>
 
               <div className="flex justify-between w-full ">
-              <p className="text-[#374151] ">{salaryRange}</p>
-                <button 
-                 onClick={() => navigate(`/dashboard-candidate/apply-job/${id}`)}
-                className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10">
+                <p className="text-[#374151] ">{salaryRange}</p>
+                <button
+                  onClick={() =>
+                    navigate(`/dashboard-candidate/apply-job/${id}`)
+                  }
+                  className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10"
+                >
                   submit
                 </button>
               </div>
@@ -297,9 +304,12 @@ const CanJobCard = ({
                     <button>
                       <FaRegTrashAlt />
                     </button>
-                    <button 
-                     onClick={() => navigate(`/dashboard-candidate/apply-job/${id}`)}
-                    className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
+                    <button
+                      onClick={() =>
+                        navigate(`/dashboard-candidate/apply-job/${id}`)
+                      }
+                      className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
+                    >
                       submit proposal
                     </button>
                   </div>

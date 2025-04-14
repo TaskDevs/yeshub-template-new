@@ -1,28 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { CustomDropdown } from "../../../../common/Dropdown";
-import styles from "./findClient.module.css";
-import { TalentCard } from "./TalentCard";
-import { skills, sortOptions, talents } from "./data";
+import styles from "./proposals.module.css";
+import { ProposalCard } from "./proposal-card";
+import { skills, sortOptions, applicants } from "./data";
 import FilterPanel from "../../../candidate/sections/find-work/filter-panel";
 import { useFilterForm } from "../../../../../utils/useFilterFormHook";
 import CanSlider from "../../../candidate/components/can-slider";
 import CanCheckbox from "../../../candidate/components/can-checkbox";
-import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+//import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 
-const ClientFindTalent = () => {
-  const { talentListData, processGetAllProfile } = useContext(ProfileApiData);
+const Proposals = () => {
+  //   const { talentListData } = useContext(ProfileApiData);
   const { filters, handleChange } = useFilterForm();
   console.log("filters", filters);
-  const [processedData, setProcessedData] = useState([]);
-
-  useEffect(() => {
-    processGetAllProfile();
-  }, []);
-
-  useEffect(() => {
-    console.log(talents);
-    setProcessedData(talentListData);
-  }, [talentListData]);
 
   // Dropdown options
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
@@ -36,7 +26,7 @@ const ClientFindTalent = () => {
         <div className={`${styles.sidebar} pr-6`}>
           <FilterPanel hideLabel={true}>
             <h1 className="text-xl font-bold mb-1 w-full justify-start">
-              Find Talent
+              Proposals
             </h1>
 
             <CanCheckbox options={sortOptions} label="Filter By" />
@@ -52,7 +42,7 @@ const ClientFindTalent = () => {
         {/* Main content area */}
         <div className={`${styles.searchResults} mt-10`}>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">Search Results</h2>
+            <h2 className="text-lg font-bold">Proposal Result</h2>
             <CustomDropdown
               selected={selectedSort}
               options={sortOptions}
@@ -63,9 +53,9 @@ const ClientFindTalent = () => {
 
           {/* Results list */}
           <div className="space-y-4">
-            {talentListData.length > 0 &&
-              processedData.map((talent) => (
-                <TalentCard key={talent.id} talent={talent} />
+            {applicants?.length > 0 &&
+              applicants.map((applicant) => (
+                <ProposalCard key={applicant.id} applicant={applicant} />
               ))}
           </div>
 
@@ -83,4 +73,4 @@ const ClientFindTalent = () => {
   );
 };
 
-export default ClientFindTalent;
+export default Proposals;

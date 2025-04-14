@@ -1,13 +1,11 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 //import axios from "../../../utils/axios.config";
 import axios from "axios";
-import {
-  SUCCESS_STATUS,
-  REACT_BASE_URL,
-} from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
+  console.log(data);
   try {
     let responseOnAddEmployer = await axios.post(
       `${REACT_BASE_URL}create-employers`,
@@ -21,6 +19,55 @@ export const addEmployer = async (data) => {
   } catch (err) {
     console.log(err);
     return false;
+  }
+};
+
+export const addCertification = async (data) => {
+  console.log(data);
+  try {
+    let responseOnAddCertification = await axios.post(
+      `${REACT_BASE_URL}store-certification`,
+      data
+    );
+    console.log(responseOnAddCertification);
+    if (responseOnAddCertification.status === SUCCESS_STATUS) {
+      return responseOnAddCertification.data;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const addExperience = async (data) => {
+  //console.log(data);
+  try {
+    let responseOnAddExperience = await axios.post(
+      `${REACT_BASE_URL}store-experience`,
+      data
+    );
+    console.log(responseOnAddExperience);
+    if (responseOnAddExperience.status === SUCCESS_STATUS) {
+      return responseOnAddExperience.data;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const addJobPost = async (data) => {
+  try {
+    let responseOnAddJobPost = await axios.post(
+      `${REACT_BASE_URL}create-job`,
+      data
+    );
+    console.log(responseOnAddJobPost);
+    if (responseOnAddJobPost.status === SUCCESS_STATUS) {
+      return responseOnAddJobPost.data;
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -56,6 +103,27 @@ export const employerList = async () => {
   }
 };
 
+// GET Client Dashboard
+export const getClientDashboardStats = async (id) => {
+  try {
+    console.log(`my userId ${id}`);
+    let responseOnClientDashboardStats = await axios.get(
+      `${REACT_BASE_URL}client-stats/${id}`
+    );
+
+    console.log(responseOnClientDashboardStats);
+
+    if (responseOnClientDashboardStats.status === 200) {
+      return responseOnClientDashboardStats.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 // VIEW Employer
 export const employerProfile = async (id) => {
   try {
@@ -63,7 +131,7 @@ export const employerProfile = async (id) => {
       `${REACT_BASE_URL}employer-companies/${id}`
       /**Add View History API URL here like ${URL}api/getEmployerProfile/${id}**/
     );
-    console.log(responseOnEmployerProfile.data.data);
+    // console.log(responseOnEmployerProfile);
     if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
     } else {
@@ -85,6 +153,42 @@ export const updateEmployer = async (id, data) => {
     //console.log(responseOnUpdateEmployer);
     if (responseOnUpdateEmployer.status == 200) {
       return responseOnUpdateEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// UPDATE Job
+export const updateJob = async (id, data) => {
+  try {
+    let responseOnUpdateJob = await axios.put(
+      `${REACT_BASE_URL}update-job/${id}`,
+      data
+    );
+    //console.log(responseOnUpdateEmployer);
+    if (responseOnUpdateJob.status == 200) {
+      return responseOnUpdateJob.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// Add Or Update Office Info
+export const updateOfficeImage = async (id, data) => {
+  try {
+    let responseOnUpdateOfficeImage = await axios.put(
+      `${REACT_BASE_URL}office-image/${id}`,
+      data
+    );
+    console.log(responseOnUpdateOfficeImage);
+    if (responseOnUpdateOfficeImage.status == 201) {
+      return responseOnUpdateOfficeImage.data;
     } else {
       return false;
     }
@@ -146,7 +250,6 @@ export const updateEmployerBanner = async (id, data) => {
   }
 };
 
-
 // DELETE Employer
 export const deleteEmployer = async (id) => {
   try {
@@ -155,6 +258,22 @@ export const deleteEmployer = async (id) => {
     );
     if (responseOnDeleteEmployer.status == 200) {
       return responseOnDeleteEmployer.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// DELETE Job
+export const deleteJob = async (id) => {
+  try {
+    let responseOnDeleteJob = await axios.delete(
+      `${REACT_BASE_URL}delete-job/${id}`
+    );
+    if (responseOnDeleteJob.status == 200) {
+      return responseOnDeleteJob.data;
     } else {
       return false;
     }

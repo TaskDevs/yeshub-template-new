@@ -82,20 +82,30 @@ const Offers = () => {
               {freelanceInviteListData.map((item, index) => (
                 <div className={`invite-card`} key={index}>
                   <div className="d-flex justify-content-between w-100">
-                    <img src={item.employer.logo} alt="#" />
+                    <img
+                      src={item.employer.logo}
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "6px",
+                        objectFit: "cover",
+                        marginRight: "4px",
+                      }}
+                      alt="Employer Logo"
+                    />
                     <div>
                       <h4>{item.job_title}</h4>
                       <span>{item.employer.company_name}</span>
                     </div>
                     <span
-                      className="text-success"
+                      className="text-success text-sm"
                       style={{ cursor: "pointer" }}
                     >
-                      View More
+                      View
                     </span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between w-100 mt-4">
-                    <span className="">GH {item.budget}</span>
+                    <span className="">GH {item.fixed_rate}</span>
                     <span className="text-gray">
                       <TimeAgo date={item.end_date} />
                     </span>
@@ -111,7 +121,7 @@ const Offers = () => {
                       className="btn btn-secondary w-100 d-flex justify-content-center align-items-center text-sm"
                       onClick={() => alert("Rejected")}
                     >
-                      Reject
+                      Decline
                     </button>
                   </div>
                 </div>

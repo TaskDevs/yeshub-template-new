@@ -18,10 +18,11 @@ import { GoDotFill } from "react-icons/go";
 
 export const WorkHistoryDetails = ({ data }) => (
   <div className="space-y-4">
-    {data?.map((job, index) => (
+    
+    {data?.work_history?.map((job, index) => (
       <div key={index} className="pb-3">
-        <h3 className="font-medium">{job.role}</h3>
-        <p className="text-gray-500 text-sm">{job.period}</p>
+        <h3 className="font-medium">{job.job_title}</h3>
+        <p className="text-gray-500 text-sm">{job.start_date} - {job.end_date}</p>
       </div>
     ))}
   </div>
@@ -400,7 +401,11 @@ export const AboutMeDetails = ({ data }) => (
     {/* About Me  */}
     <div className="bg-white mb-6 w-full col-12">
       <div className="mt-1">
-        <p className="text-gray-700">{data.bio}</p>
+        <p className="text-gray-700">
+        {data && (
+          <div dangerouslySetInnerHTML={{ __html: data.bio }} />
+        )}
+        </p>
       </div>
     </div>
 
@@ -420,7 +425,7 @@ export const AboutMeDetails = ({ data }) => (
           title="Languages"
         >
           <div className="flex flex-row items-center">
-            {data.languages.map((lang, index) => (
+            {data.languages?.map((lang, index) => (
               <>
                 <p className="text-[#4B5563]" key={index}>
                   {lang.language} ({lang.proficiency}){" "}

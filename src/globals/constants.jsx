@@ -21,6 +21,7 @@ export const LIST_ON_PAGES = 10;
 
 export const default_skin = "6";
 
+
 export const popupType = {
   DELETE: "DELETE",
   LOGOUT: "LOGOUT",
@@ -35,6 +36,7 @@ export const popupType = {
   DELETE_PORTFOLIO_MEDIA: "DELETE_PORTFOLIO_MEDIA",
   DELETE_MILESTONE: "DELETE_MILESTONE",
 };
+
 
 export const formType = {
   LOGIN_CANDIDATE: "LOGIN_CANDIDATE",

@@ -1,11 +1,11 @@
 import axios from "axios";
 import { REACT_BASE_URL } from "../../../globals/constants";
 
-// ADD Milestone
+// ADD Milestone-create-milestone
 export const addMilestone = async (data) => {
   try {
     let responseOnAddMilestone = await axios.post(
-			`${REACT_BASE_URL}create-milestone`,
+			`${REACT_BASE_URL}apply-for-job`,
 			data
 		);
     return responseOnAddMilestone;

@@ -7,13 +7,12 @@
 .findWorkDesktop {
   width: 100%;
   padding: 0 1rem;
-  display: block;
+  display: block!important;
    
 }
 
 
-
-@media screen and (max-width: 1023px) {
+@media screen and (max-width: 480px) {
   .findWorkDesktop {
     display: none;
   }
@@ -22,6 +21,16 @@
     display: block!important;
   }
 
+}
+
+@media screen and (min-width: 600px) and (max-width: 1023px) {
+  .mobileFindWork, .gridOne, .gridThree {
+    display: none!important;
+  }
+  .findWorkDesktop {
+    display: block!important;
+  }
+  
 }
 
 @media screen and (min-width: 1024px) {

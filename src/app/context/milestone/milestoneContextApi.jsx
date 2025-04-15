@@ -59,7 +59,7 @@ const MilestoneApiDataProvider = (props) => {
     ...initialMilestone,
     user_id: userId,
     job_id: jobId,
-    freelance_id: freelancerId,
+    freelance_id: userId,
     employer_status: "pending",
     freelancer_status: "pending",
     pay_status: "pending",
@@ -71,12 +71,12 @@ const MilestoneApiDataProvider = (props) => {
     if (jobId) {
       const currentCompleteInitialMilestone = {
         ...initialMilestone,
-        user_id: userId,
+        // user_id: userId,
         job_id: jobId,
-        freelance_id: freelancerId,
-        employer_status: "pending",
-        freelancer_status: "pending",
-        pay_status: "pending",
+        freelance_id: userId,
+        // employer_status: "pending",
+        // freelancer_status: "pending",
+        // pay_status: "pending",
       };
       setMilestones([currentCompleteInitialMilestone]);
     }
@@ -248,7 +248,7 @@ const MilestoneApiDataProvider = (props) => {
           ...initialMilestone,
           user_id: userId,
           job_id: id,
-          freelance_id: freelancerId,
+          freelance_id: userId,
           employer_status: "pending",
           freelancer_status: "pending",
           pay_status: "pending",

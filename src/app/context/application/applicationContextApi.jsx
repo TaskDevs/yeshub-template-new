@@ -187,6 +187,7 @@ const ApplicationApiDataProvider = (props) => {
 
   const handleSubmmitApplication = async (id) => {
     const days_left = calculateDaysLeft(profile?.start_date, profile?.end_date)
+    console.log("job_id")
     
     if (!userId)
     {
@@ -225,14 +226,16 @@ const ApplicationApiDataProvider = (props) => {
     
     if (freelancerId)
       {
-        if (currentpath.startsWith("/dashboard-candidate")) {
-          navigate(`/dashboard-candidate/apply-job/${id}`)
-          return;
-        } else {
-          navigate(`/apply-job/${id}`)
-         return;
-        }
+        // if (currentpath.startsWith("/dashboard-candidate")) {
+        //   navigate(`/dashboard-candidate/apply-job/${id}`)
+        //   return;
+        // } else {
+        //   navigate(`/apply-job/${id}`)
+        //  return;
+        // }
        
+        navigate(`/dashboard-candidate/apply-job/${id}`)
+        return;
       }
     
 

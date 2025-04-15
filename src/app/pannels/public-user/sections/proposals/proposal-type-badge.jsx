@@ -1,8 +1,19 @@
 import { FaRegFlag } from "react-icons/fa"; // Milestone icon
 
-const ProposalTypeBadge = ({ applicant, onViewMilestones }) => {
+const ProposalTypeBadge = ({
+  applicant,
+  viewAction,
+  milestones,
+  requirement,
+}) => {
   const isMilestone = applicant?.type === "Milestone";
   const isFix = applicant?.type === "Fix";
+
+  const showInfo = () => {
+    let data = milestones.length > 0 ? milestones : requirement;
+    let new_status = milestones.length > 0 ? "milestone" : "requirement";
+    viewAction(new_status, data);
+  };
 
   return (
     <div className="mb-2 w-full">
@@ -23,7 +34,7 @@ const ProposalTypeBadge = ({ applicant, onViewMilestones }) => {
           <div className="inline-flex items-center gap-2 px-4 py-1 bg-purple-100 text-purple-700 text-sm font-semibold rounded-full">
             Milestone
             <button
-              onClick={onViewMilestones}
+              onClick={showInfo}
               className="hover:text-purple-900 focus:outline-none"
               title="View milestones"
             >
@@ -31,11 +42,23 @@ const ProposalTypeBadge = ({ applicant, onViewMilestones }) => {
             </button>
           </div>
         )}
-        {isFix ? (
-          <span className="text-sm text-green-700 mt-2">Agreed to terms</span>
+        {isMilestone ? (
+          <span
+            className="text-sm text-purple-700 mt-2 cursor-pointer"
+            onClick={showInfo}
+          >
+            Click to view milestones
+          </span>
+        ) : isFix && applicant.request === "request_made" ? (
+          <span
+            className="text-sm text-green-700 mt-2 cursor-pointer"
+            onClick={showInfo}
+          >
+            Request Made Click To View
+          </span>
         ) : (
-          <span className="text-sm text-green-700 mt-2 cursor-pointer ">
-            click to view milestones
+          <span className="text-sm text-green-700 mt-2 cursor-pointer">
+            Agreed to terms
           </span>
         )}
       </div>

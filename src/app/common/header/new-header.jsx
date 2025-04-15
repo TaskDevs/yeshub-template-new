@@ -9,7 +9,7 @@ import { SearchInput } from "../search-box";
 import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { publicUser, base, candidate } from "../../../globals/route-names";
+import { base, candidate } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { Avatar } from "@mui/material";
 import { logout } from "../../context/auth/authApi";
@@ -30,8 +30,8 @@ export const Header = ({ isDashboard = true }) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const { firstname, profession } = profileData;
-  console.log("profileData", firstname, profession, profileData);
   const role = sessionStorage.getItem("userRole");
+  
   // colors for the username
   const stringToColor = (string) => {
     let hash = 0;
@@ -58,7 +58,7 @@ export const Header = ({ isDashboard = true }) => {
   const navItems = [
     { id: "home", label: "Home", selected: true, to: "/dashboard-candidate" },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
-    { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
+    { id: "public-find-work", label: "Find Work", to: "/dashboard-candidate/find-job" },
     {
       id: "my-home",
       label: "My Home",
@@ -207,7 +207,7 @@ export const Header = ({ isDashboard = true }) => {
       return;
     }
     if (!isDashboard && item.id === "find-talent") {
-      navigate("/can-list");
+      navigate("/find-talent");
       return;
     }
 

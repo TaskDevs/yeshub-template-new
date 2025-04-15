@@ -30,11 +30,11 @@ function MobileFindSavedWork({children}) {
      
 
 
-          <div className="w-full">
+          {/* <div className="w-full"> */}
             <div className="grid grid-cols-1 gap-4 w-full">
                   { children }
                 </div>
-            </div>
+           
     </div>
   )
 }

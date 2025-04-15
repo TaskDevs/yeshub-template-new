@@ -69,9 +69,12 @@ const JobApiDataProvider = (props) => {
       // console.log(response);
       setJobListData(response.data);
       setPaginationData({
-        total: response.pagination.total,
-        link: response.pagination.links,
-        current: response.pagination.current_page,
+        // total: response.pagination.total,
+        // link: response.pagination.links,
+        // current: response.pagination.current_page,
+        total: response?.total,
+        link: response?.links,
+        current: response?.current_page,
       });
     }
     setJobLoad(true);

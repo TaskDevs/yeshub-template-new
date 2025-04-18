@@ -6,9 +6,11 @@ import {
   addExperience,
   addJobPost,
   getClientDashboardStats,
+  getJobAppliedToCompany,
   updateEmployerLogo,
   employerProfile,
   updateEmployer,
+  updateJobStatus,
   updateJob,
   updateOfficeImage,
   deleteEmployer,
@@ -20,6 +22,7 @@ export const EmployerApiData = createContext();
 
 const EmployerApiDataProvider = (props) => {
   const [employerProfiles, setEmployerProfiles] = useState([]);
+  const [appliedJobList, setAppliedJobList] = useState([]);
   const [employerStats, setEmployerStats] = useState({});
 
   const processAddEmployer = async (data) => {
@@ -113,6 +116,16 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processGetJobAppliedToCompany = async (pageNo) => {
+    const userId = sessionStorage.getItem("userId");
+    let response = await getJobAppliedToCompany(userId, pageNo);
+    if (response) {
+      setAppliedJobList(response.data.data);
+    } else {
+      return false;
+    }
+  };
+
   const processEmployerProfile = async (id) => {
     const userId = sessionStorage.getItem("userId");
 
@@ -155,6 +168,17 @@ const EmployerApiDataProvider = (props) => {
       notify(200, "Company Added Successfully");
     } else {
       notify(400, "Failed to Add Company");
+    }
+  };
+
+  //updateJobStatus
+  const processUpdateJobStatus = async (data) => {
+    let response = await updateJobStatus(data);
+    if (response) {
+      processGetJobAppliedToCompany();
+      notify(200, "Application Status updated Successfully");
+    } else {
+      notify(400, "Failed to change status");
     }
   };
 
@@ -232,16 +256,19 @@ const EmployerApiDataProvider = (props) => {
         processAddCertification,
         processAddExperience,
         processEmployerProfile,
+        processGetJobAppliedToCompany,
         processSearchEmployer,
         processAddJobPost,
         processUpdateEmployer,
         processUpdateJob,
+        processUpdateJobStatus,
         processUpdateOfficeImage,
         processUpdateEmployerLogo,
         processUpdateEmployerBanner,
         processDeleteEmployer,
         processGetEmployerStats,
         processDeleteJob,
+        appliedJobList,
         employerStats,
         employerProfiles,
       }}

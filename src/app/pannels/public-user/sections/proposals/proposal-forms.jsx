@@ -100,3 +100,44 @@ export const StatusUpdateForm = ({
     </div>
   );
 };
+
+export const ShowMilestoneOrRequestInfo = ({ statusInfo }) => {
+  return (
+    <div className="p-6 w-full max-w-md mx-auto space-y-6">
+      <h2 className="text-base text-gray-600">
+        {statusInfo.status == "milestone"
+          ? "Milestone Breakdown for This Application"
+          : "Request made by applicant"}
+      </h2>
+
+      <div className="grid grid-cols-1 gap-4">
+        {statusInfo.status == "milestone" ? (
+          statusInfo.data.map((milestone) => (
+            <div
+              key={milestone.id}
+              className="border border-purple-200 rounded-xl p-4 bg-purple-50 hover:bg-purple-100 transition-all"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-purple-800 font-semibold">
+                    {milestone.title}
+                  </p>
+                  <p className="text-xs text-purple-600 mt-1">
+                    Stage #{milestone.id}
+                  </p>
+                </div>
+                <div className="text-right text-sm text-purple-700 font-medium">
+                  ${milestone.amount}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="border border-purple-200 rounded-xl p-4 bg-purple-50 ">
+            {statusInfo.data[0].requirement}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};

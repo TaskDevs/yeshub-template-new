@@ -1,21 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { CustomDropdown } from "../../../../common/Dropdown";
 import styles from "./proposals.module.css";
 import { ProposalCard } from "./proposal-card";
-import { skills, sortOptions, applicants } from "./data";
+import { skills, sortOptions } from "./data";
 import { StatusSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import FilterPanel from "../../../candidate/sections/find-work/filter-panel";
 import { useFilterForm } from "../../../../../utils/useFilterFormHook";
 import CanSlider from "../../../candidate/components/can-slider";
 import CanCheckbox from "../../../candidate/components/can-checkbox";
-import { StatusUpdateForm } from "./proposal-forms";
+import { StatusUpdateForm, ShowMilestoneOrRequestInfo } from "./proposal-forms";
 //import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 const Proposals = () => {
   //   const { talentListData } = useContext(ProfileApiData);
+  const {
+    appliedJobList,
+    processGetJobAppliedToCompany,
+    processUpdateJobStatus,
+  } = useContext(EmployerApiData);
   const { filters, handleChange } = useFilterForm();
   console.log("filters", filters);
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalToViewInfo, setModalToViewInfo] = useState(false);
+  const [viewStatus, setViewStatus] = useState({
+    status: null,
+    data: null,
+  });
+  const [changeStatusData, setChangeStatusData] = useState({
+    status: null,
+    job_apply_id: null,
+  });
+
+  useEffect(() => {
+    processGetJobAppliedToCompany(1);
+  }, []);
 
   // Dropdown options
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
@@ -23,6 +42,36 @@ const Proposals = () => {
   // Close modal handler
   const handleCloseModal = () => {
     setModalOpen(false);
+  };
+
+  const handleReadyToChangeStatus = (job_apply_id, status) => {
+    setChangeStatusData({
+      job_apply_id: job_apply_id,
+      status: status,
+    });
+    setModalOpen(true);
+  };
+
+  const handleUpdateStatus = (updatedStatus) => {
+    let newData = {
+      job_apply_id: changeStatusData.job_apply_id,
+      status: updatedStatus,
+    };
+    processUpdateJobStatus(newData);
+    //console.log(newData);
+  };
+
+  const handleCloseModalToView = () => {
+    setModalToViewInfo(false);
+  };
+
+  const handleViewInfo = (status, data) => {
+    setViewStatus({
+      status: status,
+      data: data,
+    });
+    console.log(data);
+    setModalToViewInfo(true);
   };
 
   return (
@@ -61,14 +110,14 @@ const Proposals = () => {
 
           {/* Results list */}
           <div className="space-y-4">
-            {applicants?.length > 0 &&
-              applicants.map((applicant) => (
-                <ProposalCard
-                  key={applicant.id}
-                  applicant={applicant}
-                  actions={() => setModalOpen(true)}
-                />
-              ))}
+            {appliedJobList.map((applicant) => (
+              <ProposalCard
+                key={applicant.id}
+                applicant={applicant}
+                actions={handleReadyToChangeStatus}
+                viewAction={handleViewInfo}
+              />
+            ))}
           </div>
 
           <div className="flex justify-center mt-6">
@@ -88,10 +137,19 @@ const Proposals = () => {
           title={"Status"}
         >
           <StatusUpdateForm
-            initialStatus="Interview"
-            onSave={(newStatus) => console.log("Updated to:", newStatus)}
+            initialStatus={changeStatusData.status}
+            onSave={(newStatus) => handleUpdateStatus(newStatus)}
             onClose={() => setModalOpen(false)}
           />
+        </StatusSectionModal>
+      )}
+      {modalToViewInfo && (
+        <StatusSectionModal
+          isOpen={setModalToViewInfo}
+          onClose={handleCloseModalToView}
+          title={viewStatus.status}
+        >
+          <ShowMilestoneOrRequestInfo statusInfo={viewStatus} />
         </StatusSectionModal>
       )}
     </div>

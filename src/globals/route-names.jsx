@@ -97,6 +97,7 @@ export const candidate = {
   Contracts_History: "/contracts-history",
   Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
+  FIND_WORK_DETAILS: "/find-work-details/:id",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
   RESUME: "/my-resume",

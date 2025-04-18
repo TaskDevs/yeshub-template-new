@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { CiBookmark } from "react-icons/ci";
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { experinceLevel, jobTypes, skills, sort } from "./filter-data";
 import CanSelectField from "../../components/can-select-field";
@@ -13,8 +13,8 @@ import ProfileInfoSection from "./profile-info-section";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { useNavigate } from "react-router-dom";
-import { ProposalSubmissionModal } from "../new-profile/profile-components";
-import { ProposalForm } from "./proposal-form";
+// import { ProposalSubmissionModal } from "../new-profile/profile-components";
+// import { ProposalForm } from "./proposal-form";
 import styles from "./find-work.module.css";
 import MobileFindSavedWork from "./mobile-find-work";
 
@@ -22,13 +22,14 @@ import MobileFindSavedWork from "./mobile-find-work";
 function FindWorkPage() {
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
-  const { processGetAllJob, jobListData, processApplyForJob } =
+  const { processGetAllJob, jobListData} =
     useContext(JobApiData);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [jobInfo, setJobInfo] = useState({
-    job_id: null,
-    company_id: null,
-  });
+  // const [modalOpen, setModalOpen] = useState(false); processApplyForJob, modalOpen, handleCloseModal 
+
+  // const [jobInfo, setJobInfo] = useState({
+  //   job_id: null,
+  //   company_id: null,
+  // });
  
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
@@ -43,40 +44,44 @@ function FindWorkPage() {
     console.log(jobListData);
   }, [jobListData]);
 
-  // Close modal handler
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  // Close modal handler -modalcontext
+  // const handleCloseModal = () => {
+  //   setModalOpen(false);
+  // };
 
-  const handlePrepareSubmit = (job_id, employer_id) => {
-    setJobInfo({
-      job_id: job_id,
-      company_id: employer_id,
-    });
-    // console.log(id);
-    setModalOpen(true);
-  };
+  // add detailed page
+  // const handlePrepareSubmit = (job_id, employer_id) => {
+  //   setJobInfo({
+  //     job_id: job_id,
+  //     company_id: employer_id,
+  //   });
+  //   // console.log(id);
+  //   setModalOpen(true);
+  // };
 
-  const handleOnSubmit = (data) => {
-    if (!userId) {
-      alert("Make sure you sign up first");
-      return;
-    } else {
-      let newData = {
-        user_id: userId,
-        job_id: jobInfo.job_id,
-        company_id: jobInfo.company_id,
-        milestones: data?.milestones?.length > 0 ? data.milestones : null,
-        requirement: data.request ? data.request : null,
-        status: "pending",
-        type: data.type,
-      };
+  // detailed page
+  // const handleOnSubmit = (data) => {
+  //   if (!userId) {
+  //     alert("Make sure you sign up first");
+  //     return;
+  //   } else {
+  //     let newData = {
+  //       user_id: userId,
+  //       job_id: jobInfo.job_id,
+  //       company_id: jobInfo.company_id,
+  //       milestones: data?.milestones?.length > 0 ? data.milestones : null,
+  //       requirement: data.request ? data.request : null,
+  //       status: "pending",
+  //       type: data.type,
+  //     };
 
-      console.log(newData);
-      processApplyForJob(newData);
-      setModalOpen(false);
-    }
-  };
+  //     console.log(newData);
+  //     processApplyForJob(newData);
+  //     setModalOpen(false);
+  //   }
+  // };
+
+
 
   return (
     <div className=" tw-css mx-auto ">
@@ -90,12 +95,12 @@ function FindWorkPage() {
               ratings="4.9"
               reviews="23k"
               companyName={job.employer.company_name}
-              action={() => handlePrepareSubmit(job.id, job.employer_id)}
+              // action={() => handlePrepareSubmit(job.id, job.employer_id)}
               jobType={job?.job_type}
               isMobile={true}
               jobLocation={job?.location || "Accra"}
               datePosted={job?.created_at || "2025-04-14T16:43:24.000000Z"}
-              salaryRange={job?.budget || "400"}
+              salaryRange={job?.fixed_rate || "400"}
               
             />
           ))}
@@ -166,11 +171,11 @@ function FindWorkPage() {
                           readableDate(job.start_date) ===
                             new Date().toDateString() && "new"
                         }
-                        action={() =>
-                          handlePrepareSubmit(job.id, job.employer_id)
-                        }
+                        // action={() =>
+                        //   handlePrepareSubmit(job.id, job.employer_id)
+                        // }
                         numberOfProposals="23"
-                        salaryRange={job?.fixed_rate}
+                        salaryRange={job?.fixed_rate || "400"}
                        
                         jobType={job?.job_type || ""}
                       />
@@ -188,7 +193,7 @@ function FindWorkPage() {
             </div>
           </div>
         </div>
-
+{/* 
         {modalOpen && (
   
   <ProposalSubmissionModal
@@ -199,7 +204,7 @@ function FindWorkPage() {
   <ProposalForm onSubmit={handleOnSubmit} />
  </ProposalSubmissionModal>
  )}
- <ToastContainer position="top-right" autoClose={3000} />
+ <ToastContainer position="top-right" autoClose={3000} /> */}
  
       </div>
       

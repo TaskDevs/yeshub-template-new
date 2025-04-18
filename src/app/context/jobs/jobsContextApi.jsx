@@ -39,6 +39,11 @@ const JobApiDataProvider = (props) => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   const processAddJob = async (data) => {
     let response = await addJob(data);
@@ -104,7 +109,7 @@ const JobApiDataProvider = (props) => {
     try {
       let response = await employerJobList(id);
       if (response) {
-        console.log("jobs emp", response);
+        // console.log("jobs emp", response);
         setEmpJobListData(response);
         setEmpPaginationData({
           total: response.total,
@@ -213,6 +218,9 @@ const JobApiDataProvider = (props) => {
         processApplyForJob,
         jobListData,
         setJobListData,
+        modalOpen, 
+        setModalOpen,
+        handleCloseModal,
         searchJobListData,
         searchFullInfo,
         empJobListData,

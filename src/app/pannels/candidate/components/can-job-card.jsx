@@ -6,8 +6,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { calculateDaysSincePosted } from "../../../../utils/readableDate";
 import { FaBookmark } from "react-icons/fa6";
 import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextApi";
-import { GlobalApiData } from "../../../context/global/globalContextApi";
 import { userId } from "../../../../globals/constants";
+import { useNavigate } from "react-router-dom";
 
 const Tags = ({ bg, color, text }) => {
   return (
@@ -46,39 +46,23 @@ const CanJobCard = ({
   newTag,
   isFindWork = true,
   status,
-  action,
   dateSaved,
   jobType,
   isMobile = false,
   jobLocation,
   datePosted,
 }) => {
-  const { processAddSavedJobs, handleDeleteSavedJobs } =
-    useContext(SavedJobsApiData);
-  const { setIsSubmitting } = useContext(GlobalApiData);
-  const { savedjobsData, processGetAllSavedJobs } =
-    useContext(SavedJobsApiData);
 
+  const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } = useContext(SavedJobsApiData);
+  const navigate = useNavigate();
   const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === id);
 
-  const handleAddSavedJobs = async (userId, jobId) => {
-    console.log("userId, jobId", userId, parseInt(jobId));
-    setIsSubmitting(true);
 
-    try {
-      await processAddSavedJobs({ job_id: parseInt(jobId), user_id: userId });
-      await processGetAllSavedJobs();
-    } catch (e) {
-      console.error("Failed to save job");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <>
       {!isMobile && (
-        <div className="tw-css border rounded-lg shadow-md p-4 flex flex-col size-full bg-[white]">
+        <div className="tw-css border rounded-lg shadow-md p-4 flex flex-col bg-[white]">
           {isFindWork ? (
             <>
               <div className="tw-css flex justify-between w-full h-full">
@@ -125,12 +109,13 @@ const CanJobCard = ({
 
               <div className="flex justify-between w-full ">
                 <button
-                  onClick={() => handleAddSavedJobs(userId, id)}
+                  
+                  onClick={() => toggleSavedJob(id, userId)}
                   className="border rounded py-2 px-2 flex text-[#374151] capitalize text-md"
                 >
                   {!isSaved && <CiBookmark className="size-4" />}
                   {isSaved && <FaBookmark className="size-4" color="#166534" />}
-                  <span>save</span>
+                  <span>{isSaved? "Saved": "Save"}</span>
                 </button>
 
                 <p className="text-[#374151]">{`GHS ${salaryRange}`}</p>
@@ -138,9 +123,9 @@ const CanJobCard = ({
                 <button
                   className="bg-green-800 text-white px-4 py-2 
                 rounded capitalize text-center h-10"
-                  onClick={() => action(id)}
+                  onClick={() => navigate(`/dashboard-candidate/find-work-details/${id}`)}
                 >
-                  submit proposal
+                  apply
                 </button>
               </div>
             </>
@@ -169,9 +154,9 @@ const CanJobCard = ({
                     <button
                       className="bg-green-800 text-white px-4 py-2 
                     rounded capitalize text-center h-10"
-                      onClick={() => action(id)}
+                    onClick={() => navigate(`/dashboard-candidate/find-work-details/${id}`)}
                     >
-                      submit proposal
+                      apply
                     </button>
                   </div>
                 </div>
@@ -198,7 +183,7 @@ const CanJobCard = ({
                     <Tags bg="#DBEAFE" color=" #1E40AF" text="Contract" />
                   )}
                   <p>GHS{salaryRange}</p>
-                  <p>{dateSaved} ago</p>
+                  <p>{dateSaved}</p>
                 </div>
 
                 <div className="truncate w-[70%] text-sm text-gray-700">
@@ -226,14 +211,14 @@ const CanJobCard = ({
                   <div className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-full p-2">
                     {jobType}
                   </div>
-                  {console.log("status", status)}
+         
                 </div>
               </div>
 
               {isFindWork ? (
                 <div className="flex flex-col  items-start h-full ">
                   <button
-                    onClick={() => handleAddSavedJobs(userId, id)}
+                    onClick={() => toggleSavedJob(id, userId)}
                     className="border-0"
                   >
                     {!isSaved && <CiBookmark className="size-4" />}
@@ -257,9 +242,9 @@ const CanJobCard = ({
               <button
                 className="bg-green-800 w-fit text-white 
                 px-4 py-2 rounded capitalize text-center h-10"
-                onClick={() => action(id)}
+                onClick={() => navigate(`/dashboard-candidate/find-work-details/${id}`)}
               >
-                submit
+                apply
               </button>
             </div>
           </>

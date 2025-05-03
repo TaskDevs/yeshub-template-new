@@ -1,132 +1,94 @@
-import SectionOfferSidebar1 from "../../../public-user/sections/jobs/sidebar/offers/section-offer-sidebar1";
-// import SectionRecordsFilter from "../../../public-user/sections/common/section-records-filter";
-import SectionOfferRecordsFilter from "../../../public-user/sections/common/section-offer-records-filter";
-import { useEffect, useContext, useState } from "react";
-import TimeAgo from "../../../../../utils/formateDate";
-import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
-import { loadScript } from "../../../../../globals/constants";
+import React, { useState, useEffect, useContext } from "react";
+import FilterPanel from "../find-work/filter-panel";
+import { CustomDropdown } from "../../../../common/Dropdown";
+import { useFilterForm } from "../../../../../utils/useFilterFormHook";
+import styles from "./offers.module.css";
+import CanSlider from "../../components/can-slider";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
+import CanCheckbox from "../../components/can-checkbox";
+import { offer_data, sortOptions, skills } from "./offer-data";
 import { OfferCard } from "./offer-card";
+import { InviteCard } from "./invite-card";
 
 const Offers = () => {
-  //   const username = sessionStorage.getItem("username");
-  const {
-    paginationData,
-    proposalListData,
-    processGetUserProposals,
-    processGetFreelanceInvites,
-    freelanceInviteListData,
-  } = useContext(ProposalApiData);
-  const [processedProposalListData, setProcessedProposalListData] = useState(
-    []
-  );
-
-  const _filterConfig = {
-    prefix: "Showing",
-    type: "jobs",
-    total: paginationData?.total || 0,
-    showRange: false,
-    showingUpto: "",
-  };
+  const { processGetJobsAppliedTo, appliedJobs } = useContext(FreelanceApiData);
+  const { handleChange } = useFilterForm();
+  const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
 
   useEffect(() => {
-    loadScript("js/custom.js");
-  });
-
-  useEffect(() => {
-    processGetUserProposals();
-    processGetFreelanceInvites();
+    processGetJobsAppliedTo();
   }, []);
 
-  useEffect(() => {
-    setProcessedProposalListData(proposalListData);
-  }, [proposalListData]);
-
   return (
-    <div className="section-fullsite-bg-white">
-      <div className="container-fluid mx-2">
-        <div className="row">
-          <div className="col-lg-3 col-md-12 rightSidebar">
-            <SectionOfferSidebar1
-              processDataActionControls={[
-                setProcessedProposalListData,
-                proposalListData,
-                processedProposalListData,
-              ]}
+    <div className="tw-css flex site-bg-gray w-full">
+      <div
+        className={`bg-white shadow rounded-md ${styles.findClientContainer}`}
+      >
+        {/* Left sidebar with filters */}
+        <div className={`${styles.sidebar} pr-6`}>
+          <FilterPanel hideLabel={true}>
+            <CanCheckbox options={sortOptions} label="Filter By" />
+            <CanSlider
+              values={["0", "100k", "200k+"]}
+              label="Salary"
+              onChange={handleChange("salaryRange")}
+            />
+            <CanCheckbox options={skills} label="Skills" />
+          </FilterPanel>
+        </div>
+
+        {/* Main content area */}
+        <div className={`${styles.searchResults} mt-10`}>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-xl font-bold mb-1 w-full justify-start">
+              Proposals & Offers
+            </h1>
+            <CustomDropdown
+              selected={selectedSort}
+              options={sortOptions}
+              onChange={setSelectedSort}
+              styles="border-gray-300"
             />
           </div>
-          <div className="col-lg-6 col-md-12">
-            {/*Filter Short By*/}
-            <SectionOfferRecordsFilter
-              _config={_filterConfig}
-              processDataActionControls={[
-                setProcessedProposalListData,
-                proposalListData,
-                processedProposalListData,
-              ]}
-            />
 
-            <div>
-              {processedProposalListData.map((item, index) => (
-                <OfferCard key={index} info={item} />
+          {/* Results list */}
+          <div className="space-y-4">
+            {appliedJobs.length > 0 &&
+              appliedJobs.map((offer, index) => (
+                <OfferCard key={index} info={offer} />
               ))}
-            </div>
-
-            {/* <SectionJobsList
-              processedJobList={processedJobListData}
-              actionGetAllJob={processGetAllJob}
-            /> */}
           </div>
-          <div className="col-lg-3 col-md-12">
-            <h3 className="pt-3 mx-2 mb-4">Invited Jobs</h3>
-            <div className="mx-2">
-              {freelanceInviteListData.map((item, index) => (
-                <div className={`invite-card`} key={index}>
-                  <div className="d-flex justify-content-between w-100">
-                    <img
-                      src={item.employer.logo}
-                      style={{
-                        width: "50px",
-                        height: "50px",
-                        borderRadius: "6px",
-                        objectFit: "cover",
-                        marginRight: "4px",
-                      }}
-                      alt="Employer Logo"
-                    />
-                    <div>
-                      <h4>{item.job_title}</h4>
-                      <span>{item.employer.company_name}</span>
-                    </div>
-                    <span
-                      className="text-success text-sm"
-                      style={{ cursor: "pointer" }}
-                    >
-                      View
-                    </span>
-                  </div>
-                  <div className="d-flex align-items-center justify-content-between w-100 mt-4">
-                    <span className="">GH {item.fixed_rate}</span>
-                    <span className="text-gray">
-                      <TimeAgo date={item.end_date} />
-                    </span>
-                  </div>
-                  <div className="d-flex align-items-center mt-4">
-                    <button
-                      className="btn btn-success w-100 d-flex justify-content-center align-items-center text-sm me-2"
-                      onClick={() => alert("Accepted")}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="btn btn-secondary w-100 d-flex justify-content-center align-items-center text-sm"
-                      onClick={() => alert("Rejected")}
-                    >
-                      Decline
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+
+          <div className="flex justify-center mt-6">
+            <button
+              className="bg-[#305718] text-white px-6 py-2 rounded"
+              onClick={() => console.log("Load more")}
+            >
+              Load More
+            </button>
+          </div>
+        </div>
+
+        <div className={`${styles.sidebar} pl-6 mt-10`}>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-xl font-bold mb-1 w-full justify-start">
+              Invited Jobs
+            </h1>
+          </div>
+          <div>
+            {offer_data.map((item) => (
+              <InviteCard key={item.id} info={item} />
+            ))}
+          </div>
+          <div className="flex justify-between items-center mt-10">
+            <h1 className="text-xl font-bold mb-1 w-full justify-start">
+              Jobs
+            </h1>
+          </div>
+          <div>
+            {offer_data.map((item) => (
+              <InviteCard key={item.id} info={item} />
+            ))}
           </div>
         </div>
       </div>

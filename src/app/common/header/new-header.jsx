@@ -31,7 +31,9 @@ export const Header = ({ isDashboard = true }) => {
 
   const { firstname, profession } = profileData;
   const role = sessionStorage.getItem("userRole");
-  
+
+  console.log(role);
+
   // colors for the username
   const stringToColor = (string) => {
     let hash = 0;
@@ -56,9 +58,18 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "home", label: "Home", selected: true, to: "/dashboard-candidate" },
+    {
+      id: "home",
+      label: "Home",
+      selected: true,
+      to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
+    },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
-    { id: "public-find-work", label: "Find Work", to: "/dashboard-candidate/find-job" },
+    {
+      id: "public-find-work",
+      label: "Find Work",
+      to: "/dashboard-candidate/find-job",
+    },
     {
       id: "my-home",
       label: "My Home",
@@ -84,7 +95,11 @@ export const Header = ({ isDashboard = true }) => {
             label: "Saved Jobs",
             to: "/dashboard-candidate/saved-jobs",
           },
-          { id: "proposals-offers", label: "Proposals & Offers" },
+          {
+            id: "proposals-offers",
+            label: "Proposals & Offers",
+            to: "candidate-offers",
+          },
         ],
       },
     },
@@ -236,7 +251,7 @@ export const Header = ({ isDashboard = true }) => {
   const handleLogoClick = () => {
     if (token && role == "client") {
       navigate("/profile");
-    } else if (token && role == "freelncer") {
+    } else if (token && role == "freelancer") {
       navigate("/dashboard-candidate");
     } else {
       navigate("/");

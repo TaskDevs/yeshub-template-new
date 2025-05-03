@@ -103,7 +103,7 @@ function ClientDashboard() {
   };
 
   const goToPostedJob = () => {
-    navigate("/find-talent");
+    navigate("/jobs-posted");
   };
 
   // Close modal handler

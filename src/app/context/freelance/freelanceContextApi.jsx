@@ -4,6 +4,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 
 import {
   addFreelance,
+  jobsAppliedTo,
   // searchFreelance,
   // freelanceList,
   freelanceProfile,
@@ -18,44 +19,35 @@ import { PortfolioApiData } from "../portfolio/portfolioContextApi";
 
 export const FreelanceApiData = createContext();
 
-
-const initialFormData =  FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
+const initialFormData = FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
   acc[field.name] = "";
   return acc;
 }, {});
 
-
 const FreelanceApiDataProvider = (props) => {
   const [freelanceProfileData, setFreelanceProfileData] = useState([]);
-  const [formData, setFormData] = useState(initialFormData)
-  const { setIsSubmitting } = useContext(GlobalApiData)
-  const [selectedItems, setSelectedItems] = useState([])
-  const { portfolios } = useContext(PortfolioApiData)
+  const [appliedJobs, setAppliedJobs] = useState([]);
+  const [formData, setFormData] = useState(initialFormData);
+  const { setIsSubmitting } = useContext(GlobalApiData);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const { portfolios } = useContext(PortfolioApiData);
 
-//  console.log("freelanceProfileData", freelanceProfileData)
+  //  console.log("freelanceProfileData", freelanceProfileData)
 
   const fetchProfile = async () => {
     const res = await processFreelanceProfile(userId);
     if (res) {
-    
-      setFreelanceProfileData(res.data); 
-      
-      sessionStorage.setItem("freelancer_id", res?.data[0]?.id || "");
+      setFreelanceProfileData(res.data);
 
+      sessionStorage.setItem("freelancer_id", res?.data[0]?.id || "");
     } else {
       return false;
     }
   };
 
-
   useEffect(() => {
-   
     fetchProfile();
-   
   }, []);
-
-  
-
 
   const processAddFreelance = async (data) => {
     const res = await addFreelance(data);
@@ -77,29 +69,45 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
+  const processGetJobsAppliedTo = async () => {
+    try {
+      //let new_user_id = sessionStorage.getItem("userId") || 625;
+      console.log("We are doing great");
+      let new_user_id = 625;
+      let response = await jobsAppliedTo(new_user_id, 1);
+      console.log(response.data);
+      if (response) {
+        setAppliedJobs(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   const processSearchFreelance = async () => {};
 
   const processUpdateFreelance = async (id, data) => {
-    setIsSubmitting(true)
-   try{
-    const res = await updateFreelance(id, data);
-    if (res) {
-      return res.data;
-    } else {
-      return false;
+    setIsSubmitting(true);
+    try {
+      const res = await updateFreelance(id, data);
+      if (res) {
+        return res.data;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setFormData(initialFormData);
+      setIsSubmitting(false);
     }
-   }catch(e){
-    console.error(e);
-   } finally {
-    setFormData(initialFormData)
-    setIsSubmitting(false)
-   }
   };
 
   const processDeleteFreelance = async (id) => {
     const res = await deleteFreelance(id);
     if (res) {
-      console.log("delete-freelancer", res)
+      console.log("delete-freelancer", res);
       return res.data;
     } else {
       return false;
@@ -110,99 +118,106 @@ const FreelanceApiDataProvider = (props) => {
     if (portfolios.length === 0) {
       toast.error("Please add a portfolio before proceeding.");
     }
-    
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (freelanceProfileData.length > 1 && freelanceProfileData[0].id) {
-      toast.error("A freelance profile already exists. Please edit the existing profile instead.");
-      return; 
-  }
+      toast.error(
+        "A freelance profile already exists. Please edit the existing profile instead."
+      );
+      return;
+    }
 
-    setIsSubmitting(true)
-  
+    setIsSubmitting(true);
+
     try {
-      const res = await processAddFreelance({...formData, user_id: userId});
-      
+      const res = await processAddFreelance({ ...formData, user_id: userId });
+
       if (res) {
         await fetchProfile();
-        toast.success("Freelance profile added successfully")
-      } 
-      
+        toast.success("Freelance profile added successfully");
+      }
     } catch (error) {
-      console.error("Failed to add freelance profile", error)
-      toast.error("Failed to add freelance profile")
+      console.error("Failed to add freelance profile", error);
+      toast.error("Failed to add freelance profile");
     } finally {
-      setIsSubmitting(false)
-      setFormData(initialFormData)
+      setIsSubmitting(false);
+      setFormData(initialFormData);
     }
   };
 
   const handleUpdateFreelanceProfile = async (e) => {
     e.preventDefault();
-   
-    try{
-      const res = await processUpdateFreelance( freelanceProfileData[0]?.id, {...formData, user_id: userId})
-    if (res) {
-      await fetchProfile();
-      toast.success("Freelance profile updated successfully")
+
+    try {
+      const res = await processUpdateFreelance(freelanceProfileData[0]?.id, {
+        ...formData,
+        user_id: userId,
+      });
+      if (res) {
+        await fetchProfile();
+        toast.success("Freelance profile updated successfully");
+      }
+    } catch (e) {
+      console.error();
+      toast.error("Failed to update freelance profile");
     }
-    }catch(e) {
-      console.error()
-      toast.error("Failed to update freelance profile")
-    }
-  }
+  };
 
   const handleEditFreelance = () => {
-    console.log("freelanceProfileData[0]", freelanceProfileData[0])
+    console.log("freelanceProfileData[0]", freelanceProfileData[0]);
     if (!portfolios || portfolios.length === 0) {
       console.error("Portfolio options not loaded yet.");
       return;
     }
 
-
-const portfolioArray = Array.isArray(freelanceProfileData[0]?.portfolio_id)
-    ? freelanceProfileData[0]?.portfolio_id.map(String)
-    : typeof freelanceProfileData[0]?.portfolio_id === "string"
-    ? freelanceProfileData[0]?.portfolio_id.startsWith('[') && freelanceProfileData[0]?.portfolio_id.endsWith(']')
+    const portfolioArray = Array.isArray(freelanceProfileData[0]?.portfolio_id)
+      ? freelanceProfileData[0]?.portfolio_id.map(String)
+      : typeof freelanceProfileData[0]?.portfolio_id === "string"
+      ? freelanceProfileData[0]?.portfolio_id.startsWith("[") &&
+        freelanceProfileData[0]?.portfolio_id.endsWith("]")
         ? JSON.parse(freelanceProfileData[0]?.portfolio_id).map(String)
-        : freelanceProfileData[0]?.portfolio_id.split(",").map((id) => id.trim())
-    : [];
+        : freelanceProfileData[0]?.portfolio_id
+            .split(",")
+            .map((id) => id.trim())
+      : [];
 
-console.log("portfolioArray", portfolioArray);
+    console.log("portfolioArray", portfolioArray);
 
-const selectedPortfolioObjects = portfolioArray.map((id) => {
-    const portfolio = portfolios?.find(
+    const selectedPortfolioObjects = portfolioArray.map((id) => {
+      const portfolio = portfolios?.find(
         (portfolio) => String(portfolio.id) === String(id)
-    );
-    if (portfolio) {
+      );
+      if (portfolio) {
         return { value: portfolio.id, label: portfolio.project_title };
-    } else {
+      } else {
         console.log("portfolio id: " + id + " not found in portfolios.");
         return null;
-    }
-});
+      }
+    });
 
-console.log("selectedPortfolioObjects", selectedPortfolioObjects);
+    console.log("selectedPortfolioObjects", selectedPortfolioObjects);
 
     setFormData({
       rate: freelanceProfileData[0]?.rate,
       experience: freelanceProfileData[0]?.experience,
-      portfolio_id: selectedPortfolioObjects.map((portfolio) => portfolio.value)
-    })
+      portfolio_id: selectedPortfolioObjects.map(
+        (portfolio) => portfolio.value
+      ),
+    });
 
     setSelectedItems(selectedPortfolioObjects);
-  }
+  };
 
   return (
     <FreelanceApiData.Provider
       value={{
         freelanceProfileData,
         formData,
-        selectedItems, 
+        appliedJobs,
+        selectedItems,
         setSelectedItems,
         setFormData,
         handleSubmit,
@@ -211,6 +226,7 @@ console.log("selectedPortfolioObjects", selectedPortfolioObjects);
         handleEditFreelance,
         processAddFreelance,
         processGetAllFreelance,
+        processGetJobsAppliedTo,
         processFreelanceProfile,
         processSearchFreelance,
         processUpdateFreelance,

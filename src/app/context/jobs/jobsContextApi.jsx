@@ -11,6 +11,7 @@ import {
   jobProfile,
   countApplications,
   deleteJob,
+  applyForJob,
 } from "./jobsApi";
 import { useNavigate } from "react-router-dom";
 
@@ -28,6 +29,7 @@ const JobApiDataProvider = (props) => {
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [searchJobListData, setSearchJobListData] = useState([]);
   const [searchLoad, setSearchLoad] = useState(false);
+  // const [clientDashboardData, setClientDashboardData] = useState({});
   const [jobLoad, setJobLoad] = useState(false);
   const [searchData, setSearchData] = useState({
     job_category: null,
@@ -37,6 +39,11 @@ const JobApiDataProvider = (props) => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   const processAddJob = async (data) => {
     let response = await addJob(data);
@@ -50,16 +57,29 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  const processGetAllJob = async (pageNo) => {
+  const processApplyForJob = async (data) => {
+    let response = await applyForJob(data);
+    if (response) {
+      processGetAllJob(1, data.user_id);
+      notify(200, "Job applied successfully");
+    } else {
+      notify(null, 400, "Oops Something went wrong");
+    }
+  };
+
+  const processGetAllJob = async (pageNo, userId) => {
     setJobLoad(false);
-    let response = await jobList(pageNo);
+    let response = await jobList(pageNo, userId);
     if (response) {
       // console.log(response);
       setJobListData(response.data);
       setPaginationData({
-        total: response.pagination.total,
-        link: response.pagination.links,
-        current: response.pagination.current_page,
+        // total: response.pagination.total,
+        // link: response.pagination.links,
+        // current: response.pagination.current_page,
+        total: response?.total,
+        link: response?.links,
+        current: response?.current_page,
       });
     }
     setJobLoad(true);
@@ -89,7 +109,7 @@ const JobApiDataProvider = (props) => {
     try {
       let response = await employerJobList(id);
       if (response) {
-        console.log("jobs emp", response);
+        // console.log("jobs emp", response);
         setEmpJobListData(response);
         setEmpPaginationData({
           total: response.total,
@@ -195,8 +215,12 @@ const JobApiDataProvider = (props) => {
         processUpdateJob,
         processDeleteJob,
         processAJobProfile,
+        processApplyForJob,
         jobListData,
         setJobListData,
+        modalOpen, 
+        setModalOpen,
+        handleCloseModal,
         searchJobListData,
         searchFullInfo,
         empJobListData,

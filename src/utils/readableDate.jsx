@@ -73,6 +73,8 @@ export const extractYearAndMonth = (dateString) => {
      return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
    };
 
+
+
    export function calculateDaysSincePosted(startDate) {
     try {
       // Convert the startDate string to a Date object
@@ -83,15 +85,56 @@ export const extractYearAndMonth = (dateString) => {
       // Calculate the difference in milliseconds
       const timeDifference = nowAccra.getTime() - postedDate.getTime();
   
-      // Convert milliseconds to days
-      const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      // Calculate the difference in minutes
+      const minutesDifference = Math.floor(timeDifference / (1000 * 60));
   
-      return daysDifference;
+      if (minutesDifference < 60) {
+        return `${minutesDifference} minutes ago`;
+      } else {
+        // Calculate the difference in hours
+        const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+  
+        if (hoursDifference < 24) {
+          return `${hoursDifference} hours ago`;
+        } else {
+          // Calculate the difference in days
+          const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          return `${daysDifference} days ago`;
+        }
+      }
     } catch (error) {
       console.error("Error parsing start date:", error);
       return null; // Or some other value indicating an error
     }
   }
+
+  
+
+  // export function calculateDaysSincePosted(startDate) {
+  //   try {
+  //     // Convert the startDate string to a Date object
+  //     const postedDate = new Date(startDate);
+  
+  //     const nowAccra = new Date();
+  
+  //     // Calculate the difference in milliseconds
+  //     const timeDifference = nowAccra.getTime() - postedDate.getTime();
+  
+  //     // Calculate the difference in days
+  //     const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  
+  //     if (daysDifference < 1) {
+  //       // If less than a day, calculate minutes
+  //       const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+  //       return `${minutesDifference} minutes ago`;
+  //     } else {
+  //       return `${daysDifference} days ago`;
+  //     }
+  //   } catch (error) {
+  //     console.error("Error parsing start date:", error);
+  //     return null; // Or some other value indicating an error
+  //   }
+  // }
   
  
 

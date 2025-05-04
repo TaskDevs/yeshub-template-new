@@ -12,7 +12,7 @@
   }
   
   
-  
+/*   
   @media screen and (max-width: 1023px) {
     .savedWorkDesktop {
       display: none;
@@ -33,4 +33,36 @@
       display: block;
     }
   }
+   */
+
+
+   @media screen and (max-width: 480px) {
+    .savedWorkDesktop {
+      display: none;
+    }
+    
+    .mobileSavedWork {
+      display: block!important;
+    }
   
+  }
+  
+  @media screen and (min-width: 600px) and (max-width: 1023px) {
+    .mobileSavedWork, .gridOne, .gridThree {
+      display: none!important;
+    }
+    .savedWorkDesktop {
+      display: block!important;
+    }
+    
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .mobileSavedWork {
+      display: none!important;
+    }
+    
+    .savedWorkDesktop {
+      display: block;
+    }
+  }

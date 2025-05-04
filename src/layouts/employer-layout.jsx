@@ -12,7 +12,6 @@ function EmployerLayout() {
     setSidebarActive(!sidebarActive);
   };
 
-  // console.log("We are witing here");
 
   return (
     <>

@@ -98,6 +98,17 @@ export const ProfileSectionsManager = ({
         description={profileSections[3]?.description}
         activeSection={sectionKeyMap[profileSections[3]?.title]}
       />
+
+      {/* Education and Portfolio */}
+      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+        <ProfileSection
+          data={candidateData?.education}
+          title={profileSections[3]?.title}
+          onClick={profileSections[3]?.onClick}
+          noData={!candidateData?.education.length}
+          description={profileSections[3]?.description}
+          activeSection={sectionKeyMap[profileSections[3]?.title]}
+        />
         <ProfileSection
           data={candidateData?.portfolios}
           title={profileSections[4]?.title}

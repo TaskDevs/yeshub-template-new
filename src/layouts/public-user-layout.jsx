@@ -46,6 +46,7 @@ function PublicUserLayout() {
           type={popupType.DELETE_PROFILE}
           msg={"Are you sure you want to delete this profile?"}
         />
+       
       </div>
     </>
   );

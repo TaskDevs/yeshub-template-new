@@ -30,6 +30,17 @@ import {
 import { skillsList } from "../../../../context/skills/skillsApi";
 import toast from "react-hot-toast";
 import { addHistory } from "../../../../context/employee-history/historyApi";
+import { addPortfolio } from "../../../../context/portfolio/portfolioApi";
+import { addCertificate } from "../../../../context/certificates/certficatesApi";
+import { addTestimonial } from "../../../../context/testimonial/testimonialApi";
+import { addWorkingHours } from "../../../../context/working-hours/workingHoursApi";
+import { addLicense } from "../../../../context/licenses/licensesApi";
+
+/* import {
+  useQuery,
+} from '@tanstack/react-query'
+import { REACT_BASE_URL } from "../../../../../globals/constants"; */
+
 
 const userId = sessionStorage.getItem("userId");
 /**
@@ -76,15 +87,9 @@ export const ProfileSectionsManager = ({
           activeSection={sectionKeyMap[profileSections[2]?.title]}
         /> 
       </div>
-      <ProfileSection
-        title={profileSections[5]?.title}
-        data={candidateData?.certifications}
-        onClick={profileSections[5]?.onClick}
-        noData={!candidateData?.certifications?.length}
-        description={profileSections[5]?.description}
-        activeSection={sectionKeyMap[profileSections[5]?.title]}
-      />
 
+      {/* Education and Portfolio */}
+      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
       <ProfileSection
         data={candidateData?.education}
         title={profileSections[3]?.title}
@@ -93,33 +98,23 @@ export const ProfileSectionsManager = ({
         description={profileSections[3]?.description}
         activeSection={sectionKeyMap[profileSections[3]?.title]}
       />
-      {/* Education and Portfolio */}
-      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
-          data={candidateData?.education}
-          title={profileSections[3]?.title}
-          onClick={profileSections[3]?.onClick}
-          noData={!candidateData?.education.length}
-          description={profileSections[3]?.description}
-          activeSection={sectionKeyMap[profileSections[3]?.title]}
-        />
-        <ProfileSection
-          data={candidateData?.portfolio}
+          data={candidateData?.portfolios}
           title={profileSections[4]?.title}
           onClick={profileSections[4]?.onClick}
-          noData={!candidateData?.portfolio.length}
+          noData={!candidateData?.portfolios?.length}
           description={profileSections[4]?.description}
           activeSection={sectionKeyMap[profileSections[4]?.title]}
         />
-      </div> */}
+      </div> 
 
       {/* Certifications and Work hours */}
-      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
           title={profileSections[5]?.title}
-          data={candidateData?.certifications}
+          data={candidateData?.certificates}
           onClick={profileSections[5]?.onClick}
-          noData={!candidateData?.certifications.length}
+          noData={!candidateData?.certificates?.length}
           description={profileSections[5]?.description}
           activeSection={sectionKeyMap[profileSections[5]?.title]}
         />
@@ -128,18 +123,18 @@ export const ProfileSectionsManager = ({
           title={profileSections[6]?.title}
           onClick={profileSections[6]?.onClick}
           description={profileSections[6]?.description}
-          noData={!candidateData?.workHours.hoursPerWeek}
+          noData={!candidateData?.workHours?.hoursPerWeek}
           activeSection={sectionKeyMap[profileSections[6]?.title]}
         />
-      </div> */}
+      </div> 
 
       {/* Licenses and Testimonials */}
-      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+      <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
         <ProfileSection
           data={candidateData?.licenses}
           title={profileSections[7]?.title}
           onClick={profileSections[7]?.onClick}
-          noData={!candidateData?.licenses.length}
+          noData={!candidateData?.licenses?.length}
           description={profileSections[7]?.description}
           activeSection={sectionKeyMap[profileSections[7]?.title]}
         />
@@ -147,11 +142,11 @@ export const ProfileSectionsManager = ({
           data={candidateData.testimonials}
           title={profileSections[8]?.title}
           onClick={profileSections[8]?.onClick}
-          noData={!candidateData?.testimonials.length}
+          noData={!candidateData?.testimonials?.length}
           description={profileSections[8]?.description}
           activeSection={sectionKeyMap[profileSections[8]?.title]}
         />
-      </div> */}
+      </div> 
     </div>
   );
 };
@@ -159,7 +154,7 @@ export const ProfileSectionsManager = ({
 /**
  * SkillsSection
  */
-export const SkillsSection = ({ onClose }) => {
+export const SkillsSection = ({ initialSelectedSkills,onClose }) => {
   const {
     searchValue,
     setSearchValue,
@@ -195,6 +190,13 @@ export const SkillsSection = ({ onClose }) => {
   useEffect(() => {
     fetchSkills();
   }, []);
+
+  if(initialSelectedSkills?.skills?.length > 0){
+    initialSelectedSkills.skills.map((skill) => {
+      addSkill({ name: skill})
+    })
+  }
+
 
   const handleSave = async () => {
     const formattedSkills = selectedSkills.map((skill) => skill.name).join(",");
@@ -489,16 +491,34 @@ export const EducationSection = ({ onClose }) => {
 /**\
  * WorkHistorySection
  */
-export const WorkHistorySection = ({ onClose, initialData = {} }) => {
+export const WorkHistorySection = ({ id,onClose }) => {
+  console.log(id)
+  //fetch data here 
+/*   const { isPending, error, data } = useQuery({
+    queryKey: ['workHistoryFindData', id],
+    enabled: !!id,
+    queryFn: () =>
+      fetch(`${REACT_BASE_URL}get-employment-history/${id}`).then((res) =>
+        res.json(),
+      ),
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
+ */
+  var work_data = []
+  console.log('work history here',work_data)
+
   const { formData, handleInputChange, handleDateChange, isSubmitting } =
     useProfileForm({
-      job_title: initialData.job_title || "",
-      company_name: initialData.company_name || "",
-      location: initialData.location || "",
-      start_date: initialData.start_tate || "",
-      end_date: initialData.end_date || "",
-      duty: initialData.duty || "",
-      current: initialData.current || false,
+      job_title: work_data.job_title || "",
+      company_name: work_data.company_name || "",
+      location: work_data.location || "",
+      start_date: work_data.start_date || "",
+      end_date: work_data.end_date || "",
+      duty: work_data.duty || "",
+      current: work_data.current || false,
     });
 
     const handleSave = async () => {
@@ -558,7 +578,7 @@ export const WorkHistorySection = ({ onClose, initialData = {} }) => {
             name="end_date"
             label="End Date"
             value={formData.end_date}
-            onChange={(name, date) => handleDateChange("end_ate", date)}
+            onChange={(name, date) => handleDateChange("end_date", date)}
             disabled={formData.current}
             field="end_date"
           />
@@ -618,8 +638,8 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
     project_title: "",
     role: "",
     skills: "",
-    start_date: "",
-    end_date: "",
+    project_start_date: "",
+    project_end_date: "",
     description: "",
     current: false,
     project_url: "",
@@ -646,9 +666,17 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
     setCurrentStepTitle("Project Details");
   };
 
-  const handleSave = () => {
-    console.log("Saving portfolio project:", formData, files);
-    onClose();
+  const handleSave = async () => {
+    try {
+      const res = await addPortfolio({ ...formData, user_id: userId });
+      if (res) {
+        console.log("Saving portfolio project:", formData, files);
+        onClose(); // Close modal or form
+        window.location.reload(); // Refresh page to show the new data
+      }
+    } catch (err) {
+      console.error("Error saving work history:", err);
+    }
   };
 
   useEffect(() => {
@@ -694,21 +722,21 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
 
             <div className="grid grid-cols-2 gap-4">
               <DateInput
-                name="startDate"
+                name="project_start_date"
                 label="Project Start Date"
-                value={formData.startDate}
-                onChange={(date) => handleDateChange("startDate", date)}
+                value={formData.project_start_date}
+                onChange={(name, date) => handleDateChange("project_start_date", date)}
                 required={true}
-                field="startDate"
+                field="project_start_date"
               />
 
               <DateInput
-                name="endDate"
+                name="project_end_date"
                 label="Project End Date"
-                value={formData.endDate}
-                onChange={(date) => handleDateChange("endDate", date)}
+                value={formData.project_end_date}
+                onChange={(name, date) => handleDateChange("project_end_date", date)}
                 disabled={formData.current}
-                field="endDate"
+                field="project_end_date"
               />
             </div>
 
@@ -739,9 +767,9 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
         <div className="flex flex-col w-full">
           <div className="space-y-6 w-full">
             <FormInput
-              field="projectUrl"
+              field="project_url"
               label="Project URL"
-              value={formData.projectUrl}
+              value={formData.project_url}
               onChange={handleInputChange}
               placeholder="e.g. https://example.com"
             />
@@ -785,29 +813,36 @@ export const PortfolioSection = ({ onClose, setCurrentStepTitle }) => {
 export const CertificationsSection = ({ onClose }) => {
   const { formData, handleInputChange, handleDateChange, isSubmitting } =
     useProfileForm({
-      certificationName: "",
+      name: "",
       issuingOrganization: "",
       credentialID: "",
-      issueDate: "",
-      expiryDate: "",
+      issued_at: "",
+      expires_at: "",
       description: "",
       hasExpiry: true,
       credentialUrl: "",
     });
 
-  const handleSave = () => {
-    // Save logic would go here
-    console.log("Saving certification:", formData);
-    onClose();
+  const handleSave = async () => {
+    try {
+      const res = await addCertificate({ ...formData, user_id: userId });
+      if (res) {
+        console.log("Saving certification:", formData);
+        onClose(); // Close modal or form
+        window.location.reload(); // Refresh page to show the new data
+      }
+    } catch (err) {
+      console.error("Error saving certificate:", err);
+    }
   };
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
       <div className="space-y-6 w-full">
         <FormInput
-          field="certificationName"
+          field="name"
           label="Certification Name"
-          value={formData.certificationName}
+          value={formData.name}
           onChange={handleInputChange}
           required={true}
           placeholder="e.g. AWS Certified Solutions Architect"
@@ -839,22 +874,22 @@ export const CertificationsSection = ({ onClose }) => {
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <DateInput
-            name="issueDate"
-            label="Issue Date"
-            value={formData.issueDate}
-            onChange={(date) => handleDateChange("issueDate", date)}
-            required={true}
-            field="issueDate"
-          />
+        <DateInput
+                name="issued_at"
+                label="Issue Date"
+                value={formData.issued_at}
+                onChange={(name, date) => handleDateChange("issued_at", date)}
+                field="issued_at"
+              />
+
 
           <DateInput
-            name="expiryDate"
+            name="expires_at"
             label="Expiry Date"
-            value={formData.expiryDate}
-            onChange={(date) => handleDateChange("expiryDate", date)}
+            value={formData.expires_at}
+            onChange={(name, date) => handleDateChange("expires_at", date)}
             disabled={!formData.hasExpiry}
-            field="expiryDate"
+            field="expires_at"
           />
         </div>
 
@@ -902,7 +937,7 @@ export const WorkHoursSection = ({ onClose }) => {
   const { formData, handleInputChange, isSubmitting } = useProfileForm({
     availability: "full-time",
     hoursPerWeek: 40,
-    preferredWorkingHours: "standard",
+    preferred_working_hours: "standard",
     customStartHour: "09:00",
     customEndHour: "17:00",
     workDays: {
@@ -914,7 +949,7 @@ export const WorkHoursSection = ({ onClose }) => {
       saturday: false,
       sunday: false,
     },
-    timeZone: "UTC",
+    time_zone: "UTC",
     notice: "2 weeks",
   });
 
@@ -948,10 +983,17 @@ export const WorkHoursSection = ({ onClose }) => {
     handleInputChange("workDays", updatedWorkDays);
   };
 
-  const handleSave = () => {
-    // Save logic would go here
-    console.log("Saving work hours:", formData);
-    onClose();
+  const handleSave = async () => {
+    try {
+      console.log("Saving work hours:", formData);
+      const res = await addWorkingHours({ ...formData, user_id: userId });
+      if (res) {
+        onClose(); // Close modal or form
+        window.location.reload(); // Refresh page to show the new data
+      }
+    } catch (err) {
+      console.error("Error saving work history:", err);
+    }
   };
 
   return (
@@ -1016,9 +1058,9 @@ export const WorkHoursSection = ({ onClose }) => {
                 <input
                   type="radio"
                   id={`hours-${option.value}`}
-                  checked={formData.preferredWorkingHours === option.value}
+                  checked={formData.preferred_working_hours === option.value}
                   onChange={() =>
-                    handleInputChange("preferredWorkingHours", option.value)
+                    handleInputChange("preferred_working_hours", option.value)
                   }
                   className="mr-2"
                 />
@@ -1028,7 +1070,7 @@ export const WorkHoursSection = ({ onClose }) => {
           </div>
         </div>
 
-        {formData.preferredWorkingHours === "custom" && (
+        {formData.preferred_working_hours === "custom" && (
           <div className="grid grid-cols-2 gap-4">
             <div className="form-group">
               <label className="block text-sm font-medium mb-2">
@@ -1078,9 +1120,9 @@ export const WorkHoursSection = ({ onClose }) => {
         </div>
 
         <FormInput
-          field="timeZone"
+          field="time_zone"
           label="Time Zone"
-          value={formData.timeZone}
+          value={formData.time_zone}
           onChange={handleInputChange}
           placeholder="e.g. UTC, EST, PST"
         />
@@ -1141,9 +1183,18 @@ export const LicensesSection = ({ onClose }) => {
       neverExpires: false,
     });
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // Save logic would go here
-    console.log("Saving license:", formData);
+    try {
+      const res = await addLicense({ ...formData, user_id: userId });
+      if (res) {
+        console.log("Saving license:", formData);
+        onClose(); // Close modal or form
+        window.location.reload(); // Refresh page to show the new data
+      }
+    } catch (err) {
+      console.error("Error saving license:", err);
+    }
     onClose();
   };
 
@@ -1181,7 +1232,7 @@ export const LicensesSection = ({ onClose }) => {
             name="issueDate"
             label="Issue Date"
             value={formData.issueDate}
-            onChange={(date) => handleDateChange("issueDate", date)}
+            onChange={(name, date) => handleDateChange("issueDate", date)}
             required={true}
             field="issueDate"
           />
@@ -1190,7 +1241,7 @@ export const LicensesSection = ({ onClose }) => {
             name="expirationDate"
             label="Expiration Date"
             value={formData.expirationDate}
-            onChange={(date) => handleDateChange("expirationDate", date)}
+            onChange={(name, date) => handleDateChange("expirationDate", date)}
             disabled={formData.neverExpires}
             field="expirationDate"
           />
@@ -1250,10 +1301,17 @@ export const TestimonialsSection = ({ onClose }) => {
       rating: "5",
     });
 
-  const handleSave = () => {
-    // Save logic would go here
-    console.log("Saving testimonial:", formData);
-    onClose();
+  const handleSave = async () => {
+    try {
+      const res = await addTestimonial({ ...formData, user_id: userId });
+      if (res) {
+        console.log("Saving testimonial:", formData);
+        onClose(); // Close modal or form
+        window.location.reload(); // Refresh page to show the new data
+      }
+    } catch (err) {
+      console.error("Error saving testimonial:", err);
+    }
   };
 
   return (
@@ -1299,7 +1357,7 @@ export const TestimonialsSection = ({ onClose }) => {
           name="testimonialDate"
           label="Testimonial Date"
           value={formData.testimonialDate}
-          onChange={(date) => handleDateChange("testimonialDate", date)}
+          onChange={(name, date) => handleDateChange("testimonialDate", date)}
           field="testimonialDate"
         />
 
@@ -1367,7 +1425,7 @@ export const TestimonialsSection = ({ onClose }) => {
  * AboutMeSection
  */
 
-export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
+export const AboutMeSection = ({ onClose, initialData = {} }) => {
   // Ghana regions and cities
   const ghanaRegionsAndCities = {
     "Greater Accra": ["Adabraka", "Accra", "Tema", "Madina"],
@@ -1397,13 +1455,20 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     { value: "native", label: "Native" },
   ];
 
+  function stripHtmlTags(html) {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  }
+  
+
   // Initialize with profile form hook
   const { formData, setFormData, handleInputChange, isSubmitting } =
     useProfileForm({
       firstname: initialData.firstname || "",
       lastname: initialData.lastname || "",
       profession: initialData.profession || "",
-      bio: initialData.bio || "",
+      bio: stripHtmlTags(initialData.bio) || "", 
       region: initialData.region || "Greater Accra",
       city: initialData.city || "Adabraka",
       hourly_rate: initialData.hourlyRate || "75",
@@ -1465,19 +1530,18 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
   };
 
   // Save all changes
-  const handleSave = () => {
+  const handleSave = async () => {
     // Combine form data with languages
-    const profileData = {
-      ...formData,
-      languages,
-    };
-
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Saving profile data:", profileData);
-      addProfile(profileData);
-      if (onSave) onSave(profileData);
-    }, 800);
+    try {
+      const res = await addProfile({ ...formData, languages });
+      if (res) {
+        console.log("Saving profile:", formData);
+        onClose(); // Close modal or form
+        window.location.reload(); // Refresh page to show the new data
+      }
+    } catch (err) {
+      console.error("Error saving profile:", err);
+    }
   };
 
   return (

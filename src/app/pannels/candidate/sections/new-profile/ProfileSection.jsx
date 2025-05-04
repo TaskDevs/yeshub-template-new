@@ -1,5 +1,4 @@
 import { GoPlus } from "react-icons/go";
-import { BiSolidEdit } from "react-icons/bi";
 import {
   AboutMeDetails,
   CertificationsDetails,
@@ -17,18 +16,17 @@ import { FaShareAlt, FaStar } from "react-icons/fa";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { Avatar } from "@mui/material";
 // Get the appropriate modal content based on active section
-const getInfoContent = (data, activeSection) => {
+const getInfoContent = (data, activeSection,onClick) => {
   if (!activeSection) return null;
 
   const { profileData } = useContext(ProfileApiData);
   data = profileData;
-  
+
   switch (activeSection) {
     case "skills":
       return <SkillsDetails data={data} />;
     case "workHistory":
-      console.log('work test',data)
-      return <WorkHistoryDetails data={data} />;
+      return <WorkHistoryDetails data={data} onClick={onClick} />;
     case "education":
       return <EducationDetails data={data} />;
     case "portfolio":
@@ -149,16 +147,13 @@ export const ProfileSection = ({
             <GoPlus className="w-6 h-6 text-gray-400" />
           </button>
         ) : (
-          <BiSolidEdit
-            onClick={onClick}
-            className="w-4 h-4 text-[#305718] cursor-pointer"
-          />
+          <></>
         )}
       </div>
       {noData ? (
         <p className="text-gray-500 text-sm">{description}</p>
       ) : (
-        <>{getInfoContent(data, activeSection)}</>
+        <>{getInfoContent(data, activeSection,onClick)}</>
       )}
 
       {/* Share Modal */}

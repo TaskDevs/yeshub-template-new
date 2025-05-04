@@ -10,6 +10,7 @@ const CandidateProfile = () => {
   const [activeSection, setActiveSection] = useState(null);
   const [currentStepTitle, setCurrentStepTitle] = useState('');
   const { profileData } = useContext(ProfileApiData);
+  const [activeId, setactiveId] = useState(null);
   
   const { formData } = useProfileForm();
 
@@ -22,7 +23,15 @@ const CandidateProfile = () => {
   };
 
   // Open modal handler with section
-  const handleOpenSectionModal = (sectionKey) => {
+  const handleOpenSectionModal = (sectionKey,id) => {
+    //fetching data here .. 
+    if (id.typeof !== undefined) {
+      console.log('fetching data here...', id);
+    } else {
+      console.log('new data...');
+    }
+    setactiveId(id);
+
     setActiveSection(sectionKey);
     setModalOpen(true);
   };
@@ -35,7 +44,7 @@ const CandidateProfile = () => {
       case 'skills':
         return <SkillsSection initialSelectedSkills={profileData} onClose={handleCloseModal} />;
       case 'workHistory':
-        return <WorkHistorySection initialData={profileData} onClose={handleCloseModal} />;
+        return <WorkHistorySection id={activeId} onClose={handleCloseModal} />;
       case 'education':
         return <EducationSection onClose={handleCloseModal} />;
       case 'portfolio':
@@ -71,8 +80,8 @@ const CandidateProfile = () => {
   // Setup section click handlers
   const enhancedProfileSections = profileSections.map(section => ({
     ...section,
-    onClick: () => {
-      handleOpenSectionModal(sectionKeyMap[section.title])
+    onClick: (id) => {
+      handleOpenSectionModal(sectionKeyMap[section.title],id)
     }
   }));
 

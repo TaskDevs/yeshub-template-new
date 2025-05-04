@@ -2,6 +2,7 @@ import { MdLanguage, MdLocationOn } from "react-icons/md";
 import { InfoGridItem } from "./InfoGridItem";
 import { FaCediSign, FaIdCard } from "react-icons/fa6";
 import { HiBadgeCheck } from "react-icons/hi";
+import { BiSolidEdit } from "react-icons/bi";
 import {
   FaExternalLinkAlt,
   FaCircle,
@@ -16,12 +17,20 @@ import {
 } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 
-export const WorkHistoryDetails = ({ data }) => (
+export const WorkHistoryDetails = ({ data,onClick }) => (
   <div className="space-y-4">
     
     {data?.work_history?.map((job, index) => (
       <div key={index} className="pb-3">
-        <h3 className="font-medium">{job.job_title}</h3>
+        <div className="flex flex-row justify-between">
+        <h3 className="font-medium text-wrap">{job.job_title}</h3>
+
+        <BiSolidEdit
+        onClick={() => onClick(job.id)}
+            className="w-4 h-4 text-[#305718] cursor-pointer"
+          />
+        </div>
+        
         <p className="text-gray-500 text-sm">{job.start_date} - {job.end_date}</p>
       </div>
     ))}
@@ -104,8 +113,8 @@ export const LicensesDetails = ({ data }) => (
 
 // Certifications
 export const CertificationsDetails = ({ data }) => (
-  <div className="flex flex-col justify-start w-full space-y-6">
-    {data.map((cert, index) => (
+  <div className="flex flex-row justify-start w-full space-y-6">
+    {data?.certificates?.map((cert, index) => (
       <div
         key={index}
         className="bg-white border border-gray-100 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
@@ -113,22 +122,22 @@ export const CertificationsDetails = ({ data }) => (
         <div className="flex items-center justify-start mb-3">
           <HiBadgeCheck className="text-green-600" size={18} />
           <h3 className="-ml-1 font-bold text-gray-800">
-            {cert.certificationName}
+            {cert.name}
           </h3>
         </div>
 
         <div className="ml-7 space-y-2">
           <div className="text-gray-700">
             <span className="font-medium">Issuing Organization:</span>{" "}
-            {cert.issuingOrganization}
+            {cert.organization}
           </div>
 
           <div className="text-gray-700 flex items-center justify-start">
             <span className="font-medium">Credential ID:</span>
-            <span className="-ml-2.5">{cert.credentialID}</span>
-            {cert.credentialUrl && (
+            <span className="-ml-2.5">{cert.credential_id}</span>
+            {cert.credential_url && (
               <a
-                href={cert.credentialUrl}
+                href={cert.credential_url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 ml-auto flex items-center justify-end gap-1 font-bold text-sm hover:underline"
@@ -140,14 +149,14 @@ export const CertificationsDetails = ({ data }) => (
 
           <div className="flex items-center justify-start gap-0 text-gray-600 text-sm mt-1">
             <FaCalendarAlt className="mr-2" size={14} />
-            <span>Issued: {new Date(cert.issueDate).toLocaleDateString()}</span>
+            <span>Issued On: {new Date(cert.issued_at).toLocaleDateString()}</span>
             {cert.hasExpiry && cert.expiryDate && (
               <span className="flex items-center justify-start gap-0 ">
                 {" "}
                 <GoDotFill
                   size={8}
                   className="mx-1 text-gray-400"
-                /> Expires: {new Date(cert.expiryDate).toLocaleDateString()}
+                /> Expires: {new Date(cert.expires_at).toLocaleDateString()}
               </span>
             )}
           </div>
@@ -165,23 +174,23 @@ export const CertificationsDetails = ({ data }) => (
 
 export const EducationDetails = ({ data }) => (
   <div className="flex flex-col flex-wrap items-start justify-start gap-2 space-y-5">
-    {data.map((education, index) => (
+    {data?.education?.map((education, index) => (
       <div key={index} className="flex flex-col items-start -space-y-4">
         <div className="text-gray-500 text-sm ml-12">
-          {education.startDate} to {education.endDate}
+          {education.date_attended} to {education.date_completed}
         </div>
 
         <div className="flex items-center justify-start">
           <FaCircle className="text-green-700 text-xs " />
-          <p className="flex items-center justify-start text-green-700 font-medium">
+          <p className="flex items-center justify-start text-green-700 font-medium capitalize">
             <hr className="bg-green-700 opacity-100 -mx-2.5 h-0.5 w-6 border-none" />
-            {education.institutionName}
+            {education.school}
           </p>
         </div>
 
         <div className="ml-12 pt-2">
           <div className="font-semibold text-black text-sm">
-            {education.degree}
+            {education.qualification}
           </div>
           <div className="text-gray-600 mt-1.5 text-sm">
             {education.description}
@@ -271,7 +280,7 @@ export const WorkHoursDetails = ({ data }) => (
 // TestimonialsDetails
 export const TestimonialsDetails = ({ data }) => (
   <div className="space-y-6">
-    {data.map((testimonial, index) => (
+    {data?.testimonials?.map((testimonial, index) => (
       <div
         key={index}
         className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow"
@@ -322,7 +331,7 @@ export const TestimonialsDetails = ({ data }) => (
 // PortfolioDetails
 export const PortfolioDetails = ({ data }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {data.map((project, index) => (
+    {data?.portfolios?.map((project, index) => (
       <div
         key={index}
         className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
@@ -331,14 +340,14 @@ export const PortfolioDetails = ({ data }) => (
           <div className="h-28 overflow-hidden bg-gray-100">
             <img
               src={project.images[0]}
-              alt={project.projectTitle}
+              alt={project.project_title}
               className="w-full h-full object-cover"
             />
           </div>
         )}
 
         <div className="p-5">
-          <h3 className="font-bold text-lg mb-2">{project.projectTitle}</h3>
+          <h3 className="font-bold text-lg mb-2 capitalize">{project.project_title}</h3>
 
           <div className="flex items-center text-gray-600 text-sm mb-3">
             <div className="flex items-center justify-start">
@@ -373,14 +382,14 @@ export const PortfolioDetails = ({ data }) => (
             <div className="flex items-center justify-start">
               <FaCalendarAlt />
               <span>
-                {project.startDate} –{" "}
-                {project.current ? "Present" : project.endDate}
+                {project.project_start_date} –{" "}
+                {project.current ? "Present" : project.project_end_date}
               </span>
             </div>
 
             {project.projectUrl && (
               <a
-                href={project.projectUrl}
+                href={project.project_url}
                 className="flex items-center text-green-700 hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -422,7 +431,7 @@ export const AboutMeDetails = ({ data }) => (
 
         <InfoGridItem
           icon={<MdLanguage className="w-4 h-4 text-[#4B5563]" />}
-          title="Languages"
+          title="Language"
         >
           <div className="flex flex-row items-center">
             {data.languages?.map((lang, index) => (

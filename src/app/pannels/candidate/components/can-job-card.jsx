@@ -19,18 +19,8 @@ const Tags = ({ bg, color, text }) => {
   );
 };
 
-const getCleanTruncatedDescription = (description) => {
-  if (!description) return "No description provided."; // handle null/undefined
 
-  // remove all HTML tags
-  const cleanText = description.replace(/<[^>]*>/g, "").trim();
 
-  // fallback if empty after cleaning
-  if (!cleanText) return "No description provided.";
-
-  // truncate to 100 chars max (you can adjust this)
-  return cleanText.length > 100 ? cleanText.slice(0, 97) + "..." : cleanText;
-};
 
 const CanJobCard = ({
   role,
@@ -75,9 +65,8 @@ const CanJobCard = ({
                     <span className="text-gray-500">({reviews} reviews)</span>
                   </div>
 
-                  <p className="truncate w-[70%] text-sm text-gray-700">
-                    {getCleanTruncatedDescription(description)}
-                  </p>
+                  <div className="truncate w-[70%] text-sm text-gray-700" dangerouslySetInnerHTML={{ __html: description }} />
+
 
                   <div className="flex flex-wrap gap-2 mt-2">
                     {skills?.map((skill, i) => (

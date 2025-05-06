@@ -66,6 +66,7 @@ export const publicUser = {
     PROFILE: "/profile",
     FIND_TALENT: "/find-talent",
     DASHBOARD: "/dashboard-client",
+    PROPOSALS: "/client-proposals",
   },
   candidate: {
     GRID: "/can-grid",
@@ -96,6 +97,7 @@ export const candidate = {
   Contracts_History: "/contracts-history",
   Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
+  FIND_WORK_DETAILS: "/find-work-details/:id",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
   RESUME: "/my-resume",

@@ -24,7 +24,7 @@ const getInfoContent = (data, activeSection) => {
     case "skills":
       return <SkillsDetails data={data} />;
     case "workHistory":
-      return <WorkHistoryDetails data={data} />;
+      return <WorkHistoryDetails data={data}  />;
     case "education":
       return <EducationDetails data={data} />;
     case "portfolio":
@@ -207,22 +207,26 @@ export const ProfileSection = ({
       <div className="flex justify-between mb-4">
         <h2 className="font-semibold text-lg -mb-2">{title}</h2>
 
-        {noData ? (
+        {(noData || !['aboutMe', 'skills','workHours'].includes(activeSection))  ? (
           <button onClick={onClick}>
             <GoPlus className="w-6 h-6 text-gray-400" />
           </button>
         ) : (
-          <BiSolidEdit
-            onClick={onClick}
-            className="w-4 h-4 text-[#305718] cursor-pointer"
-          />
+          <></>
         )}
+
+        {(!noData && (activeSection === 'aboutMe' || activeSection === 'skills'))  ? (
+          <BiSolidEdit onClick={onClick} className="w-4 h-4 text-[#305718] cursor-pointer" />
+        ) : (
+          <></>
+        )}
+
       </div>
 
       {noData ? (
         <p className="text-gray-500 text-sm">{description}</p>
       ) : (
-        <>{getInfoContent(data, activeSection)}</>
+        <>{getInfoContent(data, activeSection,onClick)}</>
       )}
 
       {showShareModal && (

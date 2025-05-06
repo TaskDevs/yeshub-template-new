@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { LuImagePlus } from 'react-icons/lu';
-import { MdClose } from 'react-icons/md';
-import { MdAdd } from 'react-icons/md';
-import { RiCloseLine } from 'react-icons/ri';
+import React, { useEffect, useRef } from "react";
+import { LuImagePlus } from "react-icons/lu";
+import { MdClose } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
+import { RiCloseLine } from "react-icons/ri";
 
 /**
  * All profile form components
@@ -19,13 +19,13 @@ export const ProfileSectionModal = ({
   useEffect(() => {
     if (isOpen) {
       const handleEscape = (e) => {
-        if (e.key === 'Escape') onClose();
+        if (e.key === "Escape") onClose();
       };
 
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("keydown", handleEscape);
 
       return () => {
-        document.removeEventListener('keydown', handleEscape);
+        document.removeEventListener("keydown", handleEscape);
       };
     }
   }, [isOpen, onClose]);
@@ -35,10 +35,14 @@ export const ProfileSectionModal = ({
   return (
     <div className="fixed inset-0 zIndex2 bg-black bg-opacity-50 flex justify-end">
       <div
-        className={`bg-white w-full ${isSkillsSection ? "max-w-4xl" : "max-w-2xl"}  zIndex2 mx-auto h-[95%] rounded-lg flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
+        className={`bg-white w-full ${
+          isSkillsSection ? "max-w-4xl" : "max-w-2xl"
+        }  zIndex2 mx-auto h-[95%] rounded-lg flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
       >
         <div className="flex justify-between items-center px-6 p-5 border-b w-full">
-          <h2 className="text-xl font-bold capitalize">{title} {currentStepTitle ?? ""}</h2>
+          <h2 className="text-xl font-bold capitalize">
+            {title} {currentStepTitle ?? ""}
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -56,18 +60,124 @@ export const ProfileSectionModal = ({
 };
 
 /**
+ * All profile form components
+ */
+export const StatusSectionModal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  isSkillsSection,
+  currentStepTitle,
+}) => {
+  // Only handle Escape key to close modal
+  useEffect(() => {
+    if (isOpen) {
+      const handleEscape = (e) => {
+        if (e.key === "Escape") onClose();
+      };
+
+      document.addEventListener("keydown", handleEscape);
+
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+      };
+    }
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 zIndex2 bg-black bg-opacity-50 flex justify-end">
+      <div
+        className={`bg-white w-full ${
+          isSkillsSection ? "max-w-4xl" : "max-w-2xl"
+        }  zIndex2 mx-auto  rounded-lg flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
+      >
+        <div className="flex justify-between items-center px-6 p-5 border-b w-full">
+          <h2 className="text-xl font-bold capitalize">
+            {title} {currentStepTitle ?? ""}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <MdClose size={24} />
+          </button>
+        </div>
+
+        <div className="flex-grow overflow-y-auto p-6 -mt-3 w-full flex  justify-center">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const ProposalSubmissionModal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  isSkillsSection,
+  currentStepTitle,
+}) => {
+  // Only handle Escape key to close modal
+  useEffect(() => {
+    if (isOpen) {
+      const handleEscape = (e) => {
+        if (e.key === "Escape") onClose();
+      };
+
+      document.addEventListener("keydown", handleEscape);
+
+      return () => {
+        document.removeEventListener("keydown", handleEscape);
+      };
+    }
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 zIndex2 bg-black bg-opacity-50 flex justify-end">
+      <div
+        className={`bg-white w-full h-[90%] ${
+          isSkillsSection ? "max-w-4xl" : "max-w-2xl"
+        }  zIndex2 mx-auto  rounded-lg flex flex-col justify-center items-center transform transition-transform duration-300 ease-in-out translate-x-0`}
+      >
+        <div className="flex justify-between items-center px-6 p-5 border-b w-full">
+          <h2 className="text-xl font-bold capitalize">
+            {title} {currentStepTitle ?? ""}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            <MdClose size={24} />
+          </button>
+        </div>
+
+        <div className="flex-grow overflow-y-auto p-6 -mt-3 w-full flex ">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
  * Date input component
  */
 
-
 export const DateInput = ({
-  value = '',
+  value = "",
   onChange,
   name,
   disabled = false,
   required = false,
-  label = '',
-  placeholder = "-/-/-"
+  label = "",
+  placeholder = "-/-/-",
 }) => {
   return (
     <div className="form-group">
@@ -93,7 +203,7 @@ export const DateInput = ({
 };
 
 /**
- *  Input Field component 
+ *  Input Field component
  */
 export const FormInput = ({
   field,
@@ -104,7 +214,7 @@ export const FormInput = ({
   type = "text",
   placeholder = "",
   icon = null,
-  className = ""
+  className = "",
 }) => {
   const handleChange = (e) => {
     if (typeof onChange === "function") {
@@ -154,7 +264,7 @@ export const FormTextarea = ({
   required = false,
   placeholder = "",
   rows = 5,
-  className = ""
+  className = "",
 }) => {
   const handleChange = (e) => {
     if (typeof onChange === "function") {
@@ -189,7 +299,14 @@ export const FormTextarea = ({
 /**
  * File Upload Component for Projects
  */
-export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, error, isCoverImage = false }) => {
+export const FileUpload = ({
+  files,
+  onFileSelect,
+  onFileDrop,
+  onFileRemove,
+  error,
+  isCoverImage = false,
+}) => {
   const fileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
@@ -209,7 +326,8 @@ export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, erro
             <LuImagePlus className="mx-auto h-7 w-7 text-[#9CA3AF]" />
           </div>
           <p className="flex items-center justify-center gap-1 mb-2 text-sm text-gray-500">
-            <span className="text-[#305718]">Upload images</span> or drag and drop
+            <span className="text-[#305718]">Upload images</span> or drag and
+            drop
           </p>
           <p className="text-xs text-gray-400">PNG, JPG, GIF up to 10MB</p>
         </div>
@@ -221,7 +339,7 @@ export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, erro
           className="hidden"
           onChange={(e) => {
             onFileSelect(e.target.files);
-            e.target.value = ''; // Reset input value after selection
+            e.target.value = ""; // Reset input value after selection
           }}
         />
       </div>
@@ -229,7 +347,11 @@ export const FileUpload = ({ files, onFileSelect, onFileDrop, onFileRemove, erro
       {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       {files.length > 0 && (
-        <div className={`mt-4 grid ${isCoverImage ?"grid-cols-1":"grid-cols-2 sm:grid-cols-3"}  gap-4`}>
+        <div
+          className={`mt-4 grid ${
+            isCoverImage ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3"
+          }  gap-4`}
+        >
           {files.map((file, index) => (
             <div key={index} className="relative">
               <img
@@ -302,7 +424,12 @@ export const RecommendedSkill = ({ skill, onAdd }) => {
 /**
  * Button components
  */
-export const PrimaryButton = ({ children, onClick, disabled = false, className = "" }) => (
+export const PrimaryButton = ({
+  children,
+  onClick,
+  disabled = false,
+  className = "",
+}) => (
   <button
     onClick={onClick}
     disabled={disabled}

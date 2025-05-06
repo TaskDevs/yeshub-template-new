@@ -144,10 +144,7 @@ export const ProfileSectionsManager = ({
         />
       </div>
 
-           {/* user cv */}
-      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
-        test
-        </div> */}
+     
     </div>
   );
 };

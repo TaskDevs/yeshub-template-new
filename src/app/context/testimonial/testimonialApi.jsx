@@ -10,7 +10,7 @@ import {
 export const addTestimonial = async (data) => {
   try {
     let responseOnAddTestimonial = await axios.post(
-			`${REACT_BASE_URL}create-testimonial`,
+			`${REACT_BASE_URL}testimonials`,
 			data
 		);
     return responseOnAddTestimonial;
@@ -28,7 +28,7 @@ export const addTestimonial = async (data) => {
 export const testimonialList = async (id) => {
   try {
     let responseOnTestimonialList = await axios.get(
-			`${REACT_BASE_URL}get-testimonial-by-user-id/${id}`
+			`${REACT_BASE_URL}testimonials/${id}`
 		);
     return responseOnTestimonialList;
 
@@ -56,7 +56,7 @@ export const testimonialProfile = async () => {
 export const updateTestimonial = async (id, data) => {
   try {
     let responseOnUpdateTestimonial = await axios.put(
-			`${REACT_BASE_URL}update-testimonial/${id}`,
+			`${REACT_BASE_URL}testimonials/${id}`,
 			data
 		);
     return responseOnUpdateTestimonial;
@@ -75,7 +75,7 @@ export const updateTestimonial = async (id, data) => {
 export const deleteTestimonial = async (id) => {
   try {
     let responseOnDeleteTestimonial = await axios.delete(
-			`${REACT_BASE_URL}delete-testimonial/${id}`
+			`${REACT_BASE_URL}testimonials/${id}`
 		);
     return responseOnDeleteTestimonial;
     // if (responseOnDeleteTestimonial.status === SUCCESS_STATUS) {

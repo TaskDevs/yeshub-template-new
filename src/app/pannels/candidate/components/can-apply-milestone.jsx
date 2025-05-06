@@ -42,7 +42,7 @@ function CanApplyMilestone() {
       <div className="twm-right-section-panel site-bg-gray applied-wrapper">
         <div className="section-full p-t120 p-b90 bg-white">
           <a
-            href={`/dashboard-candidate/saved-jobs`}
+            href={`/dashboard-candidate/find-work`}
             className="applied-view-btn"
           >
             <button className="site-button">Back</button>

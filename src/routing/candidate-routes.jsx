@@ -22,6 +22,7 @@ import CandidateProfile from "../app/pannels/candidate/sections/new-profile/cand
 import FindWorkPage from "../app/pannels/candidate/sections/find-work/find-work-page";
 import ActiveContracts from "../app/pannels/candidate/sections/deliver-work/active-contracts";
 import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/new-saved-jobs-page";
+import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
 
 function CandidateRoutes() {
 	return (
@@ -29,6 +30,7 @@ function CandidateRoutes() {
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
 			<Route path={candidate.PROFILE} element={<CandidateProfile />} />
 			<Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
+			<Route path={candidate.FIND_WORK_DETAILS} element={<FindWorkDetails />} />
 			{/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
 			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
 			<Route path={candidate.RESUME} element={<CanMyResumePage />} />

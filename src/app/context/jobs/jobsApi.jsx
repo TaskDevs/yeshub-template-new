@@ -25,13 +25,31 @@ export const addJob = async (data) => {
   }
 };
 
+// Apply for job
+export const applyForJob = async (data) => {
+  try {
+    let responseOnApplyForJob = await axios.post(
+      `${REACT_BASE_URL}apply-for-job`,
+      data
+    );
+    if (responseOnApplyForJob.status == SUCCESS_STATUS) {
+      return responseOnApplyForJob.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 // LIST Job
-export const jobList = async (pageNo) => {
+export const jobList = async (pageNo, userId) => {
   try {
     let responseOnJobList = await axios.get(
-      `${REACT_BASE_URL}get-posted-jobs?pageNo=${
+      `${REACT_BASE_URL}get-new-jobs?pageNo=${
         pageNo ? pageNo : 1
-      }&perPage=${LIST_ON_PAGES}`
+      }&perPage=${LIST_ON_PAGES}&user_id=${userId}`
     );
     if (responseOnJobList.status == 200) {
       console.log(responseOnJobList);

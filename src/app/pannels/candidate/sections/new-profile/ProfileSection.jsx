@@ -39,6 +39,7 @@ const getInfoContent = (data, activeSection) => {
       return <WorkHoursDetails data={data} />;
     case "aboutMe":
       return <AboutMeDetails data={data} />;
+    
     default:
       return null;
   }

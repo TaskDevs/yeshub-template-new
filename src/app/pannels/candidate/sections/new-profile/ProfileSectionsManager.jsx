@@ -144,18 +144,10 @@ export const ProfileSectionsManager = ({
         />
       </div>
 
-           {/* Certifications and Work hours */}
-        {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem] mb-5 pb-4">
-        <ProfileSection
-          title={profileSections[5]?.title}
-          data={candidateData?.certifications}
-          onClick={profileSections[5]?.onClick}
-          noData={!candidateData?.certifications?.length}
-          description={profileSections[5]?.description}
-          activeSection={sectionKeyMap[profileSections[5]?.title]}
-        />
-      
-      </div> */}
+           {/* user cv */}
+      {/* <div className="grid md:grid-cols-2 md:mb-0 gap-6 mb-[5rem]">
+        test
+        </div> */}
     </div>
   );
 };
@@ -2010,3 +2002,5 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     </div>
   );
 };
+
+

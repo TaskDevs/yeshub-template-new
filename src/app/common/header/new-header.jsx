@@ -30,9 +30,7 @@ export const Header = ({ isDashboard = true }) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const { firstname, lastname, profession, profile_image } = profileData;
-  useEffect(() => {
-    console.log("profile data", profileData);
-  }, [profileData]);
+  
 
   const role = sessionStorage.getItem("userRole");
   // colors for the username

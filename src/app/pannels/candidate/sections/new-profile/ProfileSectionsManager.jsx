@@ -495,119 +495,6 @@ export const EducationSection = ({ onClose }) => {
   );
 };
 
-/**\
- * WorkHistorySection
- */
-// export const WorkHistorySection = ({ onClose, initialData = {} }) => {
-//   const { formData, handleInputChange, handleDateChange, isSubmitting } =
-//     useProfileForm({
-//       job_title: initialData.job_title || "",
-//       company_name: initialData.company_name || "",
-//       location: initialData.location || "",
-//       start_date: initialData.start_tate || "",
-//       end_date: initialData.end_date || "",
-//       duty: initialData.duty || "",
-//       current: initialData.current || false,
-//     });
-
-//     const handleSave = async () => {
-//       try {
-//         const res = await addHistory({ ...formData, user_id: userId });
-//         if (res) {
-//           console.log("Saving work history:", formData);
-//           onClose(); // Close modal or form
-//           window.location.reload(); // Refresh page to show the new data
-//         }
-//       } catch (err) {
-//         console.error("Error saving work history:", err);
-//       }
-//     };
-
-//   return (
-//     <div className="flex flex-col h-full bg-white z-50 w-full">
-//       <div className="space-y-6 w-full">
-//         <FormInput
-//           field="job_title"
-//           label="Job Title"
-//           value={formData.job_title}
-//           onChange={handleInputChange}
-//           required={true}
-//           placeholder="e.g. Senior Software Engineer"
-//         />
-
-//         <FormInput
-//           field="company_name"
-//           label="Company Name"
-//           value={formData.company_name}
-//           onChange={handleInputChange}
-//           required={true}
-//           placeholder="e.g. Tech Corp"
-//         />
-
-//         <FormInput
-//           field="location"
-//           label="Location"
-//           value={formData.location}
-//           onChange={handleInputChange}
-//           placeholder="e.g. San Francisco, CA"
-//         />
-
-//         <div className="grid grid-cols-2 gap-4">
-//           <DateInput
-//             name="start_date"
-//             label="Start Date"
-//             value={formData.start_date}
-//             onChange={(name, date) => handleDateChange("start_date", date)}
-//             required={true}
-//             field="start_ate"
-//           />
-
-//           <DateInput
-//             name="end_date"
-//             label="End Date"
-//             value={formData.end_date}
-//             onChange={(name, date) => handleDateChange("end_ate", date)}
-//             disabled={formData.current}
-//             field="end_date"
-//           />
-//         </div>
-
-//         <div className="flex items-center justify-end -mt-3">
-//           <input
-//             type="checkbox"
-//             id="current"
-//             checked={formData.current}
-//             onChange={() => handleInputChange("current", !formData.current)}
-//           />
-//           <label htmlFor="current">I currently work here</label>
-//         </div>
-
-//         <FormTextarea
-//           field="duty"
-//           label="Responsibilities"
-//           value={formData.duty}
-//           onChange={handleInputChange}
-//           placeholder="Describe your key responsibilities and achievements..."
-//           rows={4}
-//         />
-//       </div>
-
-//       {/* Action Buttons */}
-//       <div className="flex items-center justify-between w-full pt-4 gap-3 pb-5">
-//         <TertiaryButton onClick={() => {}} icon={<FaTrash size={14} />}>
-//           Clear All
-//         </TertiaryButton>
-
-//         <div className="flex items-center justify-start gap-3">
-//           <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
-//           <PrimaryButton onClick={handleSave} disabled={isSubmitting}>
-//             {isSubmitting ? "Saving..." : "Save Changes"}
-//           </PrimaryButton>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
 
 export const WorkHistorySection = ({ onClose, initialData = {} }) => {
   const {
@@ -1007,6 +894,7 @@ export const CertificationsSection = ({ onClose, initialData = {} }) => {
           current: false,
         });
         onClose(); // Close modal or form
+        window.location.reload();
       }
     } catch (err) {
       console.error("Error saving work history:", err);
@@ -1185,6 +1073,7 @@ export const WorkHoursSection = ({ onClose }) => {
           notice: "",
         });
         onClose();
+        window.location.reload();
       }
     } catch (err) {
       console.error(
@@ -1405,6 +1294,7 @@ export const LicensesSection = ({ onClose }) => {
           never__nxpires: false,
         });
         onClose();
+        window.location.reload();
       }
     } catch (err) {
       console.error(
@@ -1535,6 +1425,7 @@ export const TestimonialsSection = ({ onClose }) => {
             rating: "5",
           });
           onClose();
+          window.location.reload();
         }
       } catch (err) {
         console.error(

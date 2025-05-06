@@ -149,10 +149,10 @@ useEffect(() => {
                     </div>
 
                     <div className="flex justify-between items-center border-b my-4 w-full px-2 ">
-                      <div className="flex items-center">
+                      {/* <div className="flex items-center">
                         <input type="checkbox" className="size-4" />
                         <span className="ml-1">Select all</span>
-                      </div>
+                      </div> */}
                       <div className="flex capitalize">
                         <button className="flex">
                           <FaRegTrashAlt />

@@ -1520,7 +1520,7 @@ export const TestimonialsSection = ({ onClose }) => {
     });
 
     const handleSave = async () => {
-      console.log("Saving testimonial:", formData);
+   
       setIsSubmitting(true);
       try {
         const res = await addTestimonial({ ...formData, user_id: userId });
@@ -1687,13 +1687,17 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
     { value: "native", label: "Native" },
   ];
 
+  const formattedBio = initialData.bio
+  ? initialData.bio.replace(/<[^>]*>/g, '') // Remove all HTML tags
+  : '';
+
   // Initialize with profile form hook
-  const { formData, setFormData, handleInputChange, isSubmitting } =
+  const { formData, setFormData, handleInputChange, isSubmitting, setIsSubmitting} =
     useProfileForm({
       firstname: initialData.firstname || "",
       lastname: initialData.lastname || "",
       profession: initialData.profession || "",
-      bio: initialData.bio || "",
+      bio: formattedBio || "",
       region: initialData.region || "Greater Accra",
       city: initialData.city || "Adabraka",
       hourly_rate: initialData.hourlyRate || "75",
@@ -1755,20 +1759,36 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
   };
 
   // Save all changes
-  const handleSave = () => {
+  const handleSave = async () => {
+    setIsSubmitting(true);
+    // Set submitting state
+    setFormData((prev) => ({ ...prev, isSubmitting: true }));
+  
     // Combine form data with languages
     const profileData = {
       ...formData,
       languages,
     };
-
-    // Simulate API call
-    setTimeout(() => {
+  
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 800));
       console.log("Saving profile data:", profileData);
-      addProfile(profileData);
+      await addProfile(profileData);
+  
       if (onSave) onSave(profileData);
-    }, 800);
+  
+      // Reload the page
+      window.location.reload();
+    } catch (error) {
+      console.error("Error saving profile:", error);
+    } finally {
+      // Reset submitting state
+      setFormData((prev) => ({ ...prev, isSubmitting: false }));
+      setIsSubmitting(false);
+    }
   };
+  
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
@@ -1884,9 +1904,9 @@ export const AboutMeSection = ({ onSave, onClose, initialData = {} }) => {
               </span>
               <input
                 type="number"
-                value={formData.hourlyRate}
+                value={formData.hourly_rate}
                 onChange={(e) =>
-                  handleInputChange("hourlyRate", e.target.value)
+                  handleInputChange("hourly_rate", e.target.value)
                 }
                 className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="75"

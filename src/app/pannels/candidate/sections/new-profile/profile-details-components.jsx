@@ -13,6 +13,7 @@ import {
   FaStar,
   FaQuoteLeft,
   FaLink,
+ 
 } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { FaTrashAlt } from "react-icons/fa";
@@ -211,7 +212,7 @@ export const CertificationsDetails = ({ data }) => {
               onClick={() => handleDelete(cert.id)}
               className="ml-auto text-red-600 hover:bg-red-200 text-sm bg-red-200 m-2 rounded-full p-1"
             >
-              Delete
+              <FaTrashAlt size={16} />
             </button>
           </div>
 
@@ -494,7 +495,7 @@ export const PortfolioDetails = ({ data }) => (
               </span>
             </div>
 
-            {project.project_url && (
+            {project?.project_url && (
               <a
                 href={project.project_url}
                 className="flex items-center text-green-700 hover:underline"
@@ -517,7 +518,7 @@ export const AboutMeDetails = ({ data }) => (
     {/* About Me  */}
     <div className="bg-white mb-6 w-full col-12">
       <div className="mt-1">
-        <p className="text-gray-700">{data.bio}</p>
+        <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: data.bio}}></p>
       </div>
     </div>
 
@@ -526,10 +527,10 @@ export const AboutMeDetails = ({ data }) => (
       {/* Left column */}
       <div className="space-y-6">
         <InfoGridItem
-          icon={<MdLocationOn className="w-4 h-4 text-[#4B5563]" />}
+          icon={<MdLocationOn className="w-4 h-4 text-red" />}
           title="Location"
         >
-          <p className="text-[#4B5563]">{data.address}</p>
+          <p className="text-[#4B5563]">{data.region},{data.city},{data.address} </p>
         </InfoGridItem>
 
         <InfoGridItem
@@ -537,7 +538,7 @@ export const AboutMeDetails = ({ data }) => (
           title="Languages"
         >
           <div className="flex flex-row items-center">
-            {data.languages.map((lang, index) => (
+            {data?.languages?.map((lang, index) => (
               <>
                 <p className="text-[#4B5563]" key={index}>
                   {lang.language} ({lang.proficiency}){" "}

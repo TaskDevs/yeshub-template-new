@@ -22,6 +22,7 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
         return newErrors;
       });
     }
+    
   };
 
   // Handle checkbox toggle

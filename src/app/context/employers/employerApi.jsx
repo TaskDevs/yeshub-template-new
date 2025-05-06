@@ -1,15 +1,10 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 //import axios from "../../../utils/axios.config";
 import axios from "axios";
-import {
-  SUCCESS_STATUS,
-  REACT_BASE_URL,
-  LOCALHOST_BACKEND,
-} from "../../../globals/constants";
+import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
-  console.log(data);
   try {
     let responseOnAddEmployer = await axios.post(
       `${REACT_BASE_URL}create-employers`,
@@ -169,7 +164,7 @@ export const employerProfile = async (id) => {
 export const companyInfo = async (id) => {
   try {
     let responseOnCompanyInfo = await axios.get(
-      `${LOCALHOST_BACKEND}employers/${id}`
+      `${REACT_BASE_URL}employers/${id}`
     );
     if (responseOnCompanyInfo.status == 200) {
       return responseOnCompanyInfo.data;

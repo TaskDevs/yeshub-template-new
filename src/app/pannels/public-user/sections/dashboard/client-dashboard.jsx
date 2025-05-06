@@ -98,8 +98,12 @@ function ClientDashboard() {
     navigate("/client-proposals");
   };
 
-  const goToFindTalent = () => {
-    navigate("/find-talent");
+  const goToStaff = () => {
+    navigate("/client-staff");
+  };
+
+  const goToTaskManagement = () => {
+    navigate("/task-management");
   };
 
   const goToPostedJob = () => {
@@ -163,7 +167,7 @@ function ClientDashboard() {
           <ClientQuickActions
             styles={styles.quickActions}
             actions={{ post_job_modal: handleOpenSectionModal }}
-            goTo={{ goToFindTalent, goToProposal }}
+            goTo={{ goToStaff, goToProposal, goToTaskManagement }}
           />
         </div>
 

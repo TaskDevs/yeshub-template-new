@@ -65,6 +65,8 @@ export const Header = ({ isDashboard = true }) => {
       to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
     },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
+    { id: "Team", label: "Team", to: "/team" },
+    { id: "invoice", label: "Payment & Invoice", to: "/payment" },
     {
       id: "public-find-work",
       label: "Find Work",
@@ -180,6 +182,11 @@ export const Header = ({ isDashboard = true }) => {
       if (role === "client") {
         return item.label !== "Find Work";
       }
+
+      if (role === "freelance") {
+        return item.label !== "Team";
+      }
+
       return true; // keep everything else
     });
   };

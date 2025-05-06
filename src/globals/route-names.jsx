@@ -67,6 +67,9 @@ export const publicUser = {
     FIND_TALENT: "/find-talent",
     DASHBOARD: "/dashboard-client",
     PROPOSALS: "/client-proposals",
+    STAFF: "/client-staff",
+    TASK: "/task-management",
+    TEAM: "/team",
   },
   candidate: {
     GRID: "/can-grid",
@@ -121,6 +124,7 @@ export const employer = {
   POST_A_JOB: "/post-a-job",
   MANAGE_JOBS: "/manage-jobs",
   CANDIDATES: "/candidates-list",
+  STAFF: "/staff-list",
   BOOKMARKS: "/bookmarked-resumes",
   PACKAGES: "/packages",
   MESSAGES1: "/messages-style-1",

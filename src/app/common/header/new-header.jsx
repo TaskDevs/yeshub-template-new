@@ -57,7 +57,7 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "home", label: "Home", selected: true, to: "/dashboard-client" },
+    { id: "home", label: "Home", selected: true, to: "/" },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
     { id: "public-find-work", label: "Find Work", to: publicUser.jobs.LIST },
     {

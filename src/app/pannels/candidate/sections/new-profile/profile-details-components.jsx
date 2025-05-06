@@ -2,7 +2,6 @@ import { MdLanguage, MdLocationOn } from "react-icons/md";
 import { InfoGridItem } from "./InfoGridItem";
 import { FaCediSign, FaIdCard } from "react-icons/fa6";
 import { HiBadgeCheck } from "react-icons/hi";
-import { BiSolidEdit } from "react-icons/bi";
 import {
   FaExternalLinkAlt,
   FaCircle,
@@ -16,26 +15,79 @@ import {
   FaLink,
 } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
+import { FaTrashAlt } from "react-icons/fa";
+import { deleteHistory } from "../../../../context/employee-history/historyApi";
+import { deleteCertificate } from "../../../../context/user-profile/profileApi";
+import Swal from "sweetalert2";
 
-export const WorkHistoryDetails = ({ data,onClick }) => (
-  <div className="space-y-4">
-    
-    {data?.work_history?.map((job, index) => (
-      <div key={index} className="pb-3">
-        <div className="flex flex-row justify-between">
-        <h3 className="font-medium text-wrap">{job.job_title}</h3>
 
-        <BiSolidEdit
-        onClick={() => onClick(job.id)}
-            className="w-4 h-4 text-[#305718] cursor-pointer"
-          />
+export const WorkHistoryDetails = ({ data }) => {
+   // delete history function
+
+   const handleDelete = async (id) => {
+     const { isConfirmed } = await Swal.fire({
+       title: 'Are you sure?',
+       text: "This will permanently delete the record.",
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#d33',
+       cancelButtonColor: '#3085d6',
+       confirmButtonText: 'Yes, delete it!'
+     });
+   
+     if (!isConfirmed) return;
+   
+     const result = await deleteHistory(id);
+   
+     if (result) {
+       Swal.fire({
+         icon: 'success',
+         title: 'Deleted!',
+         text: 'Employment history deleted successfully',
+         timer: 2000,
+         showConfirmButton: false
+       });
+       window.location.reload();
+     } else {
+       Swal.fire({
+         icon: 'error',
+         title: 'Oops...',
+         text: 'Failed to delete. Please try again.',
+       });
+     }
+   };
+   
+  
+  return (
+    <div className="space-y-4">
+      {data?.map((item, index) => (
+        <div key={index} className="pb-3 relative group">
+          {/* Delete Button */}
+          <button
+            onClick={() => handleDelete(item.id)}
+            className="absolute top-0 right-0 p-2 text-red-500 hover:text-red-700 hidden group-hover:block"
+            title="Delete"
+          >
+            <FaTrashAlt size={16} />
+          </button>
+
+          <div className="flex items-center justify-start mb-3 gap-2">
+            <FaIdCard className="text-blue-600" size={18} />
+            <h3 className="-ml-1 font-bold text-gray-800">{item.job_title}</h3>
+          </div>
+          <span>
+            {item.start_date} - {item.end_date || "Present"}
+          </span>
+          <p className="text-gray-500 text-sm">
+            {item.company_name} – {item.location}
+          </p>
         </div>
-        
-        <p className="text-gray-500 text-sm">{job.start_date} - {job.end_date}</p>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
+
+
 
 export const SkillsDetails = ({ data }) => (
   <div className="flex flex-wrap items-start justify-start gap-2">
@@ -56,43 +108,43 @@ export const LicensesDetails = ({ data }) => (
     {data.map((license, index) => (
       <div
         key={index}
-        className="bg-white border border-gray-100 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
+        className="w-full bg-white transition-shadow p-4" // Ensure full width with padding
       >
-        <div className="flex items-center justify-start mb-3">
-          <FaIdCard className="text-blue-600 " size={18} />
+        <div className="flex items-center justify-start mb-3 gap-2">
+          <FaIdCard className="text-blue-600" size={18} />
           <h3 className="-ml-1 font-bold text-gray-800">
-            {license.licenseName}
+            {license.license_name}
           </h3>
         </div>
 
-        <div className="ml-7 space-y-2">
+        <div className="space-y-2">
           <div className="text-gray-700">
             <span className="font-medium">Issuing Organization:</span>{" "}
-            {license.issuingOrganization}
+            {license.issuing_organization}
           </div>
 
           <div className="text-gray-700">
             <span className="font-medium">License Number:</span>{" "}
-            {license.licenseNumber}
+            {license.license_number}
           </div>
 
           <div className="flex items-center justify-start gap-0 text-gray-600 text-sm mt-1">
             <FaCalendarAlt className="mr-2" size={14} />
             <span>
-              Issued: {new Date(license.issueDate).toLocaleDateString()}
+              Issued: {new Date(license.issue_date).toLocaleDateString()}
             </span>
-            {!license.neverExpires && license.expirationDate && (
-              <span className="flex items-center justify-start gap-0 ">
+            {!license.never_expires && license.expiration_date && (
+              <span className="flex items-center justify-start gap-0">
                 {" "}
                 <GoDotFill
                   size={8}
                   className="mx-1 text-gray-400"
                 /> Expires:{" "}
-                {new Date(license.expirationDate).toLocaleDateString()}
+                {new Date(license.expiration_date).toLocaleDateString()}
               </span>
             )}
-            {license.neverExpires && (
-              <span className="flex items-center justify-start gap-0  text-green-600">
+            {license.never_expires && (
+              <span className="flex items-center justify-start gap-0 text-green-600">
                 {" "}
                 <GoDotFill size={8} className="mx-1 text-gray-400" /> Never
                 Expires
@@ -111,78 +163,117 @@ export const LicensesDetails = ({ data }) => (
   </div>
 );
 
+
 // Certifications
-export const CertificationsDetails = ({ data }) => (
-  <div className="flex flex-row justify-start w-full space-y-6">
-    {data?.certificates?.map((cert, index) => (
-      <div
-        key={index}
-        className="bg-white border border-gray-100 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
-      >
-        <div className="flex items-center justify-start mb-3">
-          <HiBadgeCheck className="text-green-600" size={18} />
-          <h3 className="-ml-1 font-bold text-gray-800">
-            {cert.name}
-          </h3>
-        </div>
+export const CertificationsDetails = ({ data }) => {
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: 'Are you sure?',
+      text: "This will permanently delete the record.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    });
 
-        <div className="ml-7 space-y-2">
-          <div className="text-gray-700">
-            <span className="font-medium">Issuing Organization:</span>{" "}
-            {cert.organization}
+    if (!isConfirmed) return;
+
+    const result = await deleteCertificate(id);
+
+    if (result) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'Certificate deleted successfully',
+        timer: 2000,
+        showConfirmButton: false
+      });
+      window.location.reload();
+    
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Failed to delete. Please try again.',
+      });
+    }
+  };
+
+  return (
+    <div className="flex flex-col w-full space-y-6">
+      {data.map((cert, index) => (
+        <div key={index} className="w-full bg-white transition-shadow p-4 shadow rounded relative">
+          <div className="flex items-center gap-2 mb-3">
+            <HiBadgeCheck className="text-green-600" size={18} />
+            <h3 className="font-bold text-gray-800 text-lg">{cert.name}</h3>
+            <button
+              onClick={() => handleDelete(cert.id)}
+              className="ml-auto text-red-600 hover:bg-red-200 text-sm bg-red-200 m-2 rounded-full p-1"
+            >
+              Delete
+            </button>
           </div>
 
-          <div className="text-gray-700 flex items-center justify-start">
-            <span className="font-medium">Credential ID:</span>
-            <span className="-ml-2.5">{cert.credential_id}</span>
-            {cert.credential_url && (
-              <a
-                href={cert.credential_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 ml-auto flex items-center justify-end gap-1 font-bold text-sm hover:underline"
-              >
-                <FaExternalLinkAlt size={12} className="mr-1" /> Verify
-              </a>
-            )}
-          </div>
-
-          <div className="flex items-center justify-start gap-0 text-gray-600 text-sm mt-1">
-            <FaCalendarAlt className="mr-2" size={14} />
-            <span>Issued On: {new Date(cert.issued_at).toLocaleDateString()}</span>
-            {cert.hasExpiry && cert.expiryDate && (
-              <span className="flex items-center justify-start gap-0 ">
-                {" "}
-                <GoDotFill
-                  size={8}
-                  className="mx-1 text-gray-400"
-                /> Expires: {new Date(cert.expires_at).toLocaleDateString()}
-              </span>
-            )}
-          </div>
-
-          {cert.description && (
-            <div className="text-gray-600 mt-2 text-sm border-t border-gray-100 pt-2">
-              {cert.description}
+          <div className="space-y-2 pl-6">
+            <div className="text-gray-700">
+              <span className="font-medium">Issuing Organization:</span> {cert.organization}
             </div>
-          )}
+
+            <div className="text-gray-700 flex items-center flex-wrap gap-x-2">
+              <span className="font-medium">Credential ID:</span>
+              <span>{cert.credential_id || "N/A"}</span>
+              {cert.credential_url && (
+                <a
+                  href={cert.credential_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 ml-auto flex items-center gap-1 font-bold text-sm hover:underline"
+                >
+                  <FaExternalLinkAlt size={12} /> Verify
+                </a>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 text-gray-600 text-sm mt-1">
+              <FaCalendarAlt size={14} />
+              <span>
+                Issued:{" "}
+                {cert.issued_at
+                  ? new Date(cert.issued_at).toLocaleDateString()
+                  : "N/A"}
+              </span>
+              {cert.current && cert.expiry_at && (
+                <span className="flex items-center gap-1">
+                  <GoDotFill size={8} className="text-gray-400" />
+                  Expires: {new Date(cert.expiry_at).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+
+            {cert.description && (
+              <div className="text-gray-600 mt-2 text-sm border-t border-gray-100 pt-2">
+                {cert.description}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 export const EducationDetails = ({ data }) => (
   <div className="flex flex-col flex-wrap items-start justify-start gap-2 space-y-5">
-    {data?.education?.map((education, index) => (
+    {data.map((education, index) => (
       <div key={index} className="flex flex-col items-start -space-y-4">
         <div className="text-gray-500 text-sm ml-12">
-          {education.date_attended} to {education.date_completed}
+          {education.date_attended} to {education.date_completed || "Present"}
         </div>
 
         <div className="flex items-center justify-start">
           <FaCircle className="text-green-700 text-xs " />
-          <p className="flex items-center justify-start text-green-700 font-medium capitalize">
+          <p className="flex items-center justify-start text-green-700 font-medium">
             <hr className="bg-green-700 opacity-100 -mx-2.5 h-0.5 w-6 border-none" />
             {education.school}
           </p>
@@ -193,7 +284,7 @@ export const EducationDetails = ({ data }) => (
             {education.qualification}
           </div>
           <div className="text-gray-600 mt-1.5 text-sm">
-            {education.description}
+            {education.area_of_study}
           </div>
         </div>
       </div>
@@ -202,85 +293,101 @@ export const EducationDetails = ({ data }) => (
 );
 
 // WorkHoursDetails
-export const WorkHoursDetails = ({ data }) => (
-  <div className="flex flex-col justify-start w-full">
-    <div className="flex items-center justify-start w-full">
-      <div className="justify-start bg-green-100 p-2 rounded-full">
-        <FaBriefcase className="text-green-700" />
-      </div>
-      <div>
-        <span className="font-medium">Availability</span>
-        <p className="text-gray-600 capitalize">{data.availability}</p>
-      </div>
-    </div>
+export const WorkHoursDetails = ({ data }) => {
 
-    <div className="flex items-center justify-start w-full">
-      <div className="bg-blue-100 p-2 rounded-full">
-        <FaClock className="text-blue-700" />
-      </div>
-      <div>
-        <span className="font-medium">Working Hours</span>
-        <p className="text-gray-600">
-          {data.preferredWorkingHours === "standard"
-            ? "Standard (9AM - 5PM)"
-            : data.preferredWorkingHours === "flexible"
-            ? "Flexible Hours"
-            : `${data.customStartHour} - ${data.customEndHour}`}
-        </p>
-      </div>
-    </div>
 
-    <div className="flex items-center justify-start w-full">
-      <div className="bg-purple-100 p-2 rounded-full">
-        <FaCalendarAlt className="text-purple-700" />
-      </div>
-      <div>
-        <span className="font-medium">Work Days</span>
-        <div className="flex flex-wrap gap-2 mt-2">
-          {Object.keys(data.workDays).map((day) => (
-            <span
-              key={day}
-              className={`px-3 py-1 rounded-full text-xs ${
-                data.workDays[day]
-                  ? "bg-green-100 text-green-700 border border-green-300"
-                  : "bg-gray-100 text-gray-400 border border-gray-200"
-              }`}
-            >
-              {day.charAt(0).toUpperCase() + day.slice(1, 3)}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
+  return (
+    <div className="flex flex-col space-y-6 w-full">
+      {data.map((entry, index) => (
+        <div
+          key={index}
+          className="bg-white space-y-4"
+        >
+          {/* Availability */}
+          <div className="flex items-center gap-2">
+            <div className="bg-green-100 p-2 rounded-full">
+              <FaBriefcase className="text-green-700" />
+            </div>
+            <div>
+              <span className="font-medium">Availability</span>
+              <p className="text-gray-600 capitalize">{entry.availability}</p>
+            </div>
+          </div>
 
-    <div className="flex flex-row items-center justify-between w-full">
-      <div className="flex items-center justify-start w-full">
-        <div className="bg-orange-100 p-2 rounded-full">
-          <FaGlobeAmericas className="text-orange-700" />
-        </div>
-        <div>
-          <span className="font-medium">Time Zone</span>
-          <p className="text-gray-600">{data.timeZone}</p>
-        </div>
-      </div>
+          {/* Working Hours */}
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-100 p-2 rounded-full">
+              <FaClock className="text-blue-700" />
+            </div>
+            <div>
+              <span className="font-medium">Working Hours</span>
+              <p className="text-gray-600">
+                {entry.preferred_working_hours === "standard"
+                  ? "Standard (9AM - 5PM)"
+                  : entry.preferred_working_hours === "flexible"
+                  ? "Flexible Hours"
+                  : `${entry.custom_start_hour} - ${entry.custom_end_hour}`}
+              </p>
+            </div>
+          </div>
 
-      <div className="flex items-center justify-start w-full">
-        <div className="bg-red-100 p-2 rounded-full">
-          <FaClock className="text-red-700" />
+          {/* Work Days */}
+          <div className="flex items-center gap-3">
+            <div className="bg-purple-100 p-2 rounded-full">
+              <FaCalendarAlt className="text-purple-700" />
+            </div>
+            <div>
+              <span className="font-medium">Work Days</span>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {Object.entries(entry.work_days).map(([day, isWorking]) => (
+                  <span
+                    key={day}
+                    className={`px-3 py-1 rounded-full text-xs border ${
+                      isWorking
+                        ? "bg-green-100 text-green-700 border-green-300"
+                        : "bg-gray-100 text-gray-400 border-gray-200"
+                    }`}
+                  >
+                    {day.charAt(0).toUpperCase() + day.slice(1, 3)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Time Zone and Notice Period */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-orange-100 p-2 rounded-full">
+                <FaGlobeAmericas className="text-orange-700" />
+              </div>
+              <div>
+                <span className="font-medium">Time Zone</span>
+                <p className="text-gray-600">{entry.time_zone}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="bg-red-100 p-2 rounded-full">
+                <FaClock className="text-red-700" />
+              </div>
+              <div>
+                <span className="font-medium">Notice Period</span>
+                <p className="text-gray-600">{entry.notice}</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <span className="font-medium">Notice Period</span>
-          <p className="text-gray-600">{data.notice}</p>
-        </div>
-      </div>
+      ))}
     </div>
-  </div>
-);
+  );
+};
+
 
 // TestimonialsDetails
 export const TestimonialsDetails = ({ data }) => (
   <div className="space-y-6">
-    {data?.testimonials?.map((testimonial, index) => (
+    {data.map((testimonial, index) => (
       <div
         key={index}
         className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow"
@@ -331,7 +438,7 @@ export const TestimonialsDetails = ({ data }) => (
 // PortfolioDetails
 export const PortfolioDetails = ({ data }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {data?.portfolios?.map((project, index) => (
+    {data.map((project, index) => (
       <div
         key={index}
         className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
@@ -340,14 +447,14 @@ export const PortfolioDetails = ({ data }) => (
           <div className="h-28 overflow-hidden bg-gray-100">
             <img
               src={project.images[0]}
-              alt={project.project_title}
+              alt={project.projectTitle}
               className="w-full h-full object-cover"
             />
           </div>
         )}
 
         <div className="p-5">
-          <h3 className="font-bold text-lg mb-2 capitalize">{project.project_title}</h3>
+          <h3 className="font-bold text-lg mb-2">{project.project_title}</h3>
 
           <div className="flex items-center text-gray-600 text-sm mb-3">
             <div className="flex items-center justify-start">
@@ -387,7 +494,7 @@ export const PortfolioDetails = ({ data }) => (
               </span>
             </div>
 
-            {project.projectUrl && (
+            {project.project_url && (
               <a
                 href={project.project_url}
                 className="flex items-center text-green-700 hover:underline"
@@ -410,11 +517,7 @@ export const AboutMeDetails = ({ data }) => (
     {/* About Me  */}
     <div className="bg-white mb-6 w-full col-12">
       <div className="mt-1">
-        <p className="text-gray-700">
-        {data && (
-          <div dangerouslySetInnerHTML={{ __html: data.bio }} />
-        )}
-        </p>
+        <p className="text-gray-700">{data.bio}</p>
       </div>
     </div>
 
@@ -431,10 +534,10 @@ export const AboutMeDetails = ({ data }) => (
 
         <InfoGridItem
           icon={<MdLanguage className="w-4 h-4 text-[#4B5563]" />}
-          title="Language"
+          title="Languages"
         >
           <div className="flex flex-row items-center">
-            {data.languages?.map((lang, index) => (
+            {data.languages.map((lang, index) => (
               <>
                 <p className="text-[#4B5563]" key={index}>
                   {lang.language} ({lang.proficiency}){" "}

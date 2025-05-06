@@ -7,7 +7,7 @@ import { IoIosSearch } from "react-icons/io";
 const QuickActionItem = ({ icon: Icon, label }) => (
   <div className="bg-gray-100 px-7 py-2 rounded flex flex-grow h-24 flex-col items-center justify-center text-center w-full">
 
-    <div className="bg-gray-100 p-2 rounded-full mb-1">
+    <div className="bg-gray-100 p-2 rounded-full mb-1" >
       <Icon className="h-5 w-5 text-[#305718]" />
     </div>
     <span className="text-xs">{label}</span>

@@ -42,6 +42,63 @@ export const addCv = async (data) => {
   }
 };
 
+
+export const addCertificate = async (data) => {
+  try {
+    const response = await axios.post(`${REACT_BASE_URL}certificates`, data);
+    return response.data; // return only the useful part
+  } catch (error) {
+    console.error("Error adding certificate:", error);
+    throw error; // allow caller to handle the error if needed
+  }
+};
+
+export const deleteCertificate = async (id) => {
+  try {
+    const response = await axios.delete(`${REACT_BASE_URL}certificates/${id}`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const addWorkHours = async (data) => {
+  try {
+    const response = await axios.post(`${REACT_BASE_URL}work-hours`, data);
+    return response.data; // return only the useful part
+  } catch (error) {
+    console.error("Error adding certificate:", error);
+    throw error; // allow caller to handle the error if needed
+  }
+};
+
+
+export const addLicense = async (data) => {
+  try {
+    const response = await axios.post(`${REACT_BASE_URL}licenses`, data);
+    return response.data; // return only the useful part
+  } catch (error) {
+    console.error("Error adding certificate:", error);
+    throw error; // allow caller to handle the error if needed
+  }
+};
+
+
+
+export const addTestimonial = async (data) => {
+  try {
+    const response = await axios.post(`${REACT_BASE_URL}testimonials`, data);
+    return response.data; // return only the useful part
+  } catch (error) {
+    console.error("Error adding certificate:", error);
+    throw error; // allow caller to handle the error if needed
+  }
+};
 // SEARCH Profile
 export const searchProfile = async () => {
   try {
@@ -58,21 +115,25 @@ export const searchProfile = async () => {
   }
 };
 
+
 export const updateUserLogo = async (id, data) => {
   try {
-    let responseOnUpdateUser = await axios.put(
+    const response = await axios.post(
       `${REACT_BASE_URL}upload/user-logo/${id}`,
-      data
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
     );
-    console.log(responseOnUpdateUser);
-    return responseOnUpdateUser.data;
-    // if (responseOnUpdateUser.status == 200) {
-    //   return responseOnUpdateUser.data;
-    // } else {
-    //   return false;
-    // }
+  
+    if (response.status === 200) {
+      console.log(response);
+    }
+    return response.data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 

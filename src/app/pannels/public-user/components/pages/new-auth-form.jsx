@@ -9,9 +9,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import toast from "react-hot-toast";
 import cookieMethods from "../../../../../utils/cookieUtils";
 import { base } from "../../../../../globals/route-names";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+
 
 const NewAuthForm = ({ currentState }) => {
   const [formData, setFormData] = useState({
@@ -71,12 +72,12 @@ const NewAuthForm = ({ currentState }) => {
             sessionStorage.setItem("userRole", role);
             sessionStorage.setItem("userId", user_id);
             cookieMethods.setCookies(token, refresh_token);
+
             // ✅ Show success message
             toast.success(response.message, {
               position: "top-right",
               autoClose: 3000,
             });
-            // await processRetrieve();
 
             setTimeout(() => {
               switch (role) {
@@ -92,10 +93,44 @@ const NewAuthForm = ({ currentState }) => {
                   break;
               }
             }, 1000);
+          } else {
+            // 👇 Fix starts here
+            const errorResponse = response;
+            let errorMessage = "Login failed.";
+
+            if (errorResponse?.errors) {
+              const firstKey = Object.keys(errorResponse.errors)[0];
+              errorMessage = errorResponse.errors[firstKey][0];
+            } else if (errorResponse?.message) {
+              errorMessage = errorResponse.message;
+            }
+
+            newErrors.general = errorMessage;
+
+            toast.error(errorMessage, {
+              position: "top-center",
+              autoClose: 3000,
+            });
           }
         } catch (err) {
           console.error("Login error:", err);
-          newErrors.general = err?.response?.data?.message || "Login failed.";
+
+          const errorResponse = err?.response?.data;
+          let errorMessage = "Login failed.";
+
+          if (errorResponse?.errors) {
+            const firstKey = Object.keys(errorResponse.errors)[0];
+            errorMessage = errorResponse.errors[firstKey][0];
+          } else if (errorResponse?.message) {
+            errorMessage = errorResponse.message;
+          }
+
+          newErrors.general = errorMessage;
+
+          toast.error(errorMessage, {
+            position: "top-center",
+            autoClose: 3000,
+          });
         }
       }
     } else {
@@ -375,12 +410,12 @@ const NewAuthForm = ({ currentState }) => {
               Remember me
             </label>
           </div>
-          <button
-            type="button"
+          <NavLink
+            to="/forgotton-password"
             className="border-0 bg-none focus:outline-none text-green-800 hover:text-green-700 text-sm"
           >
             Forgot Password
-          </button>
+          </NavLink>
         </div>
         {loading ? (
           <button
@@ -416,6 +451,15 @@ const NewAuthForm = ({ currentState }) => {
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
               onError={handleGoogleError}
+              render={(renderProps) => (
+                <button
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Continue with Google
+                </button>
+              )}
             />
           )}
 

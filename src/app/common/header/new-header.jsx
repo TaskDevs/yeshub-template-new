@@ -29,7 +29,9 @@ export const Header = ({ isDashboard = true }) => {
   const { profileData } = useContext(ProfileApiData);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const { firstname, profession } = profileData;
+  const { firstname, lastname, profession, profile_image } = profileData;
+  
+
   const role = sessionStorage.getItem("userRole");
   
   // colors for the username
@@ -56,7 +58,7 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "home", label: "Home", selected: true, to: "/dashboard-candidate" },
+    { id: "home", label: "Home", selected: true, to: "/" },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
     { id: "public-find-work", label: "Find Work", to: "/dashboard-candidate/find-job" },
     {
@@ -221,22 +223,22 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const handleUserProfile = () => {
-    setOpenMenu(openMenu === "profile" && null);
+    setOpenMenu(openMenu === "profile" ? null : "profile");
 
     if (role === "freelancer") {
-      navigate("/dashboard-candidate/profile");
+      window.location.href = "/dashboard-candidate/profile"; // full page reload
     } else if (role === "client") {
-      navigate("/profile");
+      window.location.href = "/profile"; // full page reload
     } else {
       console.warn("Unknown role, redirecting to default profile");
-      navigate("/profile");
+      window.location.href = "/profile"; // fallback
     }
   };
 
   const handleLogoClick = () => {
-    if (token && role == "client") {
+    if (token && role === "client") {
       navigate("/profile");
-    } else if (token && role == "freelncer") {
+    } else if (token && role === "freelancer") {
       navigate("/dashboard-candidate");
     } else {
       navigate("/");
@@ -387,17 +389,26 @@ export const Header = ({ isDashboard = true }) => {
                   </>
                 ) : (
                   <div className="relative new-profile-menu" ref={profileRef}>
-                    <Avatar
-                      sx={{
-                        bgcolor: stringToColor(username),
-                        width: 40,
-                        height: 40,
-                        fontSize: "1.2rem",
-                      }}
-                      onClick={() => handleProfileClick()}
-                    >
-                      {username.charAt(0).toUpperCase()}
-                    </Avatar>
+                    {profile_image ? (
+                      <img
+                        src={profile_image}
+                        onClick={handleProfileClick}
+                        className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                        alt="Profile"
+                      />
+                    ) : (
+                      <Avatar
+                        sx={{
+                          bgcolor: stringToColor(username),
+                          width: 40,
+                          height: 40,
+                          fontSize: "1.2rem",
+                        }}
+                        onClick={handleProfileClick}
+                      >
+                        {username.charAt(0).toUpperCase()}
+                      </Avatar>
+                    )}
 
                     {openMenu === "profile" && (
                       <div
@@ -408,10 +419,15 @@ export const Header = ({ isDashboard = true }) => {
                         <div className="p-4 border-b">
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full overflow-hidden">
-                              <img
-                                src="/yes-logo-1.png"
-                                alt="User Avatar"
-                                className="w-full h-full object-cover"
+                              <Avatar
+                                sx={{
+                                  bgcolor: stringToColor(username),
+                                  width: 40,
+                                  height: 40,
+                                  fontSize: "1.2rem",
+                                }}
+                                src={profile_image}
+                                onClick={() => handleProfileClick()}
                               />
                             </div>
                             <div className="text-sm text-gray-600 capitalize">
@@ -500,31 +516,49 @@ export const Header = ({ isDashboard = true }) => {
 
                 {/* Profile Menu */}
                 <div className="relative new-profile-menu" ref={profileRef}>
-                  <Avatar
-                    sx={{
-                      bgcolor: stringToColor(username),
-                      width: 40,
-                      height: 40,
-                      fontSize: "1.2rem",
-                    }}
-                    onClick={() => handleProfileClick()}
-                  >
-                    {username.charAt(0).toUpperCase()}
-                  </Avatar>
+                  {profile_image ? (
+                    <Avatar
+                      sx={{
+                        bgcolor: stringToColor(username),
+                        width: 40,
+                        height: 40,
+                        fontSize: "1.2rem",
+                      }}
+                      src={profile_image}
+                      onClick={() => handleProfileClick()}
+                    />
+                  ) : (
+                    <Avatar
+                      sx={{
+                        bgcolor: stringToColor(username),
+                        width: 40,
+                        height: 40,
+                        fontSize: "1.2rem",
+                      }}
+                      onClick={() => handleProfileClick()}
+                    >
+                      {username.charAt(0).toUpperCase()}
+                    </Avatar>
+                  )}
 
                   {openMenu === "profile" && (
                     <div className="absolute top-full w-64 right-0 mt-1 bg-white rounded-lg shadow-lg zIndex">
                       <div className="p-4 border-b">
                         <div className="flex items-center justify-start gap-3">
                           <div className="size-12 rounded-full overflow-hidden mr-3">
-                            <img
-                              src="/yes-logo-1.png"
-                              alt="User Avatar"
-                              className="h-full w-full object-cover"
+                            <Avatar
+                              sx={{
+                                bgcolor: stringToColor(username),
+                                width: 40,
+                                height: 40,
+                                fontSize: "1.2rem",
+                              }}
+                              src={profile_image}
                             />
                           </div>
-                          <div className="text-sm text-gray-500 text-capitalize">
-                            {role}
+                          <div className="text-sm text-gray-500 capitalize space-y-1">
+                            <div>{profession}</div>
+                            <div>{role}</div>
                           </div>
                         </div>
                       </div>
@@ -583,77 +617,77 @@ export const Header = ({ isDashboard = true }) => {
             )}
           </div>
         </div>
-      </header>
-      {/* Mobile Menu */}
-      {navOpen && (
-        <div className="absolute top-full right-4 mt-3 w-72 bg-white rounded-2xl shadow-xl z-50 p-4">
-          {/* Close Button */}
-          <div className="flex justify-end mb-3">
-            <button
-              onClick={toggleNav}
-              className="text-gray-500 hover:text-gray-800"
-            >
-              <FaTimes className="h-6 w-6" />
-            </button>
-          </div>
+        {/* Mobile Menu */}
+        {navOpen && (
+          <div className="absolute top-full right-4 mt-3 w-72 bg-white rounded-2xl shadow-xl z-50 p-4">
+            {/* Close Button */}
+            <div className="flex justify-end mb-3">
+              <button
+                onClick={toggleNav}
+                className="text-gray-500 hover:text-gray-800"
+              >
+                <FaTimes className="h-6 w-6" />
+              </button>
+            </div>
 
-          {/* User Info Section */}
-          <div className="border-b pb-4 mb-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full overflow-hidden border">
-                <img
-                  src="/yes-logo-1.png"
-                  alt="User Avatar"
-                  className="w-full h-full object-cover"
+            {/* User Info Section */}
+            <div className="border-b pb-4 mb-4">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full overflow-hidden border">
+                  <img
+                    src={profile_image || "/yes-logo-1.png"}
+                    alt="User Avatar"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900 text-sm capitalize">
+                    {firstname || username} {lastname}
+                  </div>
+                  <div className="text-xs text-gray-500">{profession}</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 mt-3 text-xs text-gray-600">
+                <span>Online for messages</span>
+                <ToggleSwitch
+                  initialState={true}
+                  onChange={(state) => console.log("Online status:", state)}
                 />
               </div>
-              <div>
-                <div className="font-semibold text-gray-900 text-sm">
-                  {firstname || username}
-                </div>
-                <div className="text-xs text-gray-500">{profession}</div>
-              </div>
             </div>
-            <div className="flex items-center gap-2 mt-3 text-xs text-gray-600">
-              <span>Online for messages</span>
-              <ToggleSwitch
-                initialState={true}
-                onChange={(state) => console.log("Online status:", state)}
-              />
+
+            {/* Navigation Links */}
+            <div className="space-y-2 text-sm">
+              <button
+                className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition"
+                onClick={handleUserProfile}
+              >
+                <FaUserCircle className="text-gray-500 w-5 h-5" />
+                <span>Your Profile</span>
+              </button>
+
+              <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
+                <ImStatsDots className="text-gray-500 w-5 h-5" />
+                <span>Stats & Trends</span>
+              </button>
+
+              <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
+                <RiSettings3Fill className="text-gray-500 w-5 h-5" />
+                <span>Account Settings</span>
+              </button>
+
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#logout-dash-profile"
+                className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+              >
+                <BiSolidLogOut className="text-red-500 w-5 h-5" />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
-
-          {/* Navigation Links */}
-          <div className="space-y-2 text-sm">
-            <button
-              className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition"
-              onClick={handleUserProfile}
-            >
-              <FaUserCircle className="text-gray-500 w-5 h-5" />
-              <span>Your Profile</span>
-            </button>
-
-            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
-              <ImStatsDots className="text-gray-500 w-5 h-5" />
-              <span>Stats & Trends</span>
-            </button>
-
-            <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
-              <RiSettings3Fill className="text-gray-500 w-5 h-5" />
-              <span>Account Settings</span>
-            </button>
-
-            <button
-              data-bs-toggle="modal"
-              data-bs-target="#logout-dash-profile"
-              className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-            >
-              <BiSolidLogOut className="text-red-500 w-5 h-5" />
-              <span>Logout</span>
-            </button>
-          </div>
-        </div>
-      )}
+        )}
+      </header>
     </>
   );
 };

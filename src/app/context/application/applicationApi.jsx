@@ -43,6 +43,21 @@ export const applicationList = async (id) => {
   }
 };
 
+// Job user statistics
+export const JobUserStat = async (user_id) => {
+  try {
+    const response = await axios.post(
+      `${REACT_BASE_URL}user-stats`,
+      { user_id } // Pass user_id as body data
+    );
+    return response.data; // or response if you want the full object
+  } catch (err) {
+    console.error("Error fetching user stats:", err);
+    return false;
+  }
+};
+
+
 
 export const getAppliedJbsByEmpid = async (id) => {
   try {

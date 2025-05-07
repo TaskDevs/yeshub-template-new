@@ -5,11 +5,13 @@ import { ProfileSectionModal } from './profile-components';
 // import { useProfileForm } from './hooks/useProfileForm';
 import { ProfileApiData } from '../../../../context/user-profile/profileContextApi';
 
+
 const CandidateProfile = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [currentStepTitle, setCurrentStepTitle] = useState('');
   const { profileData } = useContext(ProfileApiData);
+  const [activeId, setactiveId] = useState(null);
   
   // const { formData } = useProfileForm();
 
@@ -21,8 +23,18 @@ const CandidateProfile = () => {
     setActiveSection(null);
   };
 
+
+ 
   // Open modal handler with section
-  const handleOpenSectionModal = (sectionKey) => {
+  const handleOpenSectionModal = (sectionKey,id) => {
+    //fetching data here .. 
+    if (id.typeof !== undefined) {
+      console.log('fetching data here...', id);
+    } else {
+      console.log('new data...');
+    }
+    setactiveId(id);
+
     setActiveSection(sectionKey);
     setModalOpen(true);
   };
@@ -35,19 +47,19 @@ const CandidateProfile = () => {
       case 'skills':
         return <SkillsSection initialSelectedSkills={profileData} onClose={handleCloseModal} />;
       case 'workHistory':
-        return <WorkHistorySection initialData={profileData} onClose={handleCloseModal} />;
+        return <WorkHistorySection id={activeId} onClose={handleCloseModal} />;
       case 'education':
-        return <EducationSection onClose={handleCloseModal} />;
+        return <EducationSection initialData={profileData} onClose={handleCloseModal} />;
       case 'portfolio':
-        return <PortfolioSection onClose={handleCloseModal} setCurrentStepTitle={setCurrentStepTitle} />;
+        return <PortfolioSection initialData={profileData} onClose={handleCloseModal} setCurrentStepTitle={setCurrentStepTitle} />;
       case 'certifications':
-        return <CertificationsSection onClose={handleCloseModal} />;
+        return <CertificationsSection initialData={profileData} onClose={handleCloseModal} />;
       case 'license':
-        return <LicensesSection onClose={handleCloseModal} />;
+        return <LicensesSection  initialData={profileData} onClose={handleCloseModal} />;
       case 'testimonials':
-        return <TestimonialsSection onClose={handleCloseModal} />;
+        return <TestimonialsSection initialData={profileData} onClose={handleCloseModal} />;
       case 'workHours':
-        return <WorkHoursSection onClose={handleCloseModal} />;
+        return <WorkHoursSection initialData={profileData} onClose={handleCloseModal} />;
       case 'aboutMe':
         return <AboutMeSection initialData={profileData} onClose={handleCloseModal} />;
       default:
@@ -71,8 +83,8 @@ const CandidateProfile = () => {
   // Setup section click handlers
   const enhancedProfileSections = profileSections.map(section => ({
     ...section,
-    onClick: () => {
-      handleOpenSectionModal(sectionKeyMap[section.title])
+    onClick: (id) => {
+      handleOpenSectionModal(sectionKeyMap[section.title],id)
     }
   }));
 

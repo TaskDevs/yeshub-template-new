@@ -87,17 +87,17 @@ export const updateHistory = async () => {
 };
 
 // DELETE History
-export const deleteHistory = async () => {
+export const deleteHistory = async (id) => {
   try {
-    let responseOnDeleteHistory = await axios.delete({
-      /**Add Delete History API URL here like  `/api/deleteHistory/${data}` **/
-    });
-    if (responseOnDeleteHistory.status === SUCCESS_STATUS) {
-      return responseOnDeleteHistory.data;
+    const response = await axios.delete(`${REACT_BASE_URL}delete-employment-history/${id}`);
+    if (response.status === 200) {
+      return response.data;
     } else {
       return false;
     }
   } catch (err) {
     console.error(err);
+    return false;
   }
 };
+

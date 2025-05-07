@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { CiBookmark } from "react-icons/ci";
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { experinceLevel, jobTypes, skills, sort } from "./filter-data";
 import CanSelectField from "../../components/can-select-field";
@@ -13,16 +13,18 @@ import ProfileInfoSection from "./profile-info-section";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { useNavigate } from "react-router-dom";
-import { ProposalSubmissionModal } from "../new-profile/profile-components";
-import { ProposalForm } from "./proposal-form";
+// import { ProposalSubmissionModal } from "../new-profile/profile-components";
+// import { ProposalForm } from "./proposal-form";
 import styles from "./find-work.module.css";
 import MobileFindSavedWork from "./mobile-find-work";
+
 
 function FindWorkPage() {
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
-  const { processGetAllJob, jobListData, processApplyForJob } =
+  const { processGetAllJob, jobListData} =
     useContext(JobApiData);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [jobInfo, setJobInfo] = useState({
     job_id: null,
@@ -30,8 +32,16 @@ function FindWorkPage() {
   });
   const [filterJobListData, setFilterJobListData] = useState([]);
 
+
+  // const [jobInfo, setJobInfo] = useState({
+  //   job_id: null,
+  //   company_id: null,
+  // });
+ 
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
+
+  console.log("jobListData", jobListData)
 
   useEffect(() => {
     processGetAllJob(1, userId);
@@ -41,6 +51,7 @@ function FindWorkPage() {
     setFilterJobListData(jobListData);
     console.log(jobListData);
   }, [jobListData]);
+
 
   // Close modal handler
   const handleCloseModal = () => {
@@ -101,12 +112,14 @@ function FindWorkPage() {
               ratings="4.9"
               reviews="23k"
               companyName={job.employer.company_name}
+
               action={() => handlePrepareSubmit(job.id, job.employer_id)}
+
               jobType={job?.job_type}
               isMobile={true}
               jobLocation={job?.location || "Accra"}
               datePosted={job?.created_at || "2025-04-14T16:43:24.000000Z"}
-              salaryRange={job?.budget}
+              salaryRange={job?.fixed_rate || "400"}
             />
           ))}
         </MobileFindSavedWork>
@@ -127,16 +140,16 @@ function FindWorkPage() {
                   </p>
                 </div>
 
-                <button
-                  onClick={() => navigate("/dashboard-candidate/saved-jobs")}
-                  className="bg-green-800 text-white px-4 py-2 rounded flex items-center gap-2 h-10"
-                >
-                  <CiBookmark className="w-4 h-4" />
-                  <span>Saved jobs</span>
-                </button>
+                  <button
+                    onClick={() => navigate("/dashboard-candidate/saved-jobs")}
+                    className="bg-green-800 text-white px-4 py-2 rounded flex items-center gap-2 h-10"
+                  >
+                    <CiBookmark className="w-4 h-4" />
+                    <span>Saved jobs</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
           <div className="grid-container">
             <div className={`${styles.gridOne} section-one`}>
@@ -156,7 +169,8 @@ function FindWorkPage() {
               </FilterPanel>
             </div>
 
-            <div className={`${styles.gridTwo} section-two`}>
+
+            <div className={`${styles.gridTwo} section-two`} >
               <div className=" p-6 flex flex-col gap-4">
                 <div className=" section-two-header ">
                   <h2 className="font-medium capitalize">available jobs</h2>
@@ -165,6 +179,7 @@ function FindWorkPage() {
 
                 {/*job cards */}
                 <div className="grid grid-cols-1 gap-4 w-full">
+
                   {filterJobListData.map((job) => (
                     <CanJobCard
                       key={job.id}
@@ -190,17 +205,34 @@ function FindWorkPage() {
                   ))}
                   {filterJobListData.length == 0 && (
                     <p className="text-gray-500">No jobs available</p>
+
                   )}
                 </div>
               </div>
             </div>
 
-            <div className={`${styles.gridThree} section-three`}>
-              <ProfileInfoSection />
+
+              <div className={`${styles.gridThree} section-three`}>
+                <ProfileInfoSection />
+              </div>
             </div>
           </div>
         </div>
+{/* 
+        {modalOpen && (
+  
+  <ProposalSubmissionModal
+  isOpen={modalOpen}
+  onClose={handleCloseModal}
+  title={"Ready To Send Proposal"}
+ >
+  <ProposalForm onSubmit={handleOnSubmit} />
+ </ProposalSubmissionModal>
+ )}
+ <ToastContainer position="top-right" autoClose={3000} /> */}
+ 
       </div>
+
 
       {modalOpen && (
         <ProposalSubmissionModal
@@ -215,5 +247,6 @@ function FindWorkPage() {
     </div>
   );
 }
+
 
 export default FindWorkPage;

@@ -57,6 +57,21 @@ const SavedJobsApiDataProvider = (props) => {
     return res;
   };
 
+
+  const handleAddSavedJobs = async (userId, jobId) => {
+    console.log("userId, jobId", userId, parseInt(jobId));
+    setIsSubmitting(true);
+
+    try {
+      await processAddSavedJobs({ job_id: parseInt(jobId), user_id: userId });
+      await getAllSavedJobs();
+    } catch (e) {
+      console.error("Failed to save job");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleDeleteSavedJobs = async (job_id, id) => {
     
     setIsSubmitting(true);
@@ -72,6 +87,18 @@ const SavedJobsApiDataProvider = (props) => {
     }
   };
 
+
+  const toggleSavedJob = (id, userId) => {
+    const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === Number(id));
+    
+    if (isSaved) {
+        
+      handleDeleteSavedJobs(id, userId);
+    } else {
+      handleAddSavedJobs(userId, id);
+    }
+  }
+
   return (
     <SavedJobsApiData.Provider
       value={{
@@ -80,7 +107,9 @@ const SavedJobsApiDataProvider = (props) => {
         processAddSavedJobs,
         processGetAllSavedJobs,
         processDeleteSavedJobs,
+        handleAddSavedJobs,
         handleDeleteSavedJobs,
+        toggleSavedJob
       }}
     >
       {props.children}

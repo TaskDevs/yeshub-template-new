@@ -1,27 +1,33 @@
 export const LICENSEFIELD = {
 	fieldDetail: [
 		{
-			name: "profession",
+			name: "license_name",
 			label: "",
 			type: "text",
 			placeholder: "Enter License Name",
 		},
 		{
-			name: "license_body",
+			name: "issuing_organization",
 			label: "",
 			type: "text",
 			placeholder: "Enter instutition Name",
 		},
 		{
-			name: "license_no",
+			name: "license_number",
 			label: "",
 			type: "text",
-			placeholder: "Enter Certification Name",
+			placeholder: "Enter License Number",
 		},
 		{
-			name: "company_since",
+			name: "issue_date",
 			label: "",
 			type: "date",
+			placeholder: "",
+		},
+		{
+			name: "description",
+			label: "",
+			type: "text",
 			placeholder: "",
 		},
 		

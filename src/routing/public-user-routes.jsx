@@ -68,6 +68,9 @@ import ClientProfile from "../app/pannels/public-user/sections/profile/client-pr
 import ClientFindTalent from "../app/pannels/public-user/sections/find-talent/ClientFindTalent";
 import Proposals from "../app/pannels/public-user/sections/proposals/proposals";
 import ClientDashboard from "../app/pannels/public-user/sections/dashboard/client-dashboard";
+import StaffList from "../app/pannels/employer/components/staff/staff-list";
+import TaskManagement from "../app/pannels/employer/components/task/task-management";
+import TeamList from "../app/pannels/employer/components/team/team-list";
 
 function PublicUserRoutes() {
   return (
@@ -154,6 +157,9 @@ function PublicUserRoutes() {
           path={publicUser.pages.DASHBOARD}
           element={<ClientDashboard />}
         />
+        <Route path={publicUser.pages.STAFF} element={<StaffList />} />
+        <Route path={publicUser.pages.TEAM} element={<TeamList />} />
+        <Route path={publicUser.pages.TASK} element={<TaskManagement />} />
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route
           path={publicUser.pages.FORGOTPASS}

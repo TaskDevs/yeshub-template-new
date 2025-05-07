@@ -4,6 +4,7 @@ import EmpDashboardPage from "../app/pannels/employer/components/emp-dashboard";
 import EmpCompanyProfilePage from "../app/pannels/employer/components/emp-company-profile";
 import EmpPostAJobPage from "../app/pannels/employer/components/jobs/emp-post-a-job";
 import EmpManageJobsPage from "../app/pannels/employer/components/jobs/emp-manage-jobs";
+import StaffList from "../app/pannels/employer/components/staff/staff-list";
 import EmpCandidatesPage from "../app/pannels/employer/components/emp-candidates";
 import EmpBookmarksPage from "../app/pannels/employer/components/emp-bookmarks";
 import EmpPackagesPage from "../app/pannels/employer/components/emp-packages";
@@ -17,28 +18,26 @@ import SkillsPage from "../app/pannels/employer/components/skills/skills-page";
 import CategoryPage from "../app/pannels/employer/components/category/category-page";
 
 function EmployerRoutes() {
-
- 
-
   return (
-		<Routes>
-			<Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
-			<Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
-			<Route path={employer.ADD_SKILL} element={<SkillsPage />} />
-			<Route path={employer.ADD_CATEGORY} element={<CategoryPage />} />
-			<Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
-			<Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
-			<Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
-			<Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />
-			<Route path={employer.PACKAGES} element={<EmpPackagesPage />} />
-			<Route path={employer.MESSAGES1} element={<EmpMessages1Page />} />
-			{/* <Route path={employer.MESSAGES2} element={<EmpMessages2Page />} /> */}
-			<Route path={employer.RESUME_ALERTS} element={<EmpResumeAlertsPage />} />
-			<Route path={employer.ACCOUNTS} element={<FinancesPage />} />
-			<Route path={employer.REVIEWS} element={<EmpReviewsPage />} />
-			<Route path="*" element={<Error404Page />} />
-		</Routes>
-	);
+    <Routes>
+      <Route path={employer.DASHBOARD} element={<EmpDashboardPage />} />
+      <Route path={employer.PROFILE} element={<EmpCompanyProfilePage />} />
+      <Route path={employer.ADD_SKILL} element={<SkillsPage />} />
+      <Route path={employer.ADD_CATEGORY} element={<CategoryPage />} />
+      <Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
+      <Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
+      <Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
+      <Route path={employer.STAFF} element={<StaffList />} />
+      <Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />
+      <Route path={employer.PACKAGES} element={<EmpPackagesPage />} />
+      <Route path={employer.MESSAGES1} element={<EmpMessages1Page />} />
+      {/* <Route path={employer.MESSAGES2} element={<EmpMessages2Page />} /> */}
+      <Route path={employer.RESUME_ALERTS} element={<EmpResumeAlertsPage />} />
+      <Route path={employer.ACCOUNTS} element={<FinancesPage />} />
+      <Route path={employer.REVIEWS} element={<EmpReviewsPage />} />
+      <Route path="*" element={<Error404Page />} />
+    </Routes>
+  );
 }
 
 export default EmployerRoutes;

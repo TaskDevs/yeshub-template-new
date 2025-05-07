@@ -872,6 +872,8 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
     skills: isEdit ? itemsToEdit.skills : "",
     category: isEdit ? itemsToEdit.category : "",
     scope: isEdit ? itemsToEdit.scope : "Small",
+    job_type: isEdit ? itemsToEdit.job_type : "All",
+    experience: isEdit ? itemsToEdit.experience : "All",
     fixedRateSelected: isEdit ? (itemsToEdit.fixed_rate ? false : true) : true,
     fixed_rate: isEdit
       ? itemsToEdit.fixed_rate
@@ -893,6 +895,8 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
   });
 
   const scopes = ["Small", "Medium", "Large"];
+  const job_type = ["All", "Full-Time", "Part-Time", "Contract"];
+  const experience = ["All", "Beginners", "Intermediate", "Experience"];
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -904,6 +908,8 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
       skills: formData.skills,
       category: formData.category,
       scope: formData.scope,
+      job_type: formData.job_type.toLowerCase(),
+      experience: formData.experience.toLowerCase(),
       fixed_rate: formData.fixedRateSelected ? formData.fixed_rate : null,
       hourly_rate_start: formData.hourly_rate_start
         ? formData.hourly_rate_start
@@ -926,6 +932,8 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
       skills: "",
       category: "",
       scope: "Small",
+      job_type: "All",
+      experience: "All",
       fixedRateSelected: true,
       fixed_rate: "",
       hourly_rate_start: "",
@@ -982,6 +990,30 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
               styles="w-full py-2.5"
               options={scopes}
               onChange={(value) => handleInputChange("scope", value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Job Type
+            </label>
+            <CustomDropdown
+              selected={formData.job_type}
+              styles="w-full py-2.5"
+              options={job_type}
+              onChange={(value) => handleInputChange("job_type", value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Experience
+            </label>
+            <CustomDropdown
+              selected={formData.experience}
+              styles="w-full py-2.5"
+              options={experience}
+              onChange={(value) => handleInputChange("experience", value)}
             />
           </div>
 

@@ -11,6 +11,8 @@ import HistoryApiDataProvider from "./app/context/employee-history/historyContex
 import EmployerApiDataProvider from "./app/context/employers/employerContextApi";
 import FreelanceApiDataProvider from "./app/context/freelance/freelanceContextApi";
 import JobApiDataProvider from "./app/context/jobs/jobsContextApi";
+import TaskApiDataProvider from "./app/context/task/taskContextApi";
+import TeamApiDataProvider from "./app/context/team/teamContextApi";
 import ProposalApiDataProvider from "./app/context/proposal/proposalContextApi";
 import MilestoneApiDataProvider from "./app/context/milestone/milestoneContextApi";
 import PaymentApiDataProvider from "./app/context/payment/paymentContextApi";
@@ -27,8 +29,6 @@ import { ChatProvider } from "./app/context/chat/chatContext";
 import SavedJobsApiDataProvider from "./app/context/saved-jobs/savedJobsContextApi";
 
 function App() {
- 
-
   const [isLoading, setLoading] = useState(true);
   const location = useLocation();
 
@@ -49,36 +49,40 @@ function App() {
             <EducationApiDataProvider>
               <HistoryApiDataProvider>
                 <EmployerApiDataProvider>
-                  <JobApiDataProvider>
-                    <ProposalApiDataProvider>
-                    <SavedJobsApiDataProvider>
-                      <ApplicationApiDataProvider>
-                        <MilestoneApiDataProvider>
-                          <PaymentApiDataProvider>
-                            <PortfolioApiDataProvider>
-                              <PortfolioMediaApiDataProvider>
-                                <SkillsApiDataProvider>
-                                  <TestimonialApiDataProvider>
-                                    <ProfileApiDataProvider>
-                                      <FreelanceApiDataProvider>
-                                        <WalletApiDataProvider>
-                                          {isLoading && <Loader />}
-                                          <Toaster />
-                                          <ScrollToTop />
-                                          <RootLayout />
-                                        </WalletApiDataProvider>
-                                      </FreelanceApiDataProvider>
-                                    </ProfileApiDataProvider>
-                                  </TestimonialApiDataProvider>
-                                </SkillsApiDataProvider>
-                              </PortfolioMediaApiDataProvider>
-                            </PortfolioApiDataProvider>
-                          </PaymentApiDataProvider>
-                        </MilestoneApiDataProvider>
-                      </ApplicationApiDataProvider>
-                      </SavedJobsApiDataProvider>
-                    </ProposalApiDataProvider>
-                  </JobApiDataProvider>
+                  <TaskApiDataProvider>
+                    <TeamApiDataProvider>
+                      <JobApiDataProvider>
+                        <ProposalApiDataProvider>
+                          <SavedJobsApiDataProvider>
+                            <ApplicationApiDataProvider>
+                              <MilestoneApiDataProvider>
+                                <PaymentApiDataProvider>
+                                  <PortfolioApiDataProvider>
+                                    <PortfolioMediaApiDataProvider>
+                                      <SkillsApiDataProvider>
+                                        <TestimonialApiDataProvider>
+                                          <ProfileApiDataProvider>
+                                            <FreelanceApiDataProvider>
+                                              <WalletApiDataProvider>
+                                                {isLoading && <Loader />}
+                                                <Toaster />
+                                                <ScrollToTop />
+                                                <RootLayout />
+                                              </WalletApiDataProvider>
+                                            </FreelanceApiDataProvider>
+                                          </ProfileApiDataProvider>
+                                        </TestimonialApiDataProvider>
+                                      </SkillsApiDataProvider>
+                                    </PortfolioMediaApiDataProvider>
+                                  </PortfolioApiDataProvider>
+                                </PaymentApiDataProvider>
+                              </MilestoneApiDataProvider>
+                            </ApplicationApiDataProvider>
+                          </SavedJobsApiDataProvider>
+                        </ProposalApiDataProvider>
+                      </JobApiDataProvider>
+                    </TeamApiDataProvider>
+                  </TaskApiDataProvider>
                 </EmployerApiDataProvider>
               </HistoryApiDataProvider>
             </EducationApiDataProvider>

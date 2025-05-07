@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { CustomDropdown } from "../../../../common/Dropdown";
 import styles from "./proposals.module.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ProposalCard } from "./proposal-card";
 import { skills, sortOptions } from "./data";
 import { StatusSectionModal } from "../../../candidate/sections/new-profile/profile-components";
@@ -19,8 +21,7 @@ const Proposals = () => {
     processGetJobAppliedToCompany,
     processUpdateJobStatus,
   } = useContext(EmployerApiData);
-  const { filters, handleChange } = useFilterForm();
-  console.log("filters", filters);
+  const { handleChange } = useFilterForm();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalToViewInfo, setModalToViewInfo] = useState(false);
   const [viewStatus, setViewStatus] = useState({
@@ -152,6 +153,7 @@ const Proposals = () => {
           <ShowMilestoneOrRequestInfo statusInfo={viewStatus} />
         </StatusSectionModal>
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };

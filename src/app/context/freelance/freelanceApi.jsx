@@ -1,12 +1,16 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
+import {
+  SUCCESS_STATUS,
+  REACT_BASE_URL,
+  LOCALHOST_BACKEND,
+} from "../../../globals/constants";
 
 // ADD Freelance
 export const addFreelance = async (data) => {
   try {
     let responseOnAddFreelance = await axios.post(
-     `${REACT_BASE_URL}create-freelance`,
+      `${REACT_BASE_URL}create-freelance`,
       data
     );
     return responseOnAddFreelance;
@@ -55,10 +59,29 @@ export const freelanceList = async () => {
   }
 };
 
+//Jobs Applied To
+export const jobsAppliedTo = async (user_id, page_no) => {
+  try {
+    let responseOnApplyJob = await axios.get(
+      `${LOCALHOST_BACKEND}get-jobs-applied-to?user_id=${user_id}&page_no=${page_no}`
+    );
+    if (responseOnApplyJob.status == 200) {
+      return responseOnApplyJob.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 // VIEW Freelance
 export const freelanceProfile = async (id) => {
   try {
-    let responseOnFreelanceProfile = await axios.get(`${REACT_BASE_URL}get-freelance/${id}`);
+    let responseOnFreelanceProfile = await axios.get(
+      `${REACT_BASE_URL}get-freelance/${id}`
+    );
 
     return responseOnFreelanceProfile;
     // if (responseOnFreelanceProfile.status === SUCCESS_STATUS) {
@@ -75,7 +98,10 @@ export const freelanceProfile = async (id) => {
 // UPDATE Freelance
 export const updateFreelance = async (id, data) => {
   try {
-    let responseOnUpdateFreelance = await axios.put(`${REACT_BASE_URL}update-freelance/${id}`, data);
+    let responseOnUpdateFreelance = await axios.put(
+      `${REACT_BASE_URL}update-freelance/${id}`,
+      data
+    );
     return responseOnUpdateFreelance;
     // if (responseOnUpdateFreelance.status === SUCCESS_STATUS) {
     //   return responseOnUpdateFreelance.data;
@@ -90,7 +116,9 @@ export const updateFreelance = async (id, data) => {
 // DELETE Freelance
 export const deleteFreelance = async (id) => {
   try {
-    let responseOnDeleteFreelance = await axios.delete(`${REACT_BASE_URL}delete-freelance/${id}`);
+    let responseOnDeleteFreelance = await axios.delete(
+      `${REACT_BASE_URL}delete-freelance/${id}`
+    );
     if (responseOnDeleteFreelance.status === SUCCESS_STATUS) {
       return responseOnDeleteFreelance.data;
     } else {
@@ -101,11 +129,12 @@ export const deleteFreelance = async (id) => {
   }
 };
 
-
-
 export const freelanceResponse = async (formData) => {
   try {
-    let responseFreelance = await axios.post(`${REACT_BASE_URL}freelancer-responses`, formData);
+    let responseFreelance = await axios.post(
+      `${REACT_BASE_URL}freelancer-responses`,
+      formData
+    );
 
     if (responseFreelance?.data) {
       return responseFreelance.data;

@@ -25,6 +25,7 @@ import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/n
 import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
 
 function CandidateRoutes() {
+
 	return (
 		<Routes>
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
@@ -54,6 +55,7 @@ function CandidateRoutes() {
 
 		</Routes>
 	);
+
 }
 
 export default CandidateRoutes;

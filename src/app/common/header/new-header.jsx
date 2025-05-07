@@ -29,11 +29,13 @@ export const Header = ({ isDashboard = true }) => {
   const { profileData } = useContext(ProfileApiData);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+
   const { firstname, lastname, profession, profile_image } = profileData;
   
 
   const role = sessionStorage.getItem("userRole");
   
+
   // colors for the username
   const stringToColor = (string) => {
     let hash = 0;
@@ -58,9 +60,20 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    { id: "home", label: "Home", selected: true, to: "/" },
+    {
+      id: "home",
+      label: "Home",
+      selected: true,
+      to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
+    },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
-    { id: "public-find-work", label: "Find Work", to: "/dashboard-candidate/find-job" },
+    { id: "Team", label: "Team", to: "/team" },
+    { id: "invoice", label: "Payment & Invoice", to: "/payment" },
+    {
+      id: "public-find-work",
+      label: "Find Work",
+      to: "/dashboard-candidate/find-job",
+    },
     {
       id: "my-home",
       label: "My Home",
@@ -86,7 +99,11 @@ export const Header = ({ isDashboard = true }) => {
             label: "Saved Jobs",
             to: "/dashboard-candidate/saved-jobs",
           },
-          { id: "proposals-offers", label: "Proposals & Offers" },
+          {
+            id: "proposals-offers",
+            label: "Proposals & Offers",
+            to: "candidate-offers",
+          },
         ],
       },
     },
@@ -167,6 +184,11 @@ export const Header = ({ isDashboard = true }) => {
       if (role === "client") {
         return item.label !== "Find Work";
       }
+
+      if (role === "freelance") {
+        return item.label !== "Team";
+      }
+
       return true; // keep everything else
     });
   };

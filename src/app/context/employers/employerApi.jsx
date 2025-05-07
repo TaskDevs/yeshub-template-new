@@ -5,7 +5,6 @@ import { SUCCESS_STATUS, REACT_BASE_URL } from "../../../globals/constants";
 
 // ADD Employer
 export const addEmployer = async (data) => {
-  console.log(data);
   try {
     let responseOnAddEmployer = await axios.post(
       `${REACT_BASE_URL}create-employers`,
@@ -111,7 +110,7 @@ export const getClientDashboardStats = async (id) => {
       `${REACT_BASE_URL}client-stats/${id}`
     );
 
-    console.log(responseOnClientDashboardStats);
+    //console.log(responseOnClientDashboardStats);
 
     if (responseOnClientDashboardStats.status === 200) {
       return responseOnClientDashboardStats.data;
@@ -153,6 +152,22 @@ export const employerProfile = async (id) => {
     // console.log(responseOnEmployerProfile);
     if (responseOnEmployerProfile.status == 200) {
       return responseOnEmployerProfile.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const companyInfo = async (id) => {
+  try {
+    let responseOnCompanyInfo = await axios.get(
+      `${REACT_BASE_URL}employers/${id}`
+    );
+    if (responseOnCompanyInfo.status == 200) {
+      return responseOnCompanyInfo.data;
     } else {
       return false;
     }

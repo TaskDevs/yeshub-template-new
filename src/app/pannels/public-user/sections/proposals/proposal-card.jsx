@@ -66,7 +66,7 @@ export const ProposalCard = ({ applicant, actions, viewAction }) => {
           <div className=" mb-2 w-full">
             <h3 className="font-bold text-black">Skills</h3>
             <hr className="my-2" />
-            {applicant.user_info.skills_id.split(",").map((skill, index) => (
+            {applicant.user_info.skills_id?.split(",").map((skill, index) => (
               <span
                 key={index}
                 className="bg-gray-100 px-3 py-1 rounded text-sm mr-2"

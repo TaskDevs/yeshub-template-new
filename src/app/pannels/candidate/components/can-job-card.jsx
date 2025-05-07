@@ -10,7 +10,6 @@ import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextAp
 import { userId } from "../../../../globals/constants";
 import { useNavigate } from "react-router-dom";
 
-
 const getCleanTruncatedDescription = (description) => {
   if (!description) return "No description provided."; // handle null/undefined
 
@@ -44,12 +43,10 @@ const CanJobCard = ({
   jobLocation,
   datePosted,
 }) => {
-
   const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } =
     useContext(SavedJobsApiData);
   const navigate = useNavigate();
   const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === id);
-
 
   return (
     <>
@@ -67,12 +64,12 @@ const CanJobCard = ({
                     <span className="text-gray-500">({reviews} reviews)</span>
                   </div>
 
-
                   <div
                     className="w-[70%] text-sm text-gray-700 line-clamp-3"
-                    dangerouslySetInnerHTML={{ __html: description }}
+                    dangerouslySetInnerHTML={{
+                      __html: getCleanTruncatedDescription(description),
+                    }}
                   />
-
 
                   <div className="flex flex-wrap gap-2 mt-2">
                     {skills?.map((skill, i) => (
@@ -98,7 +95,6 @@ const CanJobCard = ({
                 </div>
               </div>
 
-
               <div className="flex justify-between w-full mt-2">
                 <button
                   onClick={() => toggleSavedJob(id, userId)}
@@ -110,13 +106,11 @@ const CanJobCard = ({
                     <FaBookmark className="size-4" color="#166534" />
                   )}
                   <span>{isSaved ? "Saved" : "Save"}</span>
-
                 </button>
 
                 <p className="text-[#374151]">{`GHS ${salaryRange}`}</p>
 
                 <button
-
                   className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
                   onClick={() =>
                     navigate(`/dashboard-candidate/find-work-details/${id}`)
@@ -130,13 +124,12 @@ const CanJobCard = ({
             <div className="flex space-x-2 items-start w-full">
               <div className="size-24">
                 <img
-                  src={image || 'https://placehold.co/600x400'}
+                  src={image || "https://placehold.co/600x400"}
                   alt="company_logo"
                   className="size-24 object-cover rounded-md border"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src =
-                      "https://placehold.co/600x400";
+                    e.target.src = "https://placehold.co/600x400";
                   }}
                 />
               </div>
@@ -154,7 +147,6 @@ const CanJobCard = ({
                       <FaRegTrashAlt />
                     </button>
                     <button
-
                       className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
                       onClick={() =>
                         navigate(`/dashboard-candidate/find-work-details/${id}`)
@@ -193,7 +185,6 @@ const CanJobCard = ({
                     </span>
                   )}
 
-
                   <span className="text-gray-800 font-semibold ">
                     GHS {salaryRange}
                   </span>
@@ -213,7 +204,6 @@ const CanJobCard = ({
       )}
 
       {isMobile && (
-
         <div className="tw-css border rounded-lg shadow-md p-2 flex flex-col size-full bg-white">
           <div className="tw-css flex justify-between w-full h-full">
             <div className="job-card-wrapper">

@@ -35,6 +35,7 @@ export const Header = ({ isDashboard = true }) => {
 
   const role = sessionStorage.getItem("userRole");
   
+
   // colors for the username
   const stringToColor = (string) => {
     let hash = 0;
@@ -123,7 +124,7 @@ export const Header = ({ isDashboard = true }) => {
     },
     { id: "assessment-training", label: "Assessment & Training", menu: null },
     { id: "why-yeshub", label: "Why YesHub", menu: null },
-    // { id: "enterprise", label: "Enterprise", menu: null },
+
     {
       id: "manage-finances",
       label: "Manage Finances",
@@ -142,7 +143,7 @@ export const Header = ({ isDashboard = true }) => {
         ],
       },
     },
-    { id: "messages", label: "Messages", menu: null },
+    { id: "messages", label: "Messages", to: "/messages" },
   ];
 
   // Conditional rendering of nav items based on page type
@@ -152,25 +153,17 @@ export const Header = ({ isDashboard = true }) => {
     if (isDashboard) {
       // Show only dashboard-related items
       items = navItems.filter((item) =>
-        [
-          "My Home",
-          "Find Jobs",
-          "Deliver Work",
-          "Manage Finances",
-          "Messages",
-        ].includes(item.label)
+        ["My Home", "Find Jobs", "Deliver Work", "Manage Finances"].includes(
+          item.label
+        )
       );
     } else {
       // Show only public nav items
       items = navItems.filter(
         (item) =>
-          ![
-            "My Home",
-            "Find Jobs",
-            "Manage Finances",
-            "Deliver Work",
-            "Messages",
-          ].includes(item.label)
+          !["My Home", "Find Jobs", "Manage Finances", "Deliver Work"].includes(
+            item.label
+          )
       );
     }
 

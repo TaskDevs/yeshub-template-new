@@ -8,14 +8,17 @@ export const TeamData = [
       {
         full_name: "David Kwasi",
         task: "Task One",
+        progress_rate: "30%",
       },
       {
         full_name: "John Kwesi",
         task: "Task Two",
+        progress_rate: "60%",
       },
       {
         full_name: "Peter Kwashi",
         task: "Task Three",
+        progress_rate: "50%",
       },
     ],
   },
@@ -28,14 +31,17 @@ export const TeamData = [
       {
         full_name: "David Kwasi",
         task: "Task One",
+        progress_rate: "70%",
       },
       {
         full_name: "John Kwesi",
         task: "Task Two",
+        progress_rate: "35%",
       },
       {
         full_name: "Peter Kwashi",
         task: "Task Three",
+        progress_rate: "40%",
       },
     ],
   },
@@ -48,14 +54,17 @@ export const TeamData = [
       {
         full_name: "David Kwasi",
         task: "Task One",
+        progress_rate: "55%",
       },
       {
         full_name: "John Kwesi",
         task: "Task Two",
+        progress_rate: "20%",
       },
       {
         full_name: "Peter Kwashi",
         task: "Task Three",
+        progress_rate: "60%",
       },
     ],
   },

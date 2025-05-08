@@ -67,6 +67,8 @@ export const publicUser = {
     FIND_TALENT: "/find-talent",
     DASHBOARD: "/dashboard-client",
     PROPOSALS: "/client-proposals",
+  
+
     STAFF: "/client-staff",
     TASK: "/task-management",
     TEAM: "/team",
@@ -80,6 +82,8 @@ export const publicUser = {
     PORTFOLIO: "/can-portfolio",
     DETAIL: "/can-detail/:id",
     PROFILE: "/can-profile",
+    FINANCE: "/candidate-finance",
+    FINANCE_DETAIL: "/can-finance-detail",
   },
   blog: {
     GRID1: "/blog-grid/1",
@@ -104,6 +108,7 @@ export const candidate = {
   FIND_WORK_DETAILS: "/find-work-details/:id",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
+  FINANCE: "/candidate-finance",
   RESUME: "/my-resume",
   SAVED_JOBS: "/saved-jobs",
   CV_MANAGER: "/cv-manager",

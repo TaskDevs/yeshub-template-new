@@ -6,8 +6,6 @@ import {
   jobTypes,
   sortTwo,
 } from "../find-work/filter-data";
-import { AiOutlineBars } from "react-icons/ai";
-import { MdOutlineWindow } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiCircleCheck } from "react-icons/ci";
 import { calculateDaysLeft, calculateDaysSincePosted } from "../../../../../utils/readableDate";
@@ -42,6 +40,7 @@ function NewSavedJobsPage() {
 useEffect(() => {
   if (!isLoading) {
     const results = filterElements(savedjobsData, filters);
+    console.log("results", savedjobsData)
     setFilteredJobs(results);
   }
 }, [filters, savedjobsData]);
@@ -74,6 +73,7 @@ useEffect(() => {
               key={data?.id}
               id={data?.job_id}
               role={data?.job?.title}
+              proposal={data?.job?.proposals_count}
               ratings="4.9"
               reviews="23k"
               companyName={data?.job?.category}     
@@ -133,28 +133,18 @@ useEffect(() => {
                   <div className="w-full">
                     <div className="flex justify-between items-center border-b mb-6 w-full">
                       <h2 className="font-medium text-xl capitalize">
-                        saved jobs <span>(12)</span>
+                        saved jobs <span>({totalItems})</span>
                       </h2>
                       <div className="flex mb-2 items-center">
                         <div className="">
                           <CanSelectField options={sortTwo} width="240px" />
                         </div>
-                        <div className="flex border w-fit rounded-md">
-                          <button className="border-r px-2">
-                            <AiOutlineBars className="size-8" />
-                          </button>
-                          <button>
-                            <MdOutlineWindow className="size-8" />
-                          </button>
-                        </div>
+                      
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center border-b my-4 w-full px-2 ">
-                      {/* <div className="flex items-center">
-                        <input type="checkbox" className="size-4" />
-                        <span className="ml-1">Select all</span>
-                      </div> */}
+                    
                       <div className="flex capitalize">
                         <button className="flex">
                           <FaRegTrashAlt />
@@ -175,6 +165,7 @@ useEffect(() => {
                         id={data.job_id}
                         image={data?.job?.logo}
                         role={data?.job?.title}
+                        proposal={data?.job?.proposals_count}
                         ratings="4.8"
                         reviews="23k"
                         companyName={data?.job?.category}

@@ -42,6 +42,7 @@
     "react-countup": "^6.4.2",
     "react-data-table-component": "^7.7.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.3.8",
     "react-dropzone-component": "^3.2.0",
     "react-hook-form": "^7.55.0",
     "react-hot-toast": "^2.5.2",

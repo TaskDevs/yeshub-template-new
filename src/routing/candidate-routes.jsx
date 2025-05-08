@@ -24,6 +24,8 @@ import ActiveContracts from "../app/pannels/candidate/sections/deliver-work/acti
 import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/new-saved-jobs-page";
 import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
 import FinancialDashboard from "../app/pannels/candidate/sections/finances/finance-dashboad";
+import BillingDashboard from "../app/pannels/candidate/sections/finances/billings-dashboard";
+import CreateInvoice from "../app/pannels/candidate/sections/finances/invoice";
 
 function CandidateRoutes() {
 	return (
@@ -40,6 +42,10 @@ function CandidateRoutes() {
 			<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
 			<Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
 			<Route path={candidate.FINANCE} element={<FinancialDashboard />} />
+			<Route path={candidate.BILLING} element={<BillingDashboard />} />
+			<Route path={candidate.INVOICE} element={<CreateInvoice />} />
+			{/* <Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} /> */}
+			{/* <Route path={candidate.CHAT} element={<CanChatPage />} /> */}
 			<Route
 				path={candidate.CHANGE_PASSWORD}
 				element={<CanChangePasswordPage />}

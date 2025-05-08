@@ -98,7 +98,7 @@ const StaffOnTeam = ({ data }) => {
           >
             <Column field="full_name" header="Staff" />
             <Column field="task" header="Task" />
-            <Column field="rate" body={progressBar} />
+            <Column header="Progress" body={progressBar} />
             <Column header="Actions" body={actionBodyTemplate} />
           </DataTable>
         </div>

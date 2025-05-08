@@ -7,6 +7,7 @@ import {
   addJobPost,
   getClientDashboardStats,
   getJobAppliedToCompany,
+  companyInfo,
   updateEmployerLogo,
   employerProfile,
   updateEmployer,
@@ -22,6 +23,7 @@ export const EmployerApiData = createContext();
 
 const EmployerApiDataProvider = (props) => {
   const [employerProfiles, setEmployerProfiles] = useState([]);
+  const [companyInfoData, setCompanyInfoData] = useState([]);
   const [appliedJobList, setAppliedJobList] = useState([]);
   const [employerStats, setEmployerStats] = useState({});
 
@@ -134,6 +136,16 @@ const EmployerApiDataProvider = (props) => {
 
     if (response) {
       setEmployerProfiles(response.data);
+    } else {
+      return false;
+    }
+  };
+
+  const processGetCompanyInfo = async (id) => {
+    let response = await companyInfo(id);
+    if (response) {
+      console.log(response.data);
+      setCompanyInfoData(response.data);
     } else {
       return false;
     }
@@ -257,6 +269,7 @@ const EmployerApiDataProvider = (props) => {
         processAddExperience,
         processEmployerProfile,
         processGetJobAppliedToCompany,
+        processGetCompanyInfo,
         processSearchEmployer,
         processAddJobPost,
         processUpdateEmployer,
@@ -269,6 +282,7 @@ const EmployerApiDataProvider = (props) => {
         processGetEmployerStats,
         processDeleteJob,
         appliedJobList,
+        companyInfoData,
         employerStats,
         employerProfiles,
       }}

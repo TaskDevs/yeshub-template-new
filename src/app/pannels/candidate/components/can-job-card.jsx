@@ -6,8 +6,22 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { calculateDaysSincePosted } from "../../../../utils/readableDate";
 import { FaBookmark } from "react-icons/fa6";
 import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextApi";
+
 import { userId } from "../../../../globals/constants";
 import { useNavigate } from "react-router-dom";
+
+const getCleanTruncatedDescription = (description) => {
+  if (!description) return "No description provided."; // handle null/undefined
+
+  // remove all HTML tags
+  const cleanText = description.replace(/<[^>]*>/g, "").trim();
+
+  // fallback if empty after cleaning
+  if (!cleanText) return "No description provided.";
+
+  // truncate to 100 chars max (you can adjust this)
+  return cleanText.length > 100 ? cleanText.slice(0, 97) + "..." : cleanText;
+};
 
 const CanJobCard = ({
   role,
@@ -52,7 +66,9 @@ const CanJobCard = ({
 
                   <div
                     className="w-[70%] text-sm text-gray-700 line-clamp-3"
-                    dangerouslySetInnerHTML={{ __html: description }}
+                    dangerouslySetInnerHTML={{
+                      __html: getCleanTruncatedDescription(description),
+                    }}
                   />
 
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -108,13 +124,12 @@ const CanJobCard = ({
             <div className="flex space-x-2 items-start w-full">
               <div className="size-24">
                 <img
-                  src={image || 'https://placehold.co/600x400'}
+                  src={image || "https://placehold.co/600x400"}
                   alt="company_logo"
                   className="size-24 object-cover rounded-md border"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src =
-                      "https://placehold.co/600x400";
+                    e.target.src = "https://placehold.co/600x400";
                   }}
                 />
               </div>

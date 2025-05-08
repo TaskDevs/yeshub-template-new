@@ -26,6 +26,7 @@ import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-wo
 import FinancialDashboard from "../app/pannels/candidate/sections/finances/finance-dashboad";
 
 function CandidateRoutes() {
+
 	return (
 		<Routes>
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
@@ -57,6 +58,7 @@ function CandidateRoutes() {
 
 		</Routes>
 	);
+
 }
 
 export default CandidateRoutes;

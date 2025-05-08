@@ -57,6 +57,7 @@ const SavedJobsApiDataProvider = (props) => {
     return res;
   };
 
+
   const handleAddSavedJobs = async (userId, jobId) => {
     console.log("userId, jobId", userId, parseInt(jobId));
     setIsSubmitting(true);
@@ -85,6 +86,7 @@ const SavedJobsApiDataProvider = (props) => {
       setIsSubmitting(false);
     }
   };
+
 
   const toggleSavedJob = (id, userId) => {
     const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === Number(id));

@@ -30,10 +30,12 @@ function NewSavedJobsPage() {
   const { filters, handleChange } = useFilterForm();
 
   const itemsPerPage = 10;
+
   const totalItems = savedjobsData?.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const isLoading = !savedjobsData || savedjobsData?.length === 0;
+
 
 useEffect(() => {
   if (!isLoading) {

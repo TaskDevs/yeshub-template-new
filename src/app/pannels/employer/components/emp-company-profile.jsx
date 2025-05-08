@@ -22,7 +22,8 @@ function EmpCompanyProfilePage() {
     processUpdateEmployerBanner,
   } = useContext(EmployerApiData);
   const { isSubmitting } = useContext(GlobalApiData);
-  const { handleSubmitProfile,handleUpdateProfile } = useContext(ProfileApiData);
+  const { handleSubmitProfile, handleUpdateProfile } =
+    useContext(ProfileApiData);
   const [imageURL, setImageURL] = useState(null);
   const [bannerURL, setBannerURL] = useState(null);
   const [formData, setFormData] = useState({});
@@ -104,7 +105,7 @@ function EmpCompanyProfilePage() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      borderRadius:'20px'
+                      borderRadius: "20px",
                     }}
                   >
                     {bannerURL || employerProfiles.banner ? (
@@ -129,19 +130,16 @@ function EmpCompanyProfilePage() {
                     className="twm-mid-content"
                     style={{ textAlign: "center", marginTop: "-40px" }}
                   >
-                    <div
-                      className="twm-media"
-                     
-                    >
-                       {!employerProfiles.logo ? (
+                    <div className="twm-media">
+                      {!employerProfiles.logo ? (
                         imageURL ? (
                           <JobZImage
                             src={FormatUrl(baseURL) + formatImgUrl(imageURL)}
                             alt="Company Image"
                             style={{
-                              width: "110px", 
-                              height: "110px", 
-                              fontSize: "80px", 
+                              width: "110px",
+                              height: "110px",
+                              fontSize: "80px",
 
                               alignItems: "center",
                               justifyContent: "center",
@@ -153,9 +151,9 @@ function EmpCompanyProfilePage() {
                             size="xlarge"
                             shape="circle"
                             style={{
-                              width: "110px", 
-                              height: "110px", 
-                              fontSize: "80px", 
+                              width: "110px",
+                              height: "110px",
+                              fontSize: "80px",
 
                               alignItems: "center",
                               justifyContent: "center",
@@ -305,16 +303,14 @@ function EmpCompanyProfilePage() {
                         <img src={bannerURL} alt="Company Banner" />
                       ) : employerProfiles.banner ? (
                         <img
-                        src={bannerURL || employerProfiles.banner}
-                        alt="Company Banner"
-                        
-                      />
+                          src={bannerURL || employerProfiles.banner}
+                          alt="Company Banner"
+                        />
                       ) : (
                         <img
-                        src={bannerURL || employerProfiles.banner}
-                        alt="Company Banner"
-                        
-                      />
+                          src={bannerURL || employerProfiles.banner}
+                          alt="Company Banner"
+                        />
                       )}
 
                       <div className="upload-btn-wrapper">
@@ -365,9 +361,7 @@ function EmpCompanyProfilePage() {
           <div className="panel-body wt-panel-body p-a20 m-b30 ">
             <div className="row">
               <div className="col-lg-12 col-md-12">
-                <div className="form-group">
-                 
-                </div>
+                <div className="form-group"></div>
               </div>
               <div className="col-lg-12 col-md-12">
                 <div className="text-left">

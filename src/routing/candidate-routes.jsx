@@ -23,6 +23,7 @@ import FindWorkPage from "../app/pannels/candidate/sections/find-work/find-work-
 import ActiveContracts from "../app/pannels/candidate/sections/deliver-work/active-contracts";
 import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/new-saved-jobs-page";
 import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
+import FinancialDashboard from "../app/pannels/candidate/sections/finances/finance-dashboad";
 
 function CandidateRoutes() {
 	return (
@@ -38,6 +39,7 @@ function CandidateRoutes() {
 			<Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
 			<Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
 			<Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
+			<Route path={candidate.FINANCE} element={<FinancialDashboard />} />
 			<Route
 				path={candidate.CHANGE_PASSWORD}
 				element={<CanChangePasswordPage />}
@@ -50,6 +52,7 @@ function CandidateRoutes() {
 			<Route path={candidate.APPLIED_JOB_DETAILS} element={<CanAppliedJobDetails />} />
 			<Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
 			<Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />
+			
 			<Route path="*" element={<Error404Page />} />
 
 		</Routes>

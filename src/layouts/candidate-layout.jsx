@@ -8,7 +8,7 @@ import SignInPopup from "../app/common/popups/popup-signin";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
 import { Header } from "../app/common/header/new-header";
-import { MobileNav } from "../app/common/footer/mobile-nav";
+
 // import { ProfileApiData } from "../app/context/user-profile/profileContextApi";
 // import { useContext } from "react";
 
@@ -53,7 +53,7 @@ function CandidateLayout() {
         </div>
 
         
-        <MobileNav isDashboard={true} />
+        
         {/* Footer */}
         {/* <Footer1 /> */}
         {/* {showFooter(currentpath) && setFooterType(currentpath)} */}

@@ -17,7 +17,6 @@ const CanJobCard = ({
   ratings,
   description,
   skills,
-  numberOfProposals,
   salaryRange,
   image,
   newTag,
@@ -28,6 +27,7 @@ const CanJobCard = ({
   isMobile = false,
   jobLocation,
   datePosted,
+  proposal,
 }) => {
   const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } =
     useContext(SavedJobsApiData);
@@ -74,7 +74,7 @@ const CanJobCard = ({
                     </button>
                   )}
                   <p className="rounded-xl bg-[#F3F4F6] text-sm md:text-[0.5rem] text-[#1F2937] w-fit p-1 md:p-0">
-                    {numberOfProposals} proposals
+                    {proposal} proposals
                   </p>
                 </div>
               </div>
@@ -126,7 +126,7 @@ const CanJobCard = ({
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
                       <IoIosPeople className="size-4" />
-                      <span>{numberOfProposals} proposals</span>
+                      <span>{proposal} proposals</span>
                     </div>
                     <button onClick={() => handleDeleteSavedJobs(id, userId)}>
                       <FaRegTrashAlt />

@@ -71,6 +71,7 @@ import ClientDashboard from "../app/pannels/public-user/sections/dashboard/clien
 import StaffList from "../app/pannels/employer/components/staff/staff-list";
 import TaskManagement from "../app/pannels/employer/components/task/task-management";
 import TeamList from "../app/pannels/employer/components/team/team-list";
+import MessageDashboard from "../app/pannels/public-user/components/messages/message-dashboard";
 
 function PublicUserRoutes() {
   return (
@@ -159,6 +160,7 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.STAFF} element={<StaffList />} />
         <Route path={publicUser.pages.TEAM} element={<TeamList />} />
+        <Route path={publicUser.pages.MESSAGE} element={<MessageDashboard />} />
         <Route path={publicUser.pages.TASK} element={<TaskManagement />} />
         <Route path={publicUser.pages.VERIFYOTP} element={<VerifyOtp />} />
         <Route

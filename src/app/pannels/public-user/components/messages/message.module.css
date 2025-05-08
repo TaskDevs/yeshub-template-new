@@ -1,0 +1,34 @@
+/* Main container */
+.findClientContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  width: 100%;
+  padding-right: 1.25rem;
+  padding-bottom: 2rem;
+  margin-bottom: 3rem;
+  height: 100%;
+}
+
+.sidebar {
+  width: 25% !important;
+}
+
+.searchResults {
+  width: 75% !important;
+}
+
+/* Tablet Styles */
+@media screen and (max-width: 1024px) {
+  .findClientContainer {
+    padding: 0 10px;
+    padding-bottom: 2rem;
+  }
+  .sidebar {
+    display: none;
+  }
+
+  .searchResults {
+    width: 100% !important;
+  }
+}

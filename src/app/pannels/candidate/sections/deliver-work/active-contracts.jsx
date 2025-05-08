@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { FaBriefcase, FaClock, FaDollarSign } from 'react-icons/fa';
-import Table from '../../../../common/table/Table';
-import Pagination from '../../../../common/Pagination';
-import { TableTop } from '../../../../common/table/TableTop';
-import { ContractStatCard } from '../../components/can-contract-stat-card';
+import React, { useState } from "react";
+import { FaBriefcase, FaClock, FaDollarSign } from "react-icons/fa";
+import Table from "../../../../common/table/Table";
+import Pagination from "../../../../common/Pagination";
+import { TableTop } from "../../../../common/table/TableTop";
+import { ContractStatCard } from "../../components/can-contract-stat-card";
+import { useNavigate } from "react-router-dom";
 
 // Sample data
 const contractsData = [
@@ -14,7 +15,7 @@ const contractsData = [
     daysRemaining: 14,
     status: "In Progress",
     totalValue: 4500,
-    actions: ["Submit Work", "Message"]
+    actions: ["Submit Work", "Message"],
   },
   {
     contractName: "Mobile App Development",
@@ -23,7 +24,7 @@ const contractsData = [
     daysRemaining: 30,
     status: "Under Review",
     totalValue: 8250,
-    actions: ["View Details", "Message"]
+    actions: ["View Details", "Message"],
   },
   {
     contractName: "Brand Identity Design",
@@ -32,62 +33,33 @@ const contractsData = [
     daysRemaining: 45,
     status: "Just Started",
     totalValue: 3750,
-    actions: ["Submit Work", "Message"]
-  }
+    actions: ["Submit Work", "Message"],
+  },
 ];
 
 // Stats data based on the image
 const statsData = [
-  { title: "Total Contracts", count: 85, icon: <FaBriefcase size={18} />, bgColor: "bg-gray-100", iconColor: "text-gray-700" },
-  { title: "Completed Contracts", count: 73, icon: <FaDollarSign size={18} />, bgColor: "bg-green-100", iconColor: "text-green-700" },
-  { title: "In Progress", count: 8, icon: <FaClock size={18} />, bgColor: "bg-yellow-100", iconColor: "text-yellow-700" },
-];
-
-// Table column configuration
-const columns = [
   {
-    key: "contractName",
-    header: "Contract Name",
-    render: (item) => (
-      <div>
-        <div className="font-medium">{item.contractName}</div>
-        <div className="text-sm text-gray-600">Client: {item.client}</div>
-      </div>
-    )
+    title: "Total Contracts",
+    count: 85,
+    icon: <FaBriefcase size={18} />,
+    bgColor: "bg-gray-100",
+    iconColor: "text-gray-700",
   },
   {
-    key: "completionDate",
-    header: "Completion Date",
-    render: (item) => (
-      <div>
-        <div>{item.completionDate}</div>
-        <div className="text-sm text-gray-600">{item.daysRemaining} days remaining</div>
-      </div>
-    )
+    title: "Completed Contracts",
+    count: 73,
+    icon: <FaDollarSign size={18} />,
+    bgColor: "bg-green-100",
+    iconColor: "text-green-700",
   },
   {
-    key: "status",
-    header: "Final Status",
-    render: (item) => <StatusTag status={item.status} />
+    title: "In Progress",
+    count: 8,
+    icon: <FaClock size={18} />,
+    bgColor: "bg-yellow-100",
+    iconColor: "text-yellow-700",
   },
-  {
-    key: "totalValue",
-    header: "Total Value",
-    render: (item) => <span>${item.totalValue.toLocaleString()}</span>
-  },
-  {
-    key: "actions",
-    header: "Actions",
-    render: (item) => (
-      <div className='text-right'>
-        {item.actions.map((action, index) => (
-          <button key={index} className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right">
-            {action}
-          </button>
-        ))}
-      </div>
-    )
-  }
 ];
 
 // Status Tag Component
@@ -122,7 +94,8 @@ const StatusTag = ({ status }) => {
 const ActiveContracts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
-          
+  const navigate = useNavigate();
+
   const itemsPerPage = 10;
   const totalItems = 123;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -136,6 +109,63 @@ const ActiveContracts = () => {
   const handleSearch = (value) => {
     console.log("Searching for:", value);
   };
+
+  // Table column configuration
+  const columns = [
+    {
+      key: "contractName",
+      header: "Contract Name",
+      render: (item) => (
+        <div>
+          <div className="font-medium">{item.contractName}</div>
+          <div className="text-sm text-gray-600">Client: {item.client}</div>
+        </div>
+      ),
+    },
+    {
+      key: "completionDate",
+      header: "Completion Date",
+      render: (item) => (
+        <div>
+          <div>{item.completionDate}</div>
+          <div className="text-sm text-gray-600">
+            {item.daysRemaining} days remaining
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      header: "Final Status",
+      render: (item) => <StatusTag status={item.status} />,
+    },
+    {
+      key: "totalValue",
+      header: "Total Value",
+      render: (item) => <span>${item.totalValue.toLocaleString()}</span>,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (item) => (
+        <div className="text-right">
+          {item.actions.map((action, index) => (
+            <button
+              key={index}
+              onClick={() =>
+                action == "Submit Work"
+                  ? navigate("/dashboard-candidate/submit-work")
+                  : navigate("/")
+              }
+              className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right"
+            >
+              {action}
+            </button>
+          ))}
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="tw-css mx-auto p-6">
@@ -164,7 +194,7 @@ const ActiveContracts = () => {
             data={contractsData}
             columns={columns}
             isGeneral={true}
-            bgColor='bg-white'
+            bgColor="bg-white"
             headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
             headerRowStyles=""
           />
@@ -179,7 +209,7 @@ const ActiveContracts = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ActiveContracts
+export default ActiveContracts;

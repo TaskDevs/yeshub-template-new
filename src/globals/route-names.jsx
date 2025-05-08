@@ -70,6 +70,7 @@ export const publicUser = {
     STAFF: "/client-staff",
     TASK: "/task-management",
     TEAM: "/team",
+    MESSAGE: "/messages",
   },
   candidate: {
     GRID: "/can-grid",
@@ -109,6 +110,7 @@ export const candidate = {
   ALERTS: "/job-alerts",
   CHANGE_PASSWORD: "/change-password",
   CHAT: "/chat",
+  SUBMIT: "/submit-work",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
   APPLIED_JOB_DETAILS: "/applied-job-details/:id",

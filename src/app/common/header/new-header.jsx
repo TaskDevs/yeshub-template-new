@@ -30,6 +30,7 @@ export const Header = ({ isDashboard = true }) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  console.log("profile data", profileData);
 
   const { firstname, lastname, profession, profile_image } = profileData;
 
@@ -138,7 +139,7 @@ export const Header = ({ isDashboard = true }) => {
             selected: true,
           },
           { id: "your-report", label: "Your Report" },
-          { id: "billings-earnings", label: "Billings & Earnings" },
+          { id: "billings-earnings", label: "Billings & Earnings" , to: `${base.CANDIDATE_PRE}${candidate.BILLING}`},
           { id: "transactions", label: "Transactions" },
         ],
       },

@@ -155,7 +155,7 @@ const ActiveContracts = () => {
               onClick={() =>
                 action == "Submit Work"
                   ? navigate("/dashboard-candidate/submit-work")
-                  : navigate("/")
+                  : navigate("/messages")
               }
               className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right"
             >

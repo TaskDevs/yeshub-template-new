@@ -22,6 +22,7 @@ import CandidateProfile from "../app/pannels/candidate/sections/new-profile/cand
 import FindWorkPage from "../app/pannels/candidate/sections/find-work/find-work-page";
 import ActiveContracts from "../app/pannels/candidate/sections/deliver-work/active-contracts";
 import SubmitWork from "../app/pannels/candidate/sections/deliver-work/submit-work";
+import SubmitProposal from "../app/pannels/candidate/sections/deliver-work/submit-proposal";
 import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/new-saved-jobs-page";
 import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
 
@@ -47,12 +48,13 @@ function CandidateRoutes() {
       <Route path={candidate.SUBMIT} element={<SubmitWork />} />
       <Route path={candidate.CHAT} element={<CanChatPage />} />
       <Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
-      SubmitWork
+
       <Route
         path={candidate.Contracts_History}
         element={<ContractsHistory />}
       />
       <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
+      <Route path={candidate.SUBMIT_PROPOSAL} element={<SubmitProposal />} />
       <Route
         path={candidate.APPLIED_JOB_DETAILS}
         element={<CanAppliedJobDetails />}

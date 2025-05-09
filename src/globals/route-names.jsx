@@ -124,6 +124,7 @@ export const candidate = {
   APPLY_MILESTONE_JOB: "/apply-job/:id",
   BILLING: "/billings",
   INVOICE: "/create-invoice",
+  PREVIEW_INVOICE: "/invoice-preview/:id",
   INVOICE_DETAIL: "/invoice-detail/:id",
 };
 

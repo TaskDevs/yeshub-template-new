@@ -896,6 +896,7 @@ export const Header = ({ isDashboard = true }) => {
               ))}
           </nav>
         </div>
+
       </header>
     </>
   );

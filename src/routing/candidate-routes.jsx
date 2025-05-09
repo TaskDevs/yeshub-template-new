@@ -25,6 +25,9 @@ import SubmitWork from "../app/pannels/candidate/sections/deliver-work/submit-wo
 import SubmitProposal from "../app/pannels/candidate/sections/deliver-work/submit-proposal";
 import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/new-saved-jobs-page";
 import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
+import FinancialDashboard from "../app/pannels/candidate/sections/finances/finance-dashboad";
+import BillingDashboard from "../app/pannels/candidate/sections/finances/billings-dashboard";
+import CreateInvoice from "../app/pannels/candidate/sections/finances/invoice";
 
 function CandidateRoutes() {
   return (

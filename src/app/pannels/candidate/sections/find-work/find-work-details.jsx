@@ -104,7 +104,9 @@ function FindWorkDetails() {
                 <div>
                   <div className="flex flex-col gap-2">
                     <button
-                      onClick={() => setModalOpen(true)}
+                      onClick={() =>
+                        navigate("/dashboard-candidate/submit-proposal")
+                      }
                       className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                       Submit Proposal

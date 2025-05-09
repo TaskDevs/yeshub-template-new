@@ -249,7 +249,7 @@ export default function BillingDashboard() {
                   </span>
                 </td>
                 <td className="px-4 py-2">
-                  <button className="text-green-600 hover:underline">
+                  <button className="text-green-600 hover:underline" onClick={() => naviateTo("/dashboard-candidate/invoice-detail/1")}>
                     View Details
                   </button>
                 </td>

@@ -72,121 +72,75 @@ function FindWorkDetails() {
       <div className=" mx-auto  max-w-7xl p-6 ">
         <div className="flex flex-col">
           <div className=" w-full details-job-section">
-            <div className="w-3/4 bg-gray-100 rounded-md p-4 flex-1 space-y-4">
-              <div className="border-b border-gray-500 flex flex-row pb-2 ">
-                <div className="flex">
-                  <div className="size-24">
-                    <img
-                      src={"https://placehold.co/600x400"}
-                      alt="company_logo"
-                      className="size-24 object-cover rounded-md border"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "https://placehold.co/600x400";
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <h3 className="capitalize font-bold text-2xl">
-                      {jobProfile?.title}
-                    </h3>
-                    <div className="flex w-fit mt-2">
-                      <p>{calculateDaysSincePosted(jobProfile?.created_at)}</p>
-                      <p className="flex items-center">
-                        <SlLocationPin /> Accra
-                      </p>
-                      <span className="bg-yellow-200 rounded-full text-yellow-700 px-2">
-                        Full Time
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex flex-col gap-2">
-                    <button
-                      onClick={() => setModalOpen(true)}
-                      className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                      Submit Proposal
-                    </button>
-                    <button
-                      onClick={() => toggleSavedJob(id, userId)}
-                      className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
-                    >
-                      {isSaved ? "Saved" : "Save"}
-                    </button>
-                  </div>
+            <div className="w-full border-r border-gray-500 py-2 flex-1 space-y-4">
+              <div className="sections-wrapper border-b border-gray-500">
+                <h3 className="capitalize font-bold text-3xl">
+                  {jobProfile?.category} || {jobProfile?.title}
+                </h3>
+                <div className="flex w-fit mt-2">
+                  <p>{calculateDaysSincePosted(jobProfile?.created_at)}</p>
+                  <p className="flex items-center">
+                    <SlLocationPin /> Accra
+                  </p>
                 </div>
               </div>
 
-              <div className="">
+              <div className="sections-wrapper  ">
                 <p className="mb-4">
                   {aProfile?.headline ||
                     "We're Hiring: Mid-Level Front-End Engineer to Build Dynamic Web Experiences"}
                 </p>
-                <p
-                  className="w-full"
-                  dangerouslySetInnerHTML={{
-                    __html: aProfile?.description,
-                  }}
-                />
-                <h3 className="capitalize font-bold text-xl">
-                  Skills Required
-                </h3>
-                <hr className="border-0 h-px bg-gray-500 my-4" />
-                <div className=" flex flex-wrap w-fit my-2 ">
+                <p>{aProfile?.description}</p>
+
+                <div className=" flex flex-wrap w-fit my-4 ">
                   {aProfile?.skills?.map((skill, i) => (
                     <div
                       key={i}
-                      className="bg-gray-200 text-sm text-[#1F2937] capitalize rounded-full p-2"
+                      className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2"
                     >
                       {skill}
                     </div>
                   ))}
                 </div>
-                <h3 className="capitalize font-bold text-xl mt-6">Salary</h3>
-                <hr className="border-0 h-px bg-gray-500 my-4" />
               </div>
 
-              <div className="flex flex-row">
-                <p className="text-xl font-bold">
-                  GH{" "}
+              <div className="sections-wrapper flex-row w-full justify-between">
+                <p>
+                  Budget:{" "}
                   {aProfile?.salary ||
                     aProfile?.budget ||
                     aProfile?.fixed_rate ||
                     "4000"}
                 </p>
-                <p className="text-sm text-yellow-700">Monthly</p>
+                <p>Job Type: {aProfile?.job_type}</p>
               </div>
             </div>
-            <div className="w-1/4 flex flex-col justify-start p-2 bg-gray-100 rounded-md">
-              <div className="size-24 mt-t">
-                <img
-                  src={"https://placehold.co/600x400"}
-                  alt="company_logo"
-                  className="size-24 object-cover rounded-full border"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "https://placehold.co/600x400";
-                  }}
-                />
-              </div>
-              <p className="text-xl font-bold text-gray-800">
-                {aProfile?.employer?.company_name}
-              </p>
-              <div className="text-center">
-                <span className="text-sm text-gray-500 block">
-                  {aProfile?.employer?.email}
-                </span>
-                <Link
-                  to={aProfile?.employer?.website}
-                  target="_blank"
-                  className="text-blue-500 block"
+            <div className="flex flex-col justify-start p-2">
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                  {aProfile?.employer?.website}
-                </Link>
+                  Submit Proposal
+                </button>
+                <button
+                  onClick={() => toggleSavedJob(id, userId)}
+                  className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline "
+                >
+                  {isSaved ? "Saved" : "Save"}
+                </button>
               </div>
+              <h4 className="capitalize font-bold text-base">about client</h4>
+              <p>{aProfile?.employer?.company_name}</p>
               <p>{aProfile?.employer?.description}</p>
+              <p>{aProfile?.employer?.email}</p>
+              <Link
+                to={aProfile?.employer?.website}
+                target="_blank"
+                className="text-blue-500"
+              >
+                {aProfile?.employer?.website}
+              </Link>
             </div>
           </div>
           <div className="w-full py-4">

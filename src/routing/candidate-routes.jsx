@@ -21,6 +21,8 @@ import ContractsHistory from "../app/pannels/candidate/sections/deliver-work/con
 import CandidateProfile from "../app/pannels/candidate/sections/new-profile/cand-profile";
 import FindWorkPage from "../app/pannels/candidate/sections/find-work/find-work-page";
 import ActiveContracts from "../app/pannels/candidate/sections/deliver-work/active-contracts";
+import SubmitWork from "../app/pannels/candidate/sections/deliver-work/submit-work";
+import SubmitProposal from "../app/pannels/candidate/sections/deliver-work/submit-proposal";
 import NewSavedJobsPage from "../app/pannels/candidate/sections/new-saved-jobs/new-saved-jobs-page";
 import FindWorkDetails from "../app/pannels/candidate/sections/find-work/find-work-details";
 import FinancialDashboard from "../app/pannels/candidate/sections/finances/finance-dashboad";
@@ -30,6 +32,7 @@ import InvoicePreview from "../app/pannels/candidate/sections/finances/invoice-p
 import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoice-details";
 
 function CandidateRoutes() {
+
 	return (
 		<Routes>
 			<Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
@@ -65,8 +68,27 @@ function CandidateRoutes() {
 			
 			<Route path="*" element={<Error404Page />} />
 
-		</Routes>
-	);
+      <Route
+        path={candidate.Contracts_History}
+        element={<ContractsHistory />}
+      />
+      <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
+      <Route path={candidate.SUBMIT_PROPOSAL} element={<SubmitProposal />} />
+      <Route
+        path={candidate.APPLIED_JOB_DETAILS}
+        element={<CanAppliedJobDetails />}
+      />
+      <Route
+        path={candidate.SAVED_JOBS_DETAILS}
+        element={<CanSavedJobsDetails />}
+      />
+      <Route
+        path={candidate.APPLY_MILESTONE_JOB}
+        element={<CanApplyMilestone />}
+      />
+      <Route path="*" element={<Error404Page />} />
+    </Routes>
+  );
 }
 
 export default CandidateRoutes;

@@ -119,6 +119,7 @@ export const candidate = {
   SUBMIT: "/submit-work",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
+  SUBMIT_PROPOSAL: "/submit-proposal",
   APPLIED_JOB_DETAILS: "/applied-job-details/:id",
   SAVED_JOBS_DETAILS: "/saved-job-details/:id",
   APPLY_MILESTONE_JOB: "/apply-job/:id",

@@ -43,6 +43,9 @@ function CandidateRoutes() {
       <Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
       <Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
       <Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
+      <Route path={candidate.BILLING} element={<BillingDashboard />} />
+      <Route path={candidate.INVOICE} element={<CreateInvoice />} />
+      <Route path={candidate.FINANCE} element={<FinancialDashboard />} />
       <Route
         path={candidate.CHANGE_PASSWORD}
         element={<CanChangePasswordPage />}

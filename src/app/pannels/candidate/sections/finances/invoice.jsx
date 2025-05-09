@@ -412,7 +412,18 @@ const CreateInvoice = () => {
           Save Draft
         </button>
         <div className="flex space-x-2">
-          <button className="bg-gray-700 text-white px-4 py-2 rounded">
+          <button className="bg-gray-700 text-white px-4 py-2 rounded" onClick={() => naviateTo("/dashboard-candidate/invoice-preview/1")}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 inline-block mr-1"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true">
+            <path
+              fillRule="evenodd"
+              d="M10 2a1 1 0 00-1 1v4.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 00-1-1z"
+              clipRule="evenodd"
+            /></svg>
             Preview
           </button>
           <button

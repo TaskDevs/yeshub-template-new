@@ -26,11 +26,12 @@ const LinkedInCallback = () => {
             navigate(`/dashboard/onboard?user=${userId}`);
             break;
           case "client":
-            navigate("/dashboard-client");
+            
+              window.location.href = "/dashboard-client";
             break;
           case "freelancer":
           default:
-            navigate(base.CANDIDATE_PRE);
+              window.location.href =base.CANDIDATE_PRE;
             break;
         }
       }, 800);

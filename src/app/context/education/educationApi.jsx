@@ -103,11 +103,7 @@ export const deleteEducation = async (id) => {
     `${REACT_BASE_URL}delete-education-profile/${id}`
     );
     return responseOnDeleteEducation;
-    // if (responseOnDeleteEducation.status === SUCCESS_STATUS) {
-    //   return responseOnDeleteEducation.data;
-    // } else {
-    //   return false;
-    // }
+    
   } catch (err) {
     console.error(err);
   }

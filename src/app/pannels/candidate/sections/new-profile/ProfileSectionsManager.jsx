@@ -394,8 +394,9 @@ export const EducationSection = ({ onClose }) => {
         description: "",
         current: false,
       });
-
+      
       onClose();
+      window.location.reload(); // Refresh the page to show the new data
       return res;
     } catch (error) {
       console.error("Failed to add education:", error);
@@ -1061,7 +1062,7 @@ export const WorkHoursSection = ({ onClose }) => {
     setIsSubmitting(true);
     try {
       const res = await addWorkHours({ ...formData, user_id: userId });
-      if (res?.status === 200 || res?.status === 201) {
+      if (res) {
         setFormData({
           availability: "",
           hours_per_week: "",

@@ -15,7 +15,7 @@ import { Avatar } from "@mui/material";
 import { logout } from "../../context/auth/authApi";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-
+import ProfileCompletionModal from "./profile-complettion";
 export const Header = ({ isDashboard = true }) => {
   const menuRef = useRef(null);
   const profileRef = useRef(null);
@@ -29,13 +29,34 @@ export const Header = ({ isDashboard = true }) => {
   const { profileData } = useContext(ProfileApiData);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log("profile data", profileData);
-
-  const { firstname, lastname, profession, profile_image } = profileData;
-
+  const {
+    firstname,
+    lastname,
+    profession,
+    profile_image,
+    profile_completion,
+    incomplete_sections,
+  } = profileData;
+  console.log("Profile Data:", profileData);
   const role = sessionStorage.getItem("userRole");
-  
+
+  useEffect(() => {
+    const lastClosed = localStorage.getItem("profileModalClosedAt");
+    if (
+      !lastClosed ||
+      Date.now() - parseInt(lastClosed, 10) > 24 * 60 * 60 * 1000
+    ) {
+      // Show the modal if it's never been closed or it's been over 24 hours
+      setIsModalOpen(true);
+    }
+  }, []);
+
+  const handleClose = () => {
+    localStorage.setItem("profileModalClosedAt", Date.now().toString());
+    setIsModalOpen(false);
+  };
 
   // colors for the username
   const stringToColor = (string) => {
@@ -68,7 +89,11 @@ export const Header = ({ isDashboard = true }) => {
       to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
     },
     { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
-    { id: "public-find-work", label: "Find Work", to: "/dashboard-candidate/find-job" },
+    {
+      id: "public-find-work",
+      label: "Find Work",
+      to: "/dashboard-candidate/find-job",
+    },
     {
       id: "my-home",
       label: "My Home",
@@ -139,7 +164,11 @@ export const Header = ({ isDashboard = true }) => {
             selected: true,
           },
           { id: "your-report", label: "Your Report" },
-          { id: "billings-earnings", label: "Billings & Earnings" , to: `${base.CANDIDATE_PRE}${candidate.BILLING}`},
+          {
+            id: "billings-earnings",
+            label: "Billings & Earnings",
+            to: `${base.CANDIDATE_PRE}${candidate.BILLING}`,
+          },
           { id: "transactions", label: "Transactions" },
         ],
       },
@@ -291,11 +320,9 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const getVisibleNavItems = (role) => {
-    
-  
     // Normalize helper
     const normalize = (str) => str?.trim().toLowerCase();
-  
+
     // Unauthenticated user
     if (!role || !token) {
       const guestItemIds = [
@@ -305,12 +332,12 @@ export const Header = ({ isDashboard = true }) => {
         "assessment-training",
         "why-yeshub",
       ];
-  
+
       return navItems.filter((item) =>
         guestItemIds.includes(normalize(item.id))
       );
     }
-  
+
     // Freelancer
     if (token && normalize(role) === "freelancer") {
       const freelancerItemIds = [
@@ -323,31 +350,30 @@ export const Header = ({ isDashboard = true }) => {
       const visibleItems = navItems.filter((item) =>
         freelancerItemIds.includes(normalize(item.id))
       );
-  
+
       console.log(
         "Filtered freelancer nav items:",
         visibleItems.map((item) => item.id)
       );
       return visibleItems;
     }
-  
+
     // Client
     if (token && normalize(role) === "client") {
       const clientItemIds = [
-        
         "find-talent",
         "assessment-training",
         "why-yeshub",
       ];
-  
+
       return navItems.filter((item) =>
         clientItemIds.includes(normalize(item.id))
       );
     }
-  
+
     return []; // Fallback
   };
-  
+
   const visibleNavItems = useMemo(
     () => getVisibleNavItems(role),
     [role, token, navItems]
@@ -896,7 +922,18 @@ export const Header = ({ isDashboard = true }) => {
               ))}
           </nav>
         </div>
-
+        {token && role === "freelancer" && (
+         <div>
+          <ProfileCompletionModal
+            completion={profile_completion}
+            incompleteSections={incomplete_sections}
+            isOpen={isModalOpen}
+            onClose={handleClose}
+          />
+        </div>
+        )}
+        {/* Profile Completion Modal */}
+        
       </header>
     </>
   );

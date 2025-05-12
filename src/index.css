@@ -7,6 +7,51 @@
 @tailwind components;
 @tailwind utilities; */
 
+/* Default: hide sidebar */
+.filter-sidebar {
+  display: none;
+}
+
+.login-image{
+  display:none;
+}
+@media (min-width: 768px) {
+  .login-image {
+    display: block;
+  }
+}
+
+/* Show on screens >= 768px (md breakpoint in Tailwind) */
+@media (min-width: 768px) {
+  .filter-sidebar {
+    display: block;
+  }
+}
+
+.job-layout {
+  display: flex;
+  flex-direction: column; /* Stack on mobile by default */
+  gap: 1.5rem; /* space between main and sidebar */
+}
+
+.job-main {
+  flex: 1;
+}
+
+.job-sidebar {
+  width: 100%;
+}
+
+/* On medium screens and up, show sidebar on the right */
+@media (min-width: 768px) {
+  .job-layout {
+    flex-direction: row;
+  }
+
+  .job-sidebar {
+    width: 18rem; /* 72px * 4 = 288px = 18rem */
+  }
+}
 
 .tw-css {
   @tailwind base;

@@ -13,7 +13,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
-
 const NewAuthForm = ({ currentState }) => {
   const [formData, setFormData] = useState({
     identifier: "",
@@ -82,14 +81,15 @@ const NewAuthForm = ({ currentState }) => {
             setTimeout(() => {
               switch (role) {
                 case "admin":
-                  navigate("/admin");
+                 window.location.href = "/admin";
+
                   break;
                 case "client":
-                  navigate("/dashboard-client");
+                  window.location.href = "/dashboard-client";
                   break;
                 case "freelancer":
                 default:
-                  navigate(base.CANDIDATE_PRE);
+                  window.location.href = base.CANDIDATE_PRE;
                   break;
               }
             }, 1000);
@@ -230,11 +230,12 @@ const NewAuthForm = ({ currentState }) => {
             navigate(`/dashboard/onboard?user=${user.id}`);
             break;
           case "client":
-            navigate("/dashboard-client");
+         
+              window.location.href = "/dashboard-client";
             break;
           case "freelancer":
           default:
-            navigate(base.CANDIDATE_PRE);
+              window.location.href = base.CANDIDATE_PRE;
             break;
         }
       }, 1000);
@@ -455,7 +456,7 @@ const NewAuthForm = ({ currentState }) => {
                 <button
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  className="w-64 h-12 bg-red-500 mb-2 text-white rounded hover:bg-red-600 flex items-center justify-center"
                 >
                   Continue with Google
                 </button>
@@ -465,12 +466,12 @@ const NewAuthForm = ({ currentState }) => {
 
           <button
             onClick={loginWithLinkedIn}
-            className="relative flex items-center justify-center w-full py-2 px-4 my-3 bg-[#0A66C2] text-white  rounded-lg shadow-md hover:bg-[#004182] transition-colors duration-200"
+            className="mt-3 relative flex items-center justify-center w-full h-12 px-6 bg-[#0A66C2] text-white font-medium rounded-lg shadow hover:bg-[#004182] transition duration-200"
           >
             <span className="absolute left-4">
               <FaLinkedin size={20} />
             </span>
-            Sign in with LinkedIn
+            <span className="text-center w-full">Sign in with LinkedIn</span>
           </button>
         </div>
       </div>

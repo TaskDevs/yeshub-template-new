@@ -13,52 +13,51 @@ import {
   FaStar,
   FaQuoteLeft,
   FaLink,
- 
 } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { FaTrashAlt } from "react-icons/fa";
 import { deleteHistory } from "../../../../context/employee-history/historyApi";
-import { deleteCertificate } from "../../../../context/user-profile/profileApi";
+import { deleteCertificate, deleteWorkHours } from "../../../../context/user-profile/profileApi";
 import Swal from "sweetalert2";
+import { deleteEducation } from "../../../../context/education/educationApi";
 
 
 export const WorkHistoryDetails = ({ data }) => {
-   // delete history function
+  // delete history function
 
-   const handleDelete = async (id) => {
-     const { isConfirmed } = await Swal.fire({
-       title: 'Are you sure?',
-       text: "This will permanently delete the record.",
-       icon: 'warning',
-       showCancelButton: true,
-       confirmButtonColor: '#d33',
-       cancelButtonColor: '#3085d6',
-       confirmButtonText: 'Yes, delete it!'
-     });
-   
-     if (!isConfirmed) return;
-   
-     const result = await deleteHistory(id);
-   
-     if (result) {
-       Swal.fire({
-         icon: 'success',
-         title: 'Deleted!',
-         text: 'Employment history deleted successfully',
-         timer: 2000,
-         showConfirmButton: false
-       });
-       window.location.reload();
-     } else {
-       Swal.fire({
-         icon: 'error',
-         title: 'Oops...',
-         text: 'Failed to delete. Please try again.',
-       });
-     }
-   };
-   
-  
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the record.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!isConfirmed) return;
+
+    const result = await deleteHistory(id);
+
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Employment history deleted successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
+      });
+    }
+  };
+
   return (
     <div className="space-y-4">
       {data?.map((item, index) => (
@@ -66,7 +65,7 @@ export const WorkHistoryDetails = ({ data }) => {
           {/* Delete Button */}
           <button
             onClick={() => handleDelete(item.id)}
-            className="absolute top-0 right-0 p-2 text-red-500 hover:text-red-700 hidden group-hover:block"
+            className="absolute top-0 right-0 p-2 text-red-500 group-hover:block"
             title="Delete"
           >
             <FaTrashAlt size={16} />
@@ -87,8 +86,6 @@ export const WorkHistoryDetails = ({ data }) => {
     </div>
   );
 };
-
-
 
 export const SkillsDetails = ({ data }) => (
   <div className="flex flex-wrap items-start justify-start gap-2">
@@ -164,18 +161,17 @@ export const LicensesDetails = ({ data }) => (
   </div>
 );
 
-
 // Certifications
 export const CertificationsDetails = ({ data }) => {
   const handleDelete = async (id) => {
     const { isConfirmed } = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "This will permanently delete the record.",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (!isConfirmed) return;
@@ -184,19 +180,18 @@ export const CertificationsDetails = ({ data }) => {
 
     if (result) {
       Swal.fire({
-        icon: 'success',
-        title: 'Deleted!',
-        text: 'Certificate deleted successfully',
+        icon: "success",
+        title: "Deleted!",
+        text: "Certificate deleted successfully",
         timer: 2000,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
       window.location.reload();
-    
     } else {
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Failed to delete. Please try again.',
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
       });
     }
   };
@@ -204,13 +199,16 @@ export const CertificationsDetails = ({ data }) => {
   return (
     <div className="flex flex-col w-full space-y-6">
       {data.map((cert, index) => (
-        <div key={index} className="w-full bg-white transition-shadow p-4 shadow rounded relative">
+        <div
+          key={index}
+          className="w-full bg-white transition-shadow p-4 shadow rounded relative"
+        >
           <div className="flex items-center gap-2 mb-3">
             <HiBadgeCheck className="text-green-600" size={18} />
             <h3 className="font-bold text-gray-800 text-lg">{cert.name}</h3>
             <button
               onClick={() => handleDelete(cert.id)}
-              className="ml-auto text-red-600 hover:bg-red-200 text-sm bg-red-200 m-2 rounded-full p-1"
+              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
             >
               <FaTrashAlt size={16} />
             </button>
@@ -218,7 +216,8 @@ export const CertificationsDetails = ({ data }) => {
 
           <div className="space-y-2 pl-6">
             <div className="text-gray-700">
-              <span className="font-medium">Issuing Organization:</span> {cert.organization}
+              <span className="font-medium">Issuing Organization:</span>{" "}
+              {cert.organization}
             </div>
 
             <div className="text-gray-700 flex items-center flex-wrap gap-x-2">
@@ -264,54 +263,135 @@ export const CertificationsDetails = ({ data }) => {
   );
 };
 
-export const EducationDetails = ({ data }) => (
-  <div className="flex flex-col flex-wrap items-start justify-start gap-2 space-y-5">
-    {data.map((education, index) => (
-      <div key={index} className="flex flex-col items-start -space-y-4">
-        <div className="text-gray-500 text-sm ml-12">
-          {education.date_attended} to {education.date_completed || "Present"}
-        </div>
+export const EducationDetails = ({ data }) => {
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the record.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-        <div className="flex items-center justify-start">
-          <FaCircle className="text-green-700 text-xs " />
-          <p className="flex items-center justify-start text-green-700 font-medium">
-            <hr className="bg-green-700 opacity-100 -mx-2.5 h-0.5 w-6 border-none" />
-            {education.school}
-          </p>
-        </div>
+    if (!isConfirmed) return;
 
-        <div className="ml-12 pt-2">
-          <div className="font-semibold text-black text-sm">
-            {education.qualification}
+    const result = await deleteEducation(id);
+
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Education deleted successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
+      });
+    }
+  };
+  return (
+    <div className="flex flex-col flex-wrap items-start justify-start gap-2 space-y-5">
+      {data.map((education, index) => (
+        <div key={index} className="flex flex-col items-start -space-y-4">
+          <div className="text-gray-500 text-sm ml-12">
+            {education.date_attended} to {education.date_completed || "Present"}
           </div>
-          <div className="text-gray-600 mt-1.5 text-sm">
-            {education.area_of_study}
+
+          <div className="flex items-center justify-start">
+            <div className="flex items-center flex-end gap-2 mb-3">
+               <FaCircle className="text-green-700 text-xs " />
+            <p className="flex items-center justify-start text-green-700 font-medium">
+              <hr className="bg-green-700 opacity-100 -mx-2.5 h-0.5 w-6 border-none" />
+              {education.school}
+            </p>
+            <button
+              onClick={() => handleDelete(education.id)}
+              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+            >
+              <FaTrashAlt size={16} />
+            </button>
+            </div>
+           
+          </div>
+
+          <div className="ml-12 pt-2">
+            <div className="font-semibold text-black text-sm">
+              {education.qualification}
+            </div>
+            <div className="text-gray-600 mt-1.5 text-sm">
+              {education.area_of_study}
+            </div>
           </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 // WorkHoursDetails
 export const WorkHoursDetails = ({ data }) => {
+   const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the record.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
 
+    if (!isConfirmed) return;
 
+    const result = await deleteWorkHours(id);
+
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Work hours deleted successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
+      });
+    }
+  };
   return (
     <div className="flex flex-col space-y-6 w-full">
       {data.map((entry, index) => (
-        <div
-          key={index}
-          className="bg-white space-y-4"
-        >
+        <div key={index} className="bg-white space-y-4">
           {/* Availability */}
           <div className="flex items-center gap-2">
             <div className="bg-green-100 p-2 rounded-full">
               <FaBriefcase className="text-green-700" />
             </div>
-            <div>
-              <span className="font-medium">Availability</span>
-              <p className="text-gray-600 capitalize">{entry.availability}</p>
+           
+            <div className="flex items-center justify-start">
+              <span className="font-medium">
+                <p>  Availability</p>
+              
+                  <p className="text-gray-600 capitalize">{entry.availability}</p>
+              </span>
+            
+                <button
+              onClick={() => handleDelete(entry.id)}
+              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+            >
+              <FaTrashAlt size={16} />
+            </button>
             </div>
           </div>
 
@@ -383,7 +463,6 @@ export const WorkHoursDetails = ({ data }) => {
     </div>
   );
 };
-
 
 // TestimonialsDetails
 export const TestimonialsDetails = ({ data }) => (
@@ -518,7 +597,10 @@ export const AboutMeDetails = ({ data }) => (
     {/* About Me  */}
     <div className="bg-white mb-6 w-full col-12">
       <div className="mt-1">
-        <p className="text-gray-700" dangerouslySetInnerHTML={{ __html: data.bio}}></p>
+        <p
+          className="text-gray-700"
+          dangerouslySetInnerHTML={{ __html: data.bio }}
+        ></p>
       </div>
     </div>
 
@@ -530,7 +612,9 @@ export const AboutMeDetails = ({ data }) => (
           icon={<MdLocationOn className="w-4 h-4 text-red" />}
           title="Location"
         >
-          <p className="text-[#4B5563]">{data.region},{data.city},{data.address} </p>
+          <p className="text-[#4B5563]">
+            {data.region},{data.city},{data.address}{" "}
+          </p>
         </InfoGridItem>
 
         <InfoGridItem

@@ -69,14 +69,24 @@ export const deleteCertificate = async (id) => {
 
 export const addWorkHours = async (data) => {
   try {
-    const response = await axios.post(`${REACT_BASE_URL}work-hours`, data);
+    const response = await axios.post(`${REACT_BASE_URL}work-hours/store`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error adding work hours:", error);
+    throw error;
+  }
+};
+
+
+export const deleteWorkHours = async (id) => {
+  try {
+    const response = await axios.delete(`${REACT_BASE_URL}work-hours/${id}`);
     return response.data; // return only the useful part
   } catch (error) {
     console.error("Error adding certificate:", error);
     throw error; // allow caller to handle the error if needed
   }
 };
-
 
 export const addLicense = async (data) => {
   try {

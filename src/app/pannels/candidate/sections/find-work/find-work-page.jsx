@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { CiBookmark } from "react-icons/ci";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { experinceLevel, jobTypes, skills, sort } from "./filter-data";
+import { experienceLevel, jobTypes, sort } from "./filter-data";
 import CanSelectField from "../../components/can-select-field";
-import CanCheckbox from "../../components/can-checkbox";
 import CanSlider from "../../components/can-slider";
 import FilterPanel from "./filter-panel";
 import readableDate from "../../../../../utils/readableDate";
@@ -66,13 +65,47 @@ function FindWorkPage() {
 
   const handleFilterChange = (data) => {
     if (data !== "all types") {
-      let filterData = filterJobListData.filter(
-        (item) => item.job_type == data
+      let filterData = jobListData.filter(
+        (item) => item.job_type == data.toLowerCase()
       );
       setFilterJobListData(filterData);
     } else {
       setFilterJobListData(jobListData);
     }
+    console.log(data);
+  };
+
+  const handleFilterExperience = (data) => {
+    console.log(data);
+    if (data !== "all levels") {
+      let filterData = jobListData.filter(
+        (item) => item.experience == data.toLowerCase()
+      );
+      setFilterJobListData(filterData);
+    } else {
+      setFilterJobListData(jobListData);
+    }
+  };
+
+  const handleFilterSalary = (data) => {
+    let filterData = [];
+
+    if (data.max > 10000) {
+      // Greater than 10,000
+      filterData = jobListData.filter((item) => item.budget > 10000);
+    } else if (data.max > 5000 && data.max <= 10000) {
+      // Greater than 5,000 but less than or equal to 10,000
+      filterData = jobListData.filter(
+        (item) => item.budget > 5000 && item.budget <= 10000
+      );
+    } else if (data.max > 0 && data.max <= 5000) {
+      // Greater than 0 but less than or equal to 5,000
+      filterData = jobListData.filter(
+        (item) => item.budget > 0 && item.budget <= 5000
+      );
+    }
+
+    setFilterJobListData(filterData);
     console.log(data);
   };
 
@@ -151,16 +184,21 @@ function FindWorkPage() {
               <FilterPanel>
                 <CanSelectField
                   options={jobTypes}
-                  label="Job Scope"
+                  label="Job Type"
                   action={[setFilterJobListData, jobListData]}
                   onChange={handleFilterChange}
                 />
                 <CanSelectField
-                  options={experinceLevel}
+                  options={experienceLevel}
                   label="Experience Level"
+                  action={[setFilterJobListData, jobListData]}
+                  onChange={handleFilterExperience}
                 />
-                <CanSlider values={["0", "5k", "10k+"]} label="Salary" />
-                <CanCheckbox options={skills} label="Skills" />
+                <CanSlider
+                  onChange={handleFilterSalary}
+                  values={["0", "5k", "10k+"]}
+                  label="Salary"
+                />
               </FilterPanel>
             </div>
 
@@ -178,8 +216,9 @@ function FindWorkPage() {
                       key={job.id}
                       id={job?.id}
                       role={job?.job_title}
-                      ratings="4.9"
-                      reviews="23k"
+                      proposal={job?.count_proposal}
+                      ratings={job?.employer.company_rating}
+                      reviews={job?.employer.company_review}
                       companyName={job?.job_category}
                       description={job?.description}
                       skills={job?.skills}

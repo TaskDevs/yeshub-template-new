@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import {
   FormInput,
@@ -9,6 +10,7 @@ import {
 import { CustomDropdown } from "../../../../common/Dropdown";
 import { useFileUpload } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
 import { useDeliverWorkForm } from "./hooks/useDeliverWorkForm";
+import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
 
 export const SubmitWorkSection = () => {
   const { formData, handleInputChange, clearAll } = useDeliverWorkForm({
@@ -98,28 +100,42 @@ export const SubmitWorkSection = () => {
   );
 };
 
-export const SubmitProposalSection = () => {
+export const SubmitProposalSection = ({ job_id }) => {
+  const { processSubmitProposal } = useContext(ProposalApiData);
   const { formData, setFormData, handleInputChange, clearAll } =
     useDeliverWorkForm({
-      coverLetter: "",
-      projectUnderstanding: "",
+      cover_letter: "",
+      project_understanding: "",
       attachment: "",
-      hourlyRate: "",
-      fixRate: "",
-      startDate: "",
+      hourly_rate: "",
+      fix_rate: "",
+      start_date: "",
       completion: "Days",
-      completionDay: "",
-      weekAvailable: "",
-      experienceLevel: "Beginners",
+      completion_day: "",
+      week_available: "",
+      experience_level: "Beginners",
     });
+  const [newAmountData, setNewAmountData] = useState({
+    service_charge: "0.00",
+    amount_receive: "0.00",
+  });
 
-  const {
-    files: attachment,
-    handleFileSelect: handleAttachmentSelect,
-    handleFileDrop: handleAttachmentDrop,
-    removeFile: removeAttachmentFile,
-    uploadError: attachmentUploadError,
-  } = useFileUpload();
+  useEffect(() => {
+    if (formData.fix_rate !== "") {
+      const fixRate = parseFloat(formData.fix_rate);
+      if (!isNaN(fixRate)) {
+        let service_fee = fixRate * 0.1;
+        let amount = fixRate - service_fee;
+        setNewAmountData({
+          service_charge: service_fee,
+          amount_receive: amount,
+        });
+      }
+    }
+  }, [formData.fix_rate]);
+
+  const { files, handleFileSelect, handleFileDrop, removeFile, uploadError } =
+    useFileUpload();
 
   const completion_list = ["Days", "Weeks", "Month", "Year"];
   const experience_level_list = ["Beginners", "Intermediate", "Expert"];
@@ -133,7 +149,31 @@ export const SubmitProposalSection = () => {
   };
 
   const handleSave = () => {
-    console.log("We are doing great");
+    //console.log(formData);
+    const userId = sessionStorage.getItem("userId");
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append("user_id", userId);
+    formDataToSubmit.append("job_id", job_id);
+    formDataToSubmit.append("cover_letter", formData.cover_letter);
+    formDataToSubmit.append(
+      "project_understanding",
+      formData.project_understanding
+    );
+    formDataToSubmit.append("hourly_rate", formData.hourly_rate);
+    formDataToSubmit.append("fix_rate", formData.fix_rate);
+    formDataToSubmit.append("start_date", formData.start_date);
+    formDataToSubmit.append("completion", formData.completion);
+    formDataToSubmit.append("completion_day", formData.completion_day);
+    formDataToSubmit.append("week_available", formData.week_available);
+    formDataToSubmit.append("experience_level", formData.experience_level);
+    formDataToSubmit.append("amount_to_receive", formData.amount_to_receive);
+    formDataToSubmit.append("service_charge", formData.service_charge);
+    formDataToSubmit.append("attachment", files[0].file);
+
+    for (let pair of formDataToSubmit.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+    processSubmitProposal(formDataToSubmit);
   };
 
   return (
@@ -142,7 +182,7 @@ export const SubmitProposalSection = () => {
         <div className="space-y-4">
           <div className="">
             <FormTextarea
-              field="coverLetter"
+              field="cover_letter"
               label="Cover Letter"
               required={true}
               value={formData.description}
@@ -153,10 +193,10 @@ export const SubmitProposalSection = () => {
           </div>
           <div className="">
             <FormTextarea
-              field="projectUnderstanding"
+              field="project_understanding"
               label="Project Understanding"
               required={true}
-              value={formData.description}
+              value={formData.project_understanding}
               onChange={handleInputChange}
               placeholder="Describe your understanding of the project requirement and how you plan to approach it"
               rows={4}
@@ -165,12 +205,11 @@ export const SubmitProposalSection = () => {
           <div className="space-y-2">
             <label className="block text-sm text-gray-700">Attachment</label>
             <FileUpload
-              isAttachment={true}
-              files={attachment}
-              onFileSelect={handleAttachmentSelect}
-              onFileDrop={handleAttachmentDrop}
-              onFileRemove={removeAttachmentFile}
-              error={attachmentUploadError}
+              files={files}
+              onFileSelect={handleFileSelect}
+              onFileDrop={handleFileDrop}
+              onFileRemove={removeFile}
+              error={uploadError}
             />
           </div>
           <div>
@@ -180,10 +219,10 @@ export const SubmitProposalSection = () => {
             <div className="flex w-full">
               <div className="w-full">
                 <FormInput
-                  field="hourlyRate"
+                  field="hourly_rate"
                   label="Hourly Rate ($)"
                   required={true}
-                  value={formData.hourlyRate}
+                  value={formData.hourly_rate}
                   onChange={handleInputChange}
                   placeholder="Enter your rate"
                 />
@@ -191,23 +230,28 @@ export const SubmitProposalSection = () => {
               <span className="">Or</span>
               <div className="w-full">
                 <FormInput
-                  field="fixedPrice"
+                  field="fix_rate"
                   label="Fixed Price ($)"
                   required={true}
-                  value={formData.fixedPrice}
+                  value={formData.fixed_rate}
                   onChange={handleInputChange}
                   placeholder="Enter fixed price"
                 />
               </div>
             </div>
+
             <hr className="border-0 h-px bg-gray-500 my-4" />
             <div className="flex justify-between w-full">
               <span className="text-gray-500">Service Fee(10%)</span>
-              <span className="text-gray-800">$0.00</span>
+              <span className="text-gray-800">
+                GH {newAmountData.service_charge}
+              </span>
             </div>
             <div className="flex justify-between w-full">
               <span className="text-black font-bold">You Will Receive</span>
-              <span className="text-gray-800">$0.00</span>
+              <span className="text-gray-800">
+                GH {newAmountData.amount_receive}
+              </span>
             </div>
           </div>
           <div>
@@ -217,16 +261,16 @@ export const SubmitProposalSection = () => {
             <div className="flex justify-between w-full">
               <div className="pt-3 w-1/2">
                 <DateInput
-                  name="startDate"
+                  name="start_date"
                   label="When can you start?"
-                  value={formData.startDate}
+                  value={formData.start_date}
                   onChange={(name, value) => handleDateChange(name, value)}
                   required={true}
                 />
               </div>
               <div className="flex">
                 <FormInput
-                  field="completionDay"
+                  field="completion_day"
                   label="Estimated Completion Time"
                   required={true}
                   value={formData.days}
@@ -243,10 +287,10 @@ export const SubmitProposalSection = () => {
             </div>
             <div className="flex items-center w-1/2">
               <FormInput
-                field="completionDay"
+                field="week_available"
                 label="Weekly availability"
                 required={true}
-                value={formData.weekAvailable}
+                value={formData.week_available}
                 onChange={handleInputChange}
                 placeholder="2"
               />
@@ -272,11 +316,11 @@ export const SubmitProposalSection = () => {
                     Experience Level
                   </label>
                   <CustomDropdown
-                    selected={formData.experienceLevel}
+                    selected={formData.experience_level}
                     styles="w-full py-2.5"
                     options={experience_level_list}
                     onChange={(value) =>
-                      handleInputChange("experienceLevel", value)
+                      handleInputChange("experience_level", value)
                     }
                   />
                 </div>

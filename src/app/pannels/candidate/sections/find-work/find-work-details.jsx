@@ -105,7 +105,7 @@ function FindWorkDetails() {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() =>
-                        navigate("/dashboard-candidate/submit-proposal")
+                        navigate(`/dashboard-candidate/submit-proposal/${id}`)
                       }
                       className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
@@ -132,7 +132,7 @@ function FindWorkDetails() {
                     __html: aProfile?.description,
                   }}
                 />
-                <h3 className="capitalize font-bold text-xl">
+                <h3 className="capitalize font-bold text-xl mt-4">
                   Skills Required
                 </h3>
                 <hr className="border-0 h-px bg-gray-500 my-4" />

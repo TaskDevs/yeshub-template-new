@@ -10,18 +10,18 @@ import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextAp
 import { userId } from "../../../../globals/constants";
 import { useNavigate } from "react-router-dom";
 
-const getCleanTruncatedDescription = (description) => {
-  if (!description) return "No description provided."; // handle null/undefined
+// const getCleanTruncatedDescription = (description) => {
+//   if (!description) return "No description provided."; // handle null/undefined
 
-  // remove all HTML tags
-  const cleanText = description.replace(/<[^>]*>/g, "").trim();
+//   // remove all HTML tags
+//   const cleanText = description.replace(/<[^>]*>/g, "").trim();
 
-  // fallback if empty after cleaning
-  if (!cleanText) return "No description provided.";
+//   // fallback if empty after cleaning
+//   if (!cleanText) return "No description provided.";
 
-  // truncate to 100 chars max (you can adjust this)
-  return cleanText.length > 100 ? cleanText.slice(0, 97) + "..." : cleanText;
-};
+//   // truncate to 100 chars max (you can adjust this)
+//   return cleanText.length > 100 ? cleanText.slice(0, 97) + "..." : cleanText;
+// };
 
 const CanJobCard = ({
   role,
@@ -29,7 +29,7 @@ const CanJobCard = ({
   companyName,
   reviews,
   ratings,
-  description,
+  // description,
   skills,
   salaryRange,
   image,
@@ -57,19 +57,19 @@ const CanJobCard = ({
               <div className="tw-css flex justify-between w-full h-full">
                 <div className="job-card-wrapper">
                   <h3 className="text-xl font-medium mb-0">{role}</h3>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center ">
                     <p className="text-gray-700 mb-0">{companyName}</p>
                     <FaStar className="h-5 w-5 text-[#FACC15]" />
                     <span>{ratings}</span>
                     <span className="text-gray-500">({reviews} reviews)</span>
                   </div>
 
-                  <div
+                  {/* <div
                     className="w-[70%] text-sm text-gray-700 line-clamp-3"
                     dangerouslySetInnerHTML={{
                       __html: getCleanTruncatedDescription(description),
                     }}
-                  />
+                  /> */}
 
                   <div className="flex flex-wrap gap-2 mt-2">
                     {skills?.map((skill, i) => (

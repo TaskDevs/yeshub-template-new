@@ -53,6 +53,62 @@
   }
 }
 
+
+/* Base mobile-first styling */
+
+/* On screens 640px and wider (small and up), align normally */
+@media (max-width: 639px) {
+  .page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .job-sidebar{
+    min-width:400px
+  }
+}
+
+/* Apply styles only on mobile or small screens */
+
+/* Mobile-specific styles (up to 640px) */
+@media (max-width: 640px) {
+  .card {
+    width: 100%; /* Full width on mobile */
+    padding: 1rem; /* Ensure proper padding on small screens */
+    margin-bottom: 1rem; /* Add margin between cards */
+  }
+
+  .card .title {
+    font-size: 1rem; /* Larger font size for titles on mobile */
+  }
+
+  .card .description {
+    font-size: 0.875rem; /* Slightly larger description text */
+  }
+
+  .card .actions {
+    flex-direction: column; /* Stack the buttons vertically */
+    gap: 0.5rem; /* Space between the buttons */
+  }
+
+  .card .accept-btn,
+  .card .decline-btn {
+    width: 100%; /* Buttons take full width */
+    padding: 1rem; /* Increase button padding on mobile */
+  }
+
+  .v-btn{
+    display:none;
+
+  }
+}
+
+
 .tw-css {
   @tailwind base;
   @tailwind components;

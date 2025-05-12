@@ -216,8 +216,9 @@ function FindWorkPage() {
                       key={job.id}
                       id={job?.id}
                       role={job?.job_title}
-                      ratings="4.9"
-                      reviews="23k"
+                      proposal={job?.count_proposal}
+                      ratings={job?.employer.company_rating}
+                      reviews={job?.employer.company_review}
                       companyName={job?.job_category}
                       description={job?.description}
                       skills={job?.skills}

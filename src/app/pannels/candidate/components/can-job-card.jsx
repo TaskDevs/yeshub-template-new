@@ -57,8 +57,8 @@ const CanJobCard = ({
               <div className="tw-css flex justify-between w-full h-full">
                 <div className="job-card-wrapper">
                   <h3 className="text-xl font-medium mb-0">{role}</h3>
-                  <div className="flex items-center ">
-                    <p className="text-gray-700 mb-0">{companyName}</p>
+                  <div className="flex">
+                    <p className="text-gray-700 mb-0">{companyName.trim()}</p>
                     <FaStar className="h-5 w-5 text-[#FACC15]" />
                     <span>{ratings}</span>
                     <span className="text-gray-500">({reviews} reviews)</span>

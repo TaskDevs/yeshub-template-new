@@ -2,10 +2,13 @@ import React, { useEffect, useContext, useState } from "react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SlLocationPin } from "react-icons/sl";
+import { MdEmail } from "react-icons/md";
+import { FiPhone } from "react-icons/fi";
+import { FaGlobe } from "react-icons/fa";
 import Loader from "../../../../common/loader";
 import { calculateDaysSincePosted } from "../../../../../utils/readableDate";
 import { userId } from "../../../../../globals/constants";
-import CanJobCard from "../../components/can-job-card";
+//import CanJobCard from "../../components/can-job-card";
 import { ProposalSubmissionModal } from "../new-profile/profile-components";
 import { ProposalForm } from "./proposal-form";
 import { ToastContainer } from "react-toastify";
@@ -37,7 +40,6 @@ function FindWorkDetails() {
   useEffect(() => {
     const fetchJobProfile = async () => {
       const res = await processAJobProfile(id);
-      console.log(res);
       setJobProfile(res);
     };
     fetchJobProfile();
@@ -58,7 +60,6 @@ function FindWorkDetails() {
         type: data.type,
       };
 
-      console.log(newData);
       processApplyForJob(newData);
       setModalOpen(false);
       navigate("/dashboard-candidate/find-work");
@@ -77,7 +78,7 @@ function FindWorkDetails() {
                 <div className="flex">
                   <div className="size-24">
                     <img
-                      src={"https://placehold.co/600x400"}
+                      src={aProfile.employer.logo}
                       alt="company_logo"
                       className="size-24 object-cover rounded-md border"
                       onError={(e) => {
@@ -93,10 +94,17 @@ function FindWorkDetails() {
                     <div className="flex w-fit mt-2">
                       <p>{calculateDaysSincePosted(jobProfile?.created_at)}</p>
                       <p className="flex items-center">
-                        <SlLocationPin /> Accra
+                        <SlLocationPin />{" "}
+                        {`${
+                          aProfile.employer.country +
+                          " " +
+                          aProfile.employer.city +
+                          " " +
+                          aProfile.employer.region
+                        } `}
                       </p>
                       <span className="bg-yellow-200 rounded-full text-yellow-700 px-2">
-                        Full Time
+                        {aProfile.job_type || "Full Time"}
                       </span>
                     </div>
                   </div>
@@ -122,10 +130,6 @@ function FindWorkDetails() {
               </div>
 
               <div className="">
-                <p className="mb-4">
-                  {aProfile?.headline ||
-                    "We're Hiring: Mid-Level Front-End Engineer to Build Dynamic Web Experiences"}
-                </p>
                 <p
                   className="w-full"
                   dangerouslySetInnerHTML={{
@@ -160,11 +164,24 @@ function FindWorkDetails() {
                 </p>
                 <p className="text-sm text-yellow-700">Monthly</p>
               </div>
+
+              <div className="flex w-1/3">
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/dashboard/company-profile/${aProfile.employer.emp_user_id}`
+                    )
+                  }
+                  className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-5"
+                >
+                  View Company Info
+                </button>
+              </div>
             </div>
             <div className="w-1/4 flex flex-col justify-start p-2 bg-gray-100 rounded-md">
               <div className="size-24 mt-t">
                 <img
-                  src={"https://placehold.co/600x400"}
+                  src={aProfile.employer.logo}
                   alt="company_logo"
                   className="size-24 object-cover rounded-full border"
                   onError={(e) => {
@@ -176,22 +193,71 @@ function FindWorkDetails() {
               <p className="text-xl font-bold text-gray-800">
                 {aProfile?.employer?.company_name}
               </p>
-              <div className="text-center">
-                <span className="text-sm text-gray-500 block">
-                  {aProfile?.employer?.email}
-                </span>
-                <Link
-                  to={aProfile?.employer?.website}
-                  target="_blank"
-                  className="text-blue-500 block"
-                >
-                  {aProfile?.employer?.website}
-                </Link>
+              <div className="bg-white rounded-md p-4 w-full">
+                <div className="text-center">
+                  <div className="flex mb-2">
+                    <MdEmail size={18} />
+                    <span className="text-sm text-gray-500">
+                      {aProfile?.employer.email || "Not Available"}
+                    </span>
+                  </div>
+                  <div className="flex mb-2">
+                    <FaGlobe size={18} />
+                    <span>
+                      <Link
+                        to={aProfile?.employer?.website}
+                        target="_blank"
+                        className="text-blue-500 block"
+                      >
+                        {aProfile?.employer.website || "Not Available"}
+                      </Link>
+                    </span>
+                  </div>
+                  <div className="flex mb-2">
+                    <MdEmail size={18} />
+                    <span className="text-sm text-gray-500">
+                      {aProfile?.employer?.email}
+                    </span>
+                  </div>
+                  <div className="flex mb-2">
+                    <FiPhone size={18} />
+                    <span className="text-sm text-gray-500">
+                      {aProfile.employer.phone_no || "Not Available"}
+                    </span>
+                  </div>
+                  <div className="flex mb-2">
+                    <SlLocationPin size={18} />
+                    <span className="text-sm text-gray-500">
+                      {aProfile.employer.address || "Not Available"}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <p>{aProfile?.employer?.description}</p>
+              <div className="flex space-x-1 w-full">
+                <div className="flex flex-col bg-white rounded-md p-4 w-full">
+                  <span className="text-gray-500 text-sm block">
+                    Annual Rev
+                  </span>
+                  <span className="block text-2xl font-bold">
+                    {aProfile.employer.annual_revenue || "Not Available"}
+                    {!aProfile.employer.annual_revenue && "+"}
+                  </span>
+                </div>
+                <div className="flex flex-col bg-white rounded-md p-4 w-full">
+                  <span className="text-gray-500 text-sm block">Est Date</span>
+                  <span className="block text-2xl font-bold">
+                    {aProfile.employer.est_date || "Not Available"}
+                  </span>
+                </div>
+              </div>
+              <div className="bg-white rounded-md p-4 w-full">
+                <p className="text-gray-500 ">
+                  {aProfile.employer.services || "Not Available"}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="w-full py-4">
+          {/* <div className="w-full py-4">
             <h4 className="capitalize font-bold text-xl text-center mb-2 tracking-wide my-4">
               similar jobs
             </h4>
@@ -219,7 +285,7 @@ function FindWorkDetails() {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

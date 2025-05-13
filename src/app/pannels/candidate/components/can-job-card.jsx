@@ -113,7 +113,7 @@ const CanJobCard = ({
                 <button
                   className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
                   onClick={() =>
-                    navigate(`/dashboard-candidate/find-work-details/${id}`)
+                    navigate(`/dashboard-candidate/job-details/${id}`)
                   }
                 >
                   View
@@ -149,7 +149,7 @@ const CanJobCard = ({
                     <button
                       className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
                       onClick={() =>
-                        navigate(`/dashboard-candidate/find-work-details/${id}`)
+                        navigate(`/dashboard-candidate/job-details/${id}`)
                       }
                     >
                       view
@@ -246,7 +246,7 @@ const CanJobCard = ({
             <button
               className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10"
               onClick={() =>
-                navigate(`/dashboard-candidate/find-work-details/${id}`)
+                navigate(`/dashboard-candidate/job-details/${id}`)
               }
             >
               view

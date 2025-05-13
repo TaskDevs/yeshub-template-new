@@ -97,7 +97,7 @@ export const Header = ({ isDashboard = true }) => {
     },
     {
       id: "my-home",
-      label: "My Home",
+      label: "Dashboard",
       menu: null,
       selected: true,
       to: "/dashboard-candidate",
@@ -188,7 +188,7 @@ export const Header = ({ isDashboard = true }) => {
     if (isDashboard) {
       // Show only dashboard-related items
       items = navItems.filter((item) =>
-        ["My Home", "Find Jobs", "Deliver Work", "Manage Finances"].includes(
+        ["Dashboard", "Find Jobs", "Deliver Work", "Manage Finances"].includes(
           item.label
         )
       );

@@ -13,6 +13,9 @@ const LinkedInCallback = () => {
     const name = params.get("name");
     const userId = params.get("userid");
     const role = params.get("role");
+    if (!userId || !role) {
+      throw new Error("Missing user ID or role in response");
+    }
     if (token && refresh_token) {
       sessionStorage.setItem("authToken", token);
       cookieMethods.setCookies(token, refresh_token);

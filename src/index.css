@@ -108,6 +108,12 @@
   }
 }
 
+.truncate-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Change this to 2, 4, etc. as needed */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .tw-css {
   @tailwind base;

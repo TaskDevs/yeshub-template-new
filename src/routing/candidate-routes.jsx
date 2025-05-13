@@ -30,6 +30,9 @@ import BillingDashboard from "../app/pannels/candidate/sections/finances/billing
 import CreateInvoice from "../app/pannels/candidate/sections/finances/invoice";
 import InvoicePreview from "../app/pannels/candidate/sections/finances/invoice-preview";
 import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoice-details";
+import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
+import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
+import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
 
 function CandidateRoutes() {
   return (
@@ -38,8 +41,8 @@ function CandidateRoutes() {
       <Route path={candidate.PROFILE} element={<CandidateProfile />} />
       <Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
       <Route path={candidate.FIND_WORK_DETAILS} element={<FindWorkDetails />} />
+      <Route path={candidate.JOB_DETAILS} element={<JobDetailsPage />} />
       <Route path={candidate.SUBMIT} element={<SubmitWork />} />
-      {/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
       <Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
       <Route path={candidate.RESUME} element={<CanMyResumePage />} />
       <Route path={candidate.SAVED_JOBS} element={<NewSavedJobsPage />} />
@@ -51,53 +54,18 @@ function CandidateRoutes() {
       <Route path={candidate.INVOICE} element={<CreateInvoice />} />
       <Route path={candidate.PREVIEW_INVOICE} element={<InvoicePreview />} />
       <Route path={candidate.INVOICE_DETAIL} element={<InvoiceDetailsPage />} />
-      {/* <Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} /> */}
-      {/* <Route path={candidate.CHAT} element={<CanChatPage />} /> */}
-      <Route
-        path={candidate.CHANGE_PASSWORD}
-        element={<CanChangePasswordPage />}
-      />
+      <Route path={candidate.TRANSACTIONS} element={<TransactionsPage />} />
+      <Route path={candidate.FINANCE_SETTINGS} element={<FinancialSettings />} />
+      <Route path={candidate.CHANGE_PASSWORD} element={<CanChangePasswordPage />} />
       <Route path={candidate.OFFERS} element={<Offers />} />
       <Route path={candidate.CHAT} element={<CanChatPage />} />
       <Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
-      <Route
-        path={candidate.Contracts_History}
-        element={<ContractsHistory />}
-      />
+      <Route path={candidate.Contracts_History} element={<ContractsHistory />} />
       <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
-      <Route
-        path={candidate.APPLIED_JOB_DETAILS}
-        element={<CanAppliedJobDetails />}
-      />
-      <Route
-        path={candidate.SAVED_JOBS_DETAILS}
-        element={<CanSavedJobsDetails />}
-      />
-      <Route
-        path={candidate.APPLY_MILESTONE_JOB}
-        element={<CanApplyMilestone />}
-      />
-
-      <Route path="*" element={<Error404Page />} />
-
-      <Route
-        path={candidate.Contracts_History}
-        element={<ContractsHistory />}
-      />
-      <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
+      <Route path={candidate.APPLIED_JOB_DETAILS} element={<CanAppliedJobDetails />} />
+      <Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
+      <Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />
       <Route path={candidate.SUBMIT_PROPOSAL} element={<SubmitProposal />} />
-      <Route
-        path={candidate.APPLIED_JOB_DETAILS}
-        element={<CanAppliedJobDetails />}
-      />
-      <Route
-        path={candidate.SAVED_JOBS_DETAILS}
-        element={<CanSavedJobsDetails />}
-      />
-      <Route
-        path={candidate.APPLY_MILESTONE_JOB}
-        element={<CanApplyMilestone />}
-      />
       <Route path="*" element={<Error404Page />} />
     </Routes>
   );

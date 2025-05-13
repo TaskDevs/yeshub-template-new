@@ -64,9 +64,12 @@ export const publicUser = {
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
     PROFILE: "/profile",
+   
     FIND_TALENT: "/find-talent",
     DASHBOARD: "/dashboard-client",
     PROPOSALS: "/client-proposals",
+
+    
 
     STAFF: "/client-staff",
     TASK: "/task-management",
@@ -105,6 +108,7 @@ export const candidate = {
   Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
   FIND_WORK_DETAILS: "/find-work-details/:id",
+  JOB_DETAILS:"/job-details/:1",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
   FINANCE: "/candidate-finance",
@@ -125,6 +129,9 @@ export const candidate = {
   INVOICE: "/create-invoice",
   PREVIEW_INVOICE: "/invoice-preview/:id",
   INVOICE_DETAIL: "/invoice-detail/:id",
+  TRANSACTIONS:"/transactions",
+  FINANCE_SETTINGS:"/finance-settings",
+
 };
 
 export const employer = {

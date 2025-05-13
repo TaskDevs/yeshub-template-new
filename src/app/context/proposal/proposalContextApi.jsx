@@ -1,7 +1,10 @@
 import React, { createContext, useState } from "react";
-// import { notify } from "../../../utils/responseUtils";
-
-import { getUserProposals, getFreelanceInvites } from "./proposalApi";
+import { notify } from "../../../utils/responseUtils";
+import {
+  getUserProposals,
+  getFreelanceInvites,
+  submitProposal,
+} from "./proposalApi";
 
 export const ProposalApiData = createContext();
 
@@ -36,11 +39,22 @@ const ProposalApiDataProvider = (props) => {
     setLoading(true);
   };
 
+  const processSubmitProposal = async (data) => {
+    setLoading(false);
+    let response = await submitProposal(data);
+    if (response) {
+      notify(200, "Proposal submitted successfully");
+    } else {
+      console.log("There is an error");
+    }
+  };
+
   return (
     <ProposalApiData.Provider
       value={{
         processGetUserProposals,
         processGetFreelanceInvites,
+        processSubmitProposal,
         freelanceInviteListData,
         proposalListData,
         paginationData,

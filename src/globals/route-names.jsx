@@ -68,6 +68,7 @@ export const publicUser = {
     FIND_TALENT: "/find-talent",
     DASHBOARD: "/dashboard-client",
     PROPOSALS: "/client-proposals",
+
     
 
     STAFF: "/client-staff",
@@ -85,7 +86,6 @@ export const publicUser = {
     PROFILE: "/can-profile",
     FINANCE: "/candidate-finance",
     FINANCE_DETAIL: "/can-finance-detail",
-    
   },
   blog: {
     GRID1: "/blog-grid/1",
@@ -121,6 +121,7 @@ export const candidate = {
   SUBMIT: "/submit-work",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
+  SUBMIT_PROPOSAL: "/submit-proposal/:id",
   APPLIED_JOB_DETAILS: "/applied-job-details/:id",
   SAVED_JOBS_DETAILS: "/saved-job-details/:id",
   APPLY_MILESTONE_JOB: "/apply-job/:id",

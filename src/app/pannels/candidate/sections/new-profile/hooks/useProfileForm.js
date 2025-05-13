@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 /**
  * Custom hook for managing form state across different profile sections
@@ -12,39 +12,40 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
 
   // Handle input change for any field
   const handleInputChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     // Clear error when field is edited
     if (errors[name]) {
-      setErrors(prev => {
+      setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[name];
         return newErrors;
       });
     }
-    
   };
 
   // Handle checkbox toggle
   const handleCheckboxChange = (name) => {
-    setFormData(prev => ({ ...prev, [name]: !prev[name] }));
+    setFormData((prev) => ({ ...prev, [name]: !prev[name] }));
   };
 
   // Handle date change
   const handleDateChange = (name, date) => {
-    setFormData(prev => ({ ...prev, [name]: date }));
+    setFormData((prev) => ({ ...prev, [name]: date }));
   };
 
   // Basic validation function
   const validate = () => {
     const newErrors = {};
-    
+
     // Check required fields
     Object.entries(formData).forEach(([key, value]) => {
       // Check if field is marked as required in the validation schema
-      if (validationSchema[key]?.required && 
-          (value === undefined || value === null || value === '')) {
-        newErrors[key] = 'This field is required';
+      if (
+        validationSchema[key]?.required &&
+        (value === undefined || value === null || value === "")
+      ) {
+        newErrors[key] = "This field is required";
       }
     });
 
@@ -55,24 +56,27 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
-    
+
     setIsSubmitting(true);
-    
+
     if (validate()) {
       try {
         await onSubmit(formData);
         // Reset form after successful submission if needed
         // setFormData(initialState);
       } catch (error) {
-        console.error('Form submission error:', error);
-        setErrors(prev => ({ ...prev, form: 'Submission failed. Please try again.' }));
+        console.error("Form submission error:", error);
+        setErrors((prev) => ({
+          ...prev,
+          form: "Submission failed. Please try again.",
+        }));
       }
     }
-    
+
     setIsSubmitting(false);
   };
 
-  //  validation schema 
+  //  validation schema
   const validationSchema = {
     // Fields that are required
     // Example: jobTitle: { required: true }
@@ -83,17 +87,17 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
     setFormData(initialState);
     setErrors({});
   };
-  
+
   // Clear all fields
   const clearAll = () => {
     const clearedData = {};
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       if (Array.isArray(formData[key])) {
         clearedData[key] = [];
-      } else if (typeof formData[key] === 'boolean') {
+      } else if (typeof formData[key] === "boolean") {
         clearedData[key] = false;
       } else {
-        clearedData[key] = '';
+        clearedData[key] = "";
       }
     });
     setFormData(clearedData);
@@ -112,7 +116,7 @@ export const useProfileForm = (initialState = {}, onSubmit = () => {}) => {
     setIsSubmitting,
     resetForm,
     clearAll,
-    validate
+    validate,
   };
 };
 
@@ -121,83 +125,96 @@ export const useSkillsForm = (
   customCategories = [],
   customAvailableSkillsData = {}
 ) => {
-  const [searchValue, setSearchValue] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedSkills, setSelectedSkills] = useState(initialSelectedSkills);
 
   // Fallback to default categories if none are provided
-  const categories = customCategories.length > 0
-    ? ['All Categories', ...customCategories]
-    : ['All Categories', 'Programming', 'Framework', 'Backend', 'Database', 'DevOps'];
+  const categories =
+    customCategories.length > 0
+      ? ["All Categories", ...customCategories]
+      : [
+          "All Categories",
+          "Programming",
+          "Framework",
+          "Backend",
+          "Database",
+          "DevOps",
+        ];
 
   // Fallback to default available skills if none are provided
-  const availableSkillsData = Object.keys(customAvailableSkillsData).length > 0
-    ? customAvailableSkillsData
-    : {
-        'Programming': [
-          { name: 'JavaScript', category: 'Programming' },
-          { name: 'TypeScript', category: 'Programming' },
-          { name: 'Python', category: 'Programming' },
-          { name: 'Java', category: 'Programming' },
-          { name: 'C#', category: 'Programming' },
-        ],
-        'Framework': [
-          { name: 'React', category: 'Framework' },
-          { name: 'Angular', category: 'Framework' },
-          { name: 'Vue.js', category: 'Framework' },
-          { name: 'Express', category: 'Framework' },
-        ],
-        'Backend': [
-          { name: 'Node.js', category: 'Backend' },
-          { name: 'Django', category: 'Backend' },
-          { name: 'Flask', category: 'Backend' },
-          { name: 'Ruby on Rails', category: 'Backend' },
-        ],
-        'Database': [
-          { name: 'MongoDB', category: 'Database' },
-          { name: 'PostgreSQL', category: 'Database' },
-          { name: 'MySQL', category: 'Database' },
-          { name: 'Redis', category: 'Database' },
-        ],
-        'DevOps': [
-          { name: 'Docker', category: 'DevOps' },
-          { name: 'Kubernetes', category: 'DevOps' },
-          { name: 'AWS', category: 'DevOps' },
-          { name: 'Azure', category: 'DevOps' },
-          { name: 'GraphQL', category: 'DevOps' },
-        ],
-      };
+  const availableSkillsData =
+    Object.keys(customAvailableSkillsData).length > 0
+      ? customAvailableSkillsData
+      : {
+          Programming: [
+            { name: "JavaScript", category: "Programming" },
+            { name: "TypeScript", category: "Programming" },
+            { name: "Python", category: "Programming" },
+            { name: "Java", category: "Programming" },
+            { name: "C#", category: "Programming" },
+          ],
+          Framework: [
+            { name: "React", category: "Framework" },
+            { name: "Angular", category: "Framework" },
+            { name: "Vue.js", category: "Framework" },
+            { name: "Express", category: "Framework" },
+          ],
+          Backend: [
+            { name: "Node.js", category: "Backend" },
+            { name: "Django", category: "Backend" },
+            { name: "Flask", category: "Backend" },
+            { name: "Ruby on Rails", category: "Backend" },
+          ],
+          Database: [
+            { name: "MongoDB", category: "Database" },
+            { name: "PostgreSQL", category: "Database" },
+            { name: "MySQL", category: "Database" },
+            { name: "Redis", category: "Database" },
+          ],
+          DevOps: [
+            { name: "Docker", category: "DevOps" },
+            { name: "Kubernetes", category: "DevOps" },
+            { name: "AWS", category: "DevOps" },
+            { name: "Azure", category: "DevOps" },
+            { name: "GraphQL", category: "DevOps" },
+          ],
+        };
 
   const recommendedSkills = [
-    { name: 'Docker', category: 'DevOps' },
-    { name: 'AWS', category: 'DevOps' },
-    { name: 'GraphQL', category: 'DevOps' },
+    { name: "Docker", category: "DevOps" },
+    { name: "AWS", category: "DevOps" },
+    { name: "GraphQL", category: "DevOps" },
   ];
 
   const getFilteredSkills = () => {
-    let filtered = selectedCategory === 'All Categories'
-      ? Object.values(availableSkillsData).flat()
-      : availableSkillsData[selectedCategory] || [];
+    let filtered =
+      selectedCategory === "All Categories"
+        ? Object.values(availableSkillsData).flat()
+        : availableSkillsData[selectedCategory] || [];
 
     if (searchValue) {
-      filtered = filtered.filter(skill =>
+      filtered = filtered.filter((skill) =>
         skill.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
-    return filtered.filter(skill =>
-      !selectedSkills.some(selected => selected.name === skill.name)
+    return filtered.filter(
+      (skill) =>
+        !selectedSkills.some((selected) => selected.name === skill.name)
     );
   };
 
   const addSkill = (skill) => {
-    if (!selectedSkills.some(s => s.name === skill.name)) {
+    if (!selectedSkills.some((s) => s.name === skill.name)) {
       setSelectedSkills([...selectedSkills, skill]);
     }
   };
 
   const removeSkill = (skillName) => {
-    setSelectedSkills(selectedSkills.filter(skill => skill.name !== skillName));
+    setSelectedSkills(
+      selectedSkills.filter((skill) => skill.name !== skillName)
+    );
   };
 
   const clearAllSkills = () => {
@@ -224,7 +241,6 @@ export const useSkillsForm = (
   };
 };
 
-
 /**
  * Custom hook for file upload handling
  */
@@ -236,30 +252,35 @@ export const useFileUpload = (maxFileSize = 10) => {
   // Handle file selection
   const handleFileSelect = (selectedFiles) => {
     const fileArray = Array.from(selectedFiles);
-    
+
     // Validate file size (in MB)
-    const validFiles = fileArray.filter(file => {
+    const validFiles = fileArray.filter((file) => {
       const fileSizeInMB = file.size / (1024 * 1024);
       const isValidSize = fileSizeInMB <= maxFileSize;
-      
+
       if (!isValidSize) {
-        setUploadError(`File "${file.name}" exceeds the ${maxFileSize}MB limit`);
+        setUploadError(
+          `File "${file.name}" exceeds the ${maxFileSize}MB limit`
+        );
         setTimeout(() => setUploadError(null), 3000);
       }
-      
+
       return isValidSize;
     });
-    
+
     // Create preview URLs for images
-    const newFiles = validFiles.map(file => ({
-      file,
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      preview: URL.createObjectURL(file)
-    }));
-    
-    setFiles(prev => [...prev, ...newFiles]);
+    const newFiles = validFiles.map((file) => {
+      const isImage = file.type.startsWith("image/");
+      return {
+        file,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        preview: isImage ? URL.createObjectURL(file) : null,
+      };
+    });
+
+    setFiles((prev) => [...prev, ...newFiles]);
   };
 
   // Handle file drop
@@ -272,7 +293,7 @@ export const useFileUpload = (maxFileSize = 10) => {
 
   // Remove a file
   const removeFile = (fileIndex) => {
-    setFiles(prev => {
+    setFiles((prev) => {
       const newFiles = [...prev];
       // Revoke object URL to avoid memory leaks
       URL.revokeObjectURL(newFiles[fileIndex].preview);
@@ -284,7 +305,7 @@ export const useFileUpload = (maxFileSize = 10) => {
   // Clear all files
   const clearFiles = () => {
     // Revoke all object URLs
-    files.forEach(file => {
+    files.forEach((file) => {
       if (file.preview) URL.revokeObjectURL(file.preview);
     });
     setFiles([]);
@@ -292,7 +313,7 @@ export const useFileUpload = (maxFileSize = 10) => {
 
   // Clean up function to revoke object URLs when component unmounts
   const cleanup = () => {
-    files.forEach(file => {
+    files.forEach((file) => {
       if (file.preview) URL.revokeObjectURL(file.preview);
     });
   };
@@ -306,6 +327,6 @@ export const useFileUpload = (maxFileSize = 10) => {
     handleFileDrop,
     removeFile,
     clearFiles,
-    cleanup
+    cleanup,
   };
 };

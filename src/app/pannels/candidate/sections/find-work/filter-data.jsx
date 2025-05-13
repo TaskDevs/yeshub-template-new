@@ -1,10 +1,16 @@
-export const jobTypes = ["all types", "large", "medium", "small"];
+export const jobTypes = [
+  "all types",
+  "Full-Time",
+  "Part-Time",
+  "Contract",
+  "Internship",
+];
 
-export const experinceLevel = [
+export const experienceLevel = [
   "all levels",
-  "entry level",
-  "mid level",
-  "senior level",
+  "beginners",
+  "intermediate",
+  "expert",
 ];
 
 export const skills = ["javascript", "python", "react"];

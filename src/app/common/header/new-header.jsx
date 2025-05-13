@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext, useEffect, useMemo } from "react";
 import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
+ import { Wallet } from 'lucide-react';
 import { RiSettings3Fill } from "react-icons/ri";
 import { BiSolidLogOut } from "react-icons/bi";
 import { ImStatsDots } from "react-icons/im";
@@ -169,7 +170,11 @@ export const Header = ({ isDashboard = true }) => {
             label: "Billings & Earnings",
             to: `${base.CANDIDATE_PRE}${candidate.BILLING}`,
           },
-          { id: "transactions", label: "Transactions" },
+          {
+            id: "transactions",
+            label: "Transactions",
+            to: `${base.CANDIDATE_PRE}${candidate.TRANSACTIONS}`,
+          },
         ],
       },
     },
@@ -272,6 +277,10 @@ export const Header = ({ isDashboard = true }) => {
       console.warn("Unknown role, redirecting to default profile");
       window.location.href = "/profile"; // fallback
     }
+  };
+
+  const handleNavigate = (path) => {
+    window.location.href = path;
   };
 
   const handleLogoClick = () => {
@@ -378,7 +387,6 @@ export const Header = ({ isDashboard = true }) => {
     () => getVisibleNavItems(role),
     [role, token, navItems]
   );
-
   return (
     <>
       <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 zIndex ">
@@ -730,6 +738,20 @@ export const Header = ({ isDashboard = true }) => {
                           <FaUserCircle className="text-gray-600 h-5 w-5" />
                           <span>Your Profile</span>
                         </button>
+                        
+
+                        <button
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                          onClick={() =>
+                            handleNavigate(
+                              "/dashboard-candidate/finance-settings"
+                            )
+                          }
+                        >
+                          <Wallet className="text-gray-600 h-5 w-5" />
+                          <span>Finance Settings</span>
+                        </button>
+
                         <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
                           <ImStatsDots className="text-gray-600 h-5 w-5" />
                           <span>Stats & Trends</span>
@@ -823,6 +845,17 @@ export const Header = ({ isDashboard = true }) => {
                   <FaUserCircle className="text-gray-500 w-5 h-5" />
                   <span>Your Profile</span>
                 </button>
+                 <button
+                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                          onClick={() =>
+                            handleNavigate(
+                              "/dashboard-candidate/finance-settings"
+                            )
+                          }
+                        >
+                          <Wallet className="text-gray-600 h-5 w-5" />
+                          <span>Finance Settings</span>
+                        </button>
 
                 <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
                   <ImStatsDots className="text-gray-500 w-5 h-5" />
@@ -923,17 +956,16 @@ export const Header = ({ isDashboard = true }) => {
           </nav>
         </div>
         {token && role === "freelancer" && (
-         <div>
-          <ProfileCompletionModal
-            completion={profile_completion}
-            incompleteSections={incomplete_sections}
-            isOpen={isModalOpen}
-            onClose={handleClose}
-          />
-        </div>
+          <div>
+            <ProfileCompletionModal
+              completion={profile_completion}
+              incompleteSections={incomplete_sections}
+              isOpen={isModalOpen}
+              onClose={handleClose}
+            />
+          </div>
         )}
         {/* Profile Completion Modal */}
-        
       </header>
     </>
   );

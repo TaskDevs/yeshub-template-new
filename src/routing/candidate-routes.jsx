@@ -28,6 +28,10 @@ import BillingDashboard from "../app/pannels/candidate/sections/finances/billing
 import CreateInvoice from "../app/pannels/candidate/sections/finances/invoice";
 import InvoicePreview from "../app/pannels/candidate/sections/finances/invoice-preview";
 import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoice-details";
+import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
+import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
+import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
+
 
 function CandidateRoutes() {
 	return (
@@ -36,6 +40,8 @@ function CandidateRoutes() {
 			<Route path={candidate.PROFILE} element={<CandidateProfile />} />
 			<Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
 			<Route path={candidate.FIND_WORK_DETAILS} element={<FindWorkDetails />} />
+			<Route path={candidate.JOB_DETAILS} element={<JobDetailsPage/>}/>
+
 			{/* <Route path={candidate.PROFILE} element={<CanProfilePage />} /> */}
 			<Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
 			<Route path={candidate.RESUME} element={<CanMyResumePage />} />
@@ -48,6 +54,8 @@ function CandidateRoutes() {
 			<Route path={candidate.INVOICE} element={<CreateInvoice />} />
 			<Route path={candidate.PREVIEW_INVOICE} element={<InvoicePreview />} />
 			<Route path={candidate.INVOICE_DETAIL} element={<InvoiceDetailsPage />} />
+			<Route path={candidate.TRANSACTIONS} element={<TransactionsPage/>}/>
+			<Route path={candidate.FINANCE_SETTINGS} element={<FinancialSettings/>}/>
 			{/* <Route path={candidate.SAVED_JOBS} element={<CanSavedJobsPage />} /> */}
 			{/* <Route path={candidate.CHAT} element={<CanChatPage />} /> */}
 			<Route

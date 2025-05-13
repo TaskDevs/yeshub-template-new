@@ -1,39 +1,118 @@
-import { Star, Bookmark } from "lucide-react";
+import { Star, Bookmark, BookmarkCheck } from "lucide-react";
+import { JobApiData } from "../../../../context/jobs/jobsContextApi";
+import { SavedJobsApiData } from "../../../../context/saved-jobs/savedJobsContextApi";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { calculateDaysSincePosted } from "../../../../../utils/readableDate";
 
 const JobDetailsPage = () => {
+  const [loading, setLoading] = useState(false);
+  const userId = sessionStorage.getItem("userId");
+  const { processAJobProfile, processGetAllJob, jobListData } =
+    useContext(JobApiData);
+  const { savedjobsData, toggleSavedJob } = useContext(SavedJobsApiData);
+  const { id } = useParams();
+  const [jobProfile, setJobProfile] = useState({});
+  const navigate = useNavigate();
+  const isSaved = savedjobsData?.some(
+    (item) => parseInt(item.job_id) === Number(id)
+  );
+
+  const aProfile = jobListData.find((job) => job.id === Number(id));
+  console.log("job list", jobListData);
+
+  useEffect(() => {
+    processGetAllJob(1, userId);
+  }, []);
+
+  useEffect(() => {
+    const fetchJobProfile = async () => {
+      const res = await processAJobProfile(id);
+      console.log("job details :", res);
+      setJobProfile(res);
+    };
+    fetchJobProfile();
+  }, [id]);
+
+  const handleClick = () => {
+    setLoading(true);
+    // Optional: delay to show spinner for a brief moment
+    setTimeout(() => {
+      navigate(`/dashboard-candidate/submit-proposal/${id}`);
+    }, 300); // Adjust or remove delay as needed
+  };
+
   return (
     <div className="tw-css flex flex-col lg:flex-row gap-6 p-6 bg-gray-50 min-h-screen">
       {/* Left Column */}
       <div className="flex-[2] space-y-6">
         <div className="bg-white rounded-lg p-6 shadow-sm">
           <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-2xl font-semibold">
-                Senior Frontend Developer
-              </h2>
-              <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
-                <span>Posted 2 hours ago</span>
-                <span className="flex items-center gap-1">
-                  <Star className="text-yellow-500 w-4 h-4 fill-yellow-400" />
-                  <span>4.8 (2.3k reviews)</span>
-                </span>
+            {/* Left Section: Logo + Title + Meta */}
+            <div className="flex items-start gap-4">
+              {/* Logo */}
+              {aProfile?.employer?.logo && (
+                <img
+                  src={aProfile.employer.logo}
+                  alt="Company Logo"
+                  className="size-24 object-cover rounded-md border"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://placehold.co/100x100";
+                  }}
+                />
+              )}
+
+              {/* Title & Meta */}
+              <div>
+                <h2 className="text-2xl font-semibold">{jobProfile?.title}</h2>
+                <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
+                  <span>
+                    Posted {calculateDaysSincePosted(jobProfile?.created_at)}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Star className="text-yellow-500 w-4 h-4 fill-yellow-400" />
+                    <span>4.8 (2.3k reviews)</span>
+                  </span>
+                </div>
               </div>
             </div>
-            <Bookmark className="w-5 h-5 text-gray-500 cursor-pointer" />
+
+            {/* Right Section: Bookmark Icon */}
+            <button
+              onClick={() => toggleSavedJob(id, userId)}
+              className="flex items-center gap-2 bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              {isSaved ? (
+                <BookmarkCheck className="w-5 h-5 text-white" />
+              ) : (
+                <Bookmark className="w-5 h-5 text-white" />
+              )}
+              <span>{isSaved ? "Saved" : "Save"}</span>
+            </button>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-sm text-gray-700">
             <div>
               <p className="font-semibold">Budget</p>
-              <p>$80 - $120/hour</p>
+              <p>
+                {" "}
+                GH{" "}
+                {aProfile?.salary ||
+                  aProfile?.budget ||
+                  aProfile?.fixed_rate ||
+                  "0"}
+              </p>
             </div>
             <div>
               <p className="font-semibold">Experience</p>
-              <p>Expert Level</p>
+              <p>{jobProfile?.experience ? `${jobProfile.experience} Level` : "Not Available"}</p>
+
             </div>
+
             <div>
-              <p className="font-semibold">Project Length</p>
-              <p>3+ months</p>
+              <p className="font-semibold">Job Type</p>
+              <p>{jobProfile?.job_type || "Not Available"}</p>
             </div>
             <div>
               <p className="font-semibold">Proposals</p>
@@ -43,52 +122,75 @@ const JobDetailsPage = () => {
 
           <div className="mt-6">
             <h3 className="font-semibold mb-2">Project Description</h3>
-            <p className="text-gray-700 text-sm">
-              We are looking for an experienced frontend developer with strong
-              React expertise to join our team. The ideal candidate will work on
-              building and maintaining our web applications, collaborating with
-              our design and backend teams.
-            </p>
+            <p
+              className="text-gray-700 text-sm"
+              dangerouslySetInnerHTML={{
+                __html: aProfile?.description,
+              }}
+            />
           </div>
 
           <div className="mt-4">
             <h4 className="font-semibold text-sm mb-2">Required Skills:</h4>
-            <div className="flex flex-wrap gap-2">
-              {["React", "TypeScript", "Redux", "CSS3", "HTML5"].map(
-                (skill) => (
-                  <span
-                    key={skill}
-                    className="bg-gray-100 px-3 py-1 rounded-full text-xs text-gray-700"
-                  >
-                    {skill}
-                  </span>
-                )
-              )}
+            <div className=" flex flex-wrap w-fit my-2 ">
+              {aProfile?.skills?.map((skill, i) => (
+                <div
+                  key={i}
+                  className="bg-gray-200 text-sm text-[#1F2937] capitalize rounded-full p-2"
+                >
+                  {skill}
+                </div>
+              ))}
             </div>
           </div>
 
-          <button className="mt-6 bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-md text-sm font-medium">
-            Submit Proposal
+          <button
+            className="mt-6 bg-green-700  text-white px-5 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-60"
+            onClick={handleClick}
+            disabled={loading}
+          >
+            {loading && (
+              <svg
+                className="animate-spin h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
+              </svg>
+            )}
+            {loading ? "Loading..." : "Submit Proposal"}
           </button>
         </div>
 
-        {/* About the Client */}
         <div className="bg-white p-6">
           <h3 className="text-base font-semibold text-gray-800 mb-6 border-b pb-2">
-            About the Client
+            Job Requirements
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-700">
-            <div className="space-y-1">
-              <p className="font-medium text-gray-500">📍 Location</p>
-              <p className="text-gray-800">United States</p>
+            <div className="">
+              <p className="text-gray-500 font-medium">📈 Experience Level</p>
+              <p className="text-gray-800 mx-3 text-semibold capitalize">
+                {jobProfile?.experience || "Not Available"}
+              </p>
             </div>
-            <div className="space-y-1">
-              <p className="font-medium text-gray-500">📅 Member Since</p>
-              <p className="text-gray-800">Jan 2020</p>
-            </div>
-            <div className="space-y-1">
-              <p className="font-medium text-gray-500">💰 Avg Hourly Rate</p>
-              <p className="text-gray-800">$85/hr</p>
+            <div className="">
+              <p className="text-gray-500 font-medium">📂 Project Type</p>
+              <p className="text-gray-800 mx-3 text-semibold capitalize">
+                          {jobProfile?.job_type || "Not Available"}
+              </p>
             </div>
           </div>
         </div>
@@ -110,22 +212,56 @@ const JobDetailsPage = () => {
       {/* Right Sidebar */}
       <div className="flex-[1] space-y-6">
         {/* Job Requirements */}
-        <div className="bg-white p-6">
-          <h3 className="text-base font-semibold text-gray-800 mb-6 border-b pb-2">
-            Job Requirements
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-700">
-            <div className="space-y-1">
-              <p className="text-gray-500 font-medium">📈 Experience Level</p>
-              <p className="text-gray-800">5+ years</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-gray-500 font-medium">📂 Project Type</p>
-              <p className="text-gray-800">Long Term</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-gray-500 font-medium">⏰ Availability</p>
-              <p className="text-gray-800">40 hrs/week</p>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          {/* Banner Image */}
+          <div className="h-40 w-full bg-gray-100">
+            <img
+              src={
+                aProfile?.employer?.logo ||
+                "https://placehold.co/800x200?text=Company+Banner"
+              }
+              alt="company_banner"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src =
+                  "https://placehold.co/800x200?text=Company+Banner";
+              }}
+            />
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <h3 className="text-base font-semibold text-gray-800 mb-6 border-b pb-2">
+              About the Client
+            </h3>
+
+            {/* Info Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm text-gray-700">
+              <div className="space-y-1">
+                <p className="font-medium text-gray-500">Client Name</p>
+                <p className="text-gray-800">
+                  {aProfile?.employer?.company_name}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-gray-500">📧 Email</p>
+                <p className="text-gray-800">{aProfile?.employer?.email}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-gray-500">📍 Location</p>
+                <p className="text-gray-800">
+                  {aProfile?.employer?.country}, {aProfile?.employer?.region},{" "}
+                  {aProfile?.employer?.city}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-gray-500">📅 Member Since</p>
+                <p className="text-gray-800">
+                  {aProfile?.employer?.est_date || "Not Available"}
+                </p>
+              </div>
+              
             </div>
           </div>
         </div>
@@ -135,32 +271,35 @@ const JobDetailsPage = () => {
           <h3 className="text-base font-semibold text-gray-800 mb-6">
             Similar Jobs
           </h3>
-          {[
-            {
-              title: "React Developer",
-              rate: "$70-100/hour",
-              desc: "Looking for a React developer to help build our e-commerce platform...",
-            },
-            {
-              title: "Frontend Engineer",
-              rate: "$60-90/hour",
-              desc: "Need an experienced frontend engineer for our SaaS product...",
-            },
-            {
-              title: "Full Stack Developer",
-              rate: "$80-120/hour",
-              desc: "Seeking a full stack developer with React and Node.js experience...",
-            },
-          ].map((job, idx) => (
-            <div
-              key={idx}
-              className="mb-6 last:mb-0 border-b last:border-b-0 pb-4 last:pb-0"
-            >
-              <p className="text-sm font-medium text-gray-900">{job.title}</p>
-              <p className="text-xs text-gray-500 mt-1">{job.rate}</p>
-              <p className="text-xs text-gray-600 mt-1">{job.desc}</p>
-            </div>
-          ))}
+          <div>
+             {jobListData.slice(0, 2).map((job, index) => (
+        <div
+          key={index}
+          onClick={() =>
+            navigate(`/dashboard-candidate/job-details/${job.id}`)
+          }
+          className="mb-6 last:mb-0 border-b last:border-b-0 pb-4 last:pb-0 cursor-pointer hover:bg-gray-50 p-2 rounded transition"
+        >
+          <h4 className="text-sm font-medium text-gray-900 capitalize">
+            {job?.job_title}
+          </h4>
+          <p className="text-xs text-gray-500 mt-1">{job?.rate}</p>
+          <p
+            className="text-xs text-gray-600 mt-1 truncate-description"
+            dangerouslySetInnerHTML={{ __html: job?.description }}
+          />
+        </div>
+      ))}
+
+            {jobListData.length > 2 && (
+              <button
+                onClick={() => navigate("/dashboard-candidate/find-work")}
+                className="text-blue-600 text-sm font-medium mt-2 hover:underline"
+              >
+                View More
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

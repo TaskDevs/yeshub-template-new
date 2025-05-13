@@ -203,48 +203,85 @@ const NewAuthForm = ({ currentState }) => {
     setLoading(false);
   };
   // google log n
-  const handleGoogleSuccess = async (credentialResponse) => {
-    setLoading(true);
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
-        {
-          token: credentialResponse.credential,
-        }
-      );
+  // const handleGoogleSuccess = async (credentialResponse) => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await axios.post(
+  //       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
+  //       {
+  //         token: credentialResponse.credential,
+  //       }
+  //     );
 
-      const { token, refresh_token, user, role } = res.data;
-      console.log(res.data);
-      sessionStorage.setItem("authToken", token);
+  //     const { token, refresh_token, user, role } = res.data;
+  //     console.log(res.data);
+  //     sessionStorage.setItem("authToken", token);
 
-      cookieMethods.setCookies(token, refresh_token);
-      sessionStorage.setItem("username", user?.username);
-      sessionStorage.setItem("userId", user?.id);
-      sessionStorage.setItem("userRole", role);
+  //     cookieMethods.setCookies(token, refresh_token);
+  //     sessionStorage.setItem("username", user?.username);
+  //     sessionStorage.setItem("userId", user?.id);
+  //     sessionStorage.setItem("userRole", role);
 
-      console.log(role);
-      // Check if role exists
-      setTimeout(() => {
-        switch (role) {
-          case "user":
-            navigate(`/dashboard/onboard?user=${user.id}`);
-            break;
-          case "client":
+  //     console.log(role);
+  //     // Check if role exists
+  //     setTimeout(() => {
+  //       switch (role) {
+  //         case "user":
+  //           navigate(`/dashboard/onboard?user=${user.id}`);
+  //           break;
+  //         case "client":
          
-              window.location.href = "/dashboard-client";
-            break;
-          case "freelancer":
-          default:
-              window.location.href = base.CANDIDATE_PRE;
-            break;
-        }
-      }, 1000);
-    } catch (err) {
-      console.error("Google login failed", err);
-    } finally {
-      setLoading(false);
+  //             window.location.href = "/dashboard-client";
+  //           break;
+  //         case "freelancer":
+  //         default:
+  //             window.location.href = base.CANDIDATE_PRE;
+  //           break;
+  //       }
+  //     }, 1000);
+  //   } catch (err) {
+  //     console.error("Google login failed", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+  setLoading(true);
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
+      { token: credentialResponse.credential }
+    );
+
+    const { token, refresh_token, user, role } = res.data;
+    if (!user?.id || !role) {
+      throw new Error("Missing user ID or role in response");
     }
-  };
+
+    sessionStorage.setItem("authToken", token);
+    sessionStorage.setItem("username", user.username);
+    sessionStorage.setItem("userId", user.id);
+    sessionStorage.setItem("userRole", role);
+    cookieMethods.setCookies(token, refresh_token);
+
+    if (role === "user") {
+      setTimeout(() => {
+        window.location.href = `/dashboard/onboard?user=${user.id}`;
+      }, 200);
+    } else if (role === "client") {
+      window.location.href = "/dashboard-client";
+    } else {
+      window.location.href = base.CANDIDATE_PRE;
+    }
+
+  } catch (err) {
+    console.error("Google login failed", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
   const handleGoogleError = () => {
     console.error("Google Sign-In Error");
   };

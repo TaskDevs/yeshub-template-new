@@ -109,6 +109,16 @@ export const addTestimonial = async (data) => {
     throw error; // allow caller to handle the error if needed
   }
 };
+
+export const deleteTestimonial = async (id) => {
+  try {
+    const response = await axios.delete(`${REACT_BASE_URL}testimonials/${id}`);
+    return response.data; // return only the useful part
+  } catch (error) {
+    console.error("Error adding certificate:", error);
+    throw error; // allow caller to handle the error if needed
+  }
+};
 // SEARCH Profile
 export const searchProfile = async () => {
   try {

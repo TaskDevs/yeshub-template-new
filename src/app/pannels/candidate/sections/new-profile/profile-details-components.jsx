@@ -17,10 +17,15 @@ import {
 import { GoDotFill } from "react-icons/go";
 import { FaTrashAlt } from "react-icons/fa";
 import { deleteHistory } from "../../../../context/employee-history/historyApi";
-import { deleteCertificate, deleteWorkHours } from "../../../../context/user-profile/profileApi";
+import {
+  deleteCertificate,
+  deleteWorkHours,
+} from "../../../../context/user-profile/profileApi";
 import Swal from "sweetalert2";
 import { deleteEducation } from "../../../../context/education/educationApi";
-
+import { deleteTestimonial } from "../../../../context/user-profile/profileApi";
+import { deleteLicense } from "../../../../context/licenses/licensesApi";
+import { deletePortfolio } from "../../../../context/portfolio/portfolioApi";
 
 export const WorkHistoryDetails = ({ data }) => {
   // delete history function
@@ -101,65 +106,105 @@ export const SkillsDetails = ({ data }) => (
 );
 
 // Licenses
-export const LicensesDetails = ({ data }) => (
-  <div className="flex flex-col justify-start w-full space-y-6">
-    {data.map((license, index) => (
-      <div
-        key={index}
-        className="w-full bg-white transition-shadow p-4" // Ensure full width with padding
-      >
-        <div className="flex items-center justify-start mb-3 gap-2">
-          <FaIdCard className="text-blue-600" size={18} />
-          <h3 className="-ml-1 font-bold text-gray-800">
-            {license.license_name}
-          </h3>
-        </div>
+export const LicensesDetails = ({ data }) => {
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the record.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-        <div className="space-y-2">
-          <div className="text-gray-700">
-            <span className="font-medium">Issuing Organization:</span>{" "}
-            {license.issuing_organization}
+    if (!isConfirmed) return;
+
+    const result = await deleteLicense(id);
+
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Certificate deleted successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
+      });
+    }
+  };
+  return (
+    <div className="flex flex-col justify-start w-full space-y-6">
+      {data.map((license, index) => (
+        <div
+          key={index}
+          className="w-full bg-white transition-shadow p-4" // Ensure full width with padding
+        >
+          <div className="flex items-center justify-start mb-3 gap-2">
+            <FaIdCard className="text-blue-600" size={18} />
+            <h3 className="-ml-1 font-bold text-gray-800">
+              {license.license_name}
+            </h3>
+            <button
+              onClick={() => handleDelete(license.id)}
+              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+            >
+              <FaTrashAlt size={16} />
+            </button>
           </div>
 
-          <div className="text-gray-700">
-            <span className="font-medium">License Number:</span>{" "}
-            {license.license_number}
-          </div>
-
-          <div className="flex items-center justify-start gap-0 text-gray-600 text-sm mt-1">
-            <FaCalendarAlt className="mr-2" size={14} />
-            <span>
-              Issued: {new Date(license.issue_date).toLocaleDateString()}
-            </span>
-            {!license.never_expires && license.expiration_date && (
-              <span className="flex items-center justify-start gap-0">
-                {" "}
-                <GoDotFill
-                  size={8}
-                  className="mx-1 text-gray-400"
-                /> Expires:{" "}
-                {new Date(license.expiration_date).toLocaleDateString()}
-              </span>
-            )}
-            {license.never_expires && (
-              <span className="flex items-center justify-start gap-0 text-green-600">
-                {" "}
-                <GoDotFill size={8} className="mx-1 text-gray-400" /> Never
-                Expires
-              </span>
-            )}
-          </div>
-
-          {license.description && (
-            <div className="text-gray-600 mt-2 text-sm border-t border-gray-100 pt-2">
-              {license.description}
+          <div className="space-y-2">
+            <div className="text-gray-700">
+              <span className="font-medium">Issuing Organization:</span>{" "}
+              {license.issuing_organization}
             </div>
-          )}
+
+            <div className="text-gray-700">
+              <span className="font-medium">License Number:</span>{" "}
+              {license.license_number}
+            </div>
+
+            <div className="flex items-center justify-start gap-0 text-gray-600 text-sm mt-1">
+              <FaCalendarAlt className="mr-2" size={14} />
+              <span>
+                Issued: {new Date(license.issue_date).toLocaleDateString()}
+              </span>
+              {!license.never_expires && license.expiration_date && (
+                <span className="flex items-center justify-start gap-0">
+                  {" "}
+                  <GoDotFill
+                    size={8}
+                    className="mx-1 text-gray-400"
+                  /> Expires:{" "}
+                  {new Date(license.expiration_date).toLocaleDateString()}
+                </span>
+              )}
+              {license.never_expires && (
+                <span className="flex items-center justify-start gap-0 text-green-600">
+                  {" "}
+                  <GoDotFill size={8} className="mx-1 text-gray-400" /> Never
+                  Expires
+                </span>
+              )}
+            </div>
+
+            {license.description && (
+              <div className="text-gray-600 mt-2 text-sm border-t border-gray-100 pt-2">
+                {license.description}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
 
 // Certifications
 export const CertificationsDetails = ({ data }) => {
@@ -306,19 +351,19 @@ export const EducationDetails = ({ data }) => {
 
           <div className="flex items-center justify-start">
             <div className="flex items-center flex-end gap-2 mb-3">
-               <FaCircle className="text-green-700 text-xs " />
-            <p className="flex items-center justify-start text-green-700 font-medium">
-              <hr className="bg-green-700 opacity-100 -mx-2.5 h-0.5 w-6 border-none" />
-              {education.school}
-            </p>
-            <button
-              onClick={() => handleDelete(education.id)}
-              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
-            >
-              <FaTrashAlt size={16} />
-            </button>
+              <FaCircle className="text-green-700 text-xs " />
+              <p className="flex items-center justify-start text-green-700 font-medium">
+                <hr className="bg-green-700 opacity-100 -mx-2.5 h-0.5 w-6 border-none" />
+                {education.school}
+              </p>
+              
             </div>
-           
+            <button
+                onClick={() => handleDelete(education.id)}
+                className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+              >
+                <FaTrashAlt size={16} />
+              </button>
           </div>
 
           <div className="ml-12 pt-2">
@@ -337,7 +382,7 @@ export const EducationDetails = ({ data }) => {
 
 // WorkHoursDetails
 export const WorkHoursDetails = ({ data }) => {
-   const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     const { isConfirmed } = await Swal.fire({
       title: "Are you sure?",
       text: "This will permanently delete the record.",
@@ -378,20 +423,20 @@ export const WorkHoursDetails = ({ data }) => {
             <div className="bg-green-100 p-2 rounded-full">
               <FaBriefcase className="text-green-700" />
             </div>
-           
+
             <div className="flex items-center justify-start">
               <span className="font-medium">
-                <p>  Availability</p>
-              
-                  <p className="text-gray-600 capitalize">{entry.availability}</p>
+                <p> Availability</p>
+
+                <p className="text-gray-600 capitalize">{entry.availability}</p>
               </span>
-            
-                <button
-              onClick={() => handleDelete(entry.id)}
-              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
-            >
-              <FaTrashAlt size={16} />
-            </button>
+
+              <button
+                onClick={() => handleDelete(entry.id)}
+                className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+              >
+                <FaTrashAlt size={16} />
+              </button>
             </div>
           </div>
 
@@ -465,132 +510,216 @@ export const WorkHoursDetails = ({ data }) => {
 };
 
 // TestimonialsDetails
-export const TestimonialsDetails = ({ data }) => (
-  <div className="space-y-6">
-    {data.map((testimonial, index) => (
-      <div
-        key={index}
-        className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow"
-      >
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h4 className="font-semibold text-lg">{testimonial.clientName}</h4>
-            <p className="text-gray-600 text-sm">
-              {testimonial.clientPosition} at {testimonial.clientCompany}
-            </p>
-            <p className="text-gray-500 text-xs mt-1">
-              Relationship: {testimonial.relationship}
-            </p>
-          </div>
-          <div className="flex gap-0">
-            {[...Array(parseInt(testimonial.rating))].map((_, i) => (
-              <FaStar key={i} className="text-yellow-400" />
-            ))}
-            {[...Array(5 - parseInt(testimonial.rating))].map((_, i) => (
-              <FaStar
-                key={i + parseInt(testimonial.rating)}
-                className="text-gray-200"
-              />
-            ))}
-          </div>
-        </div>
+export const TestimonialsDetails = ({ data }) => {
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the record.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-        <div className="relative mt-4 text-gray-700 italic">
-          <FaQuoteLeft
-            className="absolute -left-1 -top-1 text-gray-400 opacity-50"
-            size={20}
-          />
-          <p className="pl-6">{testimonial.testimonialText}</p>
-        </div>
+    if (!isConfirmed) return;
 
-        <div className="mt-4 text-right text-gray-400 text-xs">
-          {new Date(testimonial.testimonialDate).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </div>
-      </div>
-    ))}
-  </div>
-);
+    const result = await deleteTestimonial(id);
 
-// PortfolioDetails
-export const PortfolioDetails = ({ data }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {data.map((project, index) => (
-      <div
-        key={index}
-        className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-      >
-        {project.images && project.images.length > 0 && (
-          <div className="h-28 overflow-hidden bg-gray-100">
-            <img
-              src={project.images[0]}
-              alt={project.projectTitle}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
-
-        <div className="p-5">
-          <h3 className="font-bold text-lg mb-2">{project.project_title}</h3>
-
-          <div className="flex items-center text-gray-600 text-sm mb-3">
-            <div className="flex items-center justify-start">
-              <FaBriefcase className="text-gray-500" />
-              <span>{project.role}</span>
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Work hours deleted successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
+      });
+    }
+  };
+  return (
+    <div className="space-y-6">
+      {data.map((testimonial, index) => (
+        <div
+          key={index}
+          className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow"
+        >
+          <button
+            onClick={() => handleDelete(testimonial.id)}
+            className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+          >
+            <FaTrashAlt size={16} />
+          </button>
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h4 className="font-semibold text-lg">
+                {testimonial.clientName}
+              </h4>
+              <p className="text-gray-600 text-sm">
+                {testimonial.clientPosition} at {testimonial.clientCompany}
+              </p>
+              <p className="text-gray-500 text-xs mt-1">
+                Relationship: {testimonial.relationship}
+              </p>
             </div>
-            {project.current && (
-              <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                Current Project
-              </span>
-            )}
-          </div>
-
-          <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-            {project.description}
-          </p>
-
-          <div className="mb-4">
-            <div className="flex flex-wrap justify-start gap-2">
-              {project.skills.split(", ").map((skill, i) => (
-                <span
-                  key={i}
-                  className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full border border-blue-100"
-                >
-                  {skill}
-                </span>
+            <div className="flex gap-0">
+              {[...Array(parseInt(testimonial.rating))].map((_, i) => (
+                <FaStar key={i} className="text-yellow-400" />
+              ))}
+              {[...Array(5 - parseInt(testimonial.rating))].map((_, i) => (
+                <FaStar
+                  key={i + parseInt(testimonial.rating)}
+                  className="text-gray-200"
+                />
               ))}
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-sm text-gray-500 pt-3 border-t border-gray-100">
-            <div className="flex items-center justify-start">
-              <FaCalendarAlt />
-              <span>
-                {project.project_start_date} –{" "}
-                {project.current ? "Present" : project.project_end_date}
-              </span>
-            </div>
+          <div className="relative mt-4 text-gray-700 italic">
+            <FaQuoteLeft
+              className="absolute -left-1 -top-1 text-gray-400 opacity-50"
+              size={20}
+            />
+            <p className="pl-6">{testimonial.testimonialText}</p>
+          </div>
 
-            {project?.project_url && (
-              <a
-                href={project.project_url}
-                className="flex items-center text-green-700 hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaLink className="-mr-2" />
-                <span className="font-semibold text-sm">View Project</span>
-              </a>
-            )}
+          <div className="mt-4 text-right text-gray-400 text-xs">
+            {new Date(testimonial.testimonialDate).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </div>
         </div>
-      </div>
-    ))}
-  </div>
-);
+      ))}
+    </div>
+  );
+};
+
+// PortfolioDetails
+export const PortfolioDetails = ({ data }) => {
+  const handleDelete = async (id) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the record.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!isConfirmed) return;
+
+    const result = await deletePortfolio(id);
+
+    if (result) {
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "Work hours deleted successfully",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to delete. Please try again.",
+      });
+    }
+  };
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {data.map((project, index) => (
+        <div
+          key={index}
+          className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        >
+          {project.images && project.images.length > 0 && (
+            <div className="h-28 overflow-hidden bg-gray-100">
+              <img
+                src={project.images[0]}
+                alt={project.projectTitle}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+
+          <div className="p-5">
+            <div className="flex items-center justify-start mb-3 gap-2">
+                 <h3 className="font-bold text-lg mb-2">{project.project_title}</h3>
+            <button
+              onClick={() => handleDelete(project.id)}
+              className="ml-auto text-red-600 hover:bg-red-200 text-sm  m-2 rounded-full p-1"
+            >
+              <FaTrashAlt size={16} />
+            </button>
+              </div>
+         
+            <div className="flex items-center text-gray-600 text-sm mb-3">
+              <div className="flex items-center justify-start">
+                <FaBriefcase className="text-gray-500" />
+                <span>{project.role}</span>
+              </div>
+              {project.current && (
+                <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                  Current Project
+                </span>
+              )}
+            </div>
+
+            <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+              {project.description}
+            </p>
+
+            <div className="mb-4">
+              <div className="flex flex-wrap justify-start gap-2">
+                {project.skills.split(", ").map((skill, i) => (
+                  <span
+                    key={i}
+                    className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full border border-blue-100"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center text-sm text-gray-500 pt-3 border-t border-gray-100">
+              <div className="flex items-center justify-start">
+                <FaCalendarAlt />
+                <span>
+                  {project.project_start_date} –{" "}
+                  {project.current ? "Present" : project.project_end_date}
+                </span>
+              </div>
+
+              {project?.project_url && (
+                <a
+                  href={project.project_url}
+                  className="flex items-center text-green-700 hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaLink className="-mr-2" />
+                  <span className="font-semibold text-sm">View Project</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export const AboutMeDetails = ({ data }) => (
   <div className="flex flex-wrap items-start justify-start gap-2">

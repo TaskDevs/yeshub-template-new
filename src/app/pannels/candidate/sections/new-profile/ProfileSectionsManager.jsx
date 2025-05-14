@@ -879,30 +879,31 @@ export const CertificationsSection = ({ onClose, initialData = {} }) => {
     current: true,
   });
 
-  const handleSave = () => {
-    setIsSubmitting(true);
-    try {
-      const res = addCertificate({ ...formData, user_id: userId });
-      if (res) {
-        setFormData({
-          name: "",
-          organization: "",
-          credential_id: "",
-          credential_url: "",
-          issued_at: "",
-          expiry_at: "",
-          description: "",
-          current: false,
-        });
-        onClose(); // Close modal or form
-        window.location.reload();
-      }
-    } catch (err) {
-      console.error("Error saving work history:", err);
-    } finally {
-      setIsSubmitting(false);
+
+  const handleSave = async () => {
+  setIsSubmitting(true);
+  try {
+    const res = await addCertificate({ ...formData, user_id: userId });
+    if (res) {
+      setFormData({
+        name: "",
+        organization: "",
+        credential_id: "",
+        credential_url: "",
+        issued_at: "",
+        expiry_at: "",
+        description: "",
+        current: false,
+      });
+      onClose();
+      window.location.reload();
     }
-  };
+  } catch (err) {
+    console.error("Error saving certificate:", err);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
@@ -1276,36 +1277,40 @@ export const LicensesSection = ({ onClose }) => {
     issue_date: "",
     expiration_date: "",
     description: "",
-    never__nxpires: false,
+    never_expires:true,
   });
 
+
   const handleSave = async () => {
-    console.log("Saving License:", formData);
-    setIsSubmitting(true);
-    try {
-      const res = await addLicense({ ...formData, user_id: userId });
-      if (res?.status === 200 || res?.status === 201) {
-        setFormData({
-          license_name: "",
-          issuing_organization: "",
-          license_number: "",
-          issue_date: "",
-          expiration_date: "",
-          description: "",
-          never__nxpires: false,
-        });
-        onClose();
-        window.location.reload();
-      }
-    } catch (err) {
-      console.error(
-        "Error saving licence:",
-        err?.response?.data || err.message
-      );
-    } finally {
-      setIsSubmitting(false);
+
+  setIsSubmitting(true);
+  try {
+    const res = await addLicense({ ...formData, user_id: userId });
+
+    if (res) {
+      setFormData({
+        license_name: "",
+        issuing_organization: "",
+        license_number: "",
+        issue_date: "",
+        expiration_date: "",
+        description: "",
+        never_expires: false,
+      });
+
+      onClose();
+
+    window.location.reload()
     }
-  };
+  } catch (err) {
+    console.error(
+      "Error saving license:",
+      err?.response?.data || err.message
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="flex flex-col h-full bg-white z-50 w-full">
@@ -1415,7 +1420,7 @@ export const TestimonialsSection = ({ onClose }) => {
       setIsSubmitting(true);
       try {
         const res = await addTestimonial({ ...formData, user_id: userId });
-        if (res?.status === 200 || res?.status === 201) {
+        if (res) {
           setFormData({
             clientName: "",
             clientCompany: "",

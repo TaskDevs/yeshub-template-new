@@ -58,6 +58,7 @@ export const ProfileSection = ({
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef(null);
   const { processUpdateUserLogo } = useContext(ProfileApiData);
+  const userId = sessionStorage.getItem("userId");
   const username =
     sessionStorage.getItem("username") || `${data.firstname?.charAt(0) ?? "U"}`;
 
@@ -88,7 +89,7 @@ export const ProfileSection = ({
     formData.append("_method", "PUT");
     try {
       setIsUploading(true);
-      await processUpdateUserLogo(data.id, formData);
+      await processUpdateUserLogo(userId, formData);
       toast.success("Profile image updated");
       window.location.reload();
     } catch (error) {

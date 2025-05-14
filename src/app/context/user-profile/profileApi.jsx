@@ -126,10 +126,10 @@ export const searchProfile = async () => {
 };
 
 
-export const updateUserLogo = async (id, data) => {
+export const updateUserLogo = async (userId, data) => {
   try {
     const response = await axios.post(
-      `${REACT_BASE_URL}upload/user-logo/${id}`,
+      `${REACT_BASE_URL}upload/user-logo/${userId}`,
       data,
       {
         headers: {

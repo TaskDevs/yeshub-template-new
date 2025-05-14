@@ -110,9 +110,9 @@ const ProfileApiDataProvider = (props) => {
     }
   };
 
-  const processUpdateUserLogo = async (id, data) => {
+  const processUpdateUserLogo = async (userId, data) => {
     try {
-      const res = await updateUserLogo(id, data);
+      const res = await updateUserLogo(userId, data);
       return res;
     } catch (err) {
       console.error("update-user-logo", err);

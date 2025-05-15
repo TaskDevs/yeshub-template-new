@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { notify } from "../../../utils/responseUtils";
+// import { notify } from "../../../utils/responseUtils";
 import {
   getUserProposals,
   getFreelanceInvites,
@@ -43,9 +43,11 @@ const ProposalApiDataProvider = (props) => {
     setLoading(false);
     let response = await submitProposal(data);
     if (response) {
-      notify(200, "Proposal submitted successfully");
+      //notify(200, "Proposal submitted successfully");
+      return true;
     } else {
-      console.log("There is an error");
+      return false;
+      //console.log("There is an error");
     }
   };
 

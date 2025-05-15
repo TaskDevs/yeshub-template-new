@@ -1,20 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
+import { getUserProposals } from "../../../../context/proposal/proposalApi";
 
 // Dummy job data for simulation
-const mockJobs = Array.from({ length: 25 }, (_, i) => ({
-  id: i + 1,
-  title: `Frontend Developer #${i + 1}`,
-  company: "Company Inc.",
-  status: i % 2 === 0 ? "Interview" : i % 3 === 0 ? "Shortlisted" : "Pending",
-  type: i % 3 === 0 ? "Contract" : i % 2 === 0 ? "Full-time" : "Part-time",
-  salaryRange:
-    i % 3 === 0 ? "$70k - $90k" : i % 2 === 0 ? "$90k - $120k" : "$50k - $70k",
-  salaryValue: i % 3 === 0 ? 80 : i % 2 === 0 ? 105 : 60,
-  daysLeft: `${10 - (i % 5)} days left`,
-  description: "Looking for an experienced frontend developer...",
-}));
+
 const statusColors = {
   Pending: "text-yellow-600",
   Interview: "text-blue-600",
@@ -25,10 +15,45 @@ const statusColors = {
 
 export default function Offers() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [proposals, setProposals] = useState(null);
+  const [expanded, setExpanded] = useState(false);
+  const mappedJobs = proposals
+    ? proposals.data.map((proposal) => {
+        const userProposal = proposal.proposal || {}; // Avoid undefined errors
+
+        return {
+          id: proposal.id,
+          title: proposal.job_title || "Untitled Job",
+          company: proposal?.employer?.company_name || "Unknown Company",
+          status: userProposal.stage || "Pending",
+          skills: proposal.skills,
+          type: proposal.job_type || "N/A",
+          salaryRange: userProposal.fix_rate
+            ? `₵${userProposal.fix_rate}`
+            : "Negotiable",
+          salaryValue: userProposal.fix_rate
+            ? Number(userProposal.fix_rate) / 1000
+            : 0,
+          daysLeft: proposal.end_date
+            ? `${Math.max(
+                0,
+                Math.ceil(
+                  (new Date(proposal.end_date) - new Date()) /
+                    (1000 * 60 * 60 * 24)
+                )
+              )} days left`
+            : "N/A",
+          description: proposal.description || "No description available",
+        };
+      })
+    : [];
+
+  console.log("mapped, data:", mappedJobs);
+
+  const userId = sessionStorage.getItem("userId");
   const isMobile = window.innerWidth < 640; // Or use `react-responsive`
   const loadMoreRef = useRef(null);
   const [loading, setLoading] = useState(false); // Loading state
-  const [jobs] = useState(mockJobs);
   const [filters, setFilters] = useState({
     jobType: [],
     status: [],
@@ -36,6 +61,32 @@ export default function Offers() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3;
+
+  useEffect(() => {
+    const getProposal = async () => {
+      setLoading(true);
+      try {
+        const res = await getUserProposals(userId);
+        if (res) {
+          setProposals(res);
+          console.log("proposals: ", res.data); // Adjust this if needed
+        } else {
+          console.error("API responded with error:", res.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch proposals:", error);
+      } finally {
+        // Force a minimum 800ms delay for smoother UX
+        setTimeout(() => {
+          setLoading(false);
+        }, 800);
+      }
+    };
+
+    if (userId) {
+      getProposal();
+    }
+  }, [userId]);
 
   const handleFilterChange = (group, value) => {
     setFilters((prev) => {
@@ -50,7 +101,7 @@ export default function Offers() {
     return value <= filters.salaryValue;
   };
 
-  const filteredJobs = jobs.filter(
+  const filteredJobs = mappedJobs.filter(
     (job) =>
       (filters.jobType.length === 0 || filters.jobType.includes(job.type)) &&
       (filters.status.length === 0 || filters.status.includes(job.status)) &&
@@ -62,6 +113,15 @@ export default function Offers() {
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [totalPages, currentPage]);
+  console.log("Filtered jobs:", filteredJobs);
+  console.log("Current Page:", currentPage);
+  console.log("Total Pages:", totalPages);
 
   // pagination
 
@@ -80,9 +140,14 @@ export default function Offers() {
       setLoading(true); // Start loading when button is clicked
     }
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
   return (
     <div className="tw-css flex min-h-screen bg-gray-50 p-6 gap-6 page-container">
-      {loading && (
+      {loading && isMobile && (
         <div className="mt-4 text-center">
           <RotatingLines
             strokeColor="grey"
@@ -124,10 +189,10 @@ export default function Offers() {
           <label className="block text-sm font-semibold mb-2">Offer Type</label>
           <div className="space-y-2 text-sm">
             {["Direct Offers", "Invited Jobs"].map((type) => (
-              <label key={type} className="flex items-center gap-2">
+              <label key={type} className="flex items-center gap-1 text-left">
                 <input
                   type="checkbox"
-                  className="form-checkbox text-green-800 rounded"
+                  className="form-checkbox text-green-800 rounded "
                 />
                 {type}
               </label>
@@ -140,7 +205,7 @@ export default function Offers() {
           <label className="block text-sm font-semibold mb-2">Job Type</label>
           <div className="space-y-2 text-sm">
             {["Full-time", "Contract", "Part-time"].map((type) => (
-              <label key={type} className="flex items-center gap-2">
+              <label key={type} className="flex items-center gap-1">
                 <input
                   type="checkbox"
                   checked={filters.jobType.includes(type)}
@@ -185,7 +250,7 @@ export default function Offers() {
           </label>
           <div className="space-y-2 text-sm">
             {["Entry Level", "Mid Level", "Senior Level"].map((level) => (
-              <label key={level} className="flex items-center gap-2">
+              <label key={level} className="flex items-center gap-1">
                 <input
                   type="checkbox"
                   className="form-checkbox text-green-800 rounded"
@@ -303,8 +368,8 @@ export default function Offers() {
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-gray-600 mt-1">
-                  <span>$0</span>
-                  <span>${filters.salaryValue}k</span>
+                  <span>₵0</span>
+                  <span>₵{filters.salaryValue}k</span>
                 </div>
               </div>
 
@@ -362,49 +427,124 @@ export default function Offers() {
           </div>
 
           <div className="space-y-4">
-            {paginatedJobs.map((job) => (
-              <div
-                key={job.id}
-                className="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-start"
-              >
-                <div>
-                  <h2 className="font-semibold text-lg">
-                    {job.title}{" "}
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        statusColors[job.status] || statusColors.default
-                      }`}
-                    >
-                      {job.status}
-                    </span>
-                  </h2>
-                  <div className="text-sm text-gray-600 mb-2">
-                    {job.company} • ⭐ 4.8 • 289 reviews
+            {loading ? (
+              <div className="text-left py-10 text-gray-500">
+                <div className="mt-4 text-left">
+                  <RotatingLines
+                    strokeColor="grey"
+                    strokeWidth="2"
+                    animationDuration="0.75"
+                    width="40"
+                    visible={true}
+                  />
+                </div>{" "}
+                Loading proposals...
+              </div>
+            ) : paginatedJobs.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+                <svg
+                  className="w-12 h-12 mb-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9.75 9.75h.008v.008H9.75V9.75zM14.25 9.75h.008v.008h-.008V9.75zM9 15c.5.667 1.5 1 3 1s2.5-.333 3-1m2.25-7.5A9 9 0 1 1 6.75 6.75 9 9 0 0 1 18.75 7.5z"
+                  />
+                </svg>
+                <h3 className="text-lg font-semibold mb-2">
+                  No Proposals Found
+                </h3>
+                <p className="text-sm text-gray-400 max-w-xs text-center">
+                  We couldn’t find any proposals that match your current
+                  filters. Try adjusting your search or filter settings.
+                </p>
+              </div>
+            ) : (
+              paginatedJobs.map((job) => (
+                <div
+                  key={job.id}
+                  className="bg-white p-4 rounded-2xl shadow-sm flex justify-between items-start"
+                >
+                  <div>
+                    <h2 className="font-semibold text-lg">
+                      {job.title}{" "}
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full font-medium ${
+                          statusColors[job.status] || statusColors.default
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </h2>
+                    <div className="text-sm text-gray-600 mb-2">
+                      {job.company} • ⭐ 4.8 • 289 reviews
+                    </div>
+                    <div className="flex gap-2 mb-2 text-xs ">
+                      {(() => {
+                        const skillsArray = job.skills
+                          .split(",")
+                          .map((skill) => skill.trim());
+                        const firstTwoSkills = skillsArray.slice(0, 2);
+                        const remainingCount = skillsArray.length - 2;
+
+                        return (
+                          <>
+                            {firstTwoSkills.map((skill, index) => (
+                              <span
+                                key={index}
+                                className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                            {remainingCount > 0 && (
+                              <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded-full">
+                                +{remainingCount} more
+                              </span>
+                            )}
+                          </>
+                        );
+                      })()}
+
+                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                        {job.type}
+                      </span>
+                      <span className="text-gray-500">
+                        {job.salaryRange} • {job.daysLeft}
+                      </span>
+                    </div>
+                    <div>
+                      <p
+                        className={`text-sm text-gray-700 mb-2 max-w-md ${
+                          expanded
+                            ? ""
+                            : "truncate overflow-hidden whitespace-nowrap"
+                        }`}
+                        dangerouslySetInnerHTML={{
+                          __html: job.description,
+                        }}
+                      />
+                      <button
+                        onClick={() => setExpanded(!expanded)}
+                        className="text-blue-500 text-sm focus:outline-none"
+                      >
+                        {expanded ? "View Less" : "View More"}
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex gap-2 mb-2 text-xs">
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                      {job.status}
-                    </span>
-                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                      {job.type}
-                    </span>
-                    <span className="text-gray-500">
-                      {job.salaryRange} • {job.daysLeft}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-700 mb-2">
-                    {job.description}
-                  </p>
-                  <button className="text-sm text-blue-600 hover:underline">
-                    View More
+                  <button className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition">
+                    <Eye className="w-4 h-4" />
+                    View
                   </button>
                 </div>
-                <button className="bg-green-700 text-white px-4 py-2 rounded v-btn">
-                  View Proposal
-                </button>
-              </div>
-            ))}
+              ))
+            )}
           </div>
+
           {isMobile && currentPage < totalPages && (
             <div
               ref={loadMoreRef}

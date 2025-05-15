@@ -2,10 +2,10 @@ import axios from "axios";
 import { LOCALHOST_BACKEND, REACT_BASE_URL } from "../../../globals/constants";
 
 // LIST User Proposals
-export const getUserProposals = async () => {
+export const getUserProposals = async (userId) => {
   try {
     let responseOnProposalList = await axios.get(
-      `${LOCALHOST_BACKEND}/api/v1/get-client-proposal?id=5`
+      `${ REACT_BASE_URL}get-client-proposal?id=${userId}`
     );
     if (responseOnProposalList.status == 200) {
       return responseOnProposalList.data;

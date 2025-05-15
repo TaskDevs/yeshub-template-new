@@ -58,15 +58,19 @@
 
 /* On screens 640px and wider (small and up), align normally */
 @media (max-width: 639px) {
-  .page-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 2rem;
-    text-align: center;
-  }
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  margin: 2rem auto; /* 2rem top/bottom, auto left/right to center on wide screens */
+  text-align: center;
+  max-width: 1200px; /* optional: constrain content width on large screens */
+  box-sizing: border-box;
+}
+
 
   .job-sidebar{
     min-width:400px
@@ -134,3 +138,162 @@
 }
 
 
+/* proposal */
+/* Base styles */
+.proposal-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.loading-container,
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #6b7280;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.empty-icon {
+  width: 3rem;
+  height: 3rem;
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.proposal-card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.proposal-content h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.status-badge.approved {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.status-badge.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+/* Add more status styles as needed */
+
+.company-info {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.job-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.tag {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.tag.skill {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.tag.type {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.tag.more {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.text-info {
+  color: #6b7280;
+  align-self: center;
+}
+
+.job-description {
+  font-size: 0.875rem;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.skill{
+  margin: 3px;
+
+}
+
+.view-button {
+  align-self: flex-start;
+  background-color: #047857;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsive tweaks */
+@media (min-width: 768px) {
+  .proposal-card {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .view-button {
+    align-self: center;
+    white-space: nowrap;
+  }
+
+  .job-description {
+    max-width: 28rem;
+    white-space: nowrap;
+  }
+}
+
+.single-line-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 200px; /* or any suitable max-width */
+}

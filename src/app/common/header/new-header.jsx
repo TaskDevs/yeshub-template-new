@@ -164,7 +164,6 @@ export const Header = ({ isDashboard = true }) => {
             to: `${base.CANDIDATE_PRE}${candidate.FINANCE}`,
             selected: true,
           },
-          { id: "your-report", label: "Your Report" },
           {
             id: "billings-earnings",
             label: "Billings & Earnings",

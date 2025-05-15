@@ -34,19 +34,21 @@ const FinancialSettings = () => {
     if (financeSettingInfo) {
       setPaymentMethods(paymentMethodList);
       setFormData({
-        company_name: financeSettingInfo[0].company_name || "",
-        billing_address: financeSettingInfo[0].billing_address || "",
-        city: financeSettingInfo[0].city || "",
-        state: financeSettingInfo[0].state || "",
-        zip_code: financeSettingInfo[0].zip_code || "",
-        tax_id_or_vat_no: financeSettingInfo[0].tax_id_or_vat_no || "",
-        bill_country: financeSettingInfo[0].bill_country || "",
-        tax_type: financeSettingInfo[0].tax_type || "",
-        tax_country: financeSettingInfo[0].tax_country || "",
+        company_name: financeSettingInfo[0]?.company_name || "",
+        billing_address: financeSettingInfo[0]?.billing_address || "",
+        city: financeSettingInfo[0]?.city || "",
+        state: financeSettingInfo[0]?.state || "",
+        zip_code: financeSettingInfo[0]?.zip_code || "",
+        tax_id_or_vat_no: financeSettingInfo[0]?.tax_id_or_vat_no || "",
+        bill_country: financeSettingInfo[0]?.bill_country || "",
+        tax_type: financeSettingInfo[0]?.tax_type || "",
+        tax_country: financeSettingInfo[0]?.tax_country || "",
       });
-      setSelectedPaymentMethod(financeSettingInfo[0].pay_method_id || "");
-      setWithdrawalAmount(financeSettingInfo[0].withdrawal_amount || "");
-      setWithdrawalFrequency(financeSettingInfo[0].withdrawal_frequency || "");
+      setSelectedPaymentMethod(financeSettingInfo[0]?.pay_method_id || "");
+      setWithdrawalAmount(financeSettingInfo[0]?.withdrawal_amount || "100");
+      setWithdrawalFrequency(
+        financeSettingInfo[0]?.withdrawal_frequency || "weekly"
+      );
 
       console.log(financeSettingInfo);
     }

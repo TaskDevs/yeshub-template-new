@@ -11,6 +11,8 @@ import { CustomDropdown } from "../../../../common/Dropdown";
 import { useFileUpload } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
 import { useDeliverWorkForm } from "./hooks/useDeliverWorkForm";
 import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
+import Swal from "sweetalert2";
+//import withReactContent from "sweetalert2-react-content";
 
 export const SubmitWorkSection = () => {
   const { formData, handleInputChange, clearAll } = useDeliverWorkForm({
@@ -148,7 +150,7 @@ export const SubmitProposalSection = ({ job_id }) => {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     //console.log(formData);
     const userId = sessionStorage.getItem("userId");
     const formDataToSubmit = new FormData();
@@ -173,7 +175,23 @@ export const SubmitProposalSection = ({ job_id }) => {
     for (let pair of formDataToSubmit.entries()) {
       console.log(`${pair[0]}:`, pair[1]);
     }
-    processSubmitProposal(formDataToSubmit);
+    let response = await processSubmitProposal(formDataToSubmit);
+    if (response) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Proposal has been saved",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      console.log("Error submitting proposal");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong while saving your work!",
+      });
+    }
   };
 
   return (
@@ -325,14 +343,14 @@ export const SubmitProposalSection = ({ job_id }) => {
                   />
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <label className="block text-sm text-black font-bold mb-1">
                   Portfolio Items
                 </label>
                 <span className="text-green-600 cursor-pointer">
                   + Add portfolio items
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

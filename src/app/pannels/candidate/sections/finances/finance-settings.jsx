@@ -1,51 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AddPaymentMethodModal from "./AddPaymentMethodModal";
+import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
+import { userId } from "../../../../../globals/constants";
+import Swal from "sweetalert2";
 
 const FinancialSettings = () => {
+  const {
+    processStoreFinanceSettingInfo,
+    paymentMethodList,
+    financeSettingInfo,
+  } = useContext(PaymentApiData);
   const [withdrawalAmount, setWithdrawalAmount] = useState("100");
   const [withdrawalFrequency, setWithdrawalFrequency] = useState("Weekly");
   const [autoWithdraw, setAutoWithdraw] = useState(true);
-   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [paymentMethods, setPaymentMethods] = useState([
-    {
-      id: 1,
-      type: "Bank Account (US)",
-      details: "Chase Bank ****4532",
-      default: true,
-    },
-    {
-      id: 2,
-      type: "Mobile Money",
-      details: "+233 54 123 4567",
-      default: false,
-    },
-  ]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     paymentMethods.find((p) => p.default)?.id || null
   );
+  const [formData, setFormData] = useState({
+    company_name: null,
+    billing_address: null,
+    city: null,
+    state: null,
+    zip_code: null,
+    tax_id_or_vat_no: null,
+    bill_country: null,
+    tax_type: null,
+    tax_country: null,
+  });
+
+  useEffect(() => {
+    if (financeSettingInfo) {
+      setPaymentMethods(paymentMethodList);
+      setFormData({
+        company_name: financeSettingInfo[0].company_name || "",
+        billing_address: financeSettingInfo[0].billing_address || "",
+        city: financeSettingInfo[0].city || "",
+        state: financeSettingInfo[0].state || "",
+        zip_code: financeSettingInfo[0].zip_code || "",
+        tax_id_or_vat_no: financeSettingInfo[0].tax_id_or_vat_no || "",
+        bill_country: financeSettingInfo[0].bill_country || "",
+        tax_type: financeSettingInfo[0].tax_type || "",
+        tax_country: financeSettingInfo[0].tax_country || "",
+      });
+      setSelectedPaymentMethod(financeSettingInfo[0].pay_method_id || "");
+      setWithdrawalAmount(financeSettingInfo[0].withdrawal_amount || "");
+      setWithdrawalFrequency(financeSettingInfo[0].withdrawal_frequency || "");
+
+      console.log(financeSettingInfo);
+    }
+  }, [paymentMethodList, financeSettingInfo]);
 
   const handleSetDefault = (id) => {
     setPaymentMethods((prev) =>
       prev.map((method) => ({ ...method, default: method.id === id }))
     );
-    setSelectedPaymentMethod(id);
   };
 
-
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleCancel = () => {
     alert("Changes discarded.");
     // You can add logic to reset to initial state if needed.
   };
 
-  const handleSave = () => {
-    alert("Settings saved!");
-    console.log("Saved settings:", {
-      withdrawalAmount,
-      withdrawalFrequency,
-      autoWithdraw,
-      selectedPaymentMethod,
-    });
+  const handleSave = async () => {
+    let newData = {
+      ...formData,
+      withdrawal_amount: withdrawalAmount,
+      withdrawal_frequency: withdrawalFrequency,
+      auto_withdraw: autoWithdraw,
+      user_id: userId,
+      payment_method_id: selectedPaymentMethod,
+    };
+
+    let result = await processStoreFinanceSettingInfo(newData);
+    if (result) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Settings Saved",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setIsModalOpen(false);
+    } else {
+      console.log("Error submitting finance setting");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong, try again",
+      });
+    }
   };
 
   return (
@@ -54,7 +107,7 @@ const FinancialSettings = () => {
       <p className="text-gray-500">
         Manage your payment methods, billing information and tax settings
       </p>
-
+      {console.log(formData)}
       {/* Payment Methods */}
       <div className="grid md:grid-cols-2 gap-4 mb-4">
         <div className="bg-white p-4 rounded-lg shadow space-y-4">
@@ -80,7 +133,7 @@ const FinancialSettings = () => {
               </div>
             ))}
             <button
-            onClick={() => setIsModalOpen(true)}
+              onClick={() => setIsModalOpen(true)}
               className="text-green-600 hover:underline text-sm"
             >
               + Add Payment Method
@@ -95,29 +148,56 @@ const FinancialSettings = () => {
             <input
               className="border p-2 rounded"
               placeholder="Company Name"
-              defaultValue="Acme Corporation"
+              name="company_name"
+              onChange={(e) => {
+                handleChange(e);
+              }}
+              value={formData.company_name}
             />
             <input
               className="border p-2 rounded"
               placeholder="Billing Address"
-              defaultValue="123 Business Street"
+              name="billing_address"
+              value={formData.billing_address}
+              onChange={(e) => {
+                handleChange(e);
+              }}
             />
             <input
               className="border p-2 rounded"
               placeholder="City"
-              defaultValue="San Francisco"
+              name="city"
+              value={formData.city}
+              onChange={(e) => {
+                handleChange(e);
+              }}
             />
             <input
               className="border p-2 rounded"
               placeholder="State"
-              defaultValue="California"
+              name="state"
+              value={formData.state}
+              onChange={(e) => {
+                handleChange(e);
+              }}
             />
             <input
               className="border p-2 rounded"
               placeholder="ZIP Code"
-              defaultValue="94105"
+              name="zip_code"
+              value={formData.zip_code}
+              onChange={(e) => {
+                handleChange(e);
+              }}
             />
-            <select className="border p-2 rounded">
+            <select
+              className="border p-2 rounded"
+              name="bill_country"
+              value={formData.bill_country}
+              onChange={(e) => {
+                handleChange(e);
+              }}
+            >
               <option>United States</option>
               <option>Canada</option>
             </select>
@@ -132,15 +212,31 @@ const FinancialSettings = () => {
           <input
             className="border p-2 rounded w-full"
             placeholder="Tax ID / VAT Number"
-            defaultValue="US123456789"
+            name="tax_id_or_vat_no"
+            value={formData.tax_id_or_vat_no}
+            onChange={(e) => {
+              handleChange(e);
+            }}
           />
-          <select className="border p-2 rounded w-full" defaultValue="W-9 Form">
+          <select
+            className="border p-2 rounded w-full"
+            name="tax_type"
+            value={formData.tax_type}
+            onChange={(e) => {
+              handleChange(e);
+            }}
+          >
             <option>W-9 Form</option>
             <option>W-8BEN Form</option>
           </select>
           <select
             className="border p-2 rounded w-full"
             defaultValue="United States"
+            name="tax_country"
+            value={formData.tax_country}
+            onChange={(e) => {
+              handleChange(e);
+            }}
           >
             <option>United States</option>
             <option>Canada</option>
@@ -194,6 +290,7 @@ const FinancialSettings = () => {
       <AddPaymentMethodModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        paymentItemsNo={paymentMethods.length}
       />
       {/* Save / Cancel Buttons */}
       <div className="flex justify-end gap-2 py-3">

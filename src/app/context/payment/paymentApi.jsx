@@ -1,18 +1,53 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS } from "../../../globals/constants";
+import {
+  SUCCESS_STATUS,
+  REACT_BASE_URL,
+  userId,
+} from "../../../globals/constants";
+
+export const getFinanceSettingInfo = async () => {
+  try {
+    let responseOnGetFinanceSettingInfo = await axios.get(
+      `${REACT_BASE_URL}get-finance-setting?user_id=${userId}`
+    );
+    if (responseOnGetFinanceSettingInfo.status == SUCCESS_STATUS) {
+      return responseOnGetFinanceSettingInfo.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
 
 // ADD Payment
-export const addPayment = async (data) => {
+export const addPaymentMethod = async (data) => {
   try {
     let responseOnAddPayment = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+      `${REACT_BASE_URL}store-pay-method`,
       data
     );
     if (responseOnAddPayment.status === SUCCESS_STATUS) {
-      return responseOnAddPayment.data;
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const storeFinanceSettingInfo = async (data) => {
+  try {
+    let responseOnStoreFinanceSettingInfo = await axios.post(
+      `${REACT_BASE_URL}store-finance-info`,
+      data
+    );
+    if (responseOnStoreFinanceSettingInfo.status === SUCCESS_STATUS) {
+      return true;
     } else {
       return false;
     }

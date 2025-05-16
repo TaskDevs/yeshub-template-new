@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from "react";
-
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
   AreaChart,
   Area,
@@ -13,8 +12,9 @@ import { Doughnut } from "react-chartjs-2";
 import DataTable from "react-data-table-component";
 import { Briefcase, DollarSign } from "lucide-react";
 import AddPaymentMethodModal from "./AddPaymentMethodModal";
+import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
 import NoteModal from "./NoteModal";
-import { Send, MessageSquare } from 'lucide-react';
+import { Send, MessageSquare } from "lucide-react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -24,20 +24,20 @@ import {
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-const paymentMethods = [
-  {
-    id: "bank",
-    type: "Bank Account (US)",
-    detail: "Chase Bank ****4532",
-    isDefault: true,
-  },
-  {
-    id: "mobile",
-    type: "Mobile Money",
-    detail: "+233 54 123 4567",
-    isDefault: false,
-  },
-];
+// const paymentMethods = [
+//   {
+//     id: "bank",
+//     type: "Bank Account (US)",
+//     detail: "Chase Bank ****4532",
+//     isDefault: true,
+//   },
+//   {
+//     id: "mobile",
+//     type: "Mobile Money",
+//     detail: "+233 54 123 4567",
+//     isDefault: false,
+//   },
+// ];
 // AreaChart Data
 const areaChartData = [
   { month: "Jan", earnings: 4000 },
@@ -187,7 +187,6 @@ const transactionColumns = [
   },
 ];
 
-
 // Contract Data
 const getStatusBadge = (status) => {
   const base = "px-2 py-1 rounded-full text-xs font-semibold ";
@@ -222,7 +221,9 @@ const contractColumns = [
     cell: (row) => (
       <div>
         <div className="text-sm text-gray-800">{row.deadline}</div>
-        <div className="text-xs text-gray-400">{row.daysRemaining} days remaining</div>
+        <div className="text-xs text-gray-400">
+          {row.daysRemaining} days remaining
+        </div>
       </div>
     ),
   },
@@ -238,27 +239,28 @@ const contractColumns = [
     name: "Value",
     selector: (row) => row.budget,
     sortable: true,
-    cell: (row) => <span className="font-medium text-gray-800">{row.budget}</span>,
+    cell: (row) => (
+      <span className="font-medium text-gray-800">{row.budget}</span>
+    ),
   },
-  
-{
-  name: "Actions",
-  cell: () => (
-    <div className="flex gap-2 flex-row items-center">
-      <button className="bg-green-600 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md transition flex items-center gap-1">
-        <Send size={12} />
-        <span className="hidden sm:inline">Submit</span>
-      </button>
-      <button className="border border-gray-300 text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md hover:bg-gray-100 transition flex items-center gap-1">
-        <MessageSquare size={12} />
-        <span className="hidden sm:inline">Message</span>
-      </button>
-    </div>
-  ),
-  ignoreRowClick: true,
-  button: true,
-}
 
+  {
+    name: "Actions",
+    cell: () => (
+      <div className="flex gap-2 flex-row items-center">
+        <button className="bg-green-600 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md transition flex items-center gap-1">
+          <Send size={12} />
+          <span className="hidden sm:inline">Submit</span>
+        </button>
+        <button className="border border-gray-300 text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md hover:bg-gray-100 transition flex items-center gap-1">
+          <MessageSquare size={12} />
+          <span className="hidden sm:inline">Message</span>
+        </button>
+      </div>
+    ),
+    ignoreRowClick: true,
+    button: true,
+  },
 ];
 
 // Data definition
@@ -290,12 +292,17 @@ const contractData = [
 ];
 
 export default function FinancialDashboard() {
+  const { paymentMethodList, financeSettingInfo } = useContext(PaymentApiData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
-  const [note, setNote] = useState('');
-  const [amount, setAmount] = useState('');
+  const [note, setNote] = useState("");
+  const [amount, setAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState({});
-  // const paymentMethods = []; // Replace with actual data
+  const [paymentMethods, setPaymentMethods] = useState([]);
+
+  useEffect(() => {
+    setPaymentMethods(paymentMethodList);
+  }, [financeSettingInfo, paymentMethodList]);
 
   const handleMethodChange = (e) => {
     const method = paymentMethods.find((m) => m.id === e.target.value);
@@ -303,7 +310,7 @@ export default function FinancialDashboard() {
   };
 
   const handleWithdraw = () => {
-    console.log('Withdrawing with note:', note);
+    console.log("Withdrawing with note:", note);
     // Perform withdrawal logic
   };
 
@@ -455,7 +462,7 @@ export default function FinancialDashboard() {
             >
               {paymentMethods.map((method) => (
                 <option key={method.id} value={method.id}>
-                  {method.type} {method.detail.slice(-4)}
+                  {method.type} {method.details?.slice(-4)}
                 </option>
               ))}
             </select>
@@ -475,7 +482,7 @@ export default function FinancialDashboard() {
             <p className="text-sm text-gray-500 mb-4">Available: $8,450.00</p>
 
             <button
-               onClick={() => setShowNoteModal(true)}
+              onClick={() => setShowNoteModal(true)}
               className="w-full bg-green-600  text-white py-2 rounded-md font-semibold transition"
             >
               Withdraw ${parseFloat(amount || 0).toFixed(2)}
@@ -488,7 +495,10 @@ export default function FinancialDashboard() {
               <h2 className="text-lg font-semibold text-gray-800">
                 Payment Methods
               </h2>
-              <button className="text-sm text-green-600 hover:underline"  onClick={() => setIsModalOpen(true)}>
+              <button
+                className="text-sm text-green-600 hover:underline"
+                onClick={() => setIsModalOpen(true)}
+              >
                 + Add Method
               </button>
             </div>
@@ -604,33 +614,36 @@ export default function FinancialDashboard() {
         </section>
 
         <section className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4">Active Contracts</h2>
-      <DataTable
-        columns={contractColumns}
-        data={contractData}
-        pagination
-        responsive
-        striped
-        highlightOnHover
-      />
-    </section>
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            Active Contracts
+          </h2>
+          <DataTable
+            columns={contractColumns}
+            data={contractData}
+            pagination
+            responsive
+            striped
+            highlightOnHover
+          />
+        </section>
         {/* Payment methos modal */}
         <AddPaymentMethodModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+          isOpen={isModalOpen}
+          paymentItemsNo={paymentMethods.length}
+          onClose={() => setIsModalOpen(false)}
+        />
 
-      {/* withdrawal note modal */}
-      <NoteModal
-        isOpen={showNoteModal}
-        onClose={() => setShowNoteModal(false)}
-        onConfirm={() => {
-          handleWithdraw();
-          setShowNoteModal(false);
-        }}
-        note={note}
-        setNote={setNote}
-      />
+        {/* withdrawal note modal */}
+        <NoteModal
+          isOpen={showNoteModal}
+          onClose={() => setShowNoteModal(false)}
+          onConfirm={() => {
+            handleWithdraw();
+            setShowNoteModal(false);
+          }}
+          note={note}
+          setNote={setNote}
+        />
       </div>
     </div>
   );

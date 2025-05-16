@@ -51,7 +51,14 @@
   .job-sidebar {
     width: 18rem; /* 72px * 4 = 288px = 18rem */
   }
+
+
+  .filter-bar {
+    display: none;
+  }
 }
+
+
 
 
 /* Base mobile-first styling */
@@ -109,6 +116,9 @@
   .v-btn{
     display:none;
 
+  }
+    .filter-bar {
+    display: none;
   }
 }
 
@@ -296,4 +306,150 @@
   overflow: hidden;
   text-overflow: ellipsis;
   width: 200px; /* or any suitable max-width */
+}
+
+
+/* freelancer talented page*/
+
+/* Container with Sidebar and Main Content */
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+/* Main Content *//* Grid layout for freelancer cards */
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  padding: 10px 0;
+}
+
+/* Optional: Single column for small screens */
+@media (max-width: 640px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar{
+    display:none;
+  }
+  .search-label{
+    display:none;
+  }
+}
+
+
+/* Freelancer Count */
+.freelancer-count {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* Grid for Freelancer Cards */
+.freelancer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Freelancer Card */
+.freelancer-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* Header section */
+.freelancer-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.freelancer-avatar {
+  width: 50px;
+  height: 50px;
+  background: #ccc;
+  border-radius: 50%;
+}
+
+/* Freelancer Details */
+.freelancer-details {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Actions */
+.freelancer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invite {
+  background-color: #16a34a;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 9999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.contact {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.pagination .active {
+  background-color: #16a34a;
+  color: white;
+}
+
+/* Responsive Behavior */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .freelancer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
 }

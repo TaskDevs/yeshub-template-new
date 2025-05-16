@@ -66,6 +66,7 @@ export const publicUser = {
     PROFILE: "/profile",
    
     FIND_TALENT: "/find-talent",
+    New_FIND_TALENT:'/freelancers',
     DASHBOARD: "/dashboard-client",
     PROPOSALS: "/client-proposals",
 

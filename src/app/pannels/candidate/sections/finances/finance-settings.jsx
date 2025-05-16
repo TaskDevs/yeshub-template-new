@@ -49,8 +49,6 @@ const FinancialSettings = () => {
       setWithdrawalFrequency(
         financeSettingInfo[0]?.withdrawal_frequency || "weekly"
       );
-
-      console.log(financeSettingInfo);
     }
   }, [paymentMethodList, financeSettingInfo]);
 

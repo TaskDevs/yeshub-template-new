@@ -481,10 +481,16 @@ export const Header = ({ isDashboard = true }) => {
                 {!token ? (
                   <>
                     <button
-                      className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
+                      className="bg-gray-600 text-white px-4 py-2 rounded-md font-medium"
                       onClick={() => navigate("/login")}
                     >
                       Log In
+                    </button>
+                     <button
+                      className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
+                      onClick={() => navigate("/sign-up")}
+                    >
+                      Signup
                     </button>
                   </>
                 ) : (

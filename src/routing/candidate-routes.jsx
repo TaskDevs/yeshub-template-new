@@ -33,10 +33,14 @@ import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoi
 import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
 import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
 import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
+import { isAuthenticated } from "./auth";
 
 function CandidateRoutes() {
+  const auth = isAuthenticated();
   return (
     <Routes>
+       {auth && (
+        <>
       <Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
       <Route path={candidate.PROFILE} element={<CandidateProfile />} />
       <Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
@@ -66,6 +70,8 @@ function CandidateRoutes() {
       <Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
       <Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />
       <Route path={candidate.SUBMIT_PROPOSAL} element={<SubmitProposal />} />
+      </>
+      )}
       <Route path="*" element={<Error404Page />} />
     </Routes>
   );

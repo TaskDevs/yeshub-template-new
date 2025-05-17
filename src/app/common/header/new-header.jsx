@@ -89,7 +89,7 @@ export const Header = ({ isDashboard = true }) => {
       selected: true,
       to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
     },
-    { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
+    { id: "Find-talent", label: "Find Talent", to: "/freelancers" },
     {
       id: "public-find-work",
       label: "Find Work",
@@ -481,10 +481,16 @@ export const Header = ({ isDashboard = true }) => {
                 {!token ? (
                   <>
                     <button
-                      className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
+                      className="bg-gray-600 text-white px-4 py-2 rounded-md font-medium"
                       onClick={() => navigate("/login")}
                     >
                       Log In
+                    </button>
+                     <button
+                      className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
+                      onClick={() => navigate("/sign-up")}
+                    >
+                      Signup
                     </button>
                   </>
                 ) : (

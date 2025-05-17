@@ -72,6 +72,8 @@ import StaffList from "../app/pannels/employer/components/staff/staff-list";
 import TaskManagement from "../app/pannels/employer/components/task/task-management";
 import TeamList from "../app/pannels/employer/components/team/team-list";
 import MessageDashboard from "../app/pannels/public-user/components/messages/message-dashboard";
+import FreelancerSearch from "../app/pannels/public-user/sections/find-talent/new-find-talent";
+import FreelancerDetail from "../app/pannels/public-user/sections/find-talent/freelancer-details";
 
 function PublicUserRoutes() {
   return (
@@ -153,6 +155,8 @@ function PublicUserRoutes() {
           path={publicUser.pages.FIND_TALENT}
           element={<ClientFindTalent />}
         />
+        <Route path={publicUser.pages.New_FIND_TALENT} element={<FreelancerSearch/>}/>
+        <Route path={publicUser.pages.New_FIND_TALENT_ID} element={<FreelancerDetail/>}/>
         <Route path={publicUser.pages.PROPOSALS} element={<Proposals />} />
         <Route
           path={publicUser.pages.DASHBOARD}

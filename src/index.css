@@ -453,3 +453,63 @@
     margin-bottom: 20px;
   }
 }
+
+
+/* freelancer details */
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+/* Main Content *//* Grid layout for freelancer cards */
+
+.freelancer-layout {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+.main-content-freelance {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.freelancer-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.sidebar-right {
+  padding: 10px;
+
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .freelancer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-right {
+    border-left: none;
+    border-top: 1px solid #ddd;
+    grid-template-columns: 1fr;
+  }
+}
+

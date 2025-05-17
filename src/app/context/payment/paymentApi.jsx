@@ -22,6 +22,58 @@ export const getFinanceSettingInfo = async () => {
   }
 };
 
+export const getTotalInvoice = async () => {
+  try {
+    let responseOnGetTotalInvoice = await axios.get(
+      `${REACT_BASE_URL}count-invoice`
+    );
+    if (responseOnGetTotalInvoice.status == SUCCESS_STATUS) {
+      return responseOnGetTotalInvoice.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const createInvoice = async (data) => {
+  try {
+    let responseOnCreateInvoice = await axios.post(
+      `${REACT_BASE_URL}invoices`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    if (
+      responseOnCreateInvoice.status == SUCCESS_STATUS ||
+      responseOnCreateInvoice.status == 200
+    ) {
+      return {
+        status: "success",
+        message: responseOnCreateInvoice.data.message,
+      };
+    } else {
+      return {
+        status: "error",
+        message: "Something went wrong",
+      };
+    }
+  } catch (err) {
+    if (err.status == 409 || err.status == 400) {
+      console.log(err);
+      return {
+        status: "error",
+        message: err.response.data.message,
+      };
+    }
+  }
+};
+
 // ADD Payment
 export const addPaymentMethod = async (data) => {
   try {

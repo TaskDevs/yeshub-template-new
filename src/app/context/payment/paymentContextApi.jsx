@@ -4,6 +4,8 @@ import {
   addPaymentMethod,
   storeFinanceSettingInfo,
   getFinanceSettingInfo,
+  getTotalInvoice,
+  createInvoice,
 } from "./paymentApi";
 
 export const PaymentApiData = createContext();
@@ -11,6 +13,8 @@ export const PaymentApiData = createContext();
 const PaymentApiDataProvider = (props) => {
   const [financeSettingInfo, setFinanceSettingInfo] = useState([]);
   const [paymentMethodList, setPaymentMethodList] = useState([]);
+  const [previewData, setPreviewData] = useState({});
+  const [totalInvoice, setTotalInvoice] = useState(0);
 
   useEffect(() => {
     processGetFinanceSettingInfo();
@@ -35,6 +39,25 @@ const PaymentApiDataProvider = (props) => {
     }
   };
 
+  const processAddInvoice = async (data) => {
+    let response = await createInvoice(data);
+    if (response) {
+      console.log(response);
+      return response;
+    } else {
+      return false;
+    }
+  };
+
+  const processGetTotalInvoice = async () => {
+    let response = await getTotalInvoice();
+    if (response) {
+      return response.data + 1;
+    } else {
+      console.log(`Getting total invoice error`);
+    }
+  };
+
   const processGetFinanceSettingInfo = async () => {
     let response = await getFinanceSettingInfo();
     if (response) {
@@ -49,6 +72,8 @@ const PaymentApiDataProvider = (props) => {
           details: `Card No ${MaskLastDigits(item.card_number)} Expiry ${
             item.expiry_date
           }`,
+          card_number: item.card_number,
+          expiry_date: item.expiry_date,
           default: item.default,
         })
       );
@@ -63,6 +88,7 @@ const PaymentApiDataProvider = (props) => {
           default: item.default,
           bank_name: item.bank_name,
           account_name: item.account_name,
+          account_number: item.account_number,
           routing_number: item.routing_number,
         })
       );
@@ -74,6 +100,8 @@ const PaymentApiDataProvider = (props) => {
           item_no: item.item_number,
           type: "Mobile Money",
           details: `${item.network_type} ${MaskLastDigits(item.mobile_number)}`,
+          network_type: item.network_type,
+          account_name: item.account_name,
           mobile_number: item.mobile_number,
           default: item.default,
         })
@@ -107,7 +135,9 @@ const PaymentApiDataProvider = (props) => {
     <PaymentApiData.Provider
       value={{
         processAddPaymentMethod,
+        processGetTotalInvoice,
         processGetAllPayment,
+        processAddInvoice,
         processPaymentProfile,
         processSearchPayment,
         processUpdatePayment,
@@ -117,6 +147,10 @@ const PaymentApiDataProvider = (props) => {
         financeSettingInfo,
         setFinanceSettingInfo,
         paymentMethodList,
+        previewData,
+        setPreviewData,
+        totalInvoice,
+        setTotalInvoice,
       }}
     >
       {props.children}

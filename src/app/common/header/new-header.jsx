@@ -89,7 +89,7 @@ export const Header = ({ isDashboard = true }) => {
       selected: true,
       to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
     },
-    { id: "Find-talent", label: "Find Talent", to: "/find-talent" },
+    { id: "Find-talent", label: "Find Talent", to: "/freelancers" },
     {
       id: "public-find-work",
       label: "Find Work",

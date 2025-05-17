@@ -7,6 +7,8 @@ import {
   addJobPost,
   getClientDashboardStats,
   getJobAppliedToCompany,
+  getCompanyInfoForInvoice,
+  checkIfCompanyExist,
   companyInfo,
   updateEmployerLogo,
   employerProfile,
@@ -108,7 +110,6 @@ const EmployerApiDataProvider = (props) => {
   const processAddJobPost = async (data) => {
     const userId = sessionStorage.getItem("userId");
     data.company_id = userId;
-    console.log(data);
     let response = await addJobPost(data);
     if (response) {
       processGetEmployerStats(userId);
@@ -116,6 +117,16 @@ const EmployerApiDataProvider = (props) => {
     } else {
       return false;
     }
+  };
+
+  const processCheckIfCompanyExist = async (data) => {
+    let response = await checkIfCompanyExist(data);
+    return response;
+  };
+
+  const processGetCompanyInfoForInvoice = async (data) => {
+    let response = await getCompanyInfoForInvoice(data);
+    return response;
   };
 
   const processGetJobAppliedToCompany = async (pageNo) => {
@@ -267,9 +278,11 @@ const EmployerApiDataProvider = (props) => {
         processAddEmployer,
         processAddCertification,
         processAddExperience,
+        processGetCompanyInfoForInvoice,
         processEmployerProfile,
         processGetJobAppliedToCompany,
         processGetCompanyInfo,
+        processCheckIfCompanyExist,
         processSearchEmployer,
         processAddJobPost,
         processUpdateEmployer,

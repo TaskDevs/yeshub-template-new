@@ -10,6 +10,7 @@ export const timeOut = { timeout: 10000 };
 //RETRIEVE USER IDS
 export const userId = sessionStorage.getItem("userId");
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
+export const email = sessionStorage.getItem("email") || "Email Not Available";
 export const getJobId = () => sessionStorage.getItem("job_id");
 
 //STATUS CODE
@@ -20,7 +21,6 @@ export const SERVER_ERROR = 500;
 export const LIST_ON_PAGES = 10;
 
 export const default_skin = "6";
-
 
 export const popupType = {
   DELETE: "DELETE",
@@ -36,7 +36,6 @@ export const popupType = {
   DELETE_PORTFOLIO_MEDIA: "DELETE_PORTFOLIO_MEDIA",
   DELETE_MILESTONE: "DELETE_MILESTONE",
 };
-
 
 export const formType = {
   LOGIN_CANDIDATE: "LOGIN_CANDIDATE",

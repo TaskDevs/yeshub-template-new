@@ -11,11 +11,12 @@ export const login = async (data) => {
       data
     );
 
-    const { username, user_id } = responseOnLogin.data;
+    const { username, user_id, email } = responseOnLogin.data;
 
     // Store necessary user info in sessionStorage
     sessionStorage.setItem("username", username);
     sessionStorage.setItem("user_id", user_id);
+    sessionStorage.setItem("email", email);
 
     return {
       success: true,
@@ -103,7 +104,7 @@ export const retrieve = async () => {
     let responseOnRetrieve = await axios.get(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/user`
     );
-   
+
     return responseOnRetrieve;
     // if (responseOnRetrieve.status === SUCCESS_STATUS) {
     //   return responseOnRetrieve.data;
@@ -159,7 +160,7 @@ export const updateUserRole = async (data) => {
   try {
     let response = await axios.put(
       `${process.env.REACT_APP_BACKEND_HOST}/api/v1/update-user-role`,
-       data 
+      data
     );
     return response.data;
   } catch (err) {

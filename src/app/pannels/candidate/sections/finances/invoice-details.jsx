@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
 import { toast } from "react-toastify";
 import ShareInvoiceModal from "./shareInvoreModal";
 
 const InvoiceDetailsPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { processGetInvoiceDetails, invoiceDetailInfo } =
+    useContext(PaymentApiData);
+
+  const { id } = useParams();
+  useEffect(() => {
+    processGetInvoiceDetails(id);
+  }, []);
 
   const handleEdit = () => {
     // Navigate to edit invoice page
@@ -38,7 +47,7 @@ const InvoiceDetailsPage = () => {
           </button>
 
           <h2 className="text-xl font-semibold text-center w-full sm:w-auto sm:flex-1 sm:text-left text-gray-900 sm:ml-6">
-            INV-2025-0042
+            {invoiceDetailInfo?.invoice?.invoice_number}
           </h2>
 
           <div className="flex gap-2 mt-2 sm:mt-0">
@@ -64,16 +73,18 @@ const InvoiceDetailsPage = () => {
               ✅
             </div>
             <div>
-              <p className="text-green-800 font-medium text-sm">Paid</p>
-              <p className="text-green-600 text-xs">
-                Payment received on May 12, 2025
+              <p className="text-green-800 font-medium text-sm">
+                {invoiceDetailInfo?.invoice?.status || "Status"}
               </p>
+              {/* <p className="text-green-600 text-xs">
+                Payment received on May 12, 2025
+              </p> */}
             </div>
           </div>
           <div className="text-right">
             <p className="text-black font-medium text-sm">Amount</p>
             <p className="text-gray-800 font-semibold text-lg sm:text-xl">
-              ₵3,500.00
+              ₵{invoiceDetailInfo?.invoice?.total_amount || "0.00"}
             </p>
           </div>
         </div>
@@ -85,20 +96,25 @@ const InvoiceDetailsPage = () => {
             Client Information
           </h3>
           <p className="font-bold text-sm text-gray-800 mb-1">
-            Acme Corporation
+            {invoiceDetailInfo?.client_info?.company_name}
           </p>
           <p className="text-sm text-gray-600 mb-3">
-            123 Paradise Plaza, Suite 500
+            {invoiceDetailInfo?.client_info?.address || "Address not available"}
             <br />
-            San Francisco, CA 94106
+            {invoiceDetailInfo?.client_info?.city || "City not available"}
           </p>
           <p className="text-sm text-gray-600 mb-1">
-            Contact: Jonathan Reynolds
+            Contact:{" "}
+            {invoiceDetailInfo?.client_info?.phone_no || "Not Available"}
           </p>
           <p className="text-sm text-gray-600 mb-1">
-            Email: jonathan.reynolds@acmecorp.com
+            Email:{" "}
+            {invoiceDetailInfo?.client_info?.email || "Email Not Available"}
           </p>
-          <p className="text-sm text-gray-600 mb-3">Phone: +1 (415) 555-7676</p>
+          <p className="text-sm text-gray-600 mb-3">
+            Website:
+            {invoiceDetailInfo?.client_info?.website || "Website Not Available"}
+          </p>
           <p className="text-sm text-gray-600 font-medium">
             Payment Terms: Net 14 days
           </p>
@@ -119,38 +135,24 @@ const InvoiceDetailsPage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b">
-                <td className="py-2 font-medium text-gray-800">
-                  UI/UX Design Services
-                </td>
-                <td>1</td>
-                <td>₵2,000.00</td>
-                <td>₵2,000.00</td>
-              </tr>
-              <tr className="border-b">
-                <td className="py-2 font-medium text-gray-800">
-                  Frontend Development
-                </td>
-                <td>20</td>
-                <td>₵65.00</td>
-                <td>₵1,300.00</td>
-              </tr>
-              <tr>
-                <td className="py-2 font-medium text-gray-800">
-                  Consultation Services
-                </td>
-                <td>2</td>
-                <td>₵100.00</td>
-                <td>₵200.00</td>
-              </tr>
+              {invoiceDetailInfo?.invoice?.billing_item.map((item, index) => (
+                <tr className="border-b" key={index}>
+                  <td className="py-2 font-medium text-gray-800">
+                    {item.description}
+                  </td>
+                  <td>{item.quantity}</td>
+                  <td>₵{item.rate}</td>
+                  <td>₵{item.rate * item.quantity}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
           <div className="text-right mt-4 space-y-1 text-sm text-gray-700">
-            <p>Subtotal: ₵3,500.00</p>
-            <p>Tax (0%): ₵0.00</p>
+            <p>Subtotal: ₵{invoiceDetailInfo?.invoice?.sub_total}</p>
+            <p>Tax (0%): ₵{invoiceDetailInfo?.invoice?.tax_rate}</p>
             <p className="font-semibold text-lg text-gray-900">
-              Total: ₵3,500.00
+              Total: ₵{invoiceDetailInfo?.invoice?.total_amount}
             </p>
           </div>
         </div>
@@ -162,11 +164,9 @@ const InvoiceDetailsPage = () => {
         <div className="space-y-6 lg:col-span-1">
           <div className="md:col-span-1 bg-gray-50 p-5 rounded-lg border">
             <h3 className="font-semibold mb-2">Invoice Details</h3>
-            <p>Invoice #: INV-2025-0042</p>
-            <p>Issue Date: May 1, 2025</p>
-            <p>Due Date: May 15, 2025</p>
-            <p>PO #: PO-ACM-77992</p>
-            <p>Reference: Project Alpha Phase 2</p>
+            <p>Invoice #: {invoiceDetailInfo?.invoice?.invoice_number}</p>
+            <p>Issue Date: {invoiceDetailInfo?.invoice?.issue_date}</p>
+            <p>Due Date: {invoiceDetailInfo?.invoice?.due_date}</p>
             <p>Currency: USD ($)</p>
           </div>
 
@@ -210,22 +210,6 @@ const InvoiceDetailsPage = () => {
                 </p>
               </li>
 
-              {/* Reminder Sent */}
-              <li className="mb-10 ml-6">
-                <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white text-xs">
-                  📧
-                </span>
-                <h4 className="text-sm font-medium text-gray-800">
-                  Payment Reminder Sent
-                </h4>
-                <p className="text-xs text-gray-500">
-                  May 10, 2025 at 09:00 AM
-                </p>
-                <p className="text-sm text-gray-700">
-                  Automatic reminder sent to jonathan.reynolds@acmecorp.com
-                </p>
-              </li>
-
               {/* Invoice Sent */}
               <li className="mb-10 ml-6">
                 <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white text-xs">
@@ -242,7 +226,10 @@ const InvoiceDetailsPage = () => {
 
               {/* Invoice Created */}
               <li className="ml-6">
-                <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full ring-8 ring-white text-xs">
+                <span
+                  className="absolute -left-3 flex items-center justify-center w-6 h-6
+                 bg-gray-200 rounded-full ring-8 ring-white text-xs"
+                >
                   📄
                 </span>
                 <h4 className="text-sm font-medium text-gray-800">

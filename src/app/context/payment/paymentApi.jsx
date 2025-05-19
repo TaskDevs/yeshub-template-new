@@ -38,6 +38,38 @@ export const getTotalInvoice = async () => {
   }
 };
 
+export const getInvoiceDetails = async (id) => {
+  try {
+    let responseOnGetInvoiceDetails = await axios.get(
+      `${REACT_BASE_URL}get-invoice-of-details?id=${id}`
+    );
+    if (responseOnGetInvoiceDetails.status == 200) {
+      return responseOnGetInvoiceDetails;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getInvoiceOfUser = async () => {
+  try {
+    let responseOnGetInvoiceOfUser = await axios.get(
+      `${REACT_BASE_URL}get-invoice-of-user?user_id=${userId}`
+    );
+    if (responseOnGetInvoiceOfUser.status == 200) {
+      return responseOnGetInvoiceOfUser.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const createInvoice = async (data) => {
   try {
     let responseOnCreateInvoice = await axios.post(

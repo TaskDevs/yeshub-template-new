@@ -6,6 +6,8 @@ import {
   getFinanceSettingInfo,
   getTotalInvoice,
   createInvoice,
+  getInvoiceOfUser,
+  getInvoiceDetails,
 } from "./paymentApi";
 
 export const PaymentApiData = createContext();
@@ -13,8 +15,20 @@ export const PaymentApiData = createContext();
 const PaymentApiDataProvider = (props) => {
   const [financeSettingInfo, setFinanceSettingInfo] = useState([]);
   const [paymentMethodList, setPaymentMethodList] = useState([]);
+  const [billingList, setBillingList] = useState([]);
+  const [billingData, setBillingData] = useState({
+    pending_total: 0,
+    paid_total: 0,
+    overdue_total: 0,
+    total_amount: 0,
+  });
   const [previewData, setPreviewData] = useState({});
   const [totalInvoice, setTotalInvoice] = useState(0);
+  const [invoiceDetailInfo, setInvoiceDetailInfo] = useState({
+    invoice: null,
+    client_info: null,
+    data: null,
+  });
 
   useEffect(() => {
     processGetFinanceSettingInfo();
@@ -34,6 +48,32 @@ const PaymentApiDataProvider = (props) => {
     let response = await storeFinanceSettingInfo(data);
     if (response) {
       return true;
+    } else {
+      return false;
+    }
+  };
+
+  const processGetInvoiceOfUser = async () => {
+    let response = await getInvoiceOfUser();
+    if (response) {
+      setBillingList(response.data);
+      setBillingData({
+        pending_total: response.summary.percent_of_pending_total,
+        paid_total: response.summary.percent_of_paid_total,
+        overdue_total: response.summary.percent_of_overdue_total,
+        total_amount: response.summary.total_from_months,
+      });
+      console.log(response.data);
+    } else {
+      return false;
+    }
+  };
+
+  const processGetInvoiceDetails = async (id) => {
+    let response = await getInvoiceDetails(id);
+    if (response) {
+      console.log(response.data);
+      setInvoiceDetailInfo(response.data);
     } else {
       return false;
     }
@@ -144,13 +184,18 @@ const PaymentApiDataProvider = (props) => {
         processDeletePayment,
         processGetFinanceSettingInfo,
         processStoreFinanceSettingInfo,
+        processGetInvoiceDetails,
         financeSettingInfo,
         setFinanceSettingInfo,
         paymentMethodList,
         previewData,
         setPreviewData,
+        processGetInvoiceOfUser,
         totalInvoice,
         setTotalInvoice,
+        invoiceDetailInfo,
+        billingList,
+        billingData,
       }}
     >
       {props.children}

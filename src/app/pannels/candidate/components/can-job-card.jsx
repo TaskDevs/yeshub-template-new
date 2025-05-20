@@ -6,22 +6,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { calculateDaysSincePosted } from "../../../../utils/readableDate";
 import { FaBookmark } from "react-icons/fa6";
 import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextApi";
-
 import { userId } from "../../../../globals/constants";
 import { useNavigate } from "react-router-dom";
-
-// const getCleanTruncatedDescription = (description) => {
-//   if (!description) return "No description provided."; // handle null/undefined
-
-//   // remove all HTML tags
-//   const cleanText = description.replace(/<[^>]*>/g, "").trim();
-
-//   // fallback if empty after cleaning
-//   if (!cleanText) return "No description provided.";
-
-//   // truncate to 100 chars max (you can adjust this)
-//   return cleanText.length > 100 ? cleanText.slice(0, 97) + "..." : cleanText;
-// };
 
 const CanJobCard = ({
   role,
@@ -29,7 +15,6 @@ const CanJobCard = ({
   companyName,
   reviews,
   ratings,
-  // description,
   skills,
   salaryRange,
   image,
@@ -42,16 +27,58 @@ const CanJobCard = ({
   jobLocation,
   datePosted,
   proposal,
+  loading = false,
 }) => {
-  const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } =
-    useContext(SavedJobsApiData);
+  const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } = useContext(SavedJobsApiData);
   const navigate = useNavigate();
   const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === id);
+
+  // Skeleton for desktop
+  if (loading && !isMobile) {
+    return (
+      <div className="tw-css border rounded-lg p-4 bg-white animate-pulse space-y-4">
+        <div className="h-6 bg-gray-300 rounded w-2/3"></div>
+        <div className="flex gap-2">
+          <div className="h-4 bg-gray-300 rounded w-24"></div>
+          <div className="h-4 bg-gray-300 rounded w-16"></div>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {[1, 2, 3].map((_, idx) => (
+            <div key={idx} className="bg-gray-300 h-6 w-16 rounded-sm"></div>
+          ))}
+        </div>
+        <div className="flex justify-between items-center mt-4">
+          <div className="h-8 w-20 bg-gray-300 rounded"></div>
+          <div className="h-6 w-20 bg-gray-300 rounded"></div>
+          <div className="h-10 w-20 bg-gray-300 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Skeleton for mobile
+  if (loading && isMobile) {
+    return (
+      <div className="tw-css border rounded-lg shadow-md p-2 bg-white animate-pulse">
+        <div className="flex justify-between">
+          <div className="space-y-2">
+            <div className="h-4 bg-gray-300 rounded w-2/3"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+          </div>
+          <div className="h-6 w-6 bg-gray-300 rounded-full"></div>
+        </div>
+        <div className="flex justify-between mt-4">
+          <div className="h-4 w-20 bg-gray-300 rounded"></div>
+          <div className="h-8 w-20 bg-gray-300 rounded"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       {!isMobile && (
-        <div className="tw-css border rounded-lg  p-4 flex flex-col bg-white">
+        <div className="tw-css border rounded-lg p-4 flex flex-col bg-white">
           {isFindWork ? (
             <>
               <div className="tw-css flex justify-between w-full h-full">
@@ -64,19 +91,9 @@ const CanJobCard = ({
                     <span className="text-gray-500">({reviews} reviews)</span>
                   </div>
 
-                  {/* <div
-                    className="w-[70%] text-sm text-gray-700 line-clamp-3"
-                    dangerouslySetInnerHTML={{
-                      __html: getCleanTruncatedDescription(description),
-                    }}
-                  /> */}
-
                   <div className="flex flex-wrap gap-2 mt-2">
                     {skills?.map((skill, i) => (
-                      <div
-                        key={i}
-                        className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2"
-                      >
+                      <div key={i} className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2">
                         {skill}
                       </div>
                     ))}
@@ -85,9 +102,7 @@ const CanJobCard = ({
 
                 <div className="flex flex-col items-start h-full">
                   {newTag && (
-                    <button className="bg-green-500 text-[#166534] py-1 px-2 rounded">
-                      {newTag}
-                    </button>
+                    <button className="bg-green-500 text-[#166534] py-1 px-2 rounded">{newTag}</button>
                   )}
                   <p className="rounded-xl bg-[#F3F4F6] text-sm md:text-[0.5rem] text-[#1F2937] w-fit p-1 md:p-0">
                     {proposal} proposals
@@ -112,9 +127,7 @@ const CanJobCard = ({
 
                 <button
                   className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
-                  onClick={() =>
-                    navigate(`/dashboard-candidate/job-details/${id}`)
-                  }
+                  onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
                 >
                   View
                 </button>
@@ -148,9 +161,7 @@ const CanJobCard = ({
                     </button>
                     <button
                       className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
-                      onClick={() =>
-                        navigate(`/dashboard-candidate/job-details/${id}`)
-                      }
+                      onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
                     >
                       view
                     </button>
@@ -185,18 +196,9 @@ const CanJobCard = ({
                     </span>
                   )}
 
-                  <span className="text-gray-800 font-semibold ">
-                    GHS {salaryRange}
-                  </span>
-                  <span className="text-gray-500 text-sm flex">
-                    {dateSaved}
-                  </span>
+                  <span className="text-gray-800 font-semibold ">GHS {salaryRange}</span>
+                  <span className="text-gray-500 text-sm flex">{dateSaved}</span>
                 </div>
-
-                {/* <div
-                  className="w-[20%] text-sm text-gray-700 line-clamp-3"
-                  dangerouslySetInnerHTML={{ __html: description }}
-                /> */}
               </div>
             </div>
           )}
@@ -222,19 +224,14 @@ const CanJobCard = ({
 
             {isFindWork ? (
               <div className="flex flex-col items-start h-full">
-                <button
-                  onClick={() => toggleSavedJob(id, userId)}
-                  className="border-0"
-                >
+                <button onClick={() => toggleSavedJob(id, userId)} className="border-0">
                   {!isSaved ? (
                     <CiBookmark className="size-4" />
                   ) : (
                     <FaBookmark className="size-4" color="#166534" />
                   )}
                 </button>
-                <p className="text-sm">
-                  {calculateDaysSincePosted(datePosted)}
-                </p>
+                <p className="text-sm">{calculateDaysSincePosted(datePosted)}</p>
               </div>
             ) : (
               <p className="text-sm">{calculateDaysSincePosted(datePosted)}</p>
@@ -245,9 +242,7 @@ const CanJobCard = ({
             <p className="text-[#374151]">{salaryRange}</p>
             <button
               className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10"
-              onClick={() =>
-                navigate(`/dashboard-candidate/job-details/${id}`)
-              }
+              onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
             >
               view
             </button>

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect, useMemo } from "react";
 import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
- import { Wallet } from 'lucide-react';
+import { Wallet } from "lucide-react";
 import { RiSettings3Fill } from "react-icons/ri";
 import { BiSolidLogOut } from "react-icons/bi";
 import { ImStatsDots } from "react-icons/im";
@@ -486,7 +486,7 @@ export const Header = ({ isDashboard = true }) => {
                     >
                       Log In
                     </button>
-                     <button
+                    <button
                       className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
                       onClick={() => navigate("/sign-up")}
                     >
@@ -743,7 +743,6 @@ export const Header = ({ isDashboard = true }) => {
                           <FaUserCircle className="text-gray-600 h-5 w-5" />
                           <span>Your Profile</span>
                         </button>
-                        
 
                         <button
                           className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
@@ -850,17 +849,15 @@ export const Header = ({ isDashboard = true }) => {
                   <FaUserCircle className="text-gray-500 w-5 h-5" />
                   <span>Your Profile</span>
                 </button>
-                 <button
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
-                          onClick={() =>
-                            handleNavigate(
-                              "/dashboard-candidate/finance-settings"
-                            )
-                          }
-                        >
-                          <Wallet className="text-gray-600 h-5 w-5" />
-                          <span>Finance Settings</span>
-                        </button>
+                <button
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+                  onClick={() =>
+                    handleNavigate("/dashboard-candidate/finance-settings")
+                  }
+                >
+                  <Wallet className="text-gray-600 h-5 w-5" />
+                  <span>Finance Settings</span>
+                </button>
 
                 <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
                   <ImStatsDots className="text-gray-500 w-5 h-5" />
@@ -960,7 +957,7 @@ export const Header = ({ isDashboard = true }) => {
               ))}
           </nav>
         </div>
-        {token && role === "freelancer" && (
+        {token && role === "freelancer" && profile_completion < 100 && (
           <div>
             <ProfileCompletionModal
               completion={profile_completion}
@@ -970,6 +967,7 @@ export const Header = ({ isDashboard = true }) => {
             />
           </div>
         )}
+
         {/* Profile Completion Modal */}
       </header>
     </>

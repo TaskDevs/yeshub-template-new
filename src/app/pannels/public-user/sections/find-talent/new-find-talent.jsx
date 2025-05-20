@@ -333,7 +333,7 @@ export default function FreelancerSearch() {
         </div>
       </div>
 
-      <div className="container">
+      <div className="containers">
         {/* Filters Sidebar */}
         <div className="sidebar">
           <div>

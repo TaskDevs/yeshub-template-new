@@ -166,7 +166,6 @@ const PaymentApiDataProvider = (props) => {
   const processEditInvoice = async (id, data) => {
     try {
       let responseOnEditInvoice = await editInvoice(id, data);
-      console.log(responseOnEditInvoice);
       if (responseOnEditInvoice) {
         return responseOnEditInvoice.data;
       } else {
@@ -182,7 +181,8 @@ const PaymentApiDataProvider = (props) => {
     try {
       let responseOnDeleteInvoice = await deleteInvoice(id);
       if (responseOnDeleteInvoice) {
-        return responseOnDeleteInvoice.data.message;
+        console.log(responseOnDeleteInvoice);
+        return responseOnDeleteInvoice.data;
       }
     } catch (err) {
       console.log(err);

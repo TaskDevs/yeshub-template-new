@@ -72,7 +72,7 @@ const CreateInvoice = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!previewData.status) {
+      if (!previewData) {
         let response = await processGetTotalInvoice();
         const newInvoiceNumber = generateInvoiceNumber(response);
 
@@ -205,7 +205,6 @@ const CreateInvoice = () => {
 
   const handleEditInvoice = async () => {
     setEditLoading(true);
-
     //console.log(previewData);
 
     let checkCompanyExist = await processCheckIfCompanyExist(

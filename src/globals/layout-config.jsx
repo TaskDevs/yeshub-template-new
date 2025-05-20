@@ -1,11 +1,13 @@
 // import Header1 from "../app/common/header/header1";
 import Header2 from "../app/common/header/header2";
 // import Footer1 from "../app/common/footer/footer1";
-import Footer2 from "../app/common/footer/footer2";
+
 // import Footer3 from "../app/common/footer/footer3";
 // import Footer4 from "../app/common/footer/footer4";
 import { publicUser } from "./route-names"
 import { Header } from "../app/common/header/new-header";
+import Footer from '../app/common/footer/new_footer';
+
 
 export function showFloatingMenus(currentpath) {
     switch (currentpath) {
@@ -83,16 +85,16 @@ export function setFooterType(currentpath) {
         currentpath === publicUser.HOME9 ||
         currentpath === publicUser.HOME10 ||
         currentpath === publicUser.HOME13) {
-        return <Footer2 />
+        return <Footer />
     } else if (currentpath === publicUser.HOME5 ||
         currentpath === publicUser.HOME6 ||
         currentpath === publicUser.HOME16 ||
         currentpath === publicUser.HOME18) {
-        return <Footer2 />
+        return <Footer />
     } else if (currentpath === publicUser.HOME11) {
-        return <Footer2/>
+        return <Footer/>
     } else {
-        return <Footer2 />
+        return <Footer />
     }
 }
 

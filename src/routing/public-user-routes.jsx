@@ -74,12 +74,13 @@ import TeamList from "../app/pannels/employer/components/team/team-list";
 import MessageDashboard from "../app/pannels/public-user/components/messages/message-dashboard";
 import FreelancerSearch from "../app/pannels/public-user/sections/find-talent/new-find-talent";
 import FreelancerDetail from "../app/pannels/public-user/sections/find-talent/freelancer-details";
+import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
 
 function PublicUserRoutes() {
   return (
     <>
       <Routes>
-        <Route path={publicUser.INITIAL} element={<Home1Page />} />
+        <Route path={publicUser.INITIAL} element={<YesHubLandingPage />} />
         <Route path={publicUser.HOME1} element={<Home1Page />} />
         <Route path={publicUser.HOME2} element={<Home2Page />} />
         <Route path={publicUser.HOME3} element={<Home3Page />} />

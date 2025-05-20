@@ -3,6 +3,8 @@ import Avatar from "@mui/material/Avatar";
 import { MdFavoriteBorder } from "react-icons/md";
 import InviteToJobModal from "./invitation-modal";
 import MessageModal from "./message-modal";
+import { useNavigate } from "react-router-dom";
+
 
 const skillsList = [
   "Web Development",
@@ -115,6 +117,7 @@ export default function FreelancerSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const navigate = useNavigate()
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -504,7 +507,8 @@ export default function FreelancerSearch() {
               : currentFreelancers.map((freelancer) => (
                   <div
                     key={freelancer.id}
-                    className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition cursor"
+                    className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
+                    onClick={()=>navigate('/freelancers/1')}
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 bg-gray-300 rounded-full">

@@ -33,6 +33,7 @@ import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoi
 import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
 import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
 import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
+
 import { isAuthenticated } from "./auth";
 
 function CandidateRoutes() {

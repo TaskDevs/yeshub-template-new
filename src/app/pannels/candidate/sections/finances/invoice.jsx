@@ -7,10 +7,23 @@ import { generateInvoiceNumber } from "../../../../../utils/invoice";
 import Swal from "sweetalert2";
 
 const CreateInvoice = () => {
-  const { processAddInvoice, processGetTotalInvoice } =
-    useContext(PaymentApiData);
+  const {
+    processAddInvoice,
+    processGetTotalInvoice,
+    financeSettingInfo,
+    paymentMethodList,
+    processEditInvoice,
+  } = useContext(PaymentApiData);
+  const [paymentInfo, setPaymentInfo] = useState({});
   const { processCheckIfCompanyExist } = useContext(EmployerApiData);
   const previewData = JSON.parse(localStorage.getItem("invoice_preview"));
+
+  useEffect(() => {
+    let payment_type = paymentMethodList.filter(
+      (item) => item.type !== "Credit Card" && item.default == true
+    )[0];
+    setPaymentInfo(payment_type);
+  }, [financeSettingInfo]);
 
   const onDrop = useCallback((acceptedFiles) => {
     const filesWithPreview = acceptedFiles.map((file) =>
@@ -41,6 +54,7 @@ const CreateInvoice = () => {
     previewData?.attachments || []
   );
   const [loading, setLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
   const [invoice, setInvoice] = useState({
     client: previewData?.client || "",
     invoiceNumber: previewData?.invoiceNumber || "",
@@ -58,13 +72,15 @@ const CreateInvoice = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let response = await processGetTotalInvoice();
-      const newInvoiceNumber = generateInvoiceNumber(response);
+      if (!previewData.status) {
+        let response = await processGetTotalInvoice();
+        const newInvoiceNumber = generateInvoiceNumber(response);
 
-      setInvoice((prev) => ({
-        ...prev,
-        invoiceNumber: newInvoiceNumber,
-      }));
+        setInvoice((prev) => ({
+          ...prev,
+          invoiceNumber: newInvoiceNumber,
+        }));
+      }
     };
 
     fetchData();
@@ -106,6 +122,11 @@ const CreateInvoice = () => {
     return (subtotal * invoice.taxRate) / 100;
   };
 
+  const subtotal = calculateSubtotal();
+  const discount = calculateDiscount(subtotal);
+  const tax = calculateTax(subtotal - discount);
+  const total = subtotal - discount + tax;
+
   const handleSubmit = async (type) => {
     setLoading(true);
 
@@ -135,6 +156,8 @@ const CreateInvoice = () => {
     formData.append("discount", invoice.discount);
     formData.append("discount_type", invoice.discountType);
     formData.append("payment_terms", invoice.paymentTerms);
+    formData.append("payment_type", paymentInfo.type);
+    formData.append("payment_item_no", paymentInfo.item_no);
     formData.append("note", invoice.notes);
     formData.append("sub_total", subtotal);
     formData.append("discount_cal", discount);
@@ -180,10 +203,69 @@ const CreateInvoice = () => {
     setLoading(false);
   };
 
-  const subtotal = calculateSubtotal();
-  const discount = calculateDiscount(subtotal);
-  const tax = calculateTax(subtotal - discount);
-  const total = subtotal - discount + tax;
+  const handleEditInvoice = async () => {
+    setEditLoading(true);
+
+    //console.log(previewData);
+
+    let checkCompanyExist = await processCheckIfCompanyExist(
+      invoice.client.toLowerCase()
+    );
+    if (!checkCompanyExist.data) {
+      Swal.fire({
+        icon: "error",
+        title: "Company not found",
+        text: "Please verify client name",
+      });
+      setLoading(false);
+      return false;
+    }
+
+    //console.log(invoice);
+
+    let newData = {
+      user_id: userId,
+      invoice_number: invoice.invoiceNumber,
+      client_name: invoice.client,
+      issue_date: invoice.issueDate,
+      due_date: invoice.dueDate,
+      status: "draft",
+      tax_rate: invoice.taxRate,
+      discount: invoice.discount,
+      discount_type: invoice.discountType,
+      payment_terms: invoice.paymentTerms,
+      payment_type: paymentInfo.type,
+      payment_item_no: paymentInfo.item_no,
+      note: invoice.notes,
+      sub_total: subtotal || invoice.subtotal,
+      discount_cal: discount || invoice.discount,
+      tax_cal: tax || invoice.tax_cal,
+      total_amount: total || invoice.total_amount,
+      client_id: checkCompanyExist.data,
+      payment_status: "pending",
+      billing_item: JSON.stringify(invoice.items),
+    };
+
+    let response = await processEditInvoice(invoice.invoiceNumber, newData);
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (response.status == "error") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message,
+      });
+    }
+    setEditLoading(false);
+    //processEditInvoice;
+    //console.log("We are editing");
+  };
 
   const naviateTo = (path) => {
     window.location.href = path;
@@ -222,11 +304,13 @@ const CreateInvoice = () => {
               <li>
                 <span className="mx-2">{">"}</span>
               </li>
-              <li className="text-gray-400">Create New Invoice</li>
+              <li className="text-gray-400">
+                {previewData?.status ? "Edit Invoice" : "Create New Invoice"}
+              </li>
             </ol>
           </nav>
           <h1 className="text-2xl font-semibold text-gray-900">
-            Create New Invoice
+            {previewData?.status ? "Edit Invoice" : "Create New Invoice"}
           </h1>
           <p className="text-gray-500 text-sm">
             Fill in the details to create a new invoice for your client
@@ -241,12 +325,14 @@ const CreateInvoice = () => {
           >
             Clear
           </button>
-          <button
-            className="px-4 py-2 bg-green-600 text-white rounded"
-            onClick={() => handleSubmit("draft")}
-          >
-            {loading ? "Saving..." : "Save Draft"}
-          </button>
+          {!previewData?.status && (
+            <button
+              className="px-4 py-2 bg-green-600 text-white rounded"
+              onClick={() => handleSubmit("draft")}
+            >
+              {loading ? "Saving..." : "Save Draft"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -456,7 +542,7 @@ const CreateInvoice = () => {
       </div>
 
       {/* Notes and Terms */}
-      <div className="grid md:grid-cols-2 gap-4 md:grid-cols-2 mb-6 bg-white p-6 rounded-lg shadow-sm border">
+      <div className="grid md:grid-cols-2 gap-4 mb-6 bg-white p-6 rounded-lg shadow-sm border">
         <div>
           <label className="block text-sm font-medium mb-1 text-gray-700">
             Notes & Terms
@@ -526,32 +612,47 @@ const CreateInvoice = () => {
 
       {/* Footer Actions */}
       <div className="flex justify-between items-center">
-        <button
-          className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
-          onClick={() => handleSubmit("draft")}
-        >
-          Save Draft
-        </button>
-        <div className="flex space-x-2">
+        {!previewData?.status && (
           <button
-            className="bg-gray-700 text-white px-4 py-2 rounded"
-            onClick={handlePreview}
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+            onClick={() => handleSubmit("draft")}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 inline-block mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 2a1 1 0 00-1 1v4.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Preview
+            Save Draft
           </button>
+        )}
+
+        <div className="flex space-x-2">
+          {!previewData?.status && (
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded"
+              onClick={handlePreview}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 inline-block mr-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 2a1 1 0 00-1 1v4.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Preview
+            </button>
+          )}
+
+          {previewData?.status && (
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded"
+              onClick={handleEditInvoice}
+            >
+              {editLoading ? "Loading..." : "Edit Invoice"}
+            </button>
+          )}
+
           <button
             className="bg-green-600 text-white px-4 py-2 rounded"
             onClick={() => handleSubmit("sent")}

@@ -8,6 +8,8 @@ import {
   createInvoice,
   getInvoiceOfUser,
   getInvoiceDetails,
+  editInvoice,
+  deleteInvoice,
 } from "./paymentApi";
 
 export const PaymentApiData = createContext();
@@ -72,7 +74,7 @@ const PaymentApiDataProvider = (props) => {
   const processGetInvoiceDetails = async (id) => {
     let response = await getInvoiceDetails(id);
     if (response) {
-      console.log(response.data);
+      console.log(response.data.data);
       setInvoiceDetailInfo(response.data);
     } else {
       return false;
@@ -114,7 +116,7 @@ const PaymentApiDataProvider = (props) => {
           }`,
           card_number: item.card_number,
           expiry_date: item.expiry_date,
-          default: item.default,
+          default: item.default == "1" ? true : false,
         })
       );
 
@@ -125,7 +127,7 @@ const PaymentApiDataProvider = (props) => {
           item_no: item.item_number,
           type: "Bank Account",
           details: `${item.bank_name} ${MaskLastDigits(item.account_number)}`,
-          default: item.default,
+          default: item.default == "1" ? true : false,
           bank_name: item.bank_name,
           account_name: item.account_name,
           account_number: item.account_number,
@@ -143,7 +145,7 @@ const PaymentApiDataProvider = (props) => {
           network_type: item.network_type,
           account_name: item.account_name,
           mobile_number: item.mobile_number,
-          default: item.default,
+          default: item.default == "1" ? true : false,
         })
       );
 
@@ -158,6 +160,33 @@ const PaymentApiDataProvider = (props) => {
       //console.log(response.data.finance_setting_info);
     } else {
       console.log("error");
+    }
+  };
+
+  const processEditInvoice = async (id, data) => {
+    try {
+      let responseOnEditInvoice = await editInvoice(id, data);
+      console.log(responseOnEditInvoice);
+      if (responseOnEditInvoice) {
+        return responseOnEditInvoice.data;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const processDeleteInvoice = async (id) => {
+    try {
+      let responseOnDeleteInvoice = await deleteInvoice(id);
+      if (responseOnDeleteInvoice) {
+        return responseOnDeleteInvoice.data.message;
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
     }
   };
 
@@ -182,6 +211,8 @@ const PaymentApiDataProvider = (props) => {
         processSearchPayment,
         processUpdatePayment,
         processDeletePayment,
+        processEditInvoice,
+        processDeleteInvoice,
         processGetFinanceSettingInfo,
         processStoreFinanceSettingInfo,
         processGetInvoiceDetails,

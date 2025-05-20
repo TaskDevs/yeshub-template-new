@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import {
   FormInput,
   FormTextarea,
@@ -102,7 +103,7 @@ export const SubmitWorkSection = () => {
   );
 };
 
-export const SubmitProposalSection = ({ job_id }) => {
+export const SubmitProposalSection = ({ job_id, companyInfo }) => {
   const { processSubmitProposal } = useContext(ProposalApiData);
   const { formData, setFormData, handleInputChange, clearAll } =
     useDeliverWorkForm({
@@ -121,6 +122,8 @@ export const SubmitProposalSection = ({ job_id }) => {
     service_charge: "0.00",
     amount_receive: "0.00",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (formData.fix_rate !== "") {
@@ -184,6 +187,9 @@ export const SubmitProposalSection = ({ job_id }) => {
         showConfirmButton: false,
         timer: 1500,
       });
+      setTimeout(() => {
+        navigate("/dashboard-candidate/candidate-offers");
+      }, 1500);
     } else {
       console.log("Error submitting proposal");
       Swal.fire({
@@ -323,12 +329,22 @@ export const SubmitProposalSection = ({ job_id }) => {
               <h3 className="text-black font-bold text-md mb-3">
                 Relevant Skills
               </h3>
-              <span className="text-gray-500 mb-3 block">React</span>
+              <div className="mt-2">
+                {companyInfo?.skills?.map((item, index) => (
+                  <span
+                    className="bg-gray-300 rounded-full px-2 py-1 text-sm text-gray-700 mr-2"
+                    key={index}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              {/* <span className="text-gray-500 mb-3 block">React</span>
               <span className="text-gray-500 mb-3 block">TypeScript</span>
               <span className="text-gray-500 mb-3 block">Redux</span>
-              <span className="text-gray-500 mb-3 block">Node.js</span>
-
-              <div className="w-full">
+              <span className="text-gray-500 mb-3 block">Node.js</span> */}
+              <div className="w-full mt-4">
                 <div className="mb-4">
                   <label className="block text-sm text-black font-bold mb-1">
                     Experience Level

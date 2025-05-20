@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
 import { toast } from "react-toastify";
 import ShareInvoiceModal from "./shareInvoreModal";
+import Swal from "sweetalert2";
 
 const InvoiceDetailsPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -14,9 +17,10 @@ const InvoiceDetailsPage = () => {
     processGetInvoiceDetails(id);
   }, []);
 
-  const handleEdit = () => {
-    // Navigate to edit invoice page
-    toast.info("Navigating to edit invoice...");
+  const invoiceRef = useRef();
+
+  const naviateTo = (path) => {
+    window.location.href = path;
   };
 
   const handleDelete = () => {
@@ -25,20 +29,59 @@ const InvoiceDetailsPage = () => {
     }
   };
 
-  const handleDownload = () => {
-    toast.info("Downloading PDF...");
+  const handleDownloadPDF = async () => {
+    const element = invoiceRef.current;
+    const canvas = await html2canvas(element);
+    const imageData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const imgProps = pdf.getImageProperties(imageData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imageData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("invoice.pdf");
   };
 
-  //   const handleShare = () => {
-  //     toast.success("Invoice shared via email.");
-  //   };
+  const handleEdit = () => {
+    if (invoiceDetailInfo?.invoice?.status == "sent") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: "Invoice sent cant be edited",
+      });
+      return false;
+    }
+
+    let newData = {
+      client: invoiceDetailInfo?.invoice?.client_name,
+      invoiceNumber: invoiceDetailInfo?.invoice?.invoice_number,
+      issueDate: invoiceDetailInfo?.invoice?.issue_date,
+      dueDate: invoiceDetailInfo?.invoice?.due_date,
+      items: invoiceDetailInfo?.invoice?.billing_item,
+      taxRate: invoiceDetailInfo?.invoice?.tax_rate,
+      discount: parseFloat(invoiceDetailInfo?.invoice?.discount),
+      discountType: invoiceDetailInfo?.invoice?.discount_type,
+      notes: invoiceDetailInfo?.invoice?.note,
+      paymentTerms: invoiceDetailInfo?.invoice?.payment_terms,
+      total_amount: invoiceDetailInfo?.invoice?.total_amount,
+      attachments: invoiceDetailInfo?.invoice?.attachment,
+      sub_total: parseFloat(invoiceDetailInfo?.invoice?.sub_total),
+      discount_cal: parseFloat(invoiceDetailInfo?.invoice?.discount_cal),
+      tax_cal: parseFloat(invoiceDetailInfo?.invoice?.tax_cal),
+      status: "edit",
+    };
+    console.log(newData);
+    localStorage.setItem("invoice_preview", JSON.stringify(newData));
+    naviateTo("/dashboard-candidate/create-invoice");
+  };
 
   const handlePrint = () => {
     window.print();
   };
 
   return (
-    <div className="tw-css max-w-7xl mx-auto p-6 text-sm">
+    <div className="tw-css max-w-7xl mx-auto p-6 text-sm" ref={invoiceRef}>
       <div className="mb-6">
         {/* Top Row */}
         <div className="flex flex-wrap justify-between items-center mb-4">
@@ -172,15 +215,50 @@ const InvoiceDetailsPage = () => {
 
           <div className="md:col-span-1 bg-gray-50 p-5 rounded-lg border">
             <h3 className="font-semibold mb-2">Payment Instructions</h3>
-            <p>
-              <strong>Bank Transfer</strong>
-            </p>
-            <p>Bank: First National Bank</p>
-            <p>Account Name: Your Company LLC</p>
-            <p>Account Number: XXX-XXXX-7890</p>
-            <p>Routing Number: XXX-XXXX</p>
-            <p>SWIFT: FNBUSXXX</p>
-            <p className="mt-2">Other Payment Methods: -</p>
+            {invoiceDetailInfo?.data?.bank_account !== null && (
+              <>
+                <p>
+                  <strong>Bank Transfer</strong>
+                </p>
+                <p>Bank: {invoiceDetailInfo?.data?.bank_name}</p>
+                <p>
+                  Account Name:{" "}
+                  {invoiceDetailInfo?.data?.bank_account?.account_name}
+                </p>
+                <p>
+                  Account Number:{" "}
+                  {invoiceDetailInfo?.data?.bank_account?.account_number}
+                </p>
+                <p>
+                  Routing Number:{" "}
+                  {invoiceDetailInfo?.data?.bank_account?.routing_number}
+                </p>
+
+                <p className="mt-2">Other Payment Methods: -</p>
+              </>
+            )}
+
+            {invoiceDetailInfo?.data?.momo_account !== null && (
+              <>
+                <p>
+                  <strong>Momo Account</strong>
+                </p>
+                <p>
+                  Account Name:{" "}
+                  {invoiceDetailInfo?.data?.momo_account?.account_name}
+                </p>
+                <p>
+                  Account Number:{" "}
+                  {invoiceDetailInfo?.data?.momo_account?.account_number}
+                </p>
+                <p>
+                  Routing Number:{" "}
+                  {invoiceDetailInfo?.data?.bank_account?.routing_number}
+                </p>
+
+                <p className="mt-2">Other Payment Methods: -</p>
+              </>
+            )}
           </div>
         </div>
 
@@ -193,46 +271,93 @@ const InvoiceDetailsPage = () => {
             <ol className="relative border-l border-gray-300">
               {/* Payment Received */}
               <li className="mb-10 ml-6">
-                <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-100 rounded-full ring-8 ring-white">
-                  ✅
+                <span
+                  className={`absolute -left-3 flex items-center justify-center w-6 h-6
+                 ${
+                   invoiceDetailInfo?.invoice?.status == "paid"
+                     ? "bg-green-100"
+                     : "bg-blue-100"
+                 }  rounded-full ring-8 ring-white`}
+                >
+                  {invoiceDetailInfo?.invoice?.status == "paid" ? "✅" : "🧾"}
                 </span>
-                <h4 className="text-green-700 font-semibold text-sm flex items-center">
-                  Payment Received{" "}
-                  <span className="bg-green-100 text-green-800 text-xs font-bold ml-2 px-2 py-0.5 rounded">
-                    $3,500.00
+                <h4
+                  className={`${
+                    invoiceDetailInfo?.invoice?.status == "paid"
+                      ? "text-green-700 font-semibold"
+                      : "font-medium text-gray-800"
+                  } text-sm flex items-center`}
+                >
+                  {invoiceDetailInfo?.invoice?.status == "paid"
+                    ? "Payment Received"
+                    : "Payment not received"}
+
+                  <span
+                    className={`${
+                      invoiceDetailInfo?.invoice?.status == "paid"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-800"
+                    } text-xs font-bold ml-2 px-2 py-0.5 rounded`}
+                  >
+                    ${invoiceDetailInfo?.invoice?.total_amount}
                   </span>
                 </h4>
                 <p className="text-xs text-gray-500">
                   May 12, 2025 at 10:23 AM
                 </p>
                 <p className="text-sm text-gray-700">
-                  Payment received via bank transfer
+                  {invoiceDetailInfo?.invoice?.status == "paid"
+                    ? "Payment received"
+                    : "Payment not received yet"}
                 </p>
               </li>
 
               {/* Invoice Sent */}
               <li className="mb-10 ml-6">
-                <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white text-xs">
-                  🧾
+                <span
+                  className={`absolute -left-3 flex items-center justify-center w-6 h-6
+                 ${
+                   invoiceDetailInfo?.invoice?.status == "sent"
+                     ? "bg-green-100"
+                     : "bg-blue-100"
+                 }  rounded-full ring-8 ring-white`}
+                >
+                  {invoiceDetailInfo?.invoice?.status == "sent" ? "✅" : "🧾"}
                 </span>
-                <h4 className="text-sm font-medium text-gray-800">
+                <h4
+                  className={`${
+                    invoiceDetailInfo?.invoice?.status == "sent"
+                      ? "text-green-700 font-semibold"
+                      : "font-medium text-gray-800"
+                  } text-sm`}
+                >
                   Invoice Sent
                 </h4>
                 <p className="text-xs text-gray-500">May 1, 2025 at 02:15 PM</p>
                 <p className="text-sm text-gray-700">
-                  Invoice sent to jonathan.reynolds@acmecorp.com
+                  Invoice sent to {` ${invoiceDetailInfo?.client_info?.email}`}
                 </p>
               </li>
 
               {/* Invoice Created */}
               <li className="ml-6">
                 <span
-                  className="absolute -left-3 flex items-center justify-center w-6 h-6
-                 bg-gray-200 rounded-full ring-8 ring-white text-xs"
+                  className={`absolute -left-3 flex items-center justify-center w-6 h-6
+                 ${
+                   invoiceDetailInfo?.invoice?.status == "draft"
+                     ? "bg-green-100"
+                     : "bg-blue-100"
+                 }  rounded-full ring-8 ring-white`}
                 >
-                  📄
+                  {invoiceDetailInfo?.invoice?.status == "draft" ? "✅" : "🧾"}
                 </span>
-                <h4 className="text-sm font-medium text-gray-800">
+                <h4
+                  className={`${
+                    invoiceDetailInfo?.invoice?.status == "draft"
+                      ? "text-green-700 font-semibold"
+                      : "font-medium text-gray-800"
+                  } text-sm`}
+                >
                   Invoice Created
                 </h4>
                 <p className="text-xs text-gray-500">May 1, 2025 at 01:45 PM</p>
@@ -246,7 +371,7 @@ const InvoiceDetailsPage = () => {
             {/* Buttons */}
             <div className="flex flex-wrap gap-3 mb-6">
               <button
-                onClick={handleDownload}
+                onClick={handleDownloadPDF}
                 className="bg-green-600 text-white px-1 py-2 rounded-md hover:bg-green-700 flex items-center"
               >
                 <svg
@@ -258,7 +383,7 @@ const InvoiceDetailsPage = () => {
                 </svg>
                 Download PDF
               </button>
-              <button
+              {/* <button
                 onClick={() => setModalOpen(true)}
                 className="border px-1 py-2 rounded-md hover:bg-gray-100 flex items-center"
               >
@@ -270,7 +395,7 @@ const InvoiceDetailsPage = () => {
                   <path d="M15 8a3 3 0 10-2.83-4h-.34A3 3 0 006 6v.26A3 3 0 005 8a3 3 0 001.17 2.43v.34A3 3 0 0011 13h.26A3 3 0 0015 8z" />
                 </svg>
                 Share Invoice
-              </button>
+              </button> */}
               <button
                 onClick={handlePrint}
                 className="border px-1 py-2 rounded-md hover:bg-gray-100 flex items-center"
@@ -287,28 +412,6 @@ const InvoiceDetailsPage = () => {
             </div>
 
             {/* Notes */}
-            <div>
-              <h3 className="font-semibold mb-2">Notes</h3>
-              <div className="bg-gray-50 p-4 rounded border text-gray-700 text-sm mb-3">
-                Client requested detailed breakdown of development hours for
-                their accounting department. Sent via email on May 2.
-                <div className="text-xs text-gray-500 mt-1">
-                  Added by Sarah Wilson on May 2, 2025
-                </div>
-              </div>
-
-              {/* Add Note */}
-              <div className="flex items-start gap-2">
-                <textarea
-                  placeholder="Add a note..."
-                  className="flex-1 border rounded p-2 text-sm resize-none"
-                  rows={2}
-                />
-                <button className="bg-green-600 text-white px-3 py-2 rounded hover:bg-green-700">
-                  +
-                </button>
-              </div>
-            </div>
           </div>
         </div>
         <ShareInvoiceModal

@@ -33,7 +33,7 @@ const SubmitProposal = () => {
                 {companyInfo.job_title}
               </h2>
               <span className="text-gray-500">
-                Tech Corp Inc. 4.8(2.3k Reviews)
+                {companyInfo?.employer?.company_name}
               </span>
               <p
                 className="text-gray-500"
@@ -57,13 +57,17 @@ const SubmitProposal = () => {
                 Budget
               </span>
               <span className="font-bold text-gray-800 text-md block">
-                GH {companyInfo.budget}
+                GH{" "}
+                {companyInfo?.salary ||
+                  companyInfo?.budget ||
+                  companyInfo?.fixed_rate ||
+                  "0"}
               </span>
             </div>
           </div>
           <hr />
           <div className="flex-grow overflow-y-auto p-6 -mt-3 w-full flex  justify-center">
-            <SubmitProposalSection job_id={id} />
+            <SubmitProposalSection job_id={id} companyInfo={companyInfo} />
           </div>
         </div>
       </div>

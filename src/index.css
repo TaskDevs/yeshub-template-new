@@ -345,6 +345,12 @@
   .search-label{
     display:none;
   }
+
+.home-res {
+  margin-top: 50px; /* increase from 10px to 50px */
+  padding-top: 40px; /* increase from 20px to 40px */
+}
+
 }
 
 

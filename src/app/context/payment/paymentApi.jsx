@@ -54,6 +54,45 @@ export const getInvoiceDetails = async (id) => {
   }
 };
 
+export const editInvoice = async (id, data) => {
+  console.log(data);
+  try {
+    let responseOnEditInvoice = await axios.put(
+      `${REACT_BASE_URL}edit-invoice?invoiceId=${id}`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    if (responseOnEditInvoice.status == 200) {
+      return responseOnEditInvoice;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const deleteInvoice = async (id) => {
+  try {
+    let responseOnDeleteInvoice = await axios.delete(
+      `${REACT_BASE_URL}delete-invoice?invoiceId=${id}`
+    );
+    if (responseOnDeleteInvoice.status == 200) {
+      return responseOnDeleteInvoice;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const getInvoiceOfUser = async () => {
   try {
     let responseOnGetInvoiceOfUser = await axios.get(

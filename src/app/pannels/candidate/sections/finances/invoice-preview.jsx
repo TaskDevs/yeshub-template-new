@@ -22,8 +22,8 @@ const InvoicePreview = () => {
 
   useEffect(() => {
     let payment_type = paymentMethodList.filter(
-      (item) => item.type !== "Credit Card"
-    )?.[0];
+      (item) => item.type !== "Credit Card" && item.default == true
+    )[0];
     setPaymentInfo(payment_type);
   }, [financeSettingInfo]);
 
@@ -110,6 +110,8 @@ const InvoicePreview = () => {
     formData.append("discount", previewData.discount);
     formData.append("discount_type", previewData.discountType);
     formData.append("payment_terms", previewData.paymentTerms);
+    formData.append("payment_type", paymentInfo.type);
+    formData.append("payment_item_no", paymentInfo.item_no);
     formData.append("note", previewData.notes);
     formData.append("sub_total", previewData.subtotal);
     formData.append("discount_cal", previewData.discount);

@@ -16,7 +16,7 @@ const FinancialSettings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
-    paymentMethods.find((p) => p.default)?.id || null
+    paymentMethods.find((p) => p.default)?.item_no || null
   );
   const [formData, setFormData] = useState({
     company_name: null,
@@ -44,18 +44,22 @@ const FinancialSettings = () => {
         tax_type: financeSettingInfo[0]?.tax_type || "",
         tax_country: financeSettingInfo[0]?.tax_country || "",
       });
-      setSelectedPaymentMethod(financeSettingInfo[0]?.pay_method_id || "");
+      setSelectedPaymentMethod(
+        paymentMethodList.find((p) => p.default)?.item_no || null
+      );
       setWithdrawalAmount(financeSettingInfo[0]?.withdrawal_amount || "100");
       setWithdrawalFrequency(
         financeSettingInfo[0]?.withdrawal_frequency || "weekly"
       );
     }
+    // console.log(selectedPaymentMethod);
   }, [paymentMethodList, financeSettingInfo]);
 
   const handleSetDefault = (id) => {
     setPaymentMethods((prev) =>
-      prev.map((method) => ({ ...method, default: method.id === id }))
+      prev.map((method) => ({ ...method, default: method.item_no === id }))
     );
+    setSelectedPaymentMethod(id);
   };
 
   const handleChange = (e) => {
@@ -72,14 +76,30 @@ const FinancialSettings = () => {
   };
 
   const handleSave = async () => {
+    if (paymentMethods.length == 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Enter a payment method",
+      });
+    }
+    let defaultInfo;
+    let paymentData = paymentMethods.filter((item) => item.default == true)[0];
+    if (!paymentData) {
+      defaultInfo = paymentMethods[0];
+    }
+    console.log(paymentData);
     let newData = {
       ...formData,
       withdrawal_amount: withdrawalAmount,
       withdrawal_frequency: withdrawalFrequency,
       auto_withdraw: autoWithdraw,
       user_id: userId,
-      payment_method_id: selectedPaymentMethod,
+      payment_type: paymentData?.type || defaultInfo?.type,
+      payment_item_no: paymentData?.item_no || defaultInfo?.item_no,
     };
+
+    console.log(newData);
 
     let result = await processStoreFinanceSettingInfo(newData);
     if (result) {
@@ -107,7 +127,6 @@ const FinancialSettings = () => {
       <p className="text-gray-500">
         Manage your payment methods, billing information and tax settings
       </p>
-      {console.log(formData)}
       {/* Payment Methods */}
       <div className="grid md:grid-cols-2 gap-4 mb-4">
         <div className="bg-white p-4 rounded-lg shadow space-y-4">
@@ -115,13 +134,13 @@ const FinancialSettings = () => {
           <div className="space-y-2">
             {paymentMethods.map((method) => (
               <div
-                key={method.id}
+                key={method.item_no}
                 className={`border p-4 rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-50 ${
-                  selectedPaymentMethod === method.id
+                  selectedPaymentMethod === method.item_no
                     ? "ring-2 ring-green-500"
                     : ""
                 }`}
-                onClick={() => handleSetDefault(method.id)}
+                onClick={() => handleSetDefault(method.item_no)}
               >
                 <div>
                   <p className="font-medium">{method.type}</p>
@@ -269,7 +288,7 @@ const FinancialSettings = () => {
             value={selectedPaymentMethod}
           >
             {paymentMethods.map((method) => (
-              <option key={method.id} value={method.id}>
+              <option key={method.item_no} value={method.item_no}>
                 {method.type} - {method.details}
               </option>
             ))}

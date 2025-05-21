@@ -21,6 +21,7 @@ import SkillsApiDataProvider from "./app/context/skills/skillsContextApi";
 import TestimonialApiDataProvider from "./app/context/testimonial/testimonialContextApi";
 import ProfileApiDataProvider from "./app/context/user-profile/profileContextApi";
 import WalletApiDataProvider from "./app/context/wallet/walletContextApi";
+import TransactionApiDataProvider from "./app/context/transaction/transactionContextApi";
 
 import { Toaster } from "react-hot-toast";
 import { useLocation } from "react-router-dom";
@@ -64,10 +65,12 @@ function App() {
                                           <ProfileApiDataProvider>
                                             <FreelanceApiDataProvider>
                                               <WalletApiDataProvider>
-                                                {isLoading && <Loader />}
-                                                <Toaster />
-                                                <ScrollToTop />
-                                                <RootLayout />
+                                                <TransactionApiDataProvider>
+                                                  {isLoading && <Loader />}
+                                                  <Toaster />
+                                                  <ScrollToTop />
+                                                  <RootLayout />
+                                                </TransactionApiDataProvider>
                                               </WalletApiDataProvider>
                                             </FreelanceApiDataProvider>
                                           </ProfileApiDataProvider>

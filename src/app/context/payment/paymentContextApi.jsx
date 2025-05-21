@@ -17,6 +17,7 @@ export const PaymentApiData = createContext();
 const PaymentApiDataProvider = (props) => {
   const [financeSettingInfo, setFinanceSettingInfo] = useState([]);
   const [paymentMethodList, setPaymentMethodList] = useState([]);
+  const [filterCompanyNameList, setFilterCompanyNameList] = useState([]);
   const [billingList, setBillingList] = useState([]);
   const [billingData, setBillingData] = useState({
     pending_total: 0,
@@ -56,6 +57,7 @@ const PaymentApiDataProvider = (props) => {
   };
 
   const processGetInvoiceOfUser = async () => {
+    let filterData = ["All Client"];
     let response = await getInvoiceOfUser();
     if (response) {
       setBillingList(response.data);
@@ -65,7 +67,9 @@ const PaymentApiDataProvider = (props) => {
         overdue_total: response.summary.percent_of_overdue_total,
         total_amount: response.summary.total_from_months,
       });
-      console.log(response.data);
+      response.data.map((item) => filterData.push(item.company_name));
+      setFilterCompanyNameList(filterData);
+      //console.log(response.data);
     } else {
       return false;
     }
@@ -74,7 +78,7 @@ const PaymentApiDataProvider = (props) => {
   const processGetInvoiceDetails = async (id) => {
     let response = await getInvoiceDetails(id);
     if (response) {
-      console.log(response.data.data);
+      //console.log(response.data.data);
       setInvoiceDetailInfo(response.data);
     } else {
       return false;
@@ -181,7 +185,7 @@ const PaymentApiDataProvider = (props) => {
     try {
       let responseOnDeleteInvoice = await deleteInvoice(id);
       if (responseOnDeleteInvoice) {
-        console.log(responseOnDeleteInvoice);
+        //console.log(responseOnDeleteInvoice);
         return responseOnDeleteInvoice.data;
       }
     } catch (err) {
@@ -219,6 +223,7 @@ const PaymentApiDataProvider = (props) => {
         financeSettingInfo,
         setFinanceSettingInfo,
         paymentMethodList,
+        filterCompanyNameList,
         previewData,
         setPreviewData,
         processGetInvoiceOfUser,

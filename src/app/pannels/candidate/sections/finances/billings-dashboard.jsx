@@ -2,76 +2,22 @@ import React, { useState, useEffect, useContext } from "react";
 import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
 import { CheckCircle, Clock, CalendarCheck2, FileText } from "lucide-react";
 
-// const invoices = [
-//   {
-//     number: "INV-2025-0042",
-//     client: "Acme Corporation",
-//     issueDate: "May 1, 2025",
-//     dueDate: "May 15, 2025",
-//     amount: "$3,500.00",
-//     status: "Paid",
-//   },
-//   {
-//     number: "INV-2025-0041",
-//     client: "Globex Industries",
-//     issueDate: "Apr 28, 2025",
-//     dueDate: "May 12, 2025",
-//     amount: "$2,800.00",
-//     status: "Paid",
-//   },
-//   {
-//     number: "INV-2025-0040",
-//     client: "TechNova Solutions",
-//     issueDate: "Apr 25, 2025",
-//     dueDate: "May 9, 2025",
-//     amount: "$4,200.00",
-//     status: "Pending",
-//   },
-//   {
-//     number: "INV-2025-0039",
-//     client: "Quantum Dynamics",
-//     issueDate: "Apr 20, 2025",
-//     dueDate: "May 4, 2025",
-//     amount: "$2,150.00",
-//     status: "Paid",
-//   },
-//   {
-//     number: "INV-2025-0038",
-//     client: "Acme Corporation",
-//     issueDate: "Apr 15, 2025",
-//     dueDate: "Apr 29, 2025",
-//     amount: "$3,500.00",
-//     status: "Overdue",
-//   },
-//   {
-//     number: "INV-2025-0037",
-//     client: "Globex Industries",
-//     issueDate: "Apr 10, 2025",
-//     dueDate: "Apr 24, 2025",
-//     amount: "$1,800.00",
-//     status: "Pending",
-//   },
-//   {
-//     number: "INV-2025-0036",
-//     client: "TechNova Solutions",
-//     issueDate: "Apr 5, 2025",
-//     dueDate: "Apr 19, 2025",
-//     amount: "$2,300.00",
-//     status: "Rejected",
-//   },
-// ];
-
 const statusColor = {
   Paid: "bg-green-100 text-green-700",
   Pending: "bg-yellow-100 text-yellow-700",
   Overdue: "bg-red-100 text-red-700",
   Rejected: "bg-purple-100 text-purple-700",
+  sent: "bg-emerald-100 text-emerald-700",
   draft: "bg-orange-100 text-orange-700",
 };
 
 export default function BillingDashboard() {
-  const { processGetInvoiceOfUser, billingData, billingList } =
-    useContext(PaymentApiData);
+  const {
+    processGetInvoiceOfUser,
+    billingData,
+    billingList,
+    filterCompanyNameList,
+  } = useContext(PaymentApiData);
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [clientFilter, setClientFilter] = useState("All Clients");
   const [searchTerm, setSearchTerm] = useState("");
@@ -207,6 +153,8 @@ export default function BillingDashboard() {
             <option>Pending</option>
             <option>Overdue</option>
             <option>Rejected</option>
+            <option>sent</option>
+            <option>draft</option>
           </select>
           <select
             value={clientFilter}
@@ -216,11 +164,9 @@ export default function BillingDashboard() {
             }}
             className="w-full border-gray-300 rounded px-3 py-2"
           >
-            <option>All Clients</option>
-            <option>Acme Corporation</option>
-            <option>Globex Industries</option>
-            <option>TechNova Solutions</option>
-            <option>Quantum Dynamics</option>
+            {filterCompanyNameList.map((item, index) => (
+              <option key={index}>{item}</option>
+            ))}
           </select>
           <input
             type="text"

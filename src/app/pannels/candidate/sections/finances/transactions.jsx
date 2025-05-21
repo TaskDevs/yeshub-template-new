@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,6 +8,7 @@ import {
   Printer,
   XCircle,
 } from "lucide-react";
+import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 
 const transactionsData = [
   {
@@ -64,6 +65,11 @@ const TransactionsPage = () => {
       .includes(searchTerm.toLowerCase());
     return dateMatch && searchMatch;
   });
+  const { processGetTransactionOfUser } = useContext(TransactionApiData);
+
+  useEffect(() => {
+    processGetTransactionOfUser();
+  }, []);
 
   const pageCount = Math.ceil(filteredTransactions.length / itemsPerPage);
   const paginatedTransactions = filteredTransactions.slice(
@@ -126,26 +132,25 @@ const TransactionsPage = () => {
     if (openActionIndex !== index) return null;
     return (
       <div className="relative">
-  <div className="absolute right-0 mt-2 w-64 max-w-xs bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-    <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-      <FileText className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
-      <span className="truncate">View Details</span>
-    </button>
-    <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-      <Download className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
-      <span className="truncate">Download Receipt</span>
-    </button>
-    <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-      <Printer className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
-      <span className="truncate">Print</span>
-    </button>
-    <button className="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-      <XCircle className="w-5 h-5 mr-3 shrink-0 text-red-500" />
-      <span className="truncate">Cancel</span>
-    </button>
-  </div>
-</div>
-
+        <div className="absolute right-0 mt-2 w-64 max-w-xs bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <FileText className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
+            <span className="truncate">View Details</span>
+          </button>
+          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <Download className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
+            <span className="truncate">Download Receipt</span>
+          </button>
+          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <Printer className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
+            <span className="truncate">Print</span>
+          </button>
+          <button className="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+            <XCircle className="w-5 h-5 mr-3 shrink-0 text-red-500" />
+            <span className="truncate">Cancel</span>
+          </button>
+        </div>
+      </div>
     );
   };
 

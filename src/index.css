@@ -312,7 +312,7 @@
 /* freelancer talented page*/
 
 /* Container with Sidebar and Main Content */
-.container {
+.containers {
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: 20px;
@@ -445,7 +445,7 @@
 
 /* Responsive Behavior */
 @media (max-width: 768px) {
-  .container {
+  .containers {
     grid-template-columns: 1fr;
   }
 
@@ -463,7 +463,7 @@
 
 /* freelancer details */
 
-.container {
+.containers {
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: 20px;

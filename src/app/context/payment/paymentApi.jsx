@@ -59,12 +59,7 @@ export const editInvoice = async (id, data) => {
   try {
     let responseOnEditInvoice = await axios.put(
       `${REACT_BASE_URL}edit-invoice?invoiceId=${id}`,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
+      data
     );
     if (responseOnEditInvoice.status == 200) {
       return responseOnEditInvoice;
@@ -80,7 +75,7 @@ export const editInvoice = async (id, data) => {
 export const deleteInvoice = async (id) => {
   try {
     let responseOnDeleteInvoice = await axios.delete(
-      `${REACT_BASE_URL}delete-invoice?invoiceId=${id}`
+      `${REACT_BASE_URL}delete-invoice?id=${id}`
     );
     if (responseOnDeleteInvoice.status == 200) {
       return responseOnDeleteInvoice;

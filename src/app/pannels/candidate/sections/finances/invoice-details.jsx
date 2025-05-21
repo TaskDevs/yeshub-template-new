@@ -3,13 +3,12 @@ import { useParams } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
-import { toast } from "react-toastify";
 import ShareInvoiceModal from "./shareInvoreModal";
 import Swal from "sweetalert2";
 
 const InvoiceDetailsPage = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const { processGetInvoiceDetails, invoiceDetailInfo } =
+  const { processGetInvoiceDetails, invoiceDetailInfo, processDeleteInvoice } =
     useContext(PaymentApiData);
 
   const { id } = useParams();
@@ -23,10 +22,39 @@ const InvoiceDetailsPage = () => {
     window.location.href = path;
   };
 
-  const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this invoice?")) {
-      toast.success("Invoice deleted successfully.");
+  const handleDelete = async () => {
+    if (invoiceDetailInfo?.invoice?.status == "sent") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops Not Allowed",
+        text: "Sent invoice cannot be deleted",
+      });
+      return false;
     }
+
+    Swal.fire({
+      title: "Do you want to delete the invoice?",
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        let responseOnDelete = await processDeleteInvoice(id);
+
+        if (responseOnDelete?.status == "success") {
+          Swal.fire({
+            title: "Delete Successful!",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false,
+          }).then(() => {
+            naviateTo("/dashboard-candidate/billings");
+          });
+        } else {
+          Swal.fire("Delete not successful", "", "error");
+        }
+      }
+    });
   };
 
   const handleDownloadPDF = async () => {
@@ -71,7 +99,6 @@ const InvoiceDetailsPage = () => {
       tax_cal: parseFloat(invoiceDetailInfo?.invoice?.tax_cal),
       status: "edit",
     };
-    console.log(newData);
     localStorage.setItem("invoice_preview", JSON.stringify(newData));
     naviateTo("/dashboard-candidate/create-invoice");
   };
@@ -85,7 +112,10 @@ const InvoiceDetailsPage = () => {
       <div className="mb-6">
         {/* Top Row */}
         <div className="flex flex-wrap justify-between items-center mb-4">
-          <button className="text-sm text-gray-600 hover:underline">
+          <button
+            className="text-sm text-gray-600 hover:underline"
+            onClick={() => naviateTo("/dashboard-candidate/billings")}
+          >
             &larr; Back to Invoices
           </button>
 

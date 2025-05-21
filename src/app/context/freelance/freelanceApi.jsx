@@ -4,6 +4,7 @@ import {
   SUCCESS_STATUS,
   REACT_BASE_URL,
   LOCALHOST_BACKEND,
+  LIST_ON_PAGES,
 } from "../../../globals/constants";
 
 // ADD Freelance
@@ -42,13 +43,15 @@ export const searchFreelance = async () => {
 };
 
 // LIST Freelance
-export const freelanceList = async () => {
+export const getFreelanceList = async (pageNo) => {
   try {
-    let responseOnFreelanceList = await axios.get({
+    let responseOnFreelanceList = await axios.get(
       /**Add Get Employer API URL here like /api/getEmployer?page=${pageNo}&perPage=${LIST_ON_PAGES}**/
-    });
-
-    if (responseOnFreelanceList.status === SUCCESS_STATUS) {
+      `${REACT_BASE_URL}get-all-users?page=${
+        pageNo || "1"
+      }&perPage=${LIST_ON_PAGES}`
+    );
+    if (responseOnFreelanceList.status === 200) {
       return responseOnFreelanceList.data;
     } else {
       return false;

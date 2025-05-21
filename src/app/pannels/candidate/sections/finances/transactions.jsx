@@ -10,53 +10,54 @@ import {
 } from "lucide-react";
 import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 
-const transactionsData = [
-  {
-    date: "2025-05-12",
-    description: "Payment from TechCorp Solutions",
-    type: "Payment",
-    amount: "+$2,450.00",
-    status: "Completed",
-  },
-  {
-    date: "2025-05-10",
-    description: "Withdrawal to Bank Account",
-    type: "Withdrawal",
-    amount: "-$1,800.00",
-    status: "Pending",
-  },
-  {
-    date: "2025-05-08",
-    description: "Payment from DataFlow Inc",
-    type: "Payment",
-    amount: "+$3,200.00",
-    status: "Completed",
-  },
-  {
-    date: "2025-05-05",
-    description: "Service Fee",
-    type: "Fee",
-    amount: "-$320.00",
-    status: "Completed",
-  },
-  // Add more entries to demonstrate pagination
-  ...Array.from({ length: 20 }, (_, i) => ({
-    date: "2025-04-20",
-    description: `Test Transaction ${i + 1}`,
-    type: "Fee",
-    amount: "-$100.00",
-    status: "Completed",
-  })),
-];
+// const transactionsData = [
+//   {
+//     date: "2025-05-12",
+//     description: "Payment from TechCorp Solutions",
+//     type: "Payment",
+//     amount: "+$2,450.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "2025-05-10",
+//     description: "Withdrawal to Bank Account",
+//     type: "Withdrawal",
+//     amount: "-$1,800.00",
+//     status: "Pending",
+//   },
+//   {
+//     date: "2025-05-08",
+//     description: "Payment from DataFlow Inc",
+//     type: "Payment",
+//     amount: "+$3,200.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "2025-05-05",
+//     description: "Service Fee",
+//     type: "Fee",
+//     amount: "-$320.00",
+//     status: "Completed",
+//   },
+//   // Add more entries to demonstrate pagination
+//   ...Array.from({ length: 20 }, (_, i) => ({
+//     date: "2025-04-20",
+//     description: `Test Transaction ${i + 1}`,
+//     type: "Fee",
+//     amount: "-$100.00",
+//     status: "Completed",
+//   })),
+// ];
 
 const TransactionsPage = () => {
+  const { transactionList } = useContext(TransactionApiData);
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
   const [openActionIndex, setOpenActionIndex] = useState(null);
-  const filteredTransactions = transactionsData.filter((t) => {
+  const filteredTransactions = transactionList.filter((t) => {
     const dateMatch =
       (!startDate || new Date(t.date) >= new Date(startDate)) &&
       (!endDate || new Date(t.date) <= new Date(endDate));

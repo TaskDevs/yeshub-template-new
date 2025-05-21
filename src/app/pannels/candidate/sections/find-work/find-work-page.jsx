@@ -18,6 +18,8 @@ import styles from "./find-work.module.css";
 import MobileFindSavedWork from "./mobile-find-work";
 
 function FindWorkPage() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
   const { processGetAllJob, jobListData, processApplyForJob } =
@@ -41,7 +43,8 @@ function FindWorkPage() {
   console.log("jobListData", jobListData);
 
   useEffect(() => {
-    processGetAllJob(1, userId);
+    setIsLoading(true);
+    processGetAllJob(1, userId).finally(() => setIsLoading(false));
   }, []);
 
   useEffect(() => {
@@ -211,31 +214,52 @@ function FindWorkPage() {
 
                 {/*job cards */}
                 <div className="grid grid-cols-1 gap-4 w-full">
-                  {filterJobListData.map((job) => (
-                    <CanJobCard
-                      key={job.id}
-                      id={job?.id}
-                      role={job?.job_title}
-                      proposal={job?.count_proposal}
-                      ratings={job?.employer.company_rating}
-                      reviews={job?.employer.company_review}
-                      companyName={job?.job_category}
-                      description={job?.description}
-                      skills={job?.skills}
-                      isMobile={false}
-                      newTag={
-                        readableDate(job.start_date) ===
-                          new Date().toDateString() && "new"
-                      }
-                      action={() =>
-                        handlePrepareSubmit(job.id, job.employer_id)
-                      }
-                      numberOfProposals="23"
-                      salaryRange={job.fixed_rate || job.budget}
-                      jobType={job?.job_type || ""}
-                    />
-                  ))}
-                  {filterJobListData.length == 0 && (
+                  {isLoading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  {[1, 2, 3].map((_, index) => (
+    <div key={index} className="p-4 border rounded shadow-sm animate-pulse text-center text-gray-500">
+      <div className="w-full h-4 bg-gray-100 rounded mb-3"></div>
+      <div className="flex flex-wrap gap-2 justify-center mb-3">
+        {[1, 2, 3].map((_, i) => (
+          <span key={i} className="w-12 h-4 bg-gray-100 rounded-full"></span>
+        ))}
+      </div>
+      <div className="w-1/4 h-3 bg-gray-100 rounded mb-4 mx-auto"></div>
+      <div className="flex items-center justify-between gap-2">
+        <div className="w-24 h-6 bg-gray-200 rounded-md"></div>
+        <div className="w-20 h-6 bg-gray-200 rounded-md"></div>
+        <div className="w-8 h-6 bg-gray-200 rounded-md"></div>
+      </div>
+    </div>
+  ))}
+</div>
+
+                  ) : filterJobListData.length > 0 ? (
+                    filterJobListData.map((job) => (
+                      <CanJobCard
+                        key={job.id}
+                        id={job?.id}
+                        role={job?.job_title}
+                        proposal={job?.count_proposal}
+                        ratings={job?.employer.company_rating}
+                        reviews={job?.employer.company_review}
+                        companyName={job?.job_category}
+                        description={job?.description}
+                        skills={job?.skills}
+                        isMobile={false}
+                        newTag={
+                          readableDate(job.start_date) ===
+                            new Date().toDateString() && "new"
+                        }
+                        action={() =>
+                          handlePrepareSubmit(job.id, job.employer_id)
+                        }
+                        numberOfProposals="23"
+                        salaryRange={job.fixed_rate || job.budget}
+                        jobType={job?.job_type || ""}
+                      />
+                    ))
+                  ) : (
                     <p className="text-gray-500">No jobs available</p>
                   )}
                 </div>

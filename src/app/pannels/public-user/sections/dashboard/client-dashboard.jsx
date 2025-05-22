@@ -26,8 +26,9 @@ function ClientDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadScript("js/custom.js");
-  });
+  loadScript("js/custom.js");
+}, []);
+
 
   useEffect(() => {
     processGetEmployerStats();
@@ -124,7 +125,6 @@ function ClientDashboard() {
   const handleSetForEdit = (id) => {
     setIsEdit(true);
     let editData = employerStats.active_jobs.find((item) => item.id === id);
-    console.log(editData);
     setItemsToEdit(editData);
     setModalOpen(true);
   };

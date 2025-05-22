@@ -64,10 +64,10 @@ import VerifyResetOtp from "../app/pannels/public-user/components/pages/verify-r
 import LinkedInCallback from "../app/pannels/public-user/components/pages/LinkedinCallback";
 import WelcomePopup from "../app/common/popups/welcome-popup";
 import NewAuth from "../app/pannels/public-user/components/pages/new-auth";
-import ClientProfile from "../app/pannels/public-user/sections/profile/client-profile";
+// import ClientProfile from "../app/pannels/public-user/sections/profile/client-profile";
 import ClientFindTalent from "../app/pannels/public-user/sections/find-talent/ClientFindTalent";
 import Proposals from "../app/pannels/public-user/sections/proposals/proposals";
-import ClientDashboard from "../app/pannels/public-user/sections/dashboard/client-dashboard";
+// import ClientDashboard from "../app/pannels/public-user/sections/dashboard/client-dashboard";
 import StaffList from "../app/pannels/employer/components/staff/staff-list";
 import TaskManagement from "../app/pannels/employer/components/task/task-management";
 import TeamList from "../app/pannels/employer/components/team/team-list";
@@ -75,6 +75,7 @@ import MessageDashboard from "../app/pannels/public-user/components/messages/mes
 import FreelancerSearch from "../app/pannels/public-user/sections/find-talent/new-find-talent";
 import FreelancerDetail from "../app/pannels/public-user/sections/find-talent/freelancer-details";
 import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
+
 
 function PublicUserRoutes() {
   return (
@@ -151,7 +152,7 @@ function PublicUserRoutes() {
         />
         <Route path={publicUser.pages.AUTH} element={<NewAuth />} />
         <Route path={publicUser.pages.WELCOME} element={<WelcomePopup />} />
-        <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} />
+        {/* <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} /> */}
         <Route
           path={publicUser.pages.FIND_TALENT}
           element={<ClientFindTalent />}
@@ -159,10 +160,11 @@ function PublicUserRoutes() {
         <Route path={publicUser.pages.New_FIND_TALENT} element={<FreelancerSearch/>}/>
         <Route path={publicUser.pages.New_FIND_TALENT_ID} element={<FreelancerDetail/>}/>
         <Route path={publicUser.pages.PROPOSALS} element={<Proposals />} />
-        <Route
+        {/* <Route
           path={publicUser.pages.DASHBOARD}
           element={<ClientDashboard />}
-        />
+        /> */}
+       
         <Route path={publicUser.pages.STAFF} element={<StaffList />} />
         <Route path={publicUser.pages.TEAM} element={<TeamList />} />
         <Route path={publicUser.pages.MESSAGE} element={<MessageDashboard />} />

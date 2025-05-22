@@ -11,6 +11,8 @@ import ClientOnboard from "../app/pannels/public-user/onboard/clientOnboard/clie
 import CreateAccount from "../app/pannels/public-user/onboard/createAccount/createAccount";
 import Offers from "../app/pannels/candidate/sections/offers/offers";
 import ClientProfileView from "../app/pannels/public-user/sections/profile/client-profile-view";
+// import EmpCompanyProfileView from "../app/pannels/employer/components/emp-profile-view";
+import ClientLout from "../layouts/client-layout";
 
 function AppRoutes() {
   return (
@@ -48,6 +50,9 @@ function AppRoutes() {
       </Route>
       <Route element={<ProtectedRoute allowedRoles={["candidate"]} />}>
         <Route path={base.CANDIDATE_PRE + "/*"} element={<CandidateLayout />} />
+      </Route>
+      <Route element = {<ProtectedRoute allowedRoles={["client"]} />}>
+        <Route path={base.CLIENT_PRE + "/*"} element={<ClientLout />} />  
       </Route>
     </Routes>
   );

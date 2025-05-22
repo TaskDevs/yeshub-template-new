@@ -10,7 +10,7 @@ import { SearchInput } from "../search-box";
 import { IoSearch } from "react-icons/io5";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { base, candidate } from "../../../globals/route-names";
+import { base, candidate, client } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { Avatar } from "@mui/material";
 import { logout } from "../../context/auth/authApi";
@@ -82,37 +82,154 @@ export const Header = ({ isDashboard = true }) => {
     console.log("Searching for:", value);
   };
 
+  // const navItems = [
+  //   {
+  //     id: "home",
+  //     label: "Home",
+  //     selected: true,
+  //     to: "/",
+  //   },
+  //     {
+  //     id: "Client-home",
+  //     label: "Dashboard",
+  //     selected: true,
+  //     to: `${client.DASHBOARD}`,
+  //   },
+  //   { id: "Find-talent", label: "Find Talent", to: "/freelancers" },
+  //    { id: "manage-jobs", label: "Manage Jobs", to:  `${base.CLIENT_PRE}${client.NEW_MANAGE_JOBS}` },
+  //   {
+  //     id: "public-find-work",
+  //     label: "Find Work",
+  //     to: "/dashboard-candidate/find-job",
+  //   },
+  //   {
+  //     id: "my-home",
+  //     label: "Dashboard",
+  //     menu: null,
+  //     selected: true,
+  //     to: `${base.CANDIDATE_PRE}`,
+  //   },
+  //   {
+  //     id: "find-work",
+  //     label: "Find Jobs",
+  //     to: "/dashboard-candidate/find-work",
+  //     menu: {
+  //       // title: "Find Work",
+  //       items: [
+  //         {
+  //           id: "find-work-main",
+  //           label: "Find Jobs",
+  //           selected: true,
+  //           to: "/dashboard-candidate/find-work",
+  //         },
+  //         {
+  //           id: "saved-jobs",
+  //           label: "Saved Jobs",
+  //           to: "/dashboard-candidate/saved-jobs",
+  //         },
+  //         {
+  //           id: "proposals-offers",
+  //           label: "Proposals & Offers",
+  //           to: "candidate-offers",
+  //         },
+  //       ],
+  //     },
+  //   },
+  //   {
+  //     id: "deliver-work",
+  //     label: "Deliver Work",
+  //     to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
+  //     menu: {
+  //       // title: "Deliver Work",
+  //       items: [
+  //         {
+  //           id: "active-contracts",
+  //           label: "Active Contracts",
+  //           to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
+  //           selected: true,
+  //         },
+  //         {
+  //           id: "contract-history",
+  //           label: "Contract History",
+  //           to: `${base.CANDIDATE_PRE}${candidate.Contracts_History}`,
+  //         },
+  //       ],
+  //     },
+  //   },
+  //   { id: "assessment-training", label: "Assessment & Training", menu: null },
+  //   { id: "why-yeshub", label: "Why YesHub", menu: null },
+
+  //   {
+  //     id: "manage-finances",
+  //     label: "Manage Finances",
+  //     menu: {
+  //       // title: "Manage Finances",
+  //       items: [
+  //         {
+  //           id: "financial-overview",
+  //           label: "Financial Overview",
+  //           to: `${base.CANDIDATE_PRE}${candidate.FINANCE}`,
+  //           selected: true,
+  //         },
+  //         {
+  //           id: "billings-earnings",
+  //           label: "Billings & Earnings",
+  //           to: `${base.CANDIDATE_PRE}${candidate.BILLING}`,
+  //         },
+  //         {
+  //           id: "transactions",
+  //           label: "Transactions",
+  //           to: `${base.CANDIDATE_PRE}${candidate.TRANSACTIONS}`,
+  //         },
+  //       ],
+  //     },
+  //   },
+  //   { id: "messages", label: "Messages", to: "/messages" },
+  // ];
+
+  // Conditional rendering of nav items based on page type
+
   const navItems = [
     {
-      id: "home",
-      label: "Home",
-      selected: true,
-      to: role == "client" ? "/dashboard-client" : "/dashboard-candidate",
+      id: "client-dashboard",
+      label: "Client Dashboard",
+      to: `${base.CLIENT_PRE.replace(/\/$/, "")}/${client.DASHBOARD.replace(
+        /^\//,
+        ""
+      )}`,
     },
-    { id: "Find-talent", label: "Find Talent", to: "/freelancers" },
+    {
+      id: "find-talent",
+      label: "Find Talent",
+      to: "/freelancers",
+    },
+    {
+      id: "manage-jobs",
+      label: "Manage Jobs",
+      to: `${base.CLIENT_PRE.replace(
+        /\/$/,
+        ""
+      )}/${client.NEW_MANAGE_JOBS.replace(/^\//, "")}`,
+    },
     {
       id: "public-find-work",
       label: "Find Work",
       to: "/dashboard-candidate/find-job",
     },
     {
-      id: "my-home",
-      label: "Dashboard",
-      menu: null,
-      selected: true,
-      to: "/dashboard-candidate",
+      id: "candidate-dashboard",
+      label: "Candidate Dashboard",
+      to: `${base.CANDIDATE_PRE}`,
     },
     {
       id: "find-work",
       label: "Find Jobs",
       to: "/dashboard-candidate/find-work",
       menu: {
-        // title: "Find Work",
         items: [
           {
             id: "find-work-main",
             label: "Find Jobs",
-            selected: true,
             to: "/dashboard-candidate/find-work",
           },
           {
@@ -123,7 +240,7 @@ export const Header = ({ isDashboard = true }) => {
           {
             id: "proposals-offers",
             label: "Proposals & Offers",
-            to: "candidate-offers",
+            to: "/dashboard-candidate/candidate-offers",
           },
         ],
       },
@@ -131,87 +248,114 @@ export const Header = ({ isDashboard = true }) => {
     {
       id: "deliver-work",
       label: "Deliver Work",
-      to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
+      to: `${base.CANDIDATE_PRE.replace(
+        /\/$/,
+        ""
+      )}/${candidate.Active_Contracts.replace(/^\//, "")}`,
       menu: {
-        // title: "Deliver Work",
         items: [
           {
             id: "active-contracts",
             label: "Active Contracts",
-            to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
-            selected: true,
+            to: `${base.CANDIDATE_PRE.replace(
+              /\/$/,
+              ""
+            )}/${candidate.Active_Contracts.replace(/^\//, "")}`,
           },
           {
             id: "contract-history",
             label: "Contract History",
-            to: `${base.CANDIDATE_PRE}${candidate.Contracts_History}`,
+            to: `${base.CANDIDATE_PRE.replace(
+              /\/$/,
+              ""
+            )}/${candidate.Contracts_History.replace(/^\//, "")}`,
           },
         ],
       },
     },
-    { id: "assessment-training", label: "Assessment & Training", menu: null },
-    { id: "why-yeshub", label: "Why YesHub", menu: null },
-
+    {
+      id: "assessment-training",
+      label: "Assessment & Training",
+      to: "#",
+    },
+    {
+      id: "why-yeshub",
+      label: "Why YesHub",
+      to: "#",
+    },
     {
       id: "manage-finances",
       label: "Manage Finances",
       menu: {
-        // title: "Manage Finances",
         items: [
           {
             id: "financial-overview",
             label: "Financial Overview",
-            to: `${base.CANDIDATE_PRE}${candidate.FINANCE}`,
-            selected: true,
+            to: `${base.CANDIDATE_PRE.replace(
+              /\/$/,
+              ""
+            )}/${candidate.FINANCE.replace(/^\//, "")}`,
           },
           {
             id: "billings-earnings",
             label: "Billings & Earnings",
-            to: `${base.CANDIDATE_PRE}${candidate.BILLING}`,
+            to: `${base.CANDIDATE_PRE.replace(
+              /\/$/,
+              ""
+            )}/${candidate.BILLING.replace(/^\//, "")}`,
           },
           {
             id: "transactions",
             label: "Transactions",
-            to: `${base.CANDIDATE_PRE}${candidate.TRANSACTIONS}`,
+            to: `${base.CANDIDATE_PRE.replace(
+              /\/$/,
+              ""
+            )}/${candidate.TRANSACTIONS.replace(/^\//, "")}`,
           },
         ],
       },
     },
-    { id: "messages", label: "Messages", to: "/messages" },
+    // {
+    //   id: "messages",
+    //   label: "Messages",
+    //   to: "/messages",
+    // },
   ];
 
-  // Conditional rendering of nav items based on page type
   const getNavItems = () => {
-    let items;
+    const dashboardLabels = [
+      "Client Dashboard",
+      "Candidate Dashboard",
+      "Manage Jobs",
+      "Find Jobs",
+      "Deliver Work",
+      "Manage Finances",
+     
+    ];
 
-    if (isDashboard) {
-      // Show only dashboard-related items
-      items = navItems.filter((item) =>
-        ["Dashboard", "Find Jobs", "Deliver Work", "Manage Finances"].includes(
-          item.label
-        )
-      );
-    } else {
-      // Show only public nav items
-      items = navItems.filter(
-        (item) =>
-          !["My Home", "Find Jobs", "Manage Finances", "Deliver Work"].includes(
-            item.label
-          )
-      );
-    }
+    // Step 1: Filter by dashboard context
+    let items = navItems.filter((item) =>
+      isDashboard
+        ? dashboardLabels.includes(item.label)
+        : !dashboardLabels.includes(item.label)
+    );
 
-    return items.filter((item) => {
+    // Step 2: Filter by role
+    items = items.filter((item) => {
       if (role === "client") {
-        return item.label !== "Find Work";
+        return (
+          item.label !== "Find Jobs" && item.label !== "Candidate Dashboard"
+        );
       }
 
-      if (role === "freelance") {
-        return item.label !== "Team";
+      if (role === "freelancer") {
+        return item.label !== "Client Dashboard" && item.label !== "Manage Jobs"; // future-proof
       }
 
-      return true; // keep everything else
+      return true;
     });
+
+    return items;
   };
 
   const handleNavHover = (item) => {
@@ -252,7 +396,7 @@ export const Header = ({ isDashboard = true }) => {
       return;
     }
     if (!isDashboard && item.id === "find-talent") {
-      navigate("/find-talent");
+      navigate("/freelancers");
       return;
     }
 
@@ -271,7 +415,7 @@ export const Header = ({ isDashboard = true }) => {
     if (role === "freelancer") {
       window.location.href = "/dashboard-candidate/profile"; // full page reload
     } else if (role === "client") {
-      window.location.href = "/profile"; // full page reload
+      window.location.href = `${base.CLIENT_PRE}${client.PROFILE}`; // full page reload
     } else {
       console.warn("Unknown role, redirecting to default profile");
       window.location.href = "/profile"; // fallback
@@ -328,58 +472,51 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const getVisibleNavItems = (role) => {
-    // Normalize helper
     const normalize = (str) => str?.trim().toLowerCase();
 
-    // Unauthenticated user
+    const guestItemIds = [
+      "find-talent",
+      "public-find-work",
+      "assessment-training",
+      "why-yeshub",
+    ];
+    const freelancerItemIds = [
+      "candidate-dashboard",
+      "find-work",
+      "deliver-work",
+      "manage-finances",
+      "messages",
+    ];
+    const clientItemIds = [
+      "client-dashboard",
+      "find-talent",
+      "manage-jobs",
+      "assessment-training",
+      "why-yeshub",
+    ];
+
+    const getFilteredItems = (allowedIds) =>
+      navItems.filter((item) => allowedIds.includes(normalize(item.id)));
+
     if (!role || !token) {
-      const guestItemIds = [
-        "home",
-        "find-talent",
-        "public-find-work",
-        "assessment-training",
-        "why-yeshub",
-      ];
-
-      return navItems.filter((item) =>
-        guestItemIds.includes(normalize(item.id))
-      );
+      console.log("Guest user detected");
+      return getFilteredItems(guestItemIds);
     }
 
-    // Freelancer
-    if (token && normalize(role) === "freelancer") {
-      const freelancerItemIds = [
-        "my-home",
-        "find-work",
-        "deliver-work",
-        "manage-finances",
-        "messages",
-      ];
-      const visibleItems = navItems.filter((item) =>
-        freelancerItemIds.includes(normalize(item.id))
-      );
+    const normalizedRole = normalize(role);
 
-      console.log(
-        "Filtered freelancer nav items:",
-        visibleItems.map((item) => item.id)
-      );
-      return visibleItems;
+    if (normalizedRole === "freelancer") {
+      console.log("Freelancer user detected");
+      return getFilteredItems(freelancerItemIds);
     }
 
-    // Client
-    if (token && normalize(role) === "client") {
-      const clientItemIds = [
-        "find-talent",
-        "assessment-training",
-        "why-yeshub",
-      ];
-
-      return navItems.filter((item) =>
-        clientItemIds.includes(normalize(item.id))
-      );
+    if (normalizedRole === "client") {
+      console.log("Client user detected");
+      return getFilteredItems(clientItemIds);
     }
 
-    return []; // Fallback
+    console.warn("Unhandled role or missing token:", role);
+    return [];
   };
 
   const visibleNavItems = useMemo(

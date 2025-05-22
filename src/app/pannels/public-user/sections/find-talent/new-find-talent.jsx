@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import { MdFavoriteBorder } from "react-icons/md";
 import InviteToJobModal from "./invitation-modal";
 import MessageModal from "./message-modal";
 import { useNavigate } from "react-router-dom";
-
+import { truncateText } from "../../../../../utils/truncateText";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
 const skillsList = [
   "Web Development",
@@ -35,89 +36,91 @@ const locations = [
   "Savannah",
 ];
 
-const freelancersData = [
-  {
-    id: 1,
-    name: "Emm Rodriguez",
-    title: "Full Stack Developer",
-    skills: ["Web Development", "Data Science"],
-    experience: "Expert",
-    hourlyRate: 65,
-    location: "Volta",
-    availableNow: true,
-    rating: 8.9,
-    language: "English",
-  },
-  {
-    id: 2,
-    name: "David Chen",
-    title: "UI/UX Designer",
-    skills: ["UI/UX Design"],
-    experience: "Intermediate",
-    hourlyRate: 75,
-    location: "Central",
-    availableNow: false,
-    rating: 9.2,
-    language: "English",
-  },
-  {
-    id: 3,
-    name: "Sophia Williams",
-    title: "Data Scientist",
-    skills: ["Data Science"],
-    experience: "Expert",
-    hourlyRate: 90,
-    location: "Ashanti",
-    availableNow: true,
-    rating: 8.5,
-    language: "French",
-  },
-  {
-    id: 4,
-    name: "Michael Johnson",
-    title: "Marketing Specialist",
-    skills: ["Digital Marketing"],
-    experience: "Intermediate",
-    hourlyRate: 55,
-    location: "Sydney, Australia",
-    availableNow: true,
-    rating: 7.5,
-    language: "English",
-  },
-  {
-    id: 5,
-    name: "Olivia Martinez",
-    title: "SEO Specialist",
-    skills: ["Digital Marketing"],
-    experience: "Entry Level",
-    hourlyRate: 45,
-    location: "Barcelona, Spain",
-    availableNow: false,
-    rating: 6.8,
-    language: "Spanish",
-  },
-  {
-    id: 6,
-    name: "James Wilson",
-    title: "Mobile App Developer",
-    skills: ["Mobile Development"],
-    experience: "Expert",
-    hourlyRate: 70,
-    location: "Berlin, Germany",
-    availableNow: true,
-    rating: 8.6,
-    language: "German",
-  },
-];
+// const freelancersData = [
+//   {
+//     id: 1,
+//     name: "Emm Rodriguez",
+//     title: "Full Stack Developer",
+//     skills: ["Web Development", "Data Science"],
+//     experience: "Expert",
+//     hourlyRate: 65,
+//     location: "Volta",
+//     availableNow: true,
+//     rating: 8.9,
+//     language: "English",
+//   },
+//   {
+//     id: 2,
+//     name: "David Chen",
+//     title: "UI/UX Designer",
+//     skills: ["UI/UX Design"],
+//     experience: "Intermediate",
+//     hourlyRate: 75,
+//     location: "Central",
+//     availableNow: false,
+//     rating: 9.2,
+//     language: "English",
+//   },
+//   {
+//     id: 3,
+//     name: "Sophia Williams",
+//     title: "Data Scientist",
+//     skills: ["Data Science"],
+//     experience: "Expert",
+//     hourlyRate: 90,
+//     location: "Ashanti",
+//     availableNow: true,
+//     rating: 8.5,
+//     language: "French",
+//   },
+//   {
+//     id: 4,
+//     name: "Michael Johnson",
+//     title: "Marketing Specialist",
+//     skills: ["Digital Marketing"],
+//     experience: "Intermediate",
+//     hourlyRate: 55,
+//     location: "Sydney, Australia",
+//     availableNow: true,
+//     rating: 7.5,
+//     language: "English",
+//   },
+//   {
+//     id: 5,
+//     name: "Olivia Martinez",
+//     title: "SEO Specialist",
+//     skills: ["Digital Marketing"],
+//     experience: "Entry Level",
+//     hourlyRate: 45,
+//     location: "Barcelona, Spain",
+//     availableNow: false,
+//     rating: 6.8,
+//     language: "Spanish",
+//   },
+//   {
+//     id: 6,
+//     name: "James Wilson",
+//     title: "Mobile App Developer",
+//     skills: ["Mobile Development"],
+//     experience: "Expert",
+//     hourlyRate: 70,
+//     location: "Berlin, Germany",
+//     availableNow: true,
+//     rating: 8.6,
+//     language: "German",
+//   },
+// ];
 
 export default function FreelancerSearch() {
+  const { processGetAllFreelance, freelanceList } =
+    useContext(FreelanceApiData);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -131,6 +134,10 @@ export default function FreelancerSearch() {
     rating: "",
     language: "",
   });
+
+  useEffect(() => {
+    processGetAllFreelance();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -178,7 +185,7 @@ export default function FreelancerSearch() {
     });
   };
 
-  const filteredFreelancers = freelancersData.filter((freelancer) => {
+  const filteredFreelancers = freelanceList?.filter((freelancer) => {
     const {
       skills,
       experience,
@@ -191,11 +198,11 @@ export default function FreelancerSearch() {
 
     const matchSkills =
       Array.isArray(skills) && skills.length
-        ? skills.every((skill) => freelancer.skills.includes(skill))
+        ? skills.every((skill) => freelancer?.skills?.includes(skill))
         : true;
 
     const matchExperience = experience
-      ? freelancer.experience === experience
+      ? freelancer.experience == experience
       : true;
 
     const matchMinRate = hourlyRate.min
@@ -214,12 +221,12 @@ export default function FreelancerSearch() {
 
     const matchRating = rating ? freelancer.rating >= parseFloat(rating) : true;
 
-    const matchLanguage = language ? freelancer.language === language : true;
+    const matchLanguage = language ? freelancer.language == language : true;
 
     const matchSearch = searchTerm
-      ? freelancer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        freelancer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        freelancer.skills.some((skill) =>
+      ? freelancer?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+        freelancer?.title?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+        freelancer?.skills?.some((skill) =>
           skill.toLowerCase().includes(searchTerm.toLowerCase())
         )
       : true;
@@ -352,7 +359,7 @@ export default function FreelancerSearch() {
                 <div key={skill} className="items-center mb-1">
                   <input
                     type="checkbox"
-                    checked={filters.skills.includes(skill)}
+                    checked={filters?.skills?.includes(skill)}
                     onChange={() => toggleSkill(skill)}
                   />
                   <label className="ml-2 text-sm">{skill}</label>
@@ -368,7 +375,7 @@ export default function FreelancerSearch() {
                 <input
                   type="radio"
                   name="experience"
-                  checked={filters.experience === level}
+                  checked={filters.experience == level}
                   onChange={() => handleFilterChange("experience", level)}
                 />
                 <label className="ml-2 text-sm">{level}</label>
@@ -445,7 +452,7 @@ export default function FreelancerSearch() {
                 <input
                   type="radio"
                   name="language"
-                  checked={filters.language === lang}
+                  checked={filters.language == lang}
                   onChange={() => handleFilterChange("language", lang)}
                 />
                 <label className="ml-2 text-sm">{lang}</label>
@@ -508,13 +515,17 @@ export default function FreelancerSearch() {
                   <div
                     key={freelancer.id}
                     className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
-                    onClick={()=>navigate('/freelancers/1')}
+                    onClick={() => navigate("/freelancers/1")}
                   >
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 bg-gray-300 rounded-full">
                         <Avatar
                           alt=""
-                          src="https://placehold.co/400"
+                          src={
+                            freelancer.avatar
+                              ? freelancer.avatar
+                              : "https://placehold.co/400"
+                          }
                           className="w-12 h-12"
                         />
                       </div>
@@ -541,11 +552,11 @@ export default function FreelancerSearch() {
                     </div>
 
                     <div className="text-sm text-gray-600 mb-3">
-                      Experienced full stack dev with 8+ years in scalable apps.
+                      {truncateText(freelancer.bio)}
                     </div>
 
                     <div className="flex flex-wrap gap-2 mb-3">
-                      {freelancer.skills.map((skill, idx) => (
+                      {freelancer.skills?.map((skill, idx) => (
                         <span
                           key={idx}
                           className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"
@@ -626,12 +637,9 @@ export default function FreelancerSearch() {
         </div>
       </div>
       {/* message modal */}
-     
-        <MessageModal
-         isOpen={isOpen} 
-         onClose={() => setIsOpen(false)}
-          />
-    
+
+      <MessageModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+
       {/* invitation */}
       <InviteToJobModal
         isOpen={isModalOpen}

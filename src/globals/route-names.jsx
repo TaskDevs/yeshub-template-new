@@ -2,6 +2,7 @@ export const base = {
   PUBLIC_PRE: "",
   CANDIDATE_PRE: "/dashboard-candidate",
   EMPLOYER_PRE: "/dashboard-employer",
+  CLIENT_PRE: "/dashboard-client",
 };
 
 export const publicUser = {
@@ -63,12 +64,11 @@ export const publicUser = {
     LINKEDINCALLBACK: "/linkedin/auth/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
-    PROFILE: "/profile",
+   
    
     FIND_TALENT: "/find-talent",
     New_FIND_TALENT:'/freelancers',
     New_FIND_TALENT_ID:'/freelancers/:id',
-    DASHBOARD: "/dashboard-client",
     PROPOSALS: "/client-proposals",
 
     
@@ -136,6 +136,12 @@ export const candidate = {
 
 };
 
+export const client = {
+  DASHBOARD: "/",
+  NEW_MANAGE_JOBS: "/new-manage-jobs",
+   PROFILE: "/profile",
+}
+
 export const employer = {
   INITIAL: "/",
   DASHBOARD: "/",
@@ -153,6 +159,7 @@ export const employer = {
   RESUME_ALERTS: "/resume-alerts",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
+ 
 };
 
 export function pubRoute(_route) {
@@ -167,6 +174,9 @@ export function empRoute(_route, id = "") {
   return `${base.EMPLOYER_PRE}${_route}${id ? `/${id}` : ""}`;
 }
 
+export function clientRoute(_route, id = "") {
+  return `${base.CLIENT_PRE}${_route}${id ? `/${id}` : ""}`;
+}
 // export function canRoute(_route) {
 //     return base.CANDIDATE_PRE + _route;
 // 	// return _route + base.CANDIDATE_PRE;

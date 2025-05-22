@@ -216,24 +216,29 @@ function FindWorkPage() {
                 <div className="grid grid-cols-1 gap-4 w-full">
                   {isLoading ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-  {[1, 2, 3].map((_, index) => (
-    <div key={index} className="p-4 border rounded shadow-sm animate-pulse text-center text-gray-500">
-      <div className="w-full h-4 bg-gray-100 rounded mb-3"></div>
-      <div className="flex flex-wrap gap-2 justify-center mb-3">
-        {[1, 2, 3].map((_, i) => (
-          <span key={i} className="w-12 h-4 bg-gray-100 rounded-full"></span>
-        ))}
-      </div>
-      <div className="w-1/4 h-3 bg-gray-100 rounded mb-4 mx-auto"></div>
-      <div className="flex items-center justify-between gap-2">
-        <div className="w-24 h-6 bg-gray-200 rounded-md"></div>
-        <div className="w-20 h-6 bg-gray-200 rounded-md"></div>
-        <div className="w-8 h-6 bg-gray-200 rounded-md"></div>
-      </div>
-    </div>
-  ))}
-</div>
-
+                      {[1, 2, 3].map((_, index) => (
+                        <div
+                          key={index}
+                          className="p-4 border rounded shadow-sm animate-pulse text-center text-gray-500"
+                        >
+                          <div className="w-full h-4 bg-gray-100 rounded mb-3"></div>
+                          <div className="flex flex-wrap gap-2 justify-center mb-3">
+                            {[1, 2, 3].map((_, i) => (
+                              <span
+                                key={i}
+                                className="w-12 h-4 bg-gray-100 rounded-full"
+                              ></span>
+                            ))}
+                          </div>
+                          <div className="w-1/4 h-3 bg-gray-100 rounded mb-4 mx-auto"></div>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="w-24 h-6 bg-gray-200 rounded-md"></div>
+                            <div className="w-20 h-6 bg-gray-200 rounded-md"></div>
+                            <div className="w-8 h-6 bg-gray-200 rounded-md"></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   ) : filterJobListData.length > 0 ? (
                     filterJobListData.map((job) => (
                       <CanJobCard

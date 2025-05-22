@@ -3,7 +3,7 @@ import { employer } from "../globals/route-names";
 import EmpDashboardPage from "../app/pannels/employer/components/emp-dashboard";
 import EmpCompanyProfilePage from "../app/pannels/employer/components/emp-company-profile";
 import EmpPostAJobPage from "../app/pannels/employer/components/jobs/emp-post-a-job";
-import EmpManageJobsPage from "../app/pannels/employer/components/jobs/emp-manage-jobs";
+// import EmpManageJobsPage from "../app/pannels/employer/components/jobs/emp-manage-jobs";
 import StaffList from "../app/pannels/employer/components/staff/staff-list";
 import EmpCandidatesPage from "../app/pannels/employer/components/emp-candidates";
 import EmpBookmarksPage from "../app/pannels/employer/components/emp-bookmarks";
@@ -25,7 +25,7 @@ function EmployerRoutes() {
       <Route path={employer.ADD_SKILL} element={<SkillsPage />} />
       <Route path={employer.ADD_CATEGORY} element={<CategoryPage />} />
       <Route path={employer.POST_A_JOB} element={<EmpPostAJobPage />} />
-      <Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} />
+      {/* <Route path={employer.MANAGE_JOBS} element={<EmpManageJobsPage />} /> */}
       <Route path={employer.CANDIDATES} element={<EmpCandidatesPage />} />
       <Route path={employer.STAFF} element={<StaffList />} />
       <Route path={employer.BOOKMARKS} element={<EmpBookmarksPage />} />

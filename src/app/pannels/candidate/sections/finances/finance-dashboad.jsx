@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-
+import React, { useState, useContext, useEffect, useMemo } from "react";
+import { userId } from "../../../../../globals/constants";
 import {
   AreaChart,
   Area,
@@ -13,53 +13,35 @@ import { Doughnut } from "react-chartjs-2";
 import DataTable from "react-data-table-component";
 import { Briefcase, DollarSign } from "lucide-react";
 import AddPaymentMethodModal from "./AddPaymentMethodModal";
+import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
 import NoteModal from "./NoteModal";
-import { Send, MessageSquare } from 'lucide-react';
+import { Send, MessageSquare } from "lucide-react";
+import Swal from "sweetalert2";
 import {
   Chart as ChartJS,
   ArcElement,
   Tooltip as ChartTooltip,
   Legend,
 } from "chart.js";
+import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-const paymentMethods = [
-  {
-    id: "bank",
-    type: "Bank Account (US)",
-    detail: "Chase Bank ****4532",
-    isDefault: true,
-  },
-  {
-    id: "mobile",
-    type: "Mobile Money",
-    detail: "+233 54 123 4567",
-    isDefault: false,
-  },
-];
+// const paymentMethods = [
+//   {
+//     id: "bank",
+//     type: "Bank Account (US)",
+//     detail: "Chase Bank ****4532",
+//     isDefault: true,
+//   },
+//   {
+//     id: "mobile",
+//     type: "Mobile Money",
+//     detail: "+233 54 123 4567",
+//     isDefault: false,
+//   },
+// ];
 // AreaChart Data
-const areaChartData = [
-  { month: "Jan", earnings: 4000 },
-  { month: "Feb", earnings: 6000 },
-  { month: "Mar", earnings: 8000 },
-  { month: "Apr", earnings: 10000 },
-  { month: "May", earnings: 9000 },
-  { month: "Jun", earnings: 7000 },
-  { month: "Jul", earnings: 7500 },
-];
-
-// Doughnut Chart Data
-const doughnutData = {
-  labels: ["Withdrawals ", "Earnings", "Jobs"],
-  datasets: [
-    {
-      data: [45, 35, 20],
-      backgroundColor: ["#4F46E5", "#FACC15", "#10B981"],
-      borderWidth: 1,
-    },
-  ],
-};
 
 const doughnutOptions = {
   plugins: {
@@ -85,48 +67,48 @@ const doughnutOptions = {
 };
 
 // Tables
-const transactionData = [
-  {
-    date: "May 4, 2025",
-    description: "Payment from Acme Corporation",
-    note: "Website Redesign Project",
-    type: "Payment",
-    amount: "+$3,500.00",
-    status: "Completed",
-  },
-  {
-    date: "May 2, 2025",
-    description: "Withdrawal to Bank Account",
-    note: "Chase Bank ****4532",
-    type: "Withdrawal",
-    amount: "-$2,000.00",
-    status: "Completed",
-  },
-  {
-    date: "Apr 28, 2025",
-    description: "Payment from TechSolutions Inc.",
-    note: "Mobile App Development",
-    type: "Payment",
-    amount: "+$4,250.00",
-    status: "Completed",
-  },
-  {
-    date: "Apr 20, 2025",
-    description: "Payment from Creative Studios",
-    note: "Brand Identity Design",
-    type: "Payment",
-    amount: "+$2,750.00",
-    status: "Completed",
-  },
-  {
-    date: "Apr 15, 2025",
-    description: "Service Fee",
-    note: "Platform commission",
-    type: "Fee",
-    amount: "-$425.00",
-    status: "Completed",
-  },
-];
+// const transactionData = [
+//   {
+//     date: "May 4, 2025",
+//     description: "Payment from Acme Corporation",
+//     note: "Website Redesign Project",
+//     type: "Payment",
+//     amount: "+$3,500.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "May 2, 2025",
+//     description: "Withdrawal to Bank Account",
+//     note: "Chase Bank ****4532",
+//     type: "Withdrawal",
+//     amount: "-$2,000.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "Apr 28, 2025",
+//     description: "Payment from TechSolutions Inc.",
+//     note: "Mobile App Development",
+//     type: "Payment",
+//     amount: "+$4,250.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "Apr 20, 2025",
+//     description: "Payment from Creative Studios",
+//     note: "Brand Identity Design",
+//     type: "Payment",
+//     amount: "+$2,750.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "Apr 15, 2025",
+//     description: "Service Fee",
+//     note: "Platform commission",
+//     type: "Fee",
+//     amount: "-$425.00",
+//     status: "Completed",
+//   },
+// ];
 
 const transactionColumns = [
   {
@@ -150,9 +132,9 @@ const transactionColumns = [
     cell: (row) => (
       <span
         className={`text-xs font-medium px-2 py-1 rounded-full ${
-          row.type === "Payment"
+          row.type === "payment"
             ? "bg-green-100 text-green-700"
-            : row.type === "Withdrawal"
+            : row.type === "withdrawal"
             ? "bg-blue-100 text-blue-700"
             : "bg-orange-100 text-orange-700"
         }`}
@@ -186,7 +168,6 @@ const transactionColumns = [
     width: "120px",
   },
 ];
-
 
 // Contract Data
 const getStatusBadge = (status) => {
@@ -222,7 +203,9 @@ const contractColumns = [
     cell: (row) => (
       <div>
         <div className="text-sm text-gray-800">{row.deadline}</div>
-        <div className="text-xs text-gray-400">{row.daysRemaining} days remaining</div>
+        <div className="text-xs text-gray-400">
+          {row.daysRemaining} days remaining
+        </div>
       </div>
     ),
   },
@@ -238,79 +221,192 @@ const contractColumns = [
     name: "Value",
     selector: (row) => row.budget,
     sortable: true,
-    cell: (row) => <span className="font-medium text-gray-800">{row.budget}</span>,
+    cell: (row) => (
+      <span className="font-medium text-gray-800">{row.budget}</span>
+    ),
   },
-  
-{
-  name: "Actions",
-  cell: () => (
-    <div className="flex gap-2 flex-row items-center">
-      <button className="bg-green-600 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md transition flex items-center gap-1">
-        <Send size={12} />
-        <span className="hidden sm:inline">Submit</span>
-      </button>
-      <button className="border border-gray-300 text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md hover:bg-gray-100 transition flex items-center gap-1">
-        <MessageSquare size={12} />
-        <span className="hidden sm:inline">Message</span>
-      </button>
-    </div>
-  ),
-  ignoreRowClick: true,
-  button: true,
-}
 
+  {
+    name: "Actions",
+    cell: () => (
+      <div className="flex gap-2 flex-row items-center">
+        <button className="bg-green-600 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md transition flex items-center gap-1">
+          <Send size={12} />
+          <span className="hidden sm:inline">Submit</span>
+        </button>
+        <button className="border border-gray-300 text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-md hover:bg-gray-100 transition flex items-center gap-1">
+          <MessageSquare size={12} />
+          <span className="hidden sm:inline">Message</span>
+        </button>
+      </div>
+    ),
+    ignoreRowClick: true,
+    button: true,
+  },
 ];
 
 // Data definition
 const contractData = [
-  {
-    project: "Website Redesign Project",
-    client: "Tech Solutions Inc.",
-    deadline: "May 31, 2025",
-    daysRemaining: 25,
-    budget: "$4,500",
-    status: "In Progress",
-  },
-  {
-    project: "Mobile App Development",
-    client: "Innovation Labs",
-    deadline: "Jun 15, 2025",
-    daysRemaining: 40,
-    budget: "$6,250",
-    status: "Pending",
-  },
-  {
-    project: "Brand Identity Design",
-    client: "Creative Studios",
-    deadline: "Jun 28, 2025",
-    daysRemaining: 53,
-    budget: "$3,750",
-    status: "Just Started",
-  },
+  // {
+  //   project: "Website Redesign Project",
+  //   client: "Tech Solutions Inc.",
+  //   deadline: "May 31, 2025",
+  //   daysRemaining: 25,
+  //   budget: "$4,500",
+  //   status: "In Progress",
+  // },
+  // {
+  //   project: "Mobile App Development",
+  //   client: "Innovation Labs",
+  //   deadline: "Jun 15, 2025",
+  //   daysRemaining: 40,
+  //   budget: "$6,250",
+  //   status: "Pending",
+  // },
+  // {
+  //   project: "Brand Identity Design",
+  //   client: "Creative Studios",
+  //   deadline: "Jun 28, 2025",
+  //   daysRemaining: 53,
+  //   budget: "$3,750",
+  //   status: "Just Started",
+  // },
 ];
 
 export default function FinancialDashboard() {
+  const {
+    allEarnings,
+    processMakeWithdrawal,
+    processGetTransactionOfUser,
+    walletStatus,
+    processCreateWalletOfUser,
+    transactionList,
+    monthEarnings,
+  } = useContext(TransactionApiData);
+  const { paymentMethodList, financeSettingInfo } = useContext(PaymentApiData);
+  const [createWalletLoad, setCreateWalletLoad] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
-  const [note, setNote] = useState('');
-  const [amount, setAmount] = useState('');
+  const [note, setNote] = useState("");
+  const [amount, setAmount] = useState("");
   const [selectedMethod, setSelectedMethod] = useState({});
-  // const paymentMethods = []; // Replace with actual data
+  const [paymentMethods, setPaymentMethods] = useState([]);
+
+  useEffect(() => {
+    processGetTransactionOfUser();
+  }, []);
+
+  useEffect(() => {
+    setPaymentMethods(paymentMethodList);
+  }, [financeSettingInfo, paymentMethodList]);
+
+  // Doughnut Chart Data
+  const doughnutData = {
+    labels: ["Withdrawals ", "Earnings"],
+    datasets: [
+      {
+        data: [
+          parseFloat(allEarnings.available),
+          parseFloat(allEarnings.pending),
+        ],
+        backgroundColor: ["#4F46E5", "#FACC15"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const areaChartData = monthEarnings;
 
   const handleMethodChange = (e) => {
     const method = paymentMethods.find((m) => m.id === e.target.value);
     setSelectedMethod(method);
   };
 
-  const handleWithdraw = () => {
-    console.log('Withdrawing with note:', note);
+  const handleWithdraw = async () => {
+    console.log(`amount is = ${amount} and available ${allEarnings.available}`);
+    if (!amount || Number(amount) > Number(allEarnings.available)) {
+      Swal.fire({
+        icon: "error",
+        title: "Insufficient Balance",
+        text: "Withdrawal cannot be made due to insufficient balance",
+      });
+      return;
+    }
+
+    if (!selectedMethod.item_no) {
+      Swal.fire({
+        icon: "error",
+        title: "No Payment Method",
+        text: "Add or select a payment method",
+      });
+      return;
+    }
+
+    if (selectedMethod.type == "Credit Card") {
+      Swal.fire({
+        icon: "error",
+        title: "Sorry",
+        text: "Withdrawal can be made for only Bank and Momo Account",
+      });
+      return;
+    }
+    let newData = {
+      user_id: userId,
+      amount: amount,
+      note: note,
+      description: note,
+      payment_method: selectedMethod.type,
+      payment_item_no: selectedMethod.item_no,
+    };
+
+    let response = await processMakeWithdrawal(newData);
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Transaction successfull",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops Sorry",
+        text: "An Issue occured please try again",
+      });
+    }
+
+    console.log(newData);
+    // console.log("Withdrawing with note:", note);
     // Perform withdrawal logic
+  };
+
+  const handleCreateWallet = async () => {
+    //console.log("Creating wallet");
+    setCreateWalletLoad(true);
+    let response = await processCreateWalletOfUser();
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message || "An issue occured, try again",
+      });
+    }
+    setCreateWalletLoad(false);
   };
 
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredData = useMemo(() => {
-    return transactionData.filter(
+    return transactionList.filter(
       (item) =>
         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.note.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -337,7 +433,7 @@ export default function FinancialDashboard() {
           <div className="bg-white shadow-sm rounded-xl p-5 flex justify-between items-center hover:shadow-md transition">
             <div>
               <p className="text-gray-500">Active Jobs</p>
-              <p className="text-3xl font-bold text-gray-800">12</p>
+              <p className="text-3xl font-bold text-gray-800">0</p>
               <p className="text-sm text-green-600 mt-1">↑ 2 new this month</p>
             </div>
             <div className="bg-green-100 p-2 rounded-full">
@@ -348,10 +444,27 @@ export default function FinancialDashboard() {
           <div className="bg-white shadow-sm rounded-xl p-5 flex justify-between items-center hover:shadow-md transition">
             <div>
               <p className="text-gray-500">Available Earnings</p>
-              <p className="text-3xl font-bold text-green-600">GHS8,450</p>
-              <button className="mt-2 text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
-                Withdraw Funds
-              </button>
+              <p className="text-3xl font-bold text-green-600">
+                GHS{allEarnings.available}
+              </p>
+              {walletStatus == "true" && (
+                <button className="mt-2 text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
+                  Withdraw Funds
+                </button>
+              )}
+              {walletStatus == "false" && (
+                <>
+                  <button
+                    className="mt-2 text-sm bg-yellow-600 hover:bg-yellow-700 text-white px-3 
+                  py-1 rounded"
+                    onClick={handleCreateWallet}
+                  >
+                    {createWalletLoad
+                      ? "creating wallet ..."
+                      : " Create Wallet"}
+                  </button>
+                </>
+              )}
             </div>
             <div className="bg-green-100 p-2 rounded-full">
               <DollarSign className="text-green-600" size={24} />
@@ -361,7 +474,9 @@ export default function FinancialDashboard() {
           <div className="bg-white shadow-sm rounded-xl p-5 flex justify-between items-center hover:shadow-md transition">
             <div>
               <p className="text-gray-500">Pending Earnings</p>
-              <p className="text-3xl font-bold text-GRAY-600">GHS2,100</p>
+              <p className="text-3xl font-bold text-GRAY-600">
+                GHS{allEarnings.pending}
+              </p>
               <p className="text-sm text-gray-500 mt-1">Processing this week</p>
             </div>
             <div className="bg-yellow-100 p-2 rounded-full">
@@ -455,7 +570,7 @@ export default function FinancialDashboard() {
             >
               {paymentMethods.map((method) => (
                 <option key={method.id} value={method.id}>
-                  {method.type} {method.detail.slice(-4)}
+                  {method.type} {method.details?.slice(-4)}
                 </option>
               ))}
             </select>
@@ -472,10 +587,12 @@ export default function FinancialDashboard() {
                 className="pl-7 border border-gray-300 rounded-md p-2 w-full"
               />
             </div>
-            <p className="text-sm text-gray-500 mb-4">Available: $8,450.00</p>
+            <p className="text-sm text-gray-500 mb-4">
+              Available: ${allEarnings.available}
+            </p>
 
             <button
-               onClick={() => setShowNoteModal(true)}
+              onClick={() => setShowNoteModal(true)}
               className="w-full bg-green-600  text-white py-2 rounded-md font-semibold transition"
             >
               Withdraw ${parseFloat(amount || 0).toFixed(2)}
@@ -488,7 +605,10 @@ export default function FinancialDashboard() {
               <h2 className="text-lg font-semibold text-gray-800">
                 Payment Methods
               </h2>
-              <button className="text-sm text-green-600 hover:underline"  onClick={() => setIsModalOpen(true)}>
+              <button
+                className="text-sm text-green-600 hover:underline"
+                onClick={() => setIsModalOpen(true)}
+              >
                 + Add Method
               </button>
             </div>
@@ -604,33 +724,36 @@ export default function FinancialDashboard() {
         </section>
 
         <section className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition">
-      <h2 className="text-lg font-semibold text-gray-700 mb-4">Active Contracts</h2>
-      <DataTable
-        columns={contractColumns}
-        data={contractData}
-        pagination
-        responsive
-        striped
-        highlightOnHover
-      />
-    </section>
+          <h2 className="text-lg font-semibold text-gray-700 mb-4">
+            Active Contracts
+          </h2>
+          <DataTable
+            columns={contractColumns}
+            data={contractData}
+            pagination
+            responsive
+            striped
+            highlightOnHover
+          />
+        </section>
         {/* Payment methos modal */}
         <AddPaymentMethodModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+          isOpen={isModalOpen}
+          paymentItemsNo={paymentMethods.length}
+          onClose={() => setIsModalOpen(false)}
+        />
 
-      {/* withdrawal note modal */}
-      <NoteModal
-        isOpen={showNoteModal}
-        onClose={() => setShowNoteModal(false)}
-        onConfirm={() => {
-          handleWithdraw();
-          setShowNoteModal(false);
-        }}
-        note={note}
-        setNote={setNote}
-      />
+        {/* withdrawal note modal */}
+        <NoteModal
+          isOpen={showNoteModal}
+          onClose={() => setShowNoteModal(false)}
+          onConfirm={() => {
+            handleWithdraw();
+            setShowNoteModal(false);
+          }}
+          note={note}
+          setNote={setNote}
+        />
       </div>
     </div>
   );

@@ -1,18 +1,171 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
 import axios from "../../../utils/axios.config";
-import { SUCCESS_STATUS } from "../../../globals/constants";
+import {
+  SUCCESS_STATUS,
+  REACT_BASE_URL,
+  userId,
+} from "../../../globals/constants";
+
+export const getFinanceSettingInfo = async () => {
+  try {
+    let responseOnGetFinanceSettingInfo = await axios.get(
+      `${REACT_BASE_URL}get-finance-setting?user_id=${userId}`
+    );
+    if (responseOnGetFinanceSettingInfo.status == SUCCESS_STATUS) {
+      return responseOnGetFinanceSettingInfo.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const getTotalInvoice = async () => {
+  try {
+    let responseOnGetTotalInvoice = await axios.get(
+      `${REACT_BASE_URL}count-invoice`
+    );
+    if (responseOnGetTotalInvoice.status == SUCCESS_STATUS) {
+      return responseOnGetTotalInvoice.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getInvoiceDetails = async (id) => {
+  try {
+    let responseOnGetInvoiceDetails = await axios.get(
+      `${REACT_BASE_URL}get-invoice-of-details?id=${id}`
+    );
+    if (responseOnGetInvoiceDetails.status == 200) {
+      return responseOnGetInvoiceDetails;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const editInvoice = async (id, data) => {
+  console.log(data);
+  try {
+    let responseOnEditInvoice = await axios.put(
+      `${REACT_BASE_URL}edit-invoice?invoiceId=${id}`,
+      data
+    );
+    if (responseOnEditInvoice.status == 200) {
+      return responseOnEditInvoice;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const deleteInvoice = async (id) => {
+  try {
+    let responseOnDeleteInvoice = await axios.delete(
+      `${REACT_BASE_URL}delete-invoice?id=${id}`
+    );
+    if (responseOnDeleteInvoice.status == 200) {
+      return responseOnDeleteInvoice;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getInvoiceOfUser = async () => {
+  try {
+    let responseOnGetInvoiceOfUser = await axios.get(
+      `${REACT_BASE_URL}get-invoice-of-user?user_id=${userId}`
+    );
+    if (responseOnGetInvoiceOfUser.status == 200) {
+      return responseOnGetInvoiceOfUser.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const createInvoice = async (data) => {
+  try {
+    let responseOnCreateInvoice = await axios.post(
+      `${REACT_BASE_URL}invoices`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    if (
+      responseOnCreateInvoice.status == SUCCESS_STATUS ||
+      responseOnCreateInvoice.status == 200
+    ) {
+      return {
+        status: "success",
+        message: responseOnCreateInvoice.data.message,
+      };
+    } else {
+      return {
+        status: "error",
+        message: "Something went wrong",
+      };
+    }
+  } catch (err) {
+    if (err.status == 409 || err.status == 400) {
+      console.log(err);
+      return {
+        status: "error",
+        message: err.response.data.message,
+      };
+    }
+  }
+};
 
 // ADD Payment
-export const addPayment = async (data) => {
+export const addPaymentMethod = async (data) => {
   try {
     let responseOnAddPayment = await axios.post(
-      {
-        /**Add Create Education API URL here**/
-      },
+      `${REACT_BASE_URL}store-pay-method`,
       data
     );
     if (responseOnAddPayment.status === SUCCESS_STATUS) {
-      return responseOnAddPayment.data;
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const storeFinanceSettingInfo = async (data) => {
+  try {
+    let responseOnStoreFinanceSettingInfo = await axios.post(
+      `${REACT_BASE_URL}store-finance-info`,
+      data
+    );
+    if (responseOnStoreFinanceSettingInfo.status === SUCCESS_STATUS) {
+      return true;
     } else {
       return false;
     }

@@ -1,8 +1,29 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
+import { userId } from "../../../../../globals/constants";
+import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import { generateInvoiceNumber } from "../../../../../utils/invoice";
+import Swal from "sweetalert2";
 
 const CreateInvoice = () => {
-  const [attachments, setAttachments] = useState([]);
+  const {
+    processAddInvoice,
+    processGetTotalInvoice,
+    financeSettingInfo,
+    paymentMethodList,
+    processEditInvoice,
+  } = useContext(PaymentApiData);
+  const [paymentInfo, setPaymentInfo] = useState({});
+  const { processCheckIfCompanyExist } = useContext(EmployerApiData);
+  const previewData = JSON.parse(localStorage.getItem("invoice_preview"));
+
+  useEffect(() => {
+    let payment_type = paymentMethodList.filter(
+      (item) => item.type !== "Credit Card" && item.default == true
+    )[0];
+    setPaymentInfo(payment_type);
+  }, [financeSettingInfo]);
 
   const onDrop = useCallback((acceptedFiles) => {
     const filesWithPreview = acceptedFiles.map((file) =>
@@ -25,21 +46,45 @@ const CreateInvoice = () => {
     maxSize: 10 * 1024 * 1024, // 10MB
   });
 
+  const today = new Date();
+  const due = new Date();
+  due.setDate(due.getDate() + 14);
+  const dueDate = due.toISOString().split("T")[0];
+  const [attachments, setAttachments] = useState(
+    previewData?.attachments || []
+  );
   const [loading, setLoading] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
   const [invoice, setInvoice] = useState({
-    client: "",
-    invoiceNumber: "INV-2025-0043",
-    issueDate: "2025-05-08",
-    dueDate: "2025-05-22",
-    items: [{ description: "", quantity: 1, rate: 0 }],
-    taxRate: 0,
-    discount: 5,
-    discountType: "amount", // or 'percent'
-    notes: "",
+    client: previewData?.client || "",
+    invoiceNumber: previewData?.invoiceNumber || "",
+    issueDate: previewData?.issueData || today.toISOString().split("T")[0],
+    dueDate: previewData?.dueData || dueDate,
+    items: previewData?.items || [{ description: "", quantity: 1, rate: 0 }],
+    taxRate: previewData?.taxRate || "",
+    discount: previewData?.discount || 5,
+    discountType: previewData?.discount || "amount", // or 'percent'
+    notes: previewData?.notes || "",
     terms:
       "1. Payment is due within the specified payment term.\n2. Late payments may be subject to a 1.5% monthly interest charge.\n3. All deliverables remain the property of the service provider until payment is received in full.",
-    paymentTerms: "Due in 30 days",
+    paymentTerms: previewData?.paymentTerms || "Due in 30 days",
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!previewData) {
+        let response = await processGetTotalInvoice();
+        const newInvoiceNumber = generateInvoiceNumber(response);
+
+        setInvoice((prev) => ({
+          ...prev,
+          invoiceNumber: newInvoiceNumber,
+        }));
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleItemChange = (index, field, value) => {
     const newItems = [...invoice.items];
@@ -77,22 +122,173 @@ const CreateInvoice = () => {
     return (subtotal * invoice.taxRate) / 100;
   };
 
-  const handleSubmit = (type) => {
-    setLoading(true);
-    setTimeout(() => {
-      alert(`${type} submitted successfully!`);
-      setLoading(false);
-    }, 1500);
-  };
-
   const subtotal = calculateSubtotal();
   const discount = calculateDiscount(subtotal);
   const tax = calculateTax(subtotal - discount);
   const total = subtotal - discount + tax;
 
+  const handleSubmit = async (type) => {
+    setLoading(true);
+
+    let checkCompanyExist = await processCheckIfCompanyExist(
+      invoice.client.toLowerCase()
+    );
+    if (!checkCompanyExist.data) {
+      Swal.fire({
+        icon: "error",
+        title: "Company not found",
+        text: "Please verify client name",
+      });
+      setLoading(false);
+      return false;
+    }
+
+    const formData = new FormData();
+
+    // Basic invoice fields
+    formData.append("user_id", userId);
+    formData.append("invoice_number", invoice.invoiceNumber);
+    formData.append("client_name", invoice.client);
+    formData.append("issue_date", invoice.issueDate);
+    formData.append("due_date", invoice.dueDate);
+    formData.append("status", type);
+    formData.append("tax_rate", invoice.taxRate);
+    formData.append("discount", invoice.discount);
+    formData.append("discount_type", invoice.discountType);
+    formData.append("payment_terms", invoice.paymentTerms);
+    formData.append("payment_type", paymentInfo.type);
+    formData.append("payment_item_no", paymentInfo.item_no);
+    formData.append("note", invoice.notes);
+    formData.append("sub_total", subtotal);
+    formData.append("discount_cal", discount);
+    formData.append("tax_cal", tax);
+    formData.append("total_amount", total);
+    formData.append("client_id", checkCompanyExist.data);
+    formData.append("payment_status", "pending");
+
+    // billing_item must be stringified (because it's an array of objects)
+    formData.append("billing_item", JSON.stringify(invoice.items));
+
+    // Extract and append raw File from your attachment objects
+    attachments.forEach((fileWrapper) => {
+      if (fileWrapper instanceof File) {
+        formData.append("attachments[]", fileWrapper); // already a File object
+      } else if (fileWrapper.file) {
+        formData.append("attachments[]", fileWrapper.file); // fileWrapper.file must be a File object
+      } else {
+        // fallback in case your fileWrapper is structured like Dropzone's accepted files
+        formData.append(
+          "attachments[]",
+          new File([fileWrapper], fileWrapper.name, { type: fileWrapper.type })
+        );
+      }
+    });
+
+    let response = await processAddInvoice(formData);
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (response.status == "error") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message,
+      });
+    }
+    setLoading(false);
+  };
+
+  const handleEditInvoice = async () => {
+    setEditLoading(true);
+    //console.log(previewData);
+
+    let checkCompanyExist = await processCheckIfCompanyExist(
+      invoice.client.toLowerCase()
+    );
+    if (!checkCompanyExist.data) {
+      Swal.fire({
+        icon: "error",
+        title: "Company not found",
+        text: "Please verify client name",
+      });
+      setLoading(false);
+      return false;
+    }
+
+    //console.log(invoice);
+
+    let newData = {
+      user_id: userId,
+      invoice_number: invoice.invoiceNumber,
+      client_name: invoice.client,
+      issue_date: invoice.issueDate,
+      due_date: invoice.dueDate,
+      status: "draft",
+      tax_rate: invoice.taxRate,
+      discount: invoice.discount,
+      discount_type: invoice.discountType,
+      payment_terms: invoice.paymentTerms,
+      payment_type: paymentInfo.type,
+      payment_item_no: paymentInfo.item_no,
+      note: invoice.notes,
+      sub_total: subtotal || invoice.subtotal,
+      discount_cal: discount || invoice.discount,
+      tax_cal: tax || invoice.tax_cal,
+      total_amount: total || invoice.total_amount,
+      client_id: checkCompanyExist.data,
+      payment_status: "pending",
+      billing_item: JSON.stringify(invoice.items),
+    };
+
+    let response = await processEditInvoice(invoice.invoiceNumber, newData);
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (response.status == "error") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message,
+      });
+    }
+    setEditLoading(false);
+    //processEditInvoice;
+    //console.log("We are editing");
+  };
+
   const naviateTo = (path) => {
     window.location.href = path;
-  }
+  };
+
+  const handlePreview = () => {
+    let newData = {
+      ...invoice,
+      total_amount: total,
+      attachments: attachments,
+      sub_total: subtotal,
+      discount_cal: discount,
+      tax_cal: tax,
+    };
+    console.log(newData);
+    localStorage.setItem("invoice_preview", JSON.stringify(newData));
+    naviateTo("/dashboard-candidate/invoice-preview/1");
+  };
+
+  const handleClear = () => {
+    localStorage.removeItem("invoice_preview");
+    naviateTo("/dashboard-candidate/billings");
+  };
+
   return (
     <div className="tw-css p-6 bg-white rounded shadow max-w-6xl mx-auto mt-2">
       <div className="flex items-center justify-between mb-6">
@@ -107,11 +303,13 @@ const CreateInvoice = () => {
               <li>
                 <span className="mx-2">{">"}</span>
               </li>
-              <li className="text-gray-400">Create New Invoice</li>
+              <li className="text-gray-400">
+                {previewData?.status ? "Edit Invoice" : "Create New Invoice"}
+              </li>
             </ol>
           </nav>
           <h1 className="text-2xl font-semibold text-gray-900">
-            Create New Invoice
+            {previewData?.status ? "Edit Invoice" : "Create New Invoice"}
           </h1>
           <p className="text-gray-500 text-sm">
             Fill in the details to create a new invoice for your client
@@ -120,15 +318,20 @@ const CreateInvoice = () => {
 
         {/* Action Buttons */}
         <div className="flex space-x-2">
-          <button className="px-4 py-2 border rounded text-gray-700 border-gray-300 hover:bg-gray-100" onClick={() => naviateTo("/dashboard-candidate/billings")}>
-            Cancel
-          </button>
           <button
-            className="px-4 py-2 bg-green-600 text-white rounded"
-            onClick={() => handleSubmit("Draft")}
+            className="px-4 py-2 border rounded text-gray-700 border-gray-300 hover:bg-gray-100"
+            onClick={handleClear}
           >
-            {loading ? "Saving..." : "Save Draft"}
+            Clear
           </button>
+          {!previewData?.status && (
+            <button
+              className="px-4 py-2 bg-green-600 text-white rounded"
+              onClick={() => handleSubmit("draft")}
+            >
+              {loading ? "Saving..." : "Save Draft"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -338,7 +541,7 @@ const CreateInvoice = () => {
       </div>
 
       {/* Notes and Terms */}
-      <div className="grid md:grid-cols-2 gap-4 md:grid-cols-2 mb-6 bg-white p-6 rounded-lg shadow-sm border">
+      <div className="grid md:grid-cols-2 gap-4 mb-6 bg-white p-6 rounded-lg shadow-sm border">
         <div>
           <label className="block text-sm font-medium mb-1 text-gray-700">
             Notes & Terms
@@ -388,7 +591,7 @@ const CreateInvoice = () => {
                 key={idx}
                 className="border rounded p-2 text-sm text-center bg-white shadow-sm"
               >
-                {file.type.startsWith("image/") ? (
+                {file.type?.startsWith("image/") ? (
                   <img
                     src={file.preview}
                     alt={file.name}
@@ -408,27 +611,50 @@ const CreateInvoice = () => {
 
       {/* Footer Actions */}
       <div className="flex justify-between items-center">
-        <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded">
-          Save Draft
-        </button>
-        <div className="flex space-x-2">
-          <button className="bg-gray-700 text-white px-4 py-2 rounded" onClick={() => naviateTo("/dashboard-candidate/invoice-preview/1")}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 inline-block mr-1"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true">
-            <path
-              fillRule="evenodd"
-              d="M10 2a1 1 0 00-1 1v4.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 00-1-1z"
-              clipRule="evenodd"
-            /></svg>
-            Preview
+        {!previewData?.status && (
+          <button
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded"
+            onClick={() => handleSubmit("draft")}
+          >
+            Save Draft
           </button>
+        )}
+
+        <div className="flex space-x-2">
+          {!previewData?.status && (
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded"
+              onClick={handlePreview}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 inline-block mr-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 2a1 1 0 00-1 1v4.586l-2.293-2.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Preview
+            </button>
+          )}
+
+          {previewData?.status && (
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded"
+              onClick={handleEditInvoice}
+            >
+              {editLoading ? "Loading..." : "Edit Invoice"}
+            </button>
+          )}
+
           <button
             className="bg-green-600 text-white px-4 py-2 rounded"
-            onClick={() => handleSubmit("Invoice")}
+            onClick={() => handleSubmit("sent")}
           >
             {loading ? "Sending..." : "Send Invoice"}
           </button>

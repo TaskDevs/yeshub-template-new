@@ -10,6 +10,7 @@ import FreelancerOnboard from "../app/pannels/public-user/onboard/freelanceOnboa
 import ClientOnboard from "../app/pannels/public-user/onboard/clientOnboard/clientOnboard";
 import CreateAccount from "../app/pannels/public-user/onboard/createAccount/createAccount";
 import Offers from "../app/pannels/candidate/sections/offers/offers";
+import ClientProfileView from "../app/pannels/public-user/sections/profile/client-profile-view";
 import EmpCompanyProfileView from "../app/pannels/employer/components/emp-profile-view";
 import ClientLout from "../layouts/client-layout";
 
@@ -38,8 +39,8 @@ function AppRoutes() {
         element={<Offers />}
       />
       <Route
-        path={base.PUBLIC_PRE + "/dashboard/company-profile"}
-        element={<EmpCompanyProfileView />}
+        path={base.PUBLIC_PRE + "/dashboard/company-profile/:id"}
+        element={<ClientProfileView />}
       />
       {/** End localhost development */}
 

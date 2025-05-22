@@ -1,12 +1,11 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-// import { SUCCESS_STATUS, LIST_ON_PAGES } from "../../../globals/constants";
 // import { notify } from "../../../utils/responseUtils";
 
 import {
   addFreelance,
   jobsAppliedTo,
   // searchFreelance,
-  // freelanceList,
+  getFreelanceList,
   freelanceProfile,
   updateFreelance,
   deleteFreelance,
@@ -26,6 +25,7 @@ const initialFormData = FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
 
 const FreelanceApiDataProvider = (props) => {
   const [freelanceProfileData, setFreelanceProfileData] = useState([]);
+  const [freelanceList, setFreelanceList] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const { setIsSubmitting } = useContext(GlobalApiData);
@@ -58,7 +58,30 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
-  const processGetAllFreelance = async () => {};
+  const processGetAllFreelance = async () => {
+    let response = await getFreelanceList();
+    console.log(response.data.data);
+    if (response) {
+      let newList = [];
+      response.data.data.map((item) =>
+        newList.push({
+          id: item.id,
+          avatar: item.profile_image,
+          name: item.firstname + " " + item.lastname,
+          bio: item.bio,
+          skills: item.skills_id?.split(","),
+          hourlyRate: item.hourly_rate,
+          location: item.address,
+          availableNow: true,
+          rating: 7.5,
+          language: item.languages,
+        })
+      );
+      setFreelanceList(newList);
+    } else {
+      return false;
+    }
+  };
 
   const processFreelanceProfile = async (id) => {
     const res = await freelanceProfile(id);
@@ -72,8 +95,7 @@ const FreelanceApiDataProvider = (props) => {
   const processGetJobsAppliedTo = async () => {
     try {
       //let new_user_id = sessionStorage.getItem("userId") || 625;
-      console.log("We are doing great");
-      let new_user_id = 625;
+      let new_user_id = userId;
       let response = await jobsAppliedTo(new_user_id, 1);
       console.log(response.data);
       if (response) {
@@ -231,6 +253,7 @@ const FreelanceApiDataProvider = (props) => {
         processSearchFreelance,
         processUpdateFreelance,
         processDeleteFreelance,
+        freelanceList,
       }}
     >
       {props.children}

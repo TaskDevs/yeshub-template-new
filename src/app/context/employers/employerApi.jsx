@@ -86,6 +86,31 @@ export const searchEmployer = async () => {
   }
 };
 
+// Check if company or employer exist
+export const checkIfCompanyExist = async (data) => {
+  try {
+    let responseCheckIfCompanyExist = await axios.get(
+      `${REACT_BASE_URL}check-employer-exist?company-name=${data}`
+    );
+    return responseCheckIfCompanyExist;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getCompanyInfoForInvoice = async (data) => {
+  try {
+    let responseOnCompanyInfoForInvoice = await axios.get(
+      `${REACT_BASE_URL}company-invoice-details?company-name=${data}`,
+      data
+    );
+    console.log(responseOnCompanyInfoForInvoice);
+    return responseOnCompanyInfoForInvoice;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // LIST Employer
 export const employerList = async () => {
   try {
@@ -176,6 +201,8 @@ export const companyInfo = async (id) => {
     return false;
   }
 };
+
+//
 
 // UPDATE Employer
 export const updateEmployer = async (id, data) => {

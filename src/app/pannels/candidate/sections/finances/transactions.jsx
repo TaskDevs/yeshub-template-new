@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,54 +8,56 @@ import {
   Printer,
   XCircle,
 } from "lucide-react";
+import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 
-const transactionsData = [
-  {
-    date: "2025-05-12",
-    description: "Payment from TechCorp Solutions",
-    type: "Payment",
-    amount: "+$2,450.00",
-    status: "Completed",
-  },
-  {
-    date: "2025-05-10",
-    description: "Withdrawal to Bank Account",
-    type: "Withdrawal",
-    amount: "-$1,800.00",
-    status: "Pending",
-  },
-  {
-    date: "2025-05-08",
-    description: "Payment from DataFlow Inc",
-    type: "Payment",
-    amount: "+$3,200.00",
-    status: "Completed",
-  },
-  {
-    date: "2025-05-05",
-    description: "Service Fee",
-    type: "Fee",
-    amount: "-$320.00",
-    status: "Completed",
-  },
-  // Add more entries to demonstrate pagination
-  ...Array.from({ length: 20 }, (_, i) => ({
-    date: "2025-04-20",
-    description: `Test Transaction ${i + 1}`,
-    type: "Fee",
-    amount: "-$100.00",
-    status: "Completed",
-  })),
-];
+// const transactionsData = [
+//   {
+//     date: "2025-05-12",
+//     description: "Payment from TechCorp Solutions",
+//     type: "Payment",
+//     amount: "+$2,450.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "2025-05-10",
+//     description: "Withdrawal to Bank Account",
+//     type: "Withdrawal",
+//     amount: "-$1,800.00",
+//     status: "Pending",
+//   },
+//   {
+//     date: "2025-05-08",
+//     description: "Payment from DataFlow Inc",
+//     type: "Payment",
+//     amount: "+$3,200.00",
+//     status: "Completed",
+//   },
+//   {
+//     date: "2025-05-05",
+//     description: "Service Fee",
+//     type: "Fee",
+//     amount: "-$320.00",
+//     status: "Completed",
+//   },
+//   // Add more entries to demonstrate pagination
+//   ...Array.from({ length: 20 }, (_, i) => ({
+//     date: "2025-04-20",
+//     description: `Test Transaction ${i + 1}`,
+//     type: "Fee",
+//     amount: "-$100.00",
+//     status: "Completed",
+//   })),
+// ];
 
 const TransactionsPage = () => {
+  const { transactionList } = useContext(TransactionApiData);
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
   const [openActionIndex, setOpenActionIndex] = useState(null);
-  const filteredTransactions = transactionsData.filter((t) => {
+  const filteredTransactions = transactionList.filter((t) => {
     const dateMatch =
       (!startDate || new Date(t.date) >= new Date(startDate)) &&
       (!endDate || new Date(t.date) <= new Date(endDate));
@@ -64,6 +66,11 @@ const TransactionsPage = () => {
       .includes(searchTerm.toLowerCase());
     return dateMatch && searchMatch;
   });
+  const { processGetTransactionOfUser } = useContext(TransactionApiData);
+
+  useEffect(() => {
+    processGetTransactionOfUser();
+  }, []);
 
   const pageCount = Math.ceil(filteredTransactions.length / itemsPerPage);
   const paginatedTransactions = filteredTransactions.slice(
@@ -126,26 +133,25 @@ const TransactionsPage = () => {
     if (openActionIndex !== index) return null;
     return (
       <div className="relative">
-  <div className="absolute right-0 mt-2 w-64 max-w-xs bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-    <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-      <FileText className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
-      <span className="truncate">View Details</span>
-    </button>
-    <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-      <Download className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
-      <span className="truncate">Download Receipt</span>
-    </button>
-    <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
-      <Printer className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
-      <span className="truncate">Print</span>
-    </button>
-    <button className="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-      <XCircle className="w-5 h-5 mr-3 shrink-0 text-red-500" />
-      <span className="truncate">Cancel</span>
-    </button>
-  </div>
-</div>
-
+        <div className="absolute right-0 mt-2 w-64 max-w-xs bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <FileText className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
+            <span className="truncate">View Details</span>
+          </button>
+          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <Download className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
+            <span className="truncate">Download Receipt</span>
+          </button>
+          <button className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <Printer className="w-5 h-5 mr-3 shrink-0 text-gray-500" />
+            <span className="truncate">Print</span>
+          </button>
+          <button className="flex items-center w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
+            <XCircle className="w-5 h-5 mr-3 shrink-0 text-red-500" />
+            <span className="truncate">Cancel</span>
+          </button>
+        </div>
+      </div>
     );
   };
 

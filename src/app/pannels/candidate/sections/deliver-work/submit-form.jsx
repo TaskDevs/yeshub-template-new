@@ -33,6 +33,8 @@ export const SubmitWorkSection = () => {
     uploadError: coverUploadError,
   } = useFileUpload();
 
+  const navigate = useNavigate();
+
   const deliverables = ["File", "Link", "PSD", "PDF"];
 
   const handleSave = async () => {
@@ -59,6 +61,9 @@ export const SubmitWorkSection = () => {
         showConfirmButton: false,
         timer: 1500,
       });
+      setTimeout(() => {
+        navigate("/dashboard-candidate/active-contracts");
+      }, 1500);
     } else {
       console.log("Error submitting proposal");
       Swal.fire({

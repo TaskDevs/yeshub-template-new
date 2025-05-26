@@ -42,21 +42,21 @@ import { useNavigate } from "react-router-dom";
 const statsData = [
   {
     title: "Total Contracts",
-    count: 85,
+    count: 0,
     icon: <FaBriefcase size={18} />,
     bgColor: "bg-gray-100",
     iconColor: "text-gray-700",
   },
   {
     title: "Completed Contracts",
-    count: 73,
+    count: 0,
     icon: <FaDollarSign size={18} />,
     bgColor: "bg-green-100",
     iconColor: "text-green-700",
   },
   {
     title: "In Progress",
-    count: 8,
+    count: 1,
     icon: <FaClock size={18} />,
     bgColor: "bg-yellow-100",
     iconColor: "text-yellow-700",

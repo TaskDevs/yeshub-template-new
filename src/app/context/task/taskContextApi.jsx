@@ -1,12 +1,51 @@
 import React, { createContext, useState } from "react";
 import { notify } from "../../../utils/responseUtils";
-import { addTask } from "./taskApi";
+import { addTask, getContractOfUser, submitWork } from "./taskApi";
 
 export const TaskApiData = createContext();
 
 const TaskApiDataProvider = (props) => {
   const [taskData, setTaskData] = useState([]);
+  const [contractData, setContractData] = useState([]);
   const [taskProfile, setTaskProfile] = useState({});
+
+  const processGetContractOfUser = async () => {
+    try {
+      const response = await getContractOfUser();
+      if (response) {
+        let newData = [];
+        response.data.map((item) =>
+          newData.push({
+            id: item.id,
+            contractName: item.contract_name,
+            completionDate: "Dec 31, 2024",
+            status: item.status,
+            totalValue: item.total_amount,
+            actions: ["Submit Work", "Message"],
+          })
+        );
+        setContractData(newData);
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const processSubmitWork = async (data) => {
+    try {
+      const response = await submitWork(data);
+      if (response) {
+        return {
+          success: true,
+          message: "Work submitted successfully",
+        };
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
 
   const processAddTask = async (data) => {
     const userId = sessionStorage.getItem("userId");
@@ -39,6 +78,9 @@ const TaskApiDataProvider = (props) => {
     <TaskApiData.Provider
       value={{
         processAddTask,
+        processGetContractOfUser,
+        processSubmitWork,
+        contractData,
         taskData,
         setTaskData,
         taskProfile,

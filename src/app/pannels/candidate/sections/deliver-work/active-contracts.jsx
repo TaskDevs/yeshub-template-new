@@ -1,61 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaBriefcase, FaClock, FaDollarSign } from "react-icons/fa";
 import Table from "../../../../common/table/Table";
 import Pagination from "../../../../common/Pagination";
 import { TableTop } from "../../../../common/table/TableTop";
 import { ContractStatCard } from "../../components/can-contract-stat-card";
+import { TaskApiData } from "../../../../context/task/taskContextApi";
 import { useNavigate } from "react-router-dom";
 
 // Sample data
-const contractsData = [
-  {
-    contractName: "Website Redesign Project",
-    client: "Tech Solutions Inc.",
-    completionDate: "Dec 31, 2024",
-    daysRemaining: 14,
-    status: "In Progress",
-    totalValue: 4500,
-    actions: ["Submit Work", "Message"],
-  },
-  {
-    contractName: "Mobile App Development",
-    client: "Innovation Labs",
-    completionDate: "Jan 15, 2024",
-    daysRemaining: 30,
-    status: "Under Review",
-    totalValue: 8250,
-    actions: ["View Details", "Message"],
-  },
-  {
-    contractName: "Brand Identity Design",
-    client: "Creative Studios",
-    completionDate: "Feb 28, 2024",
-    daysRemaining: 45,
-    status: "Just Started",
-    totalValue: 3750,
-    actions: ["Submit Work", "Message"],
-  },
-];
+// const contractsData = [
+//   {
+//     contractName: "Website Redesign Project",
+//     client: "Tech Solutions Inc.",
+//     completionDate: "Dec 31, 2024",
+//     daysRemaining: 14,
+//     status: "In Progress",
+//     totalValue: 4500,
+//     actions: ["Submit Work", "Message"],
+//   },
+//   {
+//     contractName: "Mobile App Development",
+//     client: "Innovation Labs",
+//     completionDate: "Jan 15, 2024",
+//     daysRemaining: 30,
+//     status: "Under Review",
+//     totalValue: 8250,
+//     actions: ["View Details", "Message"],
+//   },
+//   {
+//     contractName: "Brand Identity Design",
+//     client: "Creative Studios",
+//     completionDate: "Feb 28, 2024",
+//     daysRemaining: 45,
+//     status: "Just Started",
+//     totalValue: 3750,
+//     actions: ["Submit Work", "Message"],
+//   },
+// ];
 
 // Stats data based on the image
 const statsData = [
   {
     title: "Total Contracts",
-    count: 85,
+    count: 0,
     icon: <FaBriefcase size={18} />,
     bgColor: "bg-gray-100",
     iconColor: "text-gray-700",
   },
   {
     title: "Completed Contracts",
-    count: 73,
+    count: 0,
     icon: <FaDollarSign size={18} />,
     bgColor: "bg-green-100",
     iconColor: "text-green-700",
   },
   {
     title: "In Progress",
-    count: 8,
+    count: 1,
     icon: <FaClock size={18} />,
     bgColor: "bg-yellow-100",
     iconColor: "text-yellow-700",
@@ -92,9 +93,14 @@ const StatusTag = ({ status }) => {
 };
 
 const ActiveContracts = () => {
+  const { processGetContractOfUser, contractData } = useContext(TaskApiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    processGetContractOfUser();
+  }, []);
 
   const itemsPerPage = 10;
   const totalItems = 123;
@@ -191,7 +197,7 @@ const ActiveContracts = () => {
             setSearchValue={setSearchValue}
           />
           <Table
-            data={contractsData}
+            data={contractData}
             columns={columns}
             isGeneral={true}
             bgColor="bg-white"

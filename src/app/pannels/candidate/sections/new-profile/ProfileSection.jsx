@@ -110,93 +110,80 @@ export const ProfileSection = ({
       } shadow px-8 py-6`}
     >
       {activeSection === "aboutMe" && (
-        <div className="border-b border-gray-100 shadow-sm mb-6 w-full  p-0">
-          {/* Banner with Background Image */}
-          <div
-            className="w-full h-48 sm:h-56 md:h-64 lg:h-72 bg-cover bg-center relative"
-            style={{
-              backgroundImage: `url(${selectedImage || data.profile_image})`,
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-30" />
-          </div>
-
-          {/* Content below banner */}
-          <div className="py-6 px-4 sm:px-6">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 sm:gap-8">
-              {/* Left Section: Avatar and Info */}
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                {/* Avatar Upload */}
-                <div className="relative group shrink-0 -mt-20 sm:-mt-24 z-10">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                  <div
-                    onClick={handleImageClick}
-                    className="group cursor-pointer w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full overflow-hidden border-4 border-white shadow-md bg-white"
-                  >
-                    {selectedImage || data.profile_image ? (
-                      <img
-                        src={selectedImage || data.profile_image}
-                        alt={data.firstname}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <Avatar
-                        sx={{
-                          bgcolor: stringToColor(username),
-                          width: "100%",
-                          height: "100%",
-                          fontSize: "2rem",
-                        }}
-                      >
-                        {username?.charAt(0).toUpperCase()}
-                      </Avatar>
-                    )}
-
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <span className="text-white text-sm">Change</span>
-                    </div>
-                  </div>
-
-                  {isUploading && (
-                    <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 flex items-center justify-center rounded-full">
-                      <div className="loader border-t-2 border-green-600 rounded-full w-6 h-6 animate-spin" />
-                    </div>
-                  )}
-                </div>
-
-                {/* User Info */}
-                <div className="text-center sm:text-left mt-2">
-                  <h1 className="text-xl font-bold capitalize">
-                    {data.firstname} {data.lastname}
-                  </h1>
-                  <p className="text-gray-600 capitalize">{data?.user?.role}</p>
-                  <div className="flex items-center justify-center sm:justify-start mt-1">
-                    <FaStar className="h-5 w-5 text-[#FACC15]" />
-                    <span className="ml-1">{data.rating || 4.0}</span>
-                    <span className="text-gray-500 ml-1">
-                      ({data.reviews} reviews)
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Share Button */}
-              <div className="flex justify-center sm:justify-end">
-                <button
-                  onClick={handleShareProfile}
-                  className="bg-[#305718] text-white px-4 py-2 rounded flex items-center gap-2 h-10"
+        <div className="mb-6 w-full">
+          <div className="flex justify-between sm:flex-row sm:justify-between sm:items-center items-center sm:justify-center mb-4">
+            {/* Avatar and Info */}
+            <div className="flex items-center gap-4">
+              {/* Avatar Upload */}
+              <div className="relative group shrink-0">
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+                <div
+                  onClick={handleImageClick}
+                  className="group cursor-pointer w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-white shadow-md bg-white relative"
                 >
-                  <FaShareAlt className="w-4 h-4" />
-                  <span>Share Profile</span>
-                </button>
+                  {selectedImage || data.profile_image ? (
+                    <img
+                      src={selectedImage || data.profile_image}
+                      alt={data.firstname}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Avatar
+                      sx={{
+                        bgcolor: stringToColor(username),
+                        width: "100%",
+                        height: "100%",
+                        fontSize: "2rem",
+                      }}
+                    >
+                      {username?.charAt(0).toUpperCase()}
+                    </Avatar>
+                  )}
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                    <span className="text-white text-sm">Change</span>
+                  </div>
+                </div>
+                {isUploading && (
+                  <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-70 flex items-center justify-center rounded-full">
+                    <div className="loader border-t-2 border-green-600 rounded-full w-6 h-6 animate-spin" />
+                  </div>
+                )}
               </div>
+
+              {/* Info */}
+              <div className="text-left">
+                <h1 className="text-lg font-bold capitalize">
+                  {data.firstname} {data.lastname}
+                </h1>
+                <p className="text-gray-600 capitalize">
+                  {data?.user?.role || "Full Stack Developer"}
+                </p>
+                <div className="flex items-center mt-1">
+                  <FaStar className="h-4 w-4 text-[#FACC15]" />
+                  <span className="text-sm">{data.rating || 4.9}</span>
+                  <span className="text-gray-500 ml-1 text-sm">
+                    ({data.reviews || 125} reviews)
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Share Button */}
+            <div className="flex justify-center sm:justify-end">
+              <button
+                onClick={handleShareProfile}
+                className="bg-[#305718] text-white px-4 py-2 rounded flex items-center gap-2 h-10"
+              >
+                <FaShareAlt className="w-4 h-4" />
+                <span>Share Profile</span>
+              </button>
             </div>
           </div>
         </div>

@@ -27,6 +27,7 @@ import { TransactionApiData } from "../../../../context/transaction/transactionC
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
+
 // const paymentMethods = [
 //   {
 //     id: "bank",
@@ -405,15 +406,23 @@ export default function FinancialDashboard() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredData = useMemo(() => {
-    return transactionList.filter(
-      (item) =>
-        item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.note.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.status.toLowerCase().includes(searchTerm.toLowerCase())
+const filteredData = useMemo(() => {
+  return transactionList.filter((item) => {
+    const description = item.description?.toLowerCase() || "";
+    const note = item.note?.toLowerCase() || "";
+    const type = item.type?.toLowerCase() || "";
+    const status = item.status?.toLowerCase() || "";
+    const search = searchTerm.toLowerCase();
+
+    return (
+      description.includes(search) ||
+      note.includes(search) ||
+      type.includes(search) ||
+      status.includes(search)
     );
-  }, [searchTerm]);
+  });
+}, [searchTerm, transactionList]);
+
 
   return (
     <div className="tw-css bg-gray-100 min-h-screen p-6">
@@ -445,7 +454,7 @@ export default function FinancialDashboard() {
             <div>
               <p className="text-gray-500">Available Earnings</p>
               <p className="text-3xl font-bold text-green-600">
-                GHS{allEarnings.available}
+                ₵{allEarnings.available}
               </p>
               {walletStatus == "true" && (
                 <button className="mt-2 text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
@@ -475,7 +484,7 @@ export default function FinancialDashboard() {
             <div>
               <p className="text-gray-500">Pending Earnings</p>
               <p className="text-3xl font-bold text-GRAY-600">
-                GHS{allEarnings.pending}
+                ₵{allEarnings.pending}
               </p>
               <p className="text-sm text-gray-500 mt-1">Processing this week</p>
             </div>

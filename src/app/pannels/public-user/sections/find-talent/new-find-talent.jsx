@@ -515,8 +515,9 @@ export default function FreelancerSearch() {
                   <div
                     key={freelancer.id}
                     className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
-                    onClick={() => navigate("/freelancers/1")}
+             
                   >
+                    <div onClick={() => navigate("/freelancers/1")}>
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 bg-gray-300 rounded-full">
                         <Avatar
@@ -529,7 +530,7 @@ export default function FreelancerSearch() {
                           className="w-12 h-12"
                         />
                       </div>
-                      <div>
+                      <div >
                         <h4 className="font-semibold text-base">
                           {freelancer.name}{" "}
                           <span className="text-sm text-gray-600">
@@ -569,7 +570,7 @@ export default function FreelancerSearch() {
                     <div className="text-sm text-gray-500 mb-4">
                       {freelancer.location}
                     </div>
-
+</div>
                     <div className="flex items-center justify-between gap-2 px-3 mt-4">
                       <button
                         onClick={() => setIsModalOpen(true)}

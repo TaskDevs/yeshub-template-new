@@ -291,10 +291,16 @@ export const Header = ({ isDashboard = true }) => {
           {
             id: "financial-overview",
             label: "Financial Overview",
-            to: `${base.CANDIDATE_PRE.replace(
-              /\/$/,
-              ""
-            )}/${candidate.FINANCE.replace(/^\//, "")}`,
+            to:
+              role === "freelancer"
+                ? `${base.CANDIDATE_PRE.replace(
+                    /\/$/,
+                    ""
+                  )}/${candidate.FINANCE.replace(/^\//, "")}`
+                : `${base.CLIENT_PRE.replace(
+                    /\/$/,
+                    ""
+                  )}/${client.FINANCE.replace(/^\//, "")}`,
           },
           {
             id: "billings-earnings",
@@ -330,7 +336,6 @@ export const Header = ({ isDashboard = true }) => {
       "Find Jobs",
       "Deliver Work",
       "Manage Finances",
-     
     ];
 
     // Step 1: Filter by dashboard context
@@ -344,12 +349,16 @@ export const Header = ({ isDashboard = true }) => {
     items = items.filter((item) => {
       if (role === "client") {
         return (
-          item.label !== "Find Jobs" && item.label !== "Candidate Dashboard"
+          item.label !== "Find Jobs" &&
+          item.label !== "Candidate Dashboard" &&
+          item.label !== "Deliver Work"
         );
       }
 
       if (role === "freelancer") {
-        return item.label !== "Client Dashboard" && item.label !== "Manage Jobs"; // future-proof
+        return (
+          item.label !== "Client Dashboard" && item.label !== "Manage Jobs"
+        ); // future-proof
       }
 
       return true;

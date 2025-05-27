@@ -218,5 +218,23 @@ export const START_CLIENT_PROFILE_FIELD = {
       placeholder: "",
     },
   ],
+  fieldDetailFive: [
+    {
+      name: "job_type",
+      label: "Job Type",
+      type: "select",
+      placeholder: "Select Job Type",
+      options: ["Full Time", "Part Time", "Contract", "Internship"],
+    }
+  ],
+   fieldDetailSix: [
+    {
+      name: "experience",
+      label: "Experience Level",
+      type: "select",
+      placeholder: "Select Experience Level",
+      options: ["Beginner Level", "Intermediate Level", "Expert Level", "All Levels"],
+    }
+  ],
 
 };

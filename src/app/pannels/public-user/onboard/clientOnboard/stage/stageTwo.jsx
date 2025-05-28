@@ -1,6 +1,7 @@
 import React from "react";
 import { START_CLIENT_PROFILE_FIELD } from "../../../../../../globals/user-profile-data";
 import InputField from "../../../../../common/input-field";
+import SelectField from "../../../../../common/select-field";
 
 const ClientStageTwo = ({ forms, handleInputChange }) => {
   return (
@@ -39,6 +40,31 @@ const ClientStageTwo = ({ forms, handleInputChange }) => {
                 </li>
                 <li>Facebook ad specialist needed for product launch</li>
               </ul>
+            </div>
+
+            <div className="input-container">
+              <SelectField
+                noIcon={"yes"}
+                field={START_CLIENT_PROFILE_FIELD.fieldDetailFive[0]}
+                label={START_CLIENT_PROFILE_FIELD.fieldDetailFive[0].label}
+                options={START_CLIENT_PROFILE_FIELD.fieldDetailFive[0].options}
+                value={forms[0]}
+                change={(data, field) => {
+                  handleInputChange(field, data);
+                }}
+              />
+            </div>
+              <div className="input-container">
+              <SelectField
+                noIcon={"yes"}
+                field={START_CLIENT_PROFILE_FIELD.fieldDetailSix[0]}
+                label={START_CLIENT_PROFILE_FIELD.fieldDetailSix[0].label}
+                options={START_CLIENT_PROFILE_FIELD.fieldDetailSix[0].options}
+                value={forms[0]}
+                change={(data, field) => {
+                  handleInputChange(field, data);
+                }}
+              />
             </div>
           </div>
         </div>

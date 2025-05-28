@@ -139,7 +139,8 @@ export const candidate = {
 export const client = {
   DASHBOARD: "/",
   NEW_MANAGE_JOBS: "/new-manage-jobs",
-   PROFILE: "/profile",
+  FINANCE: "/client-finance-overview",
+  PROFILE: "/profile",
 }
 
 export const employer = {

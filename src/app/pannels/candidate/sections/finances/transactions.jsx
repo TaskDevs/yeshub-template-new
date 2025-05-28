@@ -61,10 +61,13 @@ const TransactionsPage = () => {
     const dateMatch =
       (!startDate || new Date(t.date) >= new Date(startDate)) &&
       (!endDate || new Date(t.date) <= new Date(endDate));
-    const searchMatch = t.description
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    return dateMatch && searchMatch;
+      
+   const searchMatch = typeof t.description === "string"
+    ? t.description.toLowerCase().includes(searchTerm.toLowerCase())
+    : false;
+
+  
+  return dateMatch && searchMatch;
   });
   const { processGetTransactionOfUser } = useContext(TransactionApiData);
 

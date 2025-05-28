@@ -24,9 +24,9 @@ const logoImages = [
 ];
 const Footer = () => {
   return (
-    <footer className="tw-css bg-white">
+    <footer className="tw-css bg-white max-w-7xl mx-auto justify-center">
       {/* Trusted Brands Section */}
-          <div className="max-w-7xl mx-auto px-4 py-10">
+          <div className="max-w-7xl mx-auto justify-center px-4 py-10">
       <h3 className="text-lg font-semibold mb-6">
         Trusted by leading brands and startups
       </h3>
@@ -45,7 +45,7 @@ const Footer = () => {
         className="w-full"
       >
         {logoImages.map((src, index) => (
-          <SwiperSlide key={index} className="flex justify-center items-center">
+          <SwiperSlide key={index} className="flex justify-center items-center ">
             <img
               src={src}
               alt={`Logo ${index + 1}`}
@@ -57,7 +57,7 @@ const Footer = () => {
     </div>
 
       {/* Main Footer Navigation */}
-      <div className="bg-[#0B0F1A] text-white pt-12 pb-6 px-4">
+      <div className="bg-[#0B0F1A] text-white pt-12 pb-6 px-4 ">
         <div className="max-w-7xl mx-auto grid md:grid-cols-4  gap-8 text-sm">
           {/* Column 1 */}
           <div>

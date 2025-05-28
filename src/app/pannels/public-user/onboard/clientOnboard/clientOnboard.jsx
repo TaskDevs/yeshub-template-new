@@ -69,6 +69,8 @@ const ClientOnboard = () => {
           skills: formData.skills?.join(", ") || "",
           category: formData.category,
           scope: formData.workScope,
+          job_type: formData["job_type"],
+          experience: formData["experience"],
           hourly_rate_start:
             formData.budgetType === "hourly"
               ? formData.hourly_rate_start
@@ -80,11 +82,11 @@ const ClientOnboard = () => {
           description: formData.bio,
           end_date: formData.end_date || null,
         };
-
+      
         const jobRes = await addJob(jobData);
         if (jobRes) {
           toast.success("Job posted successfully!");
-          setTimeout(() => navigate(`/profile`), 2000);
+          setTimeout(() => navigate(`/dashboard-client`), 2000);
         }
       }
     } catch (err) {

@@ -336,6 +336,7 @@ export const Header = ({ isDashboard = true }) => {
       "Find Jobs",
       "Deliver Work",
       "Manage Finances",
+    
     ];
 
     // Step 1: Filter by dashboard context

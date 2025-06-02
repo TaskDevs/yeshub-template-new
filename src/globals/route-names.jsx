@@ -26,6 +26,7 @@ export const publicUser = {
   HOME17: "/index17",
   HOME18: "/index18",
   TEST: "/test",
+   LOG:'/log',
 
   jobs: {
     GRID: "/job-grid",
@@ -64,6 +65,7 @@ export const publicUser = {
     LINKEDINCALLBACK: "/linkedin/auth/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
+   
    
    
     FIND_TALENT: "/find-talent",
@@ -141,6 +143,7 @@ export const client = {
   NEW_MANAGE_JOBS: "/new-manage-jobs",
   FINANCE: "/client-finance-overview",
   PROFILE: "/profile",
+  PROJECT_DETAILS: "/project-details/:id",
 }
 
 export const employer = {

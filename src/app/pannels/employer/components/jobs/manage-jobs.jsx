@@ -1,6 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Clock5, MapPin,EllipsisVertical } from "lucide-react";
+import Swal from "sweetalert2";
+
+import {
+  Clock5,
+  MapPin,
+  EllipsisVertical,
+  Pencil,
+  Eye,
+  Trash2,
+} from "lucide-react";
 
 const jobData = [
   {
@@ -23,7 +32,7 @@ const jobData = [
     title: "Cloud Solutions Architect",
     location: "Remote (West Africa)",
     date: "May 5, 2025",
-    status: "Paused",
+    status: "Draft",
     tags: ["AWS", "Azure", "Cloud Architecture", "DevOps"],
     applicants: 12,
   },
@@ -62,7 +71,23 @@ export default function ManageJobs() {
   const [statusFilter, setStatusFilter] = useState("All Jobs");
   const [sortBy, setSortBy] = useState("Newest First");
   const [loading, setLoading] = useState(true);
+  const [openMenu, setOpenMenu] = useState(null);
+  const menuRef = useRef(null);
+  const toggleMenu = (index) => {
+    setOpenMenu(openMenu === index ? null : index);
+  };
 
+  // Close menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenu(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   useEffect(() => {
     // Simulate data loading
     const timer = setTimeout(() => setLoading(false), 1000);
@@ -108,6 +133,61 @@ export default function ManageJobs() {
     setCurrentPage(1);
   }, [searchTerm, statusFilter, sortBy]);
 
+
+  const handleView = (job) => {
+  // Example: open a modal or navigate to details
+  console.log("Viewing job:", job);
+  // navigate(`/jobs/${job.id}`); // if using React Router
+};
+
+const handleEdit = (job) => {
+  // Example: open edit modal or page
+  console.log("Editing job:", job);
+  // setEditJob(job);
+  // setIsEditModalOpen(true);
+};
+
+
+const handleDelete = (job) => {
+  Swal.fire({
+    title: `Delete "${job.title}"?`,
+    text: "This action cannot be undone!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#e3342f",
+    cancelButtonColor: "#6c757d",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with deletion
+      console.log("Deleting job:", job);
+      // setJobs(prev => prev.filter(j => j.id !== job.id));
+      Swal.fire("Deleted!", `"${job.title}" has been deleted.`, "success");
+    }
+  });
+};
+
+
+const handleMenuAction = (action, job) => {
+  switch (action) {
+    case "view":
+      handleView(job);
+      break;
+    case "edit":
+      handleEdit(job);
+      break;
+    case "delete":
+      handleDelete(job);
+      break;
+    default:
+      console.warn("Unknown action:", action);
+  }
+
+  // Close the menu after action
+  setOpenMenu(null);
+};
+
+
   return (
     <div className="tw-css p-4 md:p-8 max-w-6xl mx-auto">
       {/* Header Controls */}
@@ -131,7 +211,7 @@ export default function ManageJobs() {
             >
               <option>All Jobs</option>
               <option>Active</option>
-              <option>Paused</option>
+              <option>Draft</option>
               <option>Closed</option>
             </select>
           </div>
@@ -197,68 +277,93 @@ export default function ManageJobs() {
         ) : (
           // ✅ Jobs Display
           paginatedJobs.map((job, idx) => (
-            <div
-              key={idx}
-              className="border rounded-xl p-5 bg-white flex justify-between sm:flex-row sm:justify-between sm:items-center items-start mb-4"
-            >
-              {/* Job Info */}
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    {job.title}
-                  </h2>
-                  {job.status && (
-                    <span
-                      className={`text-xs font-medium px-2 py-1 rounded-full ${
-                        job.status === "Active"
-                          ? "bg-green-100 text-green-800"
-                          : job.status === "Paused"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-gray-200 text-gray-600"
-                      }`}
-                    >
-                      {job.status}
-                    </span>
-                  )}
-                </div>
+        <div
+  key={idx}
+  className="border rounded-xl p-5 bg-white flex justify-between sm:flex-row sm:justify-between sm:items-center items-start mb-4 relative z-100"
+>
+  {/* Job Info */}
+  <div className="space-y-1">
+    <div className="flex items-center gap-2">
+      <h2 className="text-lg font-semibold text-gray-900">{job.title}</h2>
+      {job.status && (
+        <span
+          className={`text-xs font-medium px-2 py-1 rounded-full ${
+            job.status === "Active"
+              ? "bg-green-100 text-green-800"
+              : job.status === "Draft"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-gray-200 text-gray-600"
+          }`}
+        >
+          {job.status}
+        </span>
+      )}
+    </div>
 
-                <div className="text-sm text-gray-600 flex items-center gap-2">
-                  <span className="flex items-center gap-1 text-sm text-gray-600">
-                    <MapPin size={15} />
-                    {job.location}
-                  </span>
-                </div>
-                <div className="text-sm text-gray-500 flex items-center gap-2">
-                  <span className="flex items-center gap-1 text-sm text-gray-600">
-                    <Clock5 size={15} /> Posted on {job.date}
-                  </span>
-                </div>
+    <div className="text-sm text-gray-600 flex items-center gap-2">
+      <span className="flex items-center gap-1">
+        <MapPin size={15} />
+        {job.location}
+      </span>
+    </div>
 
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {job.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+    <div className="text-sm text-gray-500 flex items-center gap-2">
+      <span className="flex items-center gap-1">
+        <Clock5 size={15} /> Posted on {job.date}
+      </span>
+    </div>
 
-              {/* Actions */}
-              <div className="flex flex-col items-end justify-between gap-2 mt-4 md:mt-0">
-                <p className="text-sm text-gray-500">
-                  👥 {job.applicants} applicants
-                </p>
-                <button className="border border-gray-300 text-gray-700 px-4 py-1 rounded-md text-sm hover:bg-gray-100 transition">
-                 <span className="flex items-center gap-1 text-sm text-gray-600">
-                      <EllipsisVertical size={12}/> Actions
-                 </span>
-               
-                </button>
-              </div>
-            </div>
+    <div className="flex flex-wrap gap-2 mt-2">
+      {job.tags.map((tag, i) => (
+        <span
+          key={i}
+          className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full"
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  {/* Actions */}
+  <div className="relative z-100">
+    <div className="flex flex-col items-end gap-2 mt-4 md:mt-0">
+      <p className="text-sm text-gray-500">👥 {job.applicants} applicants</p>
+      <button
+        onClick={() => toggleMenu(idx)}
+        className="border border-gray-300 text-gray-700 px-4 py-1 rounded-md text-sm hover:bg-gray-100 transition"
+      >
+        <span className="flex items-center gap-1">
+          <EllipsisVertical size={12} /> Actions
+        </span>
+      </button>
+
+      {openMenu === idx && (
+        <div className="absolute right-0 top-12 z-50 w-40 bg-white border rounded-md shadow-lg py-2">
+          <button
+            onClick={() => handleMenuAction("view", job)}
+            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+          >
+            <Eye size={14} /> View
+          </button>
+          <button
+            onClick={() => handleMenuAction("edit", job)}
+            className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+          >
+            <Pencil size={14} /> Edit
+          </button>
+          <button
+            onClick={() => handleMenuAction("delete", job)}
+            className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+          >
+            <Trash2 size={14} /> Delete
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
           ))
         )}
       </div>

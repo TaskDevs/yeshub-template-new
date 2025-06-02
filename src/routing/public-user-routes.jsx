@@ -75,6 +75,7 @@ import MessageDashboard from "../app/pannels/public-user/components/messages/mes
 import FreelancerSearch from "../app/pannels/public-user/sections/find-talent/new-find-talent";
 import FreelancerDetail from "../app/pannels/public-user/sections/find-talent/freelancer-details";
 import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
+import NewAuthForm from "../app/pannels/public-user/components/pages/log-form";
 
 
 function PublicUserRoutes() {
@@ -102,7 +103,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.HOME18} element={<Home18Page />} />
         <Route path={publicUser.TEST} element={<test-login />} />
         <Route path={publicUser.ONBOARD} element={<OnBoardPage />} />
-
+         <Route path={publicUser.LOG} element={<NewAuthForm />} />
         {/* <Route path={publicUser.jobs.GRID} element={<JobsListPage />} /> */}
         {/* <Route path={publicUser.jobs.GRID_MAP} element={<JobsGridMapPage />} /> */}
         <Route path={publicUser.jobs.LIST} element={<JobsListPage />} />

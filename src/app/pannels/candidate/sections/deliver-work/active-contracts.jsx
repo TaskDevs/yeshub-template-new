@@ -39,29 +39,6 @@ import { useNavigate } from "react-router-dom";
 // ];
 
 // Stats data based on the image
-const statsData = [
-  {
-    title: "Total Contracts",
-    count: 0,
-    icon: <FaBriefcase size={18} />,
-    bgColor: "bg-gray-100",
-    iconColor: "text-gray-700",
-  },
-  {
-    title: "Completed Contracts",
-    count: 0,
-    icon: <FaDollarSign size={18} />,
-    bgColor: "bg-green-100",
-    iconColor: "text-green-700",
-  },
-  {
-    title: "In Progress",
-    count: 1,
-    icon: <FaClock size={18} />,
-    bgColor: "bg-yellow-100",
-    iconColor: "text-yellow-700",
-  },
-];
 
 // Status Tag Component
 const StatusTag = ({ status }) => {
@@ -93,7 +70,8 @@ const StatusTag = ({ status }) => {
 };
 
 const ActiveContracts = () => {
-  const { processGetContractOfUser, contractData } = useContext(TaskApiData);
+  const { processGetContractOfUser, contractData, contractStats } =
+    useContext(TaskApiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
@@ -115,6 +93,30 @@ const ActiveContracts = () => {
   const handleSearch = (value) => {
     console.log("Searching for:", value);
   };
+
+  let statsData = [
+    {
+      title: "Total Contracts",
+      count: contractStats.total_contract,
+      icon: <FaBriefcase size={18} />,
+      bgColor: "bg-gray-100",
+      iconColor: "text-gray-700",
+    },
+    {
+      title: "Completed Contracts",
+      count: contractStats.completed_contract,
+      icon: <FaDollarSign size={18} />,
+      bgColor: "bg-green-100",
+      iconColor: "text-green-700",
+    },
+    {
+      title: "In Progress",
+      count: contractStats.contract_in_progress,
+      icon: <FaClock size={18} />,
+      bgColor: "bg-yellow-100",
+      iconColor: "text-yellow-700",
+    },
+  ];
 
   // Table column configuration
   const columns = [

@@ -8,13 +8,26 @@ const TaskApiDataProvider = (props) => {
   const [taskData, setTaskData] = useState([]);
   const [contractData, setContractData] = useState([]);
   const [taskProfile, setTaskProfile] = useState({});
+  const [contractStats, setContractStats] = useState({
+    total_contract: 0,
+    completed_contract: 0,
+    contract_in_progress: 0,
+    canceled_contract: 0,
+  });
 
   const processGetContractOfUser = async () => {
     try {
       const response = await getContractOfUser();
       if (response) {
+        setContractStats({
+          total_contract: response.counts.total_contracts,
+          completed_contract: response.counts.complete_contracts,
+          contract_in_progress: response.counts.active_contracts,
+          canceled_contract: response.counts.cancel_contracts,
+        });
+        console.log(response);
         let newData = [];
-        response.data.map((item) =>
+        response.data.data.map((item) =>
           newData.push({
             id: item.id,
             contractName: item.contract_name,
@@ -81,6 +94,7 @@ const TaskApiDataProvider = (props) => {
         processGetContractOfUser,
         processSubmitWork,
         contractData,
+        contractStats,
         taskData,
         setTaskData,
         taskProfile,

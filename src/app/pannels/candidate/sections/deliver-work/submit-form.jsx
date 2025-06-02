@@ -141,7 +141,6 @@ export const SubmitWorkSection = () => {
 };
 
 export const SubmitProposalSection = ({ job_id, companyInfo }) => {
-  //const {  } = useContext(TaskApiData);
   const { processSubmitProposal } = useContext(ProposalApiData);
   const { formData, setFormData, handleInputChange, clearAll } =
     useDeliverWorkForm({

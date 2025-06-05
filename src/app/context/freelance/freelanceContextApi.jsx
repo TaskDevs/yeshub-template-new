@@ -26,11 +26,14 @@ const initialFormData = FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
 const FreelanceApiDataProvider = (props) => {
   const [freelanceProfileData, setFreelanceProfileData] = useState([]);
   const [freelanceList, setFreelanceList] = useState([]);
+  const [freelanceSkillInfo, setFreelanceSkillInfo] = useState([]);
+  const [languagesData, setLanguagesData] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const { setIsSubmitting } = useContext(GlobalApiData);
   const [selectedItems, setSelectedItems] = useState([]);
   const { portfolios } = useContext(PortfolioApiData);
+  const [viewFreelanceProfile, setViewFreelanceProfile] = useState({});
 
   //  console.log("freelanceProfileData", freelanceProfileData)
 
@@ -66,6 +69,7 @@ const FreelanceApiDataProvider = (props) => {
       response.data.data.map((item) =>
         newList.push({
           id: item.id,
+          user_id: item.user_id,
           avatar: item.profile_image,
           name: item.firstname + " " + item.lastname,
           bio: item.bio,
@@ -86,7 +90,20 @@ const FreelanceApiDataProvider = (props) => {
   const processFreelanceProfile = async (id) => {
     const res = await freelanceProfile(id);
     if (res) {
-      return res.data;
+      console.log(res);
+      let newData = [];
+      res.freelance_info?.[0]?.skills_id?.split(",").map((item) =>
+        newData.push({
+          name: item,
+          level: "Advanced (6+ years)",
+          percentage: 80,
+        })
+      );
+
+      setLanguagesData(JSON.parse(res?.freelance_info?.[0]?.languages));
+      setFreelanceSkillInfo(newData);
+      setViewFreelanceProfile(res);
+      //return res.data;
     } else {
       return false;
     }
@@ -254,6 +271,9 @@ const FreelanceApiDataProvider = (props) => {
         processUpdateFreelance,
         processDeleteFreelance,
         freelanceList,
+        languagesData,
+        freelanceSkillInfo,
+        viewFreelanceProfile,
       }}
     >
       {props.children}

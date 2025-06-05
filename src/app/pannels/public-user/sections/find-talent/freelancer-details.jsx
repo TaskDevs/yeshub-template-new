@@ -1,15 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { CheckCircle, MapPin, Star, Clock } from "lucide-react";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  CheckCircle,
+  MapPin,
+  //Star,
+  Clock,
+} from "lucide-react";
+import { useParams } from "react-router-dom";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
 export default function FreelancerDetail() {
+  const {
+    processFreelanceProfile,
+    viewFreelanceProfile,
+    freelanceSkillInfo,
+    languagesData,
+  } = useContext(FreelanceApiData);
+  //const [freelanceProfileData, setFreelanceProfileData] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
   const [calendarCells, setCalendarCells] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
+
+  const { id } = useParams();
 
   const month = currentDate.getMonth(); // 0-11
   const year = currentDate.getFullYear();
 
   useEffect(() => {
+    console.log(id);
+    processFreelanceProfile(id);
+    // let data = freelanceList.filter((item) => item.id == id)?.[0];
+    // console.log(data);
+    // setFreelanceProfileData(data);
     generateCalendar(year, month);
     fetchAvailableDates(year, month);
   }, [year, month]);
@@ -59,29 +80,41 @@ export default function FreelancerDetail() {
           <div className="bg-white p-6 rounded-xl shadow mb-4">
             <div className="flex gap-6">
               <img
-                src="https://randomuser.me/api/portraits/men/32.jpg"
+                src={viewFreelanceProfile?.freelance_info?.[0]?.profile_image}
                 alt="David Chen"
                 className="w-24 h-24 rounded-full object-cover"
               />
               <div className="flex-1 space-y-3">
                 <div className="flex justify-between">
                   <div>
-                    <h1 className="text-xl font-semibold">David Chen</h1>
+                    <h1 className="text-xl font-semibold">
+                      {viewFreelanceProfile?.freelance_info?.[0]?.firstname +
+                        " " +
+                        viewFreelanceProfile?.freelance_info?.[0]?.lastname}
+                    </h1>
                     <p className="text-gray-600 text-sm">
-                      UI/UX Designer | Product Design
+                      {viewFreelanceProfile?.freelance_info?.[0]?.profession}
                     </p>
                     <div className="flex items-center text-gray-500 text-sm mt-1">
                       <MapPin className="w-4 h-4 mr-1" />
-                      San Francisco, USA (GMT-7)
+                      {viewFreelanceProfile?.freelance_info?.[0]?.city +
+                        " " +
+                        viewFreelanceProfile?.freelance_info?.[0]?.region +
+                        " " +
+                        viewFreelanceProfile?.freelance_info?.[0]?.address}
                     </div>
-                    <div className="flex items-center gap-1 text-yellow-500 text-sm mt-1">
+                    {/* <div className="flex items-center gap-1 text-yellow-500 text-sm mt-1">
                       <Star className="w-4 h-4" />
                       5.0 (84 reviews)
-                    </div>
+                    </div> */}
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-semibold"> ₵75/hr</p>
-                    <p className="text-sm text-gray-500"> ₵95k+ earned</p>
+                    <p className="text-lg font-semibold">
+                      {" "}
+                      ₵{viewFreelanceProfile?.freelance_info?.[0]?.hourly_rate}
+                      /hr
+                    </p>
+                    {/* <p className="text-sm text-gray-500"> ₵95k+ earned</p> */}
                     <p className="text-green-600 text-sm flex items-center justify-end mt-1">
                       <CheckCircle className="w-4 h-4 mr-1" />
                       Available now
@@ -89,26 +122,19 @@ export default function FreelancerDetail() {
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm">
-                  Award-winning UI/UX designer with 8+ years of experience
-                  creating intuitive user experiences for SaaS products, mobile
-                  applications, and e-commerce platforms.
+                  {viewFreelanceProfile?.freelance_info?.[0]?.bio}
                 </p>
                 <div className="flex flex-wrap gap-2 ">
-                  {[
-                    "Figma",
-                    "UI Design",
-                    "UX Research",
-                    "Sketch",
-                    "Adobe XD",
-                    "Prototyping",
-                  ].map((skill) => (
-                    <span
-                      key={skill}
-                      className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  {viewFreelanceProfile?.freelance_info?.[0]?.skills_id
+                    ?.split(",")
+                    .map((skill) => (
+                      <span
+                        key={skill}
+                        className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
                 </div>
               </div>
             </div>
@@ -143,17 +169,15 @@ export default function FreelancerDetail() {
           >
             <div className="items-center">
               <h2 className="text-lg font-semibold text-gray-800">
-                About David Chen
+                About{" "}
+                {viewFreelanceProfile?.freelance_info?.[0]?.firstname +
+                  " " +
+                  viewFreelanceProfile?.freelance_info?.[0]?.lastname}
               </h2>
             </div>
 
             <p className="text-gray-700 text-sm leading-relaxed">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-              amet dicta, iure quia quidem nemo, tempore fuga id labore
-              molestiae pariatur aperiam deserunt incidunt, eius illum rerum
-              error quasi magnam? Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Quas officiis vero mollitia, maiores rem
-              nesciunt possimus, libero blanditiis distinctio ut adipisci!
+              {viewFreelanceProfile?.freelance_info?.[0]?.bio}
             </p>
           </div>
 
@@ -169,15 +193,49 @@ export default function FreelancerDetail() {
               </a>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="rounded-lg overflow-hidden shadow-sm">
-                  <img
-                    src={`https://placehold.co/200x150?text=Work+${i}`}
-                    alt={`Work ${i}`}
-                    className="w-full h-full object-cover"
-                  />
+              {viewFreelanceProfile?.portfolio_info?.length > 0 ? (
+                viewFreelanceProfile?.portfolio_info.map((item) => (
+                  <div key={item.id}>
+                    <h4 className="text-md mb-4">
+                      Project Title: {item.project_title}
+                    </h4>
+                    <hr />
+                    <span className="text-md mb-4">Role: {item.role}</span>
+                    <hr />
+                    <span className="text-md mb-4">
+                      Description: {item.description}
+                    </span>
+                    <hr />
+                    <div className="flex justify-between mb-4">
+                      <span>Project Start: {item.project_start_date}</span>
+                      <span>
+                        Project End:{" "}
+                        {item.project_end_date
+                          ? item.project_end_date
+                          : "Not Available"}
+                      </span>
+                    </div>
+                    {item.media.map((i) => (
+                      <div
+                        key={i}
+                        className="rounded-lg overflow-hidden shadow-sm"
+                      >
+                        <img
+                          src={`${i.url}`}
+                          alt={`Work ${i}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <div>
+                  <h2 className="text-xl text-gray-500">
+                    No Portfolio available
+                  </h2>
                 </div>
-              ))}
+              )}
             </div>
           </div>
           {/* Skills Section */}
@@ -189,32 +247,7 @@ export default function FreelancerDetail() {
 
             {/* Skills Grid */}
             <div className="grid grid-cols-2 gap-6">
-              {[
-                { name: "UI Design", level: "Expert (8+ years)", percent: 95 },
-                { name: "Figma", level: "Expert (6+ years)", percent: 90 },
-                { name: "Adobe XD", level: "Advanced (5+ years)", percent: 80 },
-                {
-                  name: "User Testing",
-                  level: "Advanced (6+ years)",
-                  percent: 85,
-                },
-                {
-                  name: "UX Research",
-                  level: "Expert (7+ years)",
-                  percent: 90,
-                },
-                { name: "Sketch", level: "Expert (8+ years)", percent: 95 },
-                {
-                  name: "Prototyping",
-                  level: "Expert (7+ years)",
-                  percent: 90,
-                },
-                {
-                  name: "Design Systems",
-                  level: "Expert (5+ years)",
-                  percent: 85,
-                },
-              ].map((skill) => (
+              {freelanceSkillInfo?.map((skill) => (
                 <div key={skill.name}>
                   <div className="flex justify-between mb-1 text-sm">
                     <span className="font-medium text-gray-700">
@@ -235,13 +268,41 @@ export default function FreelancerDetail() {
             {/* Certifications & Achievements */}
             <div>
               <h3 className="text-sm font-semibold text-gray-700 mb-2">
-                Certifications & Achievements
+                Education
               </h3>
               <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                <li>Google UX Design Professional Certificate</li>
-                <li>Nielsen Norman Group UX Certification</li>
-                <li>Webby Award for Best User Interface (2023)</li>
-                <li>A Design Award for Mobile App Design (2022)</li>
+                {viewFreelanceProfile?.education_info?.map((item) => (
+                  <li key={item.id}>
+                    {item.school +
+                      " || " +
+                      item.qualification +
+                      " || " +
+                      item.area_of_study}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                Certification
+              </h3>
+              <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                {viewFreelanceProfile?.certificate_info?.map((item) => (
+                  <>
+                    <li key={item.id}>
+                      {"Certificate Description" +
+                        item.desription +
+                        " || Organization: " +
+                        item.organization +
+                        " || Issue Date: " +
+                        item.issued_at}
+                    </li>
+                    <p className="text-md">
+                      Credential Url: {item.credential_url}
+                    </p>
+                  </>
+                ))}
               </ul>
             </div>
 
@@ -251,20 +312,14 @@ export default function FreelancerDetail() {
                 Languages
               </h3>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>
-                  <span className="font-medium text-gray-700">English:</span>{" "}
-                  Native or Bilingual
-                </li>
-                <li>
-                  <span className="font-medium text-gray-700">
-                    Mandarin Chinese:
-                  </span>{" "}
-                  Native or Bilingual
-                </li>
-                <li>
-                  <span className="font-medium text-gray-700">Spanish:</span>{" "}
-                  Professional Working
-                </li>
+                {languagesData?.map((item, index) => (
+                  <li key={index}>
+                    <span className="font-medium text-gray-700">
+                      {item.language}:
+                    </span>{" "}
+                    {item.proficiency}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

@@ -85,13 +85,13 @@ export const freelanceProfile = async (id) => {
     let responseOnFreelanceProfile = await axios.get(
       `${REACT_BASE_URL}get-freelance/${id}`
     );
-
-    return responseOnFreelanceProfile;
-    // if (responseOnFreelanceProfile.status === SUCCESS_STATUS) {
-    //   return responseOnFreelanceProfile.data;
-    // } else {
-    //   return false;
-    // }
+    console.log(responseOnFreelanceProfile);
+    if (responseOnFreelanceProfile.status == 200) {
+      console.log(responseOnFreelanceProfile);
+      return responseOnFreelanceProfile.data.data;
+    } else {
+      return false;
+    }
   } catch (err) {
     console.log(err);
     return false;

@@ -3,9 +3,6 @@ import { FaBriefcase, FaClock, FaWallet } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
 import { JobUserStat } from "../../../context/application/applicationApi";
 
-
-
-// Stats Card Component
 const StatsCard = ({ title, value, subtitle, icon: Icon, cssModule }) => (
   <div className={cssModule.statsCard}>
     <div className="flex justify-between mb-2">
@@ -69,7 +66,7 @@ export const CandidateStats = ({ cssModule }) => {
       <StatsCard
         title="Saved Jobs"
         value={stats.total_saved_jobs}
-        subtitle={`Expiring soon: ${stats.expiring_soon_saved_jobs_count ||0}`}
+        subtitle={`Expiring soon: ${stats.expiring_soon_saved_jobs_count}`}
         icon={FaClock}
         cssModule={cssModule}
       />

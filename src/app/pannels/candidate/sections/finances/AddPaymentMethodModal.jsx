@@ -10,6 +10,7 @@ export default function AddPaymentMethodModal({
 }) {
   const { processAddPaymentMethod } = useContext(PaymentApiData);
   const [method, setMethod] = useState("card"); // card | bank | momo
+  const role = sessionStorage.getItem("userRole")
   const [formData, setFormData] = useState({
     default: true,
     expiry_date: null,
@@ -113,23 +114,26 @@ export default function AddPaymentMethodModal({
 
         {/* Tabs */}
         <div className="flex mb-4 border-b">
-          {["card", "bank", "momo"].map((type) => (
-            <button
-              key={type}
-              className={`flex-1 py-2 text-sm font-medium capitalize ${
-                method === type
-                  ? "border-b-2 border-green-600 text-green-600"
-                  : "text-gray-500 hover:text-indigo-600"
-              }`}
-              onClick={() => setMethod(type)}
-            >
-              {type === "card"
-                ? "Credit Card"
-                : type === "bank"
-                ? "Bank"
-                : "MoMo"}
-            </button>
-          ))}
+         {["card", "bank", "momo"]
+  .filter((type) => role !== "freelancer" || type !== "card")
+  .map((type) => (
+    <button
+      key={type}
+      className={`flex-1 py-2 text-sm font-medium capitalize ${
+        method === type
+          ? "border-b-2 border-green-600 text-green-600"
+          : "text-gray-500 hover:text-indigo-600"
+      }`}
+      onClick={() => setMethod(type)}
+    >
+      {type === "card"
+        ? "Credit Card"
+        : type === "bank"
+        ? "Bank"
+        : "MoMo"}
+    </button>
+))}
+
         </div>
 
         {/* Form based on method */}

@@ -6,7 +6,7 @@ import toast from "react-hot-toast"; // Updated import
 const StageFour = () => {
   const [cvFile, setCvFile] = useState(null);
   const [cvFileName, setCvFileName] = useState(""); // Display file name
-  const [linkedinImported, setLinkedinImported] = useState(false);
+  // const [linkedinImported, setLinkedinImported] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // To handle the loading state
   const [progress, setProgress] = useState(0); // To track the progress (in percentage)
   const location = useLocation();
@@ -21,9 +21,9 @@ const StageFour = () => {
     }
   };
 
-  const handleLinkedInImport = () => {
-    setLinkedinImported(true);
-  };
+  // const handleLinkedInImport = () => {
+  //   setLinkedinImported(true);
+  // };
 
   const handleSubmit = () => {
     if (!cvFile || !userId) {
@@ -95,21 +95,21 @@ const StageFour = () => {
             </div>
 
             {/* LinkedIn Import */}
-            <div className="mt-2">
+            {/* <div className="mt-2">
               <button
                 className={`btn w-full ${linkedinImported ? "btn-success" : "btn-outline-success"}`}
                 onClick={handleLinkedInImport}
               >
                 {linkedinImported ? "✅ LinkedIn Imported" : "🔗 Import from LinkedIn"}
               </button>
-            </div>
+            </div> */}
 
             {/* Fill out manually */}
-            <div className="mt-2">
+            {/* <div className="mt-2">
               <button className="btn w-full btn-outline-success">
                 Fill out manually
               </button>
-            </div>
+            </div> */}
 
             {/* Submit button with spinner and progress */}
             {cvFile && (

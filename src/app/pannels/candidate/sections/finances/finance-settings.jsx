@@ -76,6 +76,11 @@ const FinancialSettings = () => {
     // You can add logic to reset to initial state if needed.
   };
 
+
+    const handleDelete = () => {
+    alert("Delected successfully.");
+    // You can add logic to reset to initial state if needed.
+  };
   const handleSave = async () => {
     if (paymentMethods.length == 0) {
       Swal.fire({
@@ -129,7 +134,7 @@ const FinancialSettings = () => {
         Manage your payment methods, billing information and tax settings
       </p>
       {/* Payment Methods */}
-      <div className="grid md:grid-cols-2 gap-4 mb-4">
+      <div className="grid md:grid-cols-2 gap-4 mb-4 py-6">
         <div className="bg-white p-4 rounded-lg shadow space-y-4">
           <h2 className="text-lg font-semibold">Payment Methods</h2>
            <div className="space-y-2 relative">

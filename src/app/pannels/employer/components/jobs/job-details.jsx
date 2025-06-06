@@ -1,168 +1,218 @@
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const pieData = [
-  { name: "Released", value: 60, color: "#22C55E" },
-  { name: "Remaining", value: 40, color: "#E5E7EB" },
-];
+// Reusable Components
+const Button = ({ children, variant = "default", size = "md", ...props }) => {
+  const base =
+    "font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors";
 
-const JobDetails = () => {
+  const sizes = {
+    sm: "text-sm px-3 py-1.5",
+    md: "px-4 py-2",
+  };
+
+  const variants = {
+    default: "bg-green-600 text-white hover:bg-green-700",
+    outline: "border border-gray-300 text-gray-700 bg-white hover:bg-gray-50",
+    destructive: "bg-red-600 text-white hover:bg-red-700",
+    ghost: "text-gray-600 hover:bg-gray-100",
+  };
+
   return (
-    <div className="p-4 md:p-8 space-y-6">
-      {/* Project Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">E-commerce Platform Redesign</h1>
-          <p className="text-sm text-muted-foreground">
-            Posted on Jan 20, 2025 • Fixed-price • Intermediate
-          </p>
+    <button
+      className={`${base} ${variants[variant]} ${sizes[size]}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
+// const Input = ({ placeholder, ...props }) => {
+//   return (
+//     <input
+//       placeholder={placeholder}
+//       className="border border-gray-300 rounded-md px-3 py-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+//       {...props}
+//     />
+//   );
+// };
+
+const Avatar = ({ src, alt, fallback }) => {
+  return (
+    <div className="tw-css w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center text-sm font-semibold">
+      {src ? (
+        <img src={src} alt={alt} className="w-full h-full object-cover" />
+      ) : (
+        fallback
+      )}
+    </div>
+  );
+};
+
+const ApplicantCard = ({ applicant }) => {
+  const statusColors = {
+    Interview: "text-green-600",
+    Shortlist: "text-blue-600",
+    Review: "text-yellow-600",
+    Rejected: "text-red-600",
+  };
+
+  return (
+    <div className="tw-css">
+      <div className="flex justify-between p-4 border rounded-lg bg-white">
+        <div className="flex gap-4">
+          <Avatar fallback={applicant.name.charAt(0)} />
+          <div className="text-sm">
+            <div className="font-medium text-gray-900">{applicant.name}</div>
+            <div className="text-gray-500">{applicant.role}</div>
+            <div className="text-gray-400 text-xs">{applicant.location}</div>
+            <div className="flex flex-wrap gap-1 mt-1">
+              {applicant.skills.map((skill, i) => (
+                <span
+                  key={i}
+                  className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full text-xs"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
-        <Button>Edit Project</Button>
-      </div>
-
-      {/* Project Overview */}
-      <Card>
-        <CardContent className="p-4 space-y-3">
-          <p>
-            This project involves a complete redesign of an e-commerce platform,
-            including the UI update, new user flows, and improved performance.
-            Deliverables include wireframes, high-fidelity prototypes, and
-            responsive code.
-          </p>
-          <div className="flex flex-wrap gap-4 text-sm">
-            <div>
-              <strong>Total Budget:</strong> $4,500
-            </div>
-            <div>
-              <strong>Paid:</strong> $2,220
-            </div>
-            <div>
-              <strong>Remaining:</strong> $2,280
-            </div>
+        <div className="flex flex-col items-end text-sm gap-1">
+          <span>
+            Match Score: <strong>{applicant.match}%</strong>
+          </span>
+          <span>Experience: {applicant.experience} years</span>
+          <span>Applied: {applicant.applied}</span>
+          <span className={statusColors[applicant.status]}>
+            Status: {applicant.status}
+          </span>
+          <div className="flex gap-2 mt-2">
+            <Button size="sm" variant="outline">
+              Message
+            </Button>
+            <Button size="sm">
+              {applicant.status === "Rejected"
+                ? "Reconsider"
+                : applicant.status}
+            </Button>
           </div>
-          <Progress value={50} className="w-full" />
-        </CardContent>
-      </Card>
-
-      {/* Milestones */}
-      <Card>
-        <CardContent className="p-4 space-y-4">
-          <h2 className="text-lg font-semibold">Milestones & Deliverables</h2>
-          <ul className="space-y-2">
-            <li>✅ Project Requirements & Wireframes - Jan 10, 2025</li>
-            <li>🟡 Frontend Development - In Progress</li>
-            <li>⬜ Testing & Deployment - Upcoming</li>
-          </ul>
-        </CardContent>
-      </Card>
-
-      {/* Communication Section */}
-      <Card>
-        <CardContent className="p-4 space-y-3">
-          <h2 className="text-lg font-semibold">Conversation</h2>
-          <div className="space-y-2">
-            <div className="bg-gray-100 p-3 rounded-lg">
-              <p>
-                <strong>Daniel:</strong> Hey! Just completed the wireframes for
-                the homepage.
-              </p>
-            </div>
-            <div className="bg-green-100 p-3 rounded-lg self-end">
-              <p>
-                <strong>You:</strong> Great job! Please go ahead with the
-                frontend implementation.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Side Panel */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
-          <CardContent className="p-4 space-y-4">
-            <h2 className="text-lg font-semibold">Project Files</h2>
-            <ul className="text-sm space-y-1">
-              <li>✅ wireframes.pdf</li>
-              <li>📁 homepage_sketch.fig</li>
-              <li>📁 redesign_notes.docx</li>
-              <li>⬇️ assets.zip</li>
-            </ul>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-6">
-          {/* Freelancer Info */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarFallback>DK</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-semibold">Daniel Kofi</p>
-                  <p className="text-xs text-muted-foreground">
-                    Frontend Developer
-                  </p>
-                </div>
-              </div>
-              <Button className="mt-3 w-full">Message</Button>
-            </CardContent>
-          </Card>
-
-          {/* Payment Summary */}
-          <Card>
-            <CardContent className="p-4 space-y-3">
-              <h2 className="font-semibold">Payment Summary</h2>
-              <ResponsiveContainer width="100%" height={150}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    dataKey="value"
-                    innerRadius={40}
-                    outerRadius={60}
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <Button className="w-full">Release Payment</Button>
-            </CardContent>
-          </Card>
-
-          {/* Project Timeline */}
-          <Card>
-            <CardContent className="p-4 space-y-2">
-              <h2 className="font-semibold">Project Timeline</h2>
-              <ul className="text-sm">
-                <li>Started: Dec 22, 2024</li>
-                <li>Delivery: Feb 15, 2025</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Quick Actions */}
-          <Card>
-            <CardContent className="p-4 space-y-2">
-              <h2 className="font-semibold">Quick Actions</h2>
-              <div className="grid grid-cols-2 gap-2 text-center text-sm">
-                <div className="bg-gray-100 p-2 rounded">Contract</div>
-                <div className="bg-gray-100 p-2 rounded">Files</div>
-                <div className="bg-gray-100 p-2 rounded">Messages</div>
-                <div className="bg-gray-100 p-2 rounded">Consultation</div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
   );
 };
 
-export default JobDetails;
+const JobDetailsPage = () => {
+  const applicants = [
+    {
+      name: "Kwame Osei",
+      role: "Senior Backend Developer",
+      location: "Accra, Ghana",
+      match: 95,
+      skills: ["Node.js", "Express", "MongoDB", "AWS", "TypeScript"],
+      experience: 7,
+      applied: "May 11, 2025",
+      status: "Interview",
+    },
+    {
+      name: "Abena Mensah",
+      role: "Backend Developer",
+      location: "Kumasi, Ghana",
+      match: 92,
+      skills: ["Node.js", "MongoDB"],
+      experience: 4,
+      applied: "May 12, 2025",
+      status: "Interview",
+    },
+    {
+      name: "Emmanuel Ayeei",
+      role: "Full Stack Developer",
+      location: "Tamale, Ghana",
+      match: 90,
+      skills: ["Node.js", "Express", "MongoDB"],
+      experience: 6,
+      applied: "May 10, 2025",
+      status: "Shortlist",
+    },
+    {
+      name: "Kofi Boateng",
+      role: "Backend Developer",
+      location: "Tema, Ghana",
+      match: 85,
+      skills: ["Node.js", "Express", "MongoDB"],
+      experience: 5,
+      applied: "May 13, 2025",
+      status: "Review",
+    },
+    {
+      name: "Ama Darko",
+      role: "Software Developer",
+      location: "Cape Coast, Ghana",
+      match: 78,
+      skills: ["Node.js", "MongoDB", "TypeScript"],
+      experience: 3,
+      applied: "May 14, 2025",
+      status: "Rejected",
+    },
+  ];
+
+  return (
+    <div className="tw-css p-6 bg-gray-50 min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <header className="mb-6">
+          <h1 className="text-2xl font-bold">
+            Senior Backend Developer (Node.js)
+          </h1>
+          <p className="text-sm text-gray-500">
+            Remote (Africa Based) • Created on May 10, 2025 •{" "}
+            {applicants.length} applicants
+          </p>
+          <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-600">
+            {["Node.js", "Express", "MongoDB", "AWS", "TypeScript"].map(
+              (skill) => (
+                <span
+                  key={skill}
+                  className="bg-gray-200 px-2 py-1 rounded-full"
+                >
+                  {skill}
+                </span>
+              )
+            )}
+          </div>
+          <div className="flex gap-2 mt-4">
+            <Button variant="outline">Edit</Button>
+            <Button variant="outline">Pause</Button>
+            <Button variant="destructive">Close Job</Button>
+          </div>
+        </header>
+
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">
+            Applicants ({applicants.length})
+          </h2>
+          <div className="flex gap-2">
+            <Button variant="outline">Export CSV</Button>
+            <Button variant="outline">Filters</Button>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {applicants.map((a, idx) => (
+            <ApplicantCard key={idx} applicant={a} />
+          ))}
+        </div>
+
+        <div className="flex justify-end gap-2 mt-6">
+          {[1, 2, 3, 4].map((n) => (
+            <Button key={n} size="sm" variant="outline">
+              {n}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default JobDetailsPage;

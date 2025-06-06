@@ -26,9 +26,8 @@ function ClientDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  loadScript("js/custom.js");
-}, []);
-
+    loadScript("js/custom.js");
+  }, []);
 
   useEffect(() => {
     processGetEmployerStats();
@@ -49,10 +48,10 @@ function ClientDashboard() {
 
   // Chart data
   const [chartData, setChartData] = useState([
-    { name: "Week 1", earnings: 1200 },
-    { name: "Week 2", earnings: 2100 },
-    { name: "Week 3", earnings: 1500 },
-    { name: "Week 4", earnings: 2800 },
+    { name: "Week 1", earnings: 0 },
+    { name: "Week 2", earnings: 0 },
+    { name: "Week 3", earnings: 0 },
+    { name: "Week 4", earnings: 0 },
   ]);
 
   // Function to update chart data based on selected time period
@@ -62,35 +61,35 @@ function ClientDashboard() {
     // Simulate different data for different time periods
     if (period === "Last 7 Days") {
       setChartData([
-        { name: "Day 1", earnings: 400 },
-        { name: "Day 2", earnings: 300 },
-        { name: "Day 3", earnings: 500 },
-        { name: "Day 4", earnings: 200 },
-        { name: "Day 5", earnings: 600 },
-        { name: "Day 6", earnings: 400 },
-        { name: "Day 7", earnings: 700 },
+        { name: "Day 1", earnings: 0 },
+        { name: "Day 2", earnings: 0 },
+        { name: "Day 3", earnings: 0 },
+        { name: "Day 4", earnings: 0 },
+        { name: "Day 5", earnings: 0 },
+        { name: "Day 6", earnings: 0 },
+        { name: "Day 7", earnings: 0 },
       ]);
     } else if (period === "Last 30 Days") {
       setChartData([
-        { name: "Week 1", earnings: 1200 },
-        { name: "Week 2", earnings: 2100 },
-        { name: "Week 3", earnings: 1500 },
-        { name: "Week 4", earnings: 2800 },
+        { name: "Week 1", earnings: 0 },
+        { name: "Week 2", earnings: 0 },
+        { name: "Week 3", earnings: 0 },
+        { name: "Week 4", earnings: 0 },
       ]);
     } else if (period === "Last 90 Days") {
       setChartData([
-        { name: "Month 1", earnings: 4500 },
-        { name: "Month 2", earnings: 5200 },
-        { name: "Month 3", earnings: 6100 },
+        { name: "Month 1", earnings: 0 },
+        { name: "Month 2", earnings: 0 },
+        { name: "Month 3", earnings: 0 },
       ]);
     } else if (period === "This Year") {
       setChartData([
-        { name: "Jan", earnings: 2000 },
-        { name: "Feb", earnings: 2200 },
-        { name: "Mar", earnings: 2700 },
-        { name: "Apr", earnings: 2900 },
-        { name: "May", earnings: 3200 },
-        { name: "Jun", earnings: 3800 },
+        { name: "Jan", earnings: 0 },
+        { name: "Feb", earnings: 0 },
+        { name: "Mar", earnings: 0 },
+        { name: "Apr", earnings: 0 },
+        { name: "May", earnings: 0 },
+        { name: "Jun", earnings: 0 },
       ]);
     }
   };

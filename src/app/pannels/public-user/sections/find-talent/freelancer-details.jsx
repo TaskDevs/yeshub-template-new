@@ -7,14 +7,17 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
+import HireTalentModal from "./hire-talent-modal";
 
 export default function FreelancerDetail() {
   const {
     processFreelanceProfile,
     viewFreelanceProfile,
     freelanceSkillInfo,
+    employmentHistoryInfo,
     languagesData,
   } = useContext(FreelanceApiData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   //const [freelanceProfileData, setFreelanceProfileData] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
   const [calendarCells, setCalendarCells] = useState([]);
@@ -69,6 +72,10 @@ export default function FreelancerDetail() {
   const goToNextMonth = () => {
     const newDate = new Date(year, month + 1, 1);
     setCurrentDate(newDate);
+  };
+
+  const handleHire = () => {
+    console.log("Handling hire data");
   };
 
   return (
@@ -331,45 +338,7 @@ export default function FreelancerDetail() {
           >
             <h2 className="text-lg font-semibold">Work History</h2>
 
-            {[
-              {
-                title: "E-commerce Platform Redesign",
-                date: "Apr 2023 - Jul 2023",
-                price: "$12,500",
-                rating: 5.0,
-                tags: [
-                  "E-commerce",
-                  "UI Design",
-                  "Figma",
-                  "Conversion Optimization",
-                ],
-                description:
-                  "Completely redesigned the user interface and experience for a high-end fashion e-commerce platform. Created a custom checkout flow that increased conversion rates by 28% and reduced cart abandonment by 35%. Implemented a new product browsing experience that increased average session duration by 45%.",
-              },
-              {
-                title: "FinTech Mobile App UI/UX Design",
-                date: "Nov 2022 - Mar 2023",
-                price: "$18,000",
-                rating: 5.0,
-                tags: ["FinTech", "Mobile App", "UX Research", "Prototyping"],
-                description:
-                  "Designed a comprehensive mobile banking application for a fintech startup. Conducted user research, created wireframes, and developed high-fidelity prototypes. The app was featured in TechCrunch and received over 100,000 downloads in the first month after launch.",
-              },
-              {
-                title: "SaaS Dashboard Redesign",
-                date: "Jun 2022 - Oct 2022",
-                price: "$15,000",
-                rating: 5.0,
-                tags: [
-                  "SaaS",
-                  "Dashboard",
-                  "Data Visualization",
-                  "Design System",
-                ],
-                description:
-                  "Redesigned the analytics dashboard for a B2B SaaS platform, focusing on data visualization and user efficiency. Created a comprehensive design system that improved development speed by 40%. The new design reduced the time required for key user tasks by 60% and increased user satisfaction scores by 45%.",
-              },
-            ].map((item, i) => (
+            {employmentHistoryInfo?.map((item, i) => (
               <div
                 key={i}
                 className="space-y-2 border-b pb-4 last:border-0 last:pb-0"
@@ -384,7 +353,7 @@ export default function FreelancerDetail() {
                     </p>
                   </div>
                   <div className="text-yellow-500 font-semibold text-sm">
-                    ⭐ {item.rating.toFixed(1)}
+                    ⭐ {item.rating?.toFixed(1)}
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm">{item.description}</p>
@@ -416,13 +385,13 @@ export default function FreelancerDetail() {
               <h2 className="text-lg font-semibold">Client Reviews</h2>
               <div className="text-sm text-gray-600 flex items-center gap-1">
                 <span className="text-yellow-500">⭐</span>
-                <span className="font-semibold">5.0</span>
-                <span>(84 reviews)</span>
+                <span className="font-semibold">0</span>
+                <span>(0 reviews)</span>
               </div>
             </div>
 
-            <div className="space-y-6">
-              {/* Review 1 */}
+            {/* <div className="space-y-6">
+              {/* Review 1 
               <div className="border-b pb-6">
                 <div className="flex justify-between items-start">
                   <div className="flex items-start gap-4">
@@ -451,7 +420,7 @@ export default function FreelancerDetail() {
                 <p className="text-sm text-gray-400 mt-2">Apr 2023</p>
               </div>
 
-              {/* Review 2 */}
+              {/* Review 2 
               <div className="border-b pb-6">
                 <div className="flex justify-between items-start">
                   <div className="flex items-start gap-4">
@@ -478,7 +447,7 @@ export default function FreelancerDetail() {
                 <p className="text-sm text-gray-400 mt-2">Mar 2023</p>
               </div>
 
-              {/* Review 3 */}
+              {/* Review 3 *
               <div>
                 <div className="flex justify-between items-start">
                   <div className="flex items-start gap-4">
@@ -506,10 +475,10 @@ export default function FreelancerDetail() {
                 </p>
                 <p className="text-sm text-gray-400 mt-2">Oct 2022</p>
               </div>
-            </div>
+            </div> */}
 
             <div className="text-green-600 text-sm font-medium hover:underline cursor-pointer">
-              View All 84 Reviews
+              View All 0 Reviews
             </div>
           </div>
         </div>
@@ -518,8 +487,11 @@ export default function FreelancerDetail() {
         <div className="space-y-6 sidebar-right pt-4 my-4">
           {/* Action Buttons */}
           <div className="bg-white p-4 rounded-xl shadow space-y-3">
-            <button className="w-full bg-green-600 text-white py-2 rounded-md font-semibold">
-              Hire David
+            <button
+              className="w-full bg-green-600 text-white py-2 rounded-md font-semibold"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Hire {viewFreelanceProfile?.freelance_info?.[0]?.firstname}
             </button>
             <button className="w-full border py-2 rounded-md font-medium">
               Contact
@@ -605,7 +577,7 @@ export default function FreelancerDetail() {
             {/* Hourly Rate */}
             <div className="mb-4">
               <p className="text-gray-700 text-sm">Hourly Rate</p>
-              <p className="font-semibold text-lg">$75/hr</p>
+              <p className="font-semibold text-lg">GH75/hr</p>
               <p className="text-xs text-gray-500 mt-1">
                 Ideal for ongoing projects and revisions
               </p>
@@ -644,6 +616,18 @@ export default function FreelancerDetail() {
           </div>
         </div>
       </div>
+
+      <HireTalentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        jobOptions={[
+          "Senior Frontend Developer (React)",
+          "Backend Engineer (Node.js)",
+          "UX/UI Designer",
+          "Others",
+        ]}
+        onSend={handleHire}
+      />
     </div>
   );
 }

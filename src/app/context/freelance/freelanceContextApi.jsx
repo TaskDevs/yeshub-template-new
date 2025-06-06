@@ -28,6 +28,7 @@ const FreelanceApiDataProvider = (props) => {
   const [freelanceList, setFreelanceList] = useState([]);
   const [freelanceSkillInfo, setFreelanceSkillInfo] = useState([]);
   const [languagesData, setLanguagesData] = useState([]);
+  const [employmentHistoryInfo, setEmploymentHistoryInfo] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [formData, setFormData] = useState(initialFormData);
   const { setIsSubmitting } = useContext(GlobalApiData);
@@ -90,8 +91,8 @@ const FreelanceApiDataProvider = (props) => {
   const processFreelanceProfile = async (id) => {
     const res = await freelanceProfile(id);
     if (res) {
-      console.log(res);
       let newData = [];
+      let employmentData = [];
       res.freelance_info?.[0]?.skills_id?.split(",").map((item) =>
         newData.push({
           name: item,
@@ -100,7 +101,19 @@ const FreelanceApiDataProvider = (props) => {
         })
       );
 
+      res?.employment_history_info.map((item) =>
+        employmentData.push({
+          title: item.job_title + " at " + item.company_name,
+          date: item.start_date + " " + item.end_date,
+          description: item.duty,
+          price: 0,
+          ratings: 0,
+          tags: [],
+        })
+      );
+
       setLanguagesData(JSON.parse(res?.freelance_info?.[0]?.languages));
+      setEmploymentHistoryInfo(employmentData);
       setFreelanceSkillInfo(newData);
       setViewFreelanceProfile(res);
       //return res.data;
@@ -272,6 +285,7 @@ const FreelanceApiDataProvider = (props) => {
         processDeleteFreelance,
         freelanceList,
         languagesData,
+        employmentHistoryInfo,
         freelanceSkillInfo,
         viewFreelanceProfile,
       }}

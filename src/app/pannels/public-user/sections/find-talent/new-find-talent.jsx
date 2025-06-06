@@ -36,81 +36,6 @@ const locations = [
   "Savannah",
 ];
 
-// const freelancersData = [
-//   {
-//     id: 1,
-//     name: "Emm Rodriguez",
-//     title: "Full Stack Developer",
-//     skills: ["Web Development", "Data Science"],
-//     experience: "Expert",
-//     hourlyRate: 65,
-//     location: "Volta",
-//     availableNow: true,
-//     rating: 8.9,
-//     language: "English",
-//   },
-//   {
-//     id: 2,
-//     name: "David Chen",
-//     title: "UI/UX Designer",
-//     skills: ["UI/UX Design"],
-//     experience: "Intermediate",
-//     hourlyRate: 75,
-//     location: "Central",
-//     availableNow: false,
-//     rating: 9.2,
-//     language: "English",
-//   },
-//   {
-//     id: 3,
-//     name: "Sophia Williams",
-//     title: "Data Scientist",
-//     skills: ["Data Science"],
-//     experience: "Expert",
-//     hourlyRate: 90,
-//     location: "Ashanti",
-//     availableNow: true,
-//     rating: 8.5,
-//     language: "French",
-//   },
-//   {
-//     id: 4,
-//     name: "Michael Johnson",
-//     title: "Marketing Specialist",
-//     skills: ["Digital Marketing"],
-//     experience: "Intermediate",
-//     hourlyRate: 55,
-//     location: "Sydney, Australia",
-//     availableNow: true,
-//     rating: 7.5,
-//     language: "English",
-//   },
-//   {
-//     id: 5,
-//     name: "Olivia Martinez",
-//     title: "SEO Specialist",
-//     skills: ["Digital Marketing"],
-//     experience: "Entry Level",
-//     hourlyRate: 45,
-//     location: "Barcelona, Spain",
-//     availableNow: false,
-//     rating: 6.8,
-//     language: "Spanish",
-//   },
-//   {
-//     id: 6,
-//     name: "James Wilson",
-//     title: "Mobile App Developer",
-//     skills: ["Mobile Development"],
-//     experience: "Expert",
-//     hourlyRate: 70,
-//     location: "Berlin, Germany",
-//     availableNow: true,
-//     rating: 8.6,
-//     language: "German",
-//   },
-// ];
-
 export default function FreelancerSearch() {
   const { processGetAllFreelance, freelanceList } =
     useContext(FreelanceApiData);
@@ -581,12 +506,12 @@ export default function FreelancerSearch() {
                       >
                         Invite to Job
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => setIsOpen(true)}
                         className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700"
                       >
                         Contact
-                      </button>
+                      </button> */}
                       <button className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700 flex items-center justify-center">
                         <MdFavoriteBorder className="w-4 h-4" />
                       </button>
@@ -652,6 +577,7 @@ export default function FreelancerSearch() {
           "Senior Frontend Developer (React)",
           "Backend Engineer (Node.js)",
           "UX/UI Designer",
+          "Others",
         ]}
         onSend={handleSend}
       />

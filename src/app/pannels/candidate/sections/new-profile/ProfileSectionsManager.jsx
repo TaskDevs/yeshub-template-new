@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { ProfileSection } from "./ProfileSection";
+import CVUploadSection from "./CVUploadSection";
 
 import {
   FormInput,
@@ -144,7 +145,9 @@ export const ProfileSectionsManager = ({
         />
       </div>
 
-     
+     <div>
+      <CVUploadSection/>
+     </div>
     </div>
   );
 };

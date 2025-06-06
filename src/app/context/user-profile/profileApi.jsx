@@ -32,6 +32,9 @@ export const saveProfileLatest = async (data) => {
   }
 };
 
+// ADD CV
+// Add CV API URL here like  `${URL}api/addCv`
+
 export const addCv = async (data) => {
   try {
     let responseOnAddCv = await axios.post(`${REACT_BASE_URL}user-cvs`, data);
@@ -41,6 +44,24 @@ export const addCv = async (data) => {
     console.log(err);
   }
 };
+
+// get CV
+export const getCv = async (id) => {
+  try {
+    const responseOnGetCv = await axios.get(`${REACT_BASE_URL}user-cvs/${id}`);
+    return responseOnGetCv;
+  } catch (err) {
+    if (err.response) {
+      console.error("Server responded with error:", err.response.status, err.response.data);
+    } else if (err.request) {
+      console.error("No response received:", err.request);
+    } else {
+      console.error("Error setting up request:", err.message);
+    }
+    return false;
+  }
+};
+
 
 
 export const addCertificate = async (data) => {

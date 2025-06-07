@@ -141,6 +141,7 @@ export const client = {
   PROJECT_DETAILS: "/project-details/:id",
   CLIENT_FIND_TALENT:"/find-talented-freelancers",
   CLIENT_FIND_TALENT_ID: "/find-talented-freelancers/:id",
+  PAYMENT_HISTORY: "/payment-history",
 }
 
 export const employer = {

@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { client } from "../globals/route-names";
+import {  client  } from "../globals/route-names";
 import ManageJobs from "../app/pannels/employer/components/jobs/manage-jobs";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
 import ClientDashboard from "../app/pannels/public-user/sections/dashboard/client-dashboard";

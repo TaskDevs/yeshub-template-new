@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -145,6 +146,7 @@ export default function ManageJobs() {
 
   const handleView = (job) => {
   navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
+
 };
 
   const handleSetForEdit = (id) => {

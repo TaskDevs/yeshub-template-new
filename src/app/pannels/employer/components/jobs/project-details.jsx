@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { Check, Clock } from "lucide-react";
+import ReleasePaymentModal from "./release-payment-modal";
 
 import { PaperClipIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import AddFundsModal from "./AddFundsModal";
 const ProjectDetailPage = () => {
   const [message, setMessage] = useState("");
   const [attachment, setAttachment] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAddFunds = (data) => {
+    console.log("Funds Added:", data);
+    setShowModal(false);
+  };
   const milestones = [
     {
       title: "Project Requirements & Wireframes",
@@ -350,10 +359,16 @@ const ProjectDetailPage = () => {
             </div>
           </div>
 
-          <button className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 mb-2 text-sm">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 mb-2 text-sm"
+          >
             💳 Release Payment
           </button>
-          <button className="w-full border border-gray-300 py-2 rounded mb-2 text-sm hover:bg-gray-50">
+          <button
+            onClick={() => setShowModal(true)}
+            className="w-full border border-gray-300 py-2 rounded mb-2 text-sm hover:bg-gray-50"
+          >
             🏦 Add Funds to Escrow
           </button>
           <button className="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-50">
@@ -474,18 +489,14 @@ const ProjectDetailPage = () => {
                 size={"12px"}
                 className="w-5 h-5 bg-green-200 rounded-full text-green-500 p-1"
               />
-              <p className="m-0">
-                Project Started — May 1, 2025
-              </p>
+              <p className="m-0">Project Started — May 1, 2025</p>
             </div>
             <div className="flex items-center">
               <Check
                 size={"12px"}
                 className="w-5 h-5 bg-green-200 rounded-full text-green-500 p-1"
               />
-              <p >
-                Requirements Completed — May 10, 2025
-              </p>
+              <p>Requirements Completed — May 10, 2025</p>
             </div>
             <div className="flex items-center">
               <Clock
@@ -493,8 +504,8 @@ const ProjectDetailPage = () => {
                 className="w-5 h-5 bg-yellow-200 rounded-full text-yellow-500 p-1"
               />
               <p>
-             <strong>Frontend Development</strong> — In Progress
-                (Due May 30, 2025)
+                <strong>Frontend Development</strong> — In Progress (Due May 30,
+                2025)
               </p>
             </div>
             <div className="flex items-center">
@@ -502,22 +513,36 @@ const ProjectDetailPage = () => {
                 size={"12px"}
                 className="w-5 h-5 bg-gray-200 rounded-full text-gray-500 p-1"
               />
-            <p className="text-gray-500">
-               Backend Development — Pending (Due June 15, 2025)
-            </p>
+              <p className="text-gray-500">
+                Backend Development — Pending (Due June 15, 2025)
+              </p>
             </div>
             <div className="flex items-center">
               <Clock
                 size={"12px"}
                 className="w-5 h-5 bg-gray-200 rounded-full text-gray-500 p-1"
               />
-            <p className="text-gray-500">
-               Testing & Deployment — Pending (Due June 30, 2025)
-            </p>
+              <p className="text-gray-500">
+                Testing & Deployment — Pending (Due June 30, 2025)
+              </p>
             </div>
           </div>
         </div>
+       
       </div>
+       {/* payment modal */}
+        <ReleasePaymentModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+
+        {showModal && (
+          <AddFundsModal
+            currentBalance={3200}
+            onClose={() => setShowModal(false)}
+            onAddFunds={handleAddFunds}
+          />
+        )}
     </div>
   );
 };

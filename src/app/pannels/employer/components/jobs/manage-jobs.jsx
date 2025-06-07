@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import {
   Clock5,
@@ -13,6 +14,7 @@ import {
 
 const jobData = [
   {
+    id:1,
     title: "Senior Backend Developer (Node.js)",
     location: "Remote (Ghana Based)",
     date: "May 18, 2025",
@@ -66,6 +68,7 @@ const JOBS_PER_PAGE = 3;
 
 export default function ManageJobs() {
   // 🔽 Filters and pagination state
+  const navigate =useNavigate()
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Jobs");
@@ -135,9 +138,8 @@ export default function ManageJobs() {
 
 
   const handleView = (job) => {
-  // Example: open a modal or navigate to details
-  console.log("Viewing job:", job);
-  // navigate(`/jobs/${job.id}`); // if using React Router
+
+  navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
 };
 
 const handleEdit = (job) => {

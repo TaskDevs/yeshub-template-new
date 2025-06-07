@@ -36,6 +36,7 @@ const locations = [
   "Savannah",
 ];
 
+
 export default function FreelancerSearch() {
   const { processGetAllFreelance, freelanceList } =
     useContext(FreelanceApiData);
@@ -46,7 +47,7 @@ export default function FreelancerSearch() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const navigate = useNavigate();
-  const token = sessionStorage.getItem("acessToken");
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
@@ -440,71 +441,69 @@ export default function FreelancerSearch() {
                   <div
                     key={freelancer.id}
                     className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
+             
                   >
-                    <div onClick={() => navigate("/freelancers/1")}>
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="w-12 h-12 bg-gray-300 rounded-full">
-                          <Avatar
-                            alt=""
-                            src={
-                              freelancer.avatar
-                                ? freelancer.avatar
-                                : "https://placehold.co/400"
-                            }
-                            className="w-12 h-12"
-                          />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-base">
-                            {freelancer.name}{" "}
-                            <span className="text-sm text-gray-600">
-                              ${freelancer.hourlyRate}/hr
-                            </span>
-                          </h4>
-                          <p className="text-sm text-gray-500">
-                            {freelancer.title}
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            {freelancer.earnings}
-                          </p>
-                          <div className="flex items-center text-yellow-500 mt-1 text-sm">
-                            <span>★ {freelancer.rating}</span>
-                            <span className="text-gray-500 ml-1">
-                              ({freelancer.reviews} reviews)
-                            </span>
-                          </div>
-                        </div>
+                    <div onClick={() => navigate("/dashboard-client/find-talented-freelancers/" + freelancer.id)} className="cursor-pointer">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gray-300 rounded-full">
+                        <Avatar
+                          alt=""
+                          src={
+                            freelancer.avatar
+                              ? freelancer.avatar
+                              : "https://placehold.co/400"
+                          }
+                          className="w-12 h-12"
+                        />
                       </div>
-
-                      <div className="text-sm text-gray-600 mb-3">
-                        {truncateText(freelancer.bio)}
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {freelancer.skills?.map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"
-                          >
-                            {skill}
+                      <div >
+                        <h4 className="font-semibold text-base">
+                          {freelancer.name}{" "}
+                          <span className="text-sm text-gray-600">
+                            ${freelancer.hourlyRate}/hr
                           </span>
-                        ))}
-                      </div>
-
-                      <div className="text-sm text-gray-500 mb-4">
-                        {freelancer.location}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {freelancer.title}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {freelancer.earnings}
+                        </p>
+                        <div className="flex items-center text-yellow-500 mt-1 text-sm">
+                          <span>★ {freelancer.rating}</span>
+                          <span className="text-gray-500 ml-1">
+                            ({freelancer.reviews} reviews)
+                          </span>
+                        </div>
                       </div>
                     </div>
+
+                    <div className="text-sm text-gray-600 mb-3">
+                      {truncateText(freelancer.bio)}
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {freelancer.skills?.map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="text-sm text-gray-500 mb-4">
+                      {freelancer.location}
+                    </div>
+</div>
                     <div className="flex items-center justify-between gap-2 px-3 mt-4">
-                      {token && (
-                        <button
+                      <button
                         onClick={() => setIsModalOpen(true)}
                         className="bg-green-600 text-white px-4 py-1 rounded-md text-sm hover:bg-green-700"
                       >
                         Invite to Job
                       </button>
-                      )}
-                      
                       <button
                         onClick={() => setIsOpen(true)}
                         className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700"

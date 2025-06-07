@@ -139,8 +139,9 @@ export const client = {
   FINANCE: "/client-finance-overview",
   PROFILE: "/profile",
   PROJECT_DETAILS: "/project-details/:id",
-  JOB_DETAILS: "/job-details/:id",
-};
+  CLIENT_FIND_TALENT:"/find-talented-freelancers",
+  CLIENT_FIND_TALENT_ID: "/find-talented-freelancers/:id",
+}
 
 export const employer = {
   INITIAL: "/",

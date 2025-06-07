@@ -4,7 +4,7 @@ import { CheckCircle, MapPin, Star, Clock ,  FileText,
   Calendar,
   FileBarChart,} from "lucide-react";
 import ScheduleMeetingModal from "./ScheduleMeetingModal";
-export default function FreelancerDetail() {
+export default function ClientfreelancerDetail() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [calendarCells, setCalendarCells] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);

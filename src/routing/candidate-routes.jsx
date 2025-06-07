@@ -10,7 +10,6 @@ import CanJobAlertsPage from "../app/pannels/candidate/components/can-job-alerts
 import CanChangePasswordPage from "../app/pannels/candidate/components/can-change-password";
 import CanChatPage from "../app/pannels/candidate/components/can-chat";
 import Error404Page from "../app/pannels/public-user/components/pages/error404";
-import React from "react";
 import { CanReviewsPage } from "../app/pannels/candidate/components/can-reviews-page";
 import FinancesPage from "../app/common/payment/accounts/finances-page";
 import Offers from "../app/pannels/candidate/sections/offers/offers";
@@ -40,38 +39,71 @@ function CandidateRoutes() {
   const auth = isAuthenticated();
   return (
     <Routes>
-       {auth && (
+      {auth && (
         <>
-      <Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
-      <Route path={candidate.PROFILE} element={<CandidateProfile />} />
-      <Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
-      <Route path={candidate.FIND_WORK_DETAILS} element={<FindWorkDetails />} />
-      <Route path={candidate.JOB_DETAILS} element={<JobDetailsPage />} />
-      <Route path={candidate.SUBMIT} element={<SubmitWork />} />
-      <Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
-      <Route path={candidate.RESUME} element={<CanMyResumePage />} />
-      <Route path={candidate.SAVED_JOBS} element={<NewSavedJobsPage />} />
-      <Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
-      <Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
-      <Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
-      <Route path={candidate.FINANCE} element={<FinancialDashboard />} />
-      <Route path={candidate.BILLING} element={<BillingDashboard />} />
-      <Route path={candidate.INVOICE} element={<CreateInvoice />} />
-      <Route path={candidate.PREVIEW_INVOICE} element={<InvoicePreview />} />
-      <Route path={candidate.INVOICE_DETAIL} element={<InvoiceDetailsPage />} />
-      <Route path={candidate.TRANSACTIONS} element={<TransactionsPage />} />
-      <Route path={candidate.FINANCE_SETTINGS} element={<FinancialSettings />} />
-      <Route path={candidate.CHANGE_PASSWORD} element={<CanChangePasswordPage />} />
-      <Route path={candidate.OFFERS} element={<Offers />} />
-      <Route path={candidate.CHAT} element={<CanChatPage />} />
-      <Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
-      <Route path={candidate.Contracts_History} element={<ContractsHistory />} />
-      <Route path={candidate.Active_Contracts} element={<ActiveContracts />} />
-      <Route path={candidate.APPLIED_JOB_DETAILS} element={<CanAppliedJobDetails />} />
-      <Route path={candidate.SAVED_JOBS_DETAILS} element={<CanSavedJobsDetails />} />
-      <Route path={candidate.APPLY_MILESTONE_JOB} element={<CanApplyMilestone />} />
-      <Route path={candidate.SUBMIT_PROPOSAL} element={<SubmitProposal />} />
-      </>
+          <Route path={candidate.DASHBOARD} element={<CanDashboardPage />} />
+          <Route path={candidate.PROFILE} element={<CandidateProfile />} />
+          <Route path={candidate.FIND_WORK} element={<FindWorkPage />} />
+          <Route
+            path={candidate.FIND_WORK_DETAILS}
+            element={<FindWorkDetails />}
+          />
+          <Route path={candidate.JOB_DETAILS} element={<JobDetailsPage />} />
+          <Route path={candidate.SUBMIT} element={<SubmitWork />} />
+          <Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
+          <Route path={candidate.RESUME} element={<CanMyResumePage />} />
+          <Route path={candidate.SAVED_JOBS} element={<NewSavedJobsPage />} />
+          <Route path={candidate.CV_MANAGER} element={<CanCVManagerPage />} />
+          <Route path={candidate.ALERTS} element={<CanJobAlertsPage />} />
+          <Route path={candidate.ACCOUNTS} element={<FinancesPage />} />
+          <Route path={candidate.FINANCE} element={<FinancialDashboard />} />
+          <Route path={candidate.BILLING} element={<BillingDashboard />} />
+          <Route path={candidate.INVOICE} element={<CreateInvoice />} />
+          <Route
+            path={candidate.PREVIEW_INVOICE}
+            element={<InvoicePreview />}
+          />
+          <Route
+            path={candidate.INVOICE_DETAIL}
+            element={<InvoiceDetailsPage />}
+          />
+          <Route path={candidate.TRANSACTIONS} element={<TransactionsPage />} />
+          <Route
+            path={candidate.FINANCE_SETTINGS}
+            element={<FinancialSettings />}
+          />
+          <Route
+            path={candidate.CHANGE_PASSWORD}
+            element={<CanChangePasswordPage />}
+          />
+          <Route path={candidate.OFFERS} element={<Offers />} />
+          <Route path={candidate.CHAT} element={<CanChatPage />} />
+          <Route path={candidate.REVIEWS} element={<CanReviewsPage />} />
+          <Route
+            path={candidate.Contracts_History}
+            element={<ContractsHistory />}
+          />
+          <Route
+            path={candidate.Active_Contracts}
+            element={<ActiveContracts />}
+          />
+          <Route
+            path={candidate.APPLIED_JOB_DETAILS}
+            element={<CanAppliedJobDetails />}
+          />
+          <Route
+            path={candidate.SAVED_JOBS_DETAILS}
+            element={<CanSavedJobsDetails />}
+          />
+          <Route
+            path={candidate.APPLY_MILESTONE_JOB}
+            element={<CanApplyMilestone />}
+          />
+          <Route
+            path={candidate.SUBMIT_PROPOSAL}
+            element={<SubmitProposal />}
+          />
+        </>
       )}
       <Route path="*" element={<Error404Page />} />
     </Routes>

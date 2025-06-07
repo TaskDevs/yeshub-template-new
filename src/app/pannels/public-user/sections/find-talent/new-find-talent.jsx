@@ -510,7 +510,7 @@ export default function FreelancerSearch() {
                         className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700"
                       >
                         Contact
-                      </button>
+                      </button> 
                       <button className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700 flex items-center justify-center">
                         <MdFavoriteBorder className="w-4 h-4" />
                       </button>
@@ -576,6 +576,7 @@ export default function FreelancerSearch() {
           "Senior Frontend Developer (React)",
           "Backend Engineer (Node.js)",
           "UX/UI Designer",
+          "Others",
         ]}
         onSend={handleSend}
       />

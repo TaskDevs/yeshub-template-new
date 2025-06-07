@@ -82,113 +82,6 @@ export const Header = ({ isDashboard = true }) => {
     console.log("Searching for:", value);
   };
 
-  // const navItems = [
-  //   {
-  //     id: "home",
-  //     label: "Home",
-  //     selected: true,
-  //     to: "/",
-  //   },
-  //     {
-  //     id: "Client-home",
-  //     label: "Dashboard",
-  //     selected: true,
-  //     to: `${client.DASHBOARD}`,
-  //   },
-  //   { id: "Find-talent", label: "Find Talent", to: "/freelancers" },
-  //    { id: "manage-jobs", label: "Manage Jobs", to:  `${base.CLIENT_PRE}${client.NEW_MANAGE_JOBS}` },
-  //   {
-  //     id: "public-find-work",
-  //     label: "Find Work",
-  //     to: "/dashboard-candidate/find-job",
-  //   },
-  //   {
-  //     id: "my-home",
-  //     label: "Dashboard",
-  //     menu: null,
-  //     selected: true,
-  //     to: `${base.CANDIDATE_PRE}`,
-  //   },
-  //   {
-  //     id: "find-work",
-  //     label: "Find Jobs",
-  //     to: "/dashboard-candidate/find-work",
-  //     menu: {
-  //       // title: "Find Work",
-  //       items: [
-  //         {
-  //           id: "find-work-main",
-  //           label: "Find Jobs",
-  //           selected: true,
-  //           to: "/dashboard-candidate/find-work",
-  //         },
-  //         {
-  //           id: "saved-jobs",
-  //           label: "Saved Jobs",
-  //           to: "/dashboard-candidate/saved-jobs",
-  //         },
-  //         {
-  //           id: "proposals-offers",
-  //           label: "Proposals & Offers",
-  //           to: "candidate-offers",
-  //         },
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     id: "deliver-work",
-  //     label: "Deliver Work",
-  //     to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
-  //     menu: {
-  //       // title: "Deliver Work",
-  //       items: [
-  //         {
-  //           id: "active-contracts",
-  //           label: "Active Contracts",
-  //           to: `${base.CANDIDATE_PRE}${candidate.Active_Contracts}`,
-  //           selected: true,
-  //         },
-  //         {
-  //           id: "contract-history",
-  //           label: "Contract History",
-  //           to: `${base.CANDIDATE_PRE}${candidate.Contracts_History}`,
-  //         },
-  //       ],
-  //     },
-  //   },
-  //   { id: "assessment-training", label: "Assessment & Training", menu: null },
-  //   { id: "why-yeshub", label: "Why YesHub", menu: null },
-
-  //   {
-  //     id: "manage-finances",
-  //     label: "Manage Finances",
-  //     menu: {
-  //       // title: "Manage Finances",
-  //       items: [
-  //         {
-  //           id: "financial-overview",
-  //           label: "Financial Overview",
-  //           to: `${base.CANDIDATE_PRE}${candidate.FINANCE}`,
-  //           selected: true,
-  //         },
-  //         {
-  //           id: "billings-earnings",
-  //           label: "Billings & Earnings",
-  //           to: `${base.CANDIDATE_PRE}${candidate.BILLING}`,
-  //         },
-  //         {
-  //           id: "transactions",
-  //           label: "Transactions",
-  //           to: `${base.CANDIDATE_PRE}${candidate.TRANSACTIONS}`,
-  //         },
-  //       ],
-  //     },
-  //   },
-  //   { id: "messages", label: "Messages", to: "/messages" },
-  // ];
-
-  // Conditional rendering of nav items based on page type
-
   const navItems = [
     {
       id: "client-dashboard",
@@ -210,6 +103,14 @@ export const Header = ({ isDashboard = true }) => {
         /\/$/,
         ""
       )}/${client.NEW_MANAGE_JOBS.replace(/^\//, "")}`,
+    },
+    {
+      id: "client-finds-talents",
+      label: "Find Talents",
+      to: `${base.CLIENT_PRE.replace(
+        /\/$/,
+        ""
+      )}/${client.CLIENT_FIND_TALENT.replace(/^\//, "")}`,
     },
     {
       id: "public-find-work",
@@ -333,6 +234,7 @@ export const Header = ({ isDashboard = true }) => {
       "Client Dashboard",
       "Candidate Dashboard",
       "Manage Jobs",
+      "Find Talents",
       "Find Jobs",
       "Deliver Work",
       "Manage Finances",
@@ -357,7 +259,9 @@ export const Header = ({ isDashboard = true }) => {
 
       if (role === "freelancer") {
         return (
-          item.label !== "Client Dashboard" && item.label !== "Manage Jobs"
+          item.label !== "Client Dashboard" &&
+          item.label !== "Manage Jobs" &&
+          item.label !== "Find Talents"
         ); // future-proof
       }
 

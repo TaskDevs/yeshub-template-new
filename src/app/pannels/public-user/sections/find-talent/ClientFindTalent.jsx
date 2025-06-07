@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { CustomDropdown } from "../../../../common/Dropdown";
 import styles from "./findClient.module.css";
 import { TalentCard } from "./TalentCard";
-import { skills, sortOptions, talents } from "./data";
+import { skills, sortOptions } from "./data";
 import FilterPanel from "../../../candidate/sections/find-work/filter-panel";
 import { useFilterForm } from "../../../../../utils/useFilterFormHook";
 import CanSlider from "../../../candidate/components/can-slider";
@@ -20,7 +20,6 @@ const ClientFindTalent = () => {
   }, []);
 
   useEffect(() => {
-    console.log(talents);
     setProcessedData(talentListData);
   }, [talentListData]);
 

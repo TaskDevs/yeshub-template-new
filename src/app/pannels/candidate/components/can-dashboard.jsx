@@ -3,7 +3,7 @@ import { CandidateStats } from "./can-stats";
 import React, { useState, useEffect } from "react";
 import { CanActiveProjects } from "./can-active-projects";
 import { loadScript } from "../../../../globals/constants";
-import styles from "../sections/dashboard/dashboard.module.css"
+import styles from "../sections/dashboard/dashboard.module.css";
 import { CanQuickActions } from "../sections/dashboard/can-quick-actions";
 import { CanRecentActivity } from "../sections/dashboard/can-recent-activity";
 
@@ -13,7 +13,7 @@ function CanDashboardPage() {
   });
 
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("Last 30 Days");
-  
+
   const timePeriodOptions = [
     "Last 7 Days",
     "Last 30 Days",
@@ -68,31 +68,33 @@ function CanDashboardPage() {
       ]);
     }
   };
-  
-  return (
-      <div className={`tw-css ${styles.twm_right_section_panel} twm-right-section-panel site-bg-gray`}>
-        <div className={styles.dashboardContainer}>
-          <CandidateStats cssModule={styles} />
-          
-          {/* Earnings Overview and Quick Actions */}
-          <div className={styles.cardRow}>
-            <CandidateChart
-              chartData={chartData}
-              styles={styles.chart}
-              updateChartData={updateChartData}
-              timePeriodOptions={timePeriodOptions}
-              selectedTimePeriod={selectedTimePeriod}
-            />
-            <CanQuickActions styles={styles.quickActions} />
-          </div>
 
-          {/* Active Projects and Recent Activities */}
-          <div className={`${styles.cardRow} ${styles.projectsRow}`}>
-            <CanActiveProjects />
-            <CanRecentActivity />
-          </div>
+  return (
+    <div
+      className={`tw-css ${styles.twm_right_section_panel} twm-right-section-panel site-bg-gray`}
+    >
+      <div className={styles.dashboardContainer}>
+        <CandidateStats cssModule={styles} />
+
+        {/* Earnings Overview and Quick Actions */}
+        <div className={styles.cardRow}>
+          <CandidateChart
+            chartData={chartData}
+            styles={styles.chart}
+            updateChartData={updateChartData}
+            timePeriodOptions={timePeriodOptions}
+            selectedTimePeriod={selectedTimePeriod}
+          />
+          <CanQuickActions styles={styles.quickActions} />
+        </div>
+
+        {/* Active Projects and Recent Activities */}
+        <div className={`${styles.cardRow} ${styles.projectsRow}`}>
+          <CanActiveProjects />
+          <CanRecentActivity />
         </div>
       </div>
+    </div>
   );
 }
 

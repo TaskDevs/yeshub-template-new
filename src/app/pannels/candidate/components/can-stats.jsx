@@ -3,9 +3,6 @@ import { FaBriefcase, FaClock, FaWallet } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
 import { JobUserStat } from "../../../context/application/applicationApi";
 
-
-
-// Stats Card Component
 const StatsCard = ({ title, value, subtitle, icon: Icon, cssModule }) => (
   <div className={cssModule.statsCard}>
     <div className="flex justify-between mb-2">

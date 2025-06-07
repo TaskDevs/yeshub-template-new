@@ -1,73 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const CarouselComponent = () => {
+  useEffect(() => {
+    const carouselEl = document.querySelector('#carouselExample');
+    if (carouselEl && window.bootstrap) {
+      new window.bootstrap.Carousel(carouselEl);
+    }
+  }, []);
+
+  const slides = [1, 2, 3];
+
   return (
-    <div
-      id="carouselExample"
-      className="carousel slide"
-      data-bs-ride="carousel"
-    >
+    <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-inner">
-        <div className="carousel-item active">
-          <div className="carousel-parent">
-            <img
-              src="/assets/images/candidates/pic1.jpg"
-              className="w-30 rounded-circle img-fixed"
-              alt="Slide 1"
-            />
-            <span className="text-xl text-gray block">Issac Kumi</span>
-            <span className="text-sm text-gray block">UX/UI</span>
-            <div className="d-flex-row">
-              <span className="text-sm">5.0</span>
-              <span className="text-sm">GH50.0</span>
-              <span className="text-sm">GH50.0</span>
+        {slides.map((slide, idx) => (
+          <div key={idx} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
+            <div className="text-center p-4">
+              <img
+                src="/assets/images/candidates/pic1.jpg"
+                className="rounded-circle"
+                alt={`Slide ${slide}`}
+                style={{ width: "120px", height: "120px", objectFit: "cover" }}
+              />
+              <div className="mt-3">
+                <span className="h5 d-block text-dark">Issac Kumi</span>
+                <span className="text-muted d-block">UX/UI</span>
+              </div>
+              <div className="d-flex justify-content-center gap-3 mt-2">
+                <span className="text-sm">5.0</span>
+                <span className="text-sm">GH50.0</span>
+                <span className="text-sm">GH50.0</span>
+              </div>
+              <p className="text-secondary mt-3">
+                Yeshub has enabled me to build a professional career I love while
+                living a life I love while constantly developing new skills.
+              </p>
             </div>
-            <span className="text-gray">
-              Yeshub has enabled me to build a professional career I love while
-              living a life I love while constantly developing new skills.
-            </span>
           </div>
-        </div>
-        <div className="carousel-item">
-          <div className="carousel-parent">
-            <img
-              src="/assets/images/candidates/pic1.jpg"
-              className="w-30 rounded-circle img-fixed"
-              alt="Slide 2"
-            />
-            <span className="text-xl text-gray block">Issac Kumi</span>
-            <span className="text-sm text-gray block">UX/UI</span>
-            <div className="d-flex-row">
-              <span className="text-sm">5.0</span>
-              <span className="text-sm">GH50.0</span>
-              <span className="text-sm">GH50.0</span>
-            </div>
-            <span className="text-gray">
-              Yeshub has enabled me to build a professional career I love while
-              living a life I love while constantly developing new skills.
-            </span>
-          </div>
-        </div>
-        <div className="carousel-item">
-          <div className="carousel-parent">
-            <img
-              src="/assets/images/candidates/pic1.jpg"
-              className="w-30 rounded-circle img-fixed"
-              alt="Slide 3"
-            />
-            <span className="text-xl text-gray block">Issac Kumi</span>
-            <span className="text-sm text-gray block">UX/UI</span>
-            <div className="d-flex-row">
-              <span className="text-sm">5.0</span>
-              <span className="text-sm">GH50.0</span>
-              <span className="text-sm">GH50.0</span>
-            </div>
-            <span className="text-gray">
-              Yeshub has enabled me to build a professional career I love while
-              living a life I love while constantly developing new skills.
-            </span>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Navigation Controls */}
@@ -77,7 +49,7 @@ const CarouselComponent = () => {
         data-bs-target="#carouselExample"
         data-bs-slide="prev"
       >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span className="carousel-control-prev-icon" aria-hidden="true" />
       </button>
       <button
         className="carousel-control-next"
@@ -85,7 +57,7 @@ const CarouselComponent = () => {
         data-bs-target="#carouselExample"
         data-bs-slide="next"
       >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+        <span className="carousel-control-next-icon" aria-hidden="true" />
       </button>
     </div>
   );

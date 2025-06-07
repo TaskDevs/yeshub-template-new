@@ -26,6 +26,7 @@ export const publicUser = {
   HOME17: "/index17",
   HOME18: "/index18",
   TEST: "/test",
+  LOG: "/log",
 
   jobs: {
     GRID: "/job-grid",
@@ -64,14 +65,11 @@ export const publicUser = {
     LINKEDINCALLBACK: "/linkedin/auth/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
-   
-   
-    FIND_TALENT: "/find-talent",
-    New_FIND_TALENT:'/freelancers',
-    New_FIND_TALENT_ID:'/freelancers/:id',
-    PROPOSALS: "/client-proposals",
 
-    
+    FIND_TALENT: "/find-talent",
+    New_FIND_TALENT: "/freelancers",
+    New_FIND_TALENT_ID: "/freelancers/:id",
+    PROPOSALS: "/client-proposals",
 
     STAFF: "/client-staff",
     TASK: "/task-management",
@@ -110,7 +108,7 @@ export const candidate = {
   Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
   FIND_WORK_DETAILS: "/find-work-details/:id",
-  JOB_DETAILS:"/job-details/:id",
+  JOB_DETAILS: "/job-details/:id",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
   FINANCE: "/candidate-finance",
@@ -131,9 +129,8 @@ export const candidate = {
   INVOICE: "/create-invoice",
   PREVIEW_INVOICE: "/invoice-preview/:id",
   INVOICE_DETAIL: "/invoice-detail/:id",
-  TRANSACTIONS:"/transactions",
-  FINANCE_SETTINGS:"/finance-settings",
-
+  TRANSACTIONS: "/transactions",
+  FINANCE_SETTINGS: "/finance-settings",
 };
 
 export const client = {
@@ -141,6 +138,9 @@ export const client = {
   NEW_MANAGE_JOBS: "/new-manage-jobs",
   FINANCE: "/client-finance-overview",
   PROFILE: "/profile",
+  PROJECT_DETAILS: "/project-details/:id",
+  CLIENT_FIND_TALENT:"/find-talented-freelancers",
+  CLIENT_FIND_TALENT_ID: "/find-talented-freelancers/:id",
 }
 
 export const employer = {
@@ -160,7 +160,6 @@ export const employer = {
   RESUME_ALERTS: "/resume-alerts",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
- 
 };
 
 export function pubRoute(_route) {

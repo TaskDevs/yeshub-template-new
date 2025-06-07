@@ -12,10 +12,12 @@ import { CustomDropdown } from "../../../../common/Dropdown";
 import { useFileUpload } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
 import { useDeliverWorkForm } from "./hooks/useDeliverWorkForm";
 import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
+import { TaskApiData } from "../../../../context/task/taskContextApi";
 import Swal from "sweetalert2";
 //import withReactContent from "sweetalert2-react-content";
 
 export const SubmitWorkSection = () => {
+  const { processSubmitWork } = useContext(TaskApiData);
   const { formData, handleInputChange, clearAll } = useDeliverWorkForm({
     projectTitle: "",
     deliverableType: "",
@@ -31,10 +33,45 @@ export const SubmitWorkSection = () => {
     uploadError: coverUploadError,
   } = useFileUpload();
 
+  const navigate = useNavigate();
+
   const deliverables = ["File", "Link", "PSD", "PDF"];
 
-  const handleSave = () => {
-    console.log("We are doing great");
+  const handleSave = async () => {
+    const form = new FormData();
+    form.append("user_id", 636);
+    form.append("contract_id", 123);
+    form.append("title", formData.projectTitle);
+    form.append("deliver_type", formData.deliverableType);
+    form.append("description", formData.description);
+    form.append("work_file", coverFiles[0].file); // Make sure it's the actual File object
+    form.append("link", "we are done");
+
+    console.log("FormData entries:");
+    for (let pair of form.entries()) {
+      console.log(pair[0] + ": ", pair[1]);
+    }
+
+    let result = await processSubmitWork(form);
+    if (result) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Work submitted successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        navigate("/dashboard-candidate/active-contracts");
+      }, 1500);
+    } else {
+      console.log("Error submitting proposal");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong, try again",
+      });
+    }
   };
 
   return (
@@ -42,7 +79,7 @@ export const SubmitWorkSection = () => {
       <div className="space-y-6 w-full">
         <div className="space-y-4">
           <FormInput
-            field="title"
+            field="projectTitle"
             label="Project Title"
             required={true}
             value={formData.projectTitle}

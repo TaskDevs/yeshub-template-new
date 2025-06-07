@@ -1,49 +1,41 @@
-import React, { useState } from 'react';
-import { FaBriefcase, FaClock, FaBan, FaDollarSign } from 'react-icons/fa';
-import Table from '../../../../common/table/Table';
-import Pagination from '../../../../common/Pagination';
-import { TableTop } from '../../../../common/table/TableTop';
-import { ContractStatCard } from '../../components/can-contract-stat-card';
+import React, { useState, useContext, useEffect } from "react";
+import { FaBriefcase, FaClock, FaBan, FaDollarSign } from "react-icons/fa";
+import Table from "../../../../common/table/Table";
+import Pagination from "../../../../common/Pagination";
+import { TableTop } from "../../../../common/table/TableTop";
+import { ContractStatCard } from "../../components/can-contract-stat-card";
+import { TaskApiData } from "../../../../context/task/taskContextApi";
 
 // Sample data
-const contractsData = [
-  {
-    contractName: "Website Redesign Project",
-    client: "Tech Solutions Inc.",
-    completionDate: "Dec 31, 2024",
-    daysRemaining: 14,
-    status: "In Progress",
-    totalValue: 4500,
-    actions: ["Submit Work", "Message"]
-  },
-  {
-    contractName: "Mobile App Development",
-    client: "Innovation Labs",
-    completionDate: "Jan 15, 2024",
-    daysRemaining: 30,
-    status: "Under Review",
-    totalValue: 8250,
-    actions: ["View Details", "Message"]
-  },
-  {
-    contractName: "Brand Identity Design",
-    client: "Creative Studios",
-    completionDate: "Feb 28, 2024",
-    daysRemaining: 45,
-    status: "Just Started",
-    totalValue: 3750,
-    actions: ["Submit Work", "Message"]
-  }
-];
-
-// Stats data based on the image
-const statsData = [
-  { title: "Total Contracts", count: 85, icon: <FaBriefcase size={18} />, bgColor: "bg-gray-100", iconColor: "text-gray-700" },
-  { title: "Completed Contracts", count: 73, icon: <FaDollarSign size={18} />, bgColor: "bg-green-100", iconColor: "text-green-700" },
-  { title: "In Progress", count: 8, icon: <FaClock size={18} />, bgColor: "bg-yellow-100", iconColor: "text-yellow-700" },
-  { title: "Cancelled", count: 4, icon: <FaBan size={18} />, bgColor: "bg-red-100", iconColor: "text-red-700" }
-];
-
+// const contractsData = [
+//   {
+//     contractName: "Website Redesign Project",
+//     client: "Tech Solutions Inc.",
+//     completionDate: "Dec 31, 2024",
+//     daysRemaining: 14,
+//     status: "In Progress",
+//     totalValue: 4500,
+//     actions: ["Submit Work", "Message"]
+//   },
+//   {
+//     contractName: "Mobile App Development",
+//     client: "Innovation Labs",
+//     completionDate: "Jan 15, 2024",
+//     daysRemaining: 30,
+//     status: "Under Review",
+//     totalValue: 8250,
+//     actions: ["View Details", "Message"]
+//   },
+//   {
+//     contractName: "Brand Identity Design",
+//     client: "Creative Studios",
+//     completionDate: "Feb 28, 2024",
+//     daysRemaining: 45,
+//     status: "Just Started",
+//     totalValue: 3750,
+//     actions: ["Submit Work", "Message"]
+//   }
+// ];
 
 // Table column configuration
 const columns = [
@@ -55,7 +47,7 @@ const columns = [
         <div className="font-medium">{item.contractName}</div>
         <div className="text-sm text-gray-600">Client: {item.client}</div>
       </div>
-    )
+    ),
   },
   {
     key: "completionDate",
@@ -63,35 +55,39 @@ const columns = [
     render: (item) => (
       <div>
         <div>{item.completionDate}</div>
-        <div className="text-sm text-gray-600">{item.daysRemaining} days remaining</div>
+        <div className="text-sm text-gray-600">
+          {item.daysRemaining} days remaining
+        </div>
       </div>
-    )
+    ),
   },
   {
     key: "status",
     header: "Final Status",
-    render: (item) => <StatusTag status={item.status} />
+    render: (item) => <StatusTag status={item.status} />,
   },
   {
     key: "totalValue",
     header: "Total Value",
-    render: (item) => <span>${item.totalValue.toLocaleString()}</span>
+    render: (item) => <span>${item.totalValue.toLocaleString()}</span>,
   },
   {
     key: "actions",
     header: "Actions",
     render: (item) => (
-      <div className='text-right'>
+      <div className="text-right">
         {item.actions.map((action, index) => (
-          <button key={index} className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right">
+          <button
+            key={index}
+            className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right"
+          >
             {action}
           </button>
         ))}
       </div>
-    )
-  }
+    ),
+  },
 ];
-
 
 // Status Tag Component
 const StatusTag = ({ status }) => {
@@ -123,11 +119,49 @@ const StatusTag = ({ status }) => {
 };
 
 const ContractsHistory = () => {
+  const { processGetContractOfUser, contractData, contractStats } =
+    useContext(TaskApiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const itemsPerPage = 10;
   const totalItems = 123;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  useEffect(() => {
+    processGetContractOfUser();
+  }, []);
+
+  // Stats data based on the image
+  const statsData = [
+    {
+      title: "Total Contracts",
+      count: contractStats.total_contract,
+      icon: <FaBriefcase size={18} />,
+      bgColor: "bg-gray-100",
+      iconColor: "text-gray-700",
+    },
+    {
+      title: "Completed Contracts",
+      count: contractStats.completed_contract,
+      icon: <FaDollarSign size={18} />,
+      bgColor: "bg-green-100",
+      iconColor: "text-green-700",
+    },
+    {
+      title: "In Progress",
+      count: contractStats.contract_in_progress,
+      icon: <FaClock size={18} />,
+      bgColor: "bg-yellow-100",
+      iconColor: "text-yellow-700",
+    },
+    {
+      title: "Cancelled",
+      count: contractStats.canceled_contract,
+      icon: <FaBan size={18} />,
+      bgColor: "bg-red-100",
+      iconColor: "text-red-700",
+    },
+  ];
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -163,10 +197,10 @@ const ContractsHistory = () => {
             setSearchValue={setSearchValue}
           />
           <Table
-            data={contractsData}
+            data={contractData}
             columns={columns}
             isGeneral={true}
-            bgColor='bg-white'
+            bgColor="bg-white"
             headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
             headerRowStyles=""
           />
@@ -181,7 +215,7 @@ const ContractsHistory = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ContractsHistory
+export default ContractsHistory;

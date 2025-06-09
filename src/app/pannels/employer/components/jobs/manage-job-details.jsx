@@ -82,7 +82,7 @@ const JobListing = () => {
             onClick={() => setActiveTab("details")}
             className={`pb-2 ${
               activeTab === "details"
-                ? "text-blue-600 border-b-2 border-blue-600"
+                ? "text-green-600 border-b-2 border-green-600"
                 : "text-gray-500 hover:text-blue-600"
             }`}
           >
@@ -92,7 +92,7 @@ const JobListing = () => {
             onClick={() => setActiveTab("applicants")}
             className={`pb-2 ${
               activeTab === "applicants"
-                ? "text-blue-600 border-b-2 border-blue-600"
+                ? "text-green-600 border-b-2 border-green-600"
                 : "text-gray-500 hover:text-blue-600"
             }`}
           >
@@ -102,7 +102,7 @@ const JobListing = () => {
             onClick={() => setActiveTab("activity")}
             className={`pb-2 ${
               activeTab === "activity"
-                ? "text-blue-600 border-b-2 border-blue-600"
+                ? "text-green-600 border-b-2 border-green-600"
                 : "text-gray-500 hover:text-blue-600"
             }`}
           >
@@ -112,7 +112,7 @@ const JobListing = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="text-gray-800 text-sm">
+      <div className="text-gray-800 text-sm border rounded-xl p-5 bg-white ">
        {activeTab === "details" && (
   <>
     <h2 className="text-lg font-semibold mb-2">Job Description</h2>

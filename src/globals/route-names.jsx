@@ -140,6 +140,10 @@ export const client = {
   FINANCE: "/client-finance-overview",
   PROFILE: "/profile",
   PROJECT_DETAILS: "/project-details/:id",
+  CLIENT_FIND_TALENT: "/find-talented-freelancers",
+  CLIENT_FIND_TALENT_ID: "/find-talented-freelancers/:id",
+  PAYMENT_HISTORY: "/payment-history",
+
   CANDIDATE_DETAILS: "/candidate-details/:id",
   JOB_DETAILS: "/job-details/:id",
   TALENT_POOL: "/talent-pool/:id",

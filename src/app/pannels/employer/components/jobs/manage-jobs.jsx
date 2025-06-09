@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { PostJobFormSection } from "../../../public-user/sections/profile/client-profile-forms";
+import { useNavigate } from "react-router-dom";
+
 import {
   Clock5,
   MapPin,
@@ -16,6 +18,7 @@ import {
 
 const jobData = [
   {
+    id: 1,
     title: "Senior Backend Developer (Node.js)",
     location: "Remote (Ghana Based)",
     date: "May 18, 2025",
@@ -154,6 +157,7 @@ export default function ManageJobs() {
     // Example: open a modal or navigate to details
     console.log("Viewing job:", job);
     navigate(`/dashboard-client/job-applicant/${job.id}`); // if using React Router
+    //navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
   };
 
   const handleSetForEdit = (job) => {

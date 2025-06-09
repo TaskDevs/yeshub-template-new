@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { PostJobFormSection } from "../../../public-user/sections/profile/client-profile-forms";
-import { useNavigate } from "react-router-dom";
 
 import {
   Clock5,

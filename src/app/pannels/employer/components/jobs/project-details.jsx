@@ -4,11 +4,13 @@ import ReleasePaymentModal from "./release-payment-modal";
 
 import { PaperClipIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import AddFundsModal from "./AddFundsModal";
+import { useNavigate } from "react-router-dom";
 const ProjectDetailPage = () => {
   const [message, setMessage] = useState("");
   const [attachment, setAttachment] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const navigate =useNavigate()
 
   const handleAddFunds = (data) => {
     console.log("Funds Added:", data);
@@ -371,7 +373,9 @@ const ProjectDetailPage = () => {
           >
             🏦 Add Funds to Escrow
           </button>
-          <button className="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-50">
+          <button 
+            onClick={() => navigate('/dashboard-client/payment-history')}
+          className="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-50">
             📊 View Payment History
           </button>
         </div>

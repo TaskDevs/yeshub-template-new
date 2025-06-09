@@ -75,8 +75,50 @@ export const setInterview = async (data) => {
       `${REACT_BASE_URL}create-interview`,
       data
     );
-    console.log(responseOnSetInterview);
     if (responseOnSetInterview.status == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getInterviewInfo = async (id) => {
+  try {
+    let responseOnGetInterviewInfo = await axios.get(
+      `${REACT_BASE_URL}get-interview-info?id=${id}`
+    );
+    if (responseOnGetInterviewInfo.status == 200) {
+      return responseOnGetInterviewInfo.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getHiredApplicants = async () => {
+  try {
+    let responseOngetHiredApplicants = await axios.get(
+      `${REACT_BASE_URL}get-hired-applicants`
+    );
+    if (responseOngetHiredApplicants.status == 200) {
+      return responseOngetHiredApplicants.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const changeCandidateStatus = async (data, id) => {
+  try {
+    let responseOnChangeStatus = await axios.put(
+      `${REACT_BASE_URL}update-candidate-status/${id}`,
+      data
+    );
+    // console.log(responseOnChangeStatus);
+    if (responseOnChangeStatus.status == 200) {
       return true;
     } else {
       return false;

@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
+useNavigate
 import {
   Area,
   Line,
@@ -26,6 +26,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 const chartData = {
   monthly: [
     { name: "Jan", revenue: 12000, expenses: 8000, profit: 4000 },
@@ -50,6 +51,7 @@ const chartData = {
 
 const projectsData = [
   {
+    id: 1,
     name: "E-commerce Platform Redesign",
     date: "May 1, 2025",
     freelancer: "Kwame Osei",
@@ -121,7 +123,11 @@ const FinancialOverview = () => {
   const [filterStatus, setFilterStatus] = useState("All Projects");
   const [page, setPage] = useState(1);
   const perPage = 5;
+  const navigate = useNavigate(); // Initialize useNavigate hook
+  const handleView = (project) => {
+  navigate(`/dashboard-client/project-details/${project.id}`); // if using React Router
 
+};
   const filteredProjects = projectsData
     .filter((project) =>
       project.name.toLowerCase().includes(search.toLowerCase())
@@ -476,7 +482,9 @@ const FinancialOverview = () => {
                       </td>
 
                       <td>
-                        <a href="#" className="text-green-600 text-sm mr-4">
+                        <a 
+                          onClick={() => handleView(project.id)}
+                        className="text-green-600 text-sm mr-4">
                           View Details
                         </a>
                         <a href="#" className="text-gray-500 text-sm">

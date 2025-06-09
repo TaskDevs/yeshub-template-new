@@ -9,6 +9,7 @@ import ProjectDetailPage from "../app/pannels/employer/components/jobs/project-d
 import FreelancerSearch from "../app/pannels/public-user/sections/find-talent/client-find-talent";
 import ClientfreelancerDetail from "../app/pannels/public-user/sections/find-talent/client-find-talent-details";
 import PaymentHistoryPage from "../app/pannels/employer/components/jobs/payment-history";
+import JobListing from "../app/pannels/employer/components/jobs/manage-job-details";
 function ClientRoutes() {
     return (
         <Routes>
@@ -20,6 +21,7 @@ function ClientRoutes() {
         <Route path={client.CLIENT_FIND_TALENT} element={<FreelancerSearch/>} />
         <Route path={client.CLIENT_FIND_TALENT_ID} element={<ClientfreelancerDetail/>} />
         <Route path={client.PAYMENT_HISTORY} element={<PaymentHistoryPage />} />
+        <Route path={client.MANAGE_JOBS_DETAILS} element={<JobListing />} />
         {/* Add other client routes here */}
         <Route path="*" element={<Error404Page />} />
         </Routes>

@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { PostJobFormSection } from "../../../public-user/sections/profile/client-profile-forms";
-import { useNavigate } from "react-router-dom";
 
 import {
   Clock5,
@@ -154,10 +153,7 @@ export default function ManageJobs() {
   }, [searchTerm, statusFilter, sortBy]);
 
   const handleView = (job) => {
-    // Example: open a modal or navigate to details
-    console.log("Viewing job:", job);
-    navigate(`/dashboard-client/job-applicant/${job.id}`); // if using React Router
-    //navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
+    navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
   };
 
   const handleSetForEdit = (job) => {

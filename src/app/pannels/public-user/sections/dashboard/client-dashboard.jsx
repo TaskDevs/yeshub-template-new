@@ -1,4 +1,5 @@
 import styles from "./dashboard.module.css";
+import React, { useState, useEffect, useContext } from "react";
 import Swal from "sweetalert2";
 // import withReactContent from "sweetalert2-react-content";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +7,6 @@ import { ClientStats } from "./client-stats";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClientChart } from "./client-overview";
-import React, { useState, useEffect, useContext } from "react";
 import { loadScript } from "../../../../../globals/constants";
 import { ClientHiringActivity } from "./client-hiring-activity";
 import { ClientQuickActions } from "./client-hiring-quick-actions";
@@ -94,8 +94,8 @@ function ClientDashboard() {
     }
   };
 
-  const goToProposal = () => {
-    navigate("/client-proposals");
+  const goToProject = () => {
+    navigate("/dashboard-client/manage-projects");
   };
 
   const goToStaff = () => {
@@ -103,7 +103,7 @@ function ClientDashboard() {
   };
 
   const goToTaskManagement = () => {
-    navigate("/task-management");
+    navigate("/dashboard-client/new-manage-jobs");
   };
 
   const goToPostedJob = () => {
@@ -166,7 +166,7 @@ function ClientDashboard() {
           <ClientQuickActions
             styles={styles.quickActions}
             actions={{ post_job_modal: handleOpenSectionModal }}
-            goTo={{ goToStaff, goToProposal, goToTaskManagement }}
+            goTo={{ goToStaff, goToProject, goToTaskManagement }}
           />
         </div>
 

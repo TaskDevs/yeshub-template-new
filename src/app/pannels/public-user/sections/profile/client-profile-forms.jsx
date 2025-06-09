@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import Compressor from "compressorjs";
+import Swal from "sweetalert2";
 import {
   FormInput,
   FormTextarea,
@@ -920,9 +921,28 @@ export const PostJobFormSection = ({ onClose, isEdit, itemsToEdit }) => {
       description: formData.description,
       company_id: employerProfiles.id,
       end_date: formData.end_date,
+      status: "active",
     };
-    isEdit ? processUpdateJob(itemsToEdit.id, data) : processAddJobPost(data);
-    console.log("Posting job:", data);
+    let response = isEdit
+      ? processUpdateJob(itemsToEdit.id, data)
+      : processAddJobPost(data);
+
+    if (response) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Job posted successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: "Failed to post a job",
+      });
+    }
+    //console.log("Posting job:", data);
     onClose();
   };
 

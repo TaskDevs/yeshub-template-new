@@ -28,7 +28,7 @@ export const addCertification = async (data) => {
       `${REACT_BASE_URL}store-certification`,
       data
     );
-    console.log(responseOnAddCertification);
+
     if (responseOnAddCertification.status === SUCCESS_STATUS) {
       return responseOnAddCertification.data;
     }
@@ -45,7 +45,7 @@ export const addExperience = async (data) => {
       `${REACT_BASE_URL}store-experience`,
       data
     );
-    console.log(responseOnAddExperience);
+
     if (responseOnAddExperience.status === SUCCESS_STATUS) {
       return responseOnAddExperience.data;
     }
@@ -61,9 +61,25 @@ export const addJobPost = async (data) => {
       `${REACT_BASE_URL}create-job`,
       data
     );
-    console.log(responseOnAddJobPost);
     if (responseOnAddJobPost.status === SUCCESS_STATUS) {
       return responseOnAddJobPost.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const setInterview = async (data) => {
+  try {
+    let responseOnSetInterview = await axios.post(
+      `${REACT_BASE_URL}create-interview`,
+      data
+    );
+    console.log(responseOnSetInterview);
+    if (responseOnSetInterview.status == 201) {
+      return true;
+    } else {
+      return false;
     }
   } catch (err) {
     console.log(err);
@@ -104,8 +120,30 @@ export const getCompanyInfoForInvoice = async (data) => {
       `${REACT_BASE_URL}company-invoice-details?company-name=${data}`,
       data
     );
-    console.log(responseOnCompanyInfoForInvoice);
     return responseOnCompanyInfoForInvoice;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getCompanyPostedJobs = async (id) => {
+  try {
+    let responseOnCompanyPostedJobs = await axios.get(
+      `${REACT_BASE_URL}get-company-posted-jobs/${id}`
+    );
+    // console.log(responseOnCompanyPostedJobs);
+    return responseOnCompanyPostedJobs.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getApplicantsOfJobPosted = async (id) => {
+  try {
+    let responseOnGetApplicants = await axios.get(
+      `${REACT_BASE_URL}get-applicants-for-job/${id}`
+    );
+    return responseOnGetApplicants;
   } catch (err) {
     console.log(err);
   }

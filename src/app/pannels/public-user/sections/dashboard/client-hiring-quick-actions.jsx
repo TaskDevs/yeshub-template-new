@@ -18,7 +18,7 @@ const QuickActionItem = ({ icon: Icon, label, action }) => (
 );
 
 export const ClientQuickActions = ({ styles, actions, goTo }) => {
-  const { goToStaff, goToProposal, goToTaskManagement } = goTo;
+  const { goToStaff, goToProject, goToTaskManagement } = goTo;
   return (
     <div
       className={`bg-white flex items-start flex-col h-full p-4 rounded-lg shadow-sm ${styles}`}
@@ -33,20 +33,20 @@ export const ClientQuickActions = ({ styles, actions, goTo }) => {
           />
           <QuickActionItem
             icon={IoDocumentText}
-            label="Review Proposals"
-            action={goToProposal}
+            label="Job Management"
+            action={goToTaskManagement}
           />
         </div>
         <div className="flex flex-row gap-3 w-full pb-14">
           <QuickActionItem
             icon={IoIosSearch}
-            label="Staff"
-            action={goToStaff}
+            label="Projects"
+            action={goToProject}
           />
           <QuickActionItem
             icon={IoChatbubblesSharp}
-            label="Task Management"
-            action={goToTaskManagement}
+            label="Staff"
+            action={goToStaff}
           />
         </div>
       </div>

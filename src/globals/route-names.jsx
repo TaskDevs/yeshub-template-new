@@ -136,10 +136,15 @@ export const candidate = {
 export const client = {
   DASHBOARD: "/",
   NEW_MANAGE_JOBS: "/new-manage-jobs",
+  MANAGE_PROJECT: "/manage-projects",
   FINANCE: "/client-finance-overview",
   PROFILE: "/profile",
   PROJECT_DETAILS: "/project-details/:id",
+  CANDIDATE_DETAILS: "/candidate-details/:id",
   JOB_DETAILS: "/job-details/:id",
+  TALENT_POOL: "/talent-pool/:id",
+  CREATE_PROJECT: "/create-project",
+  JOB_APPLICANT: "/job-applicant/:id",
 };
 
 export const employer = {

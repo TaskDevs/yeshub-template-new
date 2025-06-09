@@ -153,10 +153,7 @@ export default function ManageJobs() {
   }, [searchTerm, statusFilter, sortBy]);
 
   const handleView = (job) => {
-    // Example: open a modal or navigate to details
-    console.log("Viewing job:", job);
-    navigate(`/dashboard-client/job-applicant/${job.id}`); // if using React Router
-    //navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
+    navigate(`/dashboard-client/manage-job-details/${job.id}`); // if using React Router
   };
 
   const handleSetForEdit = (job) => {

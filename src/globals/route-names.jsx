@@ -137,13 +137,19 @@ export const client = {
   DASHBOARD: "/",
   NEW_MANAGE_JOBS: "/new-manage-jobs",
   MANAGE_JOBS_DETAILS: "/manage-job-details/:id",
-  FINANCE: "/client-finance-overview", 
+  MANAGE_PROJECT: "/manage-projects",
+  FINANCE: "/client-finance-overview",
   PROFILE: "/profile",
   PROJECT_DETAILS: "/project-details/:id",
-  CLIENT_FIND_TALENT:"/find-talented-freelancers",
+  CLIENT_FIND_TALENT: "/find-talented-freelancers",
   CLIENT_FIND_TALENT_ID: "/find-talented-freelancers/:id",
   PAYMENT_HISTORY: "/payment-history",
-}
+  CANDIDATE_DETAILS: "/candidate-details/:id",
+  JOB_DETAILS: "/job-details/:id",
+  TALENT_POOL: "/talent-pool/:id",
+  CREATE_PROJECT: "/create-project",
+  JOB_APPLICANT: "/job-applicant/:id",
+};
 
 export const employer = {
   INITIAL: "/",

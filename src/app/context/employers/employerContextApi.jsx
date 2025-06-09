@@ -7,8 +7,11 @@ import {
   addJobPost,
   getClientDashboardStats,
   getJobAppliedToCompany,
+  getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
+  getCompanyPostedJobs,
   checkIfCompanyExist,
+  setInterview,
   companyInfo,
   updateEmployerLogo,
   employerProfile,
@@ -20,6 +23,7 @@ import {
   deleteJob,
   updateEmployerBanner,
 } from "./employerApi";
+import { formatDate } from "../../../utils/dateUtils";
 
 export const EmployerApiData = createContext();
 
@@ -27,7 +31,12 @@ const EmployerApiDataProvider = (props) => {
   const [employerProfiles, setEmployerProfiles] = useState([]);
   const [companyInfoData, setCompanyInfoData] = useState([]);
   const [appliedJobList, setAppliedJobList] = useState([]);
+  const [applicants, setApplicants] = useState([]);
+  const [postedJobList, setPostedJobList] = useState([]);
+  const [rawPostedJobs, setRawPostedJobs] = useState([]);
+  const [jobPaginationData, setJobPaginationData] = useState({});
   const [employerStats, setEmployerStats] = useState({});
+  const [totalApplicants, setTotalApplicants] = useState(0);
 
   const processAddEmployer = async (data) => {
     const userId = sessionStorage.getItem("userId"); // Get logged-in user ID=
@@ -113,7 +122,24 @@ const EmployerApiDataProvider = (props) => {
     let response = await addJobPost(data);
     if (response) {
       processGetEmployerStats(userId);
-      notify(200, "Job posted successfully");
+      processGetCompanyPostedJobs();
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const processSetInterview = async (data) => {
+    let response = await setInterview(data);
+
+    if (response === true) {
+      // Update the stage of the selected applicant
+      setApplicants((prev) =>
+        prev.map((item) =>
+          item.id === data.proposal_id ? { ...item, stage: "interview" } : item
+        )
+      );
+      return true;
     } else {
       return false;
     }
@@ -134,6 +160,21 @@ const EmployerApiDataProvider = (props) => {
     let response = await getJobAppliedToCompany(userId, pageNo);
     if (response) {
       setAppliedJobList(response.data.data);
+      setJobPaginationData({
+        currentPage: response.data.current_page,
+        lastPage: response.data.last_page,
+      });
+    } else {
+      return false;
+    }
+  };
+
+  const processGetApplicantsOfJobPosted = async (id) => {
+    let response = await getApplicantsOfJobPosted(id);
+    if (response) {
+      console.log(response);
+      setTotalApplicants(response.data.total);
+      setApplicants(response.data.data);
     } else {
       return false;
     }
@@ -157,6 +198,34 @@ const EmployerApiDataProvider = (props) => {
     if (response) {
       console.log(response.data);
       setCompanyInfoData(response.data);
+    } else {
+      return false;
+    }
+  };
+
+  const processGetCompanyPostedJobs = async () => {
+    const userId = sessionStorage.getItem("userId");
+    let response = await getCompanyPostedJobs(userId);
+    if (response) {
+      console.log(response.data);
+      let newData = [];
+      response.data.map((item) =>
+        newData.push({
+          id: item.id,
+          title: item.title,
+          location: item.job_type,
+          description: item.description,
+          proposal_count: item.proposals_count,
+          date: formatDate(item.created_at),
+          status:
+            item.status &&
+            item.status.charAt(0).toUpperCase() + item.status.slice(1),
+          tags: item.skills?.split(","),
+          applicants: 0,
+        })
+      );
+      setRawPostedJobs(response.data);
+      setPostedJobList(newData);
     } else {
       return false;
     }
@@ -227,9 +296,10 @@ const EmployerApiDataProvider = (props) => {
     //console.log(response);
     if (response) {
       processGetEmployerStats();
-      notify(200, "Job updated successfully");
+      processGetCompanyPostedJobs();
+      return true;
     } else {
-      notify(400, "Failed to update profile");
+      return false;
     }
   };
 
@@ -266,6 +336,7 @@ const EmployerApiDataProvider = (props) => {
     let response = await deleteJob(id);
     if (response) {
       processGetEmployerStats();
+      processGetCompanyPostedJobs();
       notify(200, "Job deleted successfully");
     } else {
       notify(400, "Failed to delete job");
@@ -280,6 +351,7 @@ const EmployerApiDataProvider = (props) => {
         processAddExperience,
         processGetCompanyInfoForInvoice,
         processEmployerProfile,
+
         processGetJobAppliedToCompany,
         processGetCompanyInfo,
         processCheckIfCompanyExist,
@@ -298,6 +370,14 @@ const EmployerApiDataProvider = (props) => {
         companyInfoData,
         employerStats,
         employerProfiles,
+        processGetCompanyPostedJobs,
+        postedJobList,
+        rawPostedJobs,
+        jobPaginationData,
+        processGetApplicantsOfJobPosted,
+        applicants,
+        totalApplicants,
+        processSetInterview,
       }}
     >
       {props.children}

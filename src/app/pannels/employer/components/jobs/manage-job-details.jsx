@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Clock, Users, Pencil, Pause, X } from "lucide-react";
+import { MapPin, Clock, Users, Pencil, X } from "lucide-react";
 
 const JobListing = () => {
       const [activeTab, setActiveTab] = useState("details");
@@ -60,11 +60,10 @@ const JobListing = () => {
             <Pencil size={14} />
             Edit
           </button>
-          <button className="flex items-center gap-1 border border-gray-300 px-3 py-1.5 text-sm rounded-md text-gray-700 hover:bg-gray-50">
-            <Pause size={14} />
-            Pause
-          </button>
-          <button className="flex items-center gap-1 bg-red-50 text-red-600 px-3 py-1.5 text-sm rounded-md border border-red-200 hover:bg-red-100">
+
+          <button 
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-1 bg-red-50 text-red-600 px-3 py-1.5 text-sm rounded-md border border-red-200 hover:bg-red-100">
             <X size={14} />
             Close Job
           </button>

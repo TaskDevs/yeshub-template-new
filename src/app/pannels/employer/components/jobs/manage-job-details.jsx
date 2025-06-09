@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MessageModal from "./components/message/MessageModal";
 import {
   MapPin,
   Clock,
@@ -32,15 +33,24 @@ const statuses = ["All", "New", "Reviewed", "Shortlisted", "Rejected"];
 
 const sortOptions = ["Date Applied", "Match Score", "Experience"];
 const JobListing = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
   const navigate = useNavigate();
+  const [selectedApplicant, setSelectedApplicant] = useState(null);
 
+  const handleMessageClick = (applicant) => {
+    setSelectedApplicant(applicant);
+    setModalOpen(true);
+  };
   const [experienceFilter, setExperienceFilter] = useState(5);
   const [statusFilter, setStatusFilter] = useState("All");
   const [skillFilter, setSkillFilter] = useState([]);
   const [sortBy, setSortBy] = useState("Date Applied");
   const [filtersVisible, setFiltersVisible] = useState(true);
   const [skillsOpen, setSkillsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null); // Stores the ID of the dropdown that's open
+
+  const statusOptions = ["New", "Reviewed", "Shortlisted", "Rejected"];
   const handleExport = () => {
     // your export logic
     console.log("Exporting data...");
@@ -77,6 +87,13 @@ const JobListing = () => {
   const allSkills = Array.from(
     new Set(dummyApplicants.flatMap((applicant) => applicant.skills))
   ).sort();
+
+  const handleStatusChange = (id, newStatus) => {
+    setSelectedApplicant((prev) =>
+      prev.map((app) => (app.id === id ? { ...app, status: newStatus } : app))
+    );
+    setOpenDropdown(null);
+  };
 
   return (
     <div className="tw-css p-6 max-w-6xl mx-auto bg-white rounded-lg shadow">
@@ -339,44 +356,44 @@ const JobListing = () => {
                         ))}
                       </select>
                     </div>
- {/* Skills Dropdown with Checkboxes */}
-                      <div className="flex flex-col">
-                        <label className="font-semibold text-gray-700 block">
-                          Skills
-                        </label>
-                        <div className="relative">
-                          <button
-                            onClick={() => setSkillsOpen(!skillsOpen)}
-                            className="border rounded-md px-3 py-2 w-48 text-sm focus:ring-blue-500"
-                          >
-                            {skillFilter.length > 0
-                              ? `${skillFilter.length} selected`
-                              : "Select skills"}
-                          </button>
-                          {skillsOpen && (
-                            <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-md max-h-48 overflow-y-auto p-2">
-                              {allSkills.map((skill) => (
-                                <label
-                                  key={skill}
-                                  className="flex items-center gap-2 py-1 text-sm"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={skillFilter.includes(skill)}
-                                    onChange={() => toggleSkill(skill)}
-                                  />
-                                  {skill}
-                                </label>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                    {/* Skills Dropdown with Checkboxes */}
+                    <div className="flex flex-col">
+                      <label className="font-semibold text-gray-700 block">
+                        Skills
+                      </label>
+                      <div className="relative">
+                        <button
+                          onClick={() => setSkillsOpen(!skillsOpen)}
+                          className="border rounded-md px-3 py-2 w-48 text-sm focus:ring-blue-500"
+                        >
+                          {skillFilter.length > 0
+                            ? `${skillFilter.length} selected`
+                            : "Select skills"}
+                        </button>
+                        {skillsOpen && (
+                          <div className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-md max-h-48 overflow-y-auto p-2">
+                            {allSkills.map((skill) => (
+                              <label
+                                key={skill}
+                                className="flex items-center gap-2 py-1 text-sm"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={skillFilter.includes(skill)}
+                                  onChange={() => toggleSkill(skill)}
+                                />
+                                {skill}
+                              </label>
+                            ))}
+                          </div>
+                        )}
                       </div>
+                    </div>
                     {/* Export Button */}
                     <div>
                       <button
                         onClick={handleExport}
-                        className="mt-6 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                        className="mt-6 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-md hover:bg-blue-700"
                       >
                         Export CSV
                       </button>
@@ -413,8 +430,6 @@ const JobListing = () => {
                           className="w-full"
                         />
                       </div>
-
-                     
                     </div>
                   )}
                 </div>
@@ -455,8 +470,8 @@ const JobListing = () => {
                         </div>
                       </div>
 
-                      <div className="text-right space-y-1 text-sm">
-                        <p className="flex items-center justify-end gap-1">
+                      <div className="text-left space-y-1 text-sm">
+                        <p className="flex items-center justify-start gap-1">
                           <Star size={14} className="text-yellow-500" />{" "}
                           {applicant.match}% Match
                         </p>
@@ -468,17 +483,74 @@ const JobListing = () => {
                           <span className="font-medium">Applied:</span>{" "}
                           {applicant.applied}
                         </p>
-                        <p>
+                        <p className="text-sm">
                           <span className="font-medium">Status:</span>{" "}
-                          {applicant.status}
+                          <span
+                            className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${
+                              applicant.status === "New"
+                                ? "bg-blue-100 text-blue-800"
+                                : applicant.status === "Reviewed"
+                                ? "bg-purple-100 text-purple-800"
+                                : applicant.status === "Interview"
+                                ? "bg-purple-100 text-purple-800"
+                                : applicant.status === "Hired"
+                                ? "bg-green-100 text-green-800"
+                                : applicant.status === "Shortlisted"
+                                ? "bg-green-100 text-green-800"
+                                : applicant.status === "Rejected"
+                                ? "bg-red-100 text-red-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {applicant.status}
+                          </span>
                         </p>
+
                         <div className="flex gap-2 mt-2 justify-end">
-                          <button className="bg-green-600 text-white text-xs px-3 py-1 rounded-md">
-                            {applicant.status === "Shortlisted"
-                              ? "Interview"
-                              : "Shortlist"}
-                          </button>
-                          <button className="border px-3 py-1 text-xs rounded-md">
+                          <div className="relative inline-block text-left">
+                            <button
+                              onClick={() =>
+                                setOpenDropdown(
+                                  openDropdown === applicant.id
+                                    ? null
+                                    : applicant.id
+                                )
+                              }
+                              className={`text-xs px-3 py-1 rounded-md ${
+                                applicant.status === "Shortlisted"
+                                  ? "bg-blue-600"
+                                  : "bg-green-600"
+                              } text-white`}
+                            >
+                              {applicant.status === "Shortlisted"
+                                ? "Schedule Interview"
+                                : "Shortlist"}
+                            </button>
+
+                            {openDropdown === applicant.id && (
+                              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                                {statusOptions.map((status) => (
+                                  <button
+                                    key={status}
+                                    onClick={() =>
+                                      handleStatusChange(applicant.id, status)
+                                    }
+                                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+                                      status === applicant.status
+                                        ? "font-semibold text-blue-600"
+                                        : "text-gray-700"
+                                    }`}
+                                  >
+                                    {status}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          <button
+                            onClick={() => handleMessageClick(applicant)}
+                            className="border px-3 py-1 text-xs rounded-md"
+                          >
                             Message
                           </button>
                           <button className="border px-2 py-1 rounded-md">
@@ -508,6 +580,14 @@ const JobListing = () => {
           )}
         </div>
       </div>
+      {/* message */}
+      {selectedApplicant && (
+        <MessageModal
+          recipientName={selectedApplicant.name}
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

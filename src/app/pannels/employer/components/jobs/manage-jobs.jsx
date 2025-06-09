@@ -153,7 +153,7 @@ export default function ManageJobs() {
   }, [searchTerm, statusFilter, sortBy]);
 
   const handleView = (job) => {
-    navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
+    navigate(`/dashboard-client/manage-job-details/${job.id}`); // if using React Router
   };
 
   const handleSetForEdit = (job) => {

@@ -11,6 +11,7 @@ import {
   UserPlus, // For add user
   X,
 } from "lucide-react";
+import Swal from "sweetalert2";
 
 export default function JobApplicant() {
   const {
@@ -18,6 +19,8 @@ export default function JobApplicant() {
     processGetApplicantsOfJobPosted,
     applicants,
     totalApplicants,
+    processChangeCandidateStatus,
+    processGetInterviewInfo,
   } = useContext(EmployerApiData);
   const tabs = ["Job Details", "Applicants", "Activity History"];
   const [jobInfo, setJobInfo] = useState({});
@@ -26,6 +29,7 @@ export default function JobApplicant() {
   const [candidateData, setCandidateData] = useState({});
   const [value, setValue] = useState(50);
   const [openMenu, setOpenMenu] = useState(null);
+  const [interviewStatus, setInterviewStatus] = useState(null);
   const [isInterviewOpen, setIsInterviewOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -58,7 +62,6 @@ export default function JobApplicant() {
 
   useEffect(() => {
     let data = postedJobList.find((item) => item.id == id);
-    console.log(data);
     setJobInfo(data);
     processGetApplicantsOfJobPosted(id);
   }, [postedJobList]);
@@ -74,6 +77,12 @@ export default function JobApplicant() {
         break;
       case "download":
         handleDownloadCv(item);
+        break;
+      case "hired":
+        handleStatus(item, "hired");
+        break;
+      case "rejected":
+        handleStatus(item, "rejected");
         break;
       case "delete":
         handleDelete(item);
@@ -97,7 +106,6 @@ export default function JobApplicant() {
   };
 
   const handleDownloadCv = (item) => {
-    console.log(item);
     if (!item?.user?.cv?.cv_file) {
       console.error("CV URL not found.");
       return;
@@ -119,6 +127,36 @@ export default function JobApplicant() {
     };
     setCandidateData(newData);
     setIsInterviewOpen(true);
+  };
+
+  const handleViewInterviewData = (item) => {
+    setInterviewStatus("view");
+    processGetInterviewInfo(item.id);
+    setIsInterviewOpen(true);
+  };
+
+  const handleStatus = (item, status) => {
+    let newData = {
+      proposal_id: item.id,
+      status: status,
+    };
+    // console.log(newData);
+    let response = processChangeCandidateStatus(newData, item.id);
+    if (response) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Status changed successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: "Failed to change status",
+      });
+    }
   };
 
   const handleDelete = (item) => {
@@ -439,7 +477,7 @@ export default function JobApplicant() {
                         <button
                           className="border bg-yellow-600 text-white rounded-md px-4 py-2 
                        text-sm hover:bg-gray-200 mb-2 block"
-                          onClick={() => handleInterviewSet(item)}
+                          onClick={() => handleViewInterviewData(item)}
                         >
                           Interview Details
                         </button>
@@ -474,20 +512,20 @@ export default function JobApplicant() {
                             <Download size={14} /> Download Resume
                           </button>
                           <button
-                            onClick={() => handleMenuAction("view", item)}
+                            onClick={() => handleMenuAction("hired", item)}
                             className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                           >
                             <UserPlus size={14} /> Add To Talent Pool
                           </button>
                           <button
-                            onClick={() => handleMenuAction("edit", item)}
+                            onClick={() => handleMenuAction("rejected", item)}
                             className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                           >
                             <Trash2 size={14} /> Reject
                           </button>
                           <button
                             onClick={() => handleMenuAction("close")}
-                            className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 w-full text-left"
                           >
                             <X size={14} /> Close
                           </button>
@@ -575,6 +613,7 @@ export default function JobApplicant() {
         isOpen={isInterviewOpen}
         onClose={() => setIsInterviewOpen(false)}
         candidateData={candidateData}
+        status={interviewStatus}
       />
     </div>
   );

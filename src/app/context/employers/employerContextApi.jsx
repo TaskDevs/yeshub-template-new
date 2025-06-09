@@ -3,12 +3,15 @@ import { notify } from "../../../utils/responseUtils";
 import {
   addEmployer,
   addCertification,
+  getInterviewInfo,
   addExperience,
   addJobPost,
+  changeCandidateStatus,
   getClientDashboardStats,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
+  getHiredApplicants,
   getCompanyPostedJobs,
   checkIfCompanyExist,
   setInterview,
@@ -32,10 +35,13 @@ const EmployerApiDataProvider = (props) => {
   const [companyInfoData, setCompanyInfoData] = useState([]);
   const [appliedJobList, setAppliedJobList] = useState([]);
   const [applicants, setApplicants] = useState([]);
+  const [hiredApplicants, setHiredApplicants] = useState([]);
+  const [processHiredApplicants, setProcessHiredApplicants] = useState([]);
   const [postedJobList, setPostedJobList] = useState([]);
   const [rawPostedJobs, setRawPostedJobs] = useState([]);
   const [jobPaginationData, setJobPaginationData] = useState({});
   const [employerStats, setEmployerStats] = useState({});
+  const [interviewInfo, setInterviewInfo] = useState({});
   const [totalApplicants, setTotalApplicants] = useState(0);
 
   const processAddEmployer = async (data) => {
@@ -137,6 +143,37 @@ const EmployerApiDataProvider = (props) => {
       setApplicants((prev) =>
         prev.map((item) =>
           item.id === data.proposal_id ? { ...item, stage: "interview" } : item
+        )
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const processGetInterviewInfo = async (id) => {
+    let response = await getInterviewInfo(id);
+    if (response) {
+      setInterviewInfo(response.data);
+    }
+  };
+
+  const processGetHiredApplicants = async () => {
+    let response = await getHiredApplicants();
+    if (response) {
+      let newData = [];
+      response.data.map((item) => newData.push(item.user));
+      setProcessHiredApplicants(newData);
+      setHiredApplicants(newData);
+    }
+  };
+
+  const processChangeCandidateStatus = async (data, id) => {
+    let response = await changeCandidateStatus(data, id);
+    if (response) {
+      setApplicants((prev) =>
+        prev.map((item) =>
+          item.id == id ? { ...item, stage: data.status } : item
         )
       );
       return true;
@@ -350,13 +387,15 @@ const EmployerApiDataProvider = (props) => {
         processAddCertification,
         processAddExperience,
         processGetCompanyInfoForInvoice,
+        processGetInterviewInfo,
         processEmployerProfile,
-
+        processChangeCandidateStatus,
         processGetJobAppliedToCompany,
         processGetCompanyInfo,
         processCheckIfCompanyExist,
         processSearchEmployer,
         processAddJobPost,
+        processGetHiredApplicants,
         processUpdateEmployer,
         processUpdateJob,
         processUpdateJobStatus,
@@ -375,9 +414,14 @@ const EmployerApiDataProvider = (props) => {
         rawPostedJobs,
         jobPaginationData,
         processGetApplicantsOfJobPosted,
+        hiredApplicants,
+        setHiredApplicants,
         applicants,
         totalApplicants,
         processSetInterview,
+        interviewInfo,
+        processHiredApplicants,
+        setProcessHiredApplicants,
       }}
     >
       {props.children}

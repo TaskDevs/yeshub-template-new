@@ -12,6 +12,7 @@ import {
   countApplications,
   deleteJob,
   applyForJob,
+  jobCompanyInfo,
 } from "./jobsApi";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ export const JobApiData = createContext();
 
 const JobApiDataProvider = (props) => {
   const [jobListData, setJobListData] = useState([]);
+  const [companyInfo, setCompanyInfo] = useState({});
   const [empJobListData, setEmpJobListData] = useState([]);
   const [paginationData, setPaginationData] = useState({});
   const [searchPaginationData, setSearchPaginationData] = useState([]);
@@ -83,6 +85,11 @@ const JobApiDataProvider = (props) => {
       });
     }
     setJobLoad(true);
+  };
+
+  const processJobCompanyInfo = async (id) => {
+    let response = await jobCompanyInfo(id);
+    setCompanyInfo(response.data);
   };
 
   const processCountJobsPostedByEmp = async (id) => {
@@ -211,6 +218,7 @@ const JobApiDataProvider = (props) => {
         processCountJobsPostedByEmp,
         processGetAllJobPostByEmployer,
         processJobProfile,
+        processJobCompanyInfo,
         processSearchJob,
         processUpdateJob,
         processDeleteJob,
@@ -236,6 +244,7 @@ const JobApiDataProvider = (props) => {
         processSearchJobByTitle,
         loading,
         processCountApplications,
+        companyInfo,
       }}
     >
       {props.children}

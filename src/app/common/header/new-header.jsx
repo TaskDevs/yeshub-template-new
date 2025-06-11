@@ -182,7 +182,7 @@ export const Header = ({ isDashboard = true }) => {
     {
       id: "why-yeshub",
       label: "Why YesHub",
-      to: "#",
+      to: "/why-hub",
     },
     {
       id: "manage-finances",

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CiBookmark } from "react-icons/ci";
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { experienceLevel, jobTypes, sort } from "./filter-data";
 import CanSelectField from "../../components/can-select-field";
@@ -12,8 +12,8 @@ import ProfileInfoSection from "./profile-info-section";
 import { ProfileApiData } from "../../../../context/user-profile/profileContextApi";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { useNavigate } from "react-router-dom";
-import { ProposalSubmissionModal } from "../new-profile/profile-components";
-import { ProposalForm } from "./proposal-form";
+// import { ProposalSubmissionModal } from "../new-profile/profile-components";
+// import { ProposalForm } from "./proposal-form";
 import styles from "./find-work.module.css";
 import MobileFindSavedWork from "./mobile-find-work";
 
@@ -22,14 +22,17 @@ function FindWorkPage() {
 
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
-  const { processGetAllJob, jobListData, processApplyForJob } =
-    useContext(JobApiData);
+  const {
+    processGetAllJob,
+    jobListData,
+    // processApplyForJob
+  } = useContext(JobApiData);
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [jobInfo, setJobInfo] = useState({
-    job_id: null,
-    company_id: null,
-  });
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const [jobInfo, setJobInfo] = useState({
+  //   job_id: null,
+  //   company_id: null,
+  // });
   const [filterJobListData, setFilterJobListData] = useState([]);
 
   // const [jobInfo, setJobInfo] = useState({
@@ -40,7 +43,7 @@ function FindWorkPage() {
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
 
-  console.log("jobListData", jobListData);
+  //console.log("jobListData", jobListData);
 
   useEffect(() => {
     setIsLoading(true);
@@ -53,18 +56,17 @@ function FindWorkPage() {
   }, [jobListData]);
 
   // Close modal handler
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  // const handleCloseModal = () => {
+  //   setModalOpen(false);
+  // };
 
-  const handlePrepareSubmit = (job_id, employer_id) => {
-    setJobInfo({
-      job_id: job_id,
-      company_id: employer_id,
-    });
-    // console.log(id);
-    setModalOpen(true);
-  };
+  // const handlePrepareSubmit = (job_id) => {
+  //   setJobInfo({
+  //     job_id: job_id,
+  //   });
+  //   // console.log(id);
+  //   setModalOpen(true);
+  // };
 
   const handleFilterChange = (data) => {
     if (data !== "all types") {
@@ -112,26 +114,26 @@ function FindWorkPage() {
     console.log(data);
   };
 
-  const handleOnSubmit = (data) => {
-    if (!userId) {
-      alert("Make sure you sign up first");
-      return;
-    } else {
-      let newData = {
-        user_id: userId,
-        job_id: jobInfo.job_id,
-        company_id: jobInfo.company_id,
-        milestones: data?.milestones?.length > 0 ? data.milestones : null,
-        requirement: data.request ? data.request : null,
-        status: "pending",
-        type: data.type,
-      };
+  // const handleOnSubmit = (data) => {
+  //   if (!userId) {
+  //     alert("Make sure you sign up first");
+  //     return;
+  //   } else {
+  //     let newData = {
+  //       user_id: userId,
+  //       job_id: jobInfo.id,
+  //       company_id: jobInfo?.company_id,
+  //       milestones: data?.milestones?.length > 0 ? data.milestones : null,
+  //       requirement: data.request ? data.request : null,
+  //       status: "pending",
+  //       type: data.type,
+  //     };
 
-      console.log(newData);
-      processApplyForJob(newData);
-      setModalOpen(false);
-    }
-  };
+  //     console.log(newData);
+  //     processApplyForJob(newData);
+  //     setModalOpen(false);
+  //   }
+  // };
 
   return (
     <div className=" tw-css mx-auto ">
@@ -141,11 +143,11 @@ function FindWorkPage() {
             <CanJobCard
               key={job.id}
               id={job?.id}
-              role={job.job_title}
+              role={job?.job_title}
               ratings="4.9"
               reviews="23k"
-              companyName={job.employer.company_name}
-              action={() => handlePrepareSubmit(job.id, job.employer_id)}
+              companyName={job?.company_name}
+              // action={() => handlePrepareSubmit(job.id, job.employer_id)}
               jobType={job?.job_type}
               isMobile={true}
               jobLocation={job?.location || "Accra"}
@@ -246,8 +248,8 @@ function FindWorkPage() {
                         id={job?.id}
                         role={job?.job_title}
                         proposal={job?.count_proposal}
-                        ratings={job?.employer.company_rating}
-                        reviews={job?.employer.company_review}
+                        ratings={job?.company_rating}
+                        reviews={job?.company_review}
                         companyName={job?.job_category}
                         description={job?.description}
                         skills={job?.skills}
@@ -256,11 +258,11 @@ function FindWorkPage() {
                           readableDate(job.start_date) ===
                             new Date().toDateString() && "new"
                         }
-                        action={() =>
-                          handlePrepareSubmit(job.id, job.employer_id)
-                        }
+                        // action={() =>
+                        //   handlePrepareSubmit(job.id, job.employer_id)
+                        // }
                         numberOfProposals="23"
-                        salaryRange={job.fixed_rate || job.budget}
+                        salaryRange={job?.fixed_rate || job?.budget}
                         jobType={job?.job_type || ""}
                       />
                     ))
@@ -278,7 +280,7 @@ function FindWorkPage() {
         </div>
       </div>
 
-      {modalOpen && (
+      {/* {modalOpen && (
         <ProposalSubmissionModal
           isOpen={modalOpen}
           onClose={handleCloseModal}
@@ -286,8 +288,8 @@ function FindWorkPage() {
         >
           <ProposalForm onSubmit={handleOnSubmit} />
         </ProposalSubmissionModal>
-      )}
-      <ToastContainer position="top-right" autoClose={3000} />
+      )} */}
+      {/* <ToastContainer position="top-right" autoClose={3000} /> */}
     </div>
   );
 }

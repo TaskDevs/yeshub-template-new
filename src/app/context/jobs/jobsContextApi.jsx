@@ -71,7 +71,7 @@ const JobApiDataProvider = (props) => {
     setJobLoad(false);
     let response = await jobList(pageNo, userId);
     if (response) {
-      // console.log(response);
+      console.log(response);
       setJobListData(response.data);
       setPaginationData({
         // total: response.pagination.total,
@@ -218,7 +218,7 @@ const JobApiDataProvider = (props) => {
         processApplyForJob,
         jobListData,
         setJobListData,
-        modalOpen, 
+        modalOpen,
         setModalOpen,
         handleCloseModal,
         searchJobListData,

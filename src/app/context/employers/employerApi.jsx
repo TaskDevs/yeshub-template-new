@@ -69,6 +69,33 @@ export const addJobPost = async (data) => {
   }
 };
 
+export const getProjects = async (id) => {
+  try {
+    let responseOnGetAllProjects = await axios.get(
+      `${REACT_BASE_URL}user-projects/${id}`
+    );
+    if (responseOnGetAllProjects.status === 200) {
+      return responseOnGetAllProjects.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const createProject = async (data) => {
+  try {
+    let responseOnCreateProject = await axios.post(
+      `${REACT_BASE_URL}create-project`,
+      data
+    );
+    if (responseOnCreateProject.status === SUCCESS_STATUS) {
+      return responseOnCreateProject.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const setInterview = async (data) => {
   try {
     let responseOnSetInterview = await axios.post(

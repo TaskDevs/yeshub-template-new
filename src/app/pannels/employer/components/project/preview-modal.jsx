@@ -1,11 +1,18 @@
+import React, { useContext } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Folder } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 export default function PreviewModal({ isOpen, onClose, projectData }) {
+  const { processCreateProjects } = useContext(EmployerApiData);
   const getColor = (index) => {
     const colors = ["#34D399", "#60A5FA", "#FBBF24", "#F472B6", "#A78BFA"];
     return colors[index % colors.length];
   };
+
+  const navigate = useNavigate();
 
   const doughnutData = {
     labels: projectData?.budget_items?.map((item) => item.name || "Unnamed"),
@@ -22,6 +29,37 @@ export default function PreviewModal({ isOpen, onClose, projectData }) {
   };
 
   if (!isOpen) return null;
+
+  const handleSubmitProject = async () => {
+    console.log(projectData);
+    let newData = {
+      ...projectData,
+      project_category: projectData.projectCategory,
+      start_date: projectData.startDate,
+      end_date: projectData.endDate,
+      project_name: projectData.projectName,
+    };
+    let response = await processCreateProjects(newData);
+    if (response) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Project created successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        navigate("/dashboard-client/manage-projects");
+      }, 1500);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: "Failed to create a project",
+      });
+    }
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -127,8 +165,8 @@ export default function PreviewModal({ isOpen, onClose, projectData }) {
                 <h4 className="text-sm font-semibold text-gray-700 flex items-center mb-1">
                   {item.name || "Untitled"}
                   <span className="ml-2 text-xs text-gray-500">
-                    {item.dueDate
-                      ? new Date(item.dueDate).toLocaleDateString("en-US", {
+                    {item.due_date
+                      ? new Date(item.due_date).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
@@ -206,7 +244,7 @@ export default function PreviewModal({ isOpen, onClose, projectData }) {
           </div>
         </div>
         <button
-          onClick={() => console.log("submitting")}
+          onClick={handleSubmitProject}
           className="px-4 py-2 bg-green-500 text-white rounded"
         >
           Create

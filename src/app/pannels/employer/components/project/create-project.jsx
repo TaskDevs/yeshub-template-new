@@ -46,7 +46,9 @@ export default function CreateProject() {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedTeamData, setSelectedTeamData] = useState([]);
   const [structureType, setStructureType] = useState("flat");
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    projectCategory: "Software Development",
+  });
   const [projectData, setProjectData] = useState({});
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   //const [value, setValue] = useState(50);

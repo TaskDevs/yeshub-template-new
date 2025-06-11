@@ -68,7 +68,7 @@ const jobData = [
 const JOBS_PER_PAGE = 3;
 
 export default function ManageProjects() {
-  const { employerStats } = useContext(EmployerApiData);
+  const { employerStats, processGetUserProjects } = useContext(EmployerApiData);
   // 🔽 Filters and pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -100,6 +100,10 @@ export default function ManageProjects() {
     const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
   }, [jobData, searchTerm, statusFilter, sortBy]); // re-trigger on filter change
+
+  useEffect(() => {
+    processGetUserProjects();
+  }, []);
 
   // 🔽 Apply filters and sorting first
   let filteredJobs = [];

@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { formatDate } from "../../../../../utils/dateUtils";
+import { userId } from "../../../../../globals/constants";
 import InterviewModal from "./interview-modal";
+import MessageModal from "./message-modal";
 import {
   EllipsisVertical,
   Eye,
@@ -31,6 +33,8 @@ export default function JobApplicant() {
   const [openMenu, setOpenMenu] = useState(null);
   const [interviewStatus, setInterviewStatus] = useState(null);
   const [isInterviewOpen, setIsInterviewOpen] = useState(false);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [messageInfo, setMessageInfo] = useState({});
 
   const navigate = useNavigate();
 
@@ -127,6 +131,16 @@ export default function JobApplicant() {
     };
     setCandidateData(newData);
     setIsInterviewOpen(true);
+  };
+
+  const handleOpenMessageModal = (item) => {
+    let newData = {
+      receiver_id: item.user_id,
+      sender_id: userId,
+      freelancer_name: item?.user?.firstname + " " + item?.user?.lastname,
+    };
+    setMessageInfo(newData);
+    setIsMessageOpen(true);
   };
 
   const handleViewInterviewData = (item) => {
@@ -486,6 +500,7 @@ export default function JobApplicant() {
                       <button
                         className="border bg-gray-300 text-gray-600 rounded-md px-4 py-2 
                        text-sm hover:bg-gray-200 mb-2 block"
+                        onClick={() => handleOpenMessageModal(item)}
                       >
                         Message
                       </button>
@@ -614,6 +629,11 @@ export default function JobApplicant() {
         onClose={() => setIsInterviewOpen(false)}
         candidateData={candidateData}
         status={interviewStatus}
+      />
+      <MessageModal
+        isOpen={isMessageOpen}
+        onClose={() => setIsMessageOpen(false)}
+        messageData={messageInfo}
       />
     </div>
   );

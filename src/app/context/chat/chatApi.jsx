@@ -27,19 +27,45 @@ export const sendMessage = async (data) => {
   }
 };
 
+// Get receive messages
+export const getMessagesOfReceiver = async (id) => {
+  try {
+    const response = await axios.get(
+      `${REACT_BASE_URL}get-messages-by-receiver/${id}`
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Error sending message:", err);
+    throw err;
+  }
+};
+
+// mark as read message
+export const markAsRead = async (id) => {
+  try {
+    const response = await axios.put(`${REACT_BASE_URL}mark-read/${id}`);
+    return response.data;
+  } catch (err) {
+    console.error("Error sending message:", err);
+    throw err;
+  }
+};
+
 export const getChatUsers = async (userId) => {
-    try {
-      const response = await axios.get(`${REACT_BASE_URL}chat-users/${userId}`);
-      return response.data;
-    } catch (err) {
-      console.error("Error sending message:", err);
-      throw err;
-    }
-  };
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}chat-users/${userId}`);
+    return response.data;
+  } catch (err) {
+    console.error("Error sending message:", err);
+    throw err;
+  }
+};
 // Fetch messages between two users
 export const getMessages = async (senderId, receiverId) => {
   try {
-    const response = await axios.get(`${REACT_BASE_URL}chat/${senderId}/${receiverId}`);
+    const response = await axios.get(
+      `${REACT_BASE_URL}chat/${senderId}/${receiverId}`
+    );
     return response.data.messages;
   } catch (err) {
     console.error("Error fetching messages:", err);
@@ -50,7 +76,10 @@ export const getMessages = async (senderId, receiverId) => {
 // Update a message
 export const updateMessage = async (messageId, data) => {
   try {
-    const response = await axios.put(`${REACT_BASE_URL}chat/${messageId}`, data);
+    const response = await axios.put(
+      `${REACT_BASE_URL}chat/${messageId}`,
+      data
+    );
     return response.data;
   } catch (err) {
     console.error("Error updating message:", err);

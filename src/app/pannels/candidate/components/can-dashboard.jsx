@@ -6,6 +6,7 @@ import { loadScript } from "../../../../globals/constants";
 import styles from "../sections/dashboard/dashboard.module.css";
 import { CanQuickActions } from "../sections/dashboard/can-quick-actions";
 import { CanRecentActivity } from "../sections/dashboard/can-recent-activity";
+import ChatToggleButton from "../support/ChatToggleButton";
 
 function CanDashboardPage() {
   useEffect(() => {
@@ -92,6 +93,8 @@ function CanDashboardPage() {
         <div className={`${styles.cardRow} ${styles.projectsRow}`}>
           <CanActiveProjects />
           <CanRecentActivity />
+
+          <ChatToggleButton/>
         </div>
       </div>
     </div>

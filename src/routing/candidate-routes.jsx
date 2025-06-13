@@ -34,6 +34,8 @@ import FinancialSettings from "../app/pannels/candidate/sections/finances/financ
 import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
 
 import { isAuthenticated } from "./auth";
+import SupportCenter from "../app/pannels/candidate/support/SupportCenter";
+import SubmitDispute from "../app/pannels/candidate/support/SubmitDispute";
 
 function CandidateRoutes() {
   const auth = isAuthenticated();
@@ -72,6 +74,8 @@ function CandidateRoutes() {
             path={candidate.FINANCE_SETTINGS}
             element={<FinancialSettings />}
           />
+          <Route path={candidate.SUPPORT} element={<SupportCenter />} />
+          <Route path={candidate.DISPUTE} element={<SubmitDispute />} />
           <Route
             path={candidate.CHANGE_PASSWORD}
             element={<CanChangePasswordPage />}

@@ -78,6 +78,7 @@ import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
 import NewAuthForm from "../app/pannels/public-user/components/pages/log-form";
 
 
+
 function PublicUserRoutes() {
   return (
     <>
@@ -154,7 +155,8 @@ function PublicUserRoutes() {
         <Route path={publicUser.pages.AUTH} element={<NewAuth />} />
         <Route path={publicUser.pages.WELCOME} element={<WelcomePopup />} />
         {/* <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} /> */}
-        <Route
+       
+         <Route
           path={publicUser.pages.FIND_TALENT}
           element={<ClientFindTalent />}
         />

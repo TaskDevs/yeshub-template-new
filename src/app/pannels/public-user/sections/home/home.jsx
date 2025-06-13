@@ -13,6 +13,7 @@ import {
   DollarSign,
 } from "lucide-react"; // Icons from lucide-react
 
+
 const categories = [
   { icon: <Code2 size={24} />, label: "Programming & Tech" },
   { icon: <Paintbrush size={24} />, label: "Graphics & Design" },
@@ -284,6 +285,7 @@ export default function YesHubLandingPage() {
           </div>
         </div>
       </section>
+   
     </div>
   );
 }

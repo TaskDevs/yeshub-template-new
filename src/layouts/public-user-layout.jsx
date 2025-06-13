@@ -14,6 +14,7 @@ import ContractPopup from "../app/common/popups/popup-contract";
 import YesNoPopup from "../app/common/popups/popup-yes-no";
 import { popupType } from "../globals/constants";
 
+
 function PublicUserLayout() {
   const currentpath = useLocation().pathname;
   return (
@@ -46,7 +47,7 @@ function PublicUserLayout() {
           type={popupType.DELETE_PROFILE}
           msg={"Are you sure you want to delete this profile?"}
         />
-       
+      
       </div>
     </>
   );

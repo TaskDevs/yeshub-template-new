@@ -12,6 +12,7 @@ import {
   countApplications,
   deleteJob,
   applyForJob,
+  jobCompanyInfo,
 } from "./jobsApi";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +20,7 @@ export const JobApiData = createContext();
 
 const JobApiDataProvider = (props) => {
   const [jobListData, setJobListData] = useState([]);
+  const [companyInfo, setCompanyInfo] = useState({});
   const [empJobListData, setEmpJobListData] = useState([]);
   const [paginationData, setPaginationData] = useState({});
   const [searchPaginationData, setSearchPaginationData] = useState([]);
@@ -71,7 +73,7 @@ const JobApiDataProvider = (props) => {
     setJobLoad(false);
     let response = await jobList(pageNo, userId);
     if (response) {
-      // console.log(response);
+      console.log(response);
       setJobListData(response.data);
       setPaginationData({
         // total: response.pagination.total,
@@ -83,6 +85,11 @@ const JobApiDataProvider = (props) => {
       });
     }
     setJobLoad(true);
+  };
+
+  const processJobCompanyInfo = async (id) => {
+    let response = await jobCompanyInfo(id);
+    setCompanyInfo(response.data);
   };
 
   const processCountJobsPostedByEmp = async (id) => {
@@ -211,6 +218,7 @@ const JobApiDataProvider = (props) => {
         processCountJobsPostedByEmp,
         processGetAllJobPostByEmployer,
         processJobProfile,
+        processJobCompanyInfo,
         processSearchJob,
         processUpdateJob,
         processDeleteJob,
@@ -218,7 +226,7 @@ const JobApiDataProvider = (props) => {
         processApplyForJob,
         jobListData,
         setJobListData,
-        modalOpen, 
+        modalOpen,
         setModalOpen,
         handleCloseModal,
         searchJobListData,
@@ -236,6 +244,7 @@ const JobApiDataProvider = (props) => {
         processSearchJobByTitle,
         loading,
         processCountApplications,
+        companyInfo,
       }}
     >
       {props.children}

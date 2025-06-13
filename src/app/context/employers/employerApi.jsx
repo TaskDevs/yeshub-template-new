@@ -69,14 +69,83 @@ export const addJobPost = async (data) => {
   }
 };
 
+export const getProjects = async (id) => {
+  try {
+    let responseOnGetAllProjects = await axios.get(
+      `${REACT_BASE_URL}user-projects/${id}`
+    );
+    if (responseOnGetAllProjects.status === 200) {
+      return responseOnGetAllProjects.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const createProject = async (data) => {
+  try {
+    let responseOnCreateProject = await axios.post(
+      `${REACT_BASE_URL}create-project`,
+      data
+    );
+    if (responseOnCreateProject.status === SUCCESS_STATUS) {
+      return responseOnCreateProject.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const setInterview = async (data) => {
   try {
     let responseOnSetInterview = await axios.post(
       `${REACT_BASE_URL}create-interview`,
       data
     );
-    console.log(responseOnSetInterview);
     if (responseOnSetInterview.status == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getInterviewInfo = async (id) => {
+  try {
+    let responseOnGetInterviewInfo = await axios.get(
+      `${REACT_BASE_URL}get-interview-info?id=${id}`
+    );
+    if (responseOnGetInterviewInfo.status == 200) {
+      return responseOnGetInterviewInfo.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getHiredApplicants = async () => {
+  try {
+    let responseOngetHiredApplicants = await axios.get(
+      `${REACT_BASE_URL}get-hired-applicants`
+    );
+    if (responseOngetHiredApplicants.status == 200) {
+      return responseOngetHiredApplicants.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const changeCandidateStatus = async (data, id) => {
+  try {
+    let responseOnChangeStatus = await axios.put(
+      `${REACT_BASE_URL}update-candidate-status/${id}`,
+      data
+    );
+    // console.log(responseOnChangeStatus);
+    if (responseOnChangeStatus.status == 200) {
       return true;
     } else {
       return false;

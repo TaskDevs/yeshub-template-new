@@ -1,9 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
-export default function InterviewModal({ isOpen, onClose, candidateData }) {
-  const { processSetInterview } = useContext(EmployerApiData);
+export default function InterviewModal({
+  isOpen,
+  onClose,
+  candidateData,
+  status,
+}) {
+  const { processSetInterview, interviewInfo } = useContext(EmployerApiData);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [format, setFormat] = useState("WhatsApp video call");
@@ -12,6 +17,21 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
   const [interviewers, setInterviewers] = useState("");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const isViewOnly = status === "view";
+
+  useEffect(() => {
+    if (status == "view" || status == "edit") {
+      //console.log(interviewInfo);
+      setDate(interviewInfo.date);
+      setTime(interviewInfo.time);
+      setFormat(interviewInfo.format);
+      setLocation(interviewInfo.location);
+      setDuration(interviewInfo.duration);
+      setInterviewers(interviewInfo.inteviewers);
+      setInterviewers(interviewInfo.notes);
+    }
+  }, [interviewInfo]);
 
   const handleSchedule = async () => {
     setLoading(true);
@@ -71,6 +91,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
               Date
             </label>
             <input
+              disabled={isViewOnly}
               type="date"
               className="w-full border rounded-md px-3 py-2 text-sm"
               value={date}
@@ -82,6 +103,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
               Time
             </label>
             <input
+              disabled={isViewOnly}
               type="time"
               className="w-full border rounded-md px-3 py-2 text-sm"
               value={time}
@@ -96,6 +118,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
             Interview Format
           </label>
           <select
+            disabled={isViewOnly}
             className="w-full border rounded-md px-3 py-2 text-sm"
             value={format}
             onChange={(e) => setFormat(e.target.value)}
@@ -113,6 +136,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
             Location / Meeting Link
           </label>
           <input
+            disabled={isViewOnly}
             type="text"
             className="w-full border rounded-md px-3 py-2 text-sm"
             placeholder="Enter link or location"
@@ -127,6 +151,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
             Duration
           </label>
           <input
+            disabled={isViewOnly}
             type="text"
             className="w-full border rounded-md px-3 py-2 text-sm"
             placeholder="e.g. 30 minutes"
@@ -141,6 +166,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
             Interviewers
           </label>
           <textarea
+            disabled={isViewOnly}
             rows={2}
             className="w-full border rounded-md px-3 py-2 text-sm"
             placeholder="Enter interviewer names"
@@ -155,6 +181,7 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
             Notes
           </label>
           <textarea
+            disabled={isViewOnly}
             rows={2}
             className="w-full border rounded-md px-3 py-2 text-sm"
             placeholder="Any additional information..."
@@ -165,15 +192,18 @@ export default function InterviewModal({ isOpen, onClose, candidateData }) {
 
         {/* Buttons */}
         <div className="flex justify-end gap-2">
-          <button
-            onClick={handleSchedule}
-            disabled={loading}
-            className={`bg-green-600 text-white px-4 py-2 rounded-md text-sm ${
-              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
-            }`}
-          >
-            {loading ? "Scheduling..." : "Schedule Interview"}
-          </button>
+          {!isViewOnly && (
+            <button
+              onClick={handleSchedule}
+              disabled={loading}
+              className={`bg-green-600 text-white px-4 py-2 rounded-md text-sm ${
+                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
+              }`}
+            >
+              {loading ? "Scheduling..." : "Schedule Interview"}
+            </button>
+          )}
+
           <button
             onClick={onClose}
             className="border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm"

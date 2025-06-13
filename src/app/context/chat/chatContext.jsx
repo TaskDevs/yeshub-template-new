@@ -1,9 +1,19 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { sendMessage, getMessages,getChatUsers , updateMessage, deleteMessage, subscribeToMessages } from '../chat/chatApi'
+import {
+  sendMessage,
+  getMessages,
+  getChatUsers,
+  getMessagesOfReceiver,
+  updateMessage,
+  deleteMessage,
+  subscribeToMessages,
+  markAsRead,
+} from "../chat/chatApi";
 
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
+  const [unreadCount, setUnreadCount] = useState(0);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -13,7 +23,7 @@ export const ChatProvider = ({ children }) => {
     try {
       const fetchedMessages = await getMessages(senderId, receiverId);
       setMessages(fetchedMessages);
-      console.log("mes", fetchedMessages)
+      console.log("mes", fetchedMessages);
     } catch (error) {
       console.error("Error loading messages:", error);
     }
@@ -25,12 +35,34 @@ export const ChatProvider = ({ children }) => {
     try {
       const fetchedChatUsers = await getChatUsers(userId);
       setMessages(fetchedChatUsers);
-      console.log("mes",fetchedChatUsers)
+      console.log("mes", fetchedChatUsers);
     } catch (error) {
       console.error("Error loading messages:", error);
     }
     setLoading(false);
   };
+
+  const processGetMessagesOfReceiver = async (id) => {
+    try {
+      const responseOnGetMessages = await getMessagesOfReceiver(id);
+      console.log(responseOnGetMessages);
+      setUnreadCount(responseOnGetMessages.delivered_count);
+      setMessages(responseOnGetMessages.messages);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+  const processMarkAsRead = async (id, status) => {
+    if (status == "delivered") {
+      const responseOnMarkRead = await markAsRead(id);
+      console.log(responseOnMarkRead);
+      if (responseOnMarkRead.success) {
+        setUnreadCount((prev) => prev - 1);
+      }
+    }
+  };
+
   // Send a new message
   const handleSendMessage = async (data) => {
     try {
@@ -84,6 +116,10 @@ export const ChatProvider = ({ children }) => {
         handleUpdateMessage,
         handleDeleteMessage,
         loadChatUsers,
+        processGetMessagesOfReceiver,
+        unreadCount,
+        setUnreadCount,
+        processMarkAsRead,
       }}
     >
       {children}

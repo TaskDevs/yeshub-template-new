@@ -3,12 +3,17 @@ import { notify } from "../../../utils/responseUtils";
 import {
   addEmployer,
   addCertification,
+  getInterviewInfo,
   addExperience,
   addJobPost,
+  createProject,
+  changeCandidateStatus,
   getClientDashboardStats,
+  getProjects,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
+  getHiredApplicants,
   getCompanyPostedJobs,
   checkIfCompanyExist,
   setInterview,
@@ -32,11 +37,26 @@ const EmployerApiDataProvider = (props) => {
   const [companyInfoData, setCompanyInfoData] = useState([]);
   const [appliedJobList, setAppliedJobList] = useState([]);
   const [applicants, setApplicants] = useState([]);
+  const [userProjects, setUserProjects] = useState([]);
+  const [hiredApplicants, setHiredApplicants] = useState([]);
+  const [processHiredApplicants, setProcessHiredApplicants] = useState([]);
   const [postedJobList, setPostedJobList] = useState([]);
   const [rawPostedJobs, setRawPostedJobs] = useState([]);
   const [jobPaginationData, setJobPaginationData] = useState({});
   const [employerStats, setEmployerStats] = useState({});
+  const [interviewInfo, setInterviewInfo] = useState({});
   const [totalApplicants, setTotalApplicants] = useState(0);
+
+  const processGetUserProjects = async () => {
+    try {
+      const userId = sessionStorage.getItem("userId");
+      let responseOnGetUserProjects = await getProjects(userId);
+      console.log(responseOnGetUserProjects);
+      setUserProjects(responseOnGetUserProjects.projects);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const processAddEmployer = async (data) => {
     const userId = sessionStorage.getItem("userId"); // Get logged-in user ID=
@@ -63,6 +83,22 @@ const EmployerApiDataProvider = (props) => {
     } else {
       console.error("Failed to Add Company, API Response:", response);
       notify(400, "Failed to Add Company");
+    }
+  };
+
+  const processCreateProjects = async (data) => {
+    const userId = sessionStorage.getItem("userId");
+
+    const requestData = {
+      ...data,
+      user_id: userId,
+    };
+
+    let response = await createProject(requestData);
+    if (response) {
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -145,6 +181,37 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processGetInterviewInfo = async (id) => {
+    let response = await getInterviewInfo(id);
+    if (response) {
+      setInterviewInfo(response.data);
+    }
+  };
+
+  const processGetHiredApplicants = async () => {
+    let response = await getHiredApplicants();
+    if (response) {
+      let newData = [];
+      response.data.map((item) => newData.push(item.user));
+      setProcessHiredApplicants(newData);
+      setHiredApplicants(newData);
+    }
+  };
+
+  const processChangeCandidateStatus = async (data, id) => {
+    let response = await changeCandidateStatus(data, id);
+    if (response) {
+      setApplicants((prev) =>
+        prev.map((item) =>
+          item.id == id ? { ...item, stage: data.status } : item
+        )
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const processCheckIfCompanyExist = async (data) => {
     let response = await checkIfCompanyExist(data);
     return response;
@@ -172,7 +239,7 @@ const EmployerApiDataProvider = (props) => {
   const processGetApplicantsOfJobPosted = async (id) => {
     let response = await getApplicantsOfJobPosted(id);
     if (response) {
-      console.log(response);
+      //console.log(response);
       setTotalApplicants(response.data.total);
       setApplicants(response.data.data);
     } else {
@@ -350,13 +417,17 @@ const EmployerApiDataProvider = (props) => {
         processAddCertification,
         processAddExperience,
         processGetCompanyInfoForInvoice,
+        processGetInterviewInfo,
         processEmployerProfile,
-
+        processChangeCandidateStatus,
         processGetJobAppliedToCompany,
         processGetCompanyInfo,
+        processGetUserProjects,
         processCheckIfCompanyExist,
         processSearchEmployer,
         processAddJobPost,
+        processCreateProjects,
+        processGetHiredApplicants,
         processUpdateEmployer,
         processUpdateJob,
         processUpdateJobStatus,
@@ -375,9 +446,15 @@ const EmployerApiDataProvider = (props) => {
         rawPostedJobs,
         jobPaginationData,
         processGetApplicantsOfJobPosted,
+        hiredApplicants,
+        setHiredApplicants,
         applicants,
         totalApplicants,
         processSetInterview,
+        interviewInfo,
+        userProjects,
+        processHiredApplicants,
+        setProcessHiredApplicants,
       }}
     >
       {props.children}

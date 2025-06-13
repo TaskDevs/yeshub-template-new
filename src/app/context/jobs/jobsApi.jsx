@@ -63,6 +63,18 @@ export const jobList = async (pageNo, userId) => {
   }
 };
 
+export const jobCompanyInfo = async (id) => {
+  try {
+    let responseOnJobInfo = await axios.get(
+      `${REACT_BASE_URL}get-posted-jobs-info/${id} `
+    );
+    return responseOnJobInfo;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const searchJob = async (data, pageNo) => {
   try {
     //console.log(keywords);

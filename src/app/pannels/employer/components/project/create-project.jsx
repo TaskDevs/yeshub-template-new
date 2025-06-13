@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { Doughnut } from "react-chartjs-2";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import PreviewModal from "./preview-modal";
 
 const steps = [
   { name: "Basic Details" },
@@ -9,53 +11,213 @@ const steps = [
   { name: "Budgets" },
 ];
 
-const doughnutOptions = {
-  plugins: {
-    legend: {
-      display: false,
-    },
-    datalabels: {
-      color: "#4B5563", // text-gray-600
-      font: {
-        size: 10, // 👈 reduce font size here
-        weight: "bold",
-      },
-      formatter: (value, context) => {
-        const total = context.chart.data.datasets[0].data.reduce(
-          (a, b) => a + b,
-          0
-        );
-        const percentage = ((value / total) * 100).toFixed(0);
-        return `${percentage}%`;
-      },
-    },
-  },
-};
+// const doughnutOptions = {
+//   plugins: {
+//     legend: {
+//       display: false,
+//     },
+//     datalabels: {
+//       color: "#4B5563", // text-gray-600
+//       font: {
+//         size: 10, // 👈 reduce font size here
+//         weight: "bold",
+//       },
+//       formatter: (value, context) => {
+//         const total = context.chart.data.datasets[0].data.reduce(
+//           (a, b) => a + b,
+//           0
+//         );
+//         const percentage = ((value / total) * 100).toFixed(0);
+//         return `${percentage}%`;
+//       },
+//     },
+//   },
+// };
 
 const category = ["Software Development", "Graphics", "AI"];
 
 export default function CreateProject() {
+  const {
+    processGetHiredApplicants,
+    hiredApplicants,
+    processHiredApplicants,
+    setProcessHiredApplicants,
+  } = useContext(EmployerApiData);
   const [currentStep, setCurrentStep] = useState(0);
+  const [selectedTeamData, setSelectedTeamData] = useState([]);
   const [structureType, setStructureType] = useState("flat");
-  const [formData, setFormData] = useState({});
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isOn, setIsOn] = useState(false);
-  const [value, setValue] = useState(50);
+  const [formData, setFormData] = useState({
+    projectCategory: "Software Development",
+  });
+  const [projectData, setProjectData] = useState({});
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  //const [value, setValue] = useState(50);
+  const [totalBudget, setTotalBudget] = useState(60000);
+  const [items, setItems] = useState([
+    { name: "Development", percentage: 20 },
+    { name: "Design", percentage: 20 },
+    { name: "Project Management", percentage: 20 },
+  ]);
+  const [milestones, setMilestones] = useState([
+    {
+      name: "",
+      dueDate: "",
+      description: "",
+      deliverables: [""],
+      isOn: false,
+    },
+  ]);
+
+  useEffect(() => {
+    processGetHiredApplicants();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSliderChange = (index, newPercentage) => {
+    const updated = [...items];
+    updated[index].percentage = Number(newPercentage);
+    setItems(updated);
+  };
+
+  const handleNameChange = (index, name) => {
+    const updated = [...items];
+    updated[index].name = name;
+    setItems(updated);
+  };
+
+  const addItem = () => {
+    setItems([...items, { name: "", percentage: 0 }]);
+  };
+
+  const removeItem = (index) => {
+    if (items.length === 1) return; // Prevent removing the last item
+    const updated = items.filter((_, i) => i !== index);
+    setItems(updated);
+  };
+
+  const getColor = (index) => {
+    const colors = ["#34D399", "#60A5FA", "#FBBF24", "#F472B6", "#A78BFA"];
+    return colors[index % colors.length];
+  };
+
   // Doughnut Chart Data
   const doughnutData = {
-    labels: ["Withdrawals ", "Earnings"],
+    labels: items.map((item) => item.name || "Unnamed"),
     datasets: [
       {
-        data: [200, 150],
-        backgroundColor: ["#4F46E5", "#FACC15"],
-        borderWidth: 1,
+        data: items.map((item) => (item.percentage / 100) * totalBudget),
+        backgroundColor: items.map((_, index) => getColor(index)),
       },
     ],
+  };
+
+  const handleAddMilestone = () => {
+    setMilestones([
+      ...milestones,
+      {
+        name: "",
+        dueDate: "",
+        description: "",
+        deliverables: [""],
+        isOn: false,
+      },
+    ]);
+  };
+
+  const handleMilestoneChange = (index, field, value) => {
+    const updated = [...milestones];
+    updated[index][field] = value;
+    setMilestones(updated);
+  };
+
+  const handleDeliverableChange = (index, dIndex, value) => {
+    const updated = [...milestones];
+    updated[index].deliverables[dIndex] = value;
+    setMilestones(updated);
+  };
+
+  const handleAddDeliverable = (index) => {
+    const updated = [...milestones];
+    updated[index].deliverables.push("");
+    setMilestones(updated);
+  };
+
+  const handleRemoveDeliverable = (index, dIndex) => {
+    const updated = [...milestones];
+    updated[index].deliverables.splice(dIndex, 1);
+    setMilestones(updated);
+  };
+
+  const toggleSwitch = (index) => {
+    const updated = [...milestones];
+    updated[index].isOn = !updated[index].isOn;
+    setMilestones(updated);
+  };
+
+  const handleRoleChange = (index, newRole) => {
+    const updated = [...selectedTeamData];
+    updated[index].role = newRole;
+    setSelectedTeamData(updated);
+  };
+
+  const handleRemoveMilestone = (index) => {
+    if (milestones.length > 1) {
+      const updated = [...milestones];
+      updated.splice(index, 1);
+      setMilestones(updated);
+    }
+  };
+
+  const handleAddTeamMember = (item) => {
+    let data = processHiredApplicants.filter((item) => item.id !== item.id);
+    setProcessHiredApplicants(data);
+    setSelectedTeamData([...selectedTeamData, item]);
+  };
+
+  const handleRemoveTeamMember = (item) => {
+    let data = selectedTeamData.filter((item) => item.id !== item.id);
+    setSelectedTeamData(data);
+    setProcessHiredApplicants([...processHiredApplicants, item]);
+  };
+
+  const handleSearchMember = (e) => {
+    if (e.target.value == "") {
+      setProcessHiredApplicants(hiredApplicants);
+    } else {
+      let data = processHiredApplicants.filter((item) => {
+        const fullText =
+          `${item.firstname} ${item.lastname} ${item.profession} ${item.skill}`.toLowerCase();
+        return fullText.includes(e.target.value.toLowerCase());
+      });
+      setProcessHiredApplicants(data);
+    }
+  };
+
+  const handleViewPreview = () => {
+    const payload = {
+      team: selectedTeamData, // Array of team members or IDs
+      structure_type: structureType, // "flat" or something else
+      total_budget: totalBudget, // e.g., 60000
+      budget_items: items.map((item) => ({
+        name: item.name,
+        percentage: item.percentage,
+        amount: (item.percentage / 100) * totalBudget,
+      })),
+      milestones: milestones.map((m) => ({
+        name: m.name,
+        due_date: m.dueDate,
+        description: m.description,
+        deliverables: m.deliverables.filter((d) => d), // Remove empty
+        is_on: m.isOn,
+      })),
+      ...formData, // e.g., budget_notes, or any other extras
+    };
+
+    setProjectData(payload);
+    setIsPreviewOpen(true);
   };
 
   const renderForm = () => {
@@ -76,6 +238,7 @@ export default function CreateProject() {
                   placeholder="Enter Project Name"
                   className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md 
                   focus:outline-none"
+                  value={formData.projectName || ""}
                 />
               </div>
               <div className="w-full">
@@ -103,7 +266,7 @@ export default function CreateProject() {
                 Project Description
               </label>
               <textarea
-                value={formData.message}
+                value={formData.description || ""}
                 name="description"
                 onChange={(e) => handleChange(e)}
                 placeholder="Type your message here..."
@@ -120,6 +283,7 @@ export default function CreateProject() {
                   name="startDate"
                   onChange={(e) => handleChange(e)}
                   type="date"
+                  value={formData.startDate || ""}
                   placeholder="-/-/-"
                   className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md 
                   focus:outline-none"
@@ -131,6 +295,7 @@ export default function CreateProject() {
                   name="endDate"
                   onChange={(e) => handleChange(e)}
                   type="date"
+                  value={formData.endDate || ""}
                   placeholder="-/-/-"
                   className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md 
                   focus:outline-none"
@@ -144,6 +309,14 @@ export default function CreateProject() {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
+                    name="confidential"
+                    checked={formData.confidential || false}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        confidential: e.target.checked,
+                      })
+                    }
                     className="form-checkbox h-4 w-4 text-green-600"
                   />
                   <span>Confidential Project</span>
@@ -151,6 +324,14 @@ export default function CreateProject() {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
+                    name="requiresNDA"
+                    checked={formData.requiresNDA || false}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        requiresNDA: e.target.checked,
+                      })
+                    }
                     className="form-checkbox h-4 w-4 text-green-600"
                   />
                   <span>Requires NDA</span>
@@ -167,13 +348,15 @@ export default function CreateProject() {
             </h4>
             <div className="flex justify-between mb-2">
               <span className="text-sm text-gray-400">Team Members</span>
-              <span className="text-sm text-gray-400">selected: 3/10</span>
+              <span className="text-sm text-gray-400">
+                selected:{" "}
+                {selectedTeamData.length + " / " + hiredApplicants.length}
+              </span>
             </div>
             <div className="relative mb-4">
               <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleSearchMember(e)}
                 type="text"
                 placeholder="Search team members by name or skill..."
                 className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
@@ -185,87 +368,49 @@ export default function CreateProject() {
                   <h4 className="text-gray-400 text-sm font-semibold mb-6">
                     Available Team Members
                   </h4>
-                  <div className="flex items-start gap-4 mb-6">
-                    <input
+                  {processHiredApplicants?.map((item, index) => (
+                    <div className="flex items-start gap-4 mb-6" key={index}>
+                      {/* <input
                       type="checkbox"
                       className="form-checkbox h-4 w-4 text-green-600"
-                    />
-                    <img
-                      src="https://placehold.co/600x400"
-                      alt="Freelancer Avatar"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="text-gray-600 font-semibold">
-                        Kwame Osei
-                      </h4>
-                      <span className="text-sm text-gray-600 block mb-2">
-                        Senior Backend Developer
+                    /> */}
+                      <span
+                        className="text-green-600 text-2xl cursor-pointer"
+                        onClick={() => handleAddTeamMember(item)}
+                      >
+                        +
                       </span>
-                      <div>
-                        <span className="text-sm text-gray-500 rounded-full bg-gray-200 p-1 px-2 mr-2">
-                          Node.js
+                      <img
+                        src={
+                          item.profile_image
+                            ? item.profile_image
+                            : "https://placehold.co/600x400"
+                        }
+                        alt="Freelancer Avatar"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <h4 className="text-gray-600 font-semibold">
+                          {item.firstname + " " + item.lastname}
+                        </h4>
+                        <span className="text-sm text-gray-600 block mb-2">
+                          {item.profession}
                         </span>
-                        <span className="text-sm text-gray-500 rounded-full bg-gray-200 p-1 px-2 mr-2">
-                          MongoDB
-                        </span>
+                        <div>
+                          {item.skills &&
+                            item.skills.split(",")?.map((item) => (
+                              <span
+                                className="text-sm text-gray-500 rounded-full 
+                                bg-gray-200 p-1 px-2 mr-2"
+                                key={item}
+                              >
+                                {item}
+                              </span>
+                            ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-4 mb-6">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 text-green-600"
-                    />
-                    <img
-                      src="https://placehold.co/600x400"
-                      alt="Freelancer Avatar"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="text-gray-600 font-semibold">
-                        Kwame Osei
-                      </h4>
-                      <span className="text-sm text-gray-600 block mb-2">
-                        Senior Backend Developer
-                      </span>
-                      <div>
-                        <span className="text-sm text-gray-500 rounded-full bg-gray-200 p-1 px-2 mr-2">
-                          Node.js
-                        </span>
-                        <span className="text-sm text-gray-500 rounded-full bg-gray-200 p-1 px-2 mr-2">
-                          MongoDB
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4 mb-6">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 text-green-600"
-                    />
-                    <img
-                      src="https://placehold.co/600x400"
-                      alt="Freelancer Avatar"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="text-gray-600 font-semibold">
-                        Kwame Osei
-                      </h4>
-                      <span className="text-sm text-gray-600 block mb-2">
-                        Senior Backend Developer
-                      </span>
-                      <div>
-                        <span className="text-sm text-gray-500 rounded-full bg-gray-200 p-1 px-2 mr-2">
-                          Node.js
-                        </span>
-                        <span className="text-sm text-gray-500 rounded-full bg-gray-200 p-1 px-2 mr-2">
-                          MongoDB
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -278,71 +423,57 @@ export default function CreateProject() {
                     Selected Team Members
                   </h4>
 
-                  <div className="flex items-start gap-4 mb-6 bg-gray-100 p-4 rounded-xl">
-                    <img
-                      src="https://placehold.co/600x400"
-                      alt="Freelancer Avatar"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="text-gray-600 font-semibold">
-                        Kwame Osei
-                      </h4>
-                      <span className="text-sm text-gray-600 block mb-2">
-                        Senior Backend Developer
+                  {selectedTeamData?.map((item, index) => (
+                    <div
+                      className="flex items-start gap-4 mb-6
+                     bg-gray-100 p-4 rounded-xl"
+                      key={index}
+                    >
+                      <span
+                        className="text-red-600 text-2xl cursor-pointer"
+                        onClick={() => handleRemoveTeamMember(item)}
+                      >
+                        -
                       </span>
-                      <div>
-                        <span className="text-sm text-gray-500 block">
-                          Role in Project
+                      <img
+                        src={
+                          item.profile_image
+                            ? item.profile_image
+                            : "https://placehold.co/600x400"
+                        }
+                        alt="Freelancer Avatar"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                      <div className="flex-1">
+                        <h4 className="text-gray-600 font-semibold">
+                          {item.firstname + " " + item.lastname}
+                        </h4>
+                        <span className="text-sm text-gray-600 block mb-2">
+                          {item.profession}
                         </span>
-                        <select
-                          className="w-full border rounded-md px-3 py-2 mt-2 text-sm"
-                          name="projectCategory"
-                          value={formData.projectCategory}
-                          onChange={(e) => handleChange(e)}
-                        >
-                          {category.map((item, idx) => (
-                            <option key={idx} value={item}>
-                              {item}
-                            </option>
-                          ))}
-                        </select>
+                        <div>
+                          <span className="text-sm text-gray-500 block">
+                            Role in Project
+                          </span>
+                          <select
+                            className="w-full border rounded-md px-3 py-2 mt-2 text-sm"
+                            name="role"
+                            value={item.role || ""}
+                            onChange={(e) =>
+                              handleRoleChange(index, e.target.value)
+                            }
+                          >
+                            <option value="">Select a role</option>
+                            {category.map((role, idx) => (
+                              <option key={idx} value={role}>
+                                {role}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 mb-6 bg-gray-100 p-4 rounded-xl">
-                    <img
-                      src="https://placehold.co/600x400"
-                      alt="Freelancer Avatar"
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <h4 className="text-gray-600 font-semibold">
-                        Kwame Osei
-                      </h4>
-                      <span className="text-sm text-gray-600 block mb-2">
-                        Senior Backend Developer
-                      </span>
-                      <div>
-                        <span className="text-sm text-gray-500 block">
-                          Role in Project
-                        </span>
-                        <select
-                          className="w-full border rounded-md px-3 py-2 mt-2 text-sm"
-                          name="projectCategory"
-                          value={formData.projectCategory}
-                          onChange={(e) => handleChange(e)}
-                        >
-                          {category.map((item, idx) => (
-                            <option key={idx} value={item}>
-                              {item}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -396,128 +527,145 @@ export default function CreateProject() {
             </h4>
             <div className="flex justify-between mb-2">
               <span className="text-sm text-gray-400">Milestone Timeline</span>
-              <span className="text-sm text-green-600 cursor-pointer">
+              <span
+                className="text-sm text-green-600 cursor-pointer"
+                onClick={handleAddMilestone}
+              >
                 + Add Milestone
               </span>
             </div>
-            <div className="border-gray-400 bg-white rounded-xl p-4">
-              <div className="mb-2">
-                <span className="p-1 px-3 rounded-full bg-green-100 text-green-600 mr-2">
-                  1
-                </span>
-                <span className="font-semibold">Project Kickoff</span>
-              </div>
-              <div className="flex mb-4">
-                <div className="w-full">
-                  <label className="text-sm text-gray-500">
-                    Milestone Name
-                  </label>
-                  <input
-                    name="milestoneName"
-                    onChange={(e) => handleChange(e)}
-                    type="text"
-                    placeholder="Milestone Name"
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md 
-                  focus:outline-none"
-                  />
-                </div>
-                <div className="w-full">
-                  <label className="text-sm text-gray-500">Due Date</label>
-                  <input
-                    name="dueDate"
-                    onChange={(e) => handleChange(e)}
-                    type="date"
-                    placeholder="Due Date"
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md 
-                  focus:outline-none"
-                  />
-                </div>
-              </div>
-              {/* Message Field */}
-              <div className="mb-4">
-                <label className="block text-sm text-gray-700">
-                  Description
-                </label>
-                <textarea
-                  value={formData.message}
-                  name="description"
-                  onChange={(e) => handleChange(e)}
-                  placeholder="Initial project setup, team onboarding and requirements gathering"
-                  rows="4"
-                  className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-green-500 focus:outline-none"
-                  required
-                />
-              </div>
 
-              <h4 className="text-sm text-gray-500">Deliverables</h4>
-              <div>
-                <div className="flex space-x-2">
-                  <span className="w-4 h-4 bg-green-500"></span>
-                  <input
-                    name="deliverables_added"
-                    onChange={(e) => handleChange(e)}
-                    type="text"
-                    placeholder=""
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-xl 
-                  focus:outline-none"
-                  />
-                  <span className="cursor-pointer text-gray-400">X</span>
-                </div>
-                <div className="flex space-x-2">
-                  <span className="w-4 h-4 bg-green-500"></span>
-                  <input
-                    name="deliverables_added"
-                    onChange={(e) => handleChange(e)}
-                    type="text"
-                    placeholder=""
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-xl 
-                  focus:outline-none"
-                  />
-                  <span className="cursor-pointer text-gray-400">X</span>
-                </div>
-                <div className="flex space-x-2">
-                  <span className="w-4 h-4 bg-green-500"></span>
-                  <input
-                    name="deliverables_added"
-                    onChange={(e) => handleChange(e)}
-                    type="text"
-                    placeholder=""
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-xl 
-                  focus:outline-none"
-                  />
-                  <span className="cursor-pointer text-gray-400">X</span>
-                </div>
-              </div>
-              <span className="text-green-600 text-sm mt-6 mb-6 cursor-pointer block">
-                + Add Deliverables
-              </span>
-              <div className="flex">
-                <div className="w-full flex justify-between items-center">
-                  <button
-                    onClick={() => setIsOn(!isOn)}
-                    className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-300 ${
-                      isOn ? "bg-green-500" : "bg-gray-300"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-300 ${
-                        isOn ? "translate-x-6" : "translate-x-1"
-                      }`}
-                    />
-                  </button>
+            {milestones.map((milestone, index) => (
+              <div
+                key={index}
+                className="border-gray-400 bg-white rounded-xl p-4 mb-4"
+              >
+                <div className="mb-2 flex justify-between items-center">
                   <div>
-                    <span className="text-gray-500 text-sm">Completion:</span>
-                    <span className="text-gray-500 text-sm">33%</span>
-                    <div className="w-full h-2 bg-gray-200 rounded-full">
-                      <div
-                        className="h-2 bg-green-600 rounded-full"
-                        style={{ width: `33%` }}
+                    <span className="p-1 px-3 rounded-full bg-green-100 text-green-600 mr-2">
+                      {index + 1}
+                    </span>
+                    <span className="font-semibold">
+                      {" "}
+                      {milestone.name || "Untitled"}
+                    </span>
+                  </div>
+                  {milestones.length > 1 && (
+                    <span
+                      onClick={() => handleRemoveMilestone(index)}
+                      className="text-red-500 text-sm cursor-pointer"
+                    >
+                      × Remove
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex mb-4">
+                  <div className="w-full">
+                    <label className="text-sm text-gray-500">
+                      Milestone Name
+                    </label>
+                    <input
+                      type="text"
+                      value={milestone.name}
+                      onChange={(e) =>
+                        handleMilestoneChange(index, "name", e.target.value)
+                      }
+                      className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md focus:outline-none"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label className="text-sm text-gray-500">Due Date</label>
+                    <input
+                      type="date"
+                      value={milestone.dueDate}
+                      onChange={(e) =>
+                        handleMilestoneChange(index, "dueDate", e.target.value)
+                      }
+                      className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm text-gray-700">
+                    Description
+                  </label>
+                  <textarea
+                    value={milestone.description}
+                    onChange={(e) =>
+                      handleMilestoneChange(
+                        index,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Initial project setup, team onboarding and requirements gathering"
+                    rows="4"
+                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-green-500 focus:outline-none"
+                    required
+                  />
+                </div>
+
+                <h4 className="text-sm text-gray-500">Deliverables</h4>
+                {milestone.deliverables.map((item, dIndex) => (
+                  <div
+                    key={dIndex}
+                    className="flex space-x-2 items-center mb-2"
+                  >
+                    <span className="w-4 h-4 bg-green-500 rounded-full"></span>
+                    <input
+                      type="text"
+                      value={item}
+                      onChange={(e) =>
+                        handleDeliverableChange(index, dIndex, e.target.value)
+                      }
+                      className="w-full pl-2 pr-4 py-2 border rounded-xl focus:outline-none"
+                    />
+                    <span
+                      className="cursor-pointer text-gray-400 font-bold text-lg"
+                      onClick={() => handleRemoveDeliverable(index, dIndex)}
+                    >
+                      ×
+                    </span>
+                  </div>
+                ))}
+
+                <span
+                  className="text-green-600 text-sm mt-4 mb-6 cursor-pointer block"
+                  onClick={() => handleAddDeliverable(index)}
+                >
+                  + Add Deliverables
+                </span>
+
+                <div className="flex">
+                  <div className="w-full flex justify-between items-center">
+                    <button
+                      onClick={() => toggleSwitch(index)}
+                      className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-300 ${
+                        milestone.isOn ? "bg-green-500" : "bg-gray-300"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-300 ${
+                          milestone.isOn ? "translate-x-6" : "translate-x-1"
+                        }`}
                       />
+                    </button>
+                    <div>
+                      <span className="text-gray-500 text-sm">Completion:</span>
+                      <span className="text-gray-500 text-sm">0%</span>
+                      <div className="w-full h-2 bg-gray-200 rounded-full">
+                        <div
+                          className="h-2 bg-green-600 rounded-full"
+                          style={{ width: `0%` }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            ))}
 
             <div className="border-gray-200 rounded-xl bg-gray-200 mt-6 p-4">
               <h4 className="text-sm text-gray-700 font-semibold mb-6">
@@ -525,104 +673,38 @@ export default function CreateProject() {
               </h4>
               <div className="p-4">
                 <ol className="relative border-l border-gray-300">
-                  {/* Payment Received */}
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                         bg-green-100 rounded-full ring-8 ring-white`}
-                    >
-                      ✅
-                    </span>
-                    <div className="p-2">
-                      <h4
-                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
+                  {milestones.map((item, index) => (
+                    <li key={index} className="mb-10 ml-6">
+                      <span
+                        className={`absolute -left-3 flex items-center justify-center w-6 h-6
+                          ${
+                            index === 0 ? "bg-green-100" : "bg-gray-100"
+                          } rounded-full ring-8 ring-white`}
                       >
-                        Project Kickoff
-                        <span
-                          className={` text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Initial planning and requirements gathering
-                      </p>
-                    </div>
-                  </li>
-
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                         bg-gray-100 rounded-full ring-8 ring-white`}
-                    >
-                      🧾
-                    </span>
-                    <div className="p-2">
-                      <h4
-                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Design Phase
-                        <span
-                          className={` text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        UI/UX design, wireframes and prototyping
-                      </p>
-                    </div>
-                  </li>
-
-                  {/* Invoice Sent */}
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                     bg-gray-100 rounded-full ring-8 ring-white`}
-                    >
-                      🧾
-                    </span>
-                    <div className="p-2">
-                      <h4
-                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Development Phase
-                        <span
-                          className={` text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Frontend and backend implementation
-                      </p>
-                    </div>
-                  </li>
-
-                  {/* Testing Phase */}
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center 
-                        w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white`}
-                    >
-                      🧾
-                    </span>
-                    <div className="p-2">
-                      <h4
-                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Project Completion
-                        <span
-                          className={` text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Testing deployment and handover
-                      </p>
-                    </div>
-                  </li>
+                        {index === 0 ? "✅" : "🧾"}
+                      </span>
+                      <div className="p-2">
+                        <h4 className="text-gray-700 font-semibold text-sm flex items-center mb-2">
+                          {item.name || "Untitled"}
+                          <span className="text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5">
+                            {item.dueDate
+                              ? new Date(item.dueDate).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  }
+                                )
+                              : "No Date"}
+                          </span>
+                        </h4>
+                        <p className="text-xs text-gray-500 mb-2">
+                          {item.description || "No description provided."}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
                 </ol>
               </div>
             </div>
@@ -634,146 +716,108 @@ export default function CreateProject() {
             <h4 className="text-gray-700 font-semibold mb-6">
               Budget Allocation
             </h4>
+
             <div className="w-full flex items-start">
-              <div className="w-2/3">
+              {/* Left - Input Section */}
+              <div className="w-2/3 pr-4">
                 <div className="mb-6">
                   <label className="text-gray-500 text-sm">
                     Total Project Budget
                   </label>
                   <input
-                    name="totalBudget"
-                    onChange={(e) => handleChange(e)}
-                    type="text"
+                    type="number"
+                    value={totalBudget}
+                    onChange={(e) => setTotalBudget(Number(e.target.value))}
                     placeholder="GH 60,000"
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md 
-                  focus:outline-none"
+                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md focus:outline-none"
                   />
-                </div>
-                <h4 className="text-gray-700 mb-6">Budget Breakdown</h4>
-                <div className="border rounded-xl p-4 mb-4">
-                  <div className="flex justify-between">
-                    <label className="text-gray-500 text-sm">Development</label>
-                    <label className="text-gray-500 text-sm">
-                      60% GH 15,000
-                    </label>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-                <div className="border rounded-xl p-4 mb-4">
-                  <div className="flex justify-between">
-                    <label className="text-gray-500 text-sm">Development</label>
-                    <label className="text-gray-500 text-sm">
-                      60% GH 15,000
-                    </label>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-                <div className="border rounded-xl p-4 mb-4">
-                  <div className="flex justify-between">
-                    <label className="text-gray-500 text-sm">Development</label>
-                    <label className="text-gray-500 text-sm">
-                      60% GH 15,000
-                    </label>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-                <div className="border rounded-xl p-4 mb-4">
-                  <div className="flex justify-between">
-                    <label className="text-gray-500 text-sm">Development</label>
-                    <label className="text-gray-500 text-sm">
-                      60% GH 15,000
-                    </label>
-                  </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <h4 className="text-gray-700 mb-6">
-                    Additional Budget Items
-                  </h4>
-                  <span className="text-green-600 cursor-pointer">
-                    + Add Item
-                  </span>
-                </div>
-                <div>
-                  <div className="flex justify-between mb-6">
-                    <input
-                      name="additional_item"
-                      onChange={(e) => handleChange(e)}
-                      type="text"
-                      placeholder="Software Licenses"
-                      className="w-full pl-2 pr-4 py-2 mt-2 border rounded-xl 
-                  focus:outline-none"
-                    />
-                    <span className="cursor-pointer text-gray-500">X</span>
-                  </div>
-                  <div className="flex justify-between mb-6">
-                    <input
-                      name="additional_item"
-                      onChange={(e) => handleChange(e)}
-                      type="text"
-                      placeholder="Software Licenses"
-                      className="w-full pl-2 pr-4 py-2 mt-2 border rounded-xl 
-                  focus:outline-none"
-                    />
-                    <span className="cursor-pointer text-gray-500">X</span>
-                  </div>
                 </div>
 
-                <div className="mb-4">
+                <h4 className="text-gray-700 mb-4">Budget Breakdown</h4>
+
+                {items.map((item, index) => {
+                  const allocatedAmount = (
+                    (item.percentage / 100) *
+                    totalBudget
+                  ).toFixed(2);
+
+                  return (
+                    <div key={index} className="border rounded-xl p-4 mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <input
+                          type="text"
+                          value={item.name}
+                          onChange={(e) =>
+                            handleNameChange(index, e.target.value)
+                          }
+                          placeholder="Item Name"
+                          className="text-sm font-medium text-gray-700 focus:outline-none w-full mr-4"
+                        />
+                        <span className="text-gray-500 text-sm whitespace-nowrap">
+                          {item.percentage}% GH₵ {allocatedAmount}
+                        </span>
+                      </div>
+
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={item.percentage}
+                        onChange={(e) =>
+                          handleSliderChange(index, e.target.value)
+                        }
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+
+                      <div className="text-right mt-2">
+                        <span
+                          className={`text-red-500 text-xs cursor-pointer ${
+                            items.length === 1
+                              ? "opacity-30 cursor-not-allowed"
+                              : ""
+                          }`}
+                          onClick={() => items.length > 1 && removeItem(index)}
+                        >
+                          × Remove
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                <div
+                  className="text-green-600 text-sm cursor-pointer"
+                  onClick={addItem}
+                >
+                  + Add Item
+                </div>
+
+                {/* Notes */}
+                <div className="mt-6">
                   <label className="block text-sm text-gray-700">
                     Budget Notes
                   </label>
                   <textarea
-                    value={formData.message}
-                    name="budget_notes"
-                    onChange={(e) => handleChange(e)}
                     placeholder="Add any additional notes about the budget"
                     rows="4"
                     className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-green-500 focus:outline-none"
-                    required
                   />
                 </div>
               </div>
+
+              {/* Right - Chart Summary */}
               <div className="w-1/3">
                 <h4 className="font-semibold mb-4">Budget Summary</h4>
-                <div className="bg-white p-6 rounded-lg shadow w-full max-w-md mx-auto hover:shadow-md transition">
+                <div className="bg-white p-6 rounded-lg shadow w-full hover:shadow-md transition">
                   <div
                     className="flex justify-center items-center"
                     style={{ height: "260px" }}
                   >
-                    <Doughnut data={doughnutData} options={doughnutOptions} />
+                    <Doughnut data={doughnutData} />
                   </div>
 
                   <div className="mt-6 grid grid-cols-2 gap-y-3 gap-x-6 text-xs text-gray-700">
-                    {doughnutData.labels.map((label, index) => (
+                    {items.map((item, index) => (
                       <div
                         key={index}
                         className="flex flex-col items-start space-y-1"
@@ -781,42 +825,19 @@ export default function CreateProject() {
                         <div className="flex items-center space-x-2">
                           <span
                             className="inline-block w-3 h-3 rounded-full"
-                            style={{
-                              backgroundColor:
-                                doughnutData.datasets[0].backgroundColor[index],
-                            }}
-                          ></span>
-                          <span>{label}</span>
+                            style={{ backgroundColor: getColor(index) }}
+                          />
+                          <span>{item.name || "Unnamed"}</span>
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  <div className="flex justify-between mt-4">
-                    <span className="text-sm text-gray-500">Development</span>
-                    <span className=" text-gray-600 font-semibold">
-                      GH 2,500
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Design</span>
-                    <span className=" text-gray-600 font-semibold">
-                      GH 2,500
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">
-                      Project Management
-                    </span>
-                    <span className=" text-gray-600 font-semibold">
-                      GH 2,500
-                    </span>
-                  </div>
                   <hr className="mt-4" />
-                  <div className="flex justify-between">
+                  <div className="flex justify-between mt-2">
                     <span className="text-sm text-gray-500">Total Budget</span>
-                    <span className=" text-green-600 font-semibold">
-                      GH 27,000
+                    <span className="text-green-600 font-semibold">
+                      GH₵ {totalBudget.toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -824,6 +845,7 @@ export default function CreateProject() {
             </div>
           </div>
         );
+
       default:
         return null;
     }
@@ -865,17 +887,31 @@ export default function CreateProject() {
           >
             Previous
           </button>
-          <button
-            onClick={() =>
-              setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
-            }
-            disabled={currentStep === steps.length - 1}
-            className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
-          >
-            Next
-          </button>
+          {/* handleViewPreview */}
+          {currentStep === steps.length - 1 ? (
+            <button
+              onClick={() => handleViewPreview()}
+              className="px-4 py-2 bg-green-600 text-white rounded"
+            >
+              Preview
+            </button>
+          ) : (
+            <button
+              onClick={() =>
+                setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
+              }
+              className="px-4 py-2 bg-green-500 text-white rounded"
+            >
+              Next
+            </button>
+          )}
         </div>
       </div>
+      <PreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        projectData={projectData}
+      />
     </div>
   );
 }

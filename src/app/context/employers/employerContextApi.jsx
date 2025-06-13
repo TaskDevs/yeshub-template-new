@@ -6,6 +6,7 @@ import {
   getInterviewInfo,
   addExperience,
   addJobPost,
+  manageProject,
   createProject,
   changeCandidateStatus,
   getClientDashboardStats,
@@ -15,6 +16,7 @@ import {
   getCompanyInfoForInvoice,
   getHiredApplicants,
   getCompanyPostedJobs,
+  projectInfoData,
   checkIfCompanyExist,
   setInterview,
   companyInfo,
@@ -38,6 +40,7 @@ const EmployerApiDataProvider = (props) => {
   const [appliedJobList, setAppliedJobList] = useState([]);
   const [applicants, setApplicants] = useState([]);
   const [userProjects, setUserProjects] = useState([]);
+  const [projectInfo, setProjectInfo] = useState([]);
   const [hiredApplicants, setHiredApplicants] = useState([]);
   const [processHiredApplicants, setProcessHiredApplicants] = useState([]);
   const [postedJobList, setPostedJobList] = useState([]);
@@ -51,7 +54,6 @@ const EmployerApiDataProvider = (props) => {
     try {
       const userId = sessionStorage.getItem("userId");
       let responseOnGetUserProjects = await getProjects(userId);
-      console.log(responseOnGetUserProjects);
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
@@ -93,12 +95,19 @@ const EmployerApiDataProvider = (props) => {
       ...data,
       user_id: userId,
     };
-
+    console.log(requestData);
     let response = await createProject(requestData);
     if (response) {
       return true;
     } else {
       return false;
+    }
+  };
+
+  const processProjectInfoData = async (id) => {
+    let response = await projectInfoData(id);
+    if (response) {
+      setProjectInfo(response.project_info);
     }
   };
 
@@ -330,6 +339,17 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processManageProject = async (data) => {
+    console.log(data);
+    let response = await manageProject(data);
+
+    if (response) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   //updateJobStatus
   const processUpdateJobStatus = async (data) => {
     let response = await updateJobStatus(data);
@@ -455,6 +475,9 @@ const EmployerApiDataProvider = (props) => {
         userProjects,
         processHiredApplicants,
         setProcessHiredApplicants,
+        processManageProject,
+        processProjectInfoData,
+        projectInfo,
       }}
     >
       {props.children}

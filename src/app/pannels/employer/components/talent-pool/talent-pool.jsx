@@ -1,8 +1,125 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import AddTaskModal from "./add-task-modal";
 
 export const TalentPool = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const {
+    userProjects,
+    projectInfo,
+    processManageProject,
+    processProjectInfoData,
+  } = useContext(EmployerApiData);
+  const [projectDetails, setProjectDetails] = useState({});
+  const [checkedItems, setCheckedItems] = useState({});
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [taskAssignment, setTaskAssignment] = useState([]);
+  const [initialTasks, setInitialTasks] = useState([]);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    let newTeam = [];
+    let data = userProjects.find((item) => item.id == id);
+    //console.log(data);
+    data?.team?.map((item) =>
+      newTeam.push({
+        id: item.id,
+        name: item.firstname + " " + item.lastname,
+      })
+    );
+    setTeamMembers(newTeam);
+    setProjectDetails(data);
+  }, []);
+
+  useEffect(() => {
+    processProjectInfoData(id);
+  }, []);
+
+  useEffect(() => {
+    // setInitialTasks();
+    console.log(projectInfo);
+    setInitialTasks(projectInfo.tasks);
+    setCheckedItems(projectInfo.deliverables);
+    //console.log("Fixing issues");
+  }, [projectInfo]);
+
+  const toggleCheck = (milestoneIndex, deliverableIndex) => {
+    const key = `${milestoneIndex}-${deliverableIndex}`;
+    setCheckedItems((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const handleRemoveTask = (id) => {
+    setTaskAssignment((prevAssigns) =>
+      prevAssigns.filter((assigns) => assigns.taskId !== id)
+    );
+    setInitialTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
+  const handleStatusChange = (id, newStatus) => {
+    const updated = initialTasks.map((task) =>
+      task.id === id ? { ...task, status: newStatus } : task
+    );
+    setInitialTasks(updated);
+  };
+
+  const handleAddTask = (task) => {
+    const today = new Date().toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+
+    const member = teamMembers.find((m) => m.id == task.assignedTo);
+
+    const newTask = {
+      ...task,
+      id: Math.random().toString(36).substring(2, 9),
+      assignedTo: member?.name || "Unassigned",
+      date: today,
+      status: "Fresh", // Default status if not already in `task`
+    };
+
+    setTaskAssignment([
+      ...taskAssignment,
+      { teamMemberId: task.assignedTo, taskId: newTask.id },
+    ]);
+
+    setInitialTasks([...initialTasks, newTask]);
+  };
+
+  const handleSytemChanges = async () => {
+    let newData = {
+      project_id: id,
+      deliverables: checkedItems,
+      tasks: initialTasks,
+      assignments: taskAssignment,
+    };
+
+    //console.log(newData);
+    let response = await processManageProject(newData);
+    if (response) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "System updated successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Failed",
+        text: "System failed to update. Please try again.",
+      });
+    }
+  };
 
   return (
     <div className="tw-css bg-gray-300 min-h-screen">
@@ -15,12 +132,12 @@ export const TalentPool = () => {
             </span>
           </div>
           <div className="flex flex-row">
-            <button className="border bg-green-600 rounded px-4 py-2 text-sm text-white hover:bg-green-700">
+            {/* <button className="border bg-green-600 rounded px-4 py-2 text-sm text-white hover:bg-green-700">
               + Create New Project
             </button>
             <button className="bg-gray-300 text-white rounded px-4 py-2 text-sm hover:bg-gray-200">
               Filters
-            </button>
+            </button> */}
           </div>
         </div>
 
@@ -28,7 +145,9 @@ export const TalentPool = () => {
           <div className="w-1/3">
             <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4">
               <div className="flex justify-between items-center px-4 py-2 mb-4">
-                <h4 className="font-semibold text-md">Team Members (12)</h4>
+                <h4 className="font-semibold text-md">
+                  Team Members ({projectDetails?.team?.length})
+                </h4>
                 <span className="text-sm text-green-600 cursor-pointer">
                   + Add Member
                 </span>
@@ -43,69 +162,51 @@ export const TalentPool = () => {
                   className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 />
               </div>
-              <div className="bg-green-100 rounded-xl border border-green-500 h-50 p-4 mb-4">
-                <div className="flex items-start gap-4 mb-4">
-                  <img
-                    src="https://placehold.co/600x400"
-                    alt="Freelancer Avatar"
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <h4 className="text-gray-600 font-semibold">Kwame Osei</h4>
-                    <span className="text-sm text-gray-600 block">
-                      Senior Backend Developer
-                    </span>
-                    <span className="text-sm text-gray-600 block">
-                      Last active: Today
-                    </span>
-                    <span className="text-sm text-gray-600 block">
-                      $45/hour
-                    </span>
-                  </div>
-                  <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
-                    Active
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">
-                    Current Tasks: <span className="text-green-800">3</span>
-                  </span>
-                  <span>:</span>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl border border-gray-200 h-50 p-4 mb-4">
-                <div className="flex items-start gap-4 mb-4">
-                  <img
-                    src="https://placehold.co/600x400"
-                    alt="Freelancer Avatar"
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <h4 className="text-gray-600 font-semibold">Kwame Osei</h4>
-                    <span className="text-sm text-gray-600 block">
-                      Senior Backend Developer
-                    </span>
-                    <span className="text-sm text-gray-600 block">
-                      Last active: Today
-                    </span>
-                    <span className="text-sm text-gray-600 block">
-                      $45/hour
+              {projectDetails?.team?.map((item, index) => (
+                <div
+                  className="bg-green-100 rounded-xl border border-green-500 h-50 p-4 mb-4"
+                  key={index}
+                >
+                  <div className="flex items-start gap-4 mb-4">
+                    <img
+                      src={item.profile_image || "https://placehold.co/600x400"}
+                      alt="Freelancer Avatar"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div className="flex-1">
+                      <h4 className="text-gray-600 font-semibold">
+                        {item.firstname + " " + item.lastname}
+                      </h4>
+                      <span className="text-sm text-gray-600 block">
+                        {item.role}
+                      </span>
+                      <span className="text-sm text-gray-600 block">
+                        Last active: Today
+                      </span>
+                      <span className="text-sm text-gray-600 block">
+                        $45/hour
+                      </span>
+                    </div>
+                    <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
+                      Active
                     </span>
                   </div>
-                  <span className="p-1 px-2 rounded-full bg-green-300 text-green-600 text-sm ml-auto">
-                    Active
-                  </span>
-                </div>
 
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">
-                    Current Tasks: <span className="text-green-800">3</span>
-                  </span>
-                  <span>:</span>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">
+                      Current Tasks:{" "}
+                      <span className="text-green-800">
+                        {
+                          projectInfo.assignments.filter(
+                            (idx) => idx.teamMemberId == item.id
+                          ).length
+                        }
+                      </span>
+                    </span>
+                    <span>:</span>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
           <div className="w-2/3">
@@ -115,14 +216,15 @@ export const TalentPool = () => {
                 <div className="flex justify-between">
                   <div>
                     <h4 className="text-xl font-semibold block mb-2">
-                      E-commerce Platform Redesign
+                      {projectDetails?.project_name}
                     </h4>
 
                     <span className="text-green-600 text-sm font-semibold bg-green-200 rounded-full px-2 py-1">
                       In Progress
                     </span>
                     <span className="text-gray-500 text-sm ml-2">
-                      Started on May 1, 2025
+                      Started on{" "}
+                      {`${projectDetails?.start_date} - ${projectDetails?.end_date}`}
                     </span>
                   </div>
                   <button className="bg-gray-300 text-white rounded px-4 py-2 text-sm hover:bg-gray-200">
@@ -135,16 +237,16 @@ export const TalentPool = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Budget</span>
                   <span className="text-gray-800 text-xl font-semibold block mb-2">
-                    $24,500
+                    GH {projectDetails.total_budget}
                   </span>
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm text-gray-400">Used: 14,200</span>
-                    <span className="text-sm text-gray-400">58%</span>
+                    <span className="text-sm text-gray-400">Used: 0</span>
+                    <span className="text-sm text-gray-400">0%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
                     <div
                       className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `58%` }}
+                      style={{ width: `0%` }}
                     />
                   </div>
                 </div>
@@ -155,35 +257,35 @@ export const TalentPool = () => {
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Progress</span>
-                    <span className="text-sm text-gray-400">65%</span>
+                    <span className="text-sm text-gray-400">0%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
                     <div
                       className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `65%` }}
+                      style={{ width: `0%` }}
                     />
                   </div>
                 </div>
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Tasks</span>
                   <span className="text-gray-600 text-xl font-semibold block mb-2">
-                    32 / 50
+                    0 / {initialTasks.length}
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Completed</span>
-                    <span className="text-sm text-gray-400">64%</span>
+                    <span className="text-sm text-gray-400">0%</span>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
                     <div
                       className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `64%` }}
+                      style={{ width: `0%` }}
                     />
                   </div>
                 </div>
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Team</span>
                   <span className="text-gray-800 text-xl font-semibold block mb-2">
-                    8 members
+                    {projectDetails?.team?.length} members
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Team</span>
@@ -192,7 +294,7 @@ export const TalentPool = () => {
                   <div className="w-full h-2 bg-gray-200 rounded-full">
                     <div
                       className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `40%` }}
+                      style={{ width: `0%` }}
                     />
                   </div>
                 </div>
@@ -202,143 +304,68 @@ export const TalentPool = () => {
                   Project Milestones
                 </h3>
                 <ol className="relative border-l border-gray-300">
-                  {/* Payment Received */}
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
+                  {projectDetails?.milestones?.map((item, index) => (
+                    <li className="mb-10 ml-6" key={index}>
+                      <span
+                        className={`absolute -left-3 flex items-center justify-center w-6 h-6
                          bg-green-100 rounded-full ring-8 ring-white`}
-                    >
-                      ✅
-                    </span>
-                    <div className="border-green-100 rounded-xl bg-green-100 h-30 p-2">
-                      <h4
-                        className={`text-green-700 font-semibold text-sm flex items-center mb-2`}
                       >
-                        Project Kickoff
-                        <span
-                          className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Initial planning and requirements gathering
-                      </p>
-                      <span className="text-sm text-blue-700 bg-blue-300 rounded-full px-2 p-1">
-                        Completed
+                        🧾
                       </span>
-                    </div>
-                  </li>
-
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                         bg-green-100 rounded-full ring-8 ring-white`}
-                    >
-                      ✅
-                    </span>
-                    <div className="border-green-100 rounded-xl bg-green-100 h-30 p-2">
-                      <h4
-                        className={`text-green-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Development Phase
-                        <span
-                          className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
+                      <div className="rounded-xl bg-gray-100 h-30 p-2">
+                        <h4
+                          className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
                         >
-                          May 1, 2025
+                          {item.name}
+                          <span
+                            className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
+                          >
+                            {item.due_date}
+                          </span>
+                        </h4>
+                        <p className="text-xs text-gray-500 mb-2">
+                          {item.description}
+                        </p>
+                        <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
+                          Ongoing
                         </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Initial planning and requirements gathering
-                      </p>
-                      <span className="text-sm text-blue-700 bg-blue-300 rounded-full px-2 p-1">
-                        Completed
-                      </span>
-                    </div>
-                  </li>
-
-                  {/* Invoice Sent */}
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                     bg-blue-100 rounded-full ring-8 ring-white`}
-                    >
-                      ✅
-                    </span>
-                    <div className="border-green-100 rounded-xl bg-green-100 h-30 p-2">
-                      <h4
-                        className={`text-green-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Design Phase
-                        <span
-                          className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Initial planning and requirements gathering
-                      </p>
-                      <span className="text-sm text-green-700 bg-green-300 rounded-full px-2 p-1">
-                        Completed
-                      </span>
-                    </div>
-                  </li>
-
-                  {/* Testing Phase */}
-                  <li className="mb-10 ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center 
-                        w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white`}
-                    >
-                      🧾
-                    </span>
-                    <div className="border-gray-100 rounded-xl bg-gray-100 h-30 p-2">
-                      <h4
-                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Testing Phase
-                        <span
-                          className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        QA testing and bug fixes
-                      </p>
-                      <span className="text-sm text-gray-700 bg-gray-300 rounded-full px-2 p-1">
-                        Upcoming
-                      </span>
-                    </div>
-                  </li>
-                  {/* Testing Phase */}
-                  <li className="ml-6">
-                    <span
-                      className={`absolute -left-3 flex items-center justify-center 
-                        w-6 h-6 bg-blue-100 rounded-full ring-8 ring-white`}
-                    >
-                      🧾
-                    </span>
-                    <div className="border-gray-100 rounded-xl bg-gray-100 h-30 p-2">
-                      <h4
-                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                      >
-                        Deployment
-                        <span
-                          className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                        >
-                          May 1, 2025
-                        </span>
-                      </h4>
-                      <p className="text-xs text-gray-500 mb-2">
-                        Launch and post-launch support
-                      </p>
-                      <span className="text-sm text-gray-700 bg-gray-300 rounded-full px-2 p-1">
-                        Upcoming
-                      </span>
-                    </div>
-                  </li>
+                        <hr className="mt-4" />
+                        <div className="space-y-3">
+                          {item.deliverables.map(
+                            (deliverable, deliverableIndex) => {
+                              const key = `${index}-${deliverableIndex}`;
+                              return (
+                                <div
+                                  key={key}
+                                  className="flex items-center space-x-2"
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id={`check-${key}`}
+                                    checked={!!checkedItems[key]}
+                                    onChange={() =>
+                                      toggleCheck(index, deliverableIndex)
+                                    }
+                                    className="h-4 w-4 text-green-600 rounded focus:ring-0"
+                                  />
+                                  <label
+                                    htmlFor={`check-${key}`}
+                                    className={`text-sm cursor-pointer transition ${
+                                      checkedItems[key]
+                                        ? "font-bold text-green-600 line-through"
+                                        : "text-gray-800"
+                                    }`}
+                                  >
+                                    {deliverable}
+                                  </label>
+                                </div>
+                              );
+                            }
+                          )}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
                 </ol>
               </div>
             </div>
@@ -349,7 +376,11 @@ export const TalentPool = () => {
                   Task Management
                 </h4>
 
-                <button className="bg-green-600 text-white rounded px-4 py-2 text-sm hover:bg-green-700">
+                <button
+                  onClick={() => setShowTaskModal(true)}
+                  className="bg-green-600 text-white rounded px-4 py-2 
+                text-sm hover:bg-green-700"
+                >
                   + Add Task
                 </button>
               </div>
@@ -361,131 +392,266 @@ export const TalentPool = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl p-3">
                   <div className="flex justify-between mb-2">
                     <h4>To Do</h4>
-                    <span className="rounded-full bg-gray-300 px-2 p-1">5</span>
-                  </div>
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">API Integration</h4>
-                    <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                      Backend
+                    <span className="rounded-full bg-gray-300 px-2 p-1">
+                      {
+                        initialTasks.filter((item) => item.status == "Fresh")
+                          .length
+                      }
                     </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
-                    </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
                   </div>
+                  {initialTasks
+                    .filter((item) => item.status == "Fresh")
+                    .map((item) => (
+                      <div
+                        className="bg-white border-gray-400 rounded-xl p-4 mb-4 relative"
+                        key={item.id}
+                      >
+                        {/* Remove Icon */}
+                        <button
+                          onClick={() => handleRemoveTask(item.id)}
+                          className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
+                          title="Remove Task"
+                        >
+                          &times;
+                        </button>
 
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">API Integration</h4>
-                    <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                      Backend
-                    </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
-                    </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
-                  </div>
+                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
+                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
+                          {item.category}
+                        </span>
+                        <p className="text-gray-600 text-sm mb-2">
+                          {item.details}
+                        </p>
+                        <div className="flex justify-between text-sm text-gray-500">
+                          <span>{item.assignedTo}</span>
+                          <span>{item.date}</span>
+                        </div>
+                      </div>
+                    ))}
                 </div>
                 <div className="w-1/4 bg-gray-100 rounded-xl p-3">
                   <div className="flex justify-between mb-2">
                     <h4>In Progress</h4>
                     <span className="rounded-full bg-green-300 px-2 p-1 text-green-700">
-                      3
+                      {
+                        initialTasks.filter((item) => item.status == "Progress")
+                          .length
+                      }
                     </span>
                   </div>
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">User Authentication</h4>
-                    <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                      Backend
-                    </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
-                    </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
-                  </div>
-
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">API Integration</h4>
-                    <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                      Backend
-                    </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
-                    </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
-                  </div>
+                  {initialTasks
+                    .filter((item) => item.status == "Progress")
+                    .map((item) => (
+                      <div
+                        className="bg-white border-gray-400 rounded-xl p-4 mb-4"
+                        key={item.id}
+                      >
+                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
+                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
+                          {item.category}
+                        </span>
+                        <p className="text-gray-600 text-sm mb-2">
+                          {item.details}
+                        </p>
+                        <div className="flex">
+                          <span className="text-gray-500 text-sm">
+                            {item.assignedTo}
+                          </span>
+                          <span className="text-gray-500 text-sm">Jun 5</span>
+                        </div>
+                      </div>
+                    ))}
                 </div>
                 <div className="w-1/4 bg-gray-100 rounded-xl p-3">
                   <div className="flex justify-between mb-2">
                     <h4>Under Review</h4>
                     <span className="rounded-full bg-yellow-300 px-2 p-1 text-yellow-700">
-                      2
+                      {
+                        initialTasks.filter((item) => item.status == "Review")
+                          .length
+                      }
                     </span>
                   </div>
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">Search Functionality</h4>
-                    <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                      Backend
-                    </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
-                    </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
-                  </div>
+                  {initialTasks
+                    .filter((item) => item.status == "Review")
+                    .map((item) => (
+                      <div
+                        className="bg-white border-gray-400 rounded-xl p-4 mb-4"
+                        key={item.id}
+                      >
+                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
+                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
+                          {item.status}
+                        </span>
+                        <p className="text-gray-600 text-sm mb-2">
+                          {item.details}
+                        </p>
+                        <div className="flex justify-between items-center">
+                          <div className="flex gap-4">
+                            <span className="text-gray-500 text-sm">
+                              {item.assignedTo}
+                            </span>
+                            <span className="text-gray-500 text-sm">
+                              {item.date}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Progress")
+                              }
+                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                            >
+                              Revert
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Completed")
+                              }
+                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                            >
+                              Move
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                 </div>
                 <div className="w-1/4 bg-gray-100 rounded-xl p-3">
                   <div className="flex justify-between mb-2">
                     <h4>Completed</h4>
                     <span className="rounded-full bg-green-300 px-2 p-1 text-green-700">
-                      4
+                      {
+                        initialTasks.filter(
+                          (item) => item.status == "Completed"
+                        ).length
+                      }
                     </span>
                   </div>
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">Project Setup</h4>
-                    <span className="text-sm text-gray-700 bg-gray-100 rounded-xl p-1 px-2 mb-2 block">
-                      DevOps
-                    </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
+                  {initialTasks
+                    .filter((item) => item.status == "Completed")
+                    .map((item) => (
+                      <div
+                        className="bg-white border-gray-400 rounded-xl p-4 mb-4"
+                        key={item.id}
+                      >
+                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
+                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
+                          {item.category}
+                        </span>
+                        <p className="text-gray-600 text-sm mb-2">
+                          {item.details}
+                        </p>
+                        <div className="flex">
+                          <span className="text-gray-500 text-sm">
+                            {item.assignedTo}
+                          </span>
+                          <span className="text-gray-500 text-sm">Jun 5</span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+            <div className="w-full mt-4">
+              <button
+                onClick={handleSytemChanges}
+                className="bg-green-600 text-white rounded px-4 py-2 
+                text-sm hover:bg-green-700 w-full"
+              >
+                Save Changes
+              </button>
+            </div>
+            <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4 mb-6 mt-6">
+              <div className="flex justify-between items-center mb-4">
+                <h4 className="text-xl font-semibold">Team Communication</h4>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
+                {/* Message 1 */}
+                <div className="flex items-start justify-start">
+                  <img
+                    src="https://i.pravatar.cc/40?img=1"
+                    alt="Member 1"
+                    className="w-10 h-10 rounded-full mr-2"
+                  />
+                  <div className="bg-gray-100 rounded-lg p-3 max-6w-xs">
+                    <p className="text-sm text-gray-800">
+                      Hey team, did we update the client on the API delivery?
                     </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
-                  </div>
-                  <div className="bg-white border-gray-400 rounded-xl p-4 mb-4">
-                    <h4 className="text-gray-700 mb-2">Project Setup</h4>
-                    <span className="text-sm text-gray-700 bg-gray-100 rounded-xl p-1 px-2 mb-2 block">
-                      DevOps
-                    </span>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Integrate payment gateway API with the checkout system
-                    </p>
-                    <div className="flex">
-                      <span className="text-gray-500 text-sm">Kwame O</span>
-                      <span className="text-gray-500 text-sm">Jun 5</span>
-                    </div>
                   </div>
                 </div>
+
+                {/* Message 2 */}
+                <div className="flex items-start justify-start">
+                  <img
+                    src="https://i.pravatar.cc/40?img=2"
+                    alt="Member 2"
+                    className="w-10 h-10 rounded-full mr-2"
+                  />
+                  <div className="bg-blue-100 rounded-lg p-3 max-w-xs">
+                    <p className="text-sm text-gray-800">
+                      Yes, I emailed them yesterday. Waiting on their feedback.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Message 3 */}
+                <div className="flex items-start justify-start">
+                  <img
+                    src="https://i.pravatar.cc/40?img=3"
+                    alt="Member 3"
+                    className="w-10 h-10 rounded-full mr-2"
+                  />
+                  <div className="bg-green-100 rounded-lg p-3 max-w-xs">
+                    <p className="text-sm text-gray-800">
+                      I will be ready to handle changes once they respond.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chat Input Area */}
+              <div className="flex items-center mt-4 border-t pt-3">
+                <label className="cursor-pointer mr-3">
+                  <input type="file" className="hidden" />
+                  <svg
+                    className="w-5 h-5 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586M16 16h.01"></path>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586M16 16h.01"
+                    />
+                  </svg>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Type your message..."
+                  className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                />
+                <button className="ml-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition">
+                  Send
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <AddTaskModal
+        isOpen={showTaskModal}
+        onClose={() => setShowTaskModal(false)}
+        teamMembers={teamMembers}
+        onAddTask={handleAddTask}
+      />
     </div>
   );
 };

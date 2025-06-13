@@ -96,6 +96,34 @@ export const createProject = async (data) => {
   }
 };
 
+export const manageProject = async (data) => {
+  try {
+    let responseOnManageProject = await axios.post(
+      `${REACT_BASE_URL}manage-project`,
+      data
+    );
+    if (responseOnManageProject.status === SUCCESS_STATUS) {
+      return responseOnManageProject.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const projectInfoData = async (id) => {
+  try {
+    let responseOnProjectInfo = await axios.get(
+      `${REACT_BASE_URL}project-management-info/${id}`
+    );
+    //console.log(responseOnProjectInfo);
+    if (responseOnProjectInfo.status === 200) {
+      return responseOnProjectInfo.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const setInterview = async (data) => {
   try {
     let responseOnSetInterview = await axios.post(

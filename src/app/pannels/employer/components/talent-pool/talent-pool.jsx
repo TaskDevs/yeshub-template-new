@@ -23,6 +23,8 @@ export const TalentPool = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [taskAssignment, setTaskAssignment] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
+  const [attachment, setAttachment] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const { id } = useParams();
@@ -136,24 +138,29 @@ export const TalentPool = () => {
   };
 
   const handleSubmit = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() && !attachment) return;
 
-    let newData = {
-      project_id: id,
-      sender_id: sessionStorage.getItem("chat_id"),
-      admin: true,
-      message: message,
-    };
+    setLoading(true);
 
-    console.log(newData);
+    try {
+      const formData = new FormData();
+      formData.append("project_id", id);
+      formData.append("sender_id", sessionStorage.getItem("chat_id"));
+      formData.append("admin", true);
+      formData.append("message", message);
+      if (attachment) {
+        formData.append("attachment", attachment);
+      }
 
-    // // Send the message (e.g., through API or socket)
-    await processSendGroupChat(newData);
+      await processSendGroupChat(formData); // Must accept FormData in your API
 
-    // Clear input
-    setMessage("");
-    // Optional toast
-    //toast.success("Message sent!");
+      setMessage("");
+      setAttachment(null);
+    } catch (err) {
+      console.error("Failed to send message", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -642,6 +649,24 @@ export const TalentPool = () => {
                           {item.sender_name || "Unknown User"}
                         </p>
                         <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
+                          {item.attachment_path && (
+                            <a
+                              href={item.attachment_path} // Replace with the actual file URL
+                              download
+                              className="no-underline"
+                            >
+                              <div className="my-3 w-40 h-20 rounded-lg border border-gray-300 flex items-center justify-between px-3 py-2 bg-gray-50 shadow-sm">
+                                <div className="flex items-center gap-2 overflow-hidden">
+                                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs">
+                                    📎
+                                  </div>
+                                  <span className="text-sm text-gray-700 truncate max-w-[100px]">
+                                    file
+                                  </span>
+                                </div>
+                              </div>
+                            </a>
+                          )}
                           <p className="text-sm text-gray-800">
                             {item.message}
                           </p>
@@ -655,9 +680,33 @@ export const TalentPool = () => {
               </div>
 
               {/* Chat Input Area */}
+              {attachment && (
+                <div className="flex items-center mt-4 border-t pt-3">
+                  <div className="mt-3 w-40 h-20 rounded-lg border border-gray-300 flex items-center justify-between px-3 py-2 bg-gray-50 shadow-sm">
+                    <div className="flex items-center gap-2 overflow-hidden">
+                      <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs">
+                        📎
+                      </div>
+                      <span className="text-sm text-gray-700 truncate max-w-[100px]">
+                        {attachment.name}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setAttachment(null)}
+                      className="text-red-500 text-xs hover:underline ml-2"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center mt-4 border-t pt-3">
                 <label className="cursor-pointer mr-3">
-                  <input type="file" className="hidden" />
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) => setAttachment(e.target.files[0])}
+                  />
                   <svg
                     className="w-5 h-5 text-gray-500"
                     fill="none"
@@ -676,14 +725,46 @@ export const TalentPool = () => {
                 <input
                   type="text"
                   onChange={handleChange}
+                  value={message}
                   placeholder="Type your message..."
                   className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
+
                 <button
+                  disabled={loading}
                   onClick={handleSubmit}
-                  className="ml-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition"
+                  className={`ml-2 px-4 py-2 rounded-lg text-sm transition text-white ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
                 >
-                  Send
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-4 w-4 text-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
+                      </svg>
+                      Sending...
+                    </span>
+                  ) : (
+                    "Send"
+                  )}
                 </button>
               </div>
             </div>

@@ -133,6 +133,8 @@ export const candidate = {
   TRANSACTIONS: "/transactions",
   FINANCE_SETTINGS: "/finance-settings",
   PROJECT_MANAGE: "/manage-project/:id",
+  SUPPORT: "/support-center",
+  DISPUTE: "/dispute-resolution",
 };
 
 export const client = {

@@ -131,6 +131,7 @@ function EmpDashboardPage() {
             </div>
           </div>
         </div>
+        
         <div className="twm-pro-view-chart-wrap">
           <div className="row">
             <div className="col-xl-6 col-lg-12 col-md-12 mb-4">
@@ -422,6 +423,7 @@ function EmpDashboardPage() {
             </div>
           </div>
         </div>
+          
       </div>
     </>
   );

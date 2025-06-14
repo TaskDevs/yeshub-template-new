@@ -8,6 +8,7 @@ import styles from "../sections/dashboard/dashboard.module.css";
 import { CanQuickActions } from "../sections/dashboard/can-quick-actions";
 import { CanRecentActivity } from "../sections/dashboard/can-recent-activity";
 import { FreelanceApiData } from "../../../context/freelance/freelanceContextApi";
+import ChatToggleButton from "../support/ChatToggleButton";
 
 function CanDashboardPage() {
   const { processGetFreelanceProjects, freelanceProjectList } =
@@ -104,6 +105,8 @@ function CanDashboardPage() {
         <div className={`${styles.cardRow} ${styles.projectsRow}`}>
           <CanActiveProjects projectList={freelanceProjectList} />
           <CanRecentActivity />
+
+          <ChatToggleButton />
         </div>
       </div>
     </div>

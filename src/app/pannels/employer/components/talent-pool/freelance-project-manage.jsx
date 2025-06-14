@@ -26,6 +26,7 @@ export const FreelanceProjectManage = () => {
   const [taskAssignment, setTaskAssignment] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
   const [chatId, setChatId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { id } = useParams();
 
@@ -140,21 +141,26 @@ export const FreelanceProjectManage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!message.trim()) return;
+    if (!message.trim() || loading) return;
+
+    setLoading(true); // Start loading
 
     let newData = {
       project_id: id,
       sender_id: sessionStorage.getItem("chat_id"),
+      admin: true,
       message: message,
     };
 
-    // Send the message (e.g., through API or socket)
-    await processSendGroupChat(newData);
-
-    // Clear input
-    setMessage("");
-    // Optional toast
-    //toast.success("Message sent!");
+    try {
+      await processSendGroupChat(newData); // Send the message
+      setMessage(""); // Clear input
+    } catch (err) {
+      console.error("Failed to send message:", err);
+      // Optional: show a toast error
+    } finally {
+      setLoading(false); // Reset loading state
+    }
   };
 
   return (
@@ -677,14 +683,45 @@ export const FreelanceProjectManage = () => {
                 <input
                   type="text"
                   onChange={handleChange}
+                  value={message}
                   placeholder="Type your message..."
                   className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
                 <button
+                  disabled={loading}
                   onClick={handleSubmit}
-                  className="ml-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition"
+                  className={`ml-2 px-4 py-2 rounded-lg text-sm transition text-white ${
+                    loading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
                 >
-                  Send
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="animate-spin h-4 w-4 text-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
+                      </svg>
+                      Sending...
+                    </span>
+                  ) : (
+                    "Send"
+                  )}
                 </button>
               </div>
             </div>

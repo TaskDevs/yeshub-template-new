@@ -6,17 +6,22 @@ import {
   getInterviewInfo,
   addExperience,
   addJobPost,
+  manageProject,
   createProject,
   changeCandidateStatus,
   getClientDashboardStats,
   getProjects,
+  getClientProjects,
+  getProjectChat,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
   getHiredApplicants,
   getCompanyPostedJobs,
+  projectInfoData,
   checkIfCompanyExist,
   setInterview,
+  sendGroupChat,
   companyInfo,
   updateEmployerLogo,
   employerProfile,
@@ -29,6 +34,7 @@ import {
   updateEmployerBanner,
 } from "./employerApi";
 import { formatDate } from "../../../utils/dateUtils";
+import { userId } from "../../../globals/constants";
 
 export const EmployerApiData = createContext();
 
@@ -38,6 +44,7 @@ const EmployerApiDataProvider = (props) => {
   const [appliedJobList, setAppliedJobList] = useState([]);
   const [applicants, setApplicants] = useState([]);
   const [userProjects, setUserProjects] = useState([]);
+  const [projectInfo, setProjectInfo] = useState([]);
   const [hiredApplicants, setHiredApplicants] = useState([]);
   const [processHiredApplicants, setProcessHiredApplicants] = useState([]);
   const [postedJobList, setPostedJobList] = useState([]);
@@ -46,15 +53,31 @@ const EmployerApiDataProvider = (props) => {
   const [employerStats, setEmployerStats] = useState({});
   const [interviewInfo, setInterviewInfo] = useState({});
   const [totalApplicants, setTotalApplicants] = useState(0);
+  const [notifyMessage, setNotifyMessage] = useState(0);
+  const [projectChats, setProjectChats] = useState([]);
 
   const processGetUserProjects = async () => {
     try {
       const userId = sessionStorage.getItem("userId");
       let responseOnGetUserProjects = await getProjects(userId);
-      console.log(responseOnGetUserProjects);
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const processGetProjectChat = async (id) => {
+    let response = await getProjectChat(id);
+    console.log(response);
+    setProjectChats(response.messages.data);
+  };
+
+  const processSendGroupChat = async (data) => {
+    let response = await sendGroupChat(data);
+    if (response) {
+      return true;
+    } else {
+      false;
     }
   };
 
@@ -93,11 +116,35 @@ const EmployerApiDataProvider = (props) => {
       ...data,
       user_id: userId,
     };
-
+    console.log(requestData);
     let response = await createProject(requestData);
     if (response) {
       return true;
     } else {
+      return false;
+    }
+  };
+
+  const processProjectInfoData = async (id) => {
+    let response = await projectInfoData(id);
+    if (response) {
+      setProjectInfo(response.project_info);
+    }
+  };
+
+  const processGetClientProjects = async () => {
+    try {
+      let response = await getClientProjects(userId);
+      console.log(response);
+      if (response) {
+        sessionStorage.setItem("chat_id", response.chat_id);
+        sessionStorage.setItem(
+          "project_ids",
+          JSON.stringify(response.project_ids)
+        );
+      }
+    } catch (err) {
+      console.log(err);
       return false;
     }
   };
@@ -330,6 +377,17 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processManageProject = async (data) => {
+    let response = await manageProject(data);
+    //console.log
+    if (response) {
+      processProjectInfoData(data.project_id);
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   //updateJobStatus
   const processUpdateJobStatus = async (data) => {
     let response = await updateJobStatus(data);
@@ -455,6 +513,16 @@ const EmployerApiDataProvider = (props) => {
         userProjects,
         processHiredApplicants,
         setProcessHiredApplicants,
+        processManageProject,
+        processProjectInfoData,
+        projectInfo,
+        notifyMessage,
+        setNotifyMessage,
+        projectChats,
+        setProjectChats,
+        processGetProjectChat,
+        processSendGroupChat,
+        processGetClientProjects,
       }}
     >
       {props.children}

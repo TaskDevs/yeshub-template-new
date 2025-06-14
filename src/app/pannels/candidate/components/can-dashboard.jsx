@@ -1,17 +1,29 @@
+import React, { useState, useEffect, useContext } from "react";
 import { CandidateChart } from "./can-chart";
 import { CandidateStats } from "./can-stats";
-import React, { useState, useEffect } from "react";
+
 import { CanActiveProjects } from "./can-active-projects";
 import { loadScript } from "../../../../globals/constants";
 import styles from "../sections/dashboard/dashboard.module.css";
 import { CanQuickActions } from "../sections/dashboard/can-quick-actions";
 import { CanRecentActivity } from "../sections/dashboard/can-recent-activity";
+import { FreelanceApiData } from "../../../context/freelance/freelanceContextApi";
 import ChatToggleButton from "../support/ChatToggleButton";
 
 function CanDashboardPage() {
+  const { processGetFreelanceProjects, freelanceProjectList } =
+    useContext(FreelanceApiData);
   useEffect(() => {
     loadScript("js/custom.js");
   });
+
+  useEffect(() => {
+    processGetFreelanceProjects();
+  }, []);
+
+  // useEffect(() => {
+  //   console.log(freelanceProjectList);
+  // }, [freelanceProjectList]);
 
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("Last 30 Days");
 
@@ -91,10 +103,10 @@ function CanDashboardPage() {
 
         {/* Active Projects and Recent Activities */}
         <div className={`${styles.cardRow} ${styles.projectsRow}`}>
-          <CanActiveProjects />
+          <CanActiveProjects projectList={freelanceProjectList} />
           <CanRecentActivity />
 
-          <ChatToggleButton/>
+          <ChatToggleButton />
         </div>
       </div>
     </div>

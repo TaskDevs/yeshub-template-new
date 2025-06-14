@@ -14,61 +14,11 @@ import {
   Trash2,
 } from "lucide-react";
 
-const jobData = [
-  {
-    title: "Senior Backend Developer (Node.js)",
-    location: "Remote (Ghana Based)",
-    date: "May 18, 2025",
-    status: "Active",
-    tags: ["Node.js", "Python", "MongoDB", "AWS"],
-    applicants: 27,
-  },
-  {
-    title: "UX/UI Designer for Mobile App",
-    location: "Accra, Ghana (Hybrid)",
-    date: "May 17, 2025",
-    status: "Active",
-    tags: ["Figma", "UI Design", "Mobile App", "Prototyping"],
-    applicants: 18,
-  },
-  {
-    title: "Cloud Solutions Architect",
-    location: "Remote (West Africa)",
-    date: "May 5, 2025",
-    status: "Draft",
-    tags: ["AWS", "Azure", "Cloud Architecture", "DevOps"],
-    applicants: 12,
-  },
-  {
-    title: "Digital Marketing Specialist",
-    location: "Accra, Ghana (Hybrid)",
-    date: "April 26, 2025",
-    status: "Closed",
-    tags: ["SEO", "SEM", "Social Media", "Analytics"],
-    applicants: 35,
-  },
-  {
-    title: "Project Manager (IT Infrastructure)",
-    location: "Accra, Ghana (Hybrid)",
-    date: "May 14, 2025",
-    status: "Active",
-    tags: ["Project Management", "IT Infrastructure", "Agile", "PMP"],
-    applicants: 9,
-  },
-  {
-    title: "Data Analyst",
-    location: "Remote (Ghana Based)",
-    date: "April 18, 2025",
-    status: "Closed",
-    tags: ["SQL", "Python", "Data Visualization", "Power BI"],
-    applicants: 27,
-  },
-];
-
 const JOBS_PER_PAGE = 3;
 
 export default function ManageProjects() {
-  const { employerStats, processGetUserProjects } = useContext(EmployerApiData);
+  const { employerStats, processGetUserProjects, userProjects } =
+    useContext(EmployerApiData);
   // 🔽 Filters and pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,47 +49,48 @@ export default function ManageProjects() {
     // Simulate data loading
     const timer = setTimeout(() => setLoading(false), 1000);
     return () => clearTimeout(timer);
-  }, [jobData, searchTerm, statusFilter, sortBy]); // re-trigger on filter change
+  }, [userProjects, searchTerm, statusFilter, sortBy]); // re-trigger on filter change
 
   useEffect(() => {
     processGetUserProjects();
   }, []);
 
+  //console.log(userProjects);
+
   // 🔽 Apply filters and sorting first
-  let filteredJobs = [];
+  let filteredProjects = userProjects || [];
 
-  if (!loading) {
-    filteredJobs = jobData
-      .filter((job) => {
-        const matchesStatus =
-          statusFilter === "All Jobs" || job.status === statusFilter;
+  //   if (!loading) {
+  //     filteredProjects = userProjects
+  //       .filter((project) => {
+  //         const matchesStatus =
+  //           statusFilter === "All Projects" ||
+  //           project.project_category === statusFilter;
 
-        const matchesSearch =
-          job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          job.tags.some((tag) =>
-            tag.toLowerCase().includes(searchTerm.toLowerCase())
-          );
+  //         const matchesSearch = project.project_name
+  //           .toLowerCase()
+  //           .includes(searchTerm.toLowerCase());
 
-        return matchesStatus && matchesSearch;
-      })
-      .sort((a, b) => {
-        if (sortBy === "Newest First") {
-          return new Date(b.date) - new Date(a.date);
-        } else {
-          return new Date(a.date) - new Date(b.date);
-        }
-      });
-  }
+  //         return matchesStatus && matchesSearch;
+  //       })
+  //       .sort((a, b) => {
+  //         if (sortBy === "Newest First") {
+  //           return new Date(b.start_date) - new Date(a.end_date);
+  //         } else {
+  //           return new Date(a.end_date) - new Date(b.start_date);
+  //         }
+  //       });
+  //   }
 
   const navigate = useNavigate();
 
-  // 🔽 Total jobs after filtering
-  const totalJobs = filteredJobs.length;
-  const totalPages = Math.ceil(totalJobs / JOBS_PER_PAGE);
+  // 🔽 Total projects after filtering
+  const totalProjects = filteredProjects.length;
+  const totalPages = Math.ceil(totalProjects / JOBS_PER_PAGE);
   const startIndex = (currentPage - 1) * JOBS_PER_PAGE;
-  const paginatedJobs = loading
+  const paginatedProjects = loading
     ? []
-    : filteredJobs.slice(startIndex, startIndex + JOBS_PER_PAGE);
+    : filteredProjects.slice(startIndex, startIndex + JOBS_PER_PAGE);
 
   // 🔁 Reset page if filters change
   useEffect(() => {
@@ -204,19 +155,19 @@ export default function ManageProjects() {
     });
   };
 
-  const handleMenuAction = (action, job) => {
+  const handleMenuAction = (action, project) => {
     switch (action) {
       case "manage":
-        handleManage(job);
+        handleManage(project);
         break;
       case "view":
-        handleView(job);
+        handleView(project);
         break;
       case "edit":
-        handleSetForEdit(job);
+        handleSetForEdit(project);
         break;
       case "delete":
-        handleDelete(job);
+        handleDelete(project);
         break;
       default:
         console.warn("Unknown action:", action);
@@ -312,14 +263,14 @@ export default function ManageProjects() {
               <div className="w-24 h-6 bg-gray-100 rounded-md"></div>
             </div>
           ))
-        ) : paginatedJobs.length === 0 ? (
+        ) : paginatedProjects.length === 0 ? (
           // 🔸 No Jobs Found
           <div className="text-center text-gray-500 py-10">
             No projects found.
           </div>
         ) : (
           // ✅ Jobs Display
-          paginatedJobs.map((job, idx) => (
+          paginatedProjects.map((project, idx) => (
             <div
               key={idx}
               className="border rounded-xl p-5 bg-white flex justify-between sm:flex-row sm:justify-between sm:items-center items-start mb-4 relative z-100"
@@ -328,45 +279,29 @@ export default function ManageProjects() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <h2 className="text-lg font-semibold text-gray-900">
-                    {job.title}
+                    {project.project_name}
                   </h2>
-                  {job.status && (
-                    <span
-                      className={`text-xs font-medium px-2 py-1 rounded-full ${
-                        job.status === "Active"
-                          ? "bg-green-100 text-green-800"
-                          : job.status === "Draft"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-gray-200 text-gray-600"
-                      }`}
-                    >
-                      {job.status}
-                    </span>
-                  )}
+
+                  <span
+                    className={`text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-800"
+                      `}
+                  >
+                    Ongoing
+                  </span>
                 </div>
 
                 <div className="text-sm text-gray-600 flex items-center gap-2">
                   <span className="flex items-center gap-1">
                     <MapPin size={15} />
-                    {job.location}
+                    {project.project_category}
                   </span>
                 </div>
 
                 <div className="text-sm text-gray-500 flex items-center gap-2">
                   <span className="flex items-center gap-1">
-                    <Clock5 size={15} /> Posted on {job.date}
+                    <Clock5 size={15} /> Posted on{" "}
+                    {`${project.start_date} - ${project.end_date}`}
                   </span>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {job.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
               </div>
 
@@ -374,7 +309,7 @@ export default function ManageProjects() {
               <div className="relative z-100">
                 <div className="flex flex-col items-end gap-2 mt-4 md:mt-0">
                   <p className="text-sm text-gray-500">
-                    👥 {job.applicants} applicants
+                    👥 {project.team.length} team
                   </p>
                   <button
                     onClick={() => toggleMenu(idx)}
@@ -391,25 +326,25 @@ export default function ManageProjects() {
                     shadow-lg py-2"
                     >
                       <button
-                        onClick={() => handleManage("1", job)}
+                        onClick={() => handleManage(project.id)}
                         className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                       >
                         <Clock5 size={14} /> Manage
                       </button>
                       <button
-                        onClick={() => handleMenuAction("view", job)}
+                        onClick={() => handleMenuAction("view", project)}
                         className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                       >
                         <Eye size={14} /> View
                       </button>
                       <button
-                        onClick={() => handleMenuAction("edit", job)}
+                        onClick={() => handleMenuAction("edit", project)}
                         className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                       >
                         <Pencil size={14} /> Edit
                       </button>
                       <button
-                        onClick={() => handleMenuAction("delete", job)}
+                        onClick={() => handleMenuAction("delete", project)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                       >
                         <Trash2 size={14} /> Delete
@@ -428,8 +363,8 @@ export default function ManageProjects() {
       <div className="bg-white p-4 md:p-6 rounded-lg border shadow-sm flex justify-between sm:flex-row sm:justify-between sm:items-center items-center sm:justify-center mb-4">
         <p className="text-sm font-normal text-gray">
           Showing {startIndex + 1}–
-          {Math.min(startIndex + JOBS_PER_PAGE, jobData.length)} of{" "}
-          {jobData.length} jobs
+          {Math.min(startIndex + JOBS_PER_PAGE, userProjects.length)} of{" "}
+          {userProjects.length} jobs
         </p>
         <div>
           {[...Array(totalPages)].map((_, i) => (

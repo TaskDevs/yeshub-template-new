@@ -16,8 +16,12 @@ import { ProfileSectionModal } from "../../../candidate/sections/new-profile/pro
 import { PostJobFormSection } from "../profile/client-profile-forms";
 
 function ClientDashboard() {
-  const { processGetEmployerStats, employerStats, processDeleteJob } =
-    useContext(EmployerApiData);
+  const {
+    processGetEmployerStats,
+    employerStats,
+    processDeleteJob,
+    processGetClientProjects,
+  } = useContext(EmployerApiData);
   const [modalOpen, setModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [itemsToEdit, setItemsToEdit] = useState({});
@@ -27,6 +31,10 @@ function ClientDashboard() {
 
   useEffect(() => {
     loadScript("js/custom.js");
+  }, []);
+
+  useEffect(() => {
+    processGetClientProjects();
   }, []);
 
   useEffect(() => {

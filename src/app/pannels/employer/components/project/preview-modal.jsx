@@ -31,7 +31,7 @@ export default function PreviewModal({ isOpen, onClose, projectData }) {
   if (!isOpen) return null;
 
   const handleSubmitProject = async () => {
-    console.log(projectData);
+    // console.log(projectData);
     let newData = {
       ...projectData,
       project_category: projectData.projectCategory,

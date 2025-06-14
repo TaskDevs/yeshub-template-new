@@ -13,6 +13,7 @@ import JobListing from "../app/pannels/employer/components/jobs/manage-job-detai
 import ManageProjects from "../app/pannels/employer/components/jobs/manage-projects";
 import CreateProject from "../app/pannels/employer/components/project/create-project";
 import JobApplicant from "../app/pannels/employer/components/applicant/job-applicant";
+import { TalentPool } from "../app/pannels/employer/components/talent-pool/talent-pool";
 
 function ClientRoutes() {
   return (
@@ -24,6 +25,7 @@ function ClientRoutes() {
       <Route path={client.PROJECT_DETAILS} element={<ProjectDetailPage />} />
       <Route path={client.PROFILE} element={<ClientProfile />} />
       <Route path={client.CREATE_PROJECT} element={<CreateProject />} />
+      <Route path={client.TALENT_POOL} element={<TalentPool />} />
       <Route path={client.FINANCE} element={<FinancialOverview />} />
       <Route path={client.CLIENT_FIND_TALENT} element={<FreelancerSearch />} />
       <Route

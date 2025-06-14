@@ -66,7 +66,6 @@ export const publicUser = {
     LINKEDINCALLBACK: "/linkedin/auth/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
-    
 
     FIND_TALENT: "/find-talent",
     New_FIND_TALENT: "/freelancers",
@@ -133,8 +132,9 @@ export const candidate = {
   INVOICE_DETAIL: "/invoice-detail/:id",
   TRANSACTIONS: "/transactions",
   FINANCE_SETTINGS: "/finance-settings",
-  SUPPORT:'/support-center',
-  DISPUTE: '/dispute-resolution'
+  PROJECT_MANAGE: "/manage-project/:id",
+  SUPPORT: "/support-center",
+  DISPUTE: "/dispute-resolution",
 };
 
 export const client = {

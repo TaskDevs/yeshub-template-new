@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { IoMdMail } from "react-icons/io";
 import { FaLock, FaUser } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -12,8 +12,12 @@ import { base } from "../../../../../globals/route-names";
 import { NavLink, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
 const NewAuthForm = ({ currentState }) => {
+  const { processGetClientProjects } = useContext(EmployerApiData);
+  const { processGetFreelanceProjects } = useContext(FreelanceApiData);
   const [formData, setFormData] = useState({
     identifier: "",
     username: "",
@@ -81,14 +85,16 @@ const NewAuthForm = ({ currentState }) => {
             setTimeout(() => {
               switch (role) {
                 case "admin":
-                 window.location.href = "/admin";
+                  window.location.href = "/admin";
 
                   break;
                 case "client":
+                  processGetClientProjects();
                   window.location.href = "/dashboard-client";
                   break;
                 case "freelancer":
                 default:
+                  processGetFreelanceProjects();
                   window.location.href = base.CANDIDATE_PRE;
                   break;
               }
@@ -204,42 +210,40 @@ const NewAuthForm = ({ currentState }) => {
   };
   // google log n
 
-
   const handleGoogleSuccess = async (credentialResponse) => {
-  setLoading(true);
-  try {
-    const res = await axios.post(
-      `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
-      { token: credentialResponse.credential }
-    );
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_HOST}/api/v1/auth/google`,
+        { token: credentialResponse.credential }
+      );
 
-    const { token, refresh_token, user, role } = res.data;
-    if (!user?.id || !role) {
-      throw new Error("Missing user ID or role in response");
+      const { token, refresh_token, user, role } = res.data;
+      if (!user?.id || !role) {
+        throw new Error("Missing user ID or role in response");
+      }
+
+      sessionStorage.setItem("authToken", token);
+      sessionStorage.setItem("username", user.username);
+      sessionStorage.setItem("userId", user.id);
+      sessionStorage.setItem("userRole", role);
+      cookieMethods.setCookies(token, refresh_token);
+
+      if (role === "user") {
+        setTimeout(() => {
+          window.location.href = `/dashboard/onboard?user=${user.id}`;
+        }, 200);
+      } else if (role === "client") {
+        window.location.href = "/dashboard-client";
+      } else {
+        window.location.href = base.CANDIDATE_PRE;
+      }
+    } catch (err) {
+      console.error("Google login failed", err);
+    } finally {
+      setLoading(false);
     }
-
-    sessionStorage.setItem("authToken", token);
-    sessionStorage.setItem("username", user.username);
-    sessionStorage.setItem("userId", user.id);
-    sessionStorage.setItem("userRole", role);
-    cookieMethods.setCookies(token, refresh_token);
-
-    if (role === "user") {
-      setTimeout(() => {
-        window.location.href = `/dashboard/onboard?user=${user.id}`;
-      }, 200);
-    } else if (role === "client") {
-      window.location.href = "/dashboard-client";
-    } else {
-      window.location.href = base.CANDIDATE_PRE;
-    }
-
-  } catch (err) {
-    console.error("Google login failed", err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleGoogleError = () => {
     console.error("Google Sign-In Error");

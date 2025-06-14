@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import AddTaskModal from "./add-task-modal";
-import { chatId } from "../../../../../globals/constants";
 
 export const FreelanceProjectManage = () => {
   const { freelanceProjectList } = useContext(FreelanceApiData);
@@ -26,6 +25,7 @@ export const FreelanceProjectManage = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [taskAssignment, setTaskAssignment] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
+  const [chatId, setChatId] = useState("");
 
   const { id } = useParams();
 
@@ -46,6 +46,8 @@ export const FreelanceProjectManage = () => {
 
   useEffect(() => {
     processProjectInfoData(id);
+    let data = sessionStorage.getItem("chat_id");
+    setChatId(data);
   }, []);
 
   useEffect(() => {
@@ -142,7 +144,7 @@ export const FreelanceProjectManage = () => {
 
     let newData = {
       project_id: id,
-      sender_id: chatId,
+      sender_id: sessionStorage.getItem("chat_id"),
       message: message,
     };
 

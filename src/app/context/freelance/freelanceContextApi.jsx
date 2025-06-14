@@ -37,6 +37,7 @@ const FreelanceApiDataProvider = (props) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const { portfolios } = useContext(PortfolioApiData);
   const [viewFreelanceProfile, setViewFreelanceProfile] = useState({});
+  const [freelanceProjectStatus, setFreelanceProjectStatus] = useState(false);
 
   //  console.log("freelanceProfileData", freelanceProfileData)
 
@@ -150,6 +151,7 @@ const FreelanceApiDataProvider = (props) => {
           "project_ids",
           JSON.stringify(response.project_ids)
         );
+        setFreelanceProjectStatus(true);
       }
     } catch (err) {
       console.log(err);
@@ -310,6 +312,7 @@ const FreelanceApiDataProvider = (props) => {
         viewFreelanceProfile,
         processGetFreelanceProjects,
         freelanceProjectList,
+        freelanceProjectStatus,
       }}
     >
       {props.children}

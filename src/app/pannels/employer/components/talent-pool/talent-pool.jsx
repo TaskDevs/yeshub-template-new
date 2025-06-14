@@ -140,7 +140,7 @@ export const TalentPool = () => {
 
     let newData = {
       project_id: id,
-      sender_id: userId,
+      sender_id: sessionStorage.getItem("chat_id"),
       admin: true,
       message: message,
     };

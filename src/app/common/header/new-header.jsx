@@ -14,21 +14,27 @@ import { useNavigate } from "react-router-dom";
 import { base, candidate, client } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
 import { EmployerApiData } from "../../context/employers/employerContextApi";
+import { FreelanceApiData } from "../../context/freelance/freelanceContextApi";
 import { Avatar } from "@mui/material";
 import { logout } from "../../context/auth/authApi";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import ProfileCompletionModal from "./profile-complettion";
-import { userId, chatId } from "../../../globals/constants";
+import { userId } from "../../../globals/constants";
 import { useChat } from "../../context/chat/chatContext";
 import NotificationModal from "./notification-modal";
-import { projectIds } from "../../../globals/constants";
+//import { projectIds } from "../../../globals/constants";
 
 export const Header = ({ isDashboard = true }) => {
   const { processGetMessagesOfReceiver, unreadCount, setUnreadCount } =
     useChat();
-  const { notifyMessage, setNotifyMessage, setProjectChats } =
-    useContext(EmployerApiData);
+  const {
+    notifyMessage,
+    setNotifyMessage,
+    setProjectChats,
+    clientProjectStatus,
+  } = useContext(EmployerApiData);
+  const { freelanceProjectStatus } = useContext(FreelanceApiData);
   const menuRef = useRef(null);
   const profileRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -43,6 +49,8 @@ export const Header = ({ isDashboard = true }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [projectIds, setProjectIds] = useState([]);
+  const [chatId, setChatId] = useState();
 
   const {
     firstname,
@@ -56,6 +64,14 @@ export const Header = ({ isDashboard = true }) => {
   const role = sessionStorage.getItem("userRole");
 
   const popSound = new Audio("./assets/sound/pop.mp3"); // from public/sounds
+
+  useEffect(() => {
+    let data = JSON.parse(sessionStorage.getItem("project_ids"));
+    let chat_id = sessionStorage.getItem("chat_id");
+    //console.log(data);
+    setChatId(chat_id);
+    setProjectIds(data);
+  }, [clientProjectStatus, freelanceProjectStatus]);
 
   useEffect(() => {
     const lastClosed = localStorage.getItem("profileModalClosedAt");
@@ -90,7 +106,7 @@ export const Header = ({ isDashboard = true }) => {
   }, [userId]);
 
   useEffect(() => {
-    if (!chatId || !Array.isArray(projectIds)) return;
+    if (!chatId || !projectIds) return;
 
     const channels = [];
 

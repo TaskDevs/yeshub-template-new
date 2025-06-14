@@ -32,6 +32,7 @@ import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoi
 import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
 import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
 import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
+import { FreelanceProjectManage } from "../app/pannels/employer/components/talent-pool/freelance-project-manage";
 
 import { isAuthenticated } from "./auth";
 
@@ -49,6 +50,10 @@ function CandidateRoutes() {
             element={<FindWorkDetails />}
           />
           <Route path={candidate.JOB_DETAILS} element={<JobDetailsPage />} />
+          <Route
+            path={candidate.PROJECT_MANAGE}
+            element={<FreelanceProjectManage />}
+          />
           <Route path={candidate.SUBMIT} element={<SubmitWork />} />
           <Route path={candidate.APPLIED_JOBS} element={<CanAppliedJobs />} />
           <Route path={candidate.RESUME} element={<CanMyResumePage />} />

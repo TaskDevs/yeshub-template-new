@@ -9,6 +9,8 @@ export const timeOut = { timeout: 10000 };
 
 //RETRIEVE USER IDS
 export const userId = sessionStorage.getItem("userId");
+export const chatId = sessionStorage.getItem("chat_id");
+export const projectIds = JSON.parse(sessionStorage.getItem("project_ids"));
 export const freelancerId = sessionStorage.getItem("freelancer_id") || null;
 export const email = sessionStorage.getItem("email") || "Email Not Available";
 export const getJobId = () => sessionStorage.getItem("job_id");

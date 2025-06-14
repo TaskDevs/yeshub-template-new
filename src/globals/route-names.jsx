@@ -132,6 +132,7 @@ export const candidate = {
   INVOICE_DETAIL: "/invoice-detail/:id",
   TRANSACTIONS: "/transactions",
   FINANCE_SETTINGS: "/finance-settings",
+  PROJECT_MANAGE: "/manage-project/:id",
 };
 
 export const client = {

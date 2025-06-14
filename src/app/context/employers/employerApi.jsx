@@ -82,6 +82,24 @@ export const getProjects = async (id) => {
   }
 };
 
+//Getting projectsId to listen
+export const getClientProjects = async (id) => {
+  console.log(id);
+  try {
+    let response = await axios.get(
+      `${REACT_BASE_URL}get-client-projects/${id}`
+    );
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const createProject = async (data) => {
   try {
     let responseOnCreateProject = await axios.post(
@@ -102,7 +120,8 @@ export const manageProject = async (data) => {
       `${REACT_BASE_URL}manage-project`,
       data
     );
-    if (responseOnManageProject.status === SUCCESS_STATUS) {
+    //console.log(responseOnManageProject);
+    if (responseOnManageProject.status === 200) {
       return responseOnManageProject.data;
     }
   } catch (err) {
@@ -121,6 +140,24 @@ export const projectInfoData = async (id) => {
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const getProjectChat = async (id) => {
+  let response = await axios.get(`${REACT_BASE_URL}get-project-chat/${id}`);
+  if (response.status == 200) {
+    return response.data;
+  } else {
+    return false;
+  }
+};
+
+export const sendGroupChat = async (data) => {
+  let response = await axios.post(`${REACT_BASE_URL}project-chat`, data);
+  if (response.status == SUCCESS_STATUS) {
+    return response.data;
+  } else {
+    return false;
   }
 };
 

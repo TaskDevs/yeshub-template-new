@@ -9,6 +9,7 @@ import {
   freelanceProfile,
   updateFreelance,
   deleteFreelance,
+  getFreelanceProjects,
 } from "./freelanceApi";
 import { userId } from "../../../globals/constants";
 import toast from "react-hot-toast";
@@ -25,6 +26,7 @@ const initialFormData = FREELANCERFIELD.fieldDetail.reduce((acc, field) => {
 
 const FreelanceApiDataProvider = (props) => {
   const [freelanceProfileData, setFreelanceProfileData] = useState([]);
+  const [freelanceProjectList, setFreelanceProjectList] = useState();
   const [freelanceList, setFreelanceList] = useState([]);
   const [freelanceSkillInfo, setFreelanceSkillInfo] = useState([]);
   const [languagesData, setLanguagesData] = useState([]);
@@ -130,6 +132,24 @@ const FreelanceApiDataProvider = (props) => {
       console.log(response.data);
       if (response) {
         setAppliedJobs(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const processGetFreelanceProjects = async () => {
+    try {
+      let response = await getFreelanceProjects(userId);
+      console.log(response);
+      if (response) {
+        setFreelanceProjectList(response.projects);
+        sessionStorage.setItem("chat_id", response.chat_id);
+        sessionStorage.setItem(
+          "project_ids",
+          JSON.stringify(response.project_ids)
+        );
       }
     } catch (err) {
       console.log(err);
@@ -288,6 +308,8 @@ const FreelanceApiDataProvider = (props) => {
         employmentHistoryInfo,
         freelanceSkillInfo,
         viewFreelanceProfile,
+        processGetFreelanceProjects,
+        freelanceProjectList,
       }}
     >
       {props.children}

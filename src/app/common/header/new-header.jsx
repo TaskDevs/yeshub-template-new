@@ -13,18 +13,22 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { base, candidate, client } from "../../../globals/route-names";
 import { ProfileApiData } from "../../context/user-profile/profileContextApi";
+import { EmployerApiData } from "../../context/employers/employerContextApi";
 import { Avatar } from "@mui/material";
 import { logout } from "../../context/auth/authApi";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import ProfileCompletionModal from "./profile-complettion";
-import { userId } from "../../../globals/constants";
+import { userId, chatId } from "../../../globals/constants";
 import { useChat } from "../../context/chat/chatContext";
 import NotificationModal from "./notification-modal";
+import { projectIds } from "../../../globals/constants";
 
 export const Header = ({ isDashboard = true }) => {
   const { processGetMessagesOfReceiver, unreadCount, setUnreadCount } =
     useChat();
+  const { notifyMessage, setNotifyMessage, setProjectChats } =
+    useContext(EmployerApiData);
   const menuRef = useRef(null);
   const profileRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -84,6 +88,37 @@ export const Header = ({ isDashboard = true }) => {
       echo.leave(`chat.${userId}`);
     };
   }, [userId]);
+
+  useEffect(() => {
+    if (!chatId || !Array.isArray(projectIds)) return;
+
+    const channels = [];
+
+    projectIds.forEach((projectId) => {
+      const channel = echo.channel(`group.${projectId}`);
+
+      channel.listen(".group.message.sent", (e) => {
+        console.log(`New message in project ${projectId}:`, e.message);
+        setProjectChats((prev) => [...prev, e.message]);
+
+        if (chatId !== e.message.sender_id) {
+          setNotifyMessage((prev) => prev + 1);
+          popSound.play().catch((err) => {
+            console.warn("Failed to play sound:", err);
+          });
+        }
+        //processGetMessagesOfReceiver(userId); // or project-specific handler
+      });
+
+      channels.push(channel);
+    });
+
+    return () => {
+      projectIds.forEach((projectId) => {
+        echo.leave(`group.${projectId}`);
+      });
+    };
+  }, [chatId, projectIds]);
 
   const handleClose = () => {
     localStorage.setItem("profileModalClosedAt", Date.now().toString());
@@ -765,8 +800,16 @@ export const Header = ({ isDashboard = true }) => {
                   )}
                 </div>
 
-                <button className="text-gray-600 hover:text-green-700 mail-icon">
+                <button
+                  onClick={() => console.log("Try something cool")}
+                  className="relative text-gray-600 hover:text-green-700 mail-icon"
+                >
                   <Mail className="h-5 w-5" />
+                  {notifyMessage > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                      {notifyMessage}
+                    </span>
+                  )}
                 </button>
 
                 {/* Profile Menu */}

@@ -3,34 +3,36 @@ import { FaSearch } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import AddTaskModal from "./add-task-modal";
-import { userId } from "../../../../../globals/constants";
+import { chatId } from "../../../../../globals/constants";
 
-export const TalentPool = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showTaskModal, setShowTaskModal] = useState(false);
+export const FreelanceProjectManage = () => {
+  const { freelanceProjectList } = useContext(FreelanceApiData);
   const {
-    userProjects,
     projectInfo,
-    projectChats,
-    processGetProjectChat,
-    processSendGroupChat,
     processManageProject,
     processProjectInfoData,
+    projectChats,
+    //setProjectChats,
+    processGetProjectChat,
+    processSendGroupChat,
   } = useContext(EmployerApiData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [message, setMessage] = useState("");
   const [projectDetails, setProjectDetails] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
   const [teamMembers, setTeamMembers] = useState([]);
   const [taskAssignment, setTaskAssignment] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
-  const [message, setMessage] = useState("");
 
   const { id } = useParams();
 
   useEffect(() => {
     let newTeam = [];
-    let data = userProjects.find((item) => item.id == id);
-    //console.log(data);
+    let data = freelanceProjectList?.find((item) => item.id == id);
+    console.log(data);
     data?.team?.map((item) =>
       newTeam.push({
         id: item.id,
@@ -54,6 +56,10 @@ export const TalentPool = () => {
     //console.log(projectInfo?.deliverables);
   }, [projectInfo]);
 
+  useEffect(() => {
+    console.log(projectChats);
+  }, [projectChats]);
+
   const toggleCheck = (milestoneIndex, deliverableIndex) => {
     const key = `${milestoneIndex}-${deliverableIndex}`;
     setCheckedItems((prev) => ({
@@ -61,10 +67,6 @@ export const TalentPool = () => {
       [key]: !prev[key],
     }));
   };
-
-  useEffect(() => {
-    console.log(projectChats);
-  }, [projectChats]);
 
   const handleRemoveTask = (id) => {
     setTaskAssignment((prevAssigns) =>
@@ -140,14 +142,11 @@ export const TalentPool = () => {
 
     let newData = {
       project_id: id,
-      sender_id: userId,
-      admin: true,
+      sender_id: chatId,
       message: message,
     };
 
-    console.log(newData);
-
-    // // Send the message (e.g., through API or socket)
+    // Send the message (e.g., through API or socket)
     await processSendGroupChat(newData);
 
     // Clear input
@@ -607,13 +606,12 @@ export const TalentPool = () => {
               </div>
 
               {/* Chat Messages */}
-
               <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                 {projectChats.length > 0 ? (
                   projectChats.map((item, idx) => (
                     <div
                       className={`flex items-start ${
-                        item.sender_id == userId
+                        item.sender_id == chatId
                           ? "justify-end"
                           : "justify-start"
                       }`}
@@ -652,6 +650,7 @@ export const TalentPool = () => {
                 ) : (
                   <h3>No Message</h3>
                 )}
+                {/* Message 1 */}
               </div>
 
               {/* Chat Input Area */}

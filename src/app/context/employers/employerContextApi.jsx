@@ -11,6 +11,8 @@ import {
   changeCandidateStatus,
   getClientDashboardStats,
   getProjects,
+  getClientProjects,
+  getProjectChat,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
@@ -19,6 +21,7 @@ import {
   projectInfoData,
   checkIfCompanyExist,
   setInterview,
+  sendGroupChat,
   companyInfo,
   updateEmployerLogo,
   employerProfile,
@@ -31,6 +34,7 @@ import {
   updateEmployerBanner,
 } from "./employerApi";
 import { formatDate } from "../../../utils/dateUtils";
+import { userId } from "../../../globals/constants";
 
 export const EmployerApiData = createContext();
 
@@ -49,6 +53,8 @@ const EmployerApiDataProvider = (props) => {
   const [employerStats, setEmployerStats] = useState({});
   const [interviewInfo, setInterviewInfo] = useState({});
   const [totalApplicants, setTotalApplicants] = useState(0);
+  const [notifyMessage, setNotifyMessage] = useState(0);
+  const [projectChats, setProjectChats] = useState([]);
 
   const processGetUserProjects = async () => {
     try {
@@ -57,6 +63,21 @@ const EmployerApiDataProvider = (props) => {
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const processGetProjectChat = async (id) => {
+    let response = await getProjectChat(id);
+    console.log(response);
+    setProjectChats(response.messages.data);
+  };
+
+  const processSendGroupChat = async (data) => {
+    let response = await sendGroupChat(data);
+    if (response) {
+      return true;
+    } else {
+      false;
     }
   };
 
@@ -108,6 +129,23 @@ const EmployerApiDataProvider = (props) => {
     let response = await projectInfoData(id);
     if (response) {
       setProjectInfo(response.project_info);
+    }
+  };
+
+  const processGetClientProjects = async () => {
+    try {
+      let response = await getClientProjects(userId);
+      console.log(response);
+      if (response) {
+        sessionStorage.setItem("chat_id", response.chat_id);
+        sessionStorage.setItem(
+          "project_ids",
+          JSON.stringify(response.project_ids)
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      return false;
     }
   };
 
@@ -340,10 +378,10 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processManageProject = async (data) => {
-    console.log(data);
     let response = await manageProject(data);
-
+    //console.log
     if (response) {
+      processProjectInfoData(data.project_id);
       return true;
     } else {
       return false;
@@ -478,6 +516,13 @@ const EmployerApiDataProvider = (props) => {
         processManageProject,
         processProjectInfoData,
         projectInfo,
+        notifyMessage,
+        setNotifyMessage,
+        projectChats,
+        setProjectChats,
+        processGetProjectChat,
+        processSendGroupChat,
+        processGetClientProjects,
       }}
     >
       {props.children}

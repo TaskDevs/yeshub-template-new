@@ -27,6 +27,7 @@ export const publicUser = {
   HOME18: "/index18",
   TEST: "/test",
   LOG: "/log",
+  CALLBACK: "/wallet/status",
 
   jobs: {
     GRID: "/job-grid",

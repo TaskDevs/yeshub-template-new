@@ -77,12 +77,13 @@ import FreelancerSearch from "../app/pannels/public-user/sections/find-talent/ne
 import FreelancerDetail from "../app/pannels/public-user/sections/find-talent/freelancer-details";
 import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
 import NewAuthForm from "../app/pannels/public-user/components/pages/log-form";
-
+import PaystackCallback from "../app/pannels/employer/components/callback/paystackCallback";
 
 function PublicUserRoutes() {
   return (
     <>
       <Routes>
+        <Route path={publicUser.CALLBACK} element={<PaystackCallback />} />
         <Route path={publicUser.INITIAL} element={<YesHubLandingPage />} />
         <Route path={publicUser.HOME1} element={<Home1Page />} />
         <Route path={publicUser.HOME2} element={<Home2Page />} />
@@ -156,8 +157,8 @@ function PublicUserRoutes() {
         <Route path={publicUser.pages.AUTH} element={<NewAuth />} />
         <Route path={publicUser.pages.WELCOME} element={<WelcomePopup />} />
         {/* <Route path={publicUser.pages.PROFILE} element={<ClientProfile />} /> */}
-       
-         <Route
+
+        <Route
           path={publicUser.pages.FIND_TALENT}
           element={<ClientFindTalent />}
         />

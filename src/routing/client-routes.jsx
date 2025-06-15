@@ -14,6 +14,7 @@ import ManageProjects from "../app/pannels/employer/components/jobs/manage-proje
 import CreateProject from "../app/pannels/employer/components/project/create-project";
 import JobApplicant from "../app/pannels/employer/components/applicant/job-applicant";
 import { TalentPool } from "../app/pannels/employer/components/talent-pool/talent-pool";
+//import projectDetails from "../app/pannels/employer/components/project/project-details";
 
 function ClientRoutes() {
   return (

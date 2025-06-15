@@ -1,21 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Check, Clock } from "lucide-react";
+import Swal from "sweetalert2";
 import ReleasePaymentModal from "./release-payment-modal";
-
+import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 import { PaperClipIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import AddFundsModal from "./AddFundsModal";
 import { useNavigate } from "react-router-dom";
 const ProjectDetailPage = () => {
+  const {
+    walletStatus,
+    processCreateWalletOfUser,
+    processGetTransactionOfUser,
+  } = useContext(TransactionApiData);
+  const [createWalletLoad, setCreateWalletLoad] = useState(false);
   const [message, setMessage] = useState("");
   const [attachment, setAttachment] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const navigate =useNavigate()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    processGetTransactionOfUser();
+  }, []);
 
   const handleAddFunds = (data) => {
     console.log("Funds Added:", data);
     setShowModal(false);
   };
+
+  const handleCreateWallet = async () => {
+    //console.log("Creating wallet");
+    setCreateWalletLoad(true);
+    let response = await processCreateWalletOfUser();
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message || "An issue occured, try again",
+      });
+    }
+    setCreateWalletLoad(false);
+  };
+
   const milestones = [
     {
       title: "Project Requirements & Wireframes",
@@ -367,15 +401,33 @@ const ProjectDetailPage = () => {
           >
             💳 Release Payment
           </button>
+          {walletStatus == "false" && (
+            <>
+              <button
+                className="mt-2 text-sm bg-yellow-600 hover:bg-yellow-700 text-white px-3 
+                  py-1 rounded"
+                onClick={handleCreateWallet}
+              >
+                {createWalletLoad ? "creating wallet ..." : " Create Wallet"}
+              </button>
+            </>
+          )}
+
+          {walletStatus && (
+            <>
+              <button
+                onClick={() => setShowModal(true)}
+                className="w-full border border-gray-300 py-2 rounded mb-2 text-sm hover:bg-gray-50"
+              >
+                🏦 Add Funds to Escrow
+              </button>
+            </>
+          )}
+
           <button
-            onClick={() => setShowModal(true)}
-            className="w-full border border-gray-300 py-2 rounded mb-2 text-sm hover:bg-gray-50"
+            onClick={() => navigate("/dashboard-client/payment-history")}
+            className="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-50"
           >
-            🏦 Add Funds to Escrow
-          </button>
-          <button 
-            onClick={() => navigate('/dashboard-client/payment-history')}
-          className="w-full border border-gray-300 py-2 rounded text-sm hover:bg-gray-50">
             📊 View Payment History
           </button>
         </div>
@@ -532,21 +584,20 @@ const ProjectDetailPage = () => {
             </div>
           </div>
         </div>
-       
       </div>
-       {/* payment modal */}
-        <ReleasePaymentModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-        />
+      {/* payment modal */}
+      <ReleasePaymentModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
 
-        {showModal && (
-          <AddFundsModal
-            currentBalance={3200}
-            onClose={() => setShowModal(false)}
-            onAddFunds={handleAddFunds}
-          />
-        )}
+      {showModal && (
+        <AddFundsModal
+          currentBalance={3200}
+          onClose={() => setShowModal(false)}
+          onAddFunds={handleAddFunds}
+        />
+      )}
     </div>
   );
 };

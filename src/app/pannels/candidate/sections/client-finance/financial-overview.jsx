@@ -1,8 +1,11 @@
-import React, { useState, useRef } from "react";
-
+import React, { useState, useEffect, useRef, useContext } from "react";
+import AddFundsModal from "../../../employer/components/jobs/AddFundsModal";
+import Swal from "sweetalert2";
+import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 import jsPDF from "jspdf";
+//import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
-useNavigate
+useNavigate;
 import {
   Area,
   Line,
@@ -116,18 +119,58 @@ const TABS = [
 ];
 
 const FinancialOverview = () => {
+  const {
+    walletStatus,
+    processCreateWalletOfUser,
+    allEarnings,
+    processGetTransactionOfUser,
+  } = useContext(TransactionApiData);
   const [selectedFilter, setSelectedFilter] = useState("monthly");
   const contentRef = useRef(null); // ref to capture the chart + cards
   const [activeTab, setActiveTab] = useState("Active Projects");
   const [search, setSearch] = useState("");
+  const [createWalletLoad, setCreateWalletLoad] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All Projects");
   const [page, setPage] = useState(1);
   const perPage = 5;
   const navigate = useNavigate(); // Initialize useNavigate hook
   const handleView = (project) => {
-  navigate(`/dashboard-client/project-details/${project.id}`); // if using React Router
+    navigate(`/dashboard-client/project-details/${project.id}`); // if using React Router
+  };
 
-};
+  useEffect(() => {
+    processGetTransactionOfUser();
+  }, []);
+
+  const handleAddFunds = (data) => {
+    console.log("Funds Added:", data);
+    setShowModal(false);
+  };
+
+  const handleCreateWallet = async () => {
+    //console.log("Creating wallet");
+    setCreateWalletLoad(true);
+    let response = await processCreateWalletOfUser();
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message || "An issue occured, try again",
+      });
+    }
+    setCreateWalletLoad(false);
+  };
+
   const filteredProjects = projectsData
     .filter((project) =>
       project.name.toLowerCase().includes(search.toLowerCase())
@@ -177,10 +220,26 @@ const FinancialOverview = () => {
           </p>
         </div>
         <div className="flex space-x-3">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm flex items-center space-x-2">
-            <PlusCircle size={16} />
-            <span>Top Up Account</span>
-          </button>
+          {walletStatus == "false" && (
+            <button
+              onClick={handleCreateWallet}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-md text-sm flex items-center space-x-2"
+            >
+              <PlusCircle size={16} />
+              <span>{createWalletLoad ? "loading..." : "Create Wallet"}</span>
+            </button>
+          )}
+
+          {walletStatus == "true" && (
+            <button
+              onClick={() => setShowModal(true)}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm flex items-center space-x-2"
+            >
+              <PlusCircle size={16} />
+              <span>Top Up Account</span>
+            </button>
+          )}
+
           <button
             onClick={downloadPDF}
             className="border border-gray-300 hover:bg-gray-100 px-4 py-2 rounded-md text-sm flex items-center space-x-2"
@@ -244,7 +303,7 @@ const FinancialOverview = () => {
               </h2>
               <Wallet size={20} className="text-blue-500" />
             </div>
-            <p className="text-xl font-semibold">₵8,750</p>
+            <p className="text-xl font-semibold">₵{allEarnings.available}</p>
             <p className="text-sm text-gray-500">across 5 projects</p>
             <div className="mt-3 text-sm text-gray-600">Active Projects</div>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
@@ -264,7 +323,7 @@ const FinancialOverview = () => {
               </h2>
               <CreditCard size={20} className="text-green-500" />
             </div>
-            <p className="text-2xl font-semibold">₵15,320</p>
+            <p className="text-2xl font-semibold">₵{allEarnings.available}</p>
             <div className="mt-3 flex space-x-2">
               <button className="bg-green-100 text-green-800 px-3 py-1 rounded text-sm flex items-center space-x-1">
                 <Banknote size={14} />
@@ -482,9 +541,10 @@ const FinancialOverview = () => {
                       </td>
 
                       <td>
-                        <a 
+                        <a
                           onClick={() => handleView(project.id)}
-                        className="text-green-600 text-sm mr-4">
+                          className="text-green-600 text-sm mr-4"
+                        >
                           View Details
                         </a>
                         <a href="#" className="text-gray-500 text-sm">
@@ -529,7 +589,13 @@ const FinancialOverview = () => {
           )}
         </div>
       </div>
-
+      {showModal && (
+        <AddFundsModal
+          currentBalance={3200}
+          onClose={() => setShowModal(false)}
+          onAddFunds={handleAddFunds}
+        />
+      )}
       {/* Download PDF Button */}
     </div>
   );

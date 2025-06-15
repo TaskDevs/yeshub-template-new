@@ -41,6 +41,7 @@ const TransactionApiDataProvider = (props) => {
 
   const processGetTransactionOfUser = async () => {
     let response = await getTransactionOfUser();
+    console.log(response.data);
     if (response) {
       let new_list = [];
       response.data.transactions.data.map((item) =>
@@ -56,7 +57,6 @@ const TransactionApiDataProvider = (props) => {
           status: item.status,
         })
       );
-      //console.log(response.data);
       setTransactionList(new_list);
       setAllEarnings({
         ...allEarnings,

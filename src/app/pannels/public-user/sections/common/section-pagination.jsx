@@ -1,70 +1,53 @@
-
 function SectionPagination({ paginationData, action, searchPag }) {
-  const handleGoToPage = (pageNo) => {
-    searchPag ? action(searchPag, pageNo) : action(pageNo);
-  };
-  return (
-    <>
-      <div className="pagination-outer">
-        <div className="pagination-style1">
-          <ul className="clearfix">
-            {paginationData?.current !== "1" && (
-              <li className="prev">
-                <a
-                  onClick={() => {
-                    handleGoToPage(paginationData?.current - 1);
-                  }}
-                >
-                  <span>
-                    {" "}
-                    <i className="fa fa-angle-left" />{" "}
-                  </span>
-                </a>
-              </li>
-            )}
+  const currentPage = paginationData?.current_page;
+  const lastPage = paginationData?.last_page;
+  const totalLinks = paginationData?.links || [];
 
-            {paginationData?.link?.slice(1, -1).map((item, index) => (
+  const handleGoToPage = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= lastPage) {
+      searchPag ? action(searchPag, pageNo) : action(pageNo);
+    }
+  };
+
+  return (
+    <div className="pagination-outer">
+      <div className="pagination-style1">
+        <ul className="clearfix">
+
+          {/* Previous Page */}
+          {paginationData?.prev_page_url && (
+            <li className="prev">
+              <a onClick={() => handleGoToPage(currentPage - 1)}>
+                <i className="fa fa-angle-left" />
+              </a>
+            </li>
+          )}
+
+          {/* Page Numbers */}
+          {totalLinks
+            .filter(link => Number(link.label)) // Only keep numbered pages
+            .map((link, idx) => (
               <li
-                className={paginationData?.current == index + 1 && "active"}
-                key={index}
+                key={idx}
+                className={link.active ? "active" : ""}
               >
-                <a onClick={() => handleGoToPage(index + 1)}>{index + 1}</a>
+                <a onClick={() => handleGoToPage(Number(link.label))}>
+                  {link.label}
+                </a>
               </li>
             ))}
 
-            {paginationData?.link?.length > 3 && (
-              <li>
-                <a className="#" href="#">
-                  <i className="fa fa-ellipsis-h" />
-                </a>
-              </li>
-            )}
-            {paginationData?.link?.length > 4 && (
-              <li>
-                <a onClick={() => handleGoToPage(paginationData?.link?.length)}>
-                  {paginationData?.link?.length}
-                </a>
-              </li>
-            )}
-
-            {paginationData?.current < paginationData?.link?.length && (
-              <li className="next">
-                <a
-                  onClick={() => {
-                    handleGoToPage(paginationData?.current + 1);
-                  }}
-                >
-                  <span>
-                    {" "}
-                    <i className="fa fa-angle-right" />{" "}
-                  </span>
-                </a>
-              </li>
-            )}
-          </ul>
-        </div>
+          {/* Next Page */}
+          {paginationData?.next_page_url && (
+            <li className="next">
+              <a onClick={() => handleGoToPage(currentPage + 1)}>
+                <i className="fa fa-angle-right" />
+              </a>
+            </li>
+          )}
+        </ul>
       </div>
-    </>
+    </div>
   );
 }
 

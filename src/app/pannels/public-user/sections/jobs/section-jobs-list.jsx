@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import SectionPagination from "../common/section-pagination";
 import Loader from "../../../../common/loader";
-import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { JobsCard } from "./job-card";
 
-function SectionJobsList({ processedJobList, actionGetAllJob }) {
-  const { jobLoad, paginationData } = useContext(JobApiData);
+function SectionJobsList({ processedJobList, actionGetAllJob, paginationData  }) {
+ 
 
   //Function to calculate the number of days left
   const calculateDaysLeft = (start_date, end_date) => {
@@ -22,39 +21,31 @@ function SectionJobsList({ processedJobList, actionGetAllJob }) {
     return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days
   };
 
-  
   return (
     <>
       <div>
         <div className="twm-jobs-list-wrap">
-
-          {jobLoad ? (
-            processedJobList.length > 0 ? (
-              processedJobList.map((item, index) => (
-                <JobsCard
-                  key={index}
-                  img={item.employer ? item.employer.logo : item.employer}
-                  title={item.job_title}
-                  duration={item.start_date}
-                  location={item.address}
-                  amount={`GH₵${item.salary}`}
-                  job_type={item.job_type}
-                  days_left={calculateDaysLeft(
-                    item?.start_date,
-                    item?.end_date
-                  )}
-                  link={`/job-detail/${item.id}`}
-                  employerId={item.employer_id}
-                  skills={item.skills}
-                />
-              ))
-            ) : (
-              <span>No Data Available</span>
-            )
-          ) : (
+          {processedJobList.length === 0 ? (
             <Loader />
+          ) : (
+            processedJobList.map((item, index) => (
+              <JobsCard
+                key={index}
+                img={item.employer?.logo || "/default-logo.png"}
+                title={item.job_title}
+                duration={item.start_date}
+                location={item.address}
+                amount={`GH₵${item.salary}`}
+                job_type={item.job_type}
+                days_left={calculateDaysLeft(item.start_date, item.end_date)}
+                link={`/job-detail/${item.id}`}
+                employerId={item.employer_id}
+                skills={item.skills}
+                start_rate={item.start_rate}
+                end_rate={item.end_rate}
+              />
+            ))
           )}
-
         </div>
         <SectionPagination
           action={actionGetAllJob}

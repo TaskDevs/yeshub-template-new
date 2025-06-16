@@ -43,6 +43,19 @@ export const applyForJob = async (data) => {
   }
 };
 
+
+export const AllJoblist = async (data = {}) => {
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}get-posted-jobs`, {
+      params: data,
+    });
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
 // LIST Job
 export const jobList = async (pageNo, userId) => {
   try {
@@ -62,6 +75,7 @@ export const jobList = async (pageNo, userId) => {
     return false;
   }
 };
+
 
 export const jobCompanyInfo = async (id) => {
   try {

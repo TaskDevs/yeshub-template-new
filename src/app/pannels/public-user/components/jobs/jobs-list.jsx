@@ -12,9 +12,7 @@ function JobsListPage() {
   const [paginationData, setPaginationData] = useState({});
 
   // Load external script
-  useEffect(() => {
-    loadScript("js/custom.js");
-  }, []);
+
 
   // ✅ Move this function OUTSIDE of useEffect
    const fetchJobs = async () => {
@@ -46,6 +44,10 @@ function JobsListPage() {
       setProcessedJobListData(transformedJobs);
       setPaginationTotal(res.total);
       setPaginationData(res)
+      
+    if (typeof window.page_loader === "function") {
+      window.page_loader();
+    }
     } else {
       console.warn("No data found in API response", res);
       setProcessedJobListData([]);
@@ -65,6 +67,9 @@ function JobsListPage() {
     showingUpto: "",
   };
 
+    useEffect(() => {
+    loadScript("js/custom.js");
+  }, []);
   return (
     <div className="section-full p-t120 p-b90 site-bg-white">
       <div className="container">

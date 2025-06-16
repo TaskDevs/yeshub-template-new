@@ -150,7 +150,6 @@ export const FreelanceProjectManage = () => {
       const formData = new FormData();
       formData.append("project_id", id);
       formData.append("sender_id", sessionStorage.getItem("chat_id"));
-      formData.append("admin", true);
       formData.append("message", message);
       if (attachment) {
         formData.append("attachment", attachment);

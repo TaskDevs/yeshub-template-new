@@ -53,10 +53,11 @@ function SectionJobsList({
             ))
           )}
         </div>
-        <SectionPagination
-          action={actionGetAllJob}
+       <SectionPagination
           paginationData={paginationData}
+          action={(page) => actionGetAllJob(page)} // make sure `page` is passed
         />
+
       </div>
     </>
   );

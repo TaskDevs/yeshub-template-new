@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight, Eye } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
 import { getUserProposals } from "../../../../context/proposal/proposalApi";
+import ProposalModal from "./offerDetailModal";
 
 // Dummy job data for simulation
 
@@ -17,6 +18,7 @@ export default function Offers() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [proposals, setProposals] = useState(null);
   const [expanded, setExpanded] = useState(false);
+    const [showModal, setShowModal] = useState(false);
   const mappedJobs = proposals
     ? proposals.data.map((proposal) => {
         const userProposal = proposal.proposal || {}; // Avoid undefined errors
@@ -536,7 +538,9 @@ export default function Offers() {
                       </button>
                     </div>
                   </div>
-                  <button className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition">
+                  <button 
+                  onClick={() => setShowModal(true)}
+                  className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition">
                     <Eye className="w-4 h-4" />
                     View
                   </button>
@@ -639,6 +643,7 @@ export default function Offers() {
           </div>
         </aside>
       </div>
+         <ProposalModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }

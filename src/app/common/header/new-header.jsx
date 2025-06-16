@@ -264,7 +264,7 @@ export const Header = ({ isDashboard = true }) => {
     {
       id: "why-yeshub",
       label: "Why YesHub",
-      to: "/why-hub",
+      to: "/why-choose-us",
     },
     {
       id: "manage-finances",

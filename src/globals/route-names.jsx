@@ -54,6 +54,7 @@ export const publicUser = {
     MAINTENANCE: "/under-maintenance",
     COMING: "/coming-soon",
     WHY: "/why-hub",
+    WHYCHOOSEUS:'why-choose-us',
     LOGIN: "/login",
     SIGN_UP: "/sign-up",
     FORGOTPASS: "/forgotton-password",

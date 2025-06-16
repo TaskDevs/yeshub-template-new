@@ -1,77 +1,39 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState} from "react";
 import { loadScript } from "../../../../../globals/constants";
-
 import SectionJobsSidebar2 from "../../sections/jobs/sidebar/section-jobs-sidebar2";
-import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { baseURL } from "../../../../../globals/constants";
 import readableDate from "../../../../../utils/readableDate";
-import { ApplicationApiData } from "../../../../context/application/applicationContextApi";
-import { GlobalApiData } from "../../../../context/global/globalContextApi";
-import { useJobCartStore } from "../../../../../utils/useJobCartStore";
-import toast from "react-hot-toast";
-
+import { JobById } from "../../../../context/jobs/jobsApi";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 function JobDetail1Page() {
-  const token = sessionStorage.getItem("authToken");
   const { id } = useParams();
-  const { jobListData } = useContext(JobApiData);
-  const { handleSubmmitApplication } = useContext(ApplicationApiData);
-  const { isSubmitting } = useContext(GlobalApiData);
   const [job, setJobs] = useState(null);
   const navigate = useNavigate();
-  // const [empListData, setEmpListData] = useState([]);
-  // const [error, setError] = useState(null);
-  const [profile, setProfile] = useState({});
-  const addJob = useJobCartStore((state) => state.addJob);
-  const [save, setSave] = useState(false);
+  const [proposal, setProposal] = useState(0);
 
   useEffect(() => {
-    if (jobListData.length > 0) {
-      let newData = jobListData.find((item) => item.id == id);
-      setProfile(newData);
-    }
-  }, [jobListData, id]);
-
-  useEffect(() => {
-    if (jobListData.length > 0) {
-      let newData = jobListData.find((item) => item.id == id);
-      setJobs(newData);
-    }
-  }, [jobListData, id]);
-
-  sessionStorage.setItem("job_id", job?.id || id);
-
-  console.log("josnss", job);
+    const fetchJobById = async () => {
+      const res = await JobById(id);
+      setJobs(res.job);
+      setProposal(res.proposal_count);
+    };
+    fetchJobById();
+  }, []);
 
   useEffect(() => {
     loadScript("js/custom.js");
   });
 
-  useEffect(() => {
-    console.log("Holding Up");
-  }, ["getEmpListUrl"]);
-
-  const handleSaveJob = () => {
-    if (job) {
-      addJob({
-        id: job.id,
-        title: job.job_title,
-        salary: job.salary,
-        budget: job.budget,
-        company: job?.employer?.company_name,
-        image: job?.employer?.logo,
-        skill: job.skills,
-      });
-
-      setSave(true); // ✅ Update state to "Saved"
-      navigate("/dashboard-candidate/saved-jobs");
-      toast.success("Job successfully saved", {
-        position: "bottom-center",
-        autoClose: 3000,
-      });
-    }
+  const handleSaveJob = (path) => {
+   navigate(path)
   };
+
+  dayjs.extend(relativeTime);
+
+// Assume job.posted_at is a valid ISO string or JS date
+const postedDate = job?.created_at || job?.posted_at;
 
   return (
     <>
@@ -119,22 +81,33 @@ function JobDetail1Page() {
                             />
                           </div>
                           <h4 className="twm-job-title">
-                            {profile?.job_title}
-                            {/* <span className="twm-job-post-duration">
-																/ 1 days ago
-															</span> */}
+                            {job?.title}
+                            <span className="twm-job-post-duration">
+                              / {dayjs(postedDate).fromNow()}
+                            </span>
                           </h4>
+
+                          <p className="items-center bg-green-100 text-green-800 rounded-full">
+                            <i className="fas fa-eye mx-2" />
+                            <span className="font-semibold capitalize">
+                              ({proposal}) Proposals
+                            </span>
+                          </p>
+
                           <p className="twm-job-address text-capitalize">
                             <i className="feather-map-pin" />
-                            {profile?.address}
+                            {job?.employer?.address}
                           </p>
                           <div className="twm-job-self-mid">
                             <div className="twm-job-self-mid-left">
                               <div className="twm-jobs-amount">
-                                {profile?.salary ? (
-                                  <p> Salary: ₵{profile?.salary}</p>
+                                {job?.fixed_rate ? (
+                                  <p> Budget: ₵{job?.fixed_rate}</p>
                                 ) : (
-                                  <p> Budget: ₵{profile?.budget}</p>
+                                  <p>
+                                    Hourly Rate: ₵{job?.hourly_rate_start} - ₵
+                                    {job?.hourly_rate_start}
+                                  </p>
                                 )}
 
                                 {/* <span>/ daily</span> */}
@@ -143,28 +116,20 @@ function JobDetail1Page() {
                             <div className="twm-job-apllication-area">
                               Application ends:{" "}
                               <span className="twm-job-apllication-date">
-                                {/* {profile.end_date} */}
-                                {readableDate(profile?.end_date)}
+                                {readableDate(job?.end_date)}
                               </span>
                             </div>
                           </div>
                           <div className="twm-job-self-bottom">
-                            {token && (
-                              <button
-                                className="site-buttons p-3 m-3 btn btn-danger fw-bold"
-                                onClick={() => handleSaveJob()}
-                              >
-                                {save ? "Saved" : "Save Job"}
-                              </button>
-                            )}
-
+                            
+    
                             <button
                               type="submit"
-                              onClick={() => handleSubmmitApplication()}
+                              onClick={() => handleSaveJob('/login')}
                               className="site-button"
                             >
-                              {" "}
-                              {isSubmitting ? "Submitting" : "Apply Now"}
+                           
+                            Apply Now
                             </button>
                           </div>
                           <div className=""></div>
@@ -173,17 +138,12 @@ function JobDetail1Page() {
                     </div>
                   </div>
                   <h4 className="twm-s-title">Job Description:</h4>
-                  <div dangerouslySetInnerHTML={{ __html: profile?.duty }} />
 
-                  <h4 className="twm-s-title">Requirments:</h4>
-
-                  <div
-                    dangerouslySetInnerHTML={{ __html: profile?.description }}
-                  />
+                  <div dangerouslySetInnerHTML={{ __html: job?.description }} />
                 </div>
               </div>
               <div className="col-lg-4 col-md-12 rightSidebar">
-                <SectionJobsSidebar2 _config={profile} />
+                {job && <SectionJobsSidebar2 _config={job} />}
               </div>
             </div>
           </div>

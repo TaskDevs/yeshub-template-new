@@ -1154,7 +1154,7 @@ All JavaScript fuctions Start
 
 	// > page loader function by = custom.js ========================= //		
 	function page_loader() {
-		$('.loading-area').fadeOut(1000);
+		$('.loading-area').fadeOut(500);
 	}
 
 	/*--------------------------------------------------------------------------------------------

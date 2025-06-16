@@ -56,6 +56,16 @@ export const AllJoblist = async (data = {}) => {
   }
 };
 
+// job by id
+export const JobById = async (id) => {
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}posted-jobs/${id}`)
+    return response.data;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
 // LIST Job
 export const jobList = async (pageNo, userId) => {
   try {

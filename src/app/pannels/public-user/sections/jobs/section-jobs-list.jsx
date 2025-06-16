@@ -1,11 +1,13 @@
 import React from "react";
 import SectionPagination from "../common/section-pagination";
-import Loader from "../../../../common/loader";
 import { JobsCard } from "./job-card";
+import { JobCardSkeleton } from "./skeletonloader";
 
-function SectionJobsList({ processedJobList, actionGetAllJob, paginationData  }) {
- 
-
+function SectionJobsList({
+  processedJobList,
+  actionGetAllJob,
+  paginationData,
+}) {
   //Function to calculate the number of days left
   const calculateDaysLeft = (start_date, end_date) => {
     new Date(start_date);
@@ -26,7 +28,11 @@ function SectionJobsList({ processedJobList, actionGetAllJob, paginationData  })
       <div>
         <div className="twm-jobs-list-wrap">
           {processedJobList.length === 0 ? (
-            <Loader />
+            <>
+              {[...Array(4)].map((_, idx) => (
+                <JobCardSkeleton key={idx} />
+              ))}
+            </>
           ) : (
             processedJobList.map((item, index) => (
               <JobsCard

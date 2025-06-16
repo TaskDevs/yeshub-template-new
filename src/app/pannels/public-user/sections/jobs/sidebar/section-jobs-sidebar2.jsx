@@ -1,40 +1,45 @@
-import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 import { publicUser } from "../../../../../../globals/route-names";
 import SectionSideAdvert from "./section-side-advert";
-import JobZImage from "../../../../../common/jobz-img";
 
-function SectionJobsSidebar2({ _config = {}, showAdvert = true }) {
-  // Prevent accessing undefined properties
-  if (!_config) {
+function SectionJobsSidebar2({ _config, showAdvert = true }) {
+  // Debug mount/unmount
+  useEffect(() => {
+    console.log("Sidebar mounted");
+    return () => {
+      console.log("Sidebar unmounted");
+    };
+  }, []);
+
+  // Prevent rendering if config is not ready
+  if (!_config || Object.keys(_config).length === 0) {
     return <p>Loading job details...</p>;
   }
-console.log(_config.skills)
+
   // Format date safely
-  const formattedDate = _config?.start_date
+  const formattedDate = _config?.created_at
     ? new Intl.DateTimeFormat("en-US", {
         year: "numeric",
         month: "long",
         day: "2-digit",
-      }).format(new Date(_config.start_date))
+      }).format(new Date(_config.created_at))
     : "N/A";
 
-  // Parse skills_id safely
+  // Convert skills string to array
   let skillsArray = [];
   try {
-    skillsArray = _config?.skills; // Default to empty array if parsing fails
-    console.log(skillsArray)
-    if (!Array.isArray(skillsArray)) {
-      skillsArray = [];
+    if (typeof _config.skills === "string") {
+      skillsArray = _config.skills.split(",").map((s) => s.trim());
+    } else if (Array.isArray(_config.skills)) {
+      skillsArray = _config.skills;
     }
   } catch (error) {
     console.error("Error parsing skills:", error);
-    skillsArray = [];
   }
 
   return (
     <>
-    
-      <div className= "side-bar mb-4" >
+      <div className="side-bar mb-4">
         <div className="twm-s-info2-wrap mb-5">
           <div className="twm-s-info2">
             <h4 className="section-head-small mb-4">Job Information</h4>
@@ -44,23 +49,15 @@ console.log(_config.skills)
                 <span className="twm-title">Date Posted</span>
                 <p>{formattedDate}</p>
               </li>
-              {/* <li>
-                <i className="fas fa-eye" />
-                <span className="twm-title">8160 Views</span>
+
+               <li>
+                <i className="fas fa-book" />
+                <span className="twm-title">Job Type</span>
+                <p>{_config.job_type}</p>
               </li>
-              <li>
-                <i className="fas fa-file-signature" />
-                <span className="twm-title">6 Applicants</span>
-              </li> */}
             </ul>
+
             <ul className="twm-job-hilites2">
-              {/* <li>
-                <div className="twm-s-info-inner">
-                  <i className="fas fa-calendar-alt" />
-                  <span className="twm-title">Date Posted</span>
-                  <div className="twm-s-info-discription">{formattedDate}</div>
-                </div>
-              </li> */}
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-map-marker-alt" />
@@ -75,7 +72,7 @@ console.log(_config.skills)
                   <i className="fas fa-user-tie" />
                   <span className="twm-title">Job Title</span>
                   <div className="twm-s-info-discription">
-                    {_config?.job_title || "N/A"}
+                    {_config?.title || "N/A"}
                   </div>
                 </div>
               </li>
@@ -100,18 +97,18 @@ console.log(_config.skills)
               <li>
                 <div className="twm-s-info-inner">
                   <i className="fas fa-money-bill-wave" />
-                  {_config?.salary ? (
+                  {_config?.fixed_rate ? (
                     <>
                       <span className="twm-title">Salary</span>
                       <div className="twm-s-info-discription">
-                        ₵{_config.salary}
+                        ₵{_config.fixed_rate}
                       </div>
                     </>
                   ) : (
                     <>
-                      <span className="twm-title">Budget</span>
+                      <span className="twm-title">Hourly Rate</span>
                       <div className="twm-s-info-discription">
-                        ₵{_config?.budget || "N/A"}
+                        ₵{_config?.hourly_rate_start || 0} - ₵{_config?.hourly_rate_end || 0}
                       </div>
                     </>
                   )}
@@ -120,13 +117,14 @@ console.log(_config.skills)
             </ul>
           </div>
         </div>
+
         {/* Job Skills Section */}
         <div className="widget tw-sidebar-tags-wrap">
           <h4 className="section-head-small mb-4">Job Skills</h4>
           <div className="tagcloud">
             {skillsArray.length > 0 ? (
-              skillsArray.map((skill, index) => (
-                <a href="#" key={index}>
+              skillsArray.map((skill) => (
+                <a href="#" key={skill}>
                   {skill}
                 </a>
               ))
@@ -137,80 +135,15 @@ console.log(_config.skills)
         </div>
       </div>
 
-      {_config?.showJobInfo && (
-        <div className="twm-s-info3-wrap mb-5">
-          <div className="twm-s-info3">
-            <div className="twm-s-info-logo-section">
-              <div className="twm-media">
-                <JobZImage
-                  src="images/jobs-company/pic1.jpg"
-                  alt="Company Logo"
-                />
-              </div>
-              <h4 className="twm-title">Senior Web Designer , Developer</h4>
-            </div>
-            <ul>
-              <li>
-                <div className="twm-s-info-inner">
-                  <i className="fas fa-building" />
-                  <span className="twm-title">Company</span>
-                  <div className="twm-s-info-discription">
-                    Software Development
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="twm-s-info-inner">
-                  <i className="fas fa-mobile-alt" />
-                  <span className="twm-title">Phone</span>
-                  <div className="twm-s-info-discription">+233 560 564561</div>
-                </div>
-              </li>
-              <li>
-                <div className="twm-s-info-inner">
-                  <i className="fas fa-at" />
-                  <span className="twm-title">Email</span>
-                  <div className="twm-s-info-discription">
-                    thewebmaxdemo@gmail.com
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="twm-s-info-inner">
-                  <i className="fas fa-desktop" />
-                  <span className="twm-title">Website</span>
-                  <div className="twm-s-info-discription">
-                    https://themeforest.net
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div className="twm-s-info-inner">
-                  <i className="fas fa-map-marker-alt" />
-                  <span className="twm-title">Address</span>
-                  <div className="twm-s-info-discription">
-                    Independence Avenue No. 10, Accra, Greater Accra Region,
-                    Ghana
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <NavLink to={publicUser.pages.ABOUT} className="site-button">
-              View Profile
-            </NavLink>
-          </div>
-        </div>
-      )}
-
       {/* Advert Section */}
-      {showAdvert ? (
+      {showAdvert && (
         <SectionSideAdvert
           title="Claim Your Dream Job"
           description="Stand out from the crowd—apply now and showcase your skills"
-          link={`${publicUser.jobs.APPLY}`}
+          link={publicUser.jobs.APPLY}
           action="Bid Now"
         />
-      ) : null}
+      )}
     </>
   );
 }

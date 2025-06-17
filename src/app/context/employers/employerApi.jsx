@@ -190,10 +190,11 @@ export const getInterviewInfo = async (id) => {
   }
 };
 
-export const getHiredApplicants = async () => {
+export const getHiredApplicants = async (id) => {
+  console.log(`hired applicant employerId ${id}`);
   try {
     let responseOngetHiredApplicants = await axios.get(
-      `${REACT_BASE_URL}get-hired-applicants`
+      `${REACT_BASE_URL}get-hired-applicants/${id}`
     );
     if (responseOngetHiredApplicants.status == 200) {
       return responseOngetHiredApplicants.data;
@@ -211,6 +212,22 @@ export const changeCandidateStatus = async (data, id) => {
     );
     // console.log(responseOnChangeStatus);
     if (responseOnChangeStatus.status == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const hireCandidate = async (data, id) => {
+  try {
+    let responseOnHireCandidate = await axios.post(
+      `${REACT_BASE_URL}hire-candidate/${id}`,
+      data
+    );
+    if (responseOnHireCandidate.status == 200) {
       return true;
     } else {
       return false;

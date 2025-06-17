@@ -196,9 +196,9 @@ export const FreelanceProjectManage = () => {
                 <h4 className="font-semibold text-md">
                   Team Members ({projectDetails?.team?.length})
                 </h4>
-                <span className="text-sm text-green-600 cursor-pointer">
+                {/* <span className="text-sm text-green-600 cursor-pointer">
                   + Add Member
-                </span>
+                </span> */}
               </div>
               <div className="relative mb-4">
                 <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -231,13 +231,13 @@ export const FreelanceProjectManage = () => {
                       <span className="text-sm text-gray-600 block">
                         Last active: Today
                       </span>
-                      <span className="text-sm text-gray-600 block">
+                      {/* <span className="text-sm text-gray-600 block">
                         $45/hour
-                      </span>
+                      </span> */}
                     </div>
-                    <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
+                    {/* <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
                       Active
-                    </span>
+                    </span> */}
                   </div>
 
                   <div className="flex justify-between">
@@ -429,13 +429,13 @@ export const FreelanceProjectManage = () => {
                   Task Management
                 </h4>
 
-                <button
+                {/* <button
                   onClick={() => setShowTaskModal(true)}
                   className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700"
                 >
                   + Add Task
-                </button>
+                </button> */}
               </div>
 
               <h4 className="text-green-500 text-md">Kanban Board</h4>

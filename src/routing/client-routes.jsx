@@ -35,6 +35,7 @@ function ClientRoutes() {
       />
       <Route path={client.PAYMENT_HISTORY} element={<PaymentHistoryPage />} />
       <Route path={client.MANAGE_JOBS_DETAILS} element={<JobListing />} />
+      <Route path={client.CANDIDATE_DETAILS} element={ClientfreelancerDetail} />
       {/* Add other client routes here */}
       <Route path="*" element={<Error404Page />} />
     </Routes>

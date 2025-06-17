@@ -75,7 +75,7 @@ export const AllJoblist = async (data = {}) => {
 // job by id
 export const JobById = async (id) => {
   try {
-    const response = await axios.get(`${REACT_BASE_URL}posted-jobs/${id}`)
+    const response = await axios.get(`${REACT_BASE_URL}posted-jobs/${id}`);
     return response.data;
   } catch (err) {
     console.error(err);
@@ -102,12 +102,12 @@ export const jobList = async (pageNo, userId) => {
   }
 };
 
-
 export const jobCompanyInfo = async (id) => {
   try {
     let responseOnJobInfo = await axios.get(
       `${REACT_BASE_URL}get-posted-jobs-info/${id} `
     );
+    console.log(responseOnJobInfo);
     return responseOnJobInfo;
   } catch (err) {
     console.log(err);
@@ -214,7 +214,7 @@ export const jobProfile = async (id) => {
     let responseOnJobProfile = await axios.get(
       `${REACT_BASE_URL}posted-jobs/${id}`
     );
-
+    console.log(responseOnJobProfile.data);
     return responseOnJobProfile.data;
     // if (responseOnJobProfile.status === SUCCESS_STATUS) {
     //   return responseOnJobProfile.data;

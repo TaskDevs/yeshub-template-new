@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import AddTaskModal from "./add-task-modal";
 import { userId } from "../../../../../globals/constants";
+import { getDaysLeft } from "../../../../../utils/dateUtils";
 
 export const TalentPool = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +18,7 @@ export const TalentPool = () => {
     processSendGroupChat,
     processManageProject,
     processProjectInfoData,
+    // processGetClientProjects,
   } = useContext(EmployerApiData);
   const [projectDetails, setProjectDetails] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
@@ -51,22 +53,29 @@ export const TalentPool = () => {
   useEffect(() => {
     // setInitialTasks();
     //console.log(projectInfo);
-    setInitialTasks(projectInfo?.tasks);
+    projectInfo?.tasks?.length > 0 && setInitialTasks(projectInfo?.tasks);
     setCheckedItems(projectInfo?.deliverables);
     //console.log(projectInfo?.deliverables);
   }, [projectInfo]);
 
   const toggleCheck = (milestoneIndex, deliverableIndex) => {
     const key = `${milestoneIndex}-${deliverableIndex}`;
-    setCheckedItems((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+
+    setCheckedItems((prev = {}) => {
+      const newValue = Object.prototype.hasOwnProperty.call(prev, key)
+        ? !prev[key]
+        : true;
+
+      return {
+        ...prev,
+        [key]: newValue,
+      };
+    });
   };
 
   useEffect(() => {
-    console.log(projectChats);
-  }, [projectChats]);
+    console.log(projectDetails);
+  }, [projectDetails]);
 
   const handleRemoveTask = (id) => {
     setTaskAssignment((prevAssigns) =>
@@ -103,7 +112,9 @@ export const TalentPool = () => {
       { teamMemberId: task.assignedTo, taskId: newTask.id },
     ]);
 
-    setInitialTasks([...initialTasks, newTask]);
+    initialTasks?.length > 0
+      ? setInitialTasks([...initialTasks, newTask])
+      : setInitialTasks([newTask]);
   };
 
   const handleSytemChanges = async () => {
@@ -190,7 +201,10 @@ export const TalentPool = () => {
                 <h4 className="font-semibold text-md">
                   Team Members ({projectDetails?.team?.length})
                 </h4>
-                <span className="text-sm text-green-600 cursor-pointer">
+                <span
+                  className="text-sm text-green-600 cursor-pointer"
+                  onClick={() => alert("Work in progress")}
+                >
                   + Add Member
                 </span>
               </div>
@@ -224,9 +238,6 @@ export const TalentPool = () => {
                       </span>
                       <span className="text-sm text-gray-600 block">
                         Last active: Today
-                      </span>
-                      <span className="text-sm text-gray-600 block">
-                        $45/hour
                       </span>
                     </div>
                     <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
@@ -295,7 +306,15 @@ export const TalentPool = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Timeline</span>
                   <span className="text-gray-800 text-xl font-semibold block mb-2">
-                    45 days left
+                    {projectDetails?.start_date && projectDetails?.end_date && (
+                      <p>
+                        {getDaysLeft(
+                          projectDetails.start_date,
+                          projectDetails.end_date
+                        )}{" "}
+                        days left
+                      </p>
+                    )}
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Progress</span>
@@ -311,7 +330,7 @@ export const TalentPool = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Tasks</span>
                   <span className="text-gray-600 text-xl font-semibold block mb-2">
-                    0 / {initialTasks?.length}
+                    0 / {initialTasks?.length || "0"}
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Completed</span>
@@ -346,69 +365,113 @@ export const TalentPool = () => {
                   Project Milestones
                 </h3>
                 <ol className="relative border-l border-gray-300">
-                  {projectDetails?.milestones?.map((item, index) => (
-                    <li className="mb-10 ml-6" key={index}>
-                      <span
-                        className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                         bg-green-100 rounded-full ring-8 ring-white`}
-                      >
-                        🧾
-                      </span>
-                      <div className="rounded-xl bg-gray-100 h-30 p-2">
-                        <h4
-                          className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                        >
-                          {item.name}
-                          <span
-                            className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                          >
-                            {item.due_date}
-                          </span>
-                        </h4>
-                        <p className="text-xs text-gray-500 mb-2">
-                          {item.description}
-                        </p>
-                        <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
-                          Ongoing
+                  {projectDetails?.milestones?.map((item, index) => {
+                    const deliverables =
+                      item?.deliverables &&
+                      typeof item.deliverables === "object"
+                        ? item.deliverables
+                        : {};
+
+                    const deliverableKeys = Object.keys(deliverables);
+                    const totalDeliverables = deliverableKeys.length;
+
+                    const checked = checkedItems || {}; // fallback if undefined
+                    const completedDeliverables = deliverableKeys.filter(
+                      (_, dIndex) => !!checked[`${index}-${dIndex}`]
+                    ).length;
+
+                    const isComplete =
+                      totalDeliverables > 0 &&
+                      totalDeliverables === completedDeliverables;
+
+                    return (
+                      <li className="mb-10 ml-6" key={index}>
+                        <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-100 rounded-full ring-8 ring-white">
+                          🧾
                         </span>
-                        <hr className="mt-4" />
-                        <div className="space-y-3">
-                          {item.deliverables &&
-                            Object.keys(item.deliverables)?.map(
-                              (deliverable, deliverableIndex) => {
-                                const key = `${index}-${deliverableIndex}`;
-                                return (
-                                  <div
-                                    key={key}
-                                    className="flex items-center space-x-2"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      id={`check-${key}`}
-                                      checked={!!checkedItems?.[key]}
-                                      onChange={() =>
-                                        toggleCheck(index, deliverableIndex)
-                                      }
-                                      className="h-4 w-4 text-green-600 rounded focus:ring-0"
-                                    />
-                                    <label
-                                      htmlFor={`check-${key}`}
-                                      className={`text-sm cursor-pointer transition ${
-                                        checkedItems?.[key]
-                                          ? "font-bold text-green-600 line-through"
-                                          : "text-gray-800"
-                                      }`}
-                                    >
-                                      {item.deliverables[deliverable]}
-                                    </label>
-                                  </div>
-                                );
-                              }
+
+                        <div className="rounded-xl bg-gray-100 h-30 p-2">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="text-gray-700 font-semibold text-sm flex items-center">
+                              {item.name}
+                              <span className="bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded">
+                                {item.due_date}
+                              </span>
+                            </h4>
+                            {/* Assigned person */}
+                            {item.assignedTo && (
+                              <span className="text-xs text-gray-600 bg-yellow-100 px-2 py-0.5 rounded">
+                                Assigned:{" "}
+                                {
+                                  projectDetails?.team?.filter(
+                                    (idx) => idx.id == item.assignedTo
+                                  )[0]?.firstname
+                                }
+                              </span>
                             )}
+                          </div>
+
+                          <p className="text-xs text-gray-500 mb-2">
+                            {item.description}
+                          </p>
+                          <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
+                            Ongoing
+                          </span>
+
+                          <hr className="mt-4" />
+
+                          <div className="space-y-3">
+                            {item.deliverables &&
+                              Object.keys(item.deliverables).map(
+                                (deliverable, deliverableIndex) => {
+                                  const key = `${index}-${deliverableIndex}`;
+                                  return (
+                                    <div
+                                      key={key}
+                                      className="flex items-center space-x-2"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        id={`check-${key}`}
+                                        checked={!!checkedItems?.[key]}
+                                        onChange={() =>
+                                          toggleCheck(index, deliverableIndex)
+                                        }
+                                        className="h-4 w-4 text-green-600 rounded focus:ring-0"
+                                      />
+                                      <label
+                                        htmlFor={`check-${key}`}
+                                        className={`text-sm cursor-pointer transition ${
+                                          checkedItems?.[key]
+                                            ? "font-bold text-green-600 line-through"
+                                            : "text-gray-800"
+                                        }`}
+                                      >
+                                        {item.deliverables[deliverable]}
+                                      </label>
+                                    </div>
+                                  );
+                                }
+                              )}
+                          </div>
+
+                          {/* ✅ Payout Button */}
+                          <div className="mt-4 text-right">
+                            <button
+                              disabled={!isComplete}
+                              className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
+                                isComplete
+                                  ? "bg-green-600 text-white hover:bg-green-700"
+                                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                              }`}
+                            >
+                              Payout
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
+                      </li>
+                    );
+                  })}
                 </ol>
               </div>
             </div>
@@ -458,16 +521,27 @@ export const TalentPool = () => {
                           &times;
                         </button>
 
-                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.category}
-                        </span>
+                        <h4 className="text-gray-700 mb-2 font-semibold">
+                          {item.title}
+                        </h4>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
+                        <hr className="my-2" />
                         <div className="flex justify-between text-sm text-gray-500">
                           <span>{item.assignedTo}</span>
                           <span>{item.date}</span>
+                        </div>
+                        <div className="flex gap-2 mt-4">
+                          <button
+                            onClick={() =>
+                              handleStatusChange(item.id, "Progress")
+                            }
+                            className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                          >
+                            Move
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -490,10 +564,10 @@ export const TalentPool = () => {
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4"
                         key={item.id}
                       >
-                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.category}
-                        </span>
+                        <h4 className="text-gray-700 mb-2 font-semibold">
+                          {item.title}
+                        </h4>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
@@ -502,6 +576,27 @@ export const TalentPool = () => {
                             {item.assignedTo}
                           </span>
                           <span className="text-gray-500 text-sm">Jun 5</span>
+                        </div>
+                        <hr className="my-2" />
+                        <div>
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Fresh")
+                              }
+                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                            >
+                              Revert
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Review")
+                              }
+                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                            >
+                              Move
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -523,10 +618,10 @@ export const TalentPool = () => {
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4"
                         key={item.id}
                       >
-                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.status}
-                        </span>
+                        <h4 className="text-gray-700 mb-2 font-semibold">
+                          {item.title}
+                        </h4>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
@@ -581,10 +676,10 @@ export const TalentPool = () => {
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4"
                         key={item.id}
                       >
-                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.category}
-                        </span>
+                        <h4 className="text-gray-700 mb-2 font-semibold">
+                          {item.title}
+                        </h4>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
@@ -593,6 +688,18 @@ export const TalentPool = () => {
                             {item.assignedTo}
                           </span>
                           <span className="text-gray-500 text-sm">Jun 5</span>
+                        </div>
+                        <div>
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Review")
+                              }
+                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                            >
+                              Revert
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}

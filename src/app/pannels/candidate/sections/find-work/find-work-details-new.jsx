@@ -31,7 +31,8 @@ function FindWorkDetails() {
   const aProfile = jobListData.find((job) => job.id === Number(id));
 
   useEffect(() => {
-    processGetAllJob(1, userId);
+    // processGetAllJob(1, userId);
+    console.log();
   }, []);
 
   useEffect(() => {

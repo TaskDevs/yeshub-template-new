@@ -26,7 +26,6 @@ import JobDetail1Page from "../app/pannels/public-user/components/jobs/job-detai
 import JobDetail2Page from "../app/pannels/public-user/components/jobs/job-detail2";
 import ApplyJobPage from "../app/pannels/public-user/components/jobs/apply-job";
 import OnBoardPage from "../app/pannels/public-user/onboard/onboard";
-import HowYesHubWorks from "../app/pannels/employer/components/why/why";
 
 import EmployersGridPage from "../app/pannels/public-user/components/employers/emp-grid";
 import EmployersListPage from "../app/pannels/public-user/components/employers/emp-list";
@@ -78,6 +77,7 @@ import FreelancerDetail from "../app/pannels/public-user/sections/find-talent/fr
 import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
 import NewAuthForm from "../app/pannels/public-user/components/pages/log-form";
 import PaystackCallback from "../app/pannels/employer/components/callback/paystackCallback";
+import WhyChooseUs from "../app/pannels/public-user/components/pages/WhyChooseUs";
 
 function PublicUserRoutes() {
   return (
@@ -134,7 +134,7 @@ function PublicUserRoutes() {
           element={<EmployersDetail2Page />}
         />
         <Route path={publicUser.pages.ABOUT} element={<AboutUsPage />} />
-        <Route path={publicUser.pages.WHY} element={<HowYesHubWorks />} />
+         <Route path={publicUser.pages.WHYCHOOSEUS} element={<WhyChooseUs />} />
         <Route path={publicUser.pages.PRICING} element={<PricingPage />} />
         <Route path={publicUser.pages.ERROR404} element={<Error404Page />} />
         <Route path={publicUser.pages.FAQ} element={<FaqPage />} />

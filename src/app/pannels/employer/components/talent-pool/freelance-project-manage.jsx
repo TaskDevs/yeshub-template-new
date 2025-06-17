@@ -5,6 +5,9 @@ import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import AddTaskModal from "./add-task-modal";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import AvatarGroup from "@mui/material/AvatarGroup";
 
 export const FreelanceProjectManage = () => {
   const { freelanceProjectList } = useContext(FreelanceApiData);
@@ -272,7 +275,7 @@ export const FreelanceProjectManage = () => {
                       {`${projectDetails?.start_date} - ${projectDetails?.end_date}`}
                     </span>
                   </div>
-                  <button className="bg-gray-300 text-white rounded px-4 py-2 text-sm hover:bg-gray-200">
+                  <button className="bg-green-600 text-white rounded px-4 py-2 text-sm hover:bg-gray-300">
                     Project Settings
                   </button>
                 </div>
@@ -333,14 +336,18 @@ export const FreelanceProjectManage = () => {
                     {projectDetails?.team?.length} members
                   </span>
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm text-gray-400">Team</span>
-                    <span className="text-sm text-gray-400"></span>
-                  </div>
-                  <div className="w-full h-2 bg-gray-200 rounded-full">
-                    <div
-                      className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `0%` }}
-                    />
+                    <Stack spacing={2}>
+                      <AvatarGroup max={3} spacing="small">
+                        {projectDetails?.team?.map((member, index) => (
+                          <Avatar
+                            key={index}
+                            alt={member.name}
+                            src={member.profile_image}
+                            sx={{ width: 30, height: 30}} // Smaller size
+                          />
+                        ))}
+                      </AvatarGroup>
+                    </Stack>
                   </div>
                 </div>
               </div>

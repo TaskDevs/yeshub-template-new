@@ -48,12 +48,29 @@ export const AllJoblist = async (data = {}) => {
     const response = await axios.get(`${REACT_BASE_URL}get-posted-jobs`, {
       params: data,
     });
-    return response.data;
-  } catch (err) {
-    console.error(err);
-    return false;
+    return response?.data ?? {};
+  } catch (error) {
+    console.error("Error fetching job list:", error);
+    return {
+      data: [],
+      current_page: 1,
+      last_page: 1,
+      total: 0,
+    };
   }
 };
+
+// export const AllJoblist = async (data = {}) => {
+//   try {
+//     const response = await axios.get(`${REACT_BASE_URL}get-posted-jobs`, {
+//       params: data,
+//     });
+//     return response.data;
+//   } catch (err) {
+//     console.error(err);
+//     return false;
+//   }
+// };
 
 // job by id
 export const JobById = async (id) => {

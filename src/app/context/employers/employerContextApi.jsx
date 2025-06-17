@@ -20,6 +20,7 @@ import {
   getCompanyPostedJobs,
   projectInfoData,
   checkIfCompanyExist,
+  hireCandidate,
   setInterview,
   sendGroupChat,
   companyInfo,
@@ -238,7 +239,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processGetHiredApplicants = async () => {
-    let response = await getHiredApplicants();
+    let response = await getHiredApplicants(userId);
     if (response) {
       let newData = [];
       response.data.map((item) => newData.push(item.user));
@@ -254,6 +255,18 @@ const EmployerApiDataProvider = (props) => {
         prev.map((item) =>
           item.id == id ? { ...item, stage: data.status } : item
         )
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const processHireCandidate = async (data, id) => {
+    let response = await hireCandidate(data, id);
+    if (response) {
+      setApplicants((prev) =>
+        prev.map((item) => (item.id == id ? { ...item, stage: "hired" } : item))
       );
       return true;
     } else {
@@ -525,6 +538,7 @@ const EmployerApiDataProvider = (props) => {
         processGetProjectChat,
         processSendGroupChat,
         processGetClientProjects,
+        processHireCandidate,
         clientProjectStatus,
       }}
     >

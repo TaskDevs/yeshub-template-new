@@ -4,7 +4,8 @@ import { EmployerApiData } from "../../../../context/employers/employerContextAp
 import { formatDate } from "../../../../../utils/dateUtils";
 import { userId } from "../../../../../globals/constants";
 import InterviewModal from "./interview-modal";
-import MessageModal from "./message-modal";
+import SalaryModal from "./SalaryModal";
+//import MessageModal from "./message-modal";
 import {
   EllipsisVertical,
   Eye,
@@ -21,7 +22,8 @@ export default function JobApplicant() {
     processGetApplicantsOfJobPosted,
     applicants,
     totalApplicants,
-    processChangeCandidateStatus,
+    // processChangeCandidateStatus,
+    processHireCandidate,
     processGetInterviewInfo,
   } = useContext(EmployerApiData);
   const tabs = ["Job Details", "Applicants", "Activity History"];
@@ -29,12 +31,14 @@ export default function JobApplicant() {
   const [activeTab, setActiveTab] = useState("Job Details");
   const [selected, setSelected] = useState("all");
   const [candidateData, setCandidateData] = useState({});
+  const [candidateSalaryData, setCandidateSalaryData] = useState({});
   const [value, setValue] = useState(50);
   const [openMenu, setOpenMenu] = useState(null);
   const [interviewStatus, setInterviewStatus] = useState(null);
   const [isInterviewOpen, setIsInterviewOpen] = useState(false);
-  const [isMessageOpen, setIsMessageOpen] = useState(false);
-  const [messageInfo, setMessageInfo] = useState({});
+  const [isSalaryOpen, setIsSalaryOpen] = useState(false);
+  // const [isMessageOpen, setIsMessageOpen] = useState(false);
+  //const [messageInfo, setMessageInfo] = useState({});
 
   const navigate = useNavigate();
 
@@ -48,7 +52,7 @@ export default function JobApplicant() {
   ];
 
   const getStatusClasses = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "pending":
         return "text-purple-600 bg-purple-200";
       case "rejected":
@@ -83,10 +87,10 @@ export default function JobApplicant() {
         handleDownloadCv(item);
         break;
       case "hired":
-        handleStatus(item, "hired");
+        handleHiredStatus(item);
         break;
       case "rejected":
-        handleStatus(item, "rejected");
+        handleRejectStatus(item, "rejected");
         break;
       case "delete":
         handleDelete(item);
@@ -133,15 +137,15 @@ export default function JobApplicant() {
     setIsInterviewOpen(true);
   };
 
-  const handleOpenMessageModal = (item) => {
-    let newData = {
-      receiver_id: item.user_id,
-      sender_id: userId,
-      freelancer_name: item?.user?.firstname + " " + item?.user?.lastname,
-    };
-    setMessageInfo(newData);
-    setIsMessageOpen(true);
-  };
+  // const handleOpenMessageModal = (item) => {
+  //   let newData = {
+  //     receiver_id: item.user_id,
+  //     sender_id: userId,
+  //     freelancer_name: item?.user?.firstname + " " + item?.user?.lastname,
+  //   };
+  //   setMessageInfo(newData);
+  //   setIsMessageOpen(true);
+  // };
 
   const handleViewInterviewData = (item) => {
     setInterviewStatus("view");
@@ -149,14 +153,27 @@ export default function JobApplicant() {
     setIsInterviewOpen(true);
   };
 
-  const handleStatus = (item, status) => {
+  const handleHiredStatus = (item) => {
     let newData = {
+      employer_id: userId,
       proposal_id: item.id,
-      status: status,
+      freelance_id: item.user_id,
+      job_id: item.job_id,
     };
     // console.log(newData);
-    let response = processChangeCandidateStatus(newData, item.id);
-    if (response) {
+    setCandidateSalaryData(newData);
+    // console.log(item);
+    setIsSalaryOpen(true);
+  };
+
+  const handleRejectStatus = () => {
+    console.log("We are dealing some issues today");
+  };
+
+  const handleHire = async (data) => {
+    console.log(data);
+    let response = await processHireCandidate(data, data.proposal_id);
+    if (response == true) {
       Swal.fire({
         position: "center",
         icon: "success",
@@ -472,8 +489,8 @@ export default function JobApplicant() {
                           item?.stage
                         )}`}
                       >
-                        {item?.stage.charAt(0).toUpperCase() +
-                          item?.stage.slice(1)}
+                        {item?.stage?.charAt(0).toUpperCase() +
+                          item?.stage?.slice(1)}
                       </span>
                     </div>
                     <div className="w-1/6 relative">
@@ -497,13 +514,13 @@ export default function JobApplicant() {
                         </button>
                       )}
 
-                      <button
+                      {/* <button
                         className="border bg-gray-300 text-gray-600 rounded-md px-4 py-2 
                        text-sm hover:bg-gray-200 mb-2 block"
                         onClick={() => handleOpenMessageModal(item)}
                       >
                         Message
-                      </button>
+                      </button> */}
                       <button
                         className="border bg-gray-300 text-gray-600 rounded-md px-4 py-2 
                        text-sm hover:bg-gray-200 block"
@@ -513,7 +530,7 @@ export default function JobApplicant() {
                       </button>
 
                       {openMenu === index && (
-                        <div className="absolute right-0 top-20 z-50 w-44 bg-white border rounded-md shadow-lg py-2">
+                        <div className="absolute right-0 top-10 z-50 w-44 bg-white border rounded-md shadow-lg py-2">
                           <button
                             onClick={() => handleMenuAction("view", item)}
                             className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
@@ -630,11 +647,19 @@ export default function JobApplicant() {
         candidateData={candidateData}
         status={interviewStatus}
       />
-      <MessageModal
+      {/* <MessageModal
         isOpen={isMessageOpen}
         onClose={() => setIsMessageOpen(false)}
         messageData={messageInfo}
-      />
+      /> */}
+      {isSalaryOpen && (
+        <SalaryModal
+          isOpen={isSalaryOpen}
+          onClose={() => setIsSalaryOpen(false)}
+          candidateData={candidateSalaryData}
+          action={handleHire}
+        />
+      )}
     </div>
   );
 }

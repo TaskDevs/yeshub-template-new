@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-const SalaryModal = ({ onClose, onSave }) => {
+const SalaryModal = ({ onClose, candidateData, action }) => {
   const [amount, setAmount] = useState("");
-  const [paymentType, setPaymentType] = useState("Monthly");
+  const [paymentType, setPaymentType] = useState("Milestones");
 
   const handleSubmit = () => {
     if (!amount || isNaN(amount)) {
@@ -12,10 +12,10 @@ const SalaryModal = ({ onClose, onSave }) => {
 
     const salaryData = {
       amount,
-      paymentType,
+      payment_type: paymentType,
     };
 
-    onSave(salaryData); // Callback to parent
+    action({ ...candidateData, ...salaryData }); // Callback to parent
     onClose(); // Close modal
   };
 
@@ -51,8 +51,8 @@ const SalaryModal = ({ onClose, onSave }) => {
               onChange={(e) => setPaymentType(e.target.value)}
               className="w-full px-4 py-2 mt-1 border rounded-md"
             >
-              <option value="Monthly">Monthly</option>
-              <option value="Per Project">Per Project</option>
+              {/* <option value="Monthly">Monthly</option>
+              <option value="Per Project">Per Project</option> */}
               <option value="Milestone">Milestone</option>
             </select>
           </div>

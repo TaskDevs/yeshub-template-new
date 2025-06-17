@@ -31,7 +31,7 @@ import InvoicePreview from "../app/pannels/candidate/sections/finances/invoice-p
 import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoice-details";
 import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
 import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
-import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-datails";
+import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-details";
 import { FreelanceProjectManage } from "../app/pannels/employer/components/talent-pool/freelance-project-manage";
 
 import { isAuthenticated } from "./auth";

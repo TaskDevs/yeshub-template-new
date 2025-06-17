@@ -64,13 +64,21 @@ export default function CreateProject() {
       dueDate: "",
       description: "",
       deliverables: [""],
+      assignedTo: "",
       isOn: false,
     },
   ]);
 
   useEffect(() => {
+    //selectedTeamData([]);
     processGetHiredApplicants();
   }, []);
+
+  // const teamMembers = [
+  //   { id: 1, name: "John Doe" },
+  //   { id: 2, name: "Sarah Smith" },
+  //   { id: 3, name: "Kwame Boateng" },
+  // ];
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -122,6 +130,7 @@ export default function CreateProject() {
         dueDate: "",
         description: "",
         deliverables: [""],
+        assignedTo: "",
         isOn: false,
       },
     ]);
@@ -172,7 +181,7 @@ export default function CreateProject() {
   };
 
   const handleAddTeamMember = (item) => {
-    let data = processHiredApplicants.filter((item) => item.id !== item.id);
+    let data = processHiredApplicants.filter((a) => a.id !== item.id);
     setProcessHiredApplicants(data);
     setSelectedTeamData([...selectedTeamData, item]);
   };
@@ -211,6 +220,7 @@ export default function CreateProject() {
         due_date: m.dueDate,
         description: m.description,
         deliverables: m.deliverables.filter((d) => d), // Remove empty
+        assignedTo: m.assignedTo,
         is_on: m.isOn,
       })),
       ...formData, // e.g., budget_notes, or any other extras
@@ -455,21 +465,16 @@ export default function CreateProject() {
                           <span className="text-sm text-gray-500 block">
                             Role in Project
                           </span>
-                          <select
+                          <input
+                            type="text"
                             className="w-full border rounded-md px-3 py-2 mt-2 text-sm"
                             name="role"
+                            placeholder="Enter a role"
                             value={item.role || ""}
                             onChange={(e) =>
                               handleRoleChange(index, e.target.value)
                             }
-                          >
-                            <option value="">Select a role</option>
-                            {category.map((role, idx) => (
-                              <option key={idx} value={role}>
-                                {role}
-                              </option>
-                            ))}
-                          </select>
+                          />
                         </div>
                       </div>
                     </div>
@@ -605,6 +610,26 @@ export default function CreateProject() {
                     className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none focus:ring-2 focus:ring-green-500 focus:outline-none"
                     required
                   />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm text-gray-700">
+                    Assign Team Member
+                  </label>
+                  <select
+                    value={milestone.assignedTo || ""}
+                    onChange={(e) =>
+                      handleMilestoneChange(index, "assignedTo", e.target.value)
+                    }
+                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
+                  >
+                    <option value="">-- Select a team member --</option>
+                    {selectedTeamData.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {`${item.firstname + " " + item.lastname}`}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <h4 className="text-sm text-gray-500">Deliverables</h4>

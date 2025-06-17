@@ -38,10 +38,10 @@ const JobListing = () => {
   const navigate = useNavigate();
   const [selectedApplicant, setSelectedApplicant] = useState(null);
 
-  const handleMessageClick = (applicant) => {
-    setSelectedApplicant(applicant);
-    setModalOpen(true);
-  };
+  // const handleMessageClick = (applicant) => {
+  //   setSelectedApplicant(applicant);
+  //   setModalOpen(true);
+  // };
   const [experienceFilter, setExperienceFilter] = useState(5);
   const [statusFilter, setStatusFilter] = useState("All");
   const [skillFilter, setSkillFilter] = useState([]);
@@ -547,12 +547,12 @@ const JobListing = () => {
                               </div>
                             )}
                           </div>
-                          <button
+                          {/* <button
                             onClick={() => handleMessageClick(applicant)}
                             className="border px-3 py-1 text-xs rounded-md"
                           >
                             Message
-                          </button>
+                          </button> */}
                           <button className="border px-2 py-1 rounded-md">
                             <MoreVertical size={14} />
                           </button>

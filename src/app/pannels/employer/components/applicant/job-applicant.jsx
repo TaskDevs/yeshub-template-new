@@ -108,7 +108,7 @@ export default function JobApplicant() {
 
   const handleView = (item) => {
     // Example: open a modal or navigate to details
-    navigate(`/dashboard-client/candidate-details/${item.user_id}`);
+    navigate(`/dashboard-client/candidate-details/${item.user_id}/${item.id}`);
     console.log("Viewing item:", item);
     //navigate(`/dashboard-client/job-applicant/${job.id}`); // if using React Router
   };

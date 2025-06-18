@@ -290,7 +290,7 @@ export const TalentPool = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Budget</span>
                   <span className="text-gray-800 text-xl font-semibold block mb-2">
-                    GH {projectDetails.total_budget}
+                    GH {projectDetails?.total_budget}
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Used: 0</span>
@@ -309,8 +309,8 @@ export const TalentPool = () => {
                     {projectDetails?.start_date && projectDetails?.end_date && (
                       <p>
                         {getDaysLeft(
-                          projectDetails.start_date,
-                          projectDetails.end_date
+                          projectDetails?.start_date,
+                          projectDetails?.end_date
                         )}{" "}
                         days left
                       </p>

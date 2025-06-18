@@ -56,7 +56,7 @@ const EmployerApiDataProvider = (props) => {
   const [totalApplicants, setTotalApplicants] = useState(0);
   const [notifyMessage, setNotifyMessage] = useState(0);
   const [projectChats, setProjectChats] = useState([]);
-  const [clientProjectStatus, setClientProjectStatus] = useState(false);
+  const [clientProjectStatus, setClientProjectStatus] = useState([]);
 
   const processGetUserProjects = async () => {
     try {
@@ -144,7 +144,7 @@ const EmployerApiDataProvider = (props) => {
           "project_ids",
           JSON.stringify(response.project_ids)
         );
-        setClientProjectStatus(true);
+        setClientProjectStatus(response.project_ids);
       }
     } catch (err) {
       console.log(err);

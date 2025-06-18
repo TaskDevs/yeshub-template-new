@@ -558,3 +558,20 @@ export const deleteJob = async (id) => {
     console.error(err);
   }
 };
+
+// MAKE PAYOUT
+export const makePayout = async (data) => {
+  try {
+    let responseOnMakePayout = await axios.post(
+      `${REACT_BASE_URL}make-payout`,
+      data
+    );
+    if (responseOnMakePayout.status == 200) {
+      return responseOnMakePayout.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};

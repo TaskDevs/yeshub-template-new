@@ -19,6 +19,7 @@ export const TalentPool = () => {
     processManageProject,
     processProjectInfoData,
     // processGetClientProjects,
+    //processMakePayout,
   } = useContext(EmployerApiData);
   const [projectDetails, setProjectDetails] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
@@ -72,10 +73,6 @@ export const TalentPool = () => {
       };
     });
   };
-
-  useEffect(() => {
-    console.log(projectDetails);
-  }, [projectDetails]);
 
   const handleRemoveTask = (id) => {
     setTaskAssignment((prevAssigns) =>
@@ -142,6 +139,21 @@ export const TalentPool = () => {
         text: "System failed to update. Please try again.",
       });
     }
+  };
+
+  const handlePayout = async (item) => {
+    let data = {
+      freelance_id: item.assigned,
+      project_id: id,
+      employer_id: userId,
+      project_budget: projectDetails?.total_budget,
+      milestone_completed: item,
+    };
+
+    console.log(data);
+
+    //let res = await processMakePayout(data);
+    //console.log(response);
   };
 
   const handleChange = (e) => {
@@ -459,6 +471,7 @@ export const TalentPool = () => {
                           <div className="mt-4 text-right">
                             <button
                               disabled={!isComplete}
+                              onClick={() => handlePayout(item)}
                               className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
                                 isComplete
                                   ? "bg-green-600 text-white hover:bg-green-700"

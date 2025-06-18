@@ -8,6 +8,7 @@ import {
   addExperience,
   addJobPost,
   manageProject,
+  makePayout,
   createProject,
   changeCandidateStatus,
   getClientDashboardStats,
@@ -158,6 +159,13 @@ const EmployerApiDataProvider = (props) => {
     let response = await projectInfoData(id);
     if (response) {
       setProjectInfo(response.project_info);
+    }
+  };
+
+  const processMakePayout = async (data) => {
+    let response = await makePayout(data);
+    if (response) {
+      console.log(response);
     }
   };
 
@@ -563,6 +571,7 @@ const EmployerApiDataProvider = (props) => {
         projectChats,
         setProjectChats,
         processGetProjectChat,
+        processMakePayout,
         processSendGroupChat,
         processGetClientProjects,
         processHireCandidate,

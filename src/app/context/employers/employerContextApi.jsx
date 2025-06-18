@@ -4,6 +4,7 @@ import {
   addEmployer,
   addCertification,
   getInterviewInfo,
+  getProposalInfo,
   addExperience,
   addJobPost,
   manageProject,
@@ -20,6 +21,7 @@ import {
   getCompanyPostedJobs,
   projectInfoData,
   checkIfCompanyExist,
+  hireCandidate,
   setInterview,
   sendGroupChat,
   companyInfo,
@@ -55,7 +57,8 @@ const EmployerApiDataProvider = (props) => {
   const [totalApplicants, setTotalApplicants] = useState(0);
   const [notifyMessage, setNotifyMessage] = useState(0);
   const [projectChats, setProjectChats] = useState([]);
-  const [clientProjectStatus, setClientProjectStatus] = useState(false);
+  const [clientProjectStatus, setClientProjectStatus] = useState([]);
+  const [proposalInfo, setProposalInfo] = useState({});
 
   const processGetUserProjects = async () => {
     try {
@@ -64,6 +67,31 @@ const EmployerApiDataProvider = (props) => {
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const processGetProposalInfo = async (id) => {
+    let response = await getProposalInfo(id);
+    console.log(response);
+    if (response) {
+      setProposalInfo({
+        title: response.data.posted_job.title,
+        skills: response.data.posted_job.skills.split(","),
+        category: response.data.posted_job.category,
+        description: response.data.posted_job.description,
+        job_type: response.data.posted_job.job_type,
+        experience: response.data.posted_job.experience,
+        cover_letter: response.data.proposal.cover_letter,
+        project_understanding: response.data.proposal.project_understanding,
+        attachment: response.data.proposal.attachment,
+        hourly_rate: response.data.proposal.hourly_rate,
+        fix_rate: response.data.proposal.fix_rate,
+        start_date: response.data.proposal.start_date,
+        completion: response.data.proposal.completion,
+        completion_day: response.data.proposal.completion_day,
+        week_available: response.data.proposal.week_available,
+        experience_level: response.data.proposal.experience_level,
+      });
     }
   };
 
@@ -143,7 +171,7 @@ const EmployerApiDataProvider = (props) => {
           "project_ids",
           JSON.stringify(response.project_ids)
         );
-        setClientProjectStatus(true);
+        setClientProjectStatus(response.project_ids);
       }
     } catch (err) {
       console.log(err);
@@ -238,7 +266,7 @@ const EmployerApiDataProvider = (props) => {
   };
 
   const processGetHiredApplicants = async () => {
-    let response = await getHiredApplicants();
+    let response = await getHiredApplicants(userId);
     if (response) {
       let newData = [];
       response.data.map((item) => newData.push(item.user));
@@ -254,6 +282,18 @@ const EmployerApiDataProvider = (props) => {
         prev.map((item) =>
           item.id == id ? { ...item, stage: data.status } : item
         )
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const processHireCandidate = async (data, id) => {
+    let response = await hireCandidate(data, id);
+    if (response) {
+      setApplicants((prev) =>
+        prev.map((item) => (item.id == id ? { ...item, stage: "hired" } : item))
       );
       return true;
     } else {
@@ -525,7 +565,10 @@ const EmployerApiDataProvider = (props) => {
         processGetProjectChat,
         processSendGroupChat,
         processGetClientProjects,
+        processHireCandidate,
         clientProjectStatus,
+        processGetProposalInfo,
+        proposalInfo,
       }}
     >
       {props.children}

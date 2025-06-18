@@ -8,6 +8,7 @@ import AddTaskModal from "./add-task-modal";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import AvatarGroup from "@mui/material/AvatarGroup";
+import { getDaysLeft } from "../../../../../utils/dateUtils";
 
 export const FreelanceProjectManage = () => {
   const { freelanceProjectList } = useContext(FreelanceApiData);
@@ -26,7 +27,6 @@ export const FreelanceProjectManage = () => {
   const [projectDetails, setProjectDetails] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
   const [teamMembers, setTeamMembers] = useState([]);
-  const [taskAssignment, setTaskAssignment] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
   const [chatId, setChatId] = useState("");
   const [attachment, setAttachment] = useState(null);
@@ -67,20 +67,12 @@ export const FreelanceProjectManage = () => {
     console.log(projectChats);
   }, [projectChats]);
 
-  const toggleCheck = (milestoneIndex, deliverableIndex) => {
-    const key = `${milestoneIndex}-${deliverableIndex}`;
-    setCheckedItems((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
-
-  const handleRemoveTask = (id) => {
-    setTaskAssignment((prevAssigns) =>
-      prevAssigns.filter((assigns) => assigns.taskId !== id)
-    );
-    setInitialTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  };
+  //   const handleRemoveTask = (id) => {
+  //     setTaskAssignment((prevAssigns) =>
+  //       prevAssigns.filter((assigns) => assigns.taskId !== id)
+  //     );
+  //     setInitialTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  //   };
 
   const handleStatusChange = (id, newStatus) => {
     const updated = initialTasks.map((task) =>
@@ -89,36 +81,11 @@ export const FreelanceProjectManage = () => {
     setInitialTasks(updated);
   };
 
-  const handleAddTask = (task) => {
-    const today = new Date().toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-
-    const member = teamMembers.find((m) => m.id == task.assignedTo);
-
-    const newTask = {
-      ...task,
-      id: Math.random().toString(36).substring(2, 9),
-      assignedTo: member?.name || "Unassigned",
-      date: today,
-      status: "Fresh", // Default status if not already in `task`
-    };
-
-    setTaskAssignment([
-      ...taskAssignment,
-      { teamMemberId: task.assignedTo, taskId: newTask.id },
-    ]);
-
-    setInitialTasks([...initialTasks, newTask]);
-  };
-
   const handleSytemChanges = async () => {
     let newData = {
       project_id: id,
       deliverables: checkedItems,
       tasks: initialTasks,
-      assignments: taskAssignment,
     };
 
     //console.log(newData);
@@ -153,7 +120,6 @@ export const FreelanceProjectManage = () => {
       const formData = new FormData();
       formData.append("project_id", id);
       formData.append("sender_id", sessionStorage.getItem("chat_id"));
-      formData.append("admin", true);
       formData.append("message", message);
       if (attachment) {
         formData.append("attachment", attachment);
@@ -197,9 +163,9 @@ export const FreelanceProjectManage = () => {
                 <h4 className="font-semibold text-md">
                   Team Members ({projectDetails?.team?.length})
                 </h4>
-                <span className="text-sm text-green-600 cursor-pointer">
+                {/* <span className="text-sm text-green-600 cursor-pointer">
                   + Add Member
-                </span>
+                </span> */}
               </div>
               <div className="relative mb-4">
                 <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -232,13 +198,13 @@ export const FreelanceProjectManage = () => {
                       <span className="text-sm text-gray-600 block">
                         Last active: Today
                       </span>
-                      <span className="text-sm text-gray-600 block">
+                      {/* <span className="text-sm text-gray-600 block">
                         $45/hour
-                      </span>
+                      </span> */}
                     </div>
-                    <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
+                    {/* <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
                       Active
-                    </span>
+                    </span> */}
                   </div>
 
                   <div className="flex justify-between">
@@ -276,9 +242,9 @@ export const FreelanceProjectManage = () => {
                       {`${projectDetails?.start_date} - ${projectDetails?.end_date}`}
                     </span>
                   </div>
-                  <button className="bg-green-600 text-white rounded px-4 py-2 text-sm hover:bg-gray-300">
+                  {/* <button className="bg-green-600 text-white rounded px-4 py-2 text-sm hover:bg-gray-300">
                     Project Settings
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
@@ -302,7 +268,15 @@ export const FreelanceProjectManage = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Timeline</span>
                   <span className="text-gray-800 text-xl font-semibold block mb-2">
-                    45 days left
+                    {projectDetails?.start_date && projectDetails?.end_date && (
+                      <p>
+                        {getDaysLeft(
+                          projectDetails.start_date,
+                          projectDetails.end_date
+                        )}{" "}
+                        days left
+                      </p>
+                    )}
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Progress</span>
@@ -344,7 +318,7 @@ export const FreelanceProjectManage = () => {
                             key={index}
                             alt={member.name}
                             src={member.profile_image}
-                            sx={{ width: 30, height: 30}} // Smaller size
+                            sx={{ width: 30, height: 30 }} // Smaller size
                           />
                         ))}
                       </AvatarGroup>
@@ -357,69 +331,111 @@ export const FreelanceProjectManage = () => {
                   Project Milestones
                 </h3>
                 <ol className="relative border-l border-gray-300">
-                  {projectDetails?.milestones?.map((item, index) => (
-                    <li className="mb-10 ml-6" key={index}>
-                      <span
-                        className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                         bg-green-100 rounded-full ring-8 ring-white`}
-                      >
-                        🧾
-                      </span>
-                      <div className="rounded-xl bg-gray-100 h-30 p-2">
-                        <h4
-                          className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                        >
-                          {item.name}
-                          <span
-                            className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                          >
-                            {item.due_date}
-                          </span>
-                        </h4>
-                        <p className="text-xs text-gray-500 mb-2">
-                          {item.description}
-                        </p>
-                        <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
-                          Ongoing
+                  {projectDetails?.milestones?.map((item, index) => {
+                    const deliverables =
+                      item?.deliverables &&
+                      typeof item.deliverables === "object"
+                        ? item.deliverables
+                        : {};
+
+                    const deliverableKeys = Object.keys(deliverables);
+                    const totalDeliverables = deliverableKeys.length;
+
+                    const checked = checkedItems || {}; // fallback if undefined
+                    const completedDeliverables = deliverableKeys.filter(
+                      (_, dIndex) => !!checked[`${index}-${dIndex}`]
+                    ).length;
+
+                    const isComplete =
+                      totalDeliverables > 0 &&
+                      totalDeliverables === completedDeliverables;
+
+                    return (
+                      <li className="mb-10 ml-6" key={index}>
+                        <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-100 rounded-full ring-8 ring-white">
+                          🧾
                         </span>
-                        <hr className="mt-4" />
-                        <div className="space-y-3">
-                          {item.deliverables &&
-                            Object.keys(item.deliverables)?.map(
-                              (deliverable, deliverableIndex) => {
-                                const key = `${index}-${deliverableIndex}`;
-                                return (
-                                  <div
-                                    key={key}
-                                    className="flex items-center space-x-2"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      id={`check-${key}`}
-                                      checked={!!checkedItems?.[key]}
-                                      onChange={() =>
-                                        toggleCheck(index, deliverableIndex)
-                                      }
-                                      className="h-4 w-4 text-green-600 rounded focus:ring-0"
-                                    />
-                                    <label
-                                      htmlFor={`check-${key}`}
-                                      className={`text-sm cursor-pointer transition ${
-                                        checkedItems?.[key]
-                                          ? "font-bold text-green-600 line-through"
-                                          : "text-gray-800"
-                                      }`}
-                                    >
-                                      {item.deliverables[deliverable]}
-                                    </label>
-                                  </div>
-                                );
-                              }
+
+                        <div className="rounded-xl bg-gray-100 h-30 p-2">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="text-gray-700 font-semibold text-sm flex items-center">
+                              {item.name}
+                              <span className="bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded">
+                                {item.due_date}
+                              </span>
+                            </h4>
+                            {/* Assigned person */}
+                            {item.assignedTo && (
+                              <span className="text-xs text-gray-600 bg-yellow-100 px-2 py-0.5 rounded">
+                                Assigned:{" "}
+                                {
+                                  projectDetails?.team?.filter(
+                                    (idx) => idx.id == item.assignedTo
+                                  )[0]?.firstname
+                                }
+                              </span>
                             )}
+                          </div>
+
+                          <p className="text-xs text-gray-500 mb-2">
+                            {item.description}
+                          </p>
+                          <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
+                            Ongoing
+                          </span>
+
+                          <hr className="mt-4" />
+
+                          <div className="space-y-3">
+                            {item.deliverables &&
+                              Object.keys(item.deliverables).map(
+                                (deliverable, deliverableIndex) => {
+                                  const key = `${index}-${deliverableIndex}`;
+                                  return (
+                                    <div
+                                      key={key}
+                                      className="flex items-center space-x-2"
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        id={`check-${key}`}
+                                        checked={!!checkedItems?.[key]}
+                                        readOnly={true}
+                                        className="h-4 w-4 text-green-600 rounded focus:ring-0"
+                                      />
+                                      <label
+                                        htmlFor={`check-${key}`}
+                                        className={`text-sm cursor-pointer transition ${
+                                          checkedItems?.[key]
+                                            ? "font-bold text-green-600 line-through"
+                                            : "text-gray-800"
+                                        }`}
+                                      >
+                                        {item.deliverables[deliverable]}
+                                      </label>
+                                    </div>
+                                  );
+                                }
+                              )}
+                          </div>
+
+                          {/* ✅ Payout Button */}
+                          <div className="mt-4 text-right">
+                            <span
+                              disabled={!isComplete}
+                              className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
+                                isComplete
+                                  ? "bg-green-600 text-white hover:bg-green-700"
+                                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                              }`}
+                            >
+                              Payout Status
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
+                      </li>
+                    );
+                  })}
                 </ol>
               </div>
             </div>
@@ -430,13 +446,13 @@ export const FreelanceProjectManage = () => {
                   Task Management
                 </h4>
 
-                <button
+                {/* <button
                   onClick={() => setShowTaskModal(true)}
                   className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700"
                 >
                   + Add Task
-                </button>
+                </button> */}
               </div>
 
               <h4 className="text-green-500 text-md">Kanban Board</h4>
@@ -461,24 +477,27 @@ export const FreelanceProjectManage = () => {
                         key={item.id}
                       >
                         {/* Remove Icon */}
-                        <button
-                          onClick={() => handleRemoveTask(item.id)}
-                          className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
-                          title="Remove Task"
-                        >
-                          &times;
-                        </button>
 
-                        <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.category}
-                        </span>
+                        <h4 className="text-gray-700 mb-2 font-semibold">
+                          {item.title}
+                        </h4>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
                         <div className="flex justify-between text-sm text-gray-500">
                           <span>{item.assignedTo}</span>
                           <span>{item.date}</span>
+                        </div>
+                        <div className="flex gap-2 mt-4">
+                          <button
+                            onClick={() =>
+                              handleStatusChange(item.id, "Progress")
+                            }
+                            className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                          >
+                            Move
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -502,9 +521,7 @@ export const FreelanceProjectManage = () => {
                         key={item.id}
                       >
                         <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.category}
-                        </span>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
@@ -513,6 +530,27 @@ export const FreelanceProjectManage = () => {
                             {item.assignedTo}
                           </span>
                           <span className="text-gray-500 text-sm">Jun 5</span>
+                        </div>
+                        <hr className="my-2" />
+                        <div>
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Fresh")
+                              }
+                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                            >
+                              Revert
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Review")
+                              }
+                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                            >
+                              Move
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -604,6 +642,18 @@ export const FreelanceProjectManage = () => {
                             {item.assignedTo}
                           </span>
                           <span className="text-gray-500 text-sm">Jun 5</span>
+                        </div>
+                        <div>
+                          <div className="flex gap-2 mt-4">
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Review")
+                              }
+                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                            >
+                              Revert
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -785,7 +835,6 @@ export const FreelanceProjectManage = () => {
         isOpen={showTaskModal}
         onClose={() => setShowTaskModal(false)}
         teamMembers={teamMembers}
-        onAddTask={handleAddTask}
       />
     </div>
   );

@@ -9,3 +9,18 @@ export const formatDate = (rawDate) => {
 
   return `${year}-${month}-${day}`;
 };
+
+export const getDaysLeft = (startDate, endDate) => {
+  if (!startDate || !endDate) return 0;
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  // Calculate the difference in milliseconds
+  const diffTime = end.getTime() - start.getTime();
+
+  // Convert milliseconds to days
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays > 0 ? diffDays : 0;
+};

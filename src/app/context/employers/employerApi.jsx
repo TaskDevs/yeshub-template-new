@@ -84,11 +84,25 @@ export const getProjects = async (id) => {
 
 //Getting projectsId to listen
 export const getClientProjects = async (id) => {
-  console.log(id);
+  //console.log(id);
   try {
     let response = await axios.get(
       `${REACT_BASE_URL}get-client-projects/${id}`
     );
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getProposalInfo = async (id) => {
+  try {
+    let response = await axios.get(`${REACT_BASE_URL}get-a-proposal/${id}`);
     if (response.status == 200) {
       return response.data;
     } else {
@@ -190,10 +204,11 @@ export const getInterviewInfo = async (id) => {
   }
 };
 
-export const getHiredApplicants = async () => {
+export const getHiredApplicants = async (id) => {
+  console.log(`hired applicant employerId ${id}`);
   try {
     let responseOngetHiredApplicants = await axios.get(
-      `${REACT_BASE_URL}get-hired-applicants`
+      `${REACT_BASE_URL}get-hired-applicants/${id}`
     );
     if (responseOngetHiredApplicants.status == 200) {
       return responseOngetHiredApplicants.data;
@@ -211,6 +226,22 @@ export const changeCandidateStatus = async (data, id) => {
     );
     // console.log(responseOnChangeStatus);
     if (responseOnChangeStatus.status == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const hireCandidate = async (data, id) => {
+  try {
+    let responseOnHireCandidate = await axios.post(
+      `${REACT_BASE_URL}hire-candidate/${id}`,
+      data
+    );
+    if (responseOnHireCandidate.status == 200) {
       return true;
     } else {
       return false;

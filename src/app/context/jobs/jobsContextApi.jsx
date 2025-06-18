@@ -31,6 +31,7 @@ const JobApiDataProvider = (props) => {
   const [searchJobInfo, setSearchJobInfo] = useState({});
   const [searchJobListData, setSearchJobListData] = useState([]);
   const [searchLoad, setSearchLoad] = useState(false);
+  const [jobProfileData, setJobProfileData] = useState({});
   // const [clientDashboardData, setClientDashboardData] = useState({});
   const [jobLoad, setJobLoad] = useState(false);
   const [searchData, setSearchData] = useState({
@@ -88,8 +89,10 @@ const JobApiDataProvider = (props) => {
   };
 
   const processJobCompanyInfo = async (id) => {
+    setCompanyInfo({});
     let response = await jobCompanyInfo(id);
-    setCompanyInfo(response.data);
+    console.log(response);
+    setCompanyInfo(response.data.data);
   };
 
   const processCountJobsPostedByEmp = async (id) => {
@@ -138,7 +141,8 @@ const JobApiDataProvider = (props) => {
 
   const processAJobProfile = async (id) => {
     let response = await jobProfile(id);
-    return response;
+    console.log(response);
+    setJobProfileData(response.job);
   };
 
   // jobProfile
@@ -245,6 +249,7 @@ const JobApiDataProvider = (props) => {
         loading,
         processCountApplications,
         companyInfo,
+        jobProfileData,
       }}
     >
       {props.children}

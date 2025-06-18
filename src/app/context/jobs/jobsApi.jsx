@@ -164,7 +164,7 @@ export const employerJobList = async (id) => {
     );
 
     if (responseOnEmployerJobList.status == 200) {
-      return responseOnEmployerJobList.data.data;
+      return responseOnEmployerJobList.data;
     } else {
       return false;
     }
@@ -173,6 +173,56 @@ export const employerJobList = async (id) => {
     return false;
   }
 };
+
+export const employerJobById = async (id) => {
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}posted-user-jobs/${id}`);
+    return response.data;
+  } catch (err) {
+    console.log("API error:", err);
+    return false;
+  }
+};
+
+export const JobInvitation = async (data) => {
+  try {
+    const response = await axios.post(`${REACT_BASE_URL}post-invitation`, data);
+    return response.data;
+  } catch (err) {
+    console.log("API error:", err);
+    return false;
+  }
+};
+
+// services/invitationApi.js
+export const fetchFreelancerInvitations = async (userId) => {
+  try {
+    const response = await axios.get(`${REACT_BASE_URL}get-freelancer-invites`, {
+      params: { id: userId },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching invitations:", err);
+    return { status: 'error', data: [] };
+  }
+};
+
+export const updateInvitationStatus = async (invitation_id, status) => {
+  try {
+    const response = await axios.post(`${REACT_BASE_URL}update-invitation-status`, {
+      invitation_id,
+      status,
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Status update error:", err);
+    return false;
+  }
+};
+
+
+
+
 
 // Count the employer
 export const countEmployerJobsPosted = async (id) => {

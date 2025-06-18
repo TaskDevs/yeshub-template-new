@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { truncateText } from "../../../../../utils/truncateText";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
+
 const skillsList = [
   "Web Development",
   "Mobile Development",
@@ -178,6 +179,8 @@ export default function FreelancerSearch() {
     console.log("Invitation sent:", { freelancerName, selectedJob, message });
     // You can add API call here
   };
+
+
 
   return (
     <div className="tw-css px-10 py-6 my-5">
@@ -498,19 +501,19 @@ export default function FreelancerSearch() {
                     <div className="flex items-center justify-between gap-2 px-3 mt-4">
                       {token && (
                         <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="bg-green-600 text-white px-4 py-1 rounded-md text-sm hover:bg-green-700"
-                      >
-                        Invite to Job
-                      </button>
+                          onClick={() => setIsModalOpen(true)}
+                          className="bg-green-600 text-white px-4 py-1 rounded-md text-sm hover:bg-green-700"
+                        >
+                          Invite to Job
+                        </button>
                       )}
-                      
+
                       <button
                         onClick={() => setIsOpen(true)}
                         className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700"
                       >
                         Contact
-                      </button> 
+                      </button>
                       <button className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700 flex items-center justify-center">
                         <MdFavoriteBorder className="w-4 h-4" />
                       </button>
@@ -573,10 +576,9 @@ export default function FreelancerSearch() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         jobOptions={[
-          "Senior Frontend Developer (React)",
+            "Senior Frontend Developer (React)",
           "Backend Engineer (Node.js)",
           "UX/UI Designer",
-          "Others",
         ]}
         onSend={handleSend}
       />

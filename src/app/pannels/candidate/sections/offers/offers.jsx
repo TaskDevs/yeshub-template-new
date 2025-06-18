@@ -3,6 +3,12 @@ import { ArrowLeft, ArrowRight, Eye } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
 import { getUserProposals } from "../../../../context/proposal/proposalApi";
 import ProposalModal from "./offerDetailModal";
+import {
+  fetchFreelancerInvitations,
+  updateInvitationStatus,
+} from "../../../../context/jobs/jobsApi";
+import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 // Dummy job data for simulation
 
@@ -18,7 +24,9 @@ export default function Offers() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [proposals, setProposals] = useState(null);
   const [expanded, setExpanded] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [invitations, setInvitations] = useState([]);
+  const [loadingId, setLoadingId] = useState(null);
   const mappedJobs = proposals
     ? proposals.data.map((proposal) => {
         const userProposal = proposal.proposal || {}; // Avoid undefined errors
@@ -63,6 +71,23 @@ export default function Offers() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3;
+
+  useEffect(() => {
+    const fetchInvitation = async () => {
+      try {
+        const res = await fetchFreelancerInvitations(774);
+        setInvitations(res.data);
+        console.log("Invitation data:", res);
+        // optionally set state here
+      } catch (error) {
+        console.error("Error fetching invitations:", error);
+      }
+    };
+
+    if (userId) {
+      fetchInvitation(); // ✅ call the function
+    }
+  }, [userId]);
 
   useEffect(() => {
     const getProposal = async () => {
@@ -147,6 +172,29 @@ export default function Offers() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
+  const handleStatusUpdate = async (invitationId, status) => {
+    setLoadingId(invitationId); // Start spinner for this invitation
+
+    const res = await updateInvitationStatus(invitationId, status);
+
+    if (res?.status === "success") {
+      Swal.fire({
+        icon: "success",
+        title: `Invitation ${status}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      // Optionally refetch or remove this invitation
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to update invitation status!",
+      });
+    }
+
+    setLoadingId(null); // Reset spinner
+  };
   return (
     <div className="tw-css flex min-h-screen bg-gray-50 p-6 gap-6 page-container">
       {loading && isMobile && (
@@ -538,9 +586,10 @@ export default function Offers() {
                       </button>
                     </div>
                   </div>
-                  <button 
-                  onClick={() => setShowModal(true)}
-                  className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition">
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition"
+                  >
                     <Eye className="w-4 h-4" />
                     View
                   </button>
@@ -601,25 +650,86 @@ export default function Offers() {
         <aside className="w-72 space-y-6 job-sidebar">
           <div className="bg-white p-4 rounded-2xl shadow-sm">
             <h2 className="text-lg font-semibold mb-3">Invited Jobs</h2>
-            {[1, 2].map((id) => (
-              <div
-                key={id}
-                className="card bg-gray-50 p-3 mb-2 rounded shadow-sm"
-              >
-                <div className="text-sm font-medium">UX/UI Designer</div>
-                <div className="text-xs text-gray-500">
-                  $120k - $150k • 5d left
-                </div>
-                <div className="flex gap-2 mt-2">
-                  <button className="bg-green-700 text-white px-3 py-1 text-sm rounded">
-                    Accept
-                  </button>
-                  <button className="border border-gray-300 px-3 py-1 text-sm rounded">
-                    Decline
-                  </button>
-                </div>
-              </div>
-            ))}
+
+            <>
+              {invitations.length === 0 ? (
+                <p className="text-center text-gray-500">No invitations yet</p>
+              ) : (
+                invitations.map((job) => {
+                  const daysLeft = job.expires_at
+                    ? dayjs(job.expires_at).diff(dayjs(), "day")
+                    : null;
+
+                  const expiresText =
+                    daysLeft !== null
+                      ? daysLeft > 0
+                        ? `${daysLeft}d left`
+                        : daysLeft === 0
+                        ? "Expires today"
+                        : "Expired"
+                      : "No expiry";
+
+                  const isLoading = loadingId === job.invitation_id;
+
+                  return (
+                    <div
+                      key={job.job_id}
+                      className="card bg-gray-50 p-3 mb-2 rounded shadow-sm"
+                    >
+                      <div className="text-sm font-medium">{job.job_title}</div>
+                      <div className="text-xs text-gray-500">
+                        {job.budget} • {expiresText}
+                      </div>
+
+                      <div className="flex gap-2 mt-2">
+                        <button
+                          className="bg-green-700 text-white px-3 py-1 text-sm rounded flex items-center gap-1"
+                          onClick={() =>
+                            handleStatusUpdate(job.invitation_id, "accepted")
+                          }
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <div className="mt-4 text-center">
+                              <RotatingLines
+                                strokeColor="grey"
+                                strokeWidth="2"
+                                animationDuration="0.75"
+                                width="40"
+                                visible={true}
+                              />
+                            </div>
+                          ) : (
+                            "Accept"
+                          )}
+                        </button>
+                        <button
+                          className="border border-gray-300 px-3 py-1 text-sm rounded flex items-center gap-1"
+                          onClick={() =>
+                            handleStatusUpdate(job.invitation_id, "rejected")
+                          }
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <div className="mt-4 text-center">
+                              <RotatingLines
+                                strokeColor="grey"
+                                strokeWidth="2"
+                                animationDuration="0.75"
+                                width="40"
+                                visible={true}
+                              />
+                            </div>
+                          ) : (
+                            "Decline"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </>
           </div>
 
           <div className="bg-white p-4 rounded-2xl shadow-sm">
@@ -643,7 +753,7 @@ export default function Offers() {
           </div>
         </aside>
       </div>
-         <ProposalModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <ProposalModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }

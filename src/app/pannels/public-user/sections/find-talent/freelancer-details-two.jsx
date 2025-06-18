@@ -5,9 +5,9 @@ import {
   //Star,
   Clock,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
-import HireTalentModal from "./hire-talent-modal";
+//import HireTalentModal from "./hire-talent-modal";
 
 export default function FreelancerDetailTwo() {
   const {
@@ -17,16 +17,18 @@ export default function FreelancerDetailTwo() {
     employmentHistoryInfo,
     languagesData,
   } = useContext(FreelanceApiData);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   //const [freelanceProfileData, setFreelanceProfileData] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
   const [calendarCells, setCalendarCells] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
 
-  const { id } = useParams();
+  const { id, proposal_id } = useParams();
 
   const month = currentDate.getMonth(); // 0-11
   const year = currentDate.getFullYear();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(id);
@@ -74,8 +76,8 @@ export default function FreelancerDetailTwo() {
     setCurrentDate(newDate);
   };
 
-  const handleHire = () => {
-    console.log("Handling hire data");
+  const handleViewProposal = () => {
+    navigate(`/dashboard-client/view-candidate-proposal/${proposal_id}`);
   };
 
   return (
@@ -489,13 +491,13 @@ export default function FreelancerDetailTwo() {
           <div className="bg-white p-4 rounded-xl shadow space-y-3">
             <button
               className="w-full bg-green-600 text-white py-2 rounded-md font-semibold"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => handleViewProposal()}
             >
               View Proposal
             </button>
-            <button className="w-full border py-2 rounded-md font-medium">
+            {/* <button className="w-full border py-2 rounded-md font-medium">
               Contact
-            </button>
+            </button> */}
           </div>
 
           {/* Availability */}
@@ -609,7 +611,7 @@ export default function FreelancerDetailTwo() {
         </div>
       </div>
 
-      <HireTalentModal
+      {/* <HireTalentModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         jobOptions={[
@@ -619,7 +621,7 @@ export default function FreelancerDetailTwo() {
           "Others",
         ]}
         onSend={handleHire}
-      />
+      /> */}
     </div>
   );
 }

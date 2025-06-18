@@ -54,7 +54,7 @@ export const publicUser = {
     MAINTENANCE: "/under-maintenance",
     COMING: "/coming-soon",
     WHY: "/why-hub",
-    WHYCHOOSEUS:'why-choose-us',
+    WHYCHOOSEUS: "why-choose-us",
     LOGIN: "/login",
     SIGN_UP: "/sign-up",
     FORGOTPASS: "/forgotton-password",
@@ -150,11 +150,12 @@ export const client = {
   CLIENT_FIND_TALENT: "/find-talented-freelancers",
   CLIENT_FIND_TALENT_ID: "/find-talented-freelancers/:id",
   PAYMENT_HISTORY: "/payment-history",
-  CANDIDATE_DETAILS: "/candidate-details/:id",
+  CANDIDATE_DETAILS: "/candidate-details/:id/:proposal_id",
   JOB_DETAILS: "/job-details/:id",
   TALENT_POOL: "/talent-pool/:id",
   CREATE_PROJECT: "/create-project",
   JOB_APPLICANT: "/job-applicant/:id",
+  VIEW_CANDIDATE_PROPOSAL: "/view-candidate-proposal/:id",
 };
 
 export const employer = {

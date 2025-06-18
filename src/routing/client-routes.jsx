@@ -14,6 +14,8 @@ import ManageProjects from "../app/pannels/employer/components/jobs/manage-proje
 import CreateProject from "../app/pannels/employer/components/project/create-project";
 import JobApplicant from "../app/pannels/employer/components/applicant/job-applicant";
 import { TalentPool } from "../app/pannels/employer/components/talent-pool/talent-pool";
+import ViewProposal from "../app/pannels/candidate/sections/deliver-work/view-proposal";
+import FreelancerDetailTwo from "../app/pannels/public-user/sections/find-talent/freelancer-details-two";
 //import projectDetails from "../app/pannels/employer/components/project/project-details";
 
 function ClientRoutes() {
@@ -29,13 +31,17 @@ function ClientRoutes() {
       <Route path={client.TALENT_POOL} element={<TalentPool />} />
       <Route path={client.FINANCE} element={<FinancialOverview />} />
       <Route path={client.CLIENT_FIND_TALENT} element={<FreelancerSearch />} />
+      <Route path={client.VIEW_CANDIDATE_PROPOSAL} element={<ViewProposal />} />
       <Route
         path={client.CLIENT_FIND_TALENT_ID}
         element={<ClientfreelancerDetail />}
       />
       <Route path={client.PAYMENT_HISTORY} element={<PaymentHistoryPage />} />
       <Route path={client.MANAGE_JOBS_DETAILS} element={<JobListing />} />
-      <Route path={client.CANDIDATE_DETAILS} element={ClientfreelancerDetail} />
+      <Route
+        path={client.CANDIDATE_DETAILS}
+        element={<FreelancerDetailTwo />}
+      />
       {/* Add other client routes here */}
       <Route path="*" element={<Error404Page />} />
     </Routes>

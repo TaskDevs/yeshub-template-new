@@ -4,6 +4,7 @@ import {
   addEmployer,
   addCertification,
   getInterviewInfo,
+  getProposalInfo,
   addExperience,
   addJobPost,
   manageProject,
@@ -57,6 +58,7 @@ const EmployerApiDataProvider = (props) => {
   const [notifyMessage, setNotifyMessage] = useState(0);
   const [projectChats, setProjectChats] = useState([]);
   const [clientProjectStatus, setClientProjectStatus] = useState([]);
+  const [proposalInfo, setProposalInfo] = useState({});
 
   const processGetUserProjects = async () => {
     try {
@@ -65,6 +67,31 @@ const EmployerApiDataProvider = (props) => {
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const processGetProposalInfo = async (id) => {
+    let response = await getProposalInfo(id);
+    console.log(response);
+    if (response) {
+      setProposalInfo({
+        title: response.data.posted_job.title,
+        skills: response.data.posted_job.skills.split(","),
+        category: response.data.posted_job.category,
+        description: response.data.posted_job.description,
+        job_type: response.data.posted_job.job_type,
+        experience: response.data.posted_job.experience,
+        cover_letter: response.data.proposal.cover_letter,
+        project_understanding: response.data.proposal.project_understanding,
+        attachment: response.data.proposal.attachment,
+        hourly_rate: response.data.proposal.hourly_rate,
+        fix_rate: response.data.proposal.fix_rate,
+        start_date: response.data.proposal.start_date,
+        completion: response.data.proposal.completion,
+        completion_day: response.data.proposal.completion_day,
+        week_available: response.data.proposal.week_available,
+        experience_level: response.data.proposal.experience_level,
+      });
     }
   };
 
@@ -540,6 +567,8 @@ const EmployerApiDataProvider = (props) => {
         processGetClientProjects,
         processHireCandidate,
         clientProjectStatus,
+        processGetProposalInfo,
+        proposalInfo,
       }}
     >
       {props.children}

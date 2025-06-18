@@ -6,7 +6,8 @@ import MessageModal from "./message-modal";
 import { useNavigate } from "react-router-dom";
 import { truncateText } from "../../../../../utils/truncateText";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
-
+import { employerJobById, JobInvitation } from "../../../../context/jobs/jobsApi";
+import Swal from "sweetalert2";
 const skillsList = [
   "Web Development",
   "Mobile Development",
@@ -36,10 +37,10 @@ const locations = [
   "Savannah",
 ];
 
-
 export default function FreelancerSearch() {
   const { processGetAllFreelance, freelanceList } =
     useContext(FreelanceApiData);
+  const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,9 +48,10 @@ export default function FreelancerSearch() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const navigate = useNavigate();
-
+  const employerId = sessionStorage.getItem("userId");
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const [selectedFreelancer, setSelectedFreelancer] = useState(null);
 
   const [filters, setFilters] = useState({
     skills: [],
@@ -175,11 +177,54 @@ export default function FreelancerSearch() {
   );
 
   //   send invitation
-  const handleSend = ({ freelancerName, selectedJob, message }) => {
-    console.log("Invitation sent:", { freelancerName, selectedJob, message });
-    // You can add API call here
-  };
 
+const handleSend = async ({ freelancer_id, job_id, company_id, response = "pend" }) => {
+  const data = { freelancer_id, job_id, company_id, response };
+
+  try {
+    const result = await JobInvitation(data);
+    console.log("Invitation sent:", result);
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Invitation Sent',
+      text: 'Your job invitation has been sent successfully!',
+      position: "center",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  } catch (error) {
+    console.error("Failed to send invitation:", error);
+    
+    Swal.fire({
+      icon: 'error',
+      title: 'Failed to Send',
+      text: 'An error occurred while sending the invitation.',
+      toast: true,
+      position: 'top-end',
+      timer: 3000,
+      showConfirmButton: false,
+    });
+  }
+};
+
+
+
+  useEffect(() => {
+    if (employerId) {
+      fetchJobs();
+    }
+  }, [employerId]);
+
+  const fetchJobs = async () => {
+    try {
+      const res = await employerJobById(employerId);
+      console.log("Job response:", res);
+      setJobs(res?.jobs || []);
+    } catch (error) {
+      console.error("Error fetching jobs:", error);
+    }
+  };
   return (
     <div className="tw-css px-10 py-6 my-5">
       <div className="mb-6 p-4 m-4 my-5">
@@ -441,65 +486,75 @@ export default function FreelancerSearch() {
                   <div
                     key={freelancer.id}
                     className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
-             
                   >
-                    <div onClick={() => navigate("/dashboard-client/find-talented-freelancers/" + freelancer.id)} className="cursor-pointer">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 bg-gray-300 rounded-full">
-                        <Avatar
-                          alt=""
-                          src={
-                            freelancer.avatar
-                              ? freelancer.avatar
-                              : "https://placehold.co/400"
-                          }
-                          className="w-12 h-12"
-                        />
-                      </div>
-                      <div >
-                        <h4 className="font-semibold text-base">
-                          {freelancer.name}{" "}
-                          <span className="text-sm text-gray-600">
-                            ${freelancer.hourlyRate}/hr
-                          </span>
-                        </h4>
-                        <p className="text-sm text-gray-500">
-                          {freelancer.title}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {freelancer.earnings}
-                        </p>
-                        <div className="flex items-center text-yellow-500 mt-1 text-sm">
-                          <span>★ {freelancer.rating}</span>
-                          <span className="text-gray-500 ml-1">
-                            ({freelancer.reviews} reviews)
-                          </span>
+                    <div
+                      onClick={() =>
+                        navigate(
+                          "/dashboard-client/find-talented-freelancers/" +
+                            freelancer.id
+                        )
+                      }
+                      className="cursor-pointer"
+                    >
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="w-12 h-12 bg-gray-300 rounded-full">
+                          <Avatar
+                            alt=""
+                            src={
+                              freelancer.avatar
+                                ? freelancer.avatar
+                                : "https://placehold.co/400"
+                            }
+                            className="w-12 h-12"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base">
+                            {freelancer.name}{" "}
+                            <span className="text-sm text-gray-600">
+                              ₵{freelancer.hourlyRate}/hr
+                            </span>
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            {freelancer.title}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            {freelancer.earnings}
+                          </p>
+                          <div className="flex items-center text-yellow-500 mt-1 text-sm">
+                            <span>★ {freelancer.rating}</span>
+                            <span className="text-gray-500 ml-1">
+                              ({freelancer.reviews} reviews)
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="text-sm text-gray-600 mb-3">
-                      {truncateText(freelancer.bio)}
-                    </div>
+                      <div className="text-sm text-gray-600 mb-3">
+                        {truncateText(freelancer.bio)}
+                      </div>
 
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {freelancer.skills?.map((skill, idx) => (
-                        <span
-                          key={idx}
-                          className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {freelancer.skills?.map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
 
-                    <div className="text-sm text-gray-500 mb-4">
-                      {freelancer.location}
+                      <div className="text-sm text-gray-500 mb-4">
+                        {freelancer.location}
+                      </div>
                     </div>
-</div>
                     <div className="flex items-center justify-between gap-2 px-3 mt-4">
                       <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => {
+                          setSelectedFreelancer(freelancer);
+                          setIsModalOpen(true);
+                        }}
                         className="bg-green-600 text-white px-4 py-1 rounded-md text-sm hover:bg-green-700"
                       >
                         Invite to Job
@@ -571,12 +626,10 @@ export default function FreelancerSearch() {
       <InviteToJobModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        jobOptions={[
-          "Senior Frontend Developer (React)",
-          "Backend Engineer (Node.js)",
-          "UX/UI Designer",
-        ]}
+        jobOptions={jobs}
         onSend={handleSend}
+        freelancerName={selectedFreelancer?.name}
+        freelancerId={selectedFreelancer?.id}
       />
     </div>
   );

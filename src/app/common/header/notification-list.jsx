@@ -16,29 +16,40 @@ export default function NotificationList() {
   const totalPages = Math.ceil(messages.length / ITEMS_PER_PAGE);
 
   const toggleExpand = (id, status, stage) => {
-    // console.log(status);
-    if (stage == "view") {
+    if (stage === "view") {
       processMarkAsRead(id, status);
     }
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
+    <div className="p-2">
       {paginatedMessages.map((msg) => (
         <div
           key={msg.id}
-          className="border rounded-xl p-4 mb-4 shadow-sm transition-all"
+          className={`relative border-l-4 ${
+            !msg.status ? "border-yellow-400 bg-yellow-50" : "border-gray-300 bg-white"
+          } rounded-md shadow-sm mb-4 p-4 transition-all duration-200`}
         >
-          <div className="flex items-center gap-4 mb-2">
-            <img
-              src={msg.employer_logo}
-              alt="Logo"
-              className="w-5 h-5 rounded-full"
-            />
-            <div className="flex-1">
-              <h4 className="text-gray-600">{msg.employer_name}</h4>
+          <div className="flex items-start justify-between gap-4">
+            {/* Employer Info */}
+            <div className="flex gap-3 items-center">
+              <img
+                src={msg.employer_logo}
+                alt="Logo"
+                className="w-8 h-8 rounded-full border"
+              />
+              <div>
+                <p className="font-semibold text-sm text-gray-800">
+                  {msg.employer_name}
+                </p>
+                <p className="text-xs text-gray-500">
+                  {new Date(msg.created_at).toLocaleString()}
+                </p>
+              </div>
             </div>
+
+            {/* View/Close Button */}
             <button
               onClick={() =>
                 toggleExpand(
@@ -47,36 +58,42 @@ export default function NotificationList() {
                   expandedId === msg.id ? "close" : "view"
                 )
               }
-              className="text-sm text-green-600 underline"
+              className="text-sm text-green-600 hover:underline"
             >
               {expandedId === msg.id ? "Close" : "View"}
             </button>
           </div>
 
+          {/* Message Content */}
           {expandedId === msg.id && (
-            <div className="text-sm text-gray-700 mt-2 bg-green-50 border border-green-100 rounded-lg p-3">
+            <div className="mt-3 text-sm text-gray-700 border-t pt-3">
               {msg.message}
             </div>
+          )}
+
+          {/* Unread Indicator */}
+          {!msg.status && (
+            <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
           )}
         </div>
       ))}
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center gap-2 mt-6">
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-4 mt-6">
         <button
           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          className="px-3 py-1 border rounded-md disabled:opacity-50"
+          className="px-3 py-1 text-sm border rounded-md bg-white hover:bg-gray-50 disabled:opacity-40"
         >
           Prev
         </button>
-        <span className="px-4 py-1 text-sm">
+        <span className="text-sm text-gray-600">
           Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 border rounded-md disabled:opacity-50"
+          className="px-3 py-1 text-sm border rounded-md bg-white hover:bg-gray-50 disabled:opacity-40"
         >
           Next
         </button>

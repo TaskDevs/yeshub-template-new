@@ -11,28 +11,6 @@ const steps = [
   { name: "Budgets" },
 ];
 
-// const doughnutOptions = {
-//   plugins: {
-//     legend: {
-//       display: false,
-//     },
-//     datalabels: {
-//       color: "#4B5563", // text-gray-600
-//       font: {
-//         size: 10, // 👈 reduce font size here
-//         weight: "bold",
-//       },
-//       formatter: (value, context) => {
-//         const total = context.chart.data.datasets[0].data.reduce(
-//           (a, b) => a + b,
-//           0
-//         );
-//         const percentage = ((value / total) * 100).toFixed(0);
-//         return `${percentage}%`;
-//       },
-//     },
-//   },
-// };
 
 const category = ["Software Development", "Graphics", "AI"];
 
@@ -74,11 +52,7 @@ export default function CreateProject() {
     processGetHiredApplicants();
   }, []);
 
-  // const teamMembers = [
-  //   { id: 1, name: "John Doe" },
-  //   { id: 2, name: "Sarah Smith" },
-  //   { id: 3, name: "Kwame Boateng" },
-  // ];
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -1,11 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { baseURL } from "../../../../../globals/constants";
-import TimeAgo from "../../../../../utils/formateDate";
 import { Badge } from "primereact/badge";
-
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 export const JobsCard = ({
   img,
-  duration,
   location,
   link,
   title,
@@ -14,7 +13,8 @@ export const JobsCard = ({
   job_type,
   skills,
   start_rate,
-  end_rate
+  end_rate,
+  created_at,
 }) => {
   let skillsArray = [];
 
@@ -27,7 +27,9 @@ export const JobsCard = ({
     console.error("Error parsing skills:", error);
     skillsArray = [];
   }
+  dayjs.extend(relativeTime);
 
+  console.log("date", created_at)
   return (
     <NavLink
       to={link}
@@ -45,8 +47,8 @@ export const JobsCard = ({
       <div className="twm-mid-content">
         <h4 className="twm-job-title text-lg font-semibold text-gray-800 mb-1">
           {title}
-          <span className="twm-job-post-duration text-sm text-gray-500 font-normal ml-1">
-            / <TimeAgo date={duration} />
+          <span className="twm-job-post-duration">
+            / {dayjs(created_at).fromNow()}
           </span>
         </h4>
 
@@ -55,15 +57,11 @@ export const JobsCard = ({
         </p>
 
         <div className="flex flex-wrap gap-2 mb-2">
-         
           {skills &&
             skills.map((skill, index) => (
               <Badge key={index} value={skill} severity="secondary" />
             ))}
-    
         </div>
-
-       
       </div>
 
       <div className="twm-right-content text-right">
@@ -76,8 +74,10 @@ export const JobsCard = ({
         <div className="twm-jobs-amount text-lg font-bold text-gray-900 mb-1">
           {amount ? (
             <p>{amount}</p>
-          ):(
-            <p>{start_rate} - {end_rate}</p>
+          ) : (
+            <p>
+              {start_rate} - {end_rate}
+            </p>
           )}
         </div>
 

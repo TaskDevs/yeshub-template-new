@@ -41,7 +41,7 @@ function NewSavedJobsPage() {
   useEffect(() => {
     if (!isLoading) {
       const results = filterElements(savedjobsData, filters);
-      console.log("results", savedjobsData);
+      console.log("results new", savedjobsData);
       setFilteredJobs(results);
     }
   }, [filters, savedjobsData]);
@@ -90,6 +90,7 @@ function NewSavedJobsPage() {
                     : "Closed"
                 }
                 isFindWork={false}
+               
               />
             ))}
           </MobileFindSavedWork>
@@ -163,7 +164,7 @@ function NewSavedJobsPage() {
                         <CanJobCard
                           key={data.id}
                           id={data.job_id}
-                          image={data?.job?.logo}
+                          image={data?.job?.employer?.logo}
                           role={data?.job?.title}
                           proposal={data?.job?.proposals_count}
                           ratings="4.8"
@@ -174,6 +175,7 @@ function NewSavedJobsPage() {
                           numberOfProposals="23"
                           salaryRange={data?.job?.fixed_rate || "400"}
                           jobType={data?.job?.job_type}
+                          
                           status={
                             calculateDaysLeft(
                               data?.job?.created_at,

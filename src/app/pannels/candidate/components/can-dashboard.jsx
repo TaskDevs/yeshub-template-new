@@ -21,6 +21,8 @@ function CanDashboardPage() {
     processGetFreelanceProjects();
   }, []);
 
+
+  
   // useEffect(() => {
   //   console.log(freelanceProjectList);
   // }, [freelanceProjectList]);

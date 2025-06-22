@@ -3,6 +3,8 @@ import { FaSearch } from "react-icons/fa";
 import { Doughnut } from "react-chartjs-2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import PreviewModal from "./preview-modal";
+import CautionModal from "./caution-modal";
+//import { set } from "react-hook-form";
 
 const steps = [
   { name: "Basic Details" },
@@ -10,31 +12,6 @@ const steps = [
   { name: "Milestones" },
   { name: "Budgets" },
 ];
-
-// const doughnutOptions = {
-//   plugins: {
-//     legend: {
-//       display: false,
-//     },
-//     datalabels: {
-//       color: "#4B5563", // text-gray-600
-//       font: {
-//         size: 10, // 👈 reduce font size here
-//         weight: "bold",
-//       },
-//       formatter: (value, context) => {
-//         const total = context.chart.data.datasets[0].data.reduce(
-//           (a, b) => a + b,
-//           0
-//         );
-//         const percentage = ((value / total) * 100).toFixed(0);
-//         return `${percentage}%`;
-//       },
-//     },
-//   },
-// };
-
-const category = ["Software Development", "Graphics", "AI"];
 
 export default function CreateProject() {
   const {
@@ -49,15 +26,12 @@ export default function CreateProject() {
   const [formData, setFormData] = useState({
     projectCategory: "Software Development",
   });
+  const [editSalaryIndexes, setEditSalaryIndexes] = useState([]);
   const [projectData, setProjectData] = useState({});
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   //const [value, setValue] = useState(50);
-  const [totalBudget, setTotalBudget] = useState(60000);
-  const [items, setItems] = useState([
-    { name: "Development", percentage: 20 },
-    { name: "Design", percentage: 20 },
-    { name: "Project Management", percentage: 20 },
-  ]);
+  const [totalBudget, setTotalBudget] = useState(0);
+  const [showCautionModal, setShowCautionModal] = useState(true);
   const [milestones, setMilestones] = useState([
     {
       name: "",
@@ -66,11 +40,11 @@ export default function CreateProject() {
       deliverables: [""],
       assignedTo: "",
       isOn: false,
+      paid: false,
     },
   ]);
 
   useEffect(() => {
-    //selectedTeamData([]);
     processGetHiredApplicants();
   }, []);
 
@@ -84,27 +58,16 @@ export default function CreateProject() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSliderChange = (index, newPercentage) => {
-    const updated = [...items];
-    updated[index].percentage = Number(newPercentage);
-    setItems(updated);
-  };
+  useEffect(() => {
+    const total = milestones.reduce((sum, milestone) => {
+      const member = selectedTeamData.find(
+        (m) => String(m.id) === String(milestone.assignedTo)
+      );
+      return sum + (member?.salary ? Number(member.salary) : 0);
+    }, 0);
 
-  const handleNameChange = (index, name) => {
-    const updated = [...items];
-    updated[index].name = name;
-    setItems(updated);
-  };
-
-  const addItem = () => {
-    setItems([...items, { name: "", percentage: 0 }]);
-  };
-
-  const removeItem = (index) => {
-    if (items.length === 1) return; // Prevent removing the last item
-    const updated = items.filter((_, i) => i !== index);
-    setItems(updated);
-  };
+    setTotalBudget(total);
+  }, [milestones, selectedTeamData]);
 
   const getColor = (index) => {
     const colors = ["#34D399", "#60A5FA", "#FBBF24", "#F472B6", "#A78BFA"];
@@ -113,27 +76,31 @@ export default function CreateProject() {
 
   // Doughnut Chart Data
   const doughnutData = {
-    labels: items.map((item) => item.name || "Unnamed"),
+    labels: milestones.map((item) => item.name || "Unnamed"),
     datasets: [
       {
-        data: items.map((item) => (item.percentage / 100) * totalBudget),
-        backgroundColor: items.map((_, index) => getColor(index)),
+        data: milestones.map((milestone) => {
+          const assigned = selectedTeamData.find(
+            (member) => String(member.id) === String(milestone.assignedTo)
+          );
+          return assigned?.salary ? Number(assigned.salary) : 0;
+        }),
+        backgroundColor: milestones.map((_, index) => getColor(index)),
       },
     ],
   };
 
   const handleAddMilestone = () => {
-    setMilestones([
-      ...milestones,
-      {
-        name: "",
-        dueDate: "",
-        description: "",
-        deliverables: [""],
-        assignedTo: "",
-        isOn: false,
-      },
-    ]);
+    const newMilestone = {
+      name: "",
+      dueDate: "",
+      description: "",
+      deliverables: [""],
+      assignedTo: "",
+      isOn: false,
+      paid: false,
+    };
+    setMilestones([...milestones, newMilestone]);
   };
 
   const handleMilestoneChange = (index, field, value) => {
@@ -158,6 +125,12 @@ export default function CreateProject() {
     const updated = [...milestones];
     updated[index].deliverables.splice(dIndex, 1);
     setMilestones(updated);
+  };
+
+  const handleSalaryChange = (index, value) => {
+    const updated = [...selectedTeamData]; // or your team state variable
+    updated[index].salary = value;
+    setSelectedTeamData(updated);
   };
 
   const toggleSwitch = (index) => {
@@ -205,22 +178,41 @@ export default function CreateProject() {
     }
   };
 
+  const budget_items = milestones.map((milestone) => {
+    const member = selectedTeamData.find(
+      (m) => String(m.id) === String(milestone.assignedTo)
+    );
+    const amount = member?.salary ? Number(member.salary) : 0;
+
+    const percentage = totalBudget
+      ? ((amount / totalBudget) * 100).toFixed(2)
+      : 0;
+
+    return {
+      name: milestone.name || "Unnamed",
+      percentage: Number(percentage),
+      amount: amount,
+    };
+  });
+
+  const handleTopUpRedirect = () => {
+    console.log("We are doing great staff");
+  };
+
   const handleViewPreview = () => {
     const payload = {
       team: selectedTeamData, // Array of team members or IDs
       structure_type: structureType, // "flat" or something else
       total_budget: totalBudget, // e.g., 60000
-      budget_items: items.map((item) => ({
-        name: item.name,
-        percentage: item.percentage,
-        amount: (item.percentage / 100) * totalBudget,
-      })),
-      milestones: milestones.map((m) => ({
+      budget_items: budget_items,
+      milestones: milestones.map((m, idx) => ({
+        id: idx + 1,
         name: m.name,
         due_date: m.dueDate,
         description: m.description,
         deliverables: m.deliverables.filter((d) => d), // Remove empty
         assignedTo: m.assignedTo,
+        paid: false,
         is_on: m.isOn,
       })),
       ...formData, // e.g., budget_notes, or any other extras
@@ -250,23 +242,6 @@ export default function CreateProject() {
                   focus:outline-none"
                   value={formData.projectName || ""}
                 />
-              </div>
-              <div className="w-full">
-                <label className="block text-sm text-gray-500 mb-1">
-                  Project Category
-                </label>
-                <select
-                  className="w-full border rounded-md px-3 py-2 mt-2 text-sm"
-                  name="projectCategory"
-                  value={formData.projectCategory}
-                  onChange={(e) => handleChange(e)}
-                >
-                  {category.map((item, idx) => (
-                    <option key={idx} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
 
@@ -392,7 +367,7 @@ export default function CreateProject() {
                       </span>
                       <img
                         src={
-                          item.profile_image
+                          item?.profile_image
                             ? item.profile_image
                             : "https://placehold.co/600x400"
                         }
@@ -401,14 +376,14 @@ export default function CreateProject() {
                       />
                       <div className="flex-1">
                         <h4 className="text-gray-600 font-semibold">
-                          {item.firstname + " " + item.lastname}
+                          {item?.firstname + " " + item?.lastname}
                         </h4>
                         <span className="text-sm text-gray-600 block mb-2">
-                          {item.profession}
+                          {item?.profession}
                         </span>
                         <div>
-                          {item.skills &&
-                            item.skills.split(",")?.map((item) => (
+                          {item?.skills &&
+                            item?.skills.split(",")?.map((item) => (
                               <span
                                 className="text-sm text-gray-500 rounded-full 
                                 bg-gray-200 p-1 px-2 mr-2"
@@ -435,8 +410,7 @@ export default function CreateProject() {
 
                   {selectedTeamData?.map((item, index) => (
                     <div
-                      className="flex items-start gap-4 mb-6
-                     bg-gray-100 p-4 rounded-xl"
+                      className="flex items-start gap-4 mb-6 bg-gray-100 p-4 rounded-xl relative"
                       key={index}
                     >
                       <span
@@ -476,6 +450,47 @@ export default function CreateProject() {
                             }
                           />
                         </div>
+                      </div>
+
+                      {/* Salary Section on Right */}
+                      <div className="absolute right-4 top-4 text-sm text-right">
+                        {!editSalaryIndexes.includes(index) ? (
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-700 font-semibold">
+                              GHS {item.salary ?? "Not Set"}
+                            </span>
+                            <button
+                              onClick={() =>
+                                setEditSalaryIndexes((prev) => [...prev, index])
+                              }
+                              className="text-blue-500 hover:text-blue-700 text-xs"
+                            >
+                              ✏️
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 mt-1">
+                            <input
+                              type="number"
+                              value={item.salary || ""}
+                              onChange={(e) =>
+                                handleSalaryChange(index, e.target.value)
+                              }
+                              className="border px-2 py-1 rounded-md w-24 text-sm"
+                              placeholder="Salary"
+                            />
+                            <button
+                              onClick={() =>
+                                setEditSalaryIndexes((prev) =>
+                                  prev.filter((i) => i !== index)
+                                )
+                              }
+                              className="text-red-500 hover:text-red-700 text-xs"
+                            >
+                              ✖
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -618,9 +633,23 @@ export default function CreateProject() {
                   </label>
                   <select
                     value={milestone.assignedTo || ""}
-                    onChange={(e) =>
-                      handleMilestoneChange(index, "assignedTo", e.target.value)
-                    }
+                    onChange={(e) => {
+                      const selectedId = e.target.value;
+
+                      const alreadyAssignedIds = milestones
+                        .filter((_, i) => i !== index)
+                        .map((m) => String(m.assignedTo))
+                        .filter(Boolean);
+
+                      if (alreadyAssignedIds.includes(String(selectedId))) {
+                        alert(
+                          "Freelancer has already been assigned a milestone. To assign more milestones to the same staff, please use the management section."
+                        );
+                        return;
+                      }
+
+                      handleMilestoneChange(index, "assignedTo", selectedId);
+                    }}
                     className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none"
                   >
                     <option value="">-- Select a team member --</option>
@@ -752,70 +781,38 @@ export default function CreateProject() {
                   <input
                     type="number"
                     value={totalBudget}
-                    onChange={(e) => setTotalBudget(Number(e.target.value))}
-                    placeholder="GH 60,000"
-                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md focus:outline-none"
+                    readOnly
+                    placeholder="GH₵ 60,000"
+                    className="w-full pl-2 pr-4 py-2 mt-2 border rounded-md bg-gray-100 text-gray-700 focus:outline-none"
                   />
                 </div>
 
-                <h4 className="text-gray-700 mb-4">Budget Breakdown</h4>
+                <h4 className="text-gray-700 mb-4">
+                  Budget Breakdown by Milestone
+                </h4>
 
-                {items.map((item, index) => {
-                  const allocatedAmount = (
-                    (item.percentage / 100) *
-                    totalBudget
-                  ).toFixed(2);
+                {milestones.map((milestone, index) => {
+                  const assignedMember = selectedTeamData.find(
+                    (member) =>
+                      String(member.id) === String(milestone.assignedTo)
+                  );
+                  const salary = assignedMember?.salary
+                    ? Number(assignedMember.salary)
+                    : 0;
 
                   return (
                     <div key={index} className="border rounded-xl p-4 mb-4">
                       <div className="flex justify-between items-center mb-2">
-                        <input
-                          type="text"
-                          value={item.name}
-                          onChange={(e) =>
-                            handleNameChange(index, e.target.value)
-                          }
-                          placeholder="Item Name"
-                          className="text-sm font-medium text-gray-700 focus:outline-none w-full mr-4"
-                        />
-                        <span className="text-gray-500 text-sm whitespace-nowrap">
-                          {item.percentage}% GH₵ {allocatedAmount}
+                        <span className="text-sm font-medium text-gray-700">
+                          {milestone.name || `Milestone ${index + 1}`}
                         </span>
-                      </div>
-
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={item.percentage}
-                        onChange={(e) =>
-                          handleSliderChange(index, e.target.value)
-                        }
-                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                      />
-
-                      <div className="text-right mt-2">
-                        <span
-                          className={`text-red-500 text-xs cursor-pointer ${
-                            items.length === 1
-                              ? "opacity-30 cursor-not-allowed"
-                              : ""
-                          }`}
-                          onClick={() => items.length > 1 && removeItem(index)}
-                        >
-                          × Remove
+                        <span className="text-gray-500 text-sm whitespace-nowrap">
+                          GH₵ {salary.toFixed(2)}
                         </span>
                       </div>
                     </div>
                   );
                 })}
-
-                <div
-                  className="text-green-600 text-sm cursor-pointer"
-                  onClick={addItem}
-                >
-                  + Add Item
-                </div>
 
                 {/* Notes */}
                 <div className="mt-6">
@@ -842,7 +839,7 @@ export default function CreateProject() {
                   </div>
 
                   <div className="mt-6 grid grid-cols-2 gap-y-3 gap-x-6 text-xs text-gray-700">
-                    {items.map((item, index) => (
+                    {milestones.map((item, index) => (
                       <div
                         key={index}
                         className="flex flex-col items-start space-y-1"
@@ -936,6 +933,11 @@ export default function CreateProject() {
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
         projectData={projectData}
+      />
+      <CautionModal
+        isOpen={showCautionModal}
+        onClose={() => setShowCautionModal(false)}
+        onRedirect={handleTopUpRedirect}
       />
     </div>
   );

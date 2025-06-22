@@ -48,12 +48,6 @@ export default function CreateProject() {
     processGetHiredApplicants();
   }, []);
 
-  // const teamMembers = [
-  //   { id: 1, name: "John Doe" },
-  //   { id: 2, name: "Sarah Smith" },
-  //   { id: 3, name: "Kwame Boateng" },
-  // ];
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

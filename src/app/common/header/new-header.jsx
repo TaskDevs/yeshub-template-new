@@ -3,9 +3,7 @@ import echo from "../../../utils/echo";
 import { Mail } from "@mui/icons-material";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { Wallet } from "lucide-react";
-import { RiSettings3Fill } from "react-icons/ri";
 import { BiSolidLogOut } from "react-icons/bi";
-import { ImStatsDots } from "react-icons/im";
 import { ToggleSwitch } from "../ToggleSwitch";
 import { SearchInput } from "../search-box";
 import { IoSearch } from "react-icons/io5";
@@ -165,14 +163,22 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-    {
-      id: "client-dashboard",
-      label: "Client Dashboard",
-      to: `${base.CLIENT_PRE.replace(/\/$/, "")}/${client.DASHBOARD.replace(
+     {
+  id: "dashboard",
+  label: "Dashboard",
+  to:
+    role === "client"
+      ? `${base.CLIENT_PRE.replace(/\/$/, "")}/${client.DASHBOARD.replace(
         /^\//,
         ""
-      )}`,
-    },
+      )}`
+      : role === "freelancer"
+      ? `${base.CANDIDATE_PRE}`
+      : role === "admin"
+      ? "/admin/dashboard"
+      : "/dashboard", // fallback
+}
+,
     {
       id: "find-talent",
       label: "Find Talent",
@@ -198,11 +204,6 @@ export const Header = ({ isDashboard = true }) => {
       id: "public-find-work",
       label: "Find Work",
       to: "/dashboard-candidate/find-job",
-    },
-    {
-      id: "candidate-dashboard",
-      label: "Candidate Dashboard",
-      to: `${base.CANDIDATE_PRE}`,
     },
     {
       id: "find-work",
@@ -239,7 +240,7 @@ export const Header = ({ isDashboard = true }) => {
         items: [
           {
             id: "active-contracts",
-            label: "Active Contracts",
+            label: "Active Projects",
             to: `${base.CANDIDATE_PRE.replace(
               /\/$/,
               ""
@@ -247,7 +248,7 @@ export const Header = ({ isDashboard = true }) => {
           },
           {
             id: "contract-history",
-            label: "Contract History",
+            label: "Projects History",
             to: `${base.CANDIDATE_PRE.replace(
               /\/$/,
               ""
@@ -313,8 +314,7 @@ export const Header = ({ isDashboard = true }) => {
 
   const getNavItems = () => {
     const dashboardLabels = [
-      "Client Dashboard",
-      "Candidate Dashboard",
+      "Dashboard",
       "Manage Jobs",
       "Find Talents",
       "Find Jobs",
@@ -334,14 +334,12 @@ export const Header = ({ isDashboard = true }) => {
       if (role === "client") {
         return (
           item.label !== "Find Jobs" &&
-          item.label !== "Candidate Dashboard" &&
           item.label !== "Deliver Work"
         );
       }
 
       if (role === "freelancer") {
         return (
-          item.label !== "Client Dashboard" &&
           item.label !== "Manage Jobs" &&
           item.label !== "Find Talents"
         ); // future-proof
@@ -470,20 +468,21 @@ export const Header = ({ isDashboard = true }) => {
     const normalize = (str) => str?.trim().toLowerCase();
 
     const guestItemIds = [
+      "dashboard",
       "find-talent",
       "public-find-work",
       "assessment-training",
       "why-yeshub",
     ];
     const freelancerItemIds = [
-      "candidate-dashboard",
+      "dashboard",
       "find-work",
       "deliver-work",
       "manage-finances",
       "messages",
     ];
     const clientItemIds = [
-      "client-dashboard",
+      "dashboard",
       "find-talent",
       "manage-jobs",
       "assessment-training",
@@ -697,16 +696,6 @@ export const Header = ({ isDashboard = true }) => {
                             <span>Your Profile</span>
                           </button>
 
-                          <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
-                            <ImStatsDots className="h-5 w-5" />
-                            <span>Stats & Trends</span>
-                          </button>
-
-                          <button className="w-full text-left px-5 py-2 hover:bg-gray-100 transition-all flex items-center gap-3 text-gray-700">
-                            <RiSettings3Fill className="h-5 w-5" />
-                            <span>Account Settings</span>
-                          </button>
-
                           <button
                             onClick={handleLogout}
                             disabled={isLoggingOut}
@@ -777,30 +766,44 @@ export const Header = ({ isDashboard = true }) => {
                     onClick={() => setShowNotifications(true)}
                     className="relative text-gray-600 hover:text-green-700"
                   >
-                    <FaBell className="h-6 w-6" />
+                    <FaBell className="h-6 w-6 text-green-600" />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                        {unreadCount}
+                        {unreadCount || 0}
                       </span>
                     )}
                   </button>
                   <NotificationModal
                     isOpen={showNotifications}
                     onClose={() => setShowNotifications(false)}
+                    color='teal'
                   />
                 </>
                 <div className="lg:hidden">
                   {profile_image ? (
-                    <Avatar
-                      sx={{
-                        bgcolor: stringToColor(username),
-                        width: 40,
-                        height: 40,
-                        fontSize: "1.2rem",
-                      }}
-                      src={profile_image}
-                      onClick={() => toggleNav()}
-                    />
+                     <img
+                              src={profile_image}
+                              alt={username}
+                              onClick={handleProfileClick}
+                              style={{
+                                backgroundColor: stringToColor(username),
+                                width: 40,
+                                height: 40,
+                                fontSize: "1.2rem",
+                                borderRadius: "50%",
+                                objectFit: "cover",
+                                cursor: "pointer",
+                              }}
+                              onError={(e) => {
+                                // Fallback if image fails to load
+                                e.target.onerror = null;
+                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                  username
+                                )}&background=${stringToColor(username).slice(
+                                  1
+                                )}&color=fff&size=40`;
+                              }}
+                            />
                   ) : (
                     <Avatar
                       sx={{
@@ -831,15 +834,28 @@ export const Header = ({ isDashboard = true }) => {
                 {/* Profile Menu */}
                 <div className="relative new-profile-menu" ref={profileRef}>
                   {profile_image ? (
-                    <Avatar
-                      sx={{
-                        bgcolor: stringToColor(username),
+                    <img
+                      src={profile_image}
+                      alt={username}
+                      onClick={handleProfileClick}
+                      style={{
+                        backgroundColor: stringToColor(username),
                         width: 40,
                         height: 40,
                         fontSize: "1.2rem",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        cursor: "pointer",
                       }}
-                      src={profile_image}
-                      onClick={() => handleProfileClick()}
+                      onError={(e) => {
+                        // Fallback if image fails to load
+                        e.target.onerror = null;
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          username
+                        )}&background=${stringToColor(username).slice(
+                          1
+                        )}&color=fff&size=40`;
+                      }}
                     />
                   ) : (
                     <Avatar
@@ -859,20 +875,34 @@ export const Header = ({ isDashboard = true }) => {
                     <div className="absolute top-full w-64 right-0 mt-1 bg-white rounded-lg shadow-lg zIndex">
                       <div className="p-4 border-b">
                         <div className="flex items-center justify-start gap-3">
-                          <div className="size-12 rounded-full overflow-hidden mr-3">
-                            <Avatar
-                              sx={{
-                                bgcolor: stringToColor(username),
+                          <div className="rounded-full overflow-hidden mr-3">
+                            <img
+                              src={profile_image}
+                              alt={username}
+                              onClick={handleProfileClick}
+                              style={{
+                                backgroundColor: stringToColor(username),
                                 width: 40,
                                 height: 40,
                                 fontSize: "1.2rem",
+                                borderRadius: "50%",
+                                objectFit: "cover",
+                                cursor: "pointer",
                               }}
-                              src={profile_image}
+                              onError={(e) => {
+                                // Fallback if image fails to load
+                                e.target.onerror = null;
+                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                  username
+                                )}&background=${stringToColor(username).slice(
+                                  1
+                                )}&color=fff&size=40`;
+                              }}
                             />
                           </div>
                           <div className="text-sm text-gray-500 capitalize space-y-1">
                             <div>{profession}</div>
-                            <div>{role}</div>
+                            <div className="text-xs text-green-700 font-bold">{role}</div>
                           </div>
                         </div>
                       </div>
@@ -908,15 +938,6 @@ export const Header = ({ isDashboard = true }) => {
                         >
                           <Wallet className="text-gray-600 h-5 w-5" />
                           <span>Finance Settings</span>
-                        </button>
-
-                        <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
-                          <ImStatsDots className="text-gray-600 h-5 w-5" />
-                          <span>Stats & Trends</span>
-                        </button>
-                        <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2">
-                          <RiSettings3Fill className="text-gray-600 h-5 w-5" />
-                          <span>Account Settings</span>
                         </button>
                         <button
                           onClick={handleLogout}
@@ -979,7 +1000,7 @@ export const Header = ({ isDashboard = true }) => {
                     <div className="font-semibold text-gray-900 text-sm capitalize">
                       {firstname || username} {lastname}
                     </div>
-                    <div className="text-xs text-gray-500">{profession}</div>
+                    <div className="text-xs text-green-700 text-bold">{profession}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 mt-3 text-xs text-gray-600">
@@ -1011,16 +1032,6 @@ export const Header = ({ isDashboard = true }) => {
                 >
                   <Wallet className="text-gray-600 h-5 w-5" />
                   <span>Finance Settings</span>
-                </button>
-
-                <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
-                  <ImStatsDots className="text-gray-500 w-5 h-5" />
-                  <span>Stats & Trends</span>
-                </button>
-
-                <button className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100 rounded-lg transition">
-                  <RiSettings3Fill className="text-gray-500 w-5 h-5" />
-                  <span>Account Settings</span>
                 </button>
 
                 <button

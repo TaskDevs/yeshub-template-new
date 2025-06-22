@@ -3,13 +3,19 @@ import { ArrowLeft, ArrowRight, Eye } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
 import { getUserProposals } from "../../../../context/proposal/proposalApi";
 import ProposalModal from "./offerDetailModal";
+import {
+  fetchFreelancerInvitations,
+  updateInvitationStatus,
+} from "../../../../context/jobs/jobsApi";
+import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 // Dummy job data for simulation
 
 const statusColors = {
   Pending: "text-yellow-600",
   Interview: "text-blue-600",
-  Shortlisted: "text-green-600",
+  Hired: "text-green-600",
   Rejected: "text-red-600",
   default: "text-gray-600",
 };
@@ -18,16 +24,42 @@ export default function Offers() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [proposals, setProposals] = useState(null);
   const [expanded, setExpanded] = useState(false);
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [pendingInvitations, setPendingInvitations] = useState([]);
+const [acceptedInvitations, setAcceptedInvitations] = useState([]);
+  const [loadingId, setLoadingId] = useState(null);
   const mappedJobs = proposals
     ? proposals.data.map((proposal) => {
         const userProposal = proposal.proposal || {}; // Avoid undefined errors
+
+        const daysRemaining = proposal.end_date
+          ? Math.max(
+              0,
+              Math.ceil(
+                (new Date(proposal.end_date) - new Date()) /
+                  (1000 * 60 * 60 * 24)
+              )
+            )
+          : null;
+
+        // Determine color class based on daysRemaining
+        const daysLeftColor =
+          daysRemaining === null
+            ? "text-gray-400"
+            : daysRemaining === 0
+            ? "text-yellow-600"
+            : daysRemaining <= 3
+            ? "text-red-600"
+            : "text-green-600";
 
         return {
           id: proposal.id,
           title: proposal.job_title || "Untitled Job",
           company: proposal?.employer?.company_name || "Unknown Company",
-          status: userProposal.stage || "Pending",
+          status: userProposal.stage
+            ? userProposal.stage.charAt(0).toUpperCase() +
+              userProposal.stage.slice(1).toLowerCase()
+            : "Pending",
           skills: proposal.skills,
           type: proposal.job_type || "N/A",
           salaryRange: userProposal.fix_rate
@@ -36,15 +68,9 @@ export default function Offers() {
           salaryValue: userProposal.fix_rate
             ? Number(userProposal.fix_rate) / 1000
             : 0,
-          daysLeft: proposal.end_date
-            ? `${Math.max(
-                0,
-                Math.ceil(
-                  (new Date(proposal.end_date) - new Date()) /
-                    (1000 * 60 * 60 * 24)
-                )
-              )} days left`
-            : "N/A",
+          daysLeft:
+            daysRemaining !== null ? `${daysRemaining} days left` : "N/A",
+          daysLeftColor, // <--- Add this
           description: proposal.description || "No description available",
         };
       })
@@ -65,13 +91,34 @@ export default function Offers() {
   const pageSize = 3;
 
   useEffect(() => {
+     const fetchInvitation = async () => {
+    try {
+      const res = await fetchFreelancerInvitations(userId);
+
+      const invitations = res.data || [];
+
+      // Filter based on status
+      const pending = invitations.filter(inv => inv.invitation_status === 'pending');
+      const accepted = invitations.filter(inv => inv.invitation_status === 'accepted');
+
+      setPendingInvitations(pending);
+      setAcceptedInvitations(accepted);
+    } catch (error) {
+      console.error("Error fetching invitations:", error);
+    }
+  };
+    if (userId) {
+      fetchInvitation(); // ✅ call the function
+    }
+  }, [userId]);
+
+  useEffect(() => {
     const getProposal = async () => {
       setLoading(true);
       try {
         const res = await getUserProposals(userId);
         if (res) {
           setProposals(res);
-          console.log("proposals: ", res.data); // Adjust this if needed
         } else {
           console.error("API responded with error:", res.message);
         }
@@ -121,9 +168,7 @@ export default function Offers() {
       setCurrentPage(1);
     }
   }, [totalPages, currentPage]);
-  console.log("Filtered jobs:", filteredJobs);
-  console.log("Current Page:", currentPage);
-  console.log("Total Pages:", totalPages);
+
 
   // pagination
 
@@ -147,6 +192,29 @@ export default function Offers() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
 
+  const handleStatusUpdate = async (invitationId, status) => {
+    setLoadingId(invitationId); // Start spinner for this invitation
+
+    const res = await updateInvitationStatus(invitationId, status);
+
+    if (res?.status === "success") {
+      Swal.fire({
+        icon: "success",
+        title: `Invitation ${status}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      // Optionally refetch or remove this invitation
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Failed to update invitation status!",
+      });
+    }
+
+    setLoadingId(null); // Reset spinner
+  };
   return (
     <div className="tw-css flex min-h-screen bg-gray-50 p-6 gap-6 page-container">
       {loading && isMobile && (
@@ -161,108 +229,7 @@ export default function Offers() {
         </div>
       )}
       {/* Sidebar Filters */}
-      <aside className="w-72 bg-white p-4 rounded-2xl shadow-sm filter-sidebar">
-        <h2 className="text-xl font-bold mb-6">Filter By</h2>
 
-        {/* Proposal Status */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold mb-2">
-            Proposal Status
-          </label>
-          <select
-            className="w-full border rounded px-3 py-2 text-sm"
-            onChange={(e) =>
-              setFilters((prev) => ({
-                ...prev,
-                status:
-                  e.target.value === "All Proposals" ? [] : [e.target.value],
-              }))
-            }
-          >
-            <option>All Proposals</option>
-            <option>Pending</option>
-            <option>Interview</option>
-            <option>Shortlisted</option>
-          </select>
-        </div>
-
-        {/* Offer Type */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold mb-2">Offer Type</label>
-          <div className="space-y-2 text-sm">
-            {["Direct Offers", "Invited Jobs"].map((type) => (
-              <label key={type} className="flex items-center gap-1 text-left">
-                <input
-                  type="checkbox"
-                  className="form-checkbox text-green-800 rounded "
-                />
-                {type}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Job Type */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold mb-2">Job Type</label>
-          <div className="space-y-2 text-sm">
-            {["Full-time", "Contract", "Part-time"].map((type) => (
-              <label key={type} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={filters.jobType.includes(type)}
-                  onChange={() => handleFilterChange("jobType", type)}
-                  className="form-checkbox text-green-800 rounded"
-                />
-                {type}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Salary Range */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold mb-2">
-            Salary Range
-          </label>
-          <input
-            type="range"
-            min="0"
-            max="200"
-            step="5"
-            value={filters.salaryValue}
-            onChange={(e) =>
-              setFilters((prev) => ({
-                ...prev,
-                salaryValue: Number(e.target.value),
-              }))
-            }
-            className="w-full"
-          />
-          <div className="flex justify-between text-xs text-gray-600 mt-1">
-            <span>$0</span>
-            <span>${filters.salaryValue}k</span>
-          </div>
-        </div>
-
-        {/* Experience Level */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold mb-2">
-            Experience Level
-          </label>
-          <div className="space-y-2 text-sm">
-            {["Entry Level", "Mid Level", "Senior Level"].map((level) => (
-              <label key={level} className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  className="form-checkbox text-green-800 rounded"
-                />
-                {level}
-              </label>
-            ))}
-          </div>
-        </div>
-      </aside>
       {/* mobile filters */}
       {showMobileFilters && (
         <div className="fixed inset-0 z-50 flex">
@@ -380,9 +347,9 @@ export default function Offers() {
                 <label className="block text-sm font-semibold mb-2">
                   Experience Level
                 </label>
-                <div className="space-y-2 text-sm">
+                <div className=" text-sm">
                   {["Entry Level", "Mid Level", "Senior Level"].map((level) => (
-                    <label key={level} className="flex items-center gap-2">
+                    <label key={level} className="">
                       <input
                         type="checkbox"
                         className="form-checkbox text-green-800 rounded"
@@ -409,8 +376,105 @@ export default function Offers() {
 
       {/* mobile filters */}
       {/* Main Content */}
-      <div className="job-layout">
+
+      <div className="grid md:grid-cols-[3fr,1fr] gap-4">
         <main className="flex-1 job-main">
+          <div className="bg-white p-4 rounded-2xl shadow-sm mb-6 flex flex-wrap gap-6 items-start">
+            {/* Proposal Status */}
+            <div className="flex flex-col">
+              <select
+                className="border rounded px-3 py-2 text-sm"
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    status:
+                      e.target.value === "All Proposals"
+                        ? []
+                        : [e.target.value],
+                  }))
+                }
+              >
+                <option>Proposal Status</option>
+                <option>All Proposals</option>
+                <option>Pending</option>
+                <option>Interview</option>
+                <option>Shortlisted</option>
+              </select>
+            </div>
+
+            {/* Offer Type */}
+            <div className="flex flex-col">
+              <select
+                className="border rounded px-3 py-2 text-sm"
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    offerType: e.target.value === "All" ? [] : [e.target.value],
+                  }))
+                }
+              >
+                <option>Offer Type</option>
+                <option>All</option>
+                <option>Direct Offers</option>
+                <option>Invited Jobs</option>
+              </select>
+            </div>
+
+            {/* Job Type */}
+            <div className="flex flex-col">
+              <select
+                className="border rounded px-3 py-2 text-sm"
+                onChange={(e) => handleFilterChange("jobType", e.target.value)}
+              >
+                <option>Job Type</option>
+                <option value="">all</option>
+                <option>full-time</option>
+                <option>contract</option>
+                <option>part-time</option>
+              </select>
+            </div>
+
+            {/* Experience Level */}
+            <div className="flex flex-col">
+              <select
+                className="border rounded px-3 py-2 text-sm"
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    experience: e.target.value === "All" ? "" : e.target.value,
+                  }))
+                }
+              >
+                <option>Experience Level</option>
+                <option>All</option>
+                <option>Entry Level</option>
+                <option>Mid Level</option>
+                <option>Senior Level</option>
+              </select>
+            </div>
+            {/* Salary Range */}
+            <div className="flex flex-col">
+              <input
+                type="range"
+                min="0"
+                max="200"
+                step="5"
+                value={filters.salaryValue}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    salaryValue: Number(e.target.value),
+                  }))
+                }
+                className="w-40"
+              />
+              <div className="flex justify-between text-xs text-gray-600 mt-1">
+                <span>₵0</span>
+                <span>₵{filters.salaryValue}k</span>
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-between items-center mb-4">
             {/* Mobile Filter Button - Visible only on mobile */}
             <div className="md:hidden mb-4">
@@ -516,7 +580,12 @@ export default function Offers() {
                         {job.type}
                       </span>
                       <span className="text-gray-500">
-                        {job.salaryRange} • {job.daysLeft}
+                        {job.salaryRange} •{" "}
+                        <span
+                          className={`text-xs font-medium ${job.daysLeftColor}`}
+                        >
+                          {job.daysLeft}
+                        </span>
                       </span>
                     </div>
                     <div>
@@ -538,9 +607,10 @@ export default function Offers() {
                       </button>
                     </div>
                   </div>
-                  <button 
-                  onClick={() => setShowModal(true)}
-                  className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition">
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition"
+                  >
                     <Eye className="w-4 h-4" />
                     View
                   </button>
@@ -598,52 +668,135 @@ export default function Offers() {
         </main>
 
         {/* Right Sidebar */}
-        <aside className="w-72 space-y-6 job-sidebar">
+        <aside className="w-full lg:w-72 space-y-6 job-sidebar">
           <div className="bg-white p-4 rounded-2xl shadow-sm">
             <h2 className="text-lg font-semibold mb-3">Invited Jobs</h2>
-            {[1, 2].map((id) => (
-              <div
-                key={id}
-                className="card bg-gray-50 p-3 mb-2 rounded shadow-sm"
-              >
-                <div className="text-sm font-medium">UX/UI Designer</div>
-                <div className="text-xs text-gray-500">
-                  $120k - $150k • 5d left
-                </div>
-                <div className="flex gap-2 mt-2">
-                  <button className="bg-green-700 text-white px-3 py-1 text-sm rounded">
-                    Accept
-                  </button>
-                  <button className="border border-gray-300 px-3 py-1 text-sm rounded">
-                    Decline
-                  </button>
-                </div>
-              </div>
-            ))}
+
+            <>
+              {pendingInvitations.length === 0 ? (
+                <p className="text-center text-gray-500">No invitations yet</p>
+              ) : (
+                pendingInvitations.map((job) => {
+                  const daysLeft = job.expires_at
+                    ? dayjs(job.expires_at).diff(dayjs(), "day")
+                    : null;
+
+                  const expiresText =
+                    daysLeft !== null
+                      ? daysLeft > 0
+                        ? `${daysLeft}d left`
+                        : daysLeft === 0
+                        ? "Expires today"
+                        : "Expired"
+                      : "No expiry";
+
+                  const isLoading = loadingId === job.invitation_id;
+
+                  return (
+                    <div
+                      key={job.job_id}
+                      className="card bg-gray-50 p-3 mb-2 rounded shadow-sm"
+                    >
+                      <div className="text-sm font-medium">{job.job_title}</div>
+                      <div className="text-xs text-gray-500">
+                        {job.budget} • {expiresText}
+                      </div>
+
+                      <div className="flex gap-2 mt-2">
+                        <button
+                          className="bg-green-700 text-white px-3 py-1 text-sm rounded flex items-center gap-1"
+                          onClick={() =>
+                            handleStatusUpdate(job.invitation_id, "accepted")
+                          }
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <div className="mt-4 text-center">
+                              <RotatingLines
+                                strokeColor="grey"
+                                strokeWidth="2"
+                                animationDuration="0.75"
+                                width="40"
+                                visible={true}
+                              />
+                            </div>
+                          ) : (
+                            "Accept"
+                          )}
+                        </button>
+                        <button
+                          className="border border-gray-300 px-3 py-1 text-sm rounded flex items-center gap-1"
+                          onClick={() =>
+                            handleStatusUpdate(job.invitation_id, "rejected")
+                          }
+                          disabled={isLoading}
+                        >
+                          {isLoading ? (
+                            <div className="mt-4 text-center">
+                              <RotatingLines
+                                strokeColor="grey"
+                                strokeWidth="2"
+                                animationDuration="0.75"
+                                width="40"
+                                visible={true}
+                              />
+                            </div>
+                          ) : (
+                            "Decline"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </>
           </div>
 
           <div className="bg-white p-4 rounded-2xl shadow-sm">
-            <h2 className="text-lg font-semibold mb-3">Job Offers</h2>
-            {[1, 2].map((id) => (
-              <div key={id} className="bg-gray-50 p-3 mb-2 rounded shadow-sm">
-                <div className="text-sm font-medium">UX/UI Designer</div>
-                <div className="text-xs text-gray-500">
-                  $120k - $150k • 5d left
-                </div>
-                <div className="flex gap-2 mt-2">
-                  <button className="bg-green-700 text-white px-3 py-1 text-sm rounded">
-                    Accept
-                  </button>
-                  <button className="border border-gray-300 px-3 py-1 text-sm rounded">
-                    Decline
-                  </button>
-                </div>
-              </div>
-            ))}
+            <h3 className="text-lg font-semibold mb-3">Accepted Offers</h3>
+             <>
+              {acceptedInvitations.length === 0 ? (
+                <p className="text-center text-gray-500">No invitations yet</p>
+              ) : (
+                acceptedInvitations.map((job) => {
+                  const daysLeft = job.expires_at
+                    ? dayjs(job.expires_at).diff(dayjs(), "day")
+                    : null;
+
+                  const expiresText =
+                    daysLeft !== null
+                      ? daysLeft > 0
+                        ? `${daysLeft}d left`
+                        : daysLeft === 0
+                        ? "Expires today"
+                        : "Expired"
+                      : "No expiry";
+
+                    return (
+                    <div
+                      key={job.job_id}
+                      className="card bg-gray-50 p-3 mb-2 rounded shadow-sm"
+                    >
+                      <div className="text-sm font-medium">{job.job_title}</div>
+                      <div className="text-xs text-gray-500">
+                        {job.budget} • {expiresText}
+                      </div>
+
+                      <div className="flex gap-2 mt-2">
+                        <span className="bg-green-500 text-white px-3 text-sm rounded-full items-center">
+                            Accepted
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </>
           </div>
         </aside>
       </div>
-         <ProposalModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <ProposalModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }

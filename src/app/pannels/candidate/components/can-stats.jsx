@@ -66,7 +66,7 @@ export const CandidateStats = ({ cssModule }) => {
       <StatsCard
         title="Saved Jobs"
         value={stats.total_saved_jobs}
-        subtitle={`Expiring soon: ${stats.expiring_soon_saved_jobs_count}`}
+        subtitle={`Expiring soon: 0`}
         icon={FaClock}
         cssModule={cssModule}
       />
@@ -74,7 +74,7 @@ export const CandidateStats = ({ cssModule }) => {
       <StatsCard
         title="Available Balance"
         value={`GH₵ ${stats.available_balance}`}
-        subtitle="+₵1,500 this month"
+        subtitle="current balance"
         icon={FaWallet}
         cssModule={cssModule}
       />

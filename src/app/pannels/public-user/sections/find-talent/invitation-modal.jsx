@@ -4,27 +4,38 @@ export default function InviteToJobModal({
   isOpen,
   onClose,
   jobOptions = [],
+  freelancerName = "",
+  freelancerId = null,
   onSend = () => {},
 }) {
   const [selectedJob, setSelectedJob] = useState("");
-  const [message, setMessage] = useState("");
+  const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const employerId = sessionStorage.getItem("userId");
+useEffect(() => {
+  if (jobOptions.length > 0) {
+    setSelectedJob(jobOptions[0].id); // use job title or full object if needed
+  }
+}, [jobOptions]);
 
-  useEffect(() => {
-    if (jobOptions.length > 0) {
-      setSelectedJob(jobOptions[0]);
-    }
-  }, [jobOptions]);
 
-  const sendInvitation = async () => {
-    setLoading(true);
-    try {
-      await onSend({ selectedJob, message });
-    } finally {
-      setLoading(false);
-      onClose();
-    }
-  };
+const sendInvitation = async () => {
+  setLoading(true);
+  try {
+    const data = {
+      freelancer_id: freelancerId,
+      company_id: employerId,
+      job_id: selectedJob,
+      response:response,
+    };
+
+    await onSend(data);
+  } finally {
+    setLoading(false);
+    onClose();
+  }
+};
+
 
   if (!isOpen) return null;
 
@@ -37,9 +48,9 @@ export default function InviteToJobModal({
         >
           &times;
         </button>
-        <h2 className="text-lg font-semibold mb-4">
-          Invite to Job
-        </h2>
+        <h5 className="text-sm font-semibold text-green-500 mb-4">
+          Invite  {freelancerName} to Job.
+        </h5>
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -50,9 +61,9 @@ export default function InviteToJobModal({
             value={selectedJob}
             onChange={(e) => setSelectedJob(e.target.value)}
           >
-            {jobOptions.map((job, idx) => (
-              <option key={idx} value={job}>
-                {job}
+            {jobOptions.map((job) => (
+              <option key={job.id} value={job.id}>
+                {job.title}
               </option>
             ))}
           </select>
@@ -66,8 +77,8 @@ export default function InviteToJobModal({
             rows={4}
             className="w-full border rounded-md px-3 py-2 text-sm"
             placeholder={`Write a message to free...`}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            value={response}
+            onChange={(e) => setResponse(e.target.value)}
           />
         </div>
 

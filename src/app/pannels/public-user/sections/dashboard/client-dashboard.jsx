@@ -107,7 +107,7 @@ function ClientDashboard() {
   };
 
   const goToStaff = () => {
-    navigate("/client-staff");
+    navigate("/dashboard-client/client-staff");
   };
 
   const goToTaskManagement = () => {

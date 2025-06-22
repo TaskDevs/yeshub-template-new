@@ -318,6 +318,7 @@ const EmployerApiDataProvider = (props) => {
   const processGetHiredApplicants = async () => {
     let response = await getHiredApplicants(userId);
     if (response) {
+      console.log(response.data);
       setProcessHiredApplicants(response.data);
       setHiredApplicants(response.data);
     }

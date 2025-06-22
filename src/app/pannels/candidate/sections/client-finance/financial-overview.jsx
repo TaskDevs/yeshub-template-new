@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import AddFundsModal from "../../../employer/components/jobs/AddFundsModal";
 import Swal from "sweetalert2";
 import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
+import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import jsPDF from "jspdf";
 //import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
@@ -32,91 +33,25 @@ import {
 import { useNavigate } from "react-router-dom";
 const chartData = {
   monthly: [
-    { name: "Jan", revenue: 12000, expenses: 8000, profit: 4000 },
-    { name: "Feb", revenue: 10000, expenses: 6500, profit: 3500 },
-    { name: "Mar", revenue: 14000, expenses: 9000, profit: 5000 },
-    { name: "Apr", revenue: 16000, expenses: 11000, profit: 5000 },
-    { name: "May", revenue: 15000, expenses: 10500, profit: 4500 },
+    { name: "Jan", revenue: 0, expenses: 0, profit: 0 },
+    { name: "Feb", revenue: 0, expenses: 0, profit: 0 },
+    { name: "Mar", revenue: 0, expenses: 0, profit: 0 },
+    { name: "Apr", revenue: 0, expenses: 0, profit: 0 },
+    { name: "May", revenue: 0, expenses: 0, profit: 0 },
   ],
   quarterly: [
-    { name: "Q1", revenue: 36000, expenses: 24500, profit: 11500 },
-    { name: "Q2", revenue: 46000, expenses: 31000, profit: 15000 },
-    { name: "Q3", revenue: 50000, expenses: 34000, profit: 16000 },
-    { name: "Q4", revenue: 55000, expenses: 37500, profit: 17500 },
+    { name: "Q1", revenue: 0, expenses: 0, profit: 0 },
+    { name: "Q2", revenue: 0, expenses: 0, profit: 0 },
+    { name: "Q3", revenue: 0, expenses: 0, profit: 0 },
+    { name: "Q4", revenue: 0, expenses: 0, profit: 0 },
   ],
   yearly: [
-    { name: "2021", revenue: 120000, expenses: 85000, profit: 35000 },
-    { name: "2022", revenue: 150000, expenses: 100000, profit: 50000 },
-    { name: "2023", revenue: 180000, expenses: 120000, profit: 60000 },
-    { name: "2024", revenue: 210000, expenses: 135000, profit: 75000 },
+    { name: "2021", revenue: 0, expenses: 0, profit: 0 },
+    { name: "2022", revenue: 0, expenses: 0, profit: 0 },
+    { name: "2023", revenue: 0, expenses: 0, profit: 0 },
+    { name: "2024", revenue: 0, expenses: 0, profit: 0 },
   ],
 };
-
-const projectsData = [
-  {
-    id: 1,
-    name: "E-commerce Platform Redesign",
-    date: "May 1, 2025",
-    freelancer: "Kwame Osei",
-    role: "Senior Backend Developer",
-    avatar: "https://i.pravatar.cc/40?img=1",
-    escrow: "$3,200",
-    total: "$8,500",
-    projectStatus: "In Progress",
-    paymentStatus: "Funded",
-  },
-  {
-    name: "Mobile App UI Design",
-    date: "April 15, 2025",
-    freelancer: "Ama Darko",
-    role: "UI/UX Designer",
-    avatar: "https://i.pravatar.cc/40?img=2",
-    escrow: "$1,800",
-    total: "$3,500",
-    projectStatus: "In Progress",
-    paymentStatus: "Funded",
-  },
-  {
-    name: "Database Optimization",
-    date: "May 10, 2025",
-    freelancer: "Abena Mensah",
-    role: "Database Engineer",
-    avatar: "https://i.pravatar.cc/40?img=3",
-    escrow: "$2,400",
-    total: "$2,400",
-    projectStatus: "On Hold",
-    paymentStatus: "Partial",
-  },
-  {
-    name: "Server Infrastructure Setup",
-    date: "April 5, 2025",
-    freelancer: "Emmanuel Agyei",
-    role: "DevOps Engineer",
-    avatar: "https://i.pravatar.cc/40?img=4",
-    escrow: "$1,350",
-    total: "$4,500",
-    projectStatus: "In Progress",
-    paymentStatus: "Partial",
-  },
-  {
-    name: "API Integration",
-    date: "May 8, 2025",
-    freelancer: "Kofi Boateng",
-    role: "Backend Engineer",
-    avatar: "https://i.pravatar.cc/40?img=5",
-    escrow: "$0",
-    total: "$2,800",
-    projectStatus: "In Progress",
-    paymentStatus: "Unfunded",
-  },
-];
-
-const TABS = [
-  "Active Projects",
-  "Freelancer Invoices",
-  "Transaction History",
-  "Payment Methods",
-];
 
 const FinancialOverview = () => {
   const {
@@ -125,6 +60,8 @@ const FinancialOverview = () => {
     allEarnings,
     processGetTransactionOfUser,
   } = useContext(TransactionApiData);
+  const { userProjects, projectListData, processGetUserProjects } =
+    useContext(EmployerApiData);
   const [selectedFilter, setSelectedFilter] = useState("monthly");
   const contentRef = useRef(null); // ref to capture the chart + cards
   const [activeTab, setActiveTab] = useState("Active Projects");
@@ -136,12 +73,79 @@ const FinancialOverview = () => {
   const [page, setPage] = useState(1);
   const perPage = 5;
   const navigate = useNavigate(); // Initialize useNavigate hook
-  const handleView = (project) => {
-    navigate(`/dashboard-client/project-details/${project.id}`); // if using React Router
+  const handleView = (id) => {
+    navigate(`/dashboard-client/talent-pool/${id}`); // if using React Router
   };
+
+  // const projectsData = [
+  //   {
+  //     id: 1,
+  //     name: "E-commerce Platform Redesign",
+  //     date: "May 1, 2025",
+  //     freelancer: "Kwame Osei",
+  //     role: "Senior Backend Developer",
+  //     avatar: "https://i.pravatar.cc/40?img=1",
+  //     escrow: "$3,200",
+  //     total: "$8,500",
+  //     projectStatus: "In Progress",
+  //     paymentStatus: "Funded",
+  //   },
+  //   {
+  //     name: "Mobile App UI Design",
+  //     date: "April 15, 2025",
+  //     freelancer: "Ama Darko",
+  //     role: "UI/UX Designer",
+  //     avatar: "https://i.pravatar.cc/40?img=2",
+  //     escrow: "$1,800",
+  //     total: "$3,500",
+  //     projectStatus: "In Progress",
+  //     paymentStatus: "Funded",
+  //   },
+  //   {
+  //     name: "Database Optimization",
+  //     date: "May 10, 2025",
+  //     freelancer: "Abena Mensah",
+  //     role: "Database Engineer",
+  //     avatar: "https://i.pravatar.cc/40?img=3",
+  //     escrow: "$2,400",
+  //     total: "$2,400",
+  //     projectStatus: "On Hold",
+  //     paymentStatus: "Partial",
+  //   },
+  //   {
+  //     name: "Server Infrastructure Setup",
+  //     date: "April 5, 2025",
+  //     freelancer: "Emmanuel Agyei",
+  //     role: "DevOps Engineer",
+  //     avatar: "https://i.pravatar.cc/40?img=4",
+  //     escrow: "$1,350",
+  //     total: "$4,500",
+  //     projectStatus: "In Progress",
+  //     paymentStatus: "Partial",
+  //   },
+  //   {
+  //     name: "API Integration",
+  //     date: "May 8, 2025",
+  //     freelancer: "Kofi Boateng",
+  //     role: "Backend Engineer",
+  //     avatar: "https://i.pravatar.cc/40?img=5",
+  //     escrow: "$0",
+  //     total: "$2,800",
+  //     projectStatus: "In Progress",
+  //     paymentStatus: "Unfunded",
+  //   },
+  // ];
+
+  const TABS = [
+    "Active Projects",
+    "Freelancer Invoices",
+    "Transaction History",
+    "Payment Methods",
+  ];
 
   useEffect(() => {
     processGetTransactionOfUser();
+    processGetUserProjects();
   }, []);
 
   const handleAddFunds = (data) => {
@@ -171,7 +175,7 @@ const FinancialOverview = () => {
     setCreateWalletLoad(false);
   };
 
-  const filteredProjects = projectsData
+  const filteredProjects = projectListData
     .filter((project) =>
       project.name.toLowerCase().includes(search.toLowerCase())
     )
@@ -256,20 +260,38 @@ const FinancialOverview = () => {
           <div className="bg-white rounded-lg p-4 shadow-sm">
             <div className="flex justify-between items-center mb-2">
               <h2 className="text-sm font-medium text-gray-600">
-                Total Spent (May 2025)
+                Total Spent ({allEarnings.start_month})
               </h2>
               <ArrowUpRight size={20} className="text-green-500" />
             </div>
-            <p className="text-xl font-semibold">₵12,450</p>
-            <p className="text-sm text-green-600 mt-1">↑ 8.2% from April</p>
+            <p className="text-xl font-semibold">
+              ₵{allEarnings.totalSpentInMonth}
+            </p>
+            <p className="text-sm text-green-600 mt-1">
+              ↑ 0% from {allEarnings.start_month}
+            </p>
             <div className="mt-2 text-sm text-gray-500">Monthly Budget</div>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
               <div
                 className="bg-green-500 h-2 rounded-full"
-                style={{ width: "83%" }}
+                style={{
+                  width:
+                    (parseFloat(allEarnings.totalSpentInMonth) /
+                      parseFloat(allEarnings.escrow)) *
+                      100 +
+                    "%",
+                }}
               ></div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">₵15,000 (83%)</p>
+            <p className="text-xs text-gray-500 mt-1">
+              ₵{allEarnings.totalSpentInMonth} (
+              {`${
+                (parseFloat(allEarnings.totalSpentInMonth) /
+                  parseFloat(allEarnings.escrow)) *
+                100
+              }`}
+              %)
+            </p>
           </div>
 
           {/* Outstanding Payments */}
@@ -280,17 +302,17 @@ const FinancialOverview = () => {
               </h2>
               <AlertTriangle size={20} className="text-yellow-400" />
             </div>
-            <p className="text-xl font-semibold">₵3,280</p>
+            <p className="text-xl font-semibold">₵0</p>
             <p className="text-sm text-red-600 mt-1">↑ 12.5% from April</p>
             <div className="mt-3 space-y-1 text-sm">
               <div className="text-gray-600">
-                Due Today: <strong>₵1,200</strong>
+                Due Today: <strong>₵0</strong>
               </div>
               <div className="text-gray-600">
-                Due This Week: <strong>₵1,850</strong>
+                Due This Week: <strong>₵0</strong>
               </div>
               <div className="text-red-500">
-                Overdue: <strong>₵230</strong>
+                Overdue: <strong>₵0</strong>
               </div>
             </div>
           </div>
@@ -303,8 +325,12 @@ const FinancialOverview = () => {
               </h2>
               <Wallet size={20} className="text-blue-500" />
             </div>
-            <p className="text-xl font-semibold">₵{allEarnings.available}</p>
-            <p className="text-sm text-gray-500">across 5 projects</p>
+            <p className="text-xl font-semibold">
+              ₵{allEarnings.escrow || "0"}
+            </p>
+            <p className="text-sm text-gray-500">
+              across {userProjects.length} projects
+            </p>
             <div className="mt-3 text-sm text-gray-600">Active Projects</div>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
               <div
@@ -312,7 +338,7 @@ const FinancialOverview = () => {
                 style={{ width: "71%" }}
               ></div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">5 of 7</p>
+            <p className="text-xs text-gray-500 mt-1">{userProjects.length}</p>
           </div>
 
           {/* Available Balance */}
@@ -323,7 +349,9 @@ const FinancialOverview = () => {
               </h2>
               <CreditCard size={20} className="text-green-500" />
             </div>
-            <p className="text-2xl font-semibold">₵{allEarnings.available}</p>
+            <p className="text-2xl font-semibold">
+              ₵{allEarnings.available || "0"}
+            </p>
             <div className="mt-3 flex space-x-2">
               <button className="bg-green-100 text-green-800 px-3 py-1 rounded text-sm flex items-center space-x-1">
                 <Banknote size={14} />
@@ -468,7 +496,7 @@ const FinancialOverview = () => {
                 <thead className="text-gray-500 border-b">
                   <tr>
                     <th className="py-2">Project</th>
-                    <th>Assigned Freelancer</th>
+                    <th>Assigned Team</th>
                     <th>Escrow Amount</th>
                     <th>Project Status</th>
                     <th>Payment Status</th>
@@ -489,17 +517,9 @@ const FinancialOverview = () => {
 
                       <td>
                         <div className="flex items-center gap-3">
-                          <img
-                            src={project.avatar}
-                            alt="avatar"
-                            className="w-8 h-8 rounded-full object-cover"
-                          />
                           <div className="flex flex-col">
                             <span className="font-medium text-black">
-                              {project.freelancer}
-                            </span>
-                            <span className="text-xs text-gray-400">
-                              {project.role}
+                              {project.freelance} members
                             </span>
                           </div>
                         </div>
@@ -507,8 +527,8 @@ const FinancialOverview = () => {
 
                       <td>
                         <div>{project.escrow}</div>
-                        <div className="text-xs text-gray-400">
-                          of {project.total} total
+                        <div className="font-semibold text-gray-400">
+                          {`GH ${project.total}`}
                         </div>
                       </td>
 
@@ -543,12 +563,9 @@ const FinancialOverview = () => {
                       <td>
                         <a
                           onClick={() => handleView(project.id)}
-                          className="text-green-600 text-sm mr-4"
+                          className="text-green-600 text-sm mr-4 cursor-pointer"
                         >
                           View Details
-                        </a>
-                        <a href="#" className="text-gray-500 text-sm">
-                          Add Funds
                         </a>
                       </td>
                     </tr>

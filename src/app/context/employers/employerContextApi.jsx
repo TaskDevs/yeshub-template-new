@@ -68,11 +68,26 @@ const EmployerApiDataProvider = (props) => {
   const [projectPaymentInfo, setProjectPaymentInfo] = useState([]);
   const [deliverables, setDeliverables] = useState([]);
   const [receiptInfo, setReceiptInfo] = useState({});
+  const [projectListData, setProjectListData] = useState([]);
 
   const processGetUserProjects = async () => {
     try {
       const userId = sessionStorage.getItem("userId");
       let responseOnGetUserProjects = await getProjects(userId);
+      let newData = [];
+      responseOnGetUserProjects.projects.map((project) =>
+        newData.push({
+          id: project.id,
+          name: project.project_name,
+          date: project.start_date,
+          freelance: project.team.length,
+          total: project.total_budget,
+          projectStatus: "In Progress",
+          paymentStatus: "Funded",
+        })
+      );
+      console.log(newData);
+      setProjectListData(newData);
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
@@ -603,6 +618,7 @@ const EmployerApiDataProvider = (props) => {
         setProcessHiredApplicants,
         processManageProjectMilestoneOrTeam,
         processProjectInfoData,
+        projectListData,
         projectInfo,
         notifyMessage,
         setNotifyMessage,

@@ -7,17 +7,23 @@ import {
   getProposalInfo,
   addExperience,
   addJobPost,
-  manageProject,
+  autoSaveDeliverables,
+  makePayout,
+  manageProjectTasks,
+  manageProjectMilestoneOrTeam,
+  getReceipt,
   createProject,
   changeCandidateStatus,
   getClientDashboardStats,
   getProjects,
+  getProjectPayments,
   getClientProjects,
   getProjectChat,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
   getHiredApplicants,
+  getDeliverables,
   getCompanyPostedJobs,
   projectInfoData,
   checkIfCompanyExist,
@@ -59,6 +65,9 @@ const EmployerApiDataProvider = (props) => {
   const [projectChats, setProjectChats] = useState([]);
   const [clientProjectStatus, setClientProjectStatus] = useState([]);
   const [proposalInfo, setProposalInfo] = useState({});
+  const [projectPaymentInfo, setProjectPaymentInfo] = useState([]);
+  const [deliverables, setDeliverables] = useState([]);
+  const [receiptInfo, setReceiptInfo] = useState({});
 
   const processGetUserProjects = async () => {
     try {
@@ -72,7 +81,7 @@ const EmployerApiDataProvider = (props) => {
 
   const processGetProposalInfo = async (id) => {
     let response = await getProposalInfo(id);
-    console.log(response);
+
     if (response) {
       setProposalInfo({
         title: response.data.posted_job.title,
@@ -97,8 +106,22 @@ const EmployerApiDataProvider = (props) => {
 
   const processGetProjectChat = async (id) => {
     let response = await getProjectChat(id);
-    console.log(response);
     setProjectChats(response.messages.data);
+  };
+
+  const processGetProjectPayments = async (id) => {
+    let response = await getProjectPayments(id);
+    if (response) {
+      setProjectPaymentInfo(response.data);
+    }
+  };
+
+  const processGetDeliverables = async (id) => {
+    let response = await getDeliverables(id);
+    if (response) {
+      console.log(response.data);
+      setDeliverables(response.data);
+    }
   };
 
   const processSendGroupChat = async (data) => {
@@ -157,7 +180,19 @@ const EmployerApiDataProvider = (props) => {
   const processProjectInfoData = async (id) => {
     let response = await projectInfoData(id);
     if (response) {
+      console.log(response.project_info);
       setProjectInfo(response.project_info);
+    }
+  };
+
+  const processMakePayout = async (data) => {
+    let response = await makePayout(data);
+    if (response) {
+      console.log(response);
+      processGetProjectPayments(data.project_id);
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -268,10 +303,8 @@ const EmployerApiDataProvider = (props) => {
   const processGetHiredApplicants = async () => {
     let response = await getHiredApplicants(userId);
     if (response) {
-      let newData = [];
-      response.data.map((item) => newData.push(item.user));
-      setProcessHiredApplicants(newData);
-      setHiredApplicants(newData);
+      setProcessHiredApplicants(response.data);
+      setHiredApplicants(response.data);
     }
   };
 
@@ -419,14 +452,22 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
-  const processManageProject = async (data) => {
-    let response = await manageProject(data);
-    //console.log
+  const processManageProjectTasks = async (data) => {
+    await manageProjectTasks(data);
+  };
+
+  const processManageProjectMilestoneOrTeam = async (data) => {
+    await manageProjectMilestoneOrTeam(data);
+  };
+
+  const handleAutoSaveDeliverables = async (data) => {
+    await autoSaveDeliverables(data);
+  };
+
+  const handleReceiptInfo = async (project_id, milestone_id) => {
+    let response = await getReceipt(project_id, milestone_id);
     if (response) {
-      processProjectInfoData(data.project_id);
-      return true;
-    } else {
-      return false;
+      setReceiptInfo(response.data);
     }
   };
 
@@ -523,6 +564,7 @@ const EmployerApiDataProvider = (props) => {
         processGetJobAppliedToCompany,
         processGetCompanyInfo,
         processGetUserProjects,
+        processGetDeliverables,
         processCheckIfCompanyExist,
         processSearchEmployer,
         processAddJobPost,
@@ -530,6 +572,7 @@ const EmployerApiDataProvider = (props) => {
         processGetHiredApplicants,
         processUpdateEmployer,
         processUpdateJob,
+        processManageProjectTasks,
         processUpdateJobStatus,
         processUpdateOfficeImage,
         processUpdateEmployerLogo,
@@ -539,6 +582,8 @@ const EmployerApiDataProvider = (props) => {
         processDeleteJob,
         appliedJobList,
         companyInfoData,
+        deliverables,
+        setDeliverables,
         employerStats,
         employerProfiles,
         processGetCompanyPostedJobs,
@@ -554,8 +599,9 @@ const EmployerApiDataProvider = (props) => {
         interviewInfo,
         userProjects,
         processHiredApplicants,
+        handleAutoSaveDeliverables,
         setProcessHiredApplicants,
-        processManageProject,
+        processManageProjectMilestoneOrTeam,
         processProjectInfoData,
         projectInfo,
         notifyMessage,
@@ -563,12 +609,17 @@ const EmployerApiDataProvider = (props) => {
         projectChats,
         setProjectChats,
         processGetProjectChat,
+        processMakePayout,
         processSendGroupChat,
         processGetClientProjects,
         processHireCandidate,
         clientProjectStatus,
         processGetProposalInfo,
         proposalInfo,
+        processGetProjectPayments,
+        projectPaymentInfo,
+        handleReceiptInfo,
+        receiptInfo,
       }}
     >
       {props.children}

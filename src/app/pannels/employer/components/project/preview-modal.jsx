@@ -3,6 +3,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Folder } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getDaysLeft } from "../../../../../utils/dateUtils";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 export default function PreviewModal({ isOpen, onClose, projectData }) {
@@ -110,7 +111,9 @@ export default function PreviewModal({ isOpen, onClose, projectData }) {
           </div>
           <div className="bg-gray-100 p-4 rounded-xl">
             <span className="text-sm text-gray-400 block">Duration</span>
-            <span className="text-xl font-semibold text-gray-800">67 days</span>
+            <span className="text-xl font-semibold text-gray-800">
+              {getDaysLeft(projectData?.startDate, projectData?.endDate)} days
+            </span>
           </div>
           <div className="bg-gray-100 p-4 rounded-xl">
             <span className="text-sm text-gray-400 block">Team Size</span>

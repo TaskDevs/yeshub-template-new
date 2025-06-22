@@ -19,6 +19,8 @@ export const FreelanceProjectManage = () => {
     projectChats,
     //setProjectChats,
     processGetProjectChat,
+    processGetProjectPayments,
+    projectPaymentInfo,
     processSendGroupChat,
   } = useContext(EmployerApiData);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,13 +33,19 @@ export const FreelanceProjectManage = () => {
   const [chatId, setChatId] = useState("");
   const [attachment, setAttachment] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [payoutStats, setPayoutStats] = useState([]);
+  const [projectStats, setProjectStats] = useState({
+    budget_used: 0,
+    budget_used_percentage: 0,
+    progress: 0,
+  });
 
   const { id } = useParams();
 
   useEffect(() => {
     let newTeam = [];
     let data = freelanceProjectList?.find((item) => item.id == id);
-    console.log(data);
+    //console.log(data);
     data?.team?.map((item) =>
       newTeam.push({
         id: item.id,
@@ -64,8 +72,27 @@ export const FreelanceProjectManage = () => {
   }, [projectInfo]);
 
   useEffect(() => {
-    console.log(projectChats);
-  }, [projectChats]);
+    processProjectInfoData(id);
+    processGetProjectPayments(id);
+    //setBudgetUsed()
+  }, []);
+
+  useEffect(() => {
+    let newData = [];
+    let amountSpent = 0;
+    projectPaymentInfo.map((item) => {
+      newData.push(item.freelance_id);
+      amountSpent += parseFloat(item.project_budget);
+    });
+    setPayoutStats(newData);
+    setProjectStats({
+      budget_used: amountSpent,
+      budget_used_percentage:
+        (amountSpent / parseFloat(projectDetails?.total_budget)) * 100,
+      progress:
+        (projectPaymentInfo.length / projectDetails?.milestones?.length) * 100,
+    });
+  }, [projectPaymentInfo]);
 
   //   const handleRemoveTask = (id) => {
   //     setTaskAssignment((prevAssigns) =>
@@ -211,11 +238,9 @@ export const FreelanceProjectManage = () => {
                     <span className="text-sm text-gray-600">
                       Current Tasks:{" "}
                       <span className="text-green-800">
-                        {
-                          projectInfo?.assignments?.filter(
-                            (idx) => idx.teamMemberId == item.id
-                          ).length
-                        }
+                        {projectInfo?.assignments?.filter(
+                          (idx) => idx.teamMemberId == item.id
+                        ).length || 0}
                       </span>
                     </span>
                     <span>:</span>
@@ -252,16 +277,24 @@ export const FreelanceProjectManage = () => {
                 <div className="w-1/4 bg-gray-100 rounded-xl h-30 p-4">
                   <span className="text-sm text-gray-400 block">Budget</span>
                   <span className="text-gray-800 text-xl font-semibold block mb-2">
-                    GH {projectDetails.total_budget}
+                    GH {projectDetails?.total_budget}
                   </span>
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm text-gray-400">Used: 0</span>
-                    <span className="text-sm text-gray-400">0%</span>
+                    <span className="text-sm text-gray-400">
+                      Used: {projectStats?.budget_used}
+                    </span>
+                    <span className="text-sm text-gray-400">
+                      {projectStats?.budget_used_percentage?.toFixed(1)}%
+                    </span>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
                     <div
                       className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `0%` }}
+                      style={{
+                        width: `${projectStats?.budget_used_percentage?.toFixed(
+                          1
+                        )}%`,
+                      }}
                     />
                   </div>
                 </div>
@@ -280,12 +313,14 @@ export const FreelanceProjectManage = () => {
                   </span>
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-gray-400">Progress</span>
-                    <span className="text-sm text-gray-400">0%</span>
+                    <span className="text-sm text-gray-400">
+                      {projectStats?.progress}%
+                    </span>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full">
                     <div
                       className="h-2 bg-green-600 rounded-full"
-                      style={{ width: `0%` }}
+                      style={{ width: `${projectStats?.progress}%` }}
                     />
                   </div>
                 </div>
@@ -350,6 +385,10 @@ export const FreelanceProjectManage = () => {
                       totalDeliverables > 0 &&
                       totalDeliverables === completedDeliverables;
 
+                    const isPaid = payoutStats.some(
+                      (id) => id == item.assignedTo
+                    );
+
                     return (
                       <li className="mb-10 ml-6" key={index}>
                         <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-100 rounded-full ring-8 ring-white">
@@ -391,28 +430,39 @@ export const FreelanceProjectManage = () => {
                               Object.keys(item.deliverables).map(
                                 (deliverable, deliverableIndex) => {
                                   const key = `${index}-${deliverableIndex}`;
+                                  const content =
+                                    item.deliverables[deliverable];
+
                                   return (
                                     <div
                                       key={key}
                                       className="flex items-center space-x-2"
                                     >
-                                      <input
-                                        type="checkbox"
-                                        id={`check-${key}`}
-                                        checked={!!checkedItems?.[key]}
-                                        readOnly={true}
-                                        className="h-4 w-4 text-green-600 rounded focus:ring-0"
-                                      />
-                                      <label
-                                        htmlFor={`check-${key}`}
-                                        className={`text-sm cursor-pointer transition ${
-                                          checkedItems?.[key]
-                                            ? "font-bold text-green-600 line-through"
-                                            : "text-gray-800"
-                                        }`}
-                                      >
-                                        {item.deliverables[deliverable]}
-                                      </label>
+                                      {isPaid ? (
+                                        <span className="text-sm font-bold text-green-600 line-through">
+                                          {content}
+                                        </span>
+                                      ) : (
+                                        <>
+                                          <input
+                                            type="checkbox"
+                                            id={`check-${key}`}
+                                            checked={!!checkedItems?.[key]}
+                                            readOnly={true}
+                                            className="h-4 w-4 text-green-600 rounded focus:ring-0"
+                                          />
+                                          <label
+                                            htmlFor={`check-${key}`}
+                                            className={`text-sm cursor-pointer transition ${
+                                              checkedItems?.[key]
+                                                ? "font-bold text-green-600 line-through"
+                                                : "text-gray-800"
+                                            }`}
+                                          >
+                                            {content}
+                                          </label>
+                                        </>
+                                      )}
                                     </div>
                                   );
                                 }
@@ -421,16 +471,22 @@ export const FreelanceProjectManage = () => {
 
                           {/* ✅ Payout Button */}
                           <div className="mt-4 text-right">
-                            <span
-                              disabled={!isComplete}
-                              className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
-                                isComplete
-                                  ? "bg-green-600 text-white hover:bg-green-700"
-                                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                              }`}
-                            >
-                              Payout Status
-                            </span>
+                            {isPaid ? (
+                              <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                                Payment made
+                              </span>
+                            ) : (
+                              <span
+                                disabled={!isComplete}
+                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
+                                  isComplete
+                                    ? "bg-green-600 text-white hover:bg-green-700"
+                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                }`}
+                              >
+                                Not Paid
+                              </span>
+                            )}
                           </div>
                         </div>
                       </li>

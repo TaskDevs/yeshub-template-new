@@ -5,14 +5,7 @@ import Swal from "sweetalert2";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { PostJobFormSection } from "../../../public-user/sections/profile/client-profile-forms";
-import {
-  Clock5,
-  MapPin,
-  EllipsisVertical,
-  Pencil,
-  Eye,
-  Trash2,
-} from "lucide-react";
+import { Clock5, EllipsisVertical, Trash2 } from "lucide-react";
 
 const JOBS_PER_PAGE = 3;
 
@@ -102,12 +95,6 @@ export default function ManageProjects() {
     setCurrentPage(1);
   }, [searchTerm, statusFilter, sortBy]);
 
-  const handleView = (job) => {
-    // Example: open a modal or navigate to details
-    console.log("Viewing job:", job);
-    navigate(`/dashboard-client/project-details/${job.id}`); // if using React Router
-  };
-
   const handleManage = (id) => {
     navigate(`/dashboard-client/talent-pool/${id}`);
   };
@@ -164,9 +151,6 @@ export default function ManageProjects() {
     switch (action) {
       case "manage":
         handleManage(project);
-        break;
-      case "view":
-        handleView(project);
         break;
       case "edit":
         handleSetForEdit(project);
@@ -295,13 +279,6 @@ export default function ManageProjects() {
                   </span>
                 </div>
 
-                <div className="text-sm text-gray-600 flex items-center gap-2">
-                  <span className="flex items-center gap-1">
-                    <MapPin size={15} />
-                    {project.project_category}
-                  </span>
-                </div>
-
                 <div className="text-sm text-gray-500 flex items-center gap-2">
                   <span className="flex items-center gap-1">
                     <Clock5 size={15} /> Posted on{" "}
@@ -312,7 +289,7 @@ export default function ManageProjects() {
 
               {/* Actions */}
               <div className="relative z-100">
-                <div className="flex flex-col items-end gap-2 mt-4 md:mt-0">
+                <div className="flex flex-col items-end gap-2 mt-2 md:mt-0">
                   <p className="text-sm text-gray-500">
                     👥 {project.team.length} team
                   </p>
@@ -336,18 +313,12 @@ export default function ManageProjects() {
                       >
                         <Clock5 size={14} /> Manage
                       </button>
-                      <button
-                        onClick={() => handleMenuAction("view", project)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
-                      >
-                        <Eye size={14} /> View
-                      </button>
-                      <button
+                      {/* <button
                         onClick={() => handleMenuAction("edit", project)}
                         className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                       >
                         <Pencil size={14} /> Edit
-                      </button>
+                      </button> */}
                       <button
                         onClick={() => handleMenuAction("delete", project)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"

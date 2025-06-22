@@ -10,6 +10,7 @@ import {
   updateFreelance,
   deleteFreelance,
   getFreelanceProjects,
+  getFreelanceStats,
 } from "./freelanceApi";
 import { userId } from "../../../globals/constants";
 import toast from "react-hot-toast";
@@ -38,6 +39,11 @@ const FreelanceApiDataProvider = (props) => {
   const { portfolios } = useContext(PortfolioApiData);
   const [viewFreelanceProfile, setViewFreelanceProfile] = useState({});
   const [freelanceProjectStatus, setFreelanceProjectStatus] = useState(false);
+  const [freelanceStats, setFreelanceStats] = useState({
+    total_projects: 0,
+    saved_jobs: 0,
+    wallet_balance: 0,
+  });
 
   //  console.log("freelanceProfileData", freelanceProfileData)
 
@@ -60,6 +66,16 @@ const FreelanceApiDataProvider = (props) => {
     const res = await addFreelance(data);
     if (res) {
       return res.data;
+    } else {
+      return false;
+    }
+  };
+
+  const processGetFreelanceStats = async () => {
+    const res = await getFreelanceStats(userId);
+    if (res) {
+      console.log(res.data);
+      setFreelanceStats(res.data);
     } else {
       return false;
     }
@@ -299,6 +315,7 @@ const FreelanceApiDataProvider = (props) => {
         handleUpdateFreelanceProfile,
         handleEditFreelance,
         processAddFreelance,
+        processGetFreelanceStats,
         processGetAllFreelance,
         processGetJobsAppliedTo,
         processFreelanceProfile,
@@ -307,6 +324,7 @@ const FreelanceApiDataProvider = (props) => {
         processDeleteFreelance,
         freelanceList,
         languagesData,
+        freelanceStats,
         employmentHistoryInfo,
         freelanceSkillInfo,
         viewFreelanceProfile,

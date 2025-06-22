@@ -62,6 +62,23 @@ export const getFreelanceList = async (pageNo) => {
   }
 };
 
+// Get freelance stats
+export const getFreelanceStats = async (id) => {
+  try {
+    let response = await axios.get(
+      `${REACT_BASE_URL}get-freelance-stats/${id}`
+    );
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 //Get freelance projects
 export const getFreelanceProjects = async (id) => {
   console.log(id);

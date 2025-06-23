@@ -66,50 +66,6 @@ const doughnutOptions = {
   },
 };
 
-// Tables
-// const transactionData = [
-//   {
-//     date: "May 4, 2025",
-//     description: "Payment from Acme Corporation",
-//     note: "Website Redesign Project",
-//     type: "Payment",
-//     amount: "+$3,500.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "May 2, 2025",
-//     description: "Withdrawal to Bank Account",
-//     note: "Chase Bank ****4532",
-//     type: "Withdrawal",
-//     amount: "-$2,000.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "Apr 28, 2025",
-//     description: "Payment from TechSolutions Inc.",
-//     note: "Mobile App Development",
-//     type: "Payment",
-//     amount: "+$4,250.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "Apr 20, 2025",
-//     description: "Payment from Creative Studios",
-//     note: "Brand Identity Design",
-//     type: "Payment",
-//     amount: "+$2,750.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "Apr 15, 2025",
-//     description: "Service Fee",
-//     note: "Platform commission",
-//     type: "Fee",
-//     amount: "-$425.00",
-//     status: "Completed",
-//   },
-// ];
-
 const transactionColumns = [
   {
     name: "Date",
@@ -588,7 +544,7 @@ export default function FinancialDashboard() {
               Amount
             </label>
             <div className="relative mb-2">
-              <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+              <span className="absolute left-3 top-2.5 text-gray-500">₵</span>
               <input
                 type="number"
                 value={amount}
@@ -597,14 +553,14 @@ export default function FinancialDashboard() {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ${freelanceEarnings.available}
+              Available: ${allEarnings.available}
             </p>
 
             <button
               onClick={() => setShowNoteModal(true)}
               className="w-full bg-green-600  text-white py-2 rounded-md font-semibold transition"
             >
-              Withdraw ${parseFloat(amount || 0).toFixed(2)}
+              Withdraw ₵{parseFloat(amount || 0).toFixed(2)}
             </button>
           </div>
 
@@ -627,7 +583,7 @@ export default function FinancialDashboard() {
                 <div
                   key={method.id}
                   className={`flex justify-between items-center p-4 border rounded-md cursor-pointer ${
-                    selectedMethod.id === method.id
+                    selectedMethod?.id === method.id
                       ? "border-green-500 bg-green-50"
                       : ""
                   }`}
@@ -637,11 +593,23 @@ export default function FinancialDashboard() {
                     <p className="font-medium text-gray-700">{method.type}</p>
                     <p className="text-sm text-gray-500">{method.detail}</p>
                   </div>
-                  {method.isDefault && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                      Default
-                    </span>
-                  )}
+
+                  <div className="flex items-center space-x-2">
+                    {method.isDefault && (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                        Default
+                      </span>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveMethod(method.id);
+                      }}
+                      className="text-red-500 text-xs hover:underline"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

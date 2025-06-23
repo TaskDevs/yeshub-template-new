@@ -216,7 +216,7 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
     setLoadingId(null); // Reset spinner
   };
   return (
-    <div className="tw-css flex min-h-screen bg-gray-50 p-6 gap-6 page-container">
+    <div className="tw-css bg-gray-100 min-h-screen p-6">
       {loading && isMobile && (
         <div className="mt-4 text-center">
           <RotatingLines

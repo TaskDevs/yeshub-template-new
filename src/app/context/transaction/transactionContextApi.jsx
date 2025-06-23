@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import {
-  getTransactionOfUser,
+  getTransactionOfClient,
+  getTransactionFreelancer,
   createWalletForUser,
   makeWithdrawal,
 } from "./transactionApi";
@@ -10,6 +11,10 @@ export const TransactionApiData = createContext();
 const TransactionApiDataProvider = (props) => {
   const [walletStatus, setWalletStatus] = useState("neutral");
   const [transactionList, setTransactionList] = useState([]);
+  const [freelanceEarnings, setFreelanceEarnings] = useState({
+    available: "0.00",
+    pending: "0.00",
+  });
   const [allEarnings, setAllEarnings] = useState({
     available: "0.00",
     pending: "0.00",
@@ -39,9 +44,8 @@ const TransactionApiDataProvider = (props) => {
     12: "Dec",
   };
 
-  const processGetTransactionOfUser = async () => {
-    let response = await getTransactionOfUser();
-    console.log(response.data);
+  const processGetTransactionOfFreelance = async () => {
+    let response = await getTransactionFreelancer();
     if (response) {
       let new_list = [];
       response.data.wallet_transactions.data.map((item) =>
@@ -58,13 +62,10 @@ const TransactionApiDataProvider = (props) => {
         })
       );
       setTransactionList(new_list);
-      setAllEarnings({
+      setFreelanceEarnings({
         ...allEarnings,
         available: response.data.wallet_balance,
         pending: response.data.pending,
-        escrow: response.data.escrow_balance,
-        totalSpentInMonth: response.data.total_spent_in_month,
-        start_month: response.data.start_month,
       });
       setWalletStatus("true");
 
@@ -89,10 +90,25 @@ const TransactionApiDataProvider = (props) => {
     }
   };
 
+  const processGetTransactionOfClient = async () => {
+    let response = await getTransactionOfClient();
+    console.log(response.data);
+    if (response) {
+      setAllEarnings({
+        ...allEarnings,
+        available: response.data.wallet_balance,
+        pending: response.data.pending,
+        escrow: response.data.escrow_balance,
+        totalSpentInMonth: response.data.total_spent_in_month,
+        start_month: response.data.start_month,
+      });
+    }
+  };
+
   const processCreateWalletOfUser = async () => {
     let response = await createWalletForUser();
     if (response.status == "success") {
-      processGetTransactionOfUser();
+      processGetTransactionOfClient();
       return {
         status: "success",
         message: response.message,
@@ -109,7 +125,7 @@ const TransactionApiDataProvider = (props) => {
     let response = await makeWithdrawal(data);
     console.log(response);
     if (response) {
-      processGetTransactionOfUser();
+      processGetTransactionOfClient();
       return response;
     } else {
       return false;
@@ -120,14 +136,16 @@ const TransactionApiDataProvider = (props) => {
     <TransactionApiData.Provider
       value={{
         processMakeWithdrawal,
-        processGetTransactionOfUser,
+        processGetTransactionOfClient,
         processCreateWalletOfUser,
         allEarnings,
+        freelanceEarnings,
         setAllEarnings,
         walletStatus,
         setWalletStatus,
         transactionList,
         monthEarnings,
+        processGetTransactionOfFreelance,
       }}
     >
       {props.children}

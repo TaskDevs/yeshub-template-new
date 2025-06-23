@@ -24,13 +24,25 @@ export const createWalletForUser = async () => {
   }
 };
 
-export const getTransactionOfUser = async () => {
+export const getTransactionOfClient = async () => {
   try {
     let responseOnGetTransactionOfUser = await axios.get(
-      `${REACT_BASE_URL}user/wallet/transactions?user_id=${userId}`
+      `${REACT_BASE_URL}client/wallet/transactions?user_id=${userId}`
     );
     // console.log(responseOnGetTransactionOfUser);
     return responseOnGetTransactionOfUser;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getTransactionFreelancer = async () => {
+  try {
+    let responseOnGetTransactionOfFreelance = await axios.get(
+      `${REACT_BASE_URL}freelance/wallet/transactions?user_id=${userId}`
+    );
+    return responseOnGetTransactionOfFreelance;
   } catch (err) {
     console.log(err);
     return false;

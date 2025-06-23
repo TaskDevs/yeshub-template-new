@@ -27,6 +27,22 @@ import { TransactionApiData } from "../../../../context/transaction/transactionC
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
+// const paymentMethods = [
+//   {
+//     id: "bank",
+//     type: "Bank Account (US)",
+//     detail: "Chase Bank ****4532",
+//     isDefault: true,
+//   },
+//   {
+//     id: "mobile",
+//     type: "Mobile Money",
+//     detail: "+233 54 123 4567",
+//     isDefault: false,
+//   },
+// ];
+// AreaChart Data
+
 const doughnutOptions = {
   plugins: {
     legend: {
@@ -215,9 +231,9 @@ const contractData = [
 
 export default function FinancialDashboard() {
   const {
-    allEarnings,
+    freelanceEarnings,
     processMakeWithdrawal,
-    processGetTransactionOfUser,
+    processGetTransactionOfFreelance,
     walletStatus,
     processCreateWalletOfUser,
     transactionList,
@@ -233,7 +249,7 @@ export default function FinancialDashboard() {
   const [paymentMethods, setPaymentMethods] = useState([]);
 
   useEffect(() => {
-    processGetTransactionOfUser();
+    processGetTransactionOfFreelance();
   }, []);
 
   useEffect(() => {
@@ -246,8 +262,8 @@ export default function FinancialDashboard() {
     datasets: [
       {
         data: [
-          parseFloat(allEarnings.available),
-          parseFloat(allEarnings.pending),
+          parseFloat(freelanceEarnings.available),
+          parseFloat(freelanceEarnings.pending),
         ],
         backgroundColor: ["#4F46E5", "#FACC15"],
         borderWidth: 1,
@@ -263,8 +279,10 @@ export default function FinancialDashboard() {
   };
 
   const handleWithdraw = async () => {
-    console.log(`amount is = ${amount} and available ${allEarnings.available}`);
-    if (!amount || Number(amount) > Number(allEarnings.available)) {
+    console.log(
+      `amount is = ${amount} and available ${freelanceEarnings.available}`
+    );
+    if (!amount || Number(amount) > Number(freelanceEarnings.available)) {
       Swal.fire({
         icon: "error",
         title: "Insufficient Balance",
@@ -362,33 +380,6 @@ export default function FinancialDashboard() {
     });
   }, [searchTerm, transactionList]);
 
-  const handleRemoveMethod = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This will permanently remove the payment method.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, remove it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Remove method
-        setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
-
-        if (selectedMethod?.id === id) {
-          setSelectedMethod(null);
-        }
-
-        Swal.fire(
-          "Deleted!",
-          "The payment method has been removed.",
-          "success"
-        );
-      }
-    });
-  };
-
   return (
     <div className="tw-css bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -419,7 +410,7 @@ export default function FinancialDashboard() {
             <div>
               <p className="text-gray-500">Available Earnings</p>
               <p className="text-3xl font-bold text-green-600">
-                ₵{allEarnings.available}
+                ₵{freelanceEarnings.available}
               </p>
               {walletStatus == "true" && (
                 <button className="mt-2 text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
@@ -449,7 +440,7 @@ export default function FinancialDashboard() {
             <div>
               <p className="text-gray-500">Pending Earnings</p>
               <p className="text-3xl font-bold text-GRAY-600">
-                ₵{allEarnings.pending}
+                ₵{freelanceEarnings.pending}
               </p>
               <p className="text-sm text-gray-500 mt-1">Processing this week</p>
             </div>
@@ -562,7 +553,7 @@ export default function FinancialDashboard() {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ₵{allEarnings.available}
+              Available: ${allEarnings.available}
             </p>
 
             <button

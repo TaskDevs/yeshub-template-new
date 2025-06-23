@@ -27,7 +27,6 @@ import { TransactionApiData } from "../../../../context/transaction/transactionC
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-
 // const paymentMethods = [
 //   {
 //     id: "bank",
@@ -276,9 +275,9 @@ const contractData = [
 
 export default function FinancialDashboard() {
   const {
-    allEarnings,
+    freelanceEarnings,
     processMakeWithdrawal,
-    processGetTransactionOfUser,
+    processGetTransactionOfFreelance,
     walletStatus,
     processCreateWalletOfUser,
     transactionList,
@@ -294,7 +293,7 @@ export default function FinancialDashboard() {
   const [paymentMethods, setPaymentMethods] = useState([]);
 
   useEffect(() => {
-    processGetTransactionOfUser();
+    processGetTransactionOfFreelance();
   }, []);
 
   useEffect(() => {
@@ -307,8 +306,8 @@ export default function FinancialDashboard() {
     datasets: [
       {
         data: [
-          parseFloat(allEarnings.available),
-          parseFloat(allEarnings.pending),
+          parseFloat(freelanceEarnings.available),
+          parseFloat(freelanceEarnings.pending),
         ],
         backgroundColor: ["#4F46E5", "#FACC15"],
         borderWidth: 1,
@@ -324,8 +323,10 @@ export default function FinancialDashboard() {
   };
 
   const handleWithdraw = async () => {
-    console.log(`amount is = ${amount} and available ${allEarnings.available}`);
-    if (!amount || Number(amount) > Number(allEarnings.available)) {
+    console.log(
+      `amount is = ${amount} and available ${freelanceEarnings.available}`
+    );
+    if (!amount || Number(amount) > Number(freelanceEarnings.available)) {
       Swal.fire({
         icon: "error",
         title: "Insufficient Balance",
@@ -406,23 +407,22 @@ export default function FinancialDashboard() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-const filteredData = useMemo(() => {
-  return transactionList.filter((item) => {
-    const description = item.description?.toLowerCase() || "";
-    const note = item.note?.toLowerCase() || "";
-    const type = item.type?.toLowerCase() || "";
-    const status = item.status?.toLowerCase() || "";
-    const search = searchTerm.toLowerCase();
+  const filteredData = useMemo(() => {
+    return transactionList.filter((item) => {
+      const description = item.description?.toLowerCase() || "";
+      const note = item.note?.toLowerCase() || "";
+      const type = item.type?.toLowerCase() || "";
+      const status = item.status?.toLowerCase() || "";
+      const search = searchTerm.toLowerCase();
 
-    return (
-      description.includes(search) ||
-      note.includes(search) ||
-      type.includes(search) ||
-      status.includes(search)
-    );
-  });
-}, [searchTerm, transactionList]);
-
+      return (
+        description.includes(search) ||
+        note.includes(search) ||
+        type.includes(search) ||
+        status.includes(search)
+      );
+    });
+  }, [searchTerm, transactionList]);
 
   return (
     <div className="tw-css bg-gray-100 min-h-screen p-6">
@@ -454,7 +454,7 @@ const filteredData = useMemo(() => {
             <div>
               <p className="text-gray-500">Available Earnings</p>
               <p className="text-3xl font-bold text-green-600">
-                ₵{allEarnings.available}
+                ₵{freelanceEarnings.available}
               </p>
               {walletStatus == "true" && (
                 <button className="mt-2 text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">
@@ -484,7 +484,7 @@ const filteredData = useMemo(() => {
             <div>
               <p className="text-gray-500">Pending Earnings</p>
               <p className="text-3xl font-bold text-GRAY-600">
-                ₵{allEarnings.pending}
+                ₵{freelanceEarnings.pending}
               </p>
               <p className="text-sm text-gray-500 mt-1">Processing this week</p>
             </div>
@@ -597,7 +597,7 @@ const filteredData = useMemo(() => {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ${allEarnings.available}
+              Available: ${freelanceEarnings.available}
             </p>
 
             <button

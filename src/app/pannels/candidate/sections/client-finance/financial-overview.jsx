@@ -58,7 +58,7 @@ const FinancialOverview = () => {
     walletStatus,
     processCreateWalletOfUser,
     allEarnings,
-    processGetTransactionOfUser,
+    processGetTransactionOfClient,
   } = useContext(TransactionApiData);
   const { userProjects, projectListData, processGetUserProjects } =
     useContext(EmployerApiData);
@@ -144,7 +144,7 @@ const FinancialOverview = () => {
   ];
 
   useEffect(() => {
-    processGetTransactionOfUser();
+    processGetTransactionOfClient();
     processGetUserProjects();
   }, []);
 

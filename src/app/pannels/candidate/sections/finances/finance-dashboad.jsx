@@ -553,7 +553,7 @@ export default function FinancialDashboard() {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ${allEarnings.available}
+              Available: ${freelanceEarnings.available}
             </p>
 
             <button
@@ -603,7 +603,7 @@ export default function FinancialDashboard() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemoveMethod(method.id);
+                        // handleRemoveMethod(method.id);
                       }}
                       className="text-red-500 text-xs hover:underline"
                     >

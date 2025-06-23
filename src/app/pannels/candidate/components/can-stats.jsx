@@ -1,7 +1,7 @@
-import React, { useEffect,useState } from "react";
+//import React, { useState } from "react";
 import { FaBriefcase, FaClock, FaWallet } from "react-icons/fa";
 import { TiStarFullOutline } from "react-icons/ti";
-import { JobUserStat } from "../../../context/application/applicationApi";
+//import { JobUserStat } from "../../../context/application/applicationApi";
 
 const StatsCard = ({ title, value, subtitle, icon: Icon, cssModule }) => (
   <div className={cssModule.statsCard}>
@@ -16,40 +16,40 @@ const StatsCard = ({ title, value, subtitle, icon: Icon, cssModule }) => (
   </div>
 );
 
-export const CandidateStats = ({ cssModule }) => {
-   const userId = sessionStorage.getItem('userId')
-   const [stats, setStats] = useState({
-    total_projects: 0,
-    total_active_projects: 0,
-    active_jobs: [],
-    total_saved_jobs: 0,
-    available_balance: 0,
-    expiring_soon_saved_jobs_count:0,
-    active_projects_due_this_week_count:0,
-  });
-    
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await JobUserStat(userId);
-        if (res) {
-          setStats(res);
-          console.log("dasb", res)
-        }
-      } catch (err) {
-        console.error("Error fetching stats:", err);
-      }
-    };
+export const CandidateStats = ({ cssModule, freelanceStats }) => {
+  //const userId = sessionStorage.getItem("userId");
+  // const [stats, setStats] = useState({
+  //   total_projects: freelanceStats.total_projects,
+  //   total_active_projects: freelanceStats.total_projects,
+  //   active_jobs: [],
+  //   total_saved_jobs: freelanceStats.saved_jobs,
+  //   available_balance: freelanceStats.wallet_balance,
+  //   expiring_soon_saved_jobs_count: 0,
+  //   active_projects_due_this_week_count: freelanceStats.total_projects,
+  // });
 
-    if (userId) {
-      fetchStats();
-    }
-  }, [userId])
+  // useEffect(() => {
+  //   const fetchStats = async () => {
+  //     try {
+  //       const res = await JobUserStat(userId);
+  //       if (res) {
+  //         setStats(res);
+  //         console.log("dasb", res);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching stats:", err);
+  //     }
+  //   };
+
+  //   if (userId) {
+  //     fetchStats();
+  //   }
+  // }, [userId]);
   return (
     <div className={cssModule.statsGrid}>
       <StatsCard
         title="Total Projects"
-        value={stats.total_projects}
+        value={freelanceStats.total_projects}
         subtitle="Last 30 days"
         icon={TiStarFullOutline}
         cssModule={cssModule}
@@ -57,15 +57,15 @@ export const CandidateStats = ({ cssModule }) => {
 
       <StatsCard
         title="Active Projects"
-        value={stats.total_active_projects}
-        subtitle={`${stats.active_projects_due_this_week_count} due this week`}
+        value={freelanceStats.total_projects}
+        subtitle={`${freelanceStats.total_projects} due this week`}
         icon={FaBriefcase}
         cssModule={cssModule}
       />
 
       <StatsCard
         title="Saved Jobs"
-        value={stats.total_saved_jobs}
+        value={freelanceStats.saved_jobs}
         subtitle={`Expiring soon: 0`}
         icon={FaClock}
         cssModule={cssModule}
@@ -73,7 +73,7 @@ export const CandidateStats = ({ cssModule }) => {
 
       <StatsCard
         title="Available Balance"
-        value={`GH₵ ${stats.available_balance}`}
+        value={`GH₵ ${freelanceStats.wallet_balance}`}
         subtitle="current balance"
         icon={FaWallet}
         cssModule={cssModule}

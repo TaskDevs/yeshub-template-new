@@ -44,7 +44,7 @@ const TransactionApiDataProvider = (props) => {
     console.log(response.data);
     if (response) {
       let new_list = [];
-      response.data.transactions.data.map((item) =>
+      response.data.wallet_transactions.data.map((item) =>
         new_list.push({
           date: item.created_at,
           description: item.note,
@@ -60,8 +60,11 @@ const TransactionApiDataProvider = (props) => {
       setTransactionList(new_list);
       setAllEarnings({
         ...allEarnings,
-        available: response.data.balance,
+        available: response.data.wallet_balance,
         pending: response.data.pending,
+        escrow: response.data.escrow_balance,
+        totalSpentInMonth: response.data.total_spent_in_month,
+        start_month: response.data.start_month,
       });
       setWalletStatus("true");
 

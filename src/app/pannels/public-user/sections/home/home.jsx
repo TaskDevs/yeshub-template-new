@@ -213,7 +213,7 @@ export default function YesHubLandingPage() {
         </div>
 
         {/* freelance section */}
-        <div className="bg-green-50 text-gray-800 max-w-6xl mx-auto justify-center">
+        <div className="bg-green-50 text-gray-800 max-w-6xl mx-auto justify-center rounded-xl">
           <div className="py-14 px-6 lg:px-20 mx-auto lg:flex lg:items-center lg:justify-between space-y-10 lg:space-y-0">
             {/* Left Side */}
             <div className="lg:w-1/2 space-y-6 ">

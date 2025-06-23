@@ -27,23 +27,6 @@ import { TransactionApiData } from "../../../../context/transaction/transactionC
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-
-// const paymentMethods = [
-//   {
-//     id: "bank",
-//     type: "Bank Account (US)",
-//     detail: "Chase Bank ****4532",
-//     isDefault: true,
-//   },
-//   {
-//     id: "mobile",
-//     type: "Mobile Money",
-//     detail: "+233 54 123 4567",
-//     isDefault: false,
-//   },
-// ];
-// AreaChart Data
-
 const doughnutOptions = {
   plugins: {
     legend: {
@@ -66,50 +49,6 @@ const doughnutOptions = {
     },
   },
 };
-
-// Tables
-// const transactionData = [
-//   {
-//     date: "May 4, 2025",
-//     description: "Payment from Acme Corporation",
-//     note: "Website Redesign Project",
-//     type: "Payment",
-//     amount: "+$3,500.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "May 2, 2025",
-//     description: "Withdrawal to Bank Account",
-//     note: "Chase Bank ****4532",
-//     type: "Withdrawal",
-//     amount: "-$2,000.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "Apr 28, 2025",
-//     description: "Payment from TechSolutions Inc.",
-//     note: "Mobile App Development",
-//     type: "Payment",
-//     amount: "+$4,250.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "Apr 20, 2025",
-//     description: "Payment from Creative Studios",
-//     note: "Brand Identity Design",
-//     type: "Payment",
-//     amount: "+$2,750.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "Apr 15, 2025",
-//     description: "Service Fee",
-//     note: "Platform commission",
-//     type: "Fee",
-//     amount: "-$425.00",
-//     status: "Completed",
-//   },
-// ];
 
 const transactionColumns = [
   {
@@ -406,23 +345,49 @@ export default function FinancialDashboard() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-const filteredData = useMemo(() => {
-  return transactionList.filter((item) => {
-    const description = item.description?.toLowerCase() || "";
-    const note = item.note?.toLowerCase() || "";
-    const type = item.type?.toLowerCase() || "";
-    const status = item.status?.toLowerCase() || "";
-    const search = searchTerm.toLowerCase();
+  const filteredData = useMemo(() => {
+    return transactionList.filter((item) => {
+      const description = item.description?.toLowerCase() || "";
+      const note = item.note?.toLowerCase() || "";
+      const type = item.type?.toLowerCase() || "";
+      const status = item.status?.toLowerCase() || "";
+      const search = searchTerm.toLowerCase();
 
-    return (
-      description.includes(search) ||
-      note.includes(search) ||
-      type.includes(search) ||
-      status.includes(search)
-    );
-  });
-}, [searchTerm, transactionList]);
+      return (
+        description.includes(search) ||
+        note.includes(search) ||
+        type.includes(search) ||
+        status.includes(search)
+      );
+    });
+  }, [searchTerm, transactionList]);
 
+  const handleRemoveMethod = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently remove the payment method.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Remove method
+        setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
+
+        if (selectedMethod?.id === id) {
+          setSelectedMethod(null);
+        }
+
+        Swal.fire(
+          "Deleted!",
+          "The payment method has been removed.",
+          "success"
+        );
+      }
+    });
+  };
 
   return (
     <div className="tw-css bg-gray-100 min-h-screen p-6">
@@ -588,7 +553,7 @@ const filteredData = useMemo(() => {
               Amount
             </label>
             <div className="relative mb-2">
-              <span className="absolute left-3 top-2.5 text-gray-500">$</span>
+              <span className="absolute left-3 top-2.5 text-gray-500">₵</span>
               <input
                 type="number"
                 value={amount}
@@ -597,14 +562,14 @@ const filteredData = useMemo(() => {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ${allEarnings.available}
+              Available: ₵{allEarnings.available}
             </p>
 
             <button
               onClick={() => setShowNoteModal(true)}
               className="w-full bg-green-600  text-white py-2 rounded-md font-semibold transition"
             >
-              Withdraw ${parseFloat(amount || 0).toFixed(2)}
+              Withdraw ₵{parseFloat(amount || 0).toFixed(2)}
             </button>
           </div>
 
@@ -627,7 +592,7 @@ const filteredData = useMemo(() => {
                 <div
                   key={method.id}
                   className={`flex justify-between items-center p-4 border rounded-md cursor-pointer ${
-                    selectedMethod.id === method.id
+                    selectedMethod?.id === method.id
                       ? "border-green-500 bg-green-50"
                       : ""
                   }`}
@@ -637,11 +602,23 @@ const filteredData = useMemo(() => {
                     <p className="font-medium text-gray-700">{method.type}</p>
                     <p className="text-sm text-gray-500">{method.detail}</p>
                   </div>
-                  {method.isDefault && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                      Default
-                    </span>
-                  )}
+
+                  <div className="flex items-center space-x-2">
+                    {method.isDefault && (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                        Default
+                      </span>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveMethod(method.id);
+                      }}
+                      className="text-red-500 text-xs hover:underline"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

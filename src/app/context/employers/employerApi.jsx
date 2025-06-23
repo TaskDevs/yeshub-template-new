@@ -82,6 +82,19 @@ export const getProjects = async (id) => {
   }
 };
 
+export const getDeliverables = async (id) => {
+  try {
+    let responseOnGetDeliverable = await axios.get(
+      `${REACT_BASE_URL}get-project-deliverables/${id}`
+    );
+    if (responseOnGetDeliverable.status === 200) {
+      return responseOnGetDeliverable.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 //Getting projectsId to listen
 export const getClientProjects = async (id) => {
   //console.log(id);
@@ -114,6 +127,22 @@ export const getProposalInfo = async (id) => {
   }
 };
 
+export const getReceipt = async (project_id, milestone_id) => {
+  try {
+    let response = await axios.get(
+      `${REACT_BASE_URL}get-receipt?project_id=${project_id}&milestone_id=${milestone_id}`
+    );
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const createProject = async (data) => {
   try {
     let responseOnCreateProject = await axios.post(
@@ -128,15 +157,46 @@ export const createProject = async (data) => {
   }
 };
 
-export const manageProject = async (data) => {
+export const manageProjectTasks = async (data) => {
   try {
-    let responseOnManageProject = await axios.post(
-      `${REACT_BASE_URL}manage-project`,
+    let responseOnManageProjectTasks = await axios.post(
+      `${REACT_BASE_URL}manage-tasks`,
       data
     );
     //console.log(responseOnManageProject);
-    if (responseOnManageProject.status === 200) {
-      return responseOnManageProject.data;
+    if (responseOnManageProjectTasks.status === 200) {
+      //return responseOnManageProject.data;
+      console.log(responseOnManageProjectTasks);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const manageProjectMilestoneOrTeam = async (data) => {
+  try {
+    let responseOnManageMilestoneOrTeam = await axios.post(
+      `${REACT_BASE_URL}manage-team-n-milestones`,
+      data
+    );
+    //console.log(responseOnManageProject);
+    if (responseOnManageMilestoneOrTeam.status === 200) {
+      //return responseOnManageProject.data;
+      console.log(responseOnManageMilestoneOrTeam);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const autoSaveDeliverables = async (data) => {
+  try {
+    let responseOnSaveDeliverables = await axios.post(
+      `${REACT_BASE_URL}manage-deliverables`,
+      data
+    );
+    if (responseOnSaveDeliverables.status === 200) {
+      console.log(responseOnSaveDeliverables);
     }
   } catch (err) {
     console.log(err);
@@ -551,6 +611,39 @@ export const deleteJob = async (id) => {
     );
     if (responseOnDeleteJob.status == 200) {
       return responseOnDeleteJob.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// MAKE PAYOUT
+export const makePayout = async (data) => {
+  try {
+    let responseOnMakePayout = await axios.post(
+      `${REACT_BASE_URL}make-payout`,
+      data
+    );
+    if (responseOnMakePayout.status == 200) {
+      return responseOnMakePayout.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+//Get projects payment
+export const getProjectPayments = async (id) => {
+  try {
+    let responseOnGetProjectPayments = await axios.get(
+      `${REACT_BASE_URL}project-payments/${id}`
+    );
+    if (responseOnGetProjectPayments.status == 200) {
+      return responseOnGetProjectPayments.data;
     } else {
       return false;
     }

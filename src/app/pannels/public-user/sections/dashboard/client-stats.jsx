@@ -45,7 +45,7 @@ export const ClientStats = ({ cssModule, employerStats }) => {
 
       <StatsCard
         title="Average Time to Hire"
-        value={`${employerStats.averge_time_to_hire_percent}%`}
+        value={`${employerStats.average_time_to_hire_percent}%`}
         subtitle={`${employerStats.average_time_to_hire_days} days average`}
         icon={FaClock}
         cssModule={cssModule}

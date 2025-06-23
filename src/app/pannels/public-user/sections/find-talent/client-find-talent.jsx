@@ -6,7 +6,10 @@ import MessageModal from "./message-modal";
 import { useNavigate } from "react-router-dom";
 import { truncateText } from "../../../../../utils/truncateText";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
-import { employerJobById, JobInvitation } from "../../../../context/jobs/jobsApi";
+import {
+  employerJobById,
+  JobInvitation,
+} from "../../../../context/jobs/jobsApi";
 import Swal from "sweetalert2";
 const skillsList = [
   "Web Development",
@@ -178,37 +181,40 @@ export default function FreelancerSearch() {
 
   //   send invitation
 
-const handleSend = async ({ freelancer_id, job_id, company_id, response = "pend" }) => {
-  const data = { freelancer_id, job_id, company_id, response };
+  const handleSend = async ({
+    freelancer_id,
+    job_id,
+    company_id,
+    response = "pend",
+  }) => {
+    const data = { freelancer_id, job_id, company_id, response };
 
-  try {
-    const result = await JobInvitation(data);
-    console.log("Invitation sent:", result);
+    try {
+      const result = await JobInvitation(data);
+      console.log("Invitation sent:", result);
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Invitation Sent',
-      text: 'Your job invitation has been sent successfully!',
-      position: "center",
-      timer: 1500,
-      showConfirmButton: false,
-    });
-  } catch (error) {
-    console.error("Failed to send invitation:", error);
-    
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed to Send',
-      text: 'An error occurred while sending the invitation.',
-      toast: true,
-      position: 'top-end',
-      timer: 3000,
-      showConfirmButton: false,
-    });
-  }
-};
+      Swal.fire({
+        icon: "success",
+        title: "Invitation Sent",
+        text: "Your job invitation has been sent successfully!",
+        position: "center",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Failed to send invitation:", error);
 
-
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Send",
+        text: "An error occurred while sending the invitation.",
+        toast: true,
+        position: "top-end",
+        timer: 3000,
+        showConfirmButton: false,
+      });
+    }
+  };
 
   useEffect(() => {
     if (employerId) {
@@ -491,7 +497,7 @@ const handleSend = async ({ freelancer_id, job_id, company_id, response = "pend"
                       onClick={() =>
                         navigate(
                           "/dashboard-client/find-talented-freelancers/" +
-                            freelancer.id
+                            freelancer.user_id
                         )
                       }
                       className="cursor-pointer"

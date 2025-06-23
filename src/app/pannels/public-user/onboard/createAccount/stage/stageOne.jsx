@@ -26,8 +26,7 @@ const StageOne = ({ forms, handleInputChange }) => {
   const getRegionsInGhana = () => {
     const ghanaData = allCountries.find((country) => country[1] === "GH");
 
-    console.log("Ghana Data:", ghanaData); // Debugging
-
+  
     if (ghanaData && Array.isArray(ghanaData[2])) {
       return ghanaData[2].map((region) => region[0]); // Extract only the region name
     }
@@ -40,10 +39,10 @@ const StageOne = ({ forms, handleInputChange }) => {
 
   useEffect(() => {
     setRegions(getRegionsInGhana());
-    setCity(cities)
+   setCity(cities.sort((a, b) => a.localeCompare(b)));
+
   }, []);
 
-console.log(city)
 
   return (
     <div className="container">

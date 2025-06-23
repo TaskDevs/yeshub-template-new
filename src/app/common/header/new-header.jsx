@@ -163,22 +163,21 @@ export const Header = ({ isDashboard = true }) => {
   };
 
   const navItems = [
-     {
-  id: "dashboard",
-  label: "Dashboard",
-  to:
-    role === "client"
-      ? `${base.CLIENT_PRE.replace(/\/$/, "")}/${client.DASHBOARD.replace(
-        /^\//,
-        ""
-      )}`
-      : role === "freelancer"
-      ? `${base.CANDIDATE_PRE}`
-      : role === "admin"
-      ? "/admin/dashboard"
-      : "/dashboard", // fallback
-}
-,
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      to:
+        role === "client"
+          ? `${base.CLIENT_PRE.replace(/\/$/, "")}/${client.DASHBOARD.replace(
+              /^\//,
+              ""
+            )}`
+          : role === "freelancer"
+          ? `${base.CANDIDATE_PRE}`
+          : role === "admin"
+          ? "/admin/dashboard"
+          : "/dashboard", // fallback
+    },
     {
       id: "find-talent",
       label: "Find Talent",
@@ -332,17 +331,11 @@ export const Header = ({ isDashboard = true }) => {
     // Step 2: Filter by role
     items = items.filter((item) => {
       if (role === "client") {
-        return (
-          item.label !== "Find Jobs" &&
-          item.label !== "Deliver Work"
-        );
+        return item.label !== "Find Jobs" && item.label !== "Deliver Work";
       }
 
       if (role === "freelancer") {
-        return (
-          item.label !== "Manage Jobs" &&
-          item.label !== "Find Talents"
-        ); // future-proof
+        return item.label !== "Manage Jobs" && item.label !== "Find Talents"; // future-proof
       }
 
       return true;
@@ -421,7 +414,7 @@ export const Header = ({ isDashboard = true }) => {
 
   const handleLogoClick = () => {
     if (token && role === "client") {
-      navigate("/profile");
+      navigate("/dashboard-client");
     } else if (token && role === "freelancer") {
       navigate("/dashboard-candidate");
     } else {
@@ -656,16 +649,26 @@ export const Header = ({ isDashboard = true }) => {
                         <div className="p-4 border-b">
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-full overflow-hidden">
-                              <Avatar
-                                sx={{
-                                  bgcolor: stringToColor(username),
-                                  width: 40,
-                                  height: 40,
-                                  fontSize: "1.2rem",
-                                }}
-                                src={profile_image}
-                                onClick={() => handleProfileClick()}
-                              />
+                              {profile_image ? (
+                                <img
+                                  src={profile_image}
+                                  onClick={handleProfileClick}
+                                  className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                                  alt="Profile"
+                                />
+                              ) : (
+                                <Avatar
+                                  sx={{
+                                    bgcolor: stringToColor(username),
+                                    width: 40,
+                                    height: 40,
+                                    fontSize: "1.2rem",
+                                  }}
+                                  onClick={handleProfileClick}
+                                >
+                                  {username.charAt(0).toUpperCase()}
+                                </Avatar>
+                              )}
                             </div>
                             <div className="text-sm text-gray-600 capitalize">
                               {role}
@@ -727,30 +730,26 @@ export const Header = ({ isDashboard = true }) => {
                       <FaTimes className="h-5 w-5" />
                     ) : (
                       <div className="lg:hidden">
-                        {profile_image ? (
-                          <Avatar
-                            sx={{
-                              bgcolor: stringToColor(username),
-                              width: 40,
-                              height: 40,
-                              fontSize: "1.2rem",
-                            }}
-                            src={profile_image}
-                            onClick={() => toggleNav()}
-                          />
-                        ) : (
-                          <Avatar
-                            sx={{
-                              bgcolor: stringToColor(username),
-                              width: 40,
-                              height: 40,
-                              fontSize: "1.2rem",
-                            }}
-                            onClick={() => toggleNav()}
-                          >
-                            {username.charAt(0).toUpperCase()}
-                          </Avatar>
-                        )}
+                         {profile_image ? (
+                                <img
+                                  src={profile_image}
+                                  onClick={handleProfileClick}
+                                  className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                                  alt="Profile"
+                                />
+                              ) : (
+                                <Avatar
+                                  sx={{
+                                    bgcolor: stringToColor(username),
+                                    width: 40,
+                                    height: 40,
+                                    fontSize: "1.2rem",
+                                  }}
+                                  onClick={handleProfileClick}
+                                >
+                                  {username.charAt(0).toUpperCase()}
+                                </Avatar>
+                              )}
                       </div>
                     )}
                   </button>
@@ -776,34 +775,34 @@ export const Header = ({ isDashboard = true }) => {
                   <NotificationModal
                     isOpen={showNotifications}
                     onClose={() => setShowNotifications(false)}
-                    color='teal'
+                    color="teal"
                   />
                 </>
                 <div className="lg:hidden">
                   {profile_image ? (
-                     <img
-                              src={profile_image}
-                              alt={username}
-                              onClick={handleProfileClick}
-                              style={{
-                                backgroundColor: stringToColor(username),
-                                width: 40,
-                                height: 40,
-                                fontSize: "1.2rem",
-                                borderRadius: "50%",
-                                objectFit: "cover",
-                                cursor: "pointer",
-                              }}
-                              onError={(e) => {
-                                // Fallback if image fails to load
-                                e.target.onerror = null;
-                                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                                  username
-                                )}&background=${stringToColor(username).slice(
-                                  1
-                                )}&color=fff&size=40`;
-                              }}
-                            />
+                    <img
+                      src={profile_image}
+                      alt={username}
+                      onClick={handleProfileClick}
+                      style={{
+                        backgroundColor: stringToColor(username),
+                        width: 40,
+                        height: 40,
+                        fontSize: "1.2rem",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        cursor: "pointer",
+                      }}
+                      onError={(e) => {
+                        // Fallback if image fails to load
+                        e.target.onerror = null;
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                          username
+                        )}&background=${stringToColor(username).slice(
+                          1
+                        )}&color=fff&size=40`;
+                      }}
+                    />
                   ) : (
                     <Avatar
                       sx={{
@@ -902,7 +901,9 @@ export const Header = ({ isDashboard = true }) => {
                           </div>
                           <div className="text-sm text-gray-500 capitalize space-y-1">
                             <div>{profession}</div>
-                            <div className="text-xs text-green-700 font-bold">{role}</div>
+                            <div className="text-xs text-green-700 font-bold">
+                              {role}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1000,7 +1001,9 @@ export const Header = ({ isDashboard = true }) => {
                     <div className="font-semibold text-gray-900 text-sm capitalize">
                       {firstname || username} {lastname}
                     </div>
-                    <div className="text-xs text-green-700 text-bold">{profession}</div>
+                    <div className="text-xs text-green-700 text-bold">
+                      {profession}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 mt-3 text-xs text-gray-600">

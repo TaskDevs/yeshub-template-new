@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import {
@@ -155,26 +155,8 @@ export const SubmitProposalSection = ({ job_id, companyInfo }) => {
       week_available: "",
       experience_level: "Beginners",
     });
-  const [newAmountData, setNewAmountData] = useState({
-    service_charge: "0.00",
-    amount_receive: "0.00",
-  });
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (formData.fix_rate !== "") {
-      const fixRate = parseFloat(formData.fix_rate);
-      if (!isNaN(fixRate)) {
-        let service_fee = fixRate * 0.1;
-        let amount = fixRate - service_fee;
-        setNewAmountData({
-          service_charge: service_fee,
-          amount_receive: amount,
-        });
-      }
-    }
-  }, [formData.fix_rate]);
 
   const { files, handleFileSelect, handleFileDrop, removeFile, uploadError } =
     useFileUpload();
@@ -208,9 +190,11 @@ export const SubmitProposalSection = ({ job_id, companyInfo }) => {
     formDataToSubmit.append("completion_day", formData.completion_day);
     formDataToSubmit.append("week_available", formData.week_available);
     formDataToSubmit.append("experience_level", formData.experience_level);
-    formDataToSubmit.append("amount_to_receive", formData.amount_to_receive);
-    formDataToSubmit.append("service_charge", formData.service_charge);
-    formDataToSubmit.append("attachment", files[0].file);
+    if (files && files.length > 0 && files[0].file) {
+      formDataToSubmit.append("attachment", files[0].file);
+    } else {
+      formDataToSubmit.append("attachment", ""); // Or omit this line if backend allows
+    }
 
     for (let pair of formDataToSubmit.entries()) {
       console.log(`${pair[0]}:`, pair[1]);
@@ -281,7 +265,7 @@ export const SubmitProposalSection = ({ job_id, companyInfo }) => {
               <div className="w-full">
                 <FormInput
                   field="hourly_rate"
-                  label="Hourly Rate ($)"
+                  label="Hourly Rate (GH)"
                   required={true}
                   value={formData.hourly_rate}
                   onChange={handleInputChange}
@@ -292,27 +276,13 @@ export const SubmitProposalSection = ({ job_id, companyInfo }) => {
               <div className="w-full">
                 <FormInput
                   field="fix_rate"
-                  label="Fixed Price ($)"
+                  label="Fixed Price (GH)"
                   required={true}
                   value={formData.fixed_rate}
                   onChange={handleInputChange}
                   placeholder="Enter fixed price"
                 />
               </div>
-            </div>
-
-            <hr className="border-0 h-px bg-gray-500 my-4" />
-            <div className="flex justify-between w-full">
-              <span className="text-gray-500">Service Fee(10%)</span>
-              <span className="text-gray-800">
-                GH {newAmountData.service_charge}
-              </span>
-            </div>
-            <div className="flex justify-between w-full">
-              <span className="text-black font-bold">You Will Receive</span>
-              <span className="text-gray-800">
-                GH {newAmountData.amount_receive}
-              </span>
             </div>
           </div>
           <div>

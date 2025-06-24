@@ -43,8 +43,9 @@ const ProposalApiDataProvider = (props) => {
     setLoading(false);
     let response = await submitProposal(data);
     if (response) {
+      console.log(response);
       //notify(200, "Proposal submitted successfully");
-      return true;
+      return response;
     } else {
       return false;
       //console.log("There is an error");

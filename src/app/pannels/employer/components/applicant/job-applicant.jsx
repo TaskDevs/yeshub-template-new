@@ -267,7 +267,12 @@ export default function JobApplicant() {
             <div>
               <div className="mb-4">
                 <h4 className="font-semibold mb-2">Job Description</h4>
-                <p className="text-gray-500">{jobInfo?.description}</p>
+                 <div
+                  className="text-gray-500"
+                  dangerouslySetInnerHTML={{ __html: jobInfo?.description }}
+                ></div>
+
+
               </div>
             </div>
           )}

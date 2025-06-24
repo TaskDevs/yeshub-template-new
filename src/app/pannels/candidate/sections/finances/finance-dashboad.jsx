@@ -27,21 +27,6 @@ import { TransactionApiData } from "../../../../context/transaction/transactionC
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-// const paymentMethods = [
-//   {
-//     id: "bank",
-//     type: "Bank Account (US)",
-//     detail: "Chase Bank ****4532",
-//     isDefault: true,
-//   },
-//   {
-//     id: "mobile",
-//     type: "Mobile Money",
-//     detail: "+233 54 123 4567",
-//     isDefault: false,
-//   },
-// ];
-// AreaChart Data
 
 const doughnutOptions = {
   plugins: {

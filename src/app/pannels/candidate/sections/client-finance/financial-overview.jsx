@@ -77,6 +77,8 @@ const FinancialOverview = () => {
     navigate(`/dashboard-client/talent-pool/${id}`); // if using React Router
   };
 
+  console.log(walletStatus);
+
   // const projectsData = [
   //   {
   //     id: 1,

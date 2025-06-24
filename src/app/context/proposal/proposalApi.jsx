@@ -18,6 +18,22 @@ export const getUserProposals = async (userId) => {
   }
 };
 
+export const getProposalsById = async (id) => {
+  try {
+    let responseOnProposalList = await axios.get(
+      `${ REACT_BASE_URL}proposal/detail/${id}`
+    );
+    if (responseOnProposalList.status == 200) {
+      return responseOnProposalList.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const submitProposal = async (formDataToSubmit) => {
   try {
     const response = await axios.post(

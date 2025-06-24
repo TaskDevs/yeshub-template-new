@@ -29,7 +29,7 @@ export const getTransactionOfClient = async () => {
     let responseOnGetTransactionOfUser = await axios.get(
       `${REACT_BASE_URL}client/wallet/transactions?user_id=${userId}`
     );
-    // console.log(responseOnGetTransactionOfUser);
+    console.log(responseOnGetTransactionOfUser);
     return responseOnGetTransactionOfUser;
   } catch (err) {
     console.log(err);

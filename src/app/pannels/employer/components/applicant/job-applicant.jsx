@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
+import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { formatDate } from "../../../../../utils/dateUtils";
 import { userId } from "../../../../../globals/constants";
 import InterviewModal from "./interview-modal";
 import SalaryModal from "./SalaryModal";
+import Swal from "sweetalert2";
 //import MessageModal from "./message-modal";
 import {
   EllipsisVertical,
@@ -14,7 +16,6 @@ import {
   UserPlus, // For add user
   X,
 } from "lucide-react";
-import Swal from "sweetalert2";
 
 export default function JobApplicant() {
   const {
@@ -22,10 +23,11 @@ export default function JobApplicant() {
     processGetApplicantsOfJobPosted,
     applicants,
     totalApplicants,
-    // processChangeCandidateStatus,
+    processChangeCandidateStatus,
     processHireCandidate,
     processGetInterviewInfo,
   } = useContext(EmployerApiData);
+  const { processChangeJobStatus } = useContext(JobApiData);
   const tabs = ["Job Details", "Applicants", "Activity History"];
   const [jobInfo, setJobInfo] = useState({});
   const [activeTab, setActiveTab] = useState("Job Details");
@@ -119,9 +121,12 @@ export default function JobApplicant() {
       return;
     }
 
+    const fileUrl = item.user.cv.cv_file;
+
     const link = document.createElement("a");
-    link.href = item?.user?.cv?.cv_file;
-    link.download = ""; // optional: you can specify a filename here
+    link.href = fileUrl;
+    link.target = "_blank"; // ✅ open in new tab
+    link.rel = "noopener noreferrer"; // ✅ security best practice
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -135,6 +140,43 @@ export default function JobApplicant() {
     };
     setCandidateData(newData);
     setIsInterviewOpen(true);
+  };
+
+  const handleChangeJobStatus = async (id, status) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to change the job status to "${status}".`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#14b8a6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, change it!",
+    });
+
+    if (result.isConfirmed) {
+      let newData = { status };
+
+      let res = await processChangeJobStatus(id, newData);
+      if (res) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Job status changed successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        setTimeout(() => {
+          navigate("/dashboard-client/new-manage-jobs"); // Replace with your desired route
+        }, 1500);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops",
+          text: "Failed to change job status",
+        });
+      }
+    }
   };
 
   // const handleOpenMessageModal = (item) => {
@@ -166,8 +208,27 @@ export default function JobApplicant() {
     setIsSalaryOpen(true);
   };
 
-  const handleRejectStatus = () => {
-    console.log("We are dealing some issues today");
+  const handleRejectStatus = async (data, status) => {
+    console.log(data);
+    let newData = {
+      status: status,
+    };
+    let response = await processChangeCandidateStatus(newData, data.id);
+    if (response == true) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Candidate rejected successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: "Failed to change status",
+      });
+    }
   };
 
   const handleHire = async (data) => {
@@ -204,8 +265,16 @@ export default function JobApplicant() {
                 <h4 className="font-semibold">
                   {`${jobInfo?.title} `}
 
-                  <span className="text-sm p-1 bg-green-300 rounded-xl text-green-600 ml-2 font-normal">
-                    Active
+                  <span
+                    className={`text-sm p-1
+                  ${
+                    jobInfo?.status == "Active"
+                      ? "bg-green-300 text-green-600"
+                      : "bg-yellow-300 text-yellow-600"
+                  }  rounded-xl
+                    ml-2 font-normal`}
+                  >
+                    {jobInfo?.status}
                   </span>
                 </h4>
               </div>
@@ -235,12 +304,26 @@ export default function JobApplicant() {
               {/* <button className="border  text-gray-400 rounded-md px-4 py-2 text-sm hover:bg-gray-200">
                 Edit
               </button> */}
-              <button className="border text-gray-400 rounded-md px-4 py-2 text-sm hover:bg-gray-200">
-                Pause
-              </button>
-              <button className="border text-red-500 rounded-md px-4 py-2 text-sm hover:bg-gray-200">
-                Close Job
-              </button>
+              {
+                //
+                jobInfo?.status == "Active" ? (
+                  <button
+                    className="border text-gray-400 rounded-md px-4 
+                py-2 text-sm hover:bg-gray-200"
+                    onClick={() => handleChangeJobStatus(id, "deactive")}
+                  >
+                    Pause
+                  </button>
+                ) : (
+                  <button
+                    className="border text-gray-400 rounded-md px-4 
+                py-2 text-sm hover:bg-gray-200"
+                    onClick={() => handleChangeJobStatus(id, "active")}
+                  >
+                    Activate
+                  </button>
+                )
+              }
             </div>
           </div>
         </div>
@@ -280,86 +363,18 @@ export default function JobApplicant() {
             <div>
               <div className="flex items-start">
                 <h4>Applicants {totalApplicants}</h4>
-                <div className="flex">
-                  <button className="border bg-green-600 text-white rounded-md px-4 py-2 text-sm hover:bg-gray-200">
-                    Export CSV
-                  </button>
-                  <button className="border text-gray-400 rounded-md px-4 py-2 text-sm hover:bg-gray-200">
-                    Filters
-                  </button>
-                </div>
               </div>
-              <div className="w-full flex items-start mt-2">
-                <div className="flex w-1/2 justify-between">
-                  <div>
-                    <div className="flex mb-2">
-                      <span className="text-sm text-gray-500 font-semibold">
-                        Application Status
-                      </span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">All</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">New</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">Reviewed</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">Shortlisted</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">Rejected</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex mb-2">
-                      <span className="text-sm text-gray-500 font-semibold">
-                        Skills
-                      </span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">Node.js</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">Express</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">MongoDB</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">AWS</span>
-                    </div>
-                    <div className="flex mb-2 cursor-pointer">
-                      <span className="h-2 w-2 bg-green-600"></span>
-                      <span className="text-sm text-gray-500">Typescript</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col w-1/2 text-left justify-start px-20">
-                  <div className="flex mb-2 w-full text-left">
-                    <span className="text-sm text-gray-500 font-semibold">
+              <div className="flex w-full mt-2">
+                <div className="flex w-full text-left px-4 space-y-4">
+                  {/* Experience Level */}
+                  <div className="w-full px-4">
+                    <label className="text-sm text-gray-500 font-semibold block mb-2">
                       Experience Level
-                    </span>
-                  </div>
-                  <div className="flex justify-between w-full text-left">
-                    <span className="text-gray-500">
-                      Years of Experience: 5+
-                    </span>
-                    <span className="text-gray-500">10+</span>
-                  </div>
-                  <div className="w-full">
+                    </label>
+                    <div className="flex justify-between text-sm text-gray-500 mb-1">
+                      <span>Years of Experience: 5+</span>
+                      <span>10+</span>
+                    </div>
                     <input
                       type="range"
                       min="0"
@@ -369,37 +384,31 @@ export default function JobApplicant() {
                       className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                     />
                   </div>
-                  <div className="w-full justify-start">
-                    <label className="text-gray-500 text-sm font-semibold text-left my-2">
+
+                  {/* Match Score (as select) */}
+                  <div className="w-full px-4">
+                    <label className="text-sm text-gray-500 font-semibold block mb-2">
                       Match Score
                     </label>
-                    {options.map((option) => (
-                      <label
-                        key={option.value}
-                        className="flex items-center space-x-3 mb-2 cursor-pointer w-full"
-                      >
-                        <input
-                          type="radio"
-                          name="matchLevel"
-                          value={option.value}
-                          checked={selected === option.value}
-                          onChange={() => setSelected(option.value)}
-                          className="form-radio text-green-600 h-4 w-4"
-                        />
-                        <span
-                          className={`${
-                            selected === option.value
-                              ? "text-green-700 font-semibold"
-                              : "text-gray-600"
-                          }`}
-                        >
+                    <select
+                      value={selected}
+                      onChange={(e) => setSelected(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                      {options.map((option) => (
+                        <option key={option.value} value={option.value}>
                           {option.label}
-                        </span>
-                      </label>
-                    ))}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+
+                  <button className="border bg-green-600 text-white rounded-md px-4 py-2 text-sm hover:bg-green-700 w-fit">
+                    Export
+                  </button>
                 </div>
               </div>
+
               <hr className="my-4" />
               <div className="flex justify-between items-start mb-4">
                 <span className="text-sm text-gray-500">

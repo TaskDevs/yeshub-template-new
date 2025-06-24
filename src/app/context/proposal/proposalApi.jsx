@@ -5,7 +5,7 @@ import { LOCALHOST_BACKEND, REACT_BASE_URL } from "../../../globals/constants";
 export const getUserProposals = async (userId) => {
   try {
     let responseOnProposalList = await axios.get(
-      `${ REACT_BASE_URL}get-client-proposal?id=${userId}`
+      `${REACT_BASE_URL}get-client-proposal?id=${userId}`
     );
     if (responseOnProposalList.status == 200) {
       return responseOnProposalList.data;
@@ -47,6 +47,7 @@ export const submitProposal = async (formDataToSubmit) => {
     );
 
     if (response.status == 200) {
+      //console.log(response.data);
       return response.data;
     } else {
       return false;

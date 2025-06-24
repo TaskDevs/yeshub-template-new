@@ -109,6 +109,7 @@ const TransactionApiDataProvider = (props) => {
     let response = await createWalletForUser();
     if (response.status == "success") {
       processGetTransactionOfClient();
+      processGetTransactionOfFreelance();
       return {
         status: "success",
         message: response.message,
@@ -126,6 +127,7 @@ const TransactionApiDataProvider = (props) => {
     console.log(response);
     if (response) {
       processGetTransactionOfClient();
+      processGetTransactionOfFreelance();
       return response;
     } else {
       return false;

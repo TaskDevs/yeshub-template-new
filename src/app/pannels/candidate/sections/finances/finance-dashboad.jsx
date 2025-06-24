@@ -586,6 +586,10 @@ export default function FinancialDashboard() {
                       </span>
                     )}
                     <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // handleRemoveMethod(method.id);
+                      }}
                       // onClick={(e) => {
                       //   e.stopPropagation();
                       //   handleRemoveMethod(method.id);

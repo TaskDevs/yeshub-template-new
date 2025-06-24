@@ -21,6 +21,7 @@ import ProfileCompletionModal from "./profile-complettion";
 import { userId } from "../../../globals/constants";
 import { useChat } from "../../context/chat/chatContext";
 import NotificationModal from "./notification-modal";
+import MessageModal from "./message-modal";
 //import { projectIds } from "../../../globals/constants";
 
 export const Header = ({ isDashboard = true }) => {
@@ -47,7 +48,9 @@ export const Header = ({ isDashboard = true }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
   const [projectIds, setProjectIds] = useState([]);
+  const [messagesData, setMessageData] = useState([]);
   const [chatId, setChatId] = useState();
 
   const {
@@ -110,9 +113,18 @@ export const Header = ({ isDashboard = true }) => {
 
     projectIds.forEach((projectId) => {
       const channel = echo.channel(`group.${projectId}`);
-
       channel.listen(".group.message.sent", (e) => {
         console.log(`New message in project ${projectId}:`, e.message);
+        let newMsg = [];
+        newMsg.push({
+          id: e.message.id,
+          message: e.message.message,
+          sender_name: e.message.sender_name,
+          project_id: e.message.project_id,
+          created_at: e.message.created_at,
+        });
+        setMessageData(newMsg);
+
         setProjectChats((prev) => [...prev, e.message]);
 
         if (chatId !== e.message.sender_id) {
@@ -730,26 +742,26 @@ export const Header = ({ isDashboard = true }) => {
                       <FaTimes className="h-5 w-5" />
                     ) : (
                       <div className="lg:hidden">
-                         {profile_image ? (
-                                <img
-                                  src={profile_image}
-                                  onClick={handleProfileClick}
-                                  className="w-10 h-10 rounded-full object-cover cursor-pointer"
-                                  alt="Profile"
-                                />
-                              ) : (
-                                <Avatar
-                                  sx={{
-                                    bgcolor: stringToColor(username),
-                                    width: 40,
-                                    height: 40,
-                                    fontSize: "1.2rem",
-                                  }}
-                                  onClick={handleProfileClick}
-                                >
-                                  {username.charAt(0).toUpperCase()}
-                                </Avatar>
-                              )}
+                        {profile_image ? (
+                          <img
+                            src={profile_image}
+                            onClick={handleProfileClick}
+                            className="w-10 h-10 rounded-full object-cover cursor-pointer"
+                            alt="Profile"
+                          />
+                        ) : (
+                          <Avatar
+                            sx={{
+                              bgcolor: stringToColor(username),
+                              width: 40,
+                              height: 40,
+                              fontSize: "1.2rem",
+                            }}
+                            onClick={handleProfileClick}
+                          >
+                            {username.charAt(0).toUpperCase()}
+                          </Avatar>
+                        )}
                       </div>
                     )}
                   </button>
@@ -818,17 +830,27 @@ export const Header = ({ isDashboard = true }) => {
                   )}
                 </div>
 
-                <button
-                  onClick={() => console.log("Try something cool")}
-                  className="relative text-gray-600 hover:text-green-700 mail-icon"
-                >
-                  <Mail className="h-5 w-5" />
-                  {notifyMessage > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-                      {notifyMessage}
-                    </span>
-                  )}
-                </button>
+                <>
+                  <button
+                    onClick={() => setShowMessageModal(true)}
+                    className="relative text-gray-600 hover:text-green-700 mail-icon"
+                  >
+                    <Mail className="h-5 w-5" />
+                    {notifyMessage > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                        {notifyMessage}
+                      </span>
+                    )}
+                  </button>
+                  <MessageModal
+                    isOpen={showMessageModal}
+                    onClose={() => setShowMessageModal(false)}
+                    data={messagesData}
+                    action={setMessageData}
+                    messageCountAction={[notifyMessage, setNotifyMessage]}
+                    color="teal"
+                  />
+                </>
 
                 {/* Profile Menu */}
                 <div className="relative new-profile-menu" ref={profileRef}>

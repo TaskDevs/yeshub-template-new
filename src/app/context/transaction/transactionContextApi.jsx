@@ -103,6 +103,7 @@ const TransactionApiDataProvider = (props) => {
         start_month: response.data.start_month,
       });
     }
+    setWalletStatus("true");
   };
 
   const processCreateWalletOfUser = async () => {

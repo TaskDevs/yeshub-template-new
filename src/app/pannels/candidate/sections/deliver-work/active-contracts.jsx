@@ -5,38 +5,8 @@ import Pagination from "../../../../common/Pagination";
 import { TableTop } from "../../../../common/table/TableTop";
 import { ContractStatCard } from "../../components/can-contract-stat-card";
 import { TaskApiData } from "../../../../context/task/taskContextApi";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import { useNavigate } from "react-router-dom";
-
-// Sample data
-// const contractsData = [
-//   {
-//     contractName: "Website Redesign Project",
-//     client: "Tech Solutions Inc.",
-//     completionDate: "Dec 31, 2024",
-//     daysRemaining: 14,
-//     status: "In Progress",
-//     totalValue: 4500,
-//     actions: ["Submit Work", "Message"],
-//   },
-//   {
-//     contractName: "Mobile App Development",
-//     client: "Innovation Labs",
-//     completionDate: "Jan 15, 2024",
-//     daysRemaining: 30,
-//     status: "Under Review",
-//     totalValue: 8250,
-//     actions: ["View Details", "Message"],
-//   },
-//   {
-//     contractName: "Brand Identity Design",
-//     client: "Creative Studios",
-//     completionDate: "Feb 28, 2024",
-//     daysRemaining: 45,
-//     status: "Just Started",
-//     totalValue: 3750,
-//     actions: ["Submit Work", "Message"],
-//   },
-// ];
 
 // Stats data based on the image
 
@@ -70,15 +40,20 @@ const StatusTag = ({ status }) => {
 };
 
 const ActiveContracts = () => {
-  const { processGetContractOfUser, contractData, contractStats } =
-    useContext(TaskApiData);
+  const { processGetFreelanceProjects, freelanceProjectList } =
+    useContext(FreelanceApiData);
+  const { contractData, contractStats } = useContext(TaskApiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    processGetContractOfUser();
+    processGetFreelanceProjects();
   }, []);
+
+  useEffect(() => {
+    console.log(freelanceProjectList);
+  }, [freelanceProjectList]);
 
   const itemsPerPage = 10;
   const totalItems = 123;

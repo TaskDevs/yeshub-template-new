@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
-import AddTaskModal from "./add-task-modal";
+//import AddTaskModal from "./add-task-modal";
+import AddTaskFreelance from "./add-task-freelance";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import AvatarGroup from "@mui/material/AvatarGroup";
@@ -19,8 +20,11 @@ export const FreelanceProjectManage = () => {
     processProjectInfoData,
     projectChats,
     //setProjectChats,
+    processManageProjectTasks,
+    deliverables,
     processGetProjectChat,
     processGetProjectPayments,
+    processGetDeliverables,
     projectPaymentInfo,
     processSendGroupChat,
   } = useContext(EmployerApiData);
@@ -29,14 +33,14 @@ export const FreelanceProjectManage = () => {
   const [message, setMessage] = useState("");
   const [projectDetails, setProjectDetails] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
-  const [teamMembers, setTeamMembers] = useState([]);
+  //const [teamMembers, setTeamMembers] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
   const [chatId, setChatId] = useState("");
   const [attachment, setAttachment] = useState(null);
   const [loading, setLoading] = useState(false);
   const [payoutStats, setPayoutStats] = useState([]);
   const [proposalId, setProposalId] = useState();
-  const [taskTeamName, setTaskTeamName] = useState("");
+  //const [taskTeamName, setTaskTeamName] = useState("");
   const [projectStats, setProjectStats] = useState({
     budget_used: 0,
     budget_used_percentage: 0,
@@ -58,29 +62,30 @@ export const FreelanceProjectManage = () => {
       });
     });
 
-    let memberName = newTeam.filter((item) => item.user_id == userId)[0];
-    setTaskTeamName(memberName.name);
-    setTeamMembers(newTeam);
+    //let memberName = newTeam.filter((item) => item.user_id == userId)[0];
+    //setTaskTeamName(memberName.name);
+    //setTeamMembers(newTeam);
     setProjectDetails(data);
     processGetProjectChat(id);
   }, []);
 
   useEffect(() => {
+    processGetDeliverables(id);
     processProjectInfoData(id);
     let data = sessionStorage.getItem("chat_id");
     setChatId(data);
   }, []);
 
   useEffect(() => {
-    // setInitialTasks();
-    //console.log(projectInfo);
-    setInitialTasks(projectInfo?.tasks);
-    setCheckedItems(projectInfo?.deliverables);
-    //console.log(projectInfo?.deliverables);
-  }, [projectInfo]);
+    projectInfo?.tasks?.length > 0 && setInitialTasks(projectInfo?.tasks);
+    if (deliverables[0]?.deliverables) {
+      let data = JSON.parse(deliverables[0]?.deliverables);
+      setCheckedItems(data);
+    }
+  }, [deliverables]);
 
   useEffect(() => {
-    processProjectInfoData(id);
+    console.log(id);
     processGetProjectPayments(id);
     //setBudgetUsed()
   }, []);
@@ -89,9 +94,10 @@ export const FreelanceProjectManage = () => {
     let newData = [];
     let amountSpent = 0;
     projectPaymentInfo.map((item) => {
-      newData.push(item.freelance_id);
+      newData.push(item.milestone_id);
       amountSpent += parseFloat(item.project_budget);
     });
+    // console.log(projectPaymentInfo);
     setPayoutStats(newData);
     setProjectStats({
       budget_used: amountSpent,
@@ -102,12 +108,52 @@ export const FreelanceProjectManage = () => {
     });
   }, [projectPaymentInfo]);
 
-  //   const handleRemoveTask = (id) => {
-  //     setTaskAssignment((prevAssigns) =>
-  //       prevAssigns.filter((assigns) => assigns.taskId !== id)
-  //     );
-  //     setInitialTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-  //   };
+  const handleRemoveTask = async (id) => {
+    // Calculate new values first
+    const updatedTasks = initialTasks.filter((task) => task.id !== id);
+
+    // Set state
+    // setInitialTasks(updatedTasks);
+    // setTaskAssignment(updatedAssignments);
+
+    // Send updated data
+    const newData = {
+      project_id: id,
+      tasks: updatedTasks,
+      //assignments: updatedAssignments,
+    };
+
+    console.log(newData);
+    //await processManageProjectTasks(newData);
+  };
+
+  const handleAddTask = async (task) => {
+    const today = new Date().toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+
+    const newTask = {
+      ...task,
+      id: Math.random().toString(36).substring(2, 9),
+      assignedTo: task.assignedTo,
+      details: task.details,
+      date: today,
+      status: "Fresh", // Default status if not already in `task`
+    };
+
+    let newData = {
+      project_id: id,
+      tasks: initialTasks.length > 0 ? [...initialTasks, newTask] : [newTask],
+    };
+
+    console.log(newData);
+    await processManageProjectTasks(newData);
+
+    initialTasks?.length > 0
+      ? setInitialTasks([...initialTasks, newTask])
+      : setInitialTasks([newTask]);
+  };
 
   const handleStatusChange = (id, newStatus) => {
     const updated = initialTasks.map((task) =>
@@ -383,9 +429,6 @@ export const FreelanceProjectManage = () => {
                           ? item.deliverables
                           : {};
 
-                      console.log(`my freelance id is ${userId} 
-                          and milestone assigned is ${item.assignedTo}`);
-
                       const deliverableKeys = Object.keys(deliverables);
                       const totalDeliverables = deliverableKeys.length;
 
@@ -398,9 +441,7 @@ export const FreelanceProjectManage = () => {
                         totalDeliverables > 0 &&
                         totalDeliverables === completedDeliverables;
 
-                      const isPaid = payoutStats.some(
-                        (id) => id == item.assignedTo
-                      );
+                      const isPaid = payoutStats.some((id) => id == item.id);
 
                       return (
                         <li className="mb-10 ml-6" key={index}>
@@ -541,8 +582,7 @@ export const FreelanceProjectManage = () => {
                   {initialTasks
                     ?.filter(
                       (item) =>
-                        item.status == "Fresh" &&
-                        item.assignedTo == taskTeamName
+                        item.status == "Fresh" && item.assignedTo == proposalId
                     )
                     ?.map((item) => (
                       <div
@@ -550,6 +590,13 @@ export const FreelanceProjectManage = () => {
                         key={item.id}
                       >
                         {/* Remove Icon */}
+                        <button
+                          onClick={() => handleRemoveTask(item.id)}
+                          className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
+                          title="Remove Task"
+                        >
+                          &times;
+                        </button>
 
                         <h4 className="text-gray-700 mb-2 font-semibold">
                           {item.title}
@@ -559,7 +606,6 @@ export const FreelanceProjectManage = () => {
                           {item.details}
                         </p>
                         <div className="flex justify-between text-sm text-gray-500">
-                          <span>{item.assignedTo}</span>
                           <span>{item.date}</span>
                         </div>
                         <div className="flex gap-2 mt-4">
@@ -590,7 +636,7 @@ export const FreelanceProjectManage = () => {
                     ?.filter(
                       (item) =>
                         item.status == "Progress" &&
-                        item.assignedTo == taskTeamName
+                        item.assignedTo == proposalId
                     )
                     ?.map((item) => (
                       <div
@@ -604,9 +650,8 @@ export const FreelanceProjectManage = () => {
                         </p>
                         <div className="flex">
                           <span className="text-gray-500 text-sm">
-                            {item.assignedTo}
+                            {item.date}
                           </span>
-                          <span className="text-gray-500 text-sm">Jun 5</span>
                         </div>
                         <hr className="my-2" />
                         <div>
@@ -645,8 +690,7 @@ export const FreelanceProjectManage = () => {
                   {initialTasks
                     ?.filter(
                       (item) =>
-                        item.status == "Review" &&
-                        item.assignedTo == taskTeamName
+                        item.status == "Review" && item.assignedTo == proposalId
                     )
                     ?.map((item) => (
                       <div
@@ -654,17 +698,12 @@ export const FreelanceProjectManage = () => {
                         key={item.id}
                       >
                         <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.status}
-                        </span>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
                         <div className="flex justify-between items-center">
                           <div className="flex gap-4">
-                            <span className="text-gray-500 text-sm">
-                              {item.assignedTo}
-                            </span>
                             <span className="text-gray-500 text-sm">
                               {item.date}
                             </span>
@@ -708,7 +747,7 @@ export const FreelanceProjectManage = () => {
                     ?.filter(
                       (item) =>
                         item.status == "Completed" &&
-                        item.assignedTo == taskTeamName
+                        item.assignedTo == proposalId
                     )
                     ?.map((item) => (
                       <div
@@ -716,18 +755,11 @@ export const FreelanceProjectManage = () => {
                         key={item.id}
                       >
                         <h4 className="text-gray-700 mb-2">{item.title}</h4>
-                        <span className="text-sm text-blue-700 bg-blue-100 rounded-xl p-1 px-2 mb-2 block">
-                          {item.category}
-                        </span>
+
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
-                        <div className="flex">
-                          <span className="text-gray-500 text-sm">
-                            {item.assignedTo}
-                          </span>
-                          <span className="text-gray-500 text-sm">Jun 5</span>
-                        </div>
+
                         <div>
                           <div className="flex gap-2 mt-4">
                             <button
@@ -916,10 +948,11 @@ export const FreelanceProjectManage = () => {
           </div>
         </div>
       </div>
-      <AddTaskModal
+      <AddTaskFreelance
         isOpen={showTaskModal}
         onClose={() => setShowTaskModal(false)}
-        teamMembers={teamMembers}
+        assignedTo={proposalId}
+        onAddTask={handleAddTask}
       />
     </div>
   );

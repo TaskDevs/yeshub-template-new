@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { getDaysLeft } from "../../../../../utils/dateUtils";
+import { userId } from "../../../../../globals/constants";
 
 export const FreelanceProjectManage = () => {
   const { freelanceProjectList } = useContext(FreelanceApiData);
@@ -34,6 +35,8 @@ export const FreelanceProjectManage = () => {
   const [attachment, setAttachment] = useState(null);
   const [loading, setLoading] = useState(false);
   const [payoutStats, setPayoutStats] = useState([]);
+  const [proposalId, setProposalId] = useState();
+  const [taskTeamName, setTaskTeamName] = useState("");
   const [projectStats, setProjectStats] = useState({
     budget_used: 0,
     budget_used_percentage: 0,
@@ -46,12 +49,17 @@ export const FreelanceProjectManage = () => {
     let newTeam = [];
     let data = freelanceProjectList?.find((item) => item.id == id);
     //console.log(data);
-    data?.team?.map((item) =>
+    data?.team?.map((item) => {
+      item.user_id == userId && setProposalId(item.id);
       newTeam.push({
         id: item.id,
+        user_id: item.user_id,
         name: item.firstname + " " + item.lastname,
-      })
-    );
+      });
+    });
+
+    let memberName = newTeam.filter((item) => item.user_id == userId)[0];
+    setTaskTeamName(memberName.name);
     setTeamMembers(newTeam);
     setProjectDetails(data);
     processGetProjectChat(id);
@@ -366,132 +374,137 @@ export const FreelanceProjectManage = () => {
                   Project Milestones
                 </h3>
                 <ol className="relative border-l border-gray-300">
-                  {projectDetails?.milestones?.map((item, index) => {
-                    const deliverables =
-                      item?.deliverables &&
-                      typeof item.deliverables === "object"
-                        ? item.deliverables
-                        : {};
+                  {projectDetails?.milestones
+                    ?.filter((item) => item.assignedTo == proposalId)
+                    .map((item, index) => {
+                      const deliverables =
+                        item?.deliverables &&
+                        typeof item.deliverables === "object"
+                          ? item.deliverables
+                          : {};
 
-                    const deliverableKeys = Object.keys(deliverables);
-                    const totalDeliverables = deliverableKeys.length;
+                      console.log(`my freelance id is ${userId} 
+                          and milestone assigned is ${item.assignedTo}`);
 
-                    const checked = checkedItems || {}; // fallback if undefined
-                    const completedDeliverables = deliverableKeys.filter(
-                      (_, dIndex) => !!checked[`${index}-${dIndex}`]
-                    ).length;
+                      const deliverableKeys = Object.keys(deliverables);
+                      const totalDeliverables = deliverableKeys.length;
 
-                    const isComplete =
-                      totalDeliverables > 0 &&
-                      totalDeliverables === completedDeliverables;
+                      const checked = checkedItems || {}; // fallback if undefined
+                      const completedDeliverables = deliverableKeys.filter(
+                        (_, dIndex) => !!checked[`${index}-${dIndex}`]
+                      ).length;
 
-                    const isPaid = payoutStats.some(
-                      (id) => id == item.assignedTo
-                    );
+                      const isComplete =
+                        totalDeliverables > 0 &&
+                        totalDeliverables === completedDeliverables;
 
-                    return (
-                      <li className="mb-10 ml-6" key={index}>
-                        <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-100 rounded-full ring-8 ring-white">
-                          🧾
-                        </span>
+                      const isPaid = payoutStats.some(
+                        (id) => id == item.assignedTo
+                      );
 
-                        <div className="rounded-xl bg-gray-100 h-30 p-2">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-gray-700 font-semibold text-sm flex items-center">
-                              {item.name}
-                              <span className="bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded">
-                                {item.due_date}
-                              </span>
-                            </h4>
-                            {/* Assigned person */}
-                            {item.assignedTo && (
-                              <span className="text-xs text-gray-600 bg-yellow-100 px-2 py-0.5 rounded">
-                                Assigned:{" "}
-                                {
-                                  projectDetails?.team?.filter(
-                                    (idx) => idx.id == item.assignedTo
-                                  )[0]?.firstname
-                                }
-                              </span>
-                            )}
-                          </div>
-
-                          <p className="text-xs text-gray-500 mb-2">
-                            {item.description}
-                          </p>
-                          <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
-                            Ongoing
+                      return (
+                        <li className="mb-10 ml-6" key={index}>
+                          <span className="absolute -left-3 flex items-center justify-center w-6 h-6 bg-green-100 rounded-full ring-8 ring-white">
+                            🧾
                           </span>
 
-                          <hr className="mt-4" />
-
-                          <div className="space-y-3">
-                            {item.deliverables &&
-                              Object.keys(item.deliverables).map(
-                                (deliverable, deliverableIndex) => {
-                                  const key = `${index}-${deliverableIndex}`;
-                                  const content =
-                                    item.deliverables[deliverable];
-
-                                  return (
-                                    <div
-                                      key={key}
-                                      className="flex items-center space-x-2"
-                                    >
-                                      {isPaid ? (
-                                        <span className="text-sm font-bold text-green-600 line-through">
-                                          {content}
-                                        </span>
-                                      ) : (
-                                        <>
-                                          <input
-                                            type="checkbox"
-                                            id={`check-${key}`}
-                                            checked={!!checkedItems?.[key]}
-                                            readOnly={true}
-                                            className="h-4 w-4 text-green-600 rounded focus:ring-0"
-                                          />
-                                          <label
-                                            htmlFor={`check-${key}`}
-                                            className={`text-sm cursor-pointer transition ${
-                                              checkedItems?.[key]
-                                                ? "font-bold text-green-600 line-through"
-                                                : "text-gray-800"
-                                            }`}
-                                          >
-                                            {content}
-                                          </label>
-                                        </>
-                                      )}
-                                    </div>
-                                  );
-                                }
+                          <div className="rounded-xl bg-gray-100 h-30 p-2">
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="text-gray-700 font-semibold text-sm flex items-center">
+                                {item.name}
+                                <span className="bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded">
+                                  {item.due_date}
+                                </span>
+                              </h4>
+                              {/* Assigned person */}
+                              {item.assignedTo && (
+                                <span className="text-xs text-gray-600 bg-yellow-100 px-2 py-0.5 rounded">
+                                  Assigned:{" "}
+                                  {
+                                    projectDetails?.team?.filter(
+                                      (idx) => idx.id == item.assignedTo
+                                    )[0]?.firstname
+                                  }
+                                </span>
                               )}
-                          </div>
+                            </div>
 
-                          {/* ✅ Payout Button */}
-                          <div className="mt-4 text-right">
-                            {isPaid ? (
-                              <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
-                                Payment made
-                              </span>
-                            ) : (
-                              <span
-                                disabled={!isComplete}
-                                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
-                                  isComplete
-                                    ? "bg-green-600 text-white hover:bg-green-700"
-                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                }`}
-                              >
-                                Not Paid
-                              </span>
-                            )}
+                            <p className="text-xs text-gray-500 mb-2">
+                              {item.description}
+                            </p>
+                            <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
+                              Ongoing
+                            </span>
+
+                            <hr className="mt-4" />
+
+                            <div className="space-y-3">
+                              {item.deliverables &&
+                                Object.keys(item.deliverables).map(
+                                  (deliverable, deliverableIndex) => {
+                                    const key = `${index}-${deliverableIndex}`;
+                                    const content =
+                                      item.deliverables[deliverable];
+
+                                    return (
+                                      <div
+                                        key={key}
+                                        className="flex items-center space-x-2"
+                                      >
+                                        {isPaid ? (
+                                          <span className="text-sm font-bold text-green-600 line-through">
+                                            {content}
+                                          </span>
+                                        ) : (
+                                          <>
+                                            <input
+                                              type="checkbox"
+                                              id={`check-${key}`}
+                                              checked={!!checkedItems?.[key]}
+                                              readOnly={true}
+                                              className="h-4 w-4 text-green-600 rounded focus:ring-0"
+                                            />
+                                            <label
+                                              htmlFor={`check-${key}`}
+                                              className={`text-sm cursor-pointer transition ${
+                                                checkedItems?.[key]
+                                                  ? "font-bold text-green-600 line-through"
+                                                  : "text-gray-800"
+                                              }`}
+                                            >
+                                              {content}
+                                            </label>
+                                          </>
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                )}
+                            </div>
+
+                            {/* ✅ Payout Button */}
+                            <div className="mt-4 text-right">
+                              {isPaid ? (
+                                <span className="px-2 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold">
+                                  Payment made
+                                </span>
+                              ) : (
+                                <span
+                                  disabled={!isComplete}
+                                  className={`px-4 py-1.5 rounded-md text-sm font-semibold transition ${
+                                    isComplete
+                                      ? "bg-green-600 text-white hover:bg-green-700"
+                                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                  }`}
+                                >
+                                  Not Paid
+                                </span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                    );
-                  })}
+                        </li>
+                      );
+                    })}
                 </ol>
               </div>
             </div>
@@ -502,13 +515,13 @@ export const FreelanceProjectManage = () => {
                   Task Management
                 </h4>
 
-                {/* <button
+                <button
                   onClick={() => setShowTaskModal(true)}
                   className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700"
                 >
                   + Add Task
-                </button> */}
+                </button>
               </div>
 
               <h4 className="text-green-500 text-md">Kanban Board</h4>
@@ -526,7 +539,11 @@ export const FreelanceProjectManage = () => {
                     </span>
                   </div>
                   {initialTasks
-                    ?.filter((item) => item.status == "Fresh")
+                    ?.filter(
+                      (item) =>
+                        item.status == "Fresh" &&
+                        item.assignedTo == taskTeamName
+                    )
                     ?.map((item) => (
                       <div
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4 relative"
@@ -570,7 +587,11 @@ export const FreelanceProjectManage = () => {
                     </span>
                   </div>
                   {initialTasks
-                    ?.filter((item) => item.status == "Progress")
+                    ?.filter(
+                      (item) =>
+                        item.status == "Progress" &&
+                        item.assignedTo == taskTeamName
+                    )
                     ?.map((item) => (
                       <div
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4"
@@ -622,7 +643,11 @@ export const FreelanceProjectManage = () => {
                     </span>
                   </div>
                   {initialTasks
-                    ?.filter((item) => item.status == "Review")
+                    ?.filter(
+                      (item) =>
+                        item.status == "Review" &&
+                        item.assignedTo == taskTeamName
+                    )
                     ?.map((item) => (
                       <div
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4"
@@ -680,7 +705,11 @@ export const FreelanceProjectManage = () => {
                     </span>
                   </div>
                   {initialTasks
-                    ?.filter((item) => item.status == "Completed")
+                    ?.filter(
+                      (item) =>
+                        item.status == "Completed" &&
+                        item.assignedTo == taskTeamName
+                    )
                     ?.map((item) => (
                       <div
                         className="bg-white border-gray-400 rounded-xl p-4 mb-4"

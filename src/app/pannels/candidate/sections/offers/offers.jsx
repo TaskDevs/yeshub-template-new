@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight, Eye } from "lucide-react";
 import { RotatingLines } from "react-loader-spinner";
-import { getUserProposals } from "../../../../context/proposal/proposalApi";
+import {
+  getProposalsById,
+  getUserProposals,
+} from "../../../../context/proposal/proposalApi";
 import ProposalModal from "./offerDetailModal";
+
 import {
   fetchFreelancerInvitations,
   updateInvitationStatus,
@@ -25,8 +29,9 @@ export default function Offers() {
   const [proposals, setProposals] = useState(null);
   const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedProposal, setSelectedProposal] = useState(null);
   const [pendingInvitations, setPendingInvitations] = useState([]);
-const [acceptedInvitations, setAcceptedInvitations] = useState([]);
+  const [acceptedInvitations, setAcceptedInvitations] = useState([]);
   const [loadingId, setLoadingId] = useState(null);
   const mappedJobs = proposals
     ? proposals.data.map((proposal) => {
@@ -54,6 +59,7 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
 
         return {
           id: proposal.id,
+          propsal_id: userProposal.id,
           title: proposal.job_title || "Untitled Job",
           company: proposal?.employer?.company_name || "Unknown Company",
           status: userProposal.stage
@@ -91,22 +97,26 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
   const pageSize = 3;
 
   useEffect(() => {
-     const fetchInvitation = async () => {
-    try {
-      const res = await fetchFreelancerInvitations(userId);
+    const fetchInvitation = async () => {
+      try {
+        const res = await fetchFreelancerInvitations(userId);
 
-      const invitations = res.data || [];
+        const invitations = res.data || [];
 
-      // Filter based on status
-      const pending = invitations.filter(inv => inv.invitation_status === 'pending');
-      const accepted = invitations.filter(inv => inv.invitation_status === 'accepted');
+        // Filter based on status
+        const pending = invitations.filter(
+          (inv) => inv.invitation_status === "pending"
+        );
+        const accepted = invitations.filter(
+          (inv) => inv.invitation_status === "accepted"
+        );
 
-      setPendingInvitations(pending);
-      setAcceptedInvitations(accepted);
-    } catch (error) {
-      console.error("Error fetching invitations:", error);
-    }
-  };
+        setPendingInvitations(pending);
+        setAcceptedInvitations(accepted);
+      } catch (error) {
+        console.error("Error fetching invitations:", error);
+      }
+    };
     if (userId) {
       fetchInvitation(); // ✅ call the function
     }
@@ -169,7 +179,6 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
     }
   }, [totalPages, currentPage]);
 
-
   // pagination
 
   useEffect(() => {
@@ -214,6 +223,18 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
     }
 
     setLoadingId(null); // Reset spinner
+  };
+
+  const handleViewProposal = async (id) => {
+    try {
+      const response = await getProposalsById(id);
+      if (response?.status === "success") {
+        setSelectedProposal(response.data); // set proposal data
+        setShowModal(true);
+      }
+    } catch (error) {
+      console.error("Failed to fetch proposal:", error);
+    }
   };
   return (
     <div className="tw-css bg-gray-100 min-h-screen p-6">
@@ -608,7 +629,7 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
                     </div>
                   </div>
                   <button
-                    onClick={() => setShowModal(true)}
+                    onClick={() => handleViewProposal(job.propsal_id)}
                     className="bg-green-700 text-white px-3 py-2 text-sm rounded flex items-center gap-1 hover:bg-dark-800 transition"
                   >
                     <Eye className="w-4 h-4" />
@@ -755,7 +776,7 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
 
           <div className="bg-white p-4 rounded-2xl shadow-sm">
             <h3 className="text-lg font-semibold mb-3">Accepted Offers</h3>
-             <>
+            <>
               {acceptedInvitations.length === 0 ? (
                 <p className="text-center text-gray-500">No invitations yet</p>
               ) : (
@@ -773,7 +794,7 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
                         : "Expired"
                       : "No expiry";
 
-                    return (
+                  return (
                     <div
                       key={job.job_id}
                       className="card bg-gray-50 p-3 mb-2 rounded shadow-sm"
@@ -785,7 +806,7 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
 
                       <div className="flex gap-2 mt-2">
                         <span className="bg-green-500 text-white px-3 text-sm rounded-full items-center">
-                            Accepted
+                          Accepted
                         </span>
                       </div>
                     </div>
@@ -796,7 +817,11 @@ const [acceptedInvitations, setAcceptedInvitations] = useState([]);
           </div>
         </aside>
       </div>
-      <ProposalModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <ProposalModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        proposal={selectedProposal}
+      />
     </div>
   );
 }

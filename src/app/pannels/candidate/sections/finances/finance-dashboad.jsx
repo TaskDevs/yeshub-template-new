@@ -93,7 +93,7 @@ const transactionColumns = [
           row.amount.startsWith("+") ? "text-green-600" : "text-red-600"
         }`}
       >
-        {row.amount}
+        ₵{row.amount}
       </span>
     ),
     right: true,
@@ -538,7 +538,7 @@ export default function FinancialDashboard() {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ${allEarnings.available}
+              Available: ${freelanceEarnings.available}
             </p>
 
             <button
@@ -586,10 +586,10 @@ export default function FinancialDashboard() {
                       </span>
                     )}
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveMethod(method.id);
-                      }}
+                      // onClick={(e) => {
+                      //   e.stopPropagation();
+                      //   handleRemoveMethod(method.id);
+                      // }}
                       className="text-red-500 text-xs hover:underline"
                     >
                       Remove
@@ -678,7 +678,7 @@ export default function FinancialDashboard() {
                 style: {
                   borderTop: "1px solid #e5e7eb",
                   paddingTop: "1rem",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex",
                 },
               },
             }}

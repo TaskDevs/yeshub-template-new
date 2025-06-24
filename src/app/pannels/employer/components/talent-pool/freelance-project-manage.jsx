@@ -34,13 +34,14 @@ export const FreelanceProjectManage = () => {
   const [projectDetails, setProjectDetails] = useState({});
   const [checkedItems, setCheckedItems] = useState({});
   //const [teamMembers, setTeamMembers] = useState([]);
+  const [taskAssignment, setTaskAssignment] = useState([]);
   const [initialTasks, setInitialTasks] = useState([]);
   const [chatId, setChatId] = useState("");
   const [attachment, setAttachment] = useState(null);
   const [loading, setLoading] = useState(false);
   const [payoutStats, setPayoutStats] = useState([]);
   const [proposalId, setProposalId] = useState();
-  //const [taskTeamName, setTaskTeamName] = useState("");
+  const [taskTeamName, setTaskTeamName] = useState("");
   const [projectStats, setProjectStats] = useState({
     budget_used: 0,
     budget_used_percentage: 0,
@@ -48,6 +49,8 @@ export const FreelanceProjectManage = () => {
   });
 
   const { id } = useParams();
+
+  const projectId = id;
 
   useEffect(() => {
     let newTeam = [];
@@ -62,8 +65,8 @@ export const FreelanceProjectManage = () => {
       });
     });
 
-    //let memberName = newTeam.filter((item) => item.user_id == userId)[0];
-    //setTaskTeamName(memberName.name);
+    let memberName = newTeam.filter((item) => item.user_id == userId)[0];
+    setTaskTeamName(memberName.name);
     //setTeamMembers(newTeam);
     setProjectDetails(data);
     processGetProjectChat(id);
@@ -111,20 +114,23 @@ export const FreelanceProjectManage = () => {
   const handleRemoveTask = async (id) => {
     // Calculate new values first
     const updatedTasks = initialTasks.filter((task) => task.id !== id);
+    const updatedAssignments = taskAssignment.filter(
+      (assigns) => assigns.taskId !== id
+    );
 
     // Set state
-    // setInitialTasks(updatedTasks);
-    // setTaskAssignment(updatedAssignments);
+    setInitialTasks(updatedTasks);
+    setTaskAssignment(updatedAssignments);
 
     // Send updated data
     const newData = {
-      project_id: id,
+      project_id: projectId,
       tasks: updatedTasks,
-      //assignments: updatedAssignments,
+      assignments: updatedAssignments,
     };
 
     console.log(newData);
-    //await processManageProjectTasks(newData);
+    await processManageProjectTasks(newData);
   };
 
   const handleAddTask = async (task) => {
@@ -133,18 +139,29 @@ export const FreelanceProjectManage = () => {
       day: "numeric",
     });
 
+    console.log(taskTeamName);
+
     const newTask = {
       ...task,
       id: Math.random().toString(36).substring(2, 9),
-      assignedTo: task.assignedTo,
+      assignedTo: proposalId,
       details: task.details,
       date: today,
       status: "Fresh", // Default status if not already in `task`
     };
 
+    setTaskAssignment([
+      ...taskAssignment,
+      { teamMemberId: task.assignedTo, taskId: newTask.id },
+    ]);
+
     let newData = {
       project_id: id,
       tasks: initialTasks.length > 0 ? [...initialTasks, newTask] : [newTask],
+      assignments: [
+        ...taskAssignment,
+        { teamMemberId: proposalId, taskId: newTask.id },
+      ],
     };
 
     console.log(newData);
@@ -155,11 +172,19 @@ export const FreelanceProjectManage = () => {
       : setInitialTasks([newTask]);
   };
 
-  const handleStatusChange = (id, newStatus) => {
+  const handleStatusChange = async (id, newStatus) => {
     const updated = initialTasks.map((task) =>
       task.id === id ? { ...task, status: newStatus } : task
     );
     setInitialTasks(updated);
+    const newData = {
+      project_id: projectId,
+      tasks: updated,
+      assignments: taskAssignment,
+    };
+
+    console.log(newData);
+    await processManageProjectTasks(newData);
   };
 
   const handleSytemChanges = async () => {
@@ -718,14 +743,6 @@ export const FreelanceProjectManage = () => {
                               className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
                             >
                               Revert
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Completed")
-                              }
-                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
-                            >
-                              Move
                             </button>
                           </div>
                         </div>

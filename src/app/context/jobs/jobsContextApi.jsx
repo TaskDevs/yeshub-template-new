@@ -6,6 +6,7 @@ import {
   searchJob,
   searchJobByTitle,
   jobList,
+  changeJobStatus,
   countEmployerJobsPosted,
   employerJobList,
   jobProfile,
@@ -202,7 +203,14 @@ const JobApiDataProvider = (props) => {
     }
   };
 
-  const processUpdateJob = async () => {};
+  const processChangeJobStatus = async (id, data) => {
+    let response = await changeJobStatus(id, data);
+    if (response) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const processDeleteJob = async (id) => {
     try {
@@ -224,7 +232,6 @@ const JobApiDataProvider = (props) => {
         processJobProfile,
         processJobCompanyInfo,
         processSearchJob,
-        processUpdateJob,
         processDeleteJob,
         processAJobProfile,
         processApplyForJob,
@@ -243,6 +250,7 @@ const JobApiDataProvider = (props) => {
         searchLoad,
         jobLoad,
         searchData,
+        processChangeJobStatus,
         searchPaginationData,
         setSearchJobInfo,
         processSearchJobByTitle,

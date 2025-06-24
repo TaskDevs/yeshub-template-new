@@ -328,7 +328,7 @@ export default function ManageJobs() {
                       className={`text-xs font-medium px-2 py-1 rounded-full ${
                         job.status == "Active"
                           ? "bg-green-100 text-green-800"
-                          : job.status == "Draft"
+                          : job.status == "Deactive"
                           ? "bg-yellow-100 text-yellow-800"
                           : "bg-gray-200 text-gray-600"
                       }`}

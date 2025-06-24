@@ -27,21 +27,6 @@ import { TransactionApiData } from "../../../../context/transaction/transactionC
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-// const paymentMethods = [
-//   {
-//     id: "bank",
-//     type: "Bank Account (US)",
-//     detail: "Chase Bank ****4532",
-//     isDefault: true,
-//   },
-//   {
-//     id: "mobile",
-//     type: "Mobile Money",
-//     detail: "+233 54 123 4567",
-//     isDefault: false,
-//   },
-// ];
-// AreaChart Data
 
 const doughnutOptions = {
   plugins: {
@@ -108,7 +93,7 @@ const transactionColumns = [
           row.amount.startsWith("+") ? "text-green-600" : "text-red-600"
         }`}
       >
-        {row.amount}
+        ₵{row.amount}
       </span>
     ),
     right: true,
@@ -605,6 +590,10 @@ export default function FinancialDashboard() {
                         e.stopPropagation();
                         // handleRemoveMethod(method.id);
                       }}
+                      // onClick={(e) => {
+                      //   e.stopPropagation();
+                      //   handleRemoveMethod(method.id);
+                      // }}
                       className="text-red-500 text-xs hover:underline"
                     >
                       Remove
@@ -693,7 +682,7 @@ export default function FinancialDashboard() {
                 style: {
                   borderTop: "1px solid #e5e7eb",
                   paddingTop: "1rem",
-                  justifyContent: "flex-end",
+                  justifyContent: "flex",
                 },
               },
             }}

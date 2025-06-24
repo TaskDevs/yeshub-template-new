@@ -19,7 +19,7 @@ const CarouselComponent = () => {
           <div key={idx} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
             <div className="text-center p-4">
               <img
-                src="https://ibb.co/tpWyD23N"
+                src="https://i.postimg.cc/cHz0fqgZ/image-boy-434.jpg"
                 className="rounded-circle"
                 alt={`Slide ${slide}`}
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Code2,
   Paintbrush,
@@ -13,7 +13,6 @@ import {
   DollarSign,
 } from "lucide-react"; // Icons from lucide-react
 
-
 const categories = [
   { icon: <Code2 size={24} />, label: "Programming & Tech" },
   { icon: <Paintbrush size={24} />, label: "Graphics & Design" },
@@ -26,7 +25,28 @@ const categories = [
   // { icon: <Users size={24} />, label: 'Consulting' }
 ];
 
+const images = [
+  "https://i.postimg.cc/WpMF6mkz/image-4060.jpg",
+  "https://i.postimg.cc/sxv5sTnY/image-4060u56.jpg", // Replace with your own image
+  "https://i.postimg.cc/gkh6sX12/image-4060700.jpg", 
+  "https://i.postimg.cc/nz7sHMBL/image-4060y-D45.jpg",
+]
 export default function YesHubLandingPage() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false); // Start fade out
+
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+        setFade(true); // Fade in new image
+      }, 200); // Match transition duration
+    }, 9000);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="tw-css min-h-screen bg-white text-gray-900 py-4 my-5 mt-16 sm:mt-5">
       {/* Hero Section */}
@@ -55,11 +75,13 @@ export default function YesHubLandingPage() {
             </div>
           </div>
         </div>
-        <div className="w-full h-full">
+        <div className="w-full h-full transition-all duration-700">
           <img
-            src="https://i.postimg.cc/WpMF6mkz/image-4060.jpg"
+            src={images[currentIndex]}
             alt="Professional at work"
-            className="w-full h-auto rounded-lg shadow-md"
+            className={`w-full h-auto rounded-lg shadow-md object-cover transition-all duration-700 ${
+            fade ? 'opacity-100' : 'opacity-0'
+            }`}
           />
         </div>
       </div>
@@ -83,30 +105,48 @@ export default function YesHubLandingPage() {
           </div>
         </div>
         {/* Why Businesses Section */}
-        <div className="bg-white py-14 px-6 lg:px-20">
-          <div className="max-w-6xl mx-auto justify-center bg-gray-900 rounded-xl text-white py-14 px-6 lg:px-20 grid md:grid-cols-2 gap-4 items-center">
-            <div className="mb-8 lg:mb-0">
-              <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
-                This is how good companies find good talent
-              </h2>
-              <p className="text-gray-300 mb-6">
-                Enterprise Suite is a complete workforce management solution.
-                This is how innovation works now.
-              </p>
-              <button className="bg-white text-gray-900 font-medium px-5 py-2 rounded hover:bg-gray-100 transition">
-                Learn more
-              </button>
-            </div>
-            <div className="w-full h-full rouned-lg">
-              <img
-                src="https://i.postimg.cc/6pLR3VYG/rece54.jpg"
-                alt="Team working"
-                className="w-full h-full shadow-md rouned-lg"
-              />
-            </div>
+        <div className="grid md:grid-cols-2 bg-[#0B0F1A] text-white rounded-2xl overflow-hidden max-w-6xl mx-auto my-10">
+          {/* Left Image Section */}
+          <div className="h-full w-full">
+            <img
+              src="https://i.postimg.cc/g05nWGZ0/imag560.jpg"
+              alt="Business meeting"
+              className="object-cover w-full h-full"
+            />
+          </div>
+
+          {/* Right Content Section */}
+          <div className="px-10 py-12">
+            <p className="uppercase text-sm text-gray-400 mb-2">
+              For Businesses
+            </p>
+            <h2 className="text-4xl font-bold mb-4 leading-tight">
+              This is how good companies find good talent
+            </h2>
+            <p className="text-lg text-gray-300 mb-6">
+              Discover the proven strategies top-performing companies use to
+              attract and retain high-quality talent. From building strong
+              employer brands to streamlining recruitment processes.
+            </p>
+            <ul className="space-y-3 text-base text-white mb-6">
+              <li className="items-start">
+                <span className="text-green-400 text-lg">✔</span>
+                Reduced turnover
+              </li>
+              <li className="items-start">
+                <span className="text-green-400 text-lg">✔</span>
+                Higher productivity:
+              </li>
+              <li className="items-start">
+                <span className="text-green-400 text-lg">✔</span>
+                Competitive advantage
+              </li>
+            </ul>
+            <button className="bg-green-600 text-white px-6 py-3 rounded-md font-medium hover:bg-green-600 transition">
+              Learn more
+            </button>
           </div>
         </div>
-
         {/* Business Benefits */}
         <div className="bg-white py-14 px-1 lg:px-20 max-w-6xl mx-auto justify-center">
           <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
@@ -160,7 +200,7 @@ export default function YesHubLandingPage() {
             {/* Background Image */}
             <div className="absolute inset-0">
               <img
-                src="https://i.postimg.cc/NF5KYS0Q/african-american-business-woman-working-computer.jpg"
+                src="https://i.postimg.cc/9FJ9k5JD/Untitled-2.jpg"
                 alt="Client working"
                 className="w-full object-cover"
               />
@@ -252,7 +292,7 @@ export default function YesHubLandingPage() {
                 ))}
               </ul>
 
-              <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800">
+              <button className="bg-green-700 text-white px-6 py-2 rounded-md hover:bg-gray-800">
                 Try Now
               </button>
             </div>
@@ -285,7 +325,6 @@ export default function YesHubLandingPage() {
           </div>
         </div>
       </section>
-   
     </div>
   );
 }

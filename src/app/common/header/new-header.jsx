@@ -22,7 +22,7 @@ import { userId } from "../../../globals/constants";
 import { useChat } from "../../context/chat/chatContext";
 import NotificationModal from "./notification-modal";
 import MessageModal from "./message-modal";
-//import { projectIds } from "../../../globals/constants";
+
 
 export const Header = ({ isDashboard = true }) => {
   const { processGetMessagesOfReceiver, unreadCount, setUnreadCount } =
@@ -613,10 +613,16 @@ export const Header = ({ isDashboard = true }) => {
                 {!token ? (
                   <>
                     <button
-                      className="bg-gray-600 text-white px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-200 ease-in-out hover:shadow-lg"
+                      className="text-gray-600 px-6 py-2 rounded-xl font-semibold transition-all duration-200 ease-in-out hover:shadow-lg"
                       onClick={() => navigate("/login")}
                     >
-                      Log In
+                      Log in
+                    </button>
+                    <button
+                      className="bg-green-700 text-white px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-200 ease-in-out hover:shadow-lg"
+                      onClick={() => navigate("/sign-up")}
+                    >
+                      Sign up
                     </button>
                   </>
                 ) : (

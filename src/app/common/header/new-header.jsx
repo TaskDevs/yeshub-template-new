@@ -538,7 +538,7 @@ export const Header = ({ isDashboard = true }) => {
               className="flex items-center mr-4 new-header-logo "
               onClick={() => handleLogoClick()}
             >
-              <img src="/yes-logo-1.png" alt="YesHub" className="h-14 w-auto" />
+              <img src="/yes.png" alt="YesHub" className="h-14 w-auto" />
             </div>
 
             {/* Navigation items */}
@@ -608,25 +608,15 @@ export const Header = ({ isDashboard = true }) => {
               />
             )}
 
-            {/* show Auth buttons if not dashboard */}
-            {/* data-bs-toggle="modal"
-            data-bs-target="#sign_up_popup2" */}
-
             {!isDashboard && (
               <div className="flex space-x-2">
                 {!token ? (
                   <>
                     <button
-                      className="bg-gray-600 text-white px-4 py-2 rounded-md font-medium"
+                      className="bg-gray-600 text-white px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-200 ease-in-out hover:shadow-lg"
                       onClick={() => navigate("/login")}
                     >
                       Log In
-                    </button>
-                    <button
-                      className="bg-[#305718] text-white px-4 py-2 rounded-md font-medium"
-                      onClick={() => navigate("/sign-up")}
-                    >
-                      Signup
                     </button>
                   </>
                 ) : (

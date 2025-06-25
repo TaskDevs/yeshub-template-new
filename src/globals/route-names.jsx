@@ -28,7 +28,7 @@ export const publicUser = {
   TEST: "/test",
   LOG: "/log",
   CALLBACK: "/wallet/status",
-
+  
   jobs: {
     GRID: "/job-grid",
     GRID_MAP: "/job-grid-with-map",
@@ -68,6 +68,7 @@ export const publicUser = {
     LINKEDINCALLBACK: "/linkedin/auth/callback",
     WELCOME: "/welcome-onboarding",
     AUTH: "/auth",
+    SIGN_IN: "/sign-in",
 
     FIND_TALENT: "/find-talent",
     New_FIND_TALENT: "/freelancers",

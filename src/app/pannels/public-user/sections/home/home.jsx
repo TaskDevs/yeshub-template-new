@@ -57,7 +57,7 @@ export default function YesHubLandingPage() {
         </div>
         <div className="w-full h-full">
           <img
-            src="https://i.postimg.cc/Z5C3FhDy/happy-african-american-businesswoman-working-touchpad-office.jpg"
+            src="https://i.postimg.cc/WpMF6mkz/image-4060.jpg"
             alt="Professional at work"
             className="w-full h-auto rounded-lg shadow-md"
           />
@@ -99,7 +99,7 @@ export default function YesHubLandingPage() {
             </div>
             <div className="w-full h-full rouned-lg">
               <img
-                src="https://i.postimg.cc/zDRL3Bh6/people-office-work-day.jpg"
+                src="https://i.postimg.cc/6pLR3VYG/rece54.jpg"
                 alt="Team working"
                 className="w-full h-full shadow-md rouned-lg"
               />
@@ -160,9 +160,9 @@ export default function YesHubLandingPage() {
             {/* Background Image */}
             <div className="absolute inset-0">
               <img
-                src="https://i.postimg.cc/zB7XH8y6/yesb300.jpg"
+                src="https://i.postimg.cc/NF5KYS0Q/african-american-business-woman-working-computer.jpg"
                 alt="Client working"
-                className="w-full h-full object-cover"
+                className="w-full object-cover"
               />
               <div className="absolute inset-0 bg-black/20" />
             </div>
@@ -261,7 +261,7 @@ export default function YesHubLandingPage() {
             <div className="lg:w-1/2 flex justify-center items-center relative">
               <div className="relative w-full max-w-md">
                 <img
-                  src="https://i.postimg.cc/4y5VJWbD/y40.png" // replace with your image path
+                  src="https://i.postimg.cc/TwnTdhYC/image-50000.png" // replace with your image path
                   alt="Team working"
                   className="rounded-xl w-full"
                 />

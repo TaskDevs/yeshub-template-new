@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import NewSignIn from './new-sign-in'
-import NewSignUp from './new-sign-up'
-
+import React, { useState } from 'react';
+import NewSignIn from './new-sign-in';
+import NewSignUp from './new-sign-up';
 
 function NewAuth({ state: initialState }) {
   const [state, setState] = useState(initialState || "signIn");
@@ -11,49 +10,54 @@ function NewAuth({ state: initialState }) {
   };
 
   return (
-    <div className="tw-css flex flex-col md:flex-row w-full min-h-screen bg-[#D1D5DB] new-auth-wrapper">
-      {/* Slanted image section */}
-      <div className="login-image relative w-full md:w-1/2 md:h-auto overflow-hidden min-h-screen bg-[#f0f6fe] new-auth-image" style={{
-        clipPath: "polygon(0 0, 90% 0, 100% 100%, 0% 100%)",
-      }}>
-        <img src="/assets/images/logav.png" alt="" className="size-full object-cover absolute inset-0 bg-cover bg-center" />
-      </div>
+    <div className="tw-css min-h-screen flex items-center justify-center bg-gray-100 py-10">
+      <div className="grid md:grid-cols-2 w-full bg-white shadow-lg rounded-xl overflow-hidden">
+        
+        {/* Left: Auth Form Section */}
+        <div className="w-full px-8 py-10 flex flex-col items-center justify-center">
+          <div className="w-25 h-10 mb-4">
+            <img src="/yes.png" alt="Logo" className="object-contain h-full" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-1">
+            {state === "signIn" ? "Sign in to your account" : "Create your account"}
+          </h2>
+          <p className="text-gray-500 text-sm mb-6">
+            Please enter your details to {state === "signIn" ? "sign in" : "sign up"}
+          </p>
 
-      {/* Auth form section */}
-      <div className="w-full md:w-1/2 flex items-center flex-col justify-center h-full px-6 py-12 ">
+          <div className="w-full max-w-sm">
+            {state === "signIn" ? (
+              <NewSignIn onAuthToggle={toggleAuth} />
+            ) : (
+              <NewSignUp onAuthToggle={toggleAuth} />
+            )}
+          </div>
 
-        <div className="size-8 overflow-hidden mr-3">
+          <p className="text-center text-sm text-gray-600 mt-1">
+            {state === "signIn"
+              ? "Don't have an account? "
+              : "Already have an account? "}
+            <button
+              type="button"
+              onClick={toggleAuth}
+              className="text-green-800 font-semibold hover:underline"
+            >
+              {state === "signIn" ? "Sign up" : "Sign in"}
+            </button>
+          </p>
+        </div>
+
+        {/* Right: Image Section */}
+        <div className="relative w-full h-full">
           <img
-            src="/yes-logo-1.png"
-            alt="John Doe"
-            className=""
+            src="https://i.postimg.cc/8c0Bsf92/people-office-work-day-1.jpg"
+            alt="Side Visual"
+            className="w-full h-full object-cover"
           />
         </div>
-
-        <p className="text-gray-700 capitalize">{`Please enter your details to ${state === "signIn" ? "sign in" : "sign up"}`}</p>
-        <div className="w-full max-w-md">
-          {state === "signIn" ? (
-            <NewSignIn onAuthToggle={toggleAuth} />
-          ) : (
-            <NewSignUp onAuthToggle={toggleAuth} />
-          )}
-        </div>
-
-        <p className="text-center text-gray-600 text-sm mt-4">
-          {state === "signIn" ? "Don't have an account? " : "Already have an account? "}
-          <button
-            type="button"
-            className="font-bold border-0 outline-none bg-none text-green-800 hover:underline focus:outline-none"
-            onClick={toggleAuth}
-          >
-            {state === "signIn" ? 'Sign up' : 'Sign in'}
-          </button>
-        </p>
       </div>
     </div>
   );
 }
 
-
-export default NewAuth
-
+export default NewAuth;

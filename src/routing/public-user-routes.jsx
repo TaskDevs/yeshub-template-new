@@ -78,6 +78,7 @@ import YesHubLandingPage from "../app/pannels/public-user/sections/home/home";
 import NewAuthForm from "../app/pannels/public-user/components/pages/log-form";
 import PaystackCallback from "../app/pannels/employer/components/callback/paystackCallback";
 import WhyChooseUs from "../app/pannels/public-user/components/pages/WhyChooseUs";
+import AuthPage from "../app/pannels/public-user/components/pages/logins";
 
 function PublicUserRoutes() {
   return (
@@ -113,6 +114,7 @@ function PublicUserRoutes() {
         <Route path={publicUser.jobs.DETAIL2} element={<JobDetail2Page />} />
         <Route path={publicUser.jobs.APPLY} element={<ApplyJobPage />} />
         <Route path={publicUser.jobs.SEARCH} element={<JobSearchPage />} />
+            <Route path={publicUser.pages.SIGN_IN} element={<AuthPage />} />
         <Route
           path={publicUser.jobs.AVAILABLE}
           element={<JobAvailablePage />}

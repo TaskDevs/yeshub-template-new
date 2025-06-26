@@ -30,6 +30,7 @@ import CreateInvoice from "../app/pannels/candidate/sections/finances/invoice";
 import InvoicePreview from "../app/pannels/candidate/sections/finances/invoice-preview";
 import InvoiceDetailsPage from "../app/pannels/candidate/sections/finances/invoice-details";
 import TransactionsPage from "../app/pannels/candidate/sections/finances/transactions";
+import FreelanceSubmissions from "../app/pannels/candidate/sections/deliver-work/freelance-submissions";
 import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
 import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-details";
 import { FreelanceProjectManage } from "../app/pannels/employer/components/talent-pool/freelance-project-manage";
@@ -111,6 +112,10 @@ function CandidateRoutes() {
           <Route
             path={candidate.SUBMIT_PROPOSAL}
             element={<SubmitProposal />}
+          />
+          <Route
+            path={candidate.FREELANCE_SUBMISSIONS}
+            element={<FreelanceSubmissions />}
           />
         </>
       )}

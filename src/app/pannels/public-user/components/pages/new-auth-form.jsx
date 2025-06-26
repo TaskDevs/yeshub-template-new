@@ -3,7 +3,7 @@ import { IoMdMail } from "react-icons/io";
 import { FaLock, FaUser } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FaLinkedin } from "react-icons/fa";
-// import { LinkedIn } from "react-linkedin-login-oauth2";
+import { FaArrowRight } from "react-icons/fa";
 import { login, register } from "../../../../context/auth/authApi";
 import CircularProgress from "@mui/material/CircularProgress";
 import toast from "react-hot-toast";
@@ -254,16 +254,16 @@ const NewAuthForm = ({ currentState }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-full max-w-md">
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="bg-white rounded-lg px-8 pt-2 pb-4 mb-2 w-full">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {currentState === "signIn" ? (
           <>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IoMdMail className="h-5 w-5 text-gray-500" />
+                <IoMdMail className="h-5 w-5 text-green-700" />
               </div>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 id="identifier"
                 type="text"
                 name="identifier"
@@ -278,10 +278,10 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-500" />
+                <FaLock className="h-5 w-5 text-green-700" />
               </div>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 id="password"
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -309,10 +309,10 @@ const NewAuthForm = ({ currentState }) => {
           <>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaUser className="h-5 w-5 text-gray-500" />
+                <FaUser className="h-5 w-5 text-green-700" />
               </div>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 id="username"
                 type="text"
                 name="username"
@@ -327,10 +327,10 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IoMdMail className="h-5 w-5 text-gray-500" />
+                <IoMdMail className="h-5 w-5 text-green-700" />
               </div>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 id="email"
                 type="email"
                 name="email"
@@ -345,10 +345,10 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-500" />
+                <FaLock className="h-5 w-5 text-green-700" />
               </div>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 id="password"
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -362,7 +362,7 @@ const NewAuthForm = ({ currentState }) => {
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <AiOutlineEye className="h-5 w-5 text-gray-500" />
+                  <AiOutlineEye className="h-5 w-5 text-green-700" />
                 ) : (
                   <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
                 )}
@@ -373,10 +373,10 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-gray-500" />
+                <FaLock className="h-5 w-5 text-green-700" />
               </div>
               <input
-                className="appearance-none border rounded w-full py-2 pl-10 pr-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                 id="password_confirmation"
                 type={showPassword ? "text" : "password"}
                 name="password_confirmation"
@@ -420,7 +420,7 @@ const NewAuthForm = ({ currentState }) => {
         </div>
         {loading ? (
           <button
-            className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full flex items-center justify-center gap-2 bg-green-800 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition"
             disabled
           >
             Please wait...
@@ -428,10 +428,10 @@ const NewAuthForm = ({ currentState }) => {
           </button>
         ) : (
           <button
-            className="w-full bg-green-800 hover:bg-[#140b31] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full flex items-center justify-center gap-2 bg-green-800 hover:bg-blue-700 text-white font-medium py-2 rounded-lg transition"
             type="submit"
           >
-            {currentState === "signIn" ? "Sign In" : "Sign Up"}
+            {currentState === "signIn" ? "Sign In" : "Sign Up"} <FaArrowRight className="text-sm" />
           </button>
         )}
 

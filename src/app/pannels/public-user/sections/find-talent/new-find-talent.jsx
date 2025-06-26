@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { truncateText } from "../../../../../utils/truncateText";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
-
 const skillsList = [
   "Web Development",
   "Mobile Development",
@@ -179,8 +178,6 @@ export default function FreelancerSearch() {
     console.log("Invitation sent:", { freelancerName, selectedJob, message });
     // You can add API call here
   };
-
-
 
   return (
     <div className="tw-css px-10 py-6 my-5">
@@ -444,7 +441,11 @@ export default function FreelancerSearch() {
                     key={freelancer.id}
                     className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
                   >
-                    <div onClick={() => navigate("/freelancers/1")}>
+                    <div
+                      onClick={() =>
+                        navigate("/freelancers/" + freelancer.user_id)
+                      }
+                    >
                       <div className="flex items-start gap-4 mb-4">
                         <div className="w-12 h-12 bg-gray-300 rounded-full">
                           <Avatar
@@ -576,7 +577,7 @@ export default function FreelancerSearch() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         jobOptions={[
-            "Senior Frontend Developer (React)",
+          "Senior Frontend Developer (React)",
           "Backend Engineer (Node.js)",
           "UX/UI Designer",
         ]}

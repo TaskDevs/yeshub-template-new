@@ -72,7 +72,7 @@ export const ClientProfileSectionsManager = ({
               !clientData?.contact?.linkedin
             }
           />
-          <ProfileSection
+          {/* <ProfileSection
             data={clientData?.stats}
             title={profileSections[5]?.title}
             onClick={profileSections[5]?.onClick}
@@ -83,7 +83,7 @@ export const ClientProfileSectionsManager = ({
               !clientData?.stats?.employeesCount &&
               !clientData?.stats?.clientsCount
             }
-          />
+          /> */}
           <ProfileSection
             data={clientData?.certifications}
             title={profileSections[6]?.title}

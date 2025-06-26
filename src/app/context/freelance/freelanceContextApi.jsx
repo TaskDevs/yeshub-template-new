@@ -6,6 +6,7 @@ import {
   jobsAppliedTo,
   // searchFreelance,
   getFreelanceList,
+  getProjectSubmissions,
   freelanceProfile,
   updateFreelance,
   deleteFreelance,
@@ -29,6 +30,7 @@ const FreelanceApiDataProvider = (props) => {
   const [freelanceProfileData, setFreelanceProfileData] = useState([]);
   const [freelanceProjectList, setFreelanceProjectList] = useState();
   const [freelanceList, setFreelanceList] = useState([]);
+  const [projectSubmissionsList, setProjectSubmissionList] = useState([]);
   const [freelanceSkillInfo, setFreelanceSkillInfo] = useState([]);
   const [languagesData, setLanguagesData] = useState([]);
   const [employmentHistoryInfo, setEmploymentHistoryInfo] = useState([]);
@@ -78,6 +80,15 @@ const FreelanceApiDataProvider = (props) => {
       setFreelanceStats(res.data);
     } else {
       return false;
+    }
+  };
+
+  const processGetProjectSubmissions = async (data) => {
+    //console.log(userId);
+    const res = await getProjectSubmissions(userId, data);
+    if (res) {
+      console.log(res.data);
+      setProjectSubmissionList(res.data);
     }
   };
 
@@ -316,6 +327,7 @@ const FreelanceApiDataProvider = (props) => {
         handleEditFreelance,
         processAddFreelance,
         processGetFreelanceStats,
+        processGetProjectSubmissions,
         processGetAllFreelance,
         processGetJobsAppliedTo,
         processFreelanceProfile,
@@ -323,6 +335,7 @@ const FreelanceApiDataProvider = (props) => {
         processUpdateFreelance,
         processDeleteFreelance,
         freelanceList,
+        projectSubmissionsList,
         languagesData,
         freelanceStats,
         employmentHistoryInfo,

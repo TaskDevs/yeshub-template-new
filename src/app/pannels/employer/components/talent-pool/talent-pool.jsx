@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 //import { FaSearch } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import AddTaskModal from "./add-task-modal";
@@ -77,6 +77,8 @@ export const TalentPool = () => {
   });
 
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const project_id = id;
 
@@ -673,8 +675,13 @@ export const TalentPool = () => {
                       )} - ${formatDate(projectDetails?.end_date)}`}
                     </span>
                   </div>
-                  <button className="bg-gray-300 text-white rounded px-4 py-2 text-sm hover:bg-gray-200">
-                    Project Settings
+                  <button
+                    onClick={() =>
+                      navigate(`/dashboard-client/submissions/${id}`)
+                    }
+                    className="bg-green-500 text-white rounded px-4 py-2 text-sm hover:bg-green-600"
+                  >
+                    Submissions
                   </button>
                 </div>
               </div>

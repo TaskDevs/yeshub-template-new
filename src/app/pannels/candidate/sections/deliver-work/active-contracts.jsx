@@ -4,7 +4,8 @@ import Table from "../../../../common/table/Table";
 import Pagination from "../../../../common/Pagination";
 import { TableTop } from "../../../../common/table/TableTop";
 import { ContractStatCard } from "../../components/can-contract-stat-card";
-import { TaskApiData } from "../../../../context/task/taskContextApi";
+import { getDaysLeft } from "../../../../../utils/dateUtils";
+//import { TaskApiData } from "../../../../context/task/taskContextApi";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import { useNavigate } from "react-router-dom";
 
@@ -42,9 +43,10 @@ const StatusTag = ({ status }) => {
 const ActiveContracts = () => {
   const { processGetFreelanceProjects, freelanceProjectList } =
     useContext(FreelanceApiData);
-  const { contractData, contractStats } = useContext(TaskApiData);
+  //const { contractStats } = useContext(TaskApiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+  const [contractData, setContractData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +54,23 @@ const ActiveContracts = () => {
   }, []);
 
   useEffect(() => {
-    console.log(freelanceProjectList);
+    // console.log(freelanceProjectList);
+    let newArr = [];
+    if (freelanceProjectList?.length > 0) {
+      freelanceProjectList?.map((item) =>
+        newArr.push({
+          id: item.id,
+          projectName: item.project_name,
+          client: item.company_name,
+          completionDate: item.start_date,
+          daysRemaining: getDaysLeft(item.start_date, item.end_date),
+          status: "ongoing",
+          totalValue: item.total_budget,
+          actions: ["View", "Message"],
+        })
+      );
+      setContractData(newArr);
+    }
   }, [freelanceProjectList]);
 
   const itemsPerPage = 10;
@@ -71,22 +89,22 @@ const ActiveContracts = () => {
 
   let statsData = [
     {
-      title: "Total Contracts",
-      count: contractStats.total_contract,
+      title: "Total Projects",
+      count: freelanceProjectList?.length,
       icon: <FaBriefcase size={18} />,
       bgColor: "bg-gray-100",
       iconColor: "text-gray-700",
     },
     {
-      title: "Completed Contracts",
-      count: contractStats.completed_contract,
+      title: "Completed Projects",
+      count: 0,
       icon: <FaDollarSign size={18} />,
       bgColor: "bg-green-100",
       iconColor: "text-green-700",
     },
     {
       title: "In Progress",
-      count: contractStats.contract_in_progress,
+      count: 0,
       icon: <FaClock size={18} />,
       bgColor: "bg-yellow-100",
       iconColor: "text-yellow-700",
@@ -96,18 +114,18 @@ const ActiveContracts = () => {
   // Table column configuration
   const columns = [
     {
-      key: "contractName",
-      header: "Contract Name",
+      key: "projectName",
+      header: "Project Name",
       render: (item) => (
         <div>
-          <div className="font-medium">{item.contractName}</div>
+          <div className="font-medium">{item.projectName}</div>
           <div className="text-sm text-gray-600">Client: {item.client}</div>
         </div>
       ),
     },
     {
-      key: "completionDate",
-      header: "Completion Date",
+      key: "startDate",
+      header: "Start Date",
       render: (item) => (
         <div>
           <div>{item.completionDate}</div>
@@ -123,9 +141,9 @@ const ActiveContracts = () => {
       render: (item) => <StatusTag status={item.status} />,
     },
     {
-      key: "totalValue",
+      key: "totalBudget",
       header: "Total Value",
-      render: (item) => <span>${item.totalValue.toLocaleString()}</span>,
+      render: (item) => <span>GH{item.totalValue}</span>,
     },
     {
       key: "actions",
@@ -136,9 +154,11 @@ const ActiveContracts = () => {
             <button
               key={index}
               onClick={() =>
-                action == "Submit Work"
-                  ? navigate("/dashboard-candidate/submit-work")
-                  : navigate("/messages")
+                action == "View"
+                  ? navigate(
+                      `/dashboard-candidate/freelance-submissions/${item.id}`
+                    )
+                  : navigate(`/dashboard-candidate/manage-project/${item.id}`)
               }
               className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right"
             >
@@ -168,7 +188,7 @@ const ActiveContracts = () => {
         </div>
         <div className="flex flex-col bg-white rounded-lg shadow border-top-1 overflow-hidden pt-5">
           <TableTop
-            label="Contracts History"
+            label="Projects History"
             searchValue={searchValue}
             handleSearch={handleSearch}
             setSearchValue={setSearchValue}

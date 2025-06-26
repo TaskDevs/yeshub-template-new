@@ -112,6 +112,7 @@ export const candidate = {
   Active_Contracts: "/active-contracts",
   FIND_WORK: "/find-work",
   FIND_WORK_DETAILS: "/find-work-details/:id",
+  FREELANCE_SUBMISSIONS: "/freelance-submissions/:id",
   JOB_DETAILS: "/job-details/:id",
   OFFERS: "/candidate-offers",
   APPLIED_JOBS: "/applied-jobs",
@@ -122,7 +123,7 @@ export const candidate = {
   ALERTS: "/job-alerts",
   CHANGE_PASSWORD: "/change-password",
   CHAT: "/chat",
-  SUBMIT: "/submit-work",
+  SUBMIT: "/submit-work/:id",
   REVIEWS: "/reviews",
   ACCOUNTS: "/accounts",
   SUBMIT_PROPOSAL: "/submit-proposal/:id",
@@ -158,6 +159,7 @@ export const client = {
   CREATE_PROJECT: "/create-project",
   JOB_APPLICANT: "/job-applicant/:id",
   VIEW_CANDIDATE_PROPOSAL: "/view-candidate-proposal/:id",
+  SUBMISSIONS: "/submissions/:id",
 };
 
 export const employer = {

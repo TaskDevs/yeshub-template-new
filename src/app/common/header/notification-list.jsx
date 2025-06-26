@@ -8,9 +8,9 @@ export default function NotificationList() {
   const [expandedId, setExpandedId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(messages.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(messages?.length / ITEMS_PER_PAGE);
 
-  const paginatedMessages = messages.slice(
+  const paginatedMessages = messages?.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -41,7 +41,8 @@ export default function NotificationList() {
           </svg>
           <h3 className="text-lg font-semibold mb-2">No Notifications Yet</h3>
           <p className="text-sm text-gray-400 max-w-xs text-center">
-            You don’t have any notifications at the moment. Messages from employers will appear here.
+            You don’t have any notifications at the moment. Messages from
+            employers will appear here.
           </p>
         </div>
       ) : (
@@ -50,7 +51,9 @@ export default function NotificationList() {
             <div
               key={msg.id}
               className={`relative border-l-4 ${
-                !msg.status ? "border-yellow-400 bg-yellow-50" : "border-gray-300 bg-white"
+                !msg.status
+                  ? "border-yellow-400 bg-yellow-50"
+                  : "border-gray-300 bg-white"
               } rounded-md shadow-sm mb-4 p-4 transition-all duration-200`}
             >
               <div className="flex items-start justify-between gap-4">

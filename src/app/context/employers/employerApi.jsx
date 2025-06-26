@@ -217,6 +217,20 @@ export const projectInfoData = async (id) => {
   }
 };
 
+export const getProjectWorks = async (id) => {
+  try {
+    let response = await axios.get(`${REACT_BASE_URL}get-project-works/${id}`);
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const getProjectChat = async (id) => {
   let response = await axios.get(`${REACT_BASE_URL}get-project-chat/${id}`);
   if (response.status == 200) {

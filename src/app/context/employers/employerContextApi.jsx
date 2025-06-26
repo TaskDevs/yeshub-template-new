@@ -19,6 +19,7 @@ import {
   getProjectPayments,
   getClientProjects,
   getProjectChat,
+  getProjectWorks,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
   getCompanyInfoForInvoice,
@@ -69,6 +70,7 @@ const EmployerApiDataProvider = (props) => {
   const [deliverables, setDeliverables] = useState([]);
   const [receiptInfo, setReceiptInfo] = useState({});
   const [projectListData, setProjectListData] = useState([]);
+  const [projectSubmissionData, setProjectSubmissionData] = useState([]);
 
   const processGetUserProjects = async () => {
     try {
@@ -116,6 +118,14 @@ const EmployerApiDataProvider = (props) => {
         week_available: response.data.proposal.week_available,
         experience_level: response.data.proposal.experience_level,
       });
+    }
+  };
+
+  const processGetProjectWorks = async (id) => {
+    let response = await getProjectWorks(id);
+    if (response) {
+      console.log(response);
+      setProjectSubmissionData(response.data);
     }
   };
 
@@ -579,6 +589,8 @@ const EmployerApiDataProvider = (props) => {
         processChangeCandidateStatus,
         processGetJobAppliedToCompany,
         processGetCompanyInfo,
+        processGetProjectWorks,
+        projectSubmissionData,
         processGetUserProjects,
         processGetDeliverables,
         processCheckIfCompanyExist,

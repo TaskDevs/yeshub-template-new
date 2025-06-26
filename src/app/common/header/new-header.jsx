@@ -106,45 +106,49 @@ export const Header = ({ isDashboard = true }) => {
     };
   }, [userId]);
 
-  useEffect(() => {
-    if (!chatId || !projectIds) return;
+useEffect(() => {
+  if (!chatId || !projectIds || !Array.isArray(projectIds)) return;
 
-    const channels = [];
+  const channels = [];
 
-    projectIds.forEach((projectId) => {
-      const channel = echo.channel(`group.${projectId}`);
-      channel.listen(".group.message.sent", (e) => {
-        console.log(`New message in project ${projectId}:`, e.message);
-        let newMsg = [];
-        newMsg.push({
-          id: e.message.id,
-          message: e.message.message,
-          sender_name: e.message.sender_name,
-          project_id: e.message.project_id,
-          created_at: e.message.created_at,
+  projectIds.forEach((projectId) => {
+    const channel = echo.channel(`group.${projectId}`);
+
+    channel.listen(".group.message.sent", (e) => {
+      console.log(`New message in project ${projectId}:`, e.message);
+
+      setMessageData([{
+        id: e.message.id,
+        message: e.message.message,
+        sender_name: e.message.sender_name,
+        project_id: e.message.project_id,
+        created_at: e.message.created_at,
+      }]);
+
+      setProjectChats((prev) => [...prev, e.message]);
+
+      if (chatId !== e.message.sender_id) {
+        setNotifyMessage((prev) => prev + 1);
+        popSound.play().catch((err) => {
+          console.warn("Failed to play sound:", err);
         });
-        setMessageData(newMsg);
-
-        setProjectChats((prev) => [...prev, e.message]);
-
-        if (chatId !== e.message.sender_id) {
-          setNotifyMessage((prev) => prev + 1);
-          popSound.play().catch((err) => {
-            console.warn("Failed to play sound:", err);
-          });
-        }
-        //processGetMessagesOfReceiver(userId); // or project-specific handler
-      });
-
-      channels.push(channel);
+      }
     });
 
-    return () => {
+    channels.push(channel);
+  });
+
+  return () => {
+    if (echo && typeof echo.leave === "function") {
       projectIds.forEach((projectId) => {
         echo.leave(`group.${projectId}`);
       });
-    };
-  }, [chatId, projectIds]);
+    } else {
+      console.warn("Echo leave function not found during cleanup.");
+    }
+  };
+}, [chatId, projectIds]);
+
 
   const handleClose = () => {
     localStorage.setItem("profileModalClosedAt", Date.now().toString());

@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import Avatar from "@mui/material/Avatar";
-import { MdFavoriteBorder } from "react-icons/md";
 import InviteToJobModal from "./invitation-modal";
 import MessageModal from "./message-modal";
 import { useNavigate } from "react-router-dom";
-import { truncateText } from "../../../../../utils/truncateText";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import {
   employerJobById,
@@ -49,7 +46,7 @@ export default function FreelancerSearch() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   const navigate = useNavigate();
   const employerId = sessionStorage.getItem("userId");
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -454,127 +451,101 @@ export default function FreelancerSearch() {
               </div>
             </div>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {loading
               ? Array.from({ length: 4 }).map((_, idx) => (
                   <div
                     key={idx}
-                    className="border rounded-xl p-4 bg-white shadow animate-pulse"
+                    className="border rounded-xl p-6 bg-white shadow-sm animate-pulse flex flex-col items-center"
                   >
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1 space-y-2">
-                        <div className="w-1/2 h-4 bg-gray-200 rounded"></div>
-                        <div className="w-1/3 h-3 bg-gray-200 rounded"></div>
-                        <div className="w-1/4 h-2 bg-gray-100 rounded"></div>
-                      </div>
-                    </div>
-
-                    <div className="w-full h-4 bg-gray-100 rounded mb-3"></div>
-                    <div className="flex flex-wrap gap-2 mb-3">
+                    <div className="w-24 h-24 bg-gray-200 rounded-full mb-4" />
+                    <div className="w-1/2 h-4 bg-gray-200 rounded mb-2" />
+                    <div className="w-1/3 h-3 bg-gray-200 rounded mb-4" />
+                    <div className="flex gap-2 mb-6">
                       {[1, 2, 3].map((_, i) => (
-                        <span
+                        <div
                           key={i}
                           className="w-12 h-4 bg-gray-100 rounded-full"
-                        ></span>
+                        />
                       ))}
                     </div>
-                    <div className="w-1/4 h-3 bg-gray-100 rounded mb-4"></div>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="w-24 h-6 bg-gray-200 rounded-md"></div>
-                      <div className="w-20 h-6 bg-gray-200 rounded-md"></div>
-                      <div className="w-8 h-6 bg-gray-200 rounded-md"></div>
-                    </div>
+                    <div className="w-24 h-6 bg-gray-200 rounded mb-2" />
                   </div>
                 ))
               : currentFreelancers.map((freelancer) => (
                   <div
                     key={freelancer.id}
-                    className="border rounded-xl p-4 bg-white shadow hover:shadow-md transition hover:cursor"
+                    className="bg-white rounded-xl border border-gray-200 p-6 text-center shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
+                    
                   >
-                    <div
-                      onClick={() =>
-                        navigate(
-                          "/dashboard-client/find-talented-freelancers/" +
-                            freelancer.user_id
-                        )
-                      }
-                      className="cursor-pointer"
-                    >
-                      <div className="flex items-start gap-4 mb-4">
-                        <div className="w-12 h-12 bg-gray-300 rounded-full">
-                          <Avatar
-                            alt=""
-                            src={
-                              freelancer.avatar
-                                ? freelancer.avatar
-                                : "https://placehold.co/400"
-                            }
-                            className="w-12 h-12"
-                          />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-base">
-                            {freelancer.name}{" "}
-                            <span className="text-sm text-gray-600">
-                              ₵{freelancer.hourlyRate}/hr
-                            </span>
-                          </h4>
-                          <p className="text-sm text-gray-500">
-                            {freelancer.title}
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            {freelancer.earnings}
-                          </p>
-                          <div className="flex items-center text-yellow-500 mt-1 text-sm">
-                            <span>★ {freelancer.rating}</span>
-                            <span className="text-gray-500 ml-1">
-                              ({freelancer.reviews} reviews)
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                    <img
+                      src={freelancer.avatar || "https://placehold.co/400"}
+                      alt={freelancer.name}
+                      className="w-24 h-24 rounded-full object-cover mx-auto mb-4"
+                    />
 
-                      <div className="text-sm text-gray-600 mb-3">
-                        {truncateText(freelancer.bio)}
-                      </div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {freelancer.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {freelancer.profession}
+                    </p>
 
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        {freelancer.skills?.map((skill, idx) => (
+                    <div className="flex justify-center items-center gap-2 mt-2 text-sm">
+                      {freelancer.topRatedPlus ? (
+                        <span className="flex items-center gap-1 text-green-600 font-medium">
+                          <span className="text-xl">★</span> Top Rated Plus
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1 text-green-600 font-medium">
+                          <span className="text-xl">★</span> Top Rated
+                        </span>
+                      )}
+                      <span className="text-gray-700 font-medium">
+                        ₵{freelancer.hourlyRate || 0}/hr
+                      </span>
+                    </div>
+
+                    <div className="flex justify-center items-center text-yellow-500 text-sm mt-1 mb-4">
+                      <span>★ {freelancer.rating}</span>
+                      <span className="text-gray-500 ml-1">
+                        ({freelancer.reviews} Reviews)
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap justify-center gap-2 mb-6">
+                      <div className="flex flex-wrap justify-center gap-2 mb-6">
+                        {freelancer.skills?.slice(0, 3).map((skill, idx) => (
                           <span
                             key={idx}
-                            className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full"
+                            className="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full"
                           >
                             {skill}
                           </span>
                         ))}
-                      </div>
 
-                      <div className="text-sm text-gray-500 mb-4">
-                        {freelancer.location}
+                        {freelancer.skills?.length > 3 && (
+                          <span className="bg-gray-200 text-gray-700 text-xs px-3 py-1 rounded-full">
+                            +{freelancer.skills.length - 3}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between gap-2 px-3 mt-4">
-                      <button
-                        onClick={() => {
-                          setSelectedFreelancer(freelancer);
-                          setIsModalOpen(true);
-                        }}
-                        className="bg-green-600 text-white px-4 py-1 rounded-md text-sm hover:bg-green-700"
-                      >
-                        Invite to Job
-                      </button>
-                      <button
-                        onClick={() => setIsOpen(true)}
-                        className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700"
-                      >
-                        Contact
-                      </button>
-                      <button className="bg-white border text-gray-600 px-4 py-1 rounded-md text-sm hover:bg-green-700 flex items-center justify-center">
-                        <MdFavoriteBorder className="w-4 h-4" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => {
+                        setSelectedFreelancer(freelancer);
+                        setIsModalOpen(true);
+                      }}
+                      className="border border-green-800 bg-green-600 text-white m-2 hover:bg-green-50 font-semibold text-sm px-5 py-2 rounded-full"
+                    >
+                      Invite to Job
+                    </button>
+
+                    <button 
+                    onClick={() => navigate(`/freelancers/${freelancer.id}`)}
+                    className="border border-green-600 text-green-600 hover:bg-green-50 font-semibold text-sm px-5 py-2 rounded-full">
+                      View profile
+                    </button>
                   </div>
                 ))}
           </div>

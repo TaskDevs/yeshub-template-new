@@ -8,6 +8,7 @@ import { calculateDaysSincePosted } from "../../../../../utils/readableDate";
 const JobDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const userId = sessionStorage.getItem("userId");
+  
   const {
     processAJobProfile,
     jobListData,
@@ -25,10 +26,6 @@ const JobDetailsPage = () => {
   const aProfile = jobListData.find((job) => job.id === Number(id));
   console.log("job list", aProfile);
 
-  // useEffect(() => {
-  //   // console.log(id);
-  //   console.log(companyInfo);
-  // }, [companyInfo]);
 
   useEffect(() => {
     processAJobProfile(id);
@@ -122,7 +119,7 @@ const JobDetailsPage = () => {
             </div>
             <div>
               <p className="font-semibold">Proposals</p>
-              <p>24 received</p>
+              <p>{jobProfileData?.proposal_count} received</p>
             </div>
           </div>
 

@@ -107,7 +107,11 @@ function ProfileInfoSection() {
           </div>
         </SubProfileDetails>
 
-        <button className="w-full bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
+        <button 
+        onClick={() => {
+          window.location.href = "/dashboard-candidate/profile";}
+        }
+        className="w-full bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10">
           update profile
         </button>
       </div>

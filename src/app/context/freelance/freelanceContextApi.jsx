@@ -94,7 +94,7 @@ const FreelanceApiDataProvider = (props) => {
 
   const processGetAllFreelance = async () => {
     let response = await getFreelanceList();
-    console.log(response.data.data);
+    console.log("freelancers: ",response.data.data);
     if (response) {
       let newList = [];
       response.data.data.map((item) =>
@@ -110,6 +110,7 @@ const FreelanceApiDataProvider = (props) => {
           availableNow: true,
           rating: 7.5,
           language: item.languages,
+          profession: item.profession,
         })
       );
       setFreelanceList(newList);

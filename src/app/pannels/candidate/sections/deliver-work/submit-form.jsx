@@ -14,15 +14,17 @@ import { useDeliverWorkForm } from "./hooks/useDeliverWorkForm";
 import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
 import { TaskApiData } from "../../../../context/task/taskContextApi";
 import Swal from "sweetalert2";
+import { userId } from "../../../../../globals/constants";
 //import withReactContent from "sweetalert2-react-content";
 
-export const SubmitWorkSection = () => {
+export const SubmitWorkSection = ({ id }) => {
   const { processSubmitWork } = useContext(TaskApiData);
   const { formData, handleInputChange, clearAll } = useDeliverWorkForm({
     projectTitle: "",
     deliverableType: "",
     description: "",
     file: "",
+    projectLink: "",
   });
 
   const {
@@ -35,17 +37,17 @@ export const SubmitWorkSection = () => {
 
   const navigate = useNavigate();
 
-  const deliverables = ["File", "Link", "PSD", "PDF"];
+  const deliverables = ["File", "Link"];
 
   const handleSave = async () => {
     const form = new FormData();
-    form.append("user_id", 636);
-    form.append("contract_id", 123);
+    form.append("user_id", userId);
+    form.append("project_id", id);
     form.append("title", formData.projectTitle);
     form.append("deliver_type", formData.deliverableType);
     form.append("description", formData.description);
     form.append("work_file", coverFiles[0].file); // Make sure it's the actual File object
-    form.append("link", "we are done");
+    form.append("link", formData.projectLink);
 
     console.log("FormData entries:");
     for (let pair of form.entries()) {
@@ -98,6 +100,17 @@ export const SubmitWorkSection = () => {
               onChange={(value) => handleInputChange("deliverableType", value)}
             />
           </div>
+
+          {formData.deliverableType == "Link" && (
+            <FormInput
+              field="projectLink"
+              label="Enter Link"
+              value={formData.projectLink}
+              onChange={handleInputChange}
+              placeholder="https://yeshub.com"
+            />
+          )}
+
           <div className="">
             <FormTextarea
               field="description"

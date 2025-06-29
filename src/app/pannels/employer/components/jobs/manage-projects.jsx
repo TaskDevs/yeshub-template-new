@@ -270,12 +270,14 @@ export default function ManageProjects() {
                   <h2 className="text-lg font-semibold text-gray-900">
                     {project.project_name}
                   </h2>
-
                   <span
-                    className={`text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-800"
-                      `}
+                    className={`${
+                      project?.status == "ongoing"
+                        ? "text-yellow-600 bg-yellow-200"
+                        : "text-green-600 bg-green-200"
+                    } text-sm font-medium rounded-full px-2 py-1`}
                   >
-                    Ongoing
+                    {project?.status}
                   </span>
                 </div>
 

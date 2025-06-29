@@ -24,9 +24,9 @@ import {
   Legend,
 } from "chart.js";
 import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
-
 
 const doughnutOptions = {
   plugins: {
@@ -220,10 +220,13 @@ export default function FinancialDashboard() {
     processMakeWithdrawal,
     processGetTransactionOfFreelance,
     walletStatus,
+    processGetPotentialEarningsOfFreelance,
     processCreateWalletOfUser,
     transactionList,
     monthEarnings,
+    newPendAmount,
   } = useContext(TransactionApiData);
+  const { freelanceProjectList } = useContext(FreelanceApiData);
   const { paymentMethodList, financeSettingInfo } = useContext(PaymentApiData);
   const [createWalletLoad, setCreateWalletLoad] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -235,6 +238,7 @@ export default function FinancialDashboard() {
 
   useEffect(() => {
     processGetTransactionOfFreelance();
+    processGetPotentialEarningsOfFreelance();
   }, []);
 
   useEffect(() => {
@@ -382,9 +386,11 @@ export default function FinancialDashboard() {
         <section className="grid md:grid-cols-3 gap-4">
           <div className="bg-white shadow-sm rounded-xl p-5 flex justify-between items-center hover:shadow-md transition">
             <div>
-              <p className="text-gray-500">Active Jobs</p>
-              <p className="text-3xl font-bold text-gray-800">0</p>
-              <p className="text-sm text-green-600 mt-1">↑ 2 new this month</p>
+              <p className="text-gray-500">Active Projects</p>
+              <p className="text-3xl font-bold text-gray-800">
+                {freelanceProjectList?.length}
+              </p>
+              <p className="text-sm text-green-600 mt-1"></p>
             </div>
             <div className="bg-green-100 p-2 rounded-full">
               <Briefcase className="text-green-600" size={24} />
@@ -425,9 +431,9 @@ export default function FinancialDashboard() {
             <div>
               <p className="text-gray-500">Pending Earnings</p>
               <p className="text-3xl font-bold text-GRAY-600">
-                ₵{freelanceEarnings.pending}
+                ₵{newPendAmount}
               </p>
-              <p className="text-sm text-gray-500 mt-1">Processing this week</p>
+              {/* <p className="text-sm text-gray-500 mt-1">Processing this week</p> */}
             </div>
             <div className="bg-yellow-100 p-2 rounded-full">
               <DollarSign className="text-yellow-500" size={24} />

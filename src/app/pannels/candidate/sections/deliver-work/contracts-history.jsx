@@ -3,8 +3,11 @@ import { FaBriefcase, FaClock, FaBan, FaDollarSign } from "react-icons/fa";
 import Table from "../../../../common/table/Table";
 import Pagination from "../../../../common/Pagination";
 import { TableTop } from "../../../../common/table/TableTop";
+import { getDaysLeft } from "../../../../../utils/dateUtils";
 import { ContractStatCard } from "../../components/can-contract-stat-card";
-import { TaskApiData } from "../../../../context/task/taskContextApi";
+//import { TaskApiData } from "../../../../context/task/taskContextApi";
+import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
+import { useNavigate } from "react-router-dom";
 
 // Sample data
 // const contractsData = [
@@ -37,58 +40,6 @@ import { TaskApiData } from "../../../../context/task/taskContextApi";
 //   }
 // ];
 
-// Table column configuration
-const columns = [
-  {
-    key: "contractName",
-    header: "Contract Name",
-    render: (item) => (
-      <div>
-        <div className="font-medium">{item.contractName}</div>
-        <div className="text-sm text-gray-600">Client: {item.client}</div>
-      </div>
-    ),
-  },
-  {
-    key: "completionDate",
-    header: "Completion Date",
-    render: (item) => (
-      <div>
-        <div>{item.completionDate}</div>
-        <div className="text-sm text-gray-600">
-          {item.daysRemaining} days remaining
-        </div>
-      </div>
-    ),
-  },
-  {
-    key: "status",
-    header: "Final Status",
-    render: (item) => <StatusTag status={item.status} />,
-  },
-  {
-    key: "totalValue",
-    header: "Total Value",
-    render: (item) => <span>${item.totalValue.toLocaleString()}</span>,
-  },
-  {
-    key: "actions",
-    header: "Actions",
-    render: (item) => (
-      <div className="text-right">
-        {item.actions.map((action, index) => (
-          <button
-            key={index}
-            className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right"
-          >
-            {action}
-          </button>
-        ))}
-      </div>
-    ),
-  },
-];
-
 // Status Tag Component
 const StatusTag = ({ status }) => {
   let bgColor = "bg-green-100 text-green-800";
@@ -119,44 +70,124 @@ const StatusTag = ({ status }) => {
 };
 
 const ContractsHistory = () => {
-  const { processGetContractOfUser, contractData, contractStats } =
-    useContext(TaskApiData);
+  const { processGetFreelanceProjects, freelanceProjectList } =
+    useContext(FreelanceApiData);
+  const [contractData, setContractData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
   const itemsPerPage = 10;
-  const totalItems = 123;
+  const totalItems = freelanceProjectList.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   useEffect(() => {
-    processGetContractOfUser();
+    processGetFreelanceProjects();
   }, []);
+
+  useEffect(() => {
+    let newArr = [];
+    if (freelanceProjectList?.length > 0) {
+      freelanceProjectList?.map((item) =>
+        newArr.push({
+          id: item.id,
+          projectName: item.project_name,
+          client: item.company_name,
+          completionDate: item.start_date,
+          daysRemaining: getDaysLeft(item.start_date, item.end_date),
+          status: "ongoing",
+          totalValue: item.total_budget,
+          actions: ["View", "Message"],
+        })
+      );
+      setContractData(newArr);
+    }
+  }, [freelanceProjectList]);
+
+  // Table column configuration
+  const columns = [
+    {
+      key: "projectName",
+      header: "Project Name",
+      render: (item) => (
+        <div>
+          <div className="font-medium">{item.projectName}</div>
+          <div className="text-sm text-gray-600">Client: {item.client}</div>
+        </div>
+      ),
+    },
+    {
+      key: "startDate",
+      header: "Start Date",
+      render: (item) => (
+        <div>
+          <div>{item.completionDate}</div>
+          <div className="text-sm text-gray-600">
+            {item.daysRemaining} days remaining
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      header: "Final Status",
+      render: (item) => <StatusTag status={item.status} />,
+    },
+    {
+      key: "totalBudget",
+      header: "Total Value",
+      render: (item) => <span>GH{item.totalValue}</span>,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (item) => (
+        <div className="text-right">
+          {item.actions.map((action, index) => (
+            <button
+              key={index}
+              onClick={() =>
+                action == "View"
+                  ? navigate(
+                      `/dashboard-candidate/freelance-submissions/${item.id}`
+                    )
+                  : navigate(`/dashboard-candidate/manage-project/${item.id}`)
+              }
+              className="text-[#305718] hover:text-green-900 font-medium first:mr-3 text-right"
+            >
+              {action}
+            </button>
+          ))}
+        </div>
+      ),
+    },
+  ];
 
   // Stats data based on the image
   const statsData = [
     {
-      title: "Total Contracts",
-      count: contractStats.total_contract,
+      title: "Total Projects",
+      count: freelanceProjectList?.length,
       icon: <FaBriefcase size={18} />,
       bgColor: "bg-gray-100",
       iconColor: "text-gray-700",
     },
     {
-      title: "Completed Contracts",
-      count: contractStats.completed_contract,
+      title: "Completed Projects",
+      count: 0,
       icon: <FaDollarSign size={18} />,
       bgColor: "bg-green-100",
       iconColor: "text-green-700",
     },
     {
       title: "In Progress",
-      count: contractStats.contract_in_progress,
+      count: freelanceProjectList?.length,
       icon: <FaClock size={18} />,
       bgColor: "bg-yellow-100",
       iconColor: "text-yellow-700",
     },
     {
       title: "Cancelled",
-      count: contractStats.canceled_contract,
+      count: 0,
       icon: <FaBan size={18} />,
       bgColor: "bg-red-100",
       iconColor: "text-red-700",

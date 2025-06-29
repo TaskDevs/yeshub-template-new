@@ -38,6 +38,39 @@ export const getTotalInvoice = async () => {
   }
 };
 
+export const getPaymentsOnFreelancer = async () => {
+  try {
+    let responseOnGetPaymentsOfFreelance = await axios.get(
+      `${REACT_BASE_URL}invoices-of-freelance/${userId}`
+    );
+    //console.log(responseOnGetPaymentsOfFreelance);
+    if (responseOnGetPaymentsOfFreelance.status == 200) {
+      return responseOnGetPaymentsOfFreelance.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getPaymentsOnClient = async () => {
+  try {
+    let responseOnGetPaymentsOfClient = await axios.get(
+      `${REACT_BASE_URL}invoices-of-client/${userId}`
+    );
+    if (responseOnGetPaymentsOfClient.status == 200) {
+      return responseOnGetPaymentsOfClient.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const getInvoiceDetails = async (id) => {
   try {
     let responseOnGetInvoiceDetails = await axios.get(

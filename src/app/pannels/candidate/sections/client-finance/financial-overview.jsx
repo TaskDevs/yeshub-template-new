@@ -77,7 +77,7 @@ const FinancialOverview = () => {
     navigate(`/dashboard-client/talent-pool/${id}`); // if using React Router
   };
 
-  console.log(walletStatus);
+  //console.log(walletStatus);
 
   // const projectsData = [
   //   {
@@ -610,7 +610,7 @@ const FinancialOverview = () => {
       </div>
       {showModal && (
         <AddFundsModal
-          currentBalance={3200}
+          currentBalance={allEarnings.available}
           onClose={() => setShowModal(false)}
           onAddFunds={handleAddFunds}
         />

@@ -89,6 +89,7 @@ export const TalentPool = () => {
     data?.team?.map((item) =>
       newTeam.push({
         id: item.id,
+        user_id: item.user_id,
         name: item.firstname + " " + item.lastname,
         salary: item.salary,
       })
@@ -100,10 +101,10 @@ export const TalentPool = () => {
   }, []);
 
   useEffect(() => {
-    const teamMemberIds = teamMembers.map((member) => member.id);
+    const teamMemberIds = teamMembers.map((member) => member.user_id);
 
     const newData = processHiredApplicants.filter(
-      (item) => !teamMemberIds.includes(item.id)
+      (item) => !teamMemberIds.includes(item.user_id)
     );
     setExtraTeamMembers(newData); // Use this or store in state
   }, [teamMembers, processHiredApplicants]);
@@ -146,35 +147,29 @@ export const TalentPool = () => {
   };
 
   const toggleCheck = (milestoneIndex, deliverableIndex, milestone_id) => {
-    const key = `${milestoneIndex}-${deliverableIndex}`;
+    //const key = `${milestoneIndex}-${deliverableIndex}`;
 
-    setCheckedItems((prev = {}) => {
-      // Invert current value or set to true if not set
-      const newValue = !prev[key];
+    setCheckedItems((prev) => {
+      const safePrev = prev || {}; // Ensure it's always an object
+      const key = `${milestoneIndex}-${deliverableIndex}`;
+      const newValue = !safePrev[key];
 
       const updatedCheckedItems = {
-        ...prev,
+        ...safePrev,
         [key]: newValue,
       };
 
-      // Automatic update of the database
-      // project Id
-      // milestone Id
-      // Automatic update of the database
       const newData = {
-        project_id: id, // project id should be passed or taken from a state
+        project_id: id,
         milestone_id: milestone_id,
-        deliverables: updatedCheckedItems, // Use the current checked items as the deliverables
+        deliverables: updatedCheckedItems,
       };
 
-      // Here you can make the API call to save the deliverables state in the DB
       handleAutoSaveDeliverables(newData);
 
-      return {
-        ...prev,
-        [key]: newValue,
-      };
+      return updatedCheckedItems;
     });
+
     // handleSytemChanges();
   };
 
@@ -221,12 +216,10 @@ export const TalentPool = () => {
       day: "numeric",
     });
 
-    const member = teamMembers.find((m) => m.id == task.assignedTo);
-
     const newTask = {
       ...task,
       id: Math.random().toString(36).substring(2, 9),
-      assignedTo: member?.name || "Unassigned",
+      assignedTo: task.assignedTo || "Unassigned",
       date: today,
       status: "Fresh", // Default status if not already in `task`
     };
@@ -245,7 +238,6 @@ export const TalentPool = () => {
       ],
     };
 
-    console.log(newData);
     await processManageProjectTasks(newData);
 
     initialTasks?.length > 0
@@ -302,7 +294,9 @@ export const TalentPool = () => {
     }
 
     // Remove from team
-    const updatedTeam = projectDetails.team.filter((m) => m.id !== member.id);
+    const updatedTeam = projectDetails.team.filter(
+      (m) => m.user_id !== member.id
+    );
     setProjectDetails({ ...projectDetails, team: updatedTeam });
 
     // Add to extra team members
@@ -310,7 +304,9 @@ export const TalentPool = () => {
   };
 
   const handleProcessPayment = async (item) => {
-    let teamMember = teamMembers.find((member) => member.id == item.assignedTo);
+    let teamMember = teamMembers.find(
+      (member) => member.user_id == item.assignedTo
+    );
     let newData = {
       fullName: teamMember?.name,
       salary: item?.salary || teamMember?.salary,
@@ -325,12 +321,12 @@ export const TalentPool = () => {
   const handlePayout = async (item) => {
     let refNo = generateRefNo();
     let applicant = processHiredApplicants.find(
-      (member) => member.id == item.assignedTo
+      (member) => member.user_id == item.assignedTo
     );
-    let teamMember = teamMembers.find((member) => member.id == item.assignedTo);
+    let teamMember = teamMembers.find(
+      (member) => member.user_id == item.assignedTo
+    );
     setLoadingItemId(item.assignedTo);
-
-    console.log(item);
 
     try {
       let data = {
@@ -343,8 +339,6 @@ export const TalentPool = () => {
         milestone_completed: item,
         salary: item.salary || teamMember.salary,
       };
-
-      console.log(data);
 
       let res = await processMakePayout(data);
       if (res) {
@@ -396,11 +390,11 @@ export const TalentPool = () => {
     const assignedToIds =
       projectDetails.milestones?.map((m) => String(m.assignedTo)) || [];
 
-    const isAssigned = assignedToIds.includes(String(member.id));
+    const isAssigned = assignedToIds.includes(String(member.user_id));
 
     setNewMilestoneInfo({
       ...newMilestoneInfo,
-      assignedTo: member.id,
+      assignedTo: member.user_id,
       firstname: member.firstname,
       salary: member.salary,
       addOn: isAssigned, // true if already assigned
@@ -426,13 +420,14 @@ export const TalentPool = () => {
       team: [...projectDetails.team, extraMember],
       total_budget: projectDetails.total_budget,
       budget_items: projectDetails.budget_items,
+      new_team_mate: extraMember.user_id,
     };
 
     console.log(newData);
     await processManageProjectMilestoneOrTeam(newData);
 
     setExtraTeamMembers((prevMembers) =>
-      prevMembers.filter((member) => member.id !== extraMember.id)
+      prevMembers.filter((member) => member.user_id !== extraMember.user_id)
     );
   };
 
@@ -540,6 +535,11 @@ export const TalentPool = () => {
     setFilteredTeam(filtered);
   };
 
+  const getAssignedMemberName = (id) => {
+    let teamMemberInfo = teamMembers.find((item) => item.user_id == id);
+    return teamMemberInfo.name;
+  };
+
   return (
     <div className="tw-css bg-gray-300 min-h-screen">
       <div className="max-w-6xl mx-auto">
@@ -567,12 +567,14 @@ export const TalentPool = () => {
                 <h4 className="font-semibold text-md">
                   Team Members ({projectDetails?.team?.length})
                 </h4>
-                <span
-                  className="text-sm text-green-600 cursor-pointer"
-                  onClick={() => setShowAddTeamModal(true)}
-                >
-                  + Add Member
-                </span>
+                {projectDetails?.status == "ongoing" && (
+                  <span
+                    className="text-sm text-green-600 cursor-pointer"
+                    onClick={() => setShowAddTeamModal(true)}
+                  >
+                    + Add Member
+                  </span>
+                )}
               </div>
               <div className="relative mb-4">
                 {/* <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /> */}
@@ -616,18 +618,22 @@ export const TalentPool = () => {
                       Current Tasks:{" "}
                       <span className="text-green-800">
                         {projectInfo?.assignments?.filter(
-                          (idx) => idx.teamMemberId == item.id
+                          (idx) => idx.teamMemberId == item.user_id
                         ).length || 0}
                       </span>
                     </span>
-                    <button
-                      onClick={() => toggleMenu(index)}
-                      className="border border-gray-300 text-gray-700 px-4 py-1 rounded-md text-sm hover:bg-gray-100 transition"
-                    >
-                      <span className="flex items-center gap-1">
-                        <EllipsisVertical size={12} /> Actions
-                      </span>
-                    </button>
+
+                    {projectDetails?.status == "ongoing" && (
+                      <button
+                        onClick={() => toggleMenu(index)}
+                        className="border border-gray-300 text-gray-700 px-4 py-1 rounded-md 
+                        text-sm hover:bg-gray-100 transition"
+                      >
+                        <span className="flex items-center gap-1">
+                          <EllipsisVertical size={12} /> Actions
+                        </span>
+                      </button>
+                    )}
 
                     {openMenu === index && (
                       <div
@@ -665,8 +671,14 @@ export const TalentPool = () => {
                       {projectDetails?.project_name}
                     </h4>
 
-                    <span className="text-green-600 text-sm font-semibold bg-green-200 rounded-full px-2 py-1">
-                      In Progress
+                    <span
+                      className={`${
+                        projectDetails?.status == "ongoing"
+                          ? "text-yellow-600 bg-yellow-200"
+                          : "text-green-600 bg-green-200"
+                      } text-sm font-semibold rounded-full px-2 py-1`}
+                    >
+                      {projectDetails?.status}
                     </span>
                     <span className="text-gray-500 text-sm ml-2">
                       Started on{" "}
@@ -784,8 +796,7 @@ export const TalentPool = () => {
                 <ol className="relative border-l border-gray-300">
                   {projectDetails?.milestones?.map((item, index) => {
                     const deliverables =
-                      item?.deliverables &&
-                      typeof item.deliverables === "object"
+                      item?.deliverables && typeof item.deliverables == "object"
                         ? item.deliverables
                         : {};
 
@@ -824,7 +835,7 @@ export const TalentPool = () => {
                                   Assigned:{" "}
                                   {
                                     projectDetails?.team?.filter(
-                                      (idx) => idx.id == item.assignedTo
+                                      (idx) => idx.user_id == item.assignedTo
                                     )[0]?.firstname
                                   }
                                 </span>
@@ -832,7 +843,7 @@ export const TalentPool = () => {
                                   GH₵{" "}
                                   {item?.salary ||
                                     projectDetails?.team?.filter(
-                                      (idx) => idx.id == item.assignedTo
+                                      (idx) => idx.user_id == item.assignedTo
                                     )[0]?.salary}
                                 </span>
                               </div>
@@ -842,9 +853,16 @@ export const TalentPool = () => {
                           <p className="text-xs text-gray-500 mb-2">
                             {item.description}
                           </p>
-                          <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
-                            Ongoing
-                          </span>
+
+                          {isPaid ? (
+                            <span className="text-sm text-green-500 bg-green-100 rounded-full px-2 p-1">
+                              Complete
+                            </span>
+                          ) : (
+                            <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
+                              Ongoing
+                            </span>
+                          )}
 
                           <hr className="mt-4" />
 
@@ -985,13 +1003,15 @@ export const TalentPool = () => {
                   Task Management
                 </h4>
 
-                <button
-                  onClick={() => setShowTaskModal(true)}
-                  className="bg-green-600 text-white rounded px-4 py-2 
+                {projectDetails?.status == "ongoing" && (
+                  <button
+                    onClick={() => setShowTaskModal(true)}
+                    className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700"
-                >
-                  + Add Task
-                </button>
+                  >
+                    + Add Task
+                  </button>
+                )}
               </div>
 
               <h4 className="text-green-500 text-md">Kanban Board</h4>
@@ -1016,13 +1036,15 @@ export const TalentPool = () => {
                         key={item.id}
                       >
                         {/* Remove Icon */}
-                        <button
-                          onClick={() => handleRemoveTask(item.id)}
-                          className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
-                          title="Remove Task"
-                        >
-                          &times;
-                        </button>
+                        {projectDetails?.status == "ongoing" && (
+                          <button
+                            onClick={() => handleRemoveTask(item.id)}
+                            className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
+                            title="Remove Task"
+                          >
+                            &times;
+                          </button>
+                        )}
 
                         <h4 className="text-gray-700 mb-2 font-semibold">
                           {item.title}
@@ -1033,18 +1055,20 @@ export const TalentPool = () => {
                         </p>
                         <hr className="my-2" />
                         <div className="flex justify-between text-sm text-gray-500">
-                          <span>{item.assignedTo}</span>
+                          <span>{getAssignedMemberName(item.assignedTo)}</span>
                           <span>{item.date}</span>
                         </div>
                         <div className="flex gap-2 mt-4">
-                          <button
-                            onClick={() =>
-                              handleStatusChange(item.id, "Progress")
-                            }
-                            className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
-                          >
-                            Move
-                          </button>
+                          {projectDetails?.status == "ongoing" && (
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Progress")
+                              }
+                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                            >
+                              Move
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1074,32 +1098,33 @@ export const TalentPool = () => {
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
-                        <div className="flex">
-                          <span className="text-gray-500 text-sm">
-                            {item.assignedTo}
-                          </span>
-                          <span className="text-gray-500 text-sm">Jun 5</span>
-                        </div>
                         <hr className="my-2" />
+                        <div className="flex justify-between text-sm text-gray-500">
+                          <span>{getAssignedMemberName(item.assignedTo)}</span>
+                          <span>{item.date}</span>
+                        </div>
+
                         <div>
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Fresh")
-                              }
-                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                            >
-                              Revert
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Review")
-                              }
-                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
-                            >
-                              Move
-                            </button>
-                          </div>
+                          {projectDetails?.status == "ongoing" && (
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Fresh")
+                                }
+                                className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                              >
+                                Revert
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Review")
+                                }
+                                className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                              >
+                                Move
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1129,34 +1154,35 @@ export const TalentPool = () => {
                           {item.details}
                         </p>
                         <div className="flex justify-between items-center">
-                          <div className="flex gap-4">
-                            <span className="text-gray-500 text-sm">
-                              {item.assignedTo}
+                          <hr className="my-2" />
+                          <div className="flex justify-between text-sm text-gray-500">
+                            <span>
+                              {getAssignedMemberName(item.assignedTo)}
                             </span>
-                            <span className="text-gray-500 text-sm">
-                              {item.date}
-                            </span>
+                            <span>{item.date}</span>
                           </div>
                         </div>
                         <div>
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Progress")
-                              }
-                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                            >
-                              Revert
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Completed")
-                              }
-                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
-                            >
-                              Move
-                            </button>
-                          </div>
+                          {projectDetails?.status == "ongoing" && (
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Progress")
+                                }
+                                className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                              >
+                                Revert
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Completed")
+                                }
+                                className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                              >
+                                Move
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1186,23 +1212,24 @@ export const TalentPool = () => {
                         <p className="text-gray-600 text-sm mb-2">
                           {item.details}
                         </p>
-                        <div className="flex">
-                          <span className="text-gray-500 text-sm">
-                            {item.assignedTo}
-                          </span>
-                          <span className="text-gray-500 text-sm">Jun 5</span>
+                        <hr className="my-2" />
+                        <div className="flex justify-between text-sm text-gray-500">
+                          <span>{getAssignedMemberName(item.assignedTo)}</span>
+                          <span>{item.date}</span>
                         </div>
                         <div>
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Review")
-                              }
-                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                            >
-                              Revert
-                            </button>
-                          </div>
+                          {projectDetails?.status == "ongoing" && (
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Review")
+                                }
+                                className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                              >
+                                Revert
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -1210,13 +1237,15 @@ export const TalentPool = () => {
               </div>
             </div>
             <div className="w-full mt-4">
-              <button
-                onClick={() => console.log("We are saving")}
-                className="bg-green-600 text-white rounded px-4 py-2 
+              {projectDetails?.status == "ongoing" && (
+                <button
+                  onClick={() => console.log("We are saving")}
+                  className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700 w-full"
-              >
-                Save Changes
-              </button>
+                >
+                  Save Changes
+                </button>
+              )}
             </div>
             <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4 mb-6 mt-6">
               <div className="flex justify-between items-center mb-4">

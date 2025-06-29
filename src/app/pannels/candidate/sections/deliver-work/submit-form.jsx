@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,15 +17,25 @@ import Swal from "sweetalert2";
 import { userId } from "../../../../../globals/constants";
 //import withReactContent from "sweetalert2-react-content";
 
-export const SubmitWorkSection = ({ id }) => {
+export const SubmitWorkSection = ({ id, milestones }) => {
   const { processSubmitWork } = useContext(TaskApiData);
+  const [milestoneData, setMilestoneData] = useState([]);
   const { formData, handleInputChange, clearAll } = useDeliverWorkForm({
     projectTitle: "",
     deliverableType: "",
+    milestone: "",
     description: "",
     file: "",
     projectLink: "",
   });
+
+  useEffect(() => {
+    console.log(milestones);
+    //setMilestoneData([]);
+    let newData = [];
+    milestones?.map((item) => newData.push(item.name));
+    setMilestoneData(newData);
+  }, [milestones]);
 
   const {
     files: coverFiles,
@@ -45,8 +55,10 @@ export const SubmitWorkSection = ({ id }) => {
     form.append("project_id", id);
     form.append("title", formData.projectTitle);
     form.append("deliver_type", formData.deliverableType);
+    form.append("milestone", formData.milestone);
     form.append("description", formData.description);
-    form.append("work_file", coverFiles[0].file); // Make sure it's the actual File object
+    form.append("work_file", coverFiles[0]?.file ?? null);
+    // Make sure it's the actual File object
     form.append("link", formData.projectLink);
 
     console.log("FormData entries:");
@@ -64,7 +76,7 @@ export const SubmitWorkSection = ({ id }) => {
         timer: 1500,
       });
       setTimeout(() => {
-        navigate("/dashboard-candidate/active-contracts");
+        navigate(`/dashboard-candidate/freelance-submissions/${id}`);
       }, 1500);
     } else {
       console.log("Error submitting proposal");
@@ -88,6 +100,18 @@ export const SubmitWorkSection = ({ id }) => {
             onChange={handleInputChange}
             placeholder="Website Redesign Project"
           />
+
+          <div className="mb-4">
+            <label className="block text-sm text-gray-700 mb-1">
+              Milestones
+            </label>
+            <CustomDropdown
+              selected={formData.milestone}
+              styles="w-full py-2.5"
+              options={milestoneData}
+              onChange={(value) => handleInputChange("milestone", value)}
+            />
+          </div>
 
           <div className="mb-4">
             <label className="block text-sm text-gray-700 mb-1">

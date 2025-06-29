@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { REACT_BASE_URL } from "../../../../../globals/constants";
 import { userId } from "../../../../../globals/constants";
@@ -14,8 +14,12 @@ const AddFundsModal = ({
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
+  const [newBalanceData, setNewBalanceData] = useState(0);
 
-  const newBalance = currentBalance + Number(amount || 0);
+  useEffect(() => {
+    let newBalance = Number(currentBalance) + Number(amount || 0);
+    setNewBalanceData(newBalance);
+  }, [amount]);
 
   // const getPaystackChannels = (method) => {
   //   switch (method) {
@@ -104,12 +108,12 @@ const AddFundsModal = ({
           <div className="text-sm bg-gray-50 p-4 rounded-md">
             <div className="flex justify-between">
               <span>Current Balance:</span>
-              <span>₵{currentBalance.toFixed(2)}</span>
+              <span>₵{Number(currentBalance).toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
               <span>New Balance:</span>
               <span className="text-green-600 font-semibold">
-                ₵{newBalance.toFixed(2)}
+                ₵{Number(newBalanceData).toFixed(2)}
               </span>
             </div>
           </div>

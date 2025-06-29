@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
+import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 import { CheckCircle, Clock, CalendarCheck2, FileText } from "lucide-react";
 
 const statusColor = {
@@ -12,11 +13,15 @@ const statusColor = {
 };
 
 export default function BillingDashboard() {
+  const { newPendAmount, processGetPotentialEarningsOfFreelance } =
+    useContext(TransactionApiData);
   const {
-    processGetInvoiceOfUser,
+    // processGetInvoiceOfUser,
+    processGetPaymentsOnFreelancer,
     billingData,
-    billingList,
+    // billingList,
     filterCompanyNameList,
+    invoiceListData,
   } = useContext(PaymentApiData);
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [clientFilter, setClientFilter] = useState("All Clients");
@@ -25,10 +30,12 @@ export default function BillingDashboard() {
   const invoicesPerPage = 5;
 
   useEffect(() => {
-    processGetInvoiceOfUser();
+    // processGetInvoiceOfUser();
+    processGetPotentialEarningsOfFreelance();
+    processGetPaymentsOnFreelancer();
   }, []);
 
-  const filteredInvoices = billingList.filter((inv) => {
+  const filteredInvoices = invoiceListData.filter((inv) => {
     const matchesStatus =
       statusFilter === "All Statuses" || inv.status === statusFilter;
     const matchesClient =
@@ -52,9 +59,9 @@ export default function BillingDashboard() {
     }
   };
 
-  const naviateTo = (path) => {
-    window.location.href = path;
-  };
+  // const naviateTo = (path) => {
+  //   window.location.href = path;
+  // };
 
   return (
     <div className="tw-css p-6 space-y-6 bg-gray-50 min-h-screen">
@@ -67,23 +74,21 @@ export default function BillingDashboard() {
             Manage your invoices, track payments, and monitor your earnings
           </p>
         </div>
-        <button
+        {/* <button
           className="px-4 py-2 text-white bg-green-600 rounded"
           onClick={() => naviateTo("/dashboard-candidate/create-invoice")}
         >
           + Create New Invoice
-        </button>
+        </button> */}
       </div>
 
       <div className="grid md:grid-cols-4 gap-4 overflow-auto mb-4 py-4">
         {/* Total Invoiced */}
         <div className="bg-white p-4 rounded-lg shadow flex items-start gap-3">
           <div>
-            <p className="text-sm text-gray-500">Total Invoiced (May 2025)</p>
-            <p className="text-2xl font-bold text-gray-900">
-              ₵{billingData.total_amount}
-            </p>
-            <p className="text-green-600 text-sm">↑ 12% from last month</p>
+            <p className="text-sm text-gray-500">Total Invoiced</p>
+            <p className="text-2xl font-bold text-gray-900">₵{newPendAmount}</p>
+            {/* <p className="text-green-600 text-sm">↑ 12% from last month</p> */}
           </div>
           <div className="bg-blue-100 text-blue-600 p-2 rounded-full">
             <FileText className="w-5 h-5" />
@@ -109,9 +114,9 @@ export default function BillingDashboard() {
           <div>
             <p className="text-sm text-gray-500">Pending Payments</p>
             <p className="text-2xl font-bold text-gray-900">
-              ₵{billingData.pending_total}
+              ₵{parseFloat(newPendAmount) - parseFloat(billingData.paid_total)}
             </p>
-            <p className="text-yellow-600 text-sm">44% of total invoiced</p>
+            {/* <p className="text-yellow-600 text-sm">44% of total invoiced</p> */}
           </div>
           <div className="bg-yellow-100 text-yellow-600 p-2 rounded-full">
             <Clock className="w-5 h-5" />
@@ -186,11 +191,9 @@ export default function BillingDashboard() {
               <tr className="text-left bg-gray-100">
                 <th className="px-4 py-2">Invoice #</th>
                 <th className="px-4 py-2">Client</th>
-                <th className="px-4 py-2">Issue Date</th>
                 <th className="px-4 py-2">Due Date</th>
                 <th className="px-4 py-2">Amount</th>
                 <th className="px-4 py-2">Status</th>
-                <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -198,7 +201,6 @@ export default function BillingDashboard() {
                 <tr key={inv.id} className="border-b">
                   <td className="px-4 py-2">{inv.invoice_number}</td>
                   <td className="px-4 py-2">{inv.company_name}</td>
-                  <td className="px-4 py-2">{inv.issue_date}</td>
                   <td className="px-4 py-2">{inv.due_date}</td>
                   <td className="px-4 py-2">{inv.total_amount}</td>
                   <td className="px-4 py-2">
@@ -210,7 +212,7 @@ export default function BillingDashboard() {
                       {inv.payment_status}
                     </span>
                   </td>
-                  <td className="px-4 py-2">
+                  {/* <td className="px-4 py-2">
                     <button
                       className="text-green-600 hover:underline"
                       onClick={() =>
@@ -221,7 +223,7 @@ export default function BillingDashboard() {
                     >
                       View Details
                     </button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

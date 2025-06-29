@@ -38,20 +38,7 @@ const SubmitWork = () => {
         </div>
 
         <div className="flex-grow overflow-y-auto p-6 -mt-3 w-full flex  justify-center">
-          <SubmitWorkSection id={id} />
-        </div>
-      </div>
-
-      <div
-        className={`bg-white w-[60%] 
-        mx-auto rounded-md flex-col justify-center items-center border`}
-      >
-        <div className="flex justify-between items-center px-6 p-5 w-full">
-          <div>
-            <h2 className="text-xl font-bold capitalize">
-              Previous Submissions
-            </h2>
-          </div>
+          <SubmitWorkSection id={id} milestones={projectInfo.milestones} />
         </div>
       </div>
     </div>

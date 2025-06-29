@@ -338,8 +338,14 @@ export const FreelanceProjectManage = () => {
                       {projectDetails?.project_name}
                     </h4>
 
-                    <span className="text-green-600 text-sm font-semibold bg-green-200 rounded-full px-2 py-1">
-                      In Progress
+                    <span
+                      className={`${
+                        projectDetails?.status == "ongoing"
+                          ? "text-yellow-600 bg-yellow-200"
+                          : "text-green-600 bg-green-200"
+                      } text-sm font-semibold rounded-full px-2 py-1`}
+                    >
+                      {projectDetails?.status}
                     </span>
                     <span className="text-gray-500 text-sm ml-2">
                       Started on{" "}
@@ -446,7 +452,7 @@ export const FreelanceProjectManage = () => {
                 </h3>
                 <ol className="relative border-l border-gray-300">
                   {projectDetails?.milestones
-                    ?.filter((item) => item.assignedTo == proposalId)
+                    ?.filter((item) => item.assignedTo == userId)
                     .map((item, index) => {
                       const deliverables =
                         item?.deliverables &&
@@ -488,7 +494,7 @@ export const FreelanceProjectManage = () => {
                                   Assigned:{" "}
                                   {
                                     projectDetails?.team?.filter(
-                                      (idx) => idx.id == item.assignedTo
+                                      (idx) => idx.user_id == item.assignedTo
                                     )[0]?.firstname
                                   }
                                 </span>
@@ -498,9 +504,15 @@ export const FreelanceProjectManage = () => {
                             <p className="text-xs text-gray-500 mb-2">
                               {item.description}
                             </p>
-                            <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
-                              Ongoing
-                            </span>
+                            {isPaid ? (
+                              <span className="text-sm text-green-500 bg-green-100 rounded-full px-2 p-1">
+                                Complete
+                              </span>
+                            ) : (
+                              <span className="text-sm text-blue-500 bg-blue-100 rounded-full px-2 p-1">
+                                Ongoing
+                              </span>
+                            )}
 
                             <hr className="mt-4" />
 
@@ -581,13 +593,15 @@ export const FreelanceProjectManage = () => {
                   Task Management
                 </h4>
 
-                <button
-                  onClick={() => setShowTaskModal(true)}
-                  className="bg-green-600 text-white rounded px-4 py-2 
+                {projectDetails?.status == "ongoing" && (
+                  <button
+                    onClick={() => setShowTaskModal(true)}
+                    className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700"
-                >
-                  + Add Task
-                </button>
+                  >
+                    + Add Task
+                  </button>
+                )}
               </div>
 
               <h4 className="text-green-500 text-md">Kanban Board</h4>
@@ -607,7 +621,7 @@ export const FreelanceProjectManage = () => {
                   {initialTasks
                     ?.filter(
                       (item) =>
-                        item.status == "Fresh" && item.assignedTo == proposalId
+                        item.status == "Fresh" && item.assignedTo == userId
                     )
                     ?.map((item) => (
                       <div
@@ -615,13 +629,15 @@ export const FreelanceProjectManage = () => {
                         key={item.id}
                       >
                         {/* Remove Icon */}
-                        <button
-                          onClick={() => handleRemoveTask(item.id)}
-                          className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
-                          title="Remove Task"
-                        >
-                          &times;
-                        </button>
+                        {projectDetails?.status == "ongoing" && (
+                          <button
+                            onClick={() => handleRemoveTask(item.id)}
+                            className="absolute top-2 right-2 text-gray-400 hover:text-red-600 text-xl"
+                            title="Remove Task"
+                          >
+                            &times;
+                          </button>
+                        )}
 
                         <h4 className="text-gray-700 mb-2 font-semibold">
                           {item.title}
@@ -634,14 +650,16 @@ export const FreelanceProjectManage = () => {
                           <span>{item.date}</span>
                         </div>
                         <div className="flex gap-2 mt-4">
-                          <button
-                            onClick={() =>
-                              handleStatusChange(item.id, "Progress")
-                            }
-                            className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
-                          >
-                            Move
-                          </button>
+                          {projectDetails?.status == "ongoing" && (
+                            <button
+                              onClick={() =>
+                                handleStatusChange(item.id, "Progress")
+                              }
+                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                            >
+                              Move
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -680,24 +698,26 @@ export const FreelanceProjectManage = () => {
                         </div>
                         <hr className="my-2" />
                         <div>
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Fresh")
-                              }
-                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                            >
-                              Revert
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Review")
-                              }
-                              className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
-                            >
-                              Move
-                            </button>
-                          </div>
+                          {projectDetails?.status == "ongoing" && (
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Fresh")
+                                }
+                                className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                              >
+                                Revert
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Review")
+                                }
+                                className="text-sm px-2 py-1 bg-green-100 text-green-800 rounded"
+                              >
+                                Move
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -735,16 +755,18 @@ export const FreelanceProjectManage = () => {
                           </div>
                         </div>
                         <div>
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Progress")
-                              }
-                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                            >
-                              Revert
-                            </button>
-                          </div>
+                          {projectDetails?.status == "ongoing" && (
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Progress")
+                                }
+                                className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                              >
+                                Revert
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -778,16 +800,18 @@ export const FreelanceProjectManage = () => {
                         </p>
 
                         <div>
-                          <div className="flex gap-2 mt-4">
-                            <button
-                              onClick={() =>
-                                handleStatusChange(item.id, "Review")
-                              }
-                              className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                            >
-                              Revert
-                            </button>
-                          </div>
+                          {projectDetails?.status == "ongoing" && (
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                onClick={() =>
+                                  handleStatusChange(item.id, "Review")
+                                }
+                                className="text-sm px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
+                              >
+                                Revert
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -795,13 +819,15 @@ export const FreelanceProjectManage = () => {
               </div>
             </div>
             <div className="w-full mt-4">
-              <button
-                onClick={handleSytemChanges}
-                className="bg-green-600 text-white rounded px-4 py-2 
+              {projectDetails?.status == "ongoing" && (
+                <button
+                  onClick={handleSytemChanges}
+                  className="bg-green-600 text-white rounded px-4 py-2 
                 text-sm hover:bg-green-700 w-full"
-              >
-                Save Changes
-              </button>
+                >
+                  Save Changes
+                </button>
+              )}
             </div>
             <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4 mb-6 mt-6">
               <div className="flex justify-between items-center mb-4">

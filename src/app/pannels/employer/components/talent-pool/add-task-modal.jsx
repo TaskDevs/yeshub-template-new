@@ -13,7 +13,7 @@ export default function AddTaskModal({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setAssignedTo(teamMembers[0]?.id);
+    setAssignedTo(teamMembers[0]?.user_id);
   }, []);
 
   const handleAddTask = async () => {
@@ -27,6 +27,7 @@ export default function AddTaskModal({
     }
 
     setLoading(true);
+
     try {
       const task = {
         title,
@@ -34,6 +35,8 @@ export default function AddTaskModal({
         status: "Fresh", // Default status
         assignedTo,
       };
+
+      console.log(task);
 
       await onAddTask(task); // Calls parent function to save
 
@@ -115,7 +118,7 @@ export default function AddTaskModal({
           >
             <option value="">Select a team member</option>
             {teamMembers.map((member) => (
-              <option key={member.id} value={member.id}>
+              <option key={member.user_id} value={member.user_id}>
                 {member.name}
               </option>
             ))}

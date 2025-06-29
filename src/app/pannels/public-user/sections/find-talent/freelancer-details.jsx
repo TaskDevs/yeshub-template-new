@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 //import ScheduleMeetingModal from "./ScheduleMeetingModal";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function FreelancerDetail() {
   const {
@@ -30,6 +30,7 @@ export default function FreelancerDetail() {
   const year = currentDate.getFullYear();
 
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     processFreelanceProfile(id);
@@ -509,8 +510,12 @@ export default function FreelancerDetail() {
         <div className="space-y-6 sidebar-right pt-4 my-4">
           {/* Action Buttons */}
           <div className="bg-white p-4 rounded-xl shadow space-y-3">
-            <button className="w-full bg-green-600 text-white py-2 rounded-md font-semibold">
-              Hire
+            <button
+              onClick={() => navigate("/login")}
+              className="w-full bg-green-600 text-white py-2 
+            rounded-md font-semibold"
+            >
+              Invite
             </button>
             {/* <button className="w-full border py-2 rounded-md font-medium">
                      Contact

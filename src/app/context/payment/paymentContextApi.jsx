@@ -5,6 +5,8 @@ import {
   storeFinanceSettingInfo,
   getFinanceSettingInfo,
   getTotalInvoice,
+  getPaymentsOnFreelancer,
+  getPaymentsOnClient,
   createInvoice,
   getInvoiceOfUser,
   getInvoiceDetails,
@@ -19,6 +21,7 @@ const PaymentApiDataProvider = (props) => {
   const [paymentMethodList, setPaymentMethodList] = useState([]);
   const [filterCompanyNameList, setFilterCompanyNameList] = useState([]);
   const [billingList, setBillingList] = useState([]);
+  const [invoiceListData, setInvoiceListData] = useState([]);
   const [billingData, setBillingData] = useState({
     pending_total: 0,
     paid_total: 0,
@@ -72,6 +75,50 @@ const PaymentApiDataProvider = (props) => {
       //console.log(response.data);
     } else {
       return false;
+    }
+  };
+
+  const processGetPaymentsOnFreelancer = async () => {
+    let response = await getPaymentsOnFreelancer();
+    if (response) {
+      console.log(response);
+      let new_data = [];
+      setBillingData({
+        ...billingData,
+        paid_total: response.total_earnings,
+      });
+      response.transactions.data.map((item) =>
+        new_data.push({
+          invoice_number: item.ref_no,
+          company_name: item.company_name,
+          due_date: item.milestone_completed.due_date,
+          total_amount: item.project_budget,
+          payment_status: "Paid",
+        })
+      );
+      setInvoiceListData(new_data);
+    }
+  };
+
+  const processGetPaymentsOnClient = async () => {
+    let response = await getPaymentsOnClient();
+    if (response) {
+      console.log(response);
+      let new_data = [];
+      setBillingData({
+        ...billingData,
+        paid_total: response.total_earnings,
+      });
+      response.transactions.data.map((item) =>
+        new_data.push({
+          invoice_number: item.ref_no,
+          freelancer_name: item.company_name,
+          due_date: item.milestone_completed.due_date,
+          total_amount: item.project_budget,
+          payment_status: "Paid",
+        })
+      );
+      setInvoiceListData(new_data);
     }
   };
 
@@ -217,9 +264,11 @@ const PaymentApiDataProvider = (props) => {
         processDeletePayment,
         processEditInvoice,
         processDeleteInvoice,
+        processGetPaymentsOnFreelancer,
         processGetFinanceSettingInfo,
         processStoreFinanceSettingInfo,
         processGetInvoiceDetails,
+        processGetPaymentsOnClient,
         financeSettingInfo,
         setFinanceSettingInfo,
         paymentMethodList,
@@ -230,6 +279,7 @@ const PaymentApiDataProvider = (props) => {
         totalInvoice,
         setTotalInvoice,
         invoiceDetailInfo,
+        invoiceListData,
         billingList,
         billingData,
       }}

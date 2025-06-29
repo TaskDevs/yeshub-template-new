@@ -2,6 +2,8 @@ import React, { createContext, useState } from "react";
 import {
   getTransactionOfClient,
   getTransactionFreelancer,
+  getPotentialEarningsOfFreelance,
+  // getWalletTransactionsOfBoth,
   createWalletForUser,
   makeWithdrawal,
 } from "./transactionApi";
@@ -19,6 +21,7 @@ const TransactionApiDataProvider = (props) => {
     available: "0.00",
     pending: "0.00",
   });
+  const [newPendAmount, setNewPendAmount] = useState("0.00");
   const [monthEarnings, setMonthEarnings] = useState([
     { month: "Jan", earnings: 0 },
     { month: "Feb", earnings: 0 },
@@ -90,6 +93,25 @@ const TransactionApiDataProvider = (props) => {
     }
   };
 
+  const processGetPotentialEarningsOfFreelance = async () => {
+    try {
+      const res = await getPotentialEarningsOfFreelance(); // wait for axios/etc.
+      console.log(res.data);
+      const rows = res?.data ?? []; // null‑safe
+
+      const total = rows.reduce((sum, row) => {
+        const amt = parseFloat(row?.amount_total) || 0; // guard NaN
+        return sum + amt;
+      }, 0);
+
+      setNewPendAmount(total);
+      console.log(total); // optional
+    } catch (err) {
+      console.error(err);
+      // toast.error('Could not fetch earnings');            // UX hint
+    }
+  };
+
   const processGetTransactionOfClient = async () => {
     let response = await getTransactionOfClient();
     console.log(response.data);
@@ -149,6 +171,8 @@ const TransactionApiDataProvider = (props) => {
         transactionList,
         monthEarnings,
         processGetTransactionOfFreelance,
+        processGetPotentialEarningsOfFreelance,
+        newPendAmount,
       }}
     >
       {props.children}

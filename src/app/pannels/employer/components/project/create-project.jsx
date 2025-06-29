@@ -55,7 +55,7 @@ export default function CreateProject() {
   useEffect(() => {
     const total = milestones.reduce((sum, milestone) => {
       const member = selectedTeamData.find(
-        (m) => String(m.id) === String(milestone.assignedTo)
+        (m) => String(m.user_id) === String(milestone.assignedTo)
       );
       return sum + (member?.salary ? Number(member.salary) : 0);
     }, 0);
@@ -75,7 +75,7 @@ export default function CreateProject() {
       {
         data: milestones.map((milestone) => {
           const assigned = selectedTeamData.find(
-            (member) => String(member.id) === String(milestone.assignedTo)
+            (member) => String(member.user_id) === String(milestone.assignedTo)
           );
           return assigned?.salary ? Number(assigned.salary) : 0;
         }),
@@ -174,7 +174,7 @@ export default function CreateProject() {
 
   const budget_items = milestones.map((milestone) => {
     const member = selectedTeamData.find(
-      (m) => String(m.id) === String(milestone.assignedTo)
+      (m) => String(m.user_id) === String(milestone.assignedTo)
     );
     const amount = member?.salary ? Number(member.salary) : 0;
 
@@ -648,7 +648,7 @@ export default function CreateProject() {
                   >
                     <option value="">-- Select a team member --</option>
                     {selectedTeamData.map((item) => (
-                      <option key={item.id} value={item.id}>
+                      <option key={item.id} value={item.user_id}>
                         {`${item.firstname + " " + item.lastname}`}
                       </option>
                     ))}
@@ -788,7 +788,7 @@ export default function CreateProject() {
                 {milestones.map((milestone, index) => {
                   const assignedMember = selectedTeamData.find(
                     (member) =>
-                      String(member.id) === String(milestone.assignedTo)
+                      String(member.user_id) === String(milestone.assignedTo)
                   );
                   const salary = assignedMember?.salary
                     ? Number(assignedMember.salary)

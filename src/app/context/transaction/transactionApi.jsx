@@ -49,6 +49,30 @@ export const getTransactionFreelancer = async () => {
   }
 };
 
+export const getWalletTransactionsOfBoth = async () => {
+  try {
+    let responseOnGetWalletTransactions = await axios.get(
+      `${REACT_BASE_URL}wallet-transaction-both/${userId}`
+    );
+    return responseOnGetWalletTransactions;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getPotentialEarningsOfFreelance = async () => {
+  try {
+    let responseOnGetPotentialEarnings = await axios.get(
+      `${REACT_BASE_URL}freelance-project-earnings/${userId}`
+    );
+    return responseOnGetPotentialEarnings;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const makeWithdrawal = async (data) => {
   try {
     let responseOnMakeWithdrawal = await axios.post(

@@ -74,7 +74,7 @@ const ActiveContracts = () => {
   }, [freelanceProjectList]);
 
   const itemsPerPage = 10;
-  const totalItems = 123;
+  const totalItems = freelanceProjectList.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -104,7 +104,7 @@ const ActiveContracts = () => {
     },
     {
       title: "In Progress",
-      count: 0,
+      count: freelanceProjectList?.length,
       icon: <FaClock size={18} />,
       bgColor: "bg-yellow-100",
       iconColor: "text-yellow-700",

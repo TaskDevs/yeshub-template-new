@@ -25,15 +25,31 @@ const categories = [
   // { icon: <Users size={24} />, label: 'Consulting' }
 ];
 
+const jobTitles = [
+  "Graphic Designer",
+  "Web Developer",
+  "Data Analyst",
+  "UX Researcher",
+  "Mobile App Developer",
+];
 const images = [
   "https://i.postimg.cc/WpMF6mkz/image-4060.jpg",
   "https://i.postimg.cc/sxv5sTnY/image-4060u56.jpg", // Replace with your own image
-  "https://i.postimg.cc/gkh6sX12/image-4060700.jpg", 
+  "https://i.postimg.cc/gkh6sX12/image-4060700.jpg",
   "https://i.postimg.cc/nz7sHMBL/image-4060y-D45.jpg",
-]
+];
 export default function YesHubLandingPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
+
+  const [currentJobIndex, setCurrentJobIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentJobIndex((prev) => (prev + 1) % jobTitles.length);
+    }, 2500); // Change every 2.5 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,7 +96,7 @@ export default function YesHubLandingPage() {
             src={images[currentIndex]}
             alt="Professional at work"
             className={`w-full h-auto rounded-lg shadow-md object-cover transition-all duration-700 ${
-            fade ? 'opacity-100' : 'opacity-0'
+              fade ? "opacity-100" : "opacity-0"
             }`}
           />
         </div>
@@ -253,7 +269,7 @@ export default function YesHubLandingPage() {
         </div>
 
         {/* freelance section */}
-        <div className="bg-green-50 text-gray-800 max-w-6xl mx-auto justify-center rounded-xl">
+        <div className="bg-green-50 text-gray-800 max-w-6xl mx-auto justify-center rounded-xl mb-4">
           <div className="py-14 px-6 lg:px-20 mx-auto lg:flex lg:items-center lg:justify-between space-y-10 lg:space-y-0">
             {/* Left Side */}
             <div className="lg:w-1/2 space-y-6 ">
@@ -322,6 +338,40 @@ export default function YesHubLandingPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 py-3 px-4 max-w-6xl mx-auto rounded-xl mb-4 my-3">
+          <div className="py-14 px-3 lg:px-20 mx-auto lg:flex items-center justify-between gap-2">
+            {/* Left Box */}
+            <div className="border border-black rounded-2xl px-8 py-3 text-center">
+              <h2 className="text-xl font-medium text-gray-700">
+                Work From Anywhere
+              </h2>
+              <p className="text-3xl font-bold text-black mt-2">Get Hired</p>
+            </div>
+
+            {/* Middle Text */}
+            <div className="flex flex-col items-start gap-2">
+              <div className="bg-green-600 text-white px-6 py-2 rounded-full font-semibold text-lg">
+                Over 1000+ <span className="text-sm">Jobs Listed Everyday</span>
+              </div>
+              <div className="flex gap-3 items-center">
+                <button className="bg-black text-white px-6 py-2 rounded-full font-medium">
+                  Start Now
+                </button>
+                <span className="text-green-700 font-medium text-lg">
+                  {jobTitles[currentJobIndex]}
+                </span>
+              </div>
+            </div>
+
+            {/* Image */}
+            <img
+              src="https://i.postimg.cc/wB1HGq4P/image3050.png"
+              alt="Happy freelancer"
+              className="w-48 h-auto object-contain"
+            />
           </div>
         </div>
       </section>

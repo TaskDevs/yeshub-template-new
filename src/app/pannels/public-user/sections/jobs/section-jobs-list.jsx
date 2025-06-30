@@ -50,6 +50,7 @@ function SectionJobsList({
                 start_rate={item.start_rate}
                 end_rate={item.end_rate}
                 created_at = {item.start_date}
+                companyName={item.employer?.name || "Unknown Company"}
               />
             ))
           )}

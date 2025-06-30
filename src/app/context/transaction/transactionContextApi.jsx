@@ -13,6 +13,7 @@ export const TransactionApiData = createContext();
 const TransactionApiDataProvider = (props) => {
   const [walletStatus, setWalletStatus] = useState("neutral");
   const [transactionList, setTransactionList] = useState([]);
+  const [clientTransactionList, setClientTransactionList] = useState([]);
   const [freelanceEarnings, setFreelanceEarnings] = useState({
     available: "0.00",
     pending: "0.00",
@@ -115,6 +116,7 @@ const TransactionApiDataProvider = (props) => {
   const processGetTransactionOfClient = async () => {
     let response = await getTransactionOfClient();
     console.log(response.data);
+    let new_data = [];
     if (response) {
       setAllEarnings({
         ...allEarnings,
@@ -124,6 +126,17 @@ const TransactionApiDataProvider = (props) => {
         totalSpentInMonth: response.data.total_spent_in_month,
         start_month: response.data.start_month,
       });
+
+      response.data.wallet_transactions.data.map((item) =>
+        new_data.push({
+          date: item.created_at,
+          description: item.description,
+          type: item.transaction_type,
+          amount: item.amount,
+          status: item.status,
+        })
+      );
+      setClientTransactionList(response.data.wallet_transactions.data);
     }
     setWalletStatus("true");
   };
@@ -169,6 +182,7 @@ const TransactionApiDataProvider = (props) => {
         walletStatus,
         setWalletStatus,
         transactionList,
+        clientTransactionList,
         monthEarnings,
         processGetTransactionOfFreelance,
         processGetPotentialEarningsOfFreelance,

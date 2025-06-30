@@ -239,25 +239,17 @@ export const SubmitProposalSection = ({ job_id, companyInfo }) => {
     let response = await processSubmitProposal(formDataToSubmit);
     if (response) {
       console.log(response);
-      if (response.status == "neutral") {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "You are already hired by client",
-        });
-      } else {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Proposal has been submitted",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Proposal has been submitted",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
-        setTimeout(() => {
-          navigate("/dashboard-candidate/candidate-offers");
-        }, 1500);
-      }
+      setTimeout(() => {
+        navigate("/dashboard-candidate/candidate-offers");
+      }, 1500);
     } else {
       console.log("Error submitting proposal");
       Swal.fire({

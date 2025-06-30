@@ -107,12 +107,12 @@ const PaymentApiDataProvider = (props) => {
       let new_data = [];
       setBillingData({
         ...billingData,
-        paid_total: response.total_earnings,
+        paid_total: response.total_spent,
       });
-      response.transactions.data.map((item) =>
+      response.data.map((item) =>
         new_data.push({
           invoice_number: item.ref_no,
-          freelancer_name: item.company_name,
+          freelancer_name: item.freelancer_name,
           due_date: item.milestone_completed.due_date,
           total_amount: item.project_budget,
           payment_status: "Paid",

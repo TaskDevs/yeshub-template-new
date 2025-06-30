@@ -91,12 +91,14 @@ function FindWorkPage() {
               role={job?.job_title}
               ratings="4.9"
               reviews="23k"
+              skills={job?.skills}
               companyName={job?.company_name}
               jobType={job?.job_type}
               isMobile={true}
               jobLocation={job?.location || "Accra"}
               datePosted={job?.created_at || "2025-04-14T16:43:24.000000Z"}
-              salaryRange={job?.fixed_rate || "400"}
+              salaryRange={job?.fixed_rate || job?.budget}
+              image={job?.employer_logo || "https://placehold.co/80x80?text=Logo"}
             />
           ))}
         </MobileFindSavedWork>

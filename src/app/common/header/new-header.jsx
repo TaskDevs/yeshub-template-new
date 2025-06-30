@@ -22,7 +22,7 @@ import { userId } from "../../../globals/constants";
 import { useChat } from "../../context/chat/chatContext";
 import NotificationModal from "./notification-modal";
 import MessageModal from "./message-modal";
-
+import { ChevronDown, ChevronRight, X } from "lucide-react";
 
 export const Header = ({ isDashboard = true }) => {
   const { processGetMessagesOfReceiver, unreadCount, setUnreadCount } =
@@ -52,6 +52,7 @@ export const Header = ({ isDashboard = true }) => {
   const [projectIds, setProjectIds] = useState([]);
   const [messagesData, setMessageData] = useState([]);
   const [chatId, setChatId] = useState();
+  const [openMenus, setOpenMenus] = useState({});
 
   const {
     firstname,
@@ -106,49 +107,50 @@ export const Header = ({ isDashboard = true }) => {
     };
   }, [userId]);
 
-useEffect(() => {
-  if (!chatId || !projectIds || !Array.isArray(projectIds)) return;
+  useEffect(() => {
+    if (!chatId || !projectIds || !Array.isArray(projectIds)) return;
 
-  const channels = [];
+    const channels = [];
 
-  projectIds.forEach((projectId) => {
-    const channel = echo.channel(`group.${projectId}`);
+    projectIds.forEach((projectId) => {
+      const channel = echo.channel(`group.${projectId}`);
 
-    channel.listen(".group.message.sent", (e) => {
-      console.log(`New message in project ${projectId}:`, e.message);
+      channel.listen(".group.message.sent", (e) => {
+        console.log(`New message in project ${projectId}:`, e.message);
 
-      setMessageData([{
-        id: e.message.id,
-        message: e.message.message,
-        sender_name: e.message.sender_name,
-        project_id: e.message.project_id,
-        created_at: e.message.created_at,
-      }]);
+        setMessageData([
+          {
+            id: e.message.id,
+            message: e.message.message,
+            sender_name: e.message.sender_name,
+            project_id: e.message.project_id,
+            created_at: e.message.created_at,
+          },
+        ]);
 
-      setProjectChats((prev) => [...prev, e.message]);
+        setProjectChats((prev) => [...prev, e.message]);
 
-      if (chatId !== e.message.sender_id) {
-        setNotifyMessage((prev) => prev + 1);
-        popSound.play().catch((err) => {
-          console.warn("Failed to play sound:", err);
-        });
-      }
+        if (chatId !== e.message.sender_id) {
+          setNotifyMessage((prev) => prev + 1);
+          popSound.play().catch((err) => {
+            console.warn("Failed to play sound:", err);
+          });
+        }
+      });
+
+      channels.push(channel);
     });
 
-    channels.push(channel);
-  });
-
-  return () => {
-    if (echo && typeof echo.leave === "function") {
-      projectIds.forEach((projectId) => {
-        echo.leave(`group.${projectId}`);
-      });
-    } else {
-      console.warn("Echo leave function not found during cleanup.");
-    }
-  };
-}, [chatId, projectIds]);
-
+    return () => {
+      if (echo && typeof echo.leave === "function") {
+        projectIds.forEach((projectId) => {
+          echo.leave(`group.${projectId}`);
+        });
+      } else {
+        console.warn("Echo leave function not found during cleanup.");
+      }
+    };
+  }, [chatId, projectIds]);
 
   const handleClose = () => {
     localStorage.setItem("profileModalClosedAt", Date.now().toString());
@@ -320,11 +322,6 @@ useEffect(() => {
         ],
       },
     },
-    // {
-    //   id: "messages",
-    //   label: "Messages",
-    //   to: "/messages",
-    // },
   ];
 
   const getNavItems = () => {
@@ -477,7 +474,6 @@ useEffect(() => {
     const normalize = (str) => str?.trim().toLowerCase();
 
     const guestItemIds = [
-      "dashboard",
       "find-talent",
       "public-find-work",
       "assessment-training",
@@ -494,8 +490,7 @@ useEffect(() => {
       "dashboard",
       "find-talent",
       "manage-jobs",
-      "assessment-training",
-      "why-yeshub",
+      "manage-finances",
     ];
 
     const getFilteredItems = (allowedIds) =>
@@ -526,6 +521,35 @@ useEffect(() => {
     () => getVisibleNavItems(role),
     [role, token, navItems]
   );
+
+  const flattenedItems = useMemo(() => {
+    return visibleNavItems.flatMap((item) => {
+      const items = [];
+
+      items.push({
+        id: item.id,
+        label: item.label,
+        to: item.to,
+        isSub: false,
+        hasSub: item.menu?.items?.length > 0,
+      });
+
+      if (item.menu?.items && token) {
+        item.menu.items.forEach((subItem) => {
+          items.push({
+            id: subItem.id,
+            label: subItem.label,
+            to: subItem.to,
+            isSub: true,
+            parentId: item.id,
+          });
+        });
+      }
+
+      return items;
+    });
+  }, [visibleNavItems, token]);
+
   return (
     <>
       <header className="tw-css fixed top-0 flex w-full bg-white shadow-sm py-4 px-4  md:px-2 md:py-2 zIndex ">
@@ -542,7 +566,7 @@ useEffect(() => {
               className="flex items-center mr-4 new-header-logo "
               onClick={() => handleLogoClick()}
             >
-              <img src="/yes.png" alt="YesHub" className="h-14 w-auto" />
+              <img src="/yes.png" alt="YesHub" className="h-14 w-auto " />
             </div>
 
             {/* Navigation items */}
@@ -617,13 +641,13 @@ useEffect(() => {
                 {!token ? (
                   <>
                     <button
-                      className="text-gray-600 px-6 py-2 rounded-xl font-semibold transition-all duration-200 ease-in-out hover:shadow-lg"
+                      className="text-gray-600 px-4 py-2 rounded-xl font-semibold transition-all duration-200 ease-in-out whitespace-nowrap text-sm sm:text-base sm:px-4 sm:py-2"
                       onClick={() => navigate("/login")}
                     >
                       Log in
                     </button>
                     <button
-                      className="bg-green-700 text-white px-6 py-2 rounded-xl font-semibold shadow-md transition-all duration-200 ease-in-out hover:shadow-lg"
+                      className="bg-green-700 text-white px-4 py-2 text-sm rounded-xl font-semibold transition-all duration-200 ease-in-out whitespace-nowrap sm:text-base sm:px-4 hover:bg-green-800"
                       onClick={() => navigate("/sign-up")}
                     >
                       Sign up
@@ -790,31 +814,19 @@ useEffect(() => {
                     color="teal"
                   />
                 </>
-                <div className="lg:hidden">
+                <div className="lg:hidden profile-image-container">
                   {profile_image ? (
-                    <img
+                    <Avatar
                       src={profile_image}
                       alt={username}
-                      onClick={handleProfileClick}
-                      style={{
-                        backgroundColor: stringToColor(username),
+                      onClick={() => toggleNav()}
+                      sx={{
+                        bgcolor: stringToColor(username),
                         width: 40,
                         height: 40,
                         fontSize: "1.2rem",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        cursor: "pointer",
                       }}
-                      onError={(e) => {
-                        // Fallback if image fails to load
-                        e.target.onerror = null;
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                          username
-                        )}&background=${stringToColor(username).slice(
-                          1
-                        )}&color=fff&size=40`;
-                      }}
-                    />
+                    ></Avatar>
                   ) : (
                     <Avatar
                       sx={{
@@ -1109,44 +1121,64 @@ useEffect(() => {
         >
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-800">Menu</h2>
+            <img src="/yes.png" alt="YesHub" className="h-14 w-auto" />
             <button
               onClick={() => setDrawerOpen(false)}
-              className="text-gray-500 hover:text-red-500 text-2xl focus:outline-none"
+              className="text-gray-500 hover:text-red-500 focus:outline-none"
               aria-label="Close menu"
             >
-              &times;
+              <X size={24} />
             </button>
           </div>
 
           {/* Navigation */}
           <nav className="flex flex-col px-5 py-4 space-y-2">
-            {visibleNavItems
-              .flatMap((item) =>
-                item.to || item.label
-                  ? [
-                      {
-                        id: item.id,
-                        label: item.label,
-                        to: item.to,
-                      },
-                    ]
-                  : []
-              )
-              .map((item) => (
+            {flattenedItems.map((item) => {
+              // Hide submenus if parent is collapsed
+              if (item.isSub && !openMenus[item.parentId]) return null;
+
+              const isParent = !item.isSub && item.hasSub;
+              const isOpen = openMenus[item.id];
+
+              return (
                 <button
                   key={item.id}
                   onClick={() => {
-                    if (item.to) window.location.href = item.to;
-                    setDrawerOpen(false);
+                    if (item.isSub) {
+                      window.location.href = item.to;
+                      setDrawerOpen(false);
+                    } else if (isParent) {
+                      setOpenMenus((prev) => ({
+                        ...prev,
+                        [item.id]: !prev[item.id],
+                      }));
+                    } else if (item.to) {
+                      window.location.href = item.to;
+                      setDrawerOpen(false);
+                    }
                   }}
-                  className="w-full text-left py-3 px-4 rounded-lg text-gray-800 font-medium hover:bg-green-50 hover:text-green-600 transition-all duration-200"
+                  className={`w-full text-left py-3 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-between ${
+                    item.isSub
+                      ? "text-gray-600 pl-8 hover:text-green-500 text-sm"
+                      : "text-gray-800 hover:bg-green-50 hover:text-green-600"
+                  }`}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {isParent && (
+                    <span className="ml-2">
+                      {isOpen ? (
+                        <ChevronDown size={18} />
+                      ) : (
+                        <ChevronRight size={18} />
+                      )}
+                    </span>
+                  )}
                 </button>
-              ))}
+              );
+            })}
           </nav>
         </div>
+
         {token && role === "freelancer" && profile_completion < 100 && (
           <div>
             <ProfileCompletionModal

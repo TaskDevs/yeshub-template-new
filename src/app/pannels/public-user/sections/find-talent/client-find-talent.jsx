@@ -8,16 +8,9 @@ import {
   JobInvitation,
 } from "../../../../context/jobs/jobsApi";
 import Swal from "sweetalert2";
-const skillsList = [
-  "Web Development",
-  "Mobile Development",
-  "UI/UX Design",
-  "Data Science",
-  "Digital Marketing",
-];
+
 const experienceLevels = ["Entry Level", "Intermediate", "Expert"];
-const ratings = ["8 Up", "7 Up", "6 Up"];
-const languages = ["English", "French", "Spanish", "German"];
+const ratings = ["1 Up", "2 Up", "3 Up", "4 Up", "5 Up", "6 Up", "7 Up", "8 Up"];
 const locations = [
   "Greater Accra",
   "Ashanti",
@@ -57,7 +50,7 @@ export default function FreelancerSearch() {
     skills: [],
     experience: "",
     hourlyRate: { min: "", max: "" },
-    location: "",
+    region: "",
     availableNow: false,
     rating: "",
     language: "",
@@ -78,14 +71,7 @@ export default function FreelancerSearch() {
     return () => clearTimeout(timeout);
   }, [filters, searchTerm]);
 
-  const toggleSkill = (skill) => {
-    setFilters((prev) => {
-      const skills = prev.skills.includes(skill)
-        ? prev.skills.filter((s) => s !== skill)
-        : [...prev.skills, skill];
-      return { ...prev, skills };
-    });
-  };
+
 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -118,7 +104,7 @@ export default function FreelancerSearch() {
       skills,
       experience,
       hourlyRate,
-      location,
+      region,
       availableNow,
       rating,
       language,
@@ -141,8 +127,8 @@ export default function FreelancerSearch() {
       ? freelancer.hourlyRate <= parseFloat(hourlyRate.max)
       : true;
 
-    const matchLocation = location
-      ? freelancer.location.includes(location.split(" ")[0])
+    const matchRegion = region
+      ? freelancer.region.includes(region.split(" ")[0])
       : true;
 
     const matchAvailability = availableNow ? freelancer.availableNow : true;
@@ -154,6 +140,8 @@ export default function FreelancerSearch() {
     const matchSearch = searchTerm
       ? freelancer?.name?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
         freelancer?.title?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+         freelancer?.profession?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
+          freelancer?.region?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
         freelancer?.skills?.some((skill) =>
           skill.toLowerCase().includes(searchTerm.toLowerCase())
         )
@@ -164,7 +152,7 @@ export default function FreelancerSearch() {
       matchExperience &&
       matchMinRate &&
       matchMaxRate &&
-      matchLocation &&
+      matchRegion &&
       matchAvailability &&
       matchRating &&
       matchLanguage &&
@@ -229,8 +217,8 @@ export default function FreelancerSearch() {
     }
   };
   return (
-    <div className="tw-css px-10 py-6 my-5">
-      <div className="mb-6 p-4 m-4 my-5">
+    <div className="tw-css px-10 py-2">
+      <div className="mb-6 p-4 m-4">
         <h1 className="text-xl font-semibold">Find Talented Freelancers</h1>
         <div className="flex items-center border rounded-full px-4 py-2 mt-4 shadow-sm">
           <input
@@ -276,34 +264,6 @@ export default function FreelancerSearch() {
               ))}
             </select>
           </div>
-          <div>
-            <select
-              value={filters.language}
-              onChange={(e) => handleFilterChange("language", e.target.value)}
-              className="w-full p-2 border rounded"
-            >
-              <option value="">Language</option>
-              {languages.map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <select
-              value={filters.skills}
-              onChange={(e) => handleFilterChange("skills", e.target.value)}
-              className="w-full p-2 border rounded"
-            >
-              <option value="">Skills</option>
-              {skillsList.map((skill) => (
-                <option key={skill} value={skill}>
-                  {skill}
-                </option>
-              ))}
-            </select>
-          </div>
 
           <button
             onClick={clearAllFilters}
@@ -326,19 +286,6 @@ export default function FreelancerSearch() {
               >
                 Reset
               </button>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Skills</h3>
-              {skillsList.map((skill) => (
-                <div key={skill} className="items-center mb-1">
-                  <input
-                    type="checkbox"
-                    checked={filters?.skills?.includes(skill)}
-                    onChange={() => toggleSkill(skill)}
-                  />
-                  <label className="ml-2 text-sm">{skill}</label>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -380,8 +327,8 @@ export default function FreelancerSearch() {
           <div>
             <h3 className="font-semibold mb-2">Location</h3>
             <select
-              value={filters.location}
-              onChange={(e) => handleFilterChange("location", e.target.value)}
+              value={filters.region}
+              onChange={(e) => handleFilterChange("region", e.target.value)}
               className="w-full p-2 border rounded"
             >
               <option value="">All</option>
@@ -418,25 +365,10 @@ export default function FreelancerSearch() {
               </div>
             ))}
           </div>
-
-          <div>
-            <h3 className="font-semibold mb-2">Languages</h3>
-            {languages.map((lang) => (
-              <div key={lang} className="items-center mb-1">
-                <input
-                  type="radio"
-                  name="language"
-                  checked={filters.language == lang}
-                  onChange={() => handleFilterChange("language", lang)}
-                />
-                <label className="ml-2 text-sm">{lang}</label>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Freelancer Cards Section */}
-        <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto px-4 py-6 cards">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2 text-gray-700 text-sm p-3 border bg-white shadow w-full sm:w-auto rounded-md">
               <div>
@@ -451,7 +383,7 @@ export default function FreelancerSearch() {
               </div>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:w-full">
             {loading
               ? Array.from({ length: 4 }).map((_, idx) => (
                   <div
@@ -487,6 +419,7 @@ export default function FreelancerSearch() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       {freelancer.name}
                     </h3>
+                    <p className="text-sm text-gray-600">{freelancer.region}</p>
                     <p className="text-sm text-gray-600">
                       {freelancer.profession}
                     </p>
@@ -508,8 +441,8 @@ export default function FreelancerSearch() {
 
                     <div className="flex justify-center items-center text-yellow-500 text-sm mt-1 mb-4">
                       <span>★ {freelancer.rating}</span>
-                      <span className="text-gray-500 ml-1">
-                        ({freelancer.reviews} Reviews)
+                       <span className="text-gray-500 ml-1">
+                        [{freelancer.experience || "N/A"}]
                       </span>
                     </div>
 

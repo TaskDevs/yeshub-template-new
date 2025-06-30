@@ -111,6 +111,8 @@ const FreelanceApiDataProvider = (props) => {
           rating: 7.5,
           language: item.languages,
           profession: item.profession,
+          region:item.region,
+          experience:item.experience,
         })
       );
       setFreelanceList(newList);

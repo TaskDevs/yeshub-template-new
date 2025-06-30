@@ -52,6 +52,7 @@ export const getFreelanceList = async (pageNo) => {
       }&perPage=${LIST_ON_PAGES}`
     );
     if (responseOnFreelanceList.status === 200) {
+      console.log("freelancers:" , responseOnFreelanceList.data);
       return responseOnFreelanceList.data;
     } else {
       return false;

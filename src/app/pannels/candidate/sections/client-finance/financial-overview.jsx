@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import AddFundsModal from "../../../employer/components/jobs/AddFundsModal";
 import Swal from "sweetalert2";
+import { PaymentApiData } from "../../../../context/payment/paymentContextApi";
 import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import jsPDF from "jspdf";
@@ -58,8 +59,11 @@ const FinancialOverview = () => {
     walletStatus,
     processCreateWalletOfUser,
     allEarnings,
+    //clientTransactionList,
     processGetTransactionOfClient,
   } = useContext(TransactionApiData);
+  const { processGetPaymentsOnClient, billingData, invoiceListData } =
+    useContext(PaymentApiData);
   const { userProjects, projectListData, processGetUserProjects } =
     useContext(EmployerApiData);
   const [selectedFilter, setSelectedFilter] = useState("monthly");
@@ -142,13 +146,17 @@ const FinancialOverview = () => {
     "Active Projects",
     "Freelancer Invoices",
     "Transaction History",
-    "Payment Methods",
   ];
 
   useEffect(() => {
+    processGetPaymentsOnClient();
     processGetTransactionOfClient();
     processGetUserProjects();
   }, []);
+
+  useEffect(() => {
+    console.log(invoiceListData);
+  }, [invoiceListData]);
 
   const handleAddFunds = (data) => {
     console.log("Funds Added:", data);
@@ -188,6 +196,15 @@ const FinancialOverview = () => {
     );
 
   const paginatedProjects = filteredProjects.slice(
+    (page - 1) * perPage,
+    page * perPage
+  );
+
+  const filteredInvoice = invoiceListData.filter((invoice) =>
+    invoice.freelancer_name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const paginatedInvoice = filteredInvoice.slice(
     (page - 1) * perPage,
     page * perPage
   );
@@ -261,16 +278,17 @@ const FinancialOverview = () => {
           {/* Total Spent */}
           <div className="bg-white rounded-lg p-4 shadow-sm">
             <div className="flex justify-between items-center mb-2">
-              <h2 className="text-sm font-medium text-gray-600">
-                Total Spent ({allEarnings.start_month})
-              </h2>
+              <h2 className="text-sm font-medium text-gray-600">Total Spent</h2>
               <ArrowUpRight size={20} className="text-green-500" />
             </div>
-            <p className="text-xl font-semibold">
-              ₵{allEarnings.totalSpentInMonth}
-            </p>
+            <p className="text-xl font-semibold">₵{billingData.paid_total}</p>
             <p className="text-sm text-green-600 mt-1">
-              ↑ 0% from {allEarnings.start_month}
+              ↑{" "}
+              {(
+                parseFloat(billingData.paid_total) /
+                parseFloat(allEarnings.escrow)
+              ).toFixed(2) * 100}
+              % from {allEarnings.start_month}
             </p>
             <div className="mt-2 text-sm text-gray-500">Monthly Budget</div>
             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
@@ -278,7 +296,7 @@ const FinancialOverview = () => {
                 className="bg-green-500 h-2 rounded-full"
                 style={{
                   width:
-                    (parseFloat(allEarnings.totalSpentInMonth) /
+                    (parseFloat(billingData.paid_total) /
                       parseFloat(allEarnings.escrow)) *
                       100 +
                     "%",
@@ -286,11 +304,12 @@ const FinancialOverview = () => {
               ></div>
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              ₵{allEarnings.totalSpentInMonth} (
+              ₵{parseFloat(billingData.paid_total)} (
               {`${
-                (parseFloat(allEarnings.totalSpentInMonth) /
-                  parseFloat(allEarnings.escrow)) *
-                100
+                (
+                  parseFloat(billingData.paid_total) /
+                  parseFloat(allEarnings.escrow)
+                ).toFixed(2) * 100
               }`}
               %)
             </p>
@@ -304,7 +323,11 @@ const FinancialOverview = () => {
               </h2>
               <AlertTriangle size={20} className="text-yellow-400" />
             </div>
-            <p className="text-xl font-semibold">₵0</p>
+            <p className="text-xl font-semibold">
+              ₵
+              {parseFloat(allEarnings.escrow) -
+                parseFloat(billingData.paid_total)}
+            </p>
             <p className="text-sm text-red-600 mt-1">↑ 12.5% from April</p>
             <div className="mt-3 space-y-1 text-sm">
               <div className="text-gray-600">
@@ -569,6 +592,119 @@ const FinancialOverview = () => {
                         >
                           View Details
                         </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <button
+                  className="border rounded px-2 py-1"
+                  disabled={page === 1}
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    className={`px-3 py-1 border rounded ${
+                      page === i + 1
+                        ? "bg-green-500 text-white"
+                        : "bg-white text-gray-700"
+                    }`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  className="border rounded px-2 py-1"
+                  disabled={page === totalPages}
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+          {activeTab === "Freelancer Invoices" && (
+            <div className="border rounded-lg p-4 space-y-4 bg-white">
+              <div className="flex items-center justify-between">
+                <input
+                  type="text"
+                  placeholder="Search invoices..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-1/3 px-3 py-2 border rounded text-sm"
+                />
+                <div className="flex items-center gap-2">
+                  <select
+                    className="border rounded px-2 py-1 text-sm"
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                  >
+                    <option>All Projects</option>
+                    <option>In Progress</option>
+                    <option>On Hold</option>
+                  </select>
+                  <button className="border px-3 py-1 rounded text-sm">
+                    Filters
+                  </button>
+                </div>
+              </div>
+
+              <table className="w-full text-sm text-left">
+                <thead className="text-gray-500 border-b">
+                  <tr>
+                    <th className="py-2">Invoice No</th>
+                    <th>Freelancer</th>
+                    <th>Due Date</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedInvoice.map((invoice, index) => (
+                    <tr key={index} className="border-b hover:bg-gray-50">
+                      <td className="py-2">
+                        <div className="font-medium text-black">
+                          {invoice.invoice_number}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-black">
+                              {invoice.freelancer_name}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="font-semibold text-gray-400">
+                          {invoice.due_date}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="font-semibold text-gray-400">
+                          {`GH ${invoice.total_amount}`}
+                        </div>
+                      </td>
+
+                      <td>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${
+                            invoice.payment_status === "Paid"
+                              ? "bg-green-100 text-green-700"
+                              : invoice.payment_status === "On Hold"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          {invoice.payment_status}
+                        </span>
                       </td>
                     </tr>
                   ))}

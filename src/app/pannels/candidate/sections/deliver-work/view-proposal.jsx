@@ -15,7 +15,7 @@ const ViewProposal = () => {
   }
 
   return (
-    <div className="w-full bg-gray-50 min-h-screen py-10 px-4 md:px-16">
+    <div className="tw-css w-full bg-gray-50 min-h-screen py-10 px-4 md:px-16">
       <div className="bg-white shadow-lg rounded-xl p-8 space-y-8 max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-800">Proposal Overview</h1>
 

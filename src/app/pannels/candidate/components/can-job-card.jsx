@@ -29,14 +29,17 @@ const CanJobCard = ({
   proposal,
   loading = false,
 }) => {
-  const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } = useContext(SavedJobsApiData);
+  const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } =
+    useContext(SavedJobsApiData);
   const navigate = useNavigate();
   const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === id);
 
+
+  console.log("mobile logo", image)
   // Skeleton for desktop
   if (loading && !isMobile) {
     return (
-      <div className="tw-css border rounded-lg p-4 bg-white animate-pulse space-y-4">
+      <div className="tw-css border rounded-lg p-4 bg-white animate-pulse space-y-4 ">
         <div className="h-6 bg-gray-300 rounded w-2/3"></div>
         <div className="flex gap-2">
           <div className="h-4 bg-gray-300 rounded w-24"></div>
@@ -93,7 +96,10 @@ const CanJobCard = ({
 
                   <div className="flex flex-wrap gap-2 mt-2">
                     {skills?.map((skill, i) => (
-                      <div key={i} className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2">
+                      <div
+                        key={i}
+                        className="bg-[#F3F4F6] text-sm text-[#1F2937] capitalize rounded-sm p-2"
+                      >
                         {skill}
                       </div>
                     ))}
@@ -102,7 +108,9 @@ const CanJobCard = ({
 
                 <div className="flex flex-col items-start h-full">
                   {newTag && (
-                    <button className="bg-green-500 text-[#166534] py-1 px-2 rounded">{newTag}</button>
+                    <button className="bg-green-500 text-[#166534] py-1 px-2 rounded">
+                      {newTag}
+                    </button>
                   )}
                   <p className="rounded-xl bg-[#F3F4F6] text-sm md:text-[0.5rem] text-[#1F2937] w-fit p-1 md:p-0">
                     {proposal} proposals
@@ -127,7 +135,9 @@ const CanJobCard = ({
 
                 <button
                   className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
-                  onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
+                  onClick={() =>
+                    navigate(`/dashboard-candidate/job-details/${id}`)
+                  }
                 >
                   View
                 </button>
@@ -161,7 +171,9 @@ const CanJobCard = ({
                     </button>
                     <button
                       className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
-                      onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
+                      onClick={() =>
+                        navigate(`/dashboard-candidate/job-details/${id}`)
+                      }
                     >
                       view
                     </button>
@@ -196,8 +208,12 @@ const CanJobCard = ({
                     </span>
                   )}
 
-                  <span className="text-gray-800 font-semibold ">GHS {salaryRange}</span>
-                  <span className="text-gray-500 text-sm flex">{dateSaved}</span>
+                  <span className="text-gray-800 font-semibold ">
+                    GHS {salaryRange}
+                  </span>
+                  <span className="text-gray-500 text-sm flex">
+                    {dateSaved}
+                  </span>
                 </div>
               </div>
             </div>
@@ -205,50 +221,77 @@ const CanJobCard = ({
         </div>
       )}
 
-      {isMobile && (
-        <div className="tw-css border rounded-lg shadow-md p-2 flex flex-col size-full bg-white">
-          <div className="tw-css flex justify-between w-full h-full">
-            <div className="job-card-wrapper">
-              <h3 className="text-xl font-medium mb-0">{role}</h3>
-              <p className="text-gray-700 mb-0">{companyName}</p>
+{isMobile && (
+  <div className="border max-w-md w-full mx-auto p-4 bg-white rounded-xl shadow-sm space-y-3">
+    {/* Top Section */}
+    <div className="flex items-start gap-3">
+      {/* Logo */}
+      <div className="w-10 h-10 rounded-full overflow-hidden bg-white shrink-0">
+        <img
+          src={image}
+          alt={companyName}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
-              <div className="flex flex-wrap items-center gap-2 mt-3">
-                <span className="inline-block bg-gray-100 text-gray-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm">
-                  {isFindWork ? jobLocation : status}
-                </span>
-                <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-red-600/10 ring-inset">
-                  {jobType}
-                </span>
-              </div>
-            </div>
+      {/* Info & Tags */}
+      <div className="flex-1">
+        <h3 className="text-base font-semibold text-gray-900 leading-tight">{role}</h3>
+        <p className="text-sm text-gray-500 mb-1">{companyName}</p>
 
-            {isFindWork ? (
-              <div className="flex flex-col items-start h-full">
-                <button onClick={() => toggleSavedJob(id, userId)} className="border-0">
-                  {!isSaved ? (
-                    <CiBookmark className="size-4" />
-                  ) : (
-                    <FaBookmark className="size-4" color="#166534" />
-                  )}
-                </button>
-                <p className="text-sm">{calculateDaysSincePosted(datePosted)}</p>
-              </div>
-            ) : (
-              <p className="text-sm">{calculateDaysSincePosted(datePosted)}</p>
-            )}
-          </div>
-
-          <div className="flex justify-between w-full mt-2">
-            <p className="text-[#374151]">{salaryRange}</p>
-            <button
-              className="bg-green-800 w-fit text-white px-4 py-2 rounded capitalize text-center h-10"
-              onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
-            >
-              view
-            </button>
-          </div>
+        <div className="flex flex-wrap items-center gap-1">
+          <span className="bg-gray-100 text-gray-700 text-[10px] font-medium px-2 py-[2px] rounded-full">
+            {isFindWork ? jobLocation : status}
+          </span>
+          <span className="bg-red-100 text-red-700 text-[10px] font-medium px-2 py-[2px] rounded-full">
+            {jobType}
+          </span>
         </div>
-      )}
+
+        {/* Skills */}
+        <div className="flex flex-wrap gap-1 mt-2">
+          {skills?.slice(0, 3).map((skill, i) => (
+            <div
+              key={i}
+              className="bg-gray-100 text-[10px] text-gray-800 capitalize rounded px-2 py-[2px]"
+            >
+              {skill}
+            </div>
+          ))}
+          {skills?.length > 3 && (
+            <div className="text-[10px] text-gray-500 mt-[2px]">+{skills.length - 3} more</div>
+          )}
+        </div>
+      </div>
+
+      {/* Bookmark + Date */}
+      <div className="flex flex-col items-end gap-1">
+        {isFindWork && (
+          <button onClick={() => toggleSavedJob(id, userId)} className="p-1">
+            {!isSaved ? (
+              <CiBookmark className="text-gray-500 size-4" />
+            ) : (
+              <FaBookmark className="text-green-700 size-4" />
+            )}
+          </button>
+        )}
+        <p className="text-[10px] text-gray-400">{calculateDaysSincePosted(datePosted)}</p>
+      </div>
+    </div>
+
+    {/* Bottom Row */}
+    <div className="flex justify-between items-center">
+      <p className="text-sm text-gray-800 font-sm">GHS {salaryRange}</p>
+      <button
+        className="bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
+        onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}
+      >
+        View
+      </button>
+    </div>
+  </div>
+)}
+
     </>
   );
 };

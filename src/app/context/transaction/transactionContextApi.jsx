@@ -136,7 +136,7 @@ const TransactionApiDataProvider = (props) => {
           status: item.status,
         })
       );
-      setClientTransactionList(response.data.wallet_transactions.data);
+      setClientTransactionList(new_data);
     }
     setWalletStatus("true");
   };

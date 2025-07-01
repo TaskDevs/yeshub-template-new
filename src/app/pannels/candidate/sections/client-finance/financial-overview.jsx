@@ -32,40 +32,23 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-const chartData = {
-  monthly: [
-    { name: "Jan", revenue: 0, expenses: 0, profit: 0 },
-    { name: "Feb", revenue: 0, expenses: 0, profit: 0 },
-    { name: "Mar", revenue: 0, expenses: 0, profit: 0 },
-    { name: "Apr", revenue: 0, expenses: 0, profit: 0 },
-    { name: "May", revenue: 0, expenses: 0, profit: 0 },
-  ],
-  quarterly: [
-    { name: "Q1", revenue: 0, expenses: 0, profit: 0 },
-    { name: "Q2", revenue: 0, expenses: 0, profit: 0 },
-    { name: "Q3", revenue: 0, expenses: 0, profit: 0 },
-    { name: "Q4", revenue: 0, expenses: 0, profit: 0 },
-  ],
-  yearly: [
-    { name: "2021", revenue: 0, expenses: 0, profit: 0 },
-    { name: "2022", revenue: 0, expenses: 0, profit: 0 },
-    { name: "2023", revenue: 0, expenses: 0, profit: 0 },
-    { name: "2024", revenue: 0, expenses: 0, profit: 0 },
-  ],
-};
 
 const FinancialOverview = () => {
   const {
     walletStatus,
     processCreateWalletOfUser,
     allEarnings,
-    //clientTransactionList,
+    clientTransactionList,
     processGetTransactionOfClient,
   } = useContext(TransactionApiData);
   const { processGetPaymentsOnClient, billingData, invoiceListData } =
     useContext(PaymentApiData);
-  const { userProjects, projectListData, processGetUserProjects } =
-    useContext(EmployerApiData);
+  const {
+    userProjects,
+    projectListData,
+    processGetUserProjects,
+    employerStats,
+  } = useContext(EmployerApiData);
   const [selectedFilter, setSelectedFilter] = useState("monthly");
   const contentRef = useRef(null); // ref to capture the chart + cards
   const [activeTab, setActiveTab] = useState("Active Projects");
@@ -83,64 +66,11 @@ const FinancialOverview = () => {
 
   //console.log(walletStatus);
 
-  // const projectsData = [
-  //   {
-  //     id: 1,
-  //     name: "E-commerce Platform Redesign",
-  //     date: "May 1, 2025",
-  //     freelancer: "Kwame Osei",
-  //     role: "Senior Backend Developer",
-  //     avatar: "https://i.pravatar.cc/40?img=1",
-  //     escrow: "$3,200",
-  //     total: "$8,500",
-  //     projectStatus: "In Progress",
-  //     paymentStatus: "Funded",
-  //   },
-  //   {
-  //     name: "Mobile App UI Design",
-  //     date: "April 15, 2025",
-  //     freelancer: "Ama Darko",
-  //     role: "UI/UX Designer",
-  //     avatar: "https://i.pravatar.cc/40?img=2",
-  //     escrow: "$1,800",
-  //     total: "$3,500",
-  //     projectStatus: "In Progress",
-  //     paymentStatus: "Funded",
-  //   },
-  //   {
-  //     name: "Database Optimization",
-  //     date: "May 10, 2025",
-  //     freelancer: "Abena Mensah",
-  //     role: "Database Engineer",
-  //     avatar: "https://i.pravatar.cc/40?img=3",
-  //     escrow: "$2,400",
-  //     total: "$2,400",
-  //     projectStatus: "On Hold",
-  //     paymentStatus: "Partial",
-  //   },
-  //   {
-  //     name: "Server Infrastructure Setup",
-  //     date: "April 5, 2025",
-  //     freelancer: "Emmanuel Agyei",
-  //     role: "DevOps Engineer",
-  //     avatar: "https://i.pravatar.cc/40?img=4",
-  //     escrow: "$1,350",
-  //     total: "$4,500",
-  //     projectStatus: "In Progress",
-  //     paymentStatus: "Partial",
-  //   },
-  //   {
-  //     name: "API Integration",
-  //     date: "May 8, 2025",
-  //     freelancer: "Kofi Boateng",
-  //     role: "Backend Engineer",
-  //     avatar: "https://i.pravatar.cc/40?img=5",
-  //     escrow: "$0",
-  //     total: "$2,800",
-  //     projectStatus: "In Progress",
-  //     paymentStatus: "Unfunded",
-  //   },
-  // ];
+  const chartData = {
+    monthly: employerStats.chart_data.last_30_days,
+    quarterly: employerStats.chart_data.last_90_days,
+    yearly: employerStats.chart_data.this_year,
+  };
 
   const TABS = [
     "Active Projects",
@@ -205,6 +135,17 @@ const FinancialOverview = () => {
   );
 
   const paginatedInvoice = filteredInvoice.slice(
+    (page - 1) * perPage,
+    page * perPage
+  );
+
+  // clientTransactionList
+  const filteredClientTransaction = clientTransactionList.filter(
+    (transaction) =>
+      transaction.type?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const paginatedTransaction = filteredClientTransaction.slice(
     (page - 1) * perPage,
     page * perPage
   );
@@ -429,42 +370,17 @@ const FinancialOverview = () => {
               {/* Background fills using Area */}
               <Area
                 type="monotone"
-                dataKey="revenue"
+                dataKey="spendings"
                 stroke="none"
                 fill="#22c55e33"
-              />
-              <Area
-                type="monotone"
-                dataKey="expenses"
-                stroke="none"
-                fill="#ef444433"
-              />
-              <Area
-                type="monotone"
-                dataKey="profit"
-                stroke="none"
-                fill="#3b82f633"
               />
 
               {/* Lines on top */}
               <Line
                 type="monotone"
-                dataKey="revenue"
+                dataKey="spendings"
+                name="Spendings"
                 stroke="#22c55e"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="expenses"
-                stroke="#ef4444"
-                strokeWidth={2}
-                dot={{ r: 3 }}
-              />
-              <Line
-                type="monotone"
-                dataKey="profit"
-                stroke="#3b82f6"
                 strokeWidth={2}
                 dot={{ r: 3 }}
               />
@@ -704,6 +620,119 @@ const FinancialOverview = () => {
                           }`}
                         >
                           {invoice.payment_status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <button
+                  className="border rounded px-2 py-1"
+                  disabled={page === 1}
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    className={`px-3 py-1 border rounded ${
+                      page === i + 1
+                        ? "bg-green-500 text-white"
+                        : "bg-white text-gray-700"
+                    }`}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  className="border rounded px-2 py-1"
+                  disabled={page === totalPages}
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+          )}
+          {activeTab === "Transaction History" && (
+            <div className="border rounded-lg p-4 space-y-4 bg-white">
+              <div className="flex items-center justify-between">
+                <input
+                  type="text"
+                  placeholder="Search invoices..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-1/3 px-3 py-2 border rounded text-sm"
+                />
+                <div className="flex items-center gap-2">
+                  <select
+                    className="border rounded px-2 py-1 text-sm"
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                  >
+                    <option>All Projects</option>
+                    <option>In Progress</option>
+                    <option>On Hold</option>
+                  </select>
+                  <button className="border px-3 py-1 rounded text-sm">
+                    Filters
+                  </button>
+                </div>
+              </div>
+
+              <table className="w-full text-sm text-left">
+                <thead className="text-gray-500 border-b">
+                  <tr>
+                    <th className="py-2">Date</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedTransaction.map((transaction, index) => (
+                    <tr key={index} className="border-b hover:bg-gray-50">
+                      <td className="py-2">
+                        <div className="font-medium text-black">
+                          {transaction.date}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-black">
+                              {transaction.description}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="font-semibold text-gray-400">
+                          {transaction.type}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="font-semibold text-gray-400">
+                          {`GH ${transaction.amount}`}
+                        </div>
+                      </td>
+
+                      <td>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${
+                            transaction.status === "Paid"
+                              ? "bg-green-100 text-green-700"
+                              : transaction.status === "On Hold"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-gray-100 text-gray-700"
+                          }`}
+                        >
+                          {transaction.status}
                         </span>
                       </td>
                     </tr>

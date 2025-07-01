@@ -450,6 +450,7 @@ const EmployerApiDataProvider = (props) => {
     const userId = sessionStorage.getItem("userId");
     let response = await getClientDashboardStats(userId);
     if (response) {
+      console.log(response);
       setEmployerStats(response);
     } else {
       return false;

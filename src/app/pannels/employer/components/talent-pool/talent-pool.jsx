@@ -537,7 +537,7 @@ export const TalentPool = () => {
 
   const getAssignedMemberName = (id) => {
     let teamMemberInfo = teamMembers.find((item) => item.user_id == id);
-    return teamMemberInfo.name;
+    return teamMemberInfo?.name;
   };
 
   return (

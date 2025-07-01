@@ -56,10 +56,10 @@ function ClientDashboard() {
 
   // Chart data
   const [chartData, setChartData] = useState([
-    { name: "Week 1", earnings: 0 },
-    { name: "Week 2", earnings: 0 },
-    { name: "Week 3", earnings: 0 },
-    { name: "Week 4", earnings: 0 },
+    { name: "Week 1", spendings: 0 },
+    { name: "Week 2", spendings: 0 },
+    { name: "Week 3", spendings: 0 },
+    { name: "Week 4", spendings: 0 },
   ]);
 
   // Function to update chart data based on selected time period
@@ -68,37 +68,13 @@ function ClientDashboard() {
 
     // Simulate different data for different time periods
     if (period === "Last 7 Days") {
-      setChartData([
-        { name: "Day 1", earnings: 0 },
-        { name: "Day 2", earnings: 0 },
-        { name: "Day 3", earnings: 0 },
-        { name: "Day 4", earnings: 0 },
-        { name: "Day 5", earnings: 0 },
-        { name: "Day 6", earnings: 0 },
-        { name: "Day 7", earnings: 0 },
-      ]);
+      setChartData(employerStats.chart_data.last_7_days);
     } else if (period === "Last 30 Days") {
-      setChartData([
-        { name: "Week 1", earnings: 0 },
-        { name: "Week 2", earnings: 0 },
-        { name: "Week 3", earnings: 0 },
-        { name: "Week 4", earnings: 0 },
-      ]);
+      setChartData(employerStats.chart_data.last_30_days);
     } else if (period === "Last 90 Days") {
-      setChartData([
-        { name: "Month 1", earnings: 0 },
-        { name: "Month 2", earnings: 0 },
-        { name: "Month 3", earnings: 0 },
-      ]);
+      setChartData(employerStats.chart_data.last_90_days);
     } else if (period === "This Year") {
-      setChartData([
-        { name: "Jan", earnings: 0 },
-        { name: "Feb", earnings: 0 },
-        { name: "Mar", earnings: 0 },
-        { name: "Apr", earnings: 0 },
-        { name: "May", earnings: 0 },
-        { name: "Jun", earnings: 0 },
-      ]);
+      setChartData(employerStats.chart_data.this_year);
     }
   };
 

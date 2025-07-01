@@ -303,22 +303,27 @@ export const Header = ({ isDashboard = true }) => {
                     ""
                   )}/${client.FINANCE.replace(/^\//, "")}`,
           },
-          {
-            id: "billings-earnings",
-            label: "Billings & Earnings",
-            to: `${base.CANDIDATE_PRE.replace(
-              /\/$/,
-              ""
-            )}/${candidate.BILLING.replace(/^\//, "")}`,
-          },
-          {
-            id: "transactions",
-            label: "Transactions",
-            to: `${base.CANDIDATE_PRE.replace(
-              /\/$/,
-              ""
-            )}/${candidate.TRANSACTIONS.replace(/^\//, "")}`,
-          },
+          // ⬇︎ only add these two when the role is NOT client
+          ...(role !== "client"
+            ? [
+                {
+                  id: "billings-earnings",
+                  label: "Billings & Earnings",
+                  to: `${base.CANDIDATE_PRE.replace(
+                    /\/$/,
+                    ""
+                  )}/${candidate.BILLING.replace(/^\//, "")}`,
+                },
+                {
+                  id: "transactions",
+                  label: "Transactions",
+                  to: `${base.CANDIDATE_PRE.replace(
+                    /\/$/,
+                    ""
+                  )}/${candidate.TRANSACTIONS.replace(/^\//, "")}`,
+                },
+              ]
+            : []),
         ],
       },
     },

@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Swal from "sweetalert2";
+import { userId } from "../../../../../globals/constants";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
 export default function InterviewModal({
@@ -37,6 +38,7 @@ export default function InterviewModal({
     setLoading(true);
     try {
       let newData = {
+        employer_id: userId,
         proposal_id: candidateData.proposal_id,
         user_id: candidateData.user_id,
         date: date,
@@ -61,7 +63,7 @@ export default function InterviewModal({
         Swal.fire({
           icon: "error",
           title: "Oops",
-          text: "Failed to post a job",
+          text: "Failed to set interview",
         });
       }
       onClose();
@@ -127,6 +129,7 @@ export default function InterviewModal({
             <option>Google Meet</option>
             <option>Zoom</option>
             <option>Phone call</option>
+            <option>In Person</option>
           </select>
         </div>
 

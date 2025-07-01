@@ -21,7 +21,7 @@ export const getUserProposals = async (userId) => {
 export const getProposalsById = async (id) => {
   try {
     let responseOnProposalList = await axios.get(
-      `${ REACT_BASE_URL}proposal/detail/${id}`
+      `${REACT_BASE_URL}proposal/detail/${id}`
     );
     if (responseOnProposalList.status == 200) {
       return responseOnProposalList.data;
@@ -52,6 +52,20 @@ export const submitProposal = async (formDataToSubmit) => {
     } else {
       return false;
     }
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const checkProposalAlreadySent = async (data) => {
+  try {
+    const response = await axios.post(
+      `${REACT_BASE_URL}check-proposal-sent`,
+      data
+    );
+    console.log(response);
+    return response.data;
   } catch (err) {
     console.error(err);
     return false;

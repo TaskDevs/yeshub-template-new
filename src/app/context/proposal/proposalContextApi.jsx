@@ -4,6 +4,7 @@ import {
   getUserProposals,
   getFreelanceInvites,
   submitProposal,
+  checkProposalAlreadySent,
 } from "./proposalApi";
 
 export const ProposalApiData = createContext();
@@ -13,6 +14,7 @@ const ProposalApiDataProvider = (props) => {
   const [freelanceInviteListData, setFreelanceInviteListData] = useState([]);
   const [paginationData, setPaginationData] = useState({});
   const [Loading, setLoading] = useState(false);
+  const [proposalAlreadySent, setProposalAlreadySent] = useState(false);
 
   const processGetUserProposals = async () => {
     setLoading(false);
@@ -52,11 +54,20 @@ const ProposalApiDataProvider = (props) => {
     }
   };
 
+  const processGetCheckProposalAlreadySent = async (data) => {
+    let response = await checkProposalAlreadySent(data);
+    if (response) {
+      setProposalAlreadySent(response.already_sent);
+    }
+  };
+
   return (
     <ProposalApiData.Provider
       value={{
         processGetUserProposals,
         processGetFreelanceInvites,
+        processGetCheckProposalAlreadySent,
+        proposalAlreadySent,
         processSubmitProposal,
         freelanceInviteListData,
         proposalListData,

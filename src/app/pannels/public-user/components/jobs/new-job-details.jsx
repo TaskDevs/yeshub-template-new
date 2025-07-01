@@ -1,14 +1,17 @@
 import { Star, Bookmark, BookmarkCheck } from "lucide-react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
+import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
 import { SavedJobsApiData } from "../../../../context/saved-jobs/savedJobsContextApi";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { calculateDaysSincePosted } from "../../../../../utils/readableDate";
+//import { userId } from "../../../../../globals/constants";
 
 const JobDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const userId = sessionStorage.getItem("userId");
-  
+  const { processGetCheckProposalAlreadySent, proposalAlreadySent } =
+    useContext(ProposalApiData);
   const {
     processAJobProfile,
     jobListData,
@@ -26,9 +29,9 @@ const JobDetailsPage = () => {
   const aProfile = jobListData.find((job) => job.id === Number(id));
   console.log("job list", aProfile);
 
-
   useEffect(() => {
     processAJobProfile(id);
+    processGetCheckProposalAlreadySent({ user_id: userId, job_id: id });
   }, [id]);
 
   const handleClick = () => {
@@ -146,35 +149,41 @@ const JobDetailsPage = () => {
               ))}
             </div>
           </div>
-
           <button
-            className="mt-6 bg-green-700  text-white px-5 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-60"
+            type="button"
+            className="mt-6 bg-green-700 text-white px-5 py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-60"
             onClick={handleClick}
-            disabled={loading}
+            disabled={loading || proposalAlreadySent} // ⬅️ both conditions
           >
-            {loading && (
-              <svg
-                className="animate-spin h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                />
-              </svg>
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  />
+                </svg>
+                Loading…
+              </>
+            ) : proposalAlreadySent ? (
+              "Proposal Already Submitted"
+            ) : (
+              "Submit Proposal"
             )}
-            {loading ? "Loading..." : "Submit Proposal"}
           </button>
         </div>
 

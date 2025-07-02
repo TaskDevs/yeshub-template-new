@@ -23,7 +23,7 @@ import { filterElements } from "../../common/filter-elements";
 import styles from "./new-saved-job.module.css";
 import MobileFindSavedWork from "../find-work/mobile-find-work";
 import { SavedJobsApiData } from "../../../../context/saved-jobs/savedJobsContextApi";
-import Loader from "../../../../common/loader";
+import { JobCardSkeleton } from "../../../public-user/sections/jobs/skeletonloader";
 
 function NewSavedJobsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,22 +57,34 @@ function NewSavedJobsPage() {
       setFilteredJobs(savedjobsData);
     }
   }, [savedjobsData]);
-
-  console.log("filteredJobs", filteredJobs);
+  useEffect(() => {
+    if (savedjobsData?.length > 0) {
+      const results = filterElements(savedjobsData, filters);
+      setFilteredJobs(results);
+    }
+  }, [filters, savedjobsData]);
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && 
+      <>
+                    {[...Array(4)].map((_, idx) => (
+                      <JobCardSkeleton key={idx} />
+                    ))}
+                  </>
+      }
 
       <div className="tw-css mx-auto   min-h-screen">
         <div className={`${styles.mobileSavedWork} h-min-h-screen px-4`}>
           <MobileFindSavedWork>
+             jobs={filteredJobs}
             {savedjobsData?.map((data) => (
               <CanJobCard
                 key={data?.id}
                 id={data?.job_id}
                 role={data?.job?.title}
                 proposal={data?.job?.proposals_count}
+                 image={data?.job?.employer?.logo}
                 ratings="4.9"
                 reviews="23k"
                 companyName={data?.job?.category}

@@ -12,39 +12,34 @@ const SubmitProposal = () => {
   useEffect(() => {
     const aProfile = jobListData.find((job) => job.id === Number(id));
     setCompanyInfo(aProfile);
-    console.log(aProfile);
-  }, []);
+  }, [id, jobListData]);
 
   return (
     <>
-      <div className="tw-css">
-        <div
-          className={`bg-white w-[60%]
-        mx-auto rounded-md flex-col justify-center items-center border mb-4`}
-        >
-          <div className="flex justify-between  px-6 p-5 w-full">
-            <div>
-              <h2 className="text-xl font-bold capitalize">Submit Proposal</h2>
-            </div>
+      <div className="tw-css px-4 py-6">
+        <div className="bg-white w-full max-w-4xl mx-auto rounded-md border mb-4 shadow-sm">
+          <div className="flex justify-between items-center px-4 md:px-6 py-4 border-b">
+            <h2 className="text-xl font-bold capitalize">Submit Proposal</h2>
           </div>
-          <div className="flex justify-between items-center px-6 p-5 w-full">
-            <div className="w-3/4">
-              <h2 className="text-lg font-Md capitalize">
+
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center px-4 md:px-6 py-4 gap-4">
+            <div className="w-full md:w-3/4">
+              <h2 className="text-lg font-medium capitalize mb-1 break-words">
                 {companyInfo.job_title}
               </h2>
-              <span className="text-gray-500">
+              <span className="text-sm text-gray-500 block mb-2">
                 {companyInfo?.employer?.company_name}
               </span>
               <p
-                className="text-gray-500"
+                className="text-sm text-gray-600 mb-2 whitespace-pre-wrap break-words"
                 dangerouslySetInnerHTML={{
                   __html: companyInfo?.description,
                 }}
               />
-              <div className="mt-2">
+              <div className="flex flex-wrap gap-2 mt-2">
                 {companyInfo?.skills?.map((item, index) => (
                   <span
-                    className="bg-gray-300 rounded-full px-2 py-1 text-sm text-gray-500 mr-2"
+                    className="bg-gray-200 rounded-full px-3 py-1 text-sm text-gray-600"
                     key={index}
                   >
                     {item}
@@ -52,11 +47,12 @@ const SubmitProposal = () => {
                 ))}
               </div>
             </div>
-            <div className="w-1/4 text-right">
-              <span className="font-bold text-sm text-gray-500 block">
+
+            <div className="w-full md:w-1/4 text-left md:text-right">
+              <span className="font-semibold text-sm text-gray-500 block">
                 Budget
               </span>
-              <span className="font-bold text-gray-800 text-md block">
+              <span className="font-bold text-gray-800 text-base block">
                 GH{" "}
                 {companyInfo?.salary ||
                   companyInfo?.budget ||
@@ -65,8 +61,8 @@ const SubmitProposal = () => {
               </span>
             </div>
           </div>
-          <hr />
-          <div className="flex-grow overflow-y-auto p-6 -mt-3 w-full flex  justify-center">
+
+          <div className="px-4 md:px-6 pb-6">
             <SubmitProposalSection job_id={id} companyInfo={companyInfo} />
           </div>
         </div>

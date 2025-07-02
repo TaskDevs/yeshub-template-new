@@ -220,7 +220,7 @@ export const Header = ({ isDashboard = true }) => {
     {
       id: "public-find-work",
       label: "Find Work",
-      to: "/dashboard-candidate/find-job",
+      to: "/job-list",
     },
     {
       id: "find-work",

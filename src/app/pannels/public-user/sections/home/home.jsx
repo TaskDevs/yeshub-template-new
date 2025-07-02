@@ -50,9 +50,9 @@ export default function YesHubLandingPage() {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="tw-css min-h-screen bg-white text-gray-900 py-4 my-5 mt-16 sm:mt-5">
+    <div className="tw-css min-h-screen bg-white text-gray-900 py-5 md:py-4  my-6 mt-16 sm:mt-5 md:mt-5 lg:mt-5">
       {/* Hero Section */}
-      <div className="grid md:grid-cols-2 gap-4 px-6 lg:px-20 py-10 items-center mx-5">
+      <div className="grid md:grid-cols-2 gap-4 px-6 lg:px-20 py-10 items-center mx-5 ">
         <div>
           <p className="text-sm text-gray-600 mb-2">
             An Initiative By H.E. President John Dramani Mahama

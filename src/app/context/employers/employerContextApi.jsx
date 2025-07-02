@@ -22,6 +22,7 @@ import {
   getProjectWorks,
   getJobAppliedToCompany,
   getApplicantsOfJobPosted,
+  getApplicantsLogs,
   getCompanyInfoForInvoice,
   getHiredApplicants,
   getDeliverables,
@@ -64,6 +65,7 @@ const EmployerApiDataProvider = (props) => {
   const [totalApplicants, setTotalApplicants] = useState(0);
   const [notifyMessage, setNotifyMessage] = useState(0);
   const [projectChats, setProjectChats] = useState([]);
+  const [applicantLogs, setApplicantLogs] = useState([]);
   const [clientProjectStatus, setClientProjectStatus] = useState([]);
   const [proposalInfo, setProposalInfo] = useState({});
   const [projectPaymentInfo, setProjectPaymentInfo] = useState([]);
@@ -93,6 +95,14 @@ const EmployerApiDataProvider = (props) => {
       setUserProjects(responseOnGetUserProjects.projects);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const processGetApplicantsLogs = async (id) => {
+    let response = await getApplicantsLogs(id);
+    if (response) {
+      console.log(response.logs);
+      setApplicantLogs(response.logs.data);
     }
   };
 
@@ -585,6 +595,7 @@ const EmployerApiDataProvider = (props) => {
         processAddCertification,
         processAddExperience,
         processGetCompanyInfoForInvoice,
+        processGetApplicantsLogs,
         processGetInterviewInfo,
         processEmployerProfile,
         processChangeCandidateStatus,
@@ -623,6 +634,7 @@ const EmployerApiDataProvider = (props) => {
         hiredApplicants,
         setHiredApplicants,
         applicants,
+        applicantLogs,
         totalApplicants,
         processSetInterview,
         interviewInfo,

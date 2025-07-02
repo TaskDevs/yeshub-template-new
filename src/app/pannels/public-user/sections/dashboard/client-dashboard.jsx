@@ -26,6 +26,13 @@ function ClientDashboard() {
   const [isEdit, setIsEdit] = useState(false);
   const [itemsToEdit, setItemsToEdit] = useState({});
   // const [activeSection, setActiveSection] = useState(null);
+  // Chart data
+  const [chartData, setChartData] = useState([
+    { name: "Week 1", spendings: 0 },
+    { name: "Week 2", spendings: 0 },
+    { name: "Week 3", spendings: 0 },
+    { name: "Week 4", spendings: 0 },
+  ]);
 
   const navigate = useNavigate();
 
@@ -42,7 +49,7 @@ function ClientDashboard() {
   }, []);
 
   useEffect(() => {
-    console.log(employerStats);
+    setChartData(employerStats?.chart_data?.last_30_days);
   }, [employerStats]);
 
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("Last 30 Days");
@@ -53,14 +60,6 @@ function ClientDashboard() {
     "Last 90 Days",
     "This Year",
   ];
-
-  // Chart data
-  const [chartData, setChartData] = useState([
-    { name: "Week 1", spendings: 0 },
-    { name: "Week 2", spendings: 0 },
-    { name: "Week 3", spendings: 0 },
-    { name: "Week 4", spendings: 0 },
-  ]);
 
   // Function to update chart data based on selected time period
   const updateChartData = (period) => {

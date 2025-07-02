@@ -15,8 +15,18 @@ function CanDashboardPage() {
     processGetFreelanceProjects,
     freelanceProjectList,
     processGetFreelanceStats,
+    processGetFreelanceNotification,
+    freelanceNotifications,
     freelanceStats,
   } = useContext(FreelanceApiData);
+  // Chart data
+  const [chartData, setChartData] = useState([
+    { name: "Week 1", earnings: 0 },
+    { name: "Week 2", earnings: 0 },
+    { name: "Week 3", earnings: 0 },
+    { name: "Week 4", earnings: 0 },
+  ]);
+
   useEffect(() => {
     loadScript("js/custom.js");
   });
@@ -24,11 +34,16 @@ function CanDashboardPage() {
   useEffect(() => {
     processGetFreelanceStats();
     processGetFreelanceProjects();
+    processGetFreelanceNotification();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(freelanceProjectList);
-  // }, [freelanceProjectList]);
+  useEffect(() => {
+    console.log(freelanceNotifications);
+  }, [freelanceNotifications]);
+
+  useEffect(() => {
+    setChartData(freelanceStats?.chart_data?.last_30_days);
+  }, [freelanceStats]);
 
   const [selectedTimePeriod, setSelectedTimePeriod] = useState("Last 30 Days");
 
@@ -38,14 +53,6 @@ function CanDashboardPage() {
     "Last 90 Days",
     "This Year",
   ];
-
-  // Chart data
-  const [chartData, setChartData] = useState([
-    { name: "Week 1", earnings: 0 },
-    { name: "Week 2", earnings: 0 },
-    { name: "Week 3", earnings: 0 },
-    { name: "Week 4", earnings: 0 },
-  ]);
 
   // Function to update chart data based on selected time period
   const updateChartData = (period) => {
@@ -85,7 +92,7 @@ function CanDashboardPage() {
         {/* Active Projects and Recent Activities */}
         <div className={`${styles.cardRow} ${styles.projectsRow}`}>
           <CanActiveProjects projectList={freelanceProjectList} />
-          <CanRecentActivity />
+          <CanRecentActivity notifications={freelanceNotifications} />
 
           <ChatToggleButton />
         </div>

@@ -7,6 +7,7 @@ import { userId } from "../../../../../globals/constants";
 import InterviewModal from "./interview-modal";
 import SalaryModal from "./SalaryModal";
 import Swal from "sweetalert2";
+
 //import MessageModal from "./message-modal";
 import {
   EllipsisVertical,
@@ -22,10 +23,12 @@ export default function JobApplicant() {
     postedJobList,
     processGetApplicantsOfJobPosted,
     applicants,
+    applicantLogs,
     totalApplicants,
     processChangeCandidateStatus,
     processHireCandidate,
     processGetInterviewInfo,
+    processGetApplicantsLogs,
   } = useContext(EmployerApiData);
   const { processChangeJobStatus } = useContext(JobApiData);
   const tabs = ["Job Details", "Applicants", "Activity History"];
@@ -74,6 +77,7 @@ export default function JobApplicant() {
     let data = postedJobList.find((item) => item.id == id);
     setJobInfo(data);
     processGetApplicantsOfJobPosted(id);
+    processGetApplicantsLogs(id);
   }, [postedJobList]);
 
   const toggleMenu = (index) => {
@@ -350,12 +354,10 @@ export default function JobApplicant() {
             <div>
               <div className="mb-4">
                 <h4 className="font-semibold mb-2">Job Description</h4>
-                 <div
+                <div
                   className="text-gray-500"
                   dangerouslySetInnerHTML={{ __html: jobInfo?.description }}
                 ></div>
-
-
               </div>
             </div>
           )}
@@ -597,59 +599,34 @@ export default function JobApplicant() {
                 </div>
               </div>
               <ol className="relative">
-                <li className="mb-10 ml-6">
-                  <span
-                    className={`absolute -left-3 flex items-center justify-center w-6 h-6
+                {applicantLogs.map((item) => (
+                  <li className="mb-10 ml-6" key={item.id}>
+                    <span
+                      className={`absolute -left-3 flex items-center justify-center w-6 h-6
                          bg-green-100 rounded-full ring-8 ring-white`}
-                  >
-                    ✅
-                  </span>
-                  <div>
-                    <h4
-                      className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
                     >
-                      Application Shortlisted
-                      <span
-                        className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
-                      >
-                        May 1, 2025
-                      </span>
-                    </h4>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Initial planning and requirements gathering
-                    </p>
-                    <span className="text-sm text-gray-400">
-                      By Sarah Owusu (HR Manager)
+                      ✅
                     </span>
-                  </div>
-                </li>
-
-                <li className="mb-10 ml-6">
-                  <span
-                    className={`absolute -left-3 flex items-center justify-center w-6 h-6
-                         bg-green-100 rounded-full ring-8 ring-white`}
-                  >
-                    ✅
-                  </span>
-                  <div>
-                    <h4
-                      className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
-                    >
-                      Application Shortlisted
-                      <span
-                        className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
+                    <div>
+                      <h4
+                        className={`text-gray-700 font-semibold text-sm flex items-center mb-2`}
                       >
-                        May 1, 2025
+                        Application Shortlisted
+                        <span
+                          className={`bg-green-100 text-gray-600 text-xs font-semibold ml-2 px-2 py-0.5 rounded`}
+                        >
+                          {formatDate(item.created_at)}
+                        </span>
+                      </h4>
+                      <p className="text-xs text-gray-500 mb-2">
+                        {item.description}
+                      </p>
+                      <span className="text-sm text-gray-400">
+                        {item.freelance_name}
                       </span>
-                    </h4>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Initial planning and requirements gathering
-                    </p>
-                    <span className="text-sm text-gray-400">
-                      By Sarah Owusu (HR Manager)
-                    </span>
-                  </div>
-                </li>
+                    </div>
+                  </li>
+                ))}
               </ol>
             </div>
           )}

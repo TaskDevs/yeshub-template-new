@@ -113,6 +113,22 @@ export const getClientProjects = async (id) => {
   }
 };
 
+export const getApplicantsLogs = async (id) => {
+  try {
+    let response = await axios.get(
+      `${REACT_BASE_URL}get-application-logs/${id}`
+    );
+    if (response.status == 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
 export const getProposalInfo = async (id) => {
   try {
     let response = await axios.get(`${REACT_BASE_URL}get-a-proposal/${id}`);

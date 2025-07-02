@@ -6,6 +6,7 @@ import {
   jobsAppliedTo,
   // searchFreelance,
   getFreelanceList,
+  getFreelanceNotification,
   getProjectSubmissions,
   freelanceProfile,
   updateFreelance,
@@ -30,6 +31,7 @@ const FreelanceApiDataProvider = (props) => {
   const [freelanceProfileData, setFreelanceProfileData] = useState([]);
   const [freelanceProjectList, setFreelanceProjectList] = useState();
   const [freelanceList, setFreelanceList] = useState([]);
+  const [freelanceNotifications, setFreelanceNotifications] = useState([]);
   const [projectSubmissionsList, setProjectSubmissionList] = useState([]);
   const [freelanceSkillInfo, setFreelanceSkillInfo] = useState([]);
   const [languagesData, setLanguagesData] = useState([]);
@@ -83,6 +85,14 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
+  const processGetFreelanceNotification = async () => {
+    const res = await getFreelanceNotification(userId);
+    if (res) {
+      console.log(res);
+      setFreelanceNotifications(res.notifications);
+    }
+  };
+
   const processGetProjectSubmissions = async (data) => {
     //console.log(userId);
     const res = await getProjectSubmissions(userId, data);
@@ -94,7 +104,7 @@ const FreelanceApiDataProvider = (props) => {
 
   const processGetAllFreelance = async () => {
     let response = await getFreelanceList();
-    console.log("freelancers: ",response.data.data);
+    console.log("freelancers: ", response.data.data);
     if (response) {
       let newList = [];
       response.data.data.map((item) =>
@@ -111,8 +121,8 @@ const FreelanceApiDataProvider = (props) => {
           rating: 7.5,
           language: item.languages,
           profession: item.profession,
-          region:item.region,
-          experience:item.experience,
+          region: item.region,
+          experience: item.experience,
         })
       );
       setFreelanceList(newList);
@@ -333,11 +343,13 @@ const FreelanceApiDataProvider = (props) => {
         processGetProjectSubmissions,
         processGetAllFreelance,
         processGetJobsAppliedTo,
+        processGetFreelanceNotification,
         processFreelanceProfile,
         processSearchFreelance,
         processUpdateFreelance,
         processDeleteFreelance,
         freelanceList,
+        freelanceNotifications,
         projectSubmissionsList,
         languagesData,
         freelanceStats,

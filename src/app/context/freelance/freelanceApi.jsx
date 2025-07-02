@@ -52,7 +52,7 @@ export const getFreelanceList = async (pageNo) => {
       }&perPage=${LIST_ON_PAGES}`
     );
     if (responseOnFreelanceList.status === 200) {
-      console.log("freelancers:" , responseOnFreelanceList.data);
+      console.log("freelancers:", responseOnFreelanceList.data);
       return responseOnFreelanceList.data;
     } else {
       return false;
@@ -74,6 +74,19 @@ export const getFreelanceStats = async (id) => {
     } else {
       return false;
     }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getFreelanceNotification = async (id) => {
+  try {
+    let response = await axios.get(
+      `${REACT_BASE_URL}get-freelance-notifications/${id}`
+    );
+    console.log(response);
+    return response.data;
   } catch (err) {
     console.log(err);
     return false;

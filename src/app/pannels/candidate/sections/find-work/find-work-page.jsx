@@ -16,13 +16,19 @@ import MobileFindSavedWork from "./mobile-find-work";
 function FindWorkPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = 5; // number of jobs to show per page
+  const jobsPerPage = 5;
 
   const username = sessionStorage.getItem("username");
   const { profileData } = useContext(ProfileApiData);
   const { processGetAllJob, jobListData } = useContext(JobApiData);
 
   const [filterJobListData, setFilterJobListData] = useState([]);
+
+  // NEW: Filters state
+  const [selectedJobType, setSelectedJobType] = useState("all types");
+  const [selectedExperience, setSelectedExperience] = useState("all levels");
+  const [selectedSalaryRange, setSelectedSalaryRange] = useState(null);
+
   const userId = sessionStorage.getItem("userId");
   const navigate = useNavigate();
 
@@ -35,42 +41,58 @@ function FindWorkPage() {
     setFilterJobListData(jobListData);
   }, [jobListData]);
 
-  const handleFilterChange = (data) => {
-    if (data !== "all types") {
-      let filterData = jobListData.filter(
-        (item) => item.job_type == data.toLowerCase()
+  // NEW: apply all filters
+  const applyAllFilters = () => {
+    let filtered = [...jobListData];
+
+    if (selectedJobType !== "all types") {
+      filtered = filtered.filter(
+        (item) => item.job_type?.toLowerCase() === selectedJobType.toLowerCase()
       );
-      setFilterJobListData(filterData);
-    } else {
-      setFilterJobListData(jobListData);
     }
+
+    if (selectedExperience !== "all levels") {
+      filtered = filtered.filter(
+        (item) =>
+          item.experience?.toLowerCase() === selectedExperience.toLowerCase()
+      );
+    }
+
+    if (selectedSalaryRange) {
+      const { max } = selectedSalaryRange;
+      if (max > 10000) {
+        filtered = filtered.filter((item) => item.budget > 10000);
+      } else if (max > 5000 && max <= 10000) {
+        filtered = filtered.filter(
+          (item) => item.budget > 5000 && item.budget <= 10000
+        );
+      } else if (max > 0 && max <= 5000) {
+        filtered = filtered.filter(
+          (item) => item.budget > 0 && item.budget <= 5000
+        );
+      }
+    }
+
+    setFilterJobListData(filtered);
+    setCurrentPage(1);
+  };
+
+  // Run filters whenever any filter changes
+  useEffect(() => {
+    applyAllFilters();
+  }, [selectedJobType, selectedExperience, selectedSalaryRange, jobListData]);
+
+  // NEW: filter change handlers
+  const handleFilterChange = (data) => {
+    setSelectedJobType(data);
   };
 
   const handleFilterExperience = (data) => {
-    if (data !== "all levels") {
-      let filterData = jobListData.filter(
-        (item) => item.experience == data.toLowerCase()
-      );
-      setFilterJobListData(filterData);
-    } else {
-      setFilterJobListData(jobListData);
-    }
+    setSelectedExperience(data);
   };
 
   const handleFilterSalary = (data) => {
-    let filterData = [];
-    if (data.max > 10000) {
-      filterData = jobListData.filter((item) => item.budget > 10000);
-    } else if (data.max > 5000 && data.max <= 10000) {
-      filterData = jobListData.filter(
-        (item) => item.budget > 5000 && item.budget <= 10000
-      );
-    } else if (data.max > 0 && data.max <= 5000) {
-      filterData = jobListData.filter(
-        (item) => item.budget > 0 && item.budget <= 5000
-      );
-    }
-    setFilterJobListData(filterData);
+    setSelectedSalaryRange(data);
   };
 
   const indexOfLastJob = currentPage * jobsPerPage;
@@ -80,11 +102,18 @@ function FindWorkPage() {
 
   const handlePagination = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleResetFilters = () => {
+    setSelectedJobType("all types");
+    setSelectedExperience("all levels");
+    setSelectedSalaryRange(null);
+  };
+
   return (
     <div className="tw-css mx-auto">
       <div className={`${styles.mobileFindWork} min-h-screen p-4`}>
-        <MobileFindSavedWork>
-          {currentJobs.map((job) => (
+        <MobileFindSavedWork
+          jobs={currentJobs}
+          renderJob={(job) => (
             <CanJobCard
               key={job.id}
               id={job?.id}
@@ -98,10 +127,27 @@ function FindWorkPage() {
               jobLocation={job?.location || "Accra"}
               datePosted={job?.created_at || "2025-04-14T16:43:24.000000Z"}
               salaryRange={job?.fixed_rate || job?.budget}
-              image={job?.employer_logo || "https://placehold.co/80x80?text=Logo"}
+              image={
+                job?.employer?.logo || "https://placehold.co/80x80?text=Logo"
+              }
             />
+          )}
+        ></MobileFindSavedWork>
+        <div className="flex justify-center mt-6">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePagination(page)}
+              className={`mx-1 px-3 py-1 rounded border ${
+                currentPage === page
+                  ? "bg-green-800 text-white"
+                  : "bg-white text-gray-800 border-gray-300"
+              }`}
+            >
+              {page}
+            </button>
           ))}
-        </MobileFindSavedWork>
+        </div>
       </div>
 
       <div className="mx-auto max-w-7xl p-6">
@@ -149,19 +195,43 @@ function FindWorkPage() {
                   values={["0", "5k", "10k+"]}
                   label="Salary"
                 />
+                <button
+                  onClick={handleResetFilters}
+                  className="mt-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Reset Filters
+                </button>
               </FilterPanel>
             </div>
 
             <div className={`${styles.gridTwo} section-two`}>
               <div className="p-6 flex flex-col gap-4">
-                <div className="section-two-header">
+                <div className="section-two-header flex justify-between items-center">
                   <h2 className="font-medium capitalize">available jobs</h2>
                   <CanSelectField options={sort} width="240px" />
                 </div>
 
                 <div className="grid grid-cols-1 gap-4 w-full">
                   {isLoading ? (
-                    <p>Loading...</p>
+                    <>
+                      <div className="flex gap-2">
+                        <div className="h-4 bg-gray-300 rounded w-24"></div>
+                        <div className="h-4 bg-gray-300 rounded w-16"></div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {[1, 2, 3].map((_, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-gray-300 h-6 w-16 rounded-sm"
+                          ></div>
+                        ))}
+                      </div>
+                      <div className="flex justify-between items-center mt-4">
+                        <div className="h-8 w-20 bg-gray-300 rounded"></div>
+                        <div className="h-6 w-20 bg-gray-300 rounded"></div>
+                        <div className="h-10 w-20 bg-gray-300 rounded"></div>
+                      </div>
+                    </>
                   ) : currentJobs.length > 0 ? (
                     currentJobs.map((job) => (
                       <CanJobCard
@@ -170,6 +240,10 @@ function FindWorkPage() {
                         role={job?.job_title}
                         proposal={job?.count_proposal}
                         ratings={job?.company_rating}
+                        image={
+                          job?.employer?.logo ||
+                          "https://placehold.co/80x80?text=Logo"
+                        }
                         reviews={job?.company_review}
                         companyName={job?.job_category}
                         description={job?.description}
@@ -181,7 +255,7 @@ function FindWorkPage() {
                         }
                         numberOfProposals="23"
                         salaryRange={job?.fixed_rate || job?.budget}
-                        jobType={job?.job_type || ""}
+                        jobType={job?.job_type}
                       />
                     ))
                   ) : (

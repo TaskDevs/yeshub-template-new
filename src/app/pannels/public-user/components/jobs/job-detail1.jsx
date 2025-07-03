@@ -65,9 +65,7 @@ const postedDate = job?.created_at || job?.posted_at;
                               borderRadius: "20px",
                             }}
                           />
-                          {/* <div className="twm-jobs-category green">
-															<span className="twm-bg-green">New</span>
-														</div> */}
+                        
                         </div>
                         <div className="twm-mid-content">
                           <div className="twm-media">

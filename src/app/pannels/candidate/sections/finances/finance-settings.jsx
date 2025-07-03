@@ -18,7 +18,7 @@ const FinancialSettings = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     paymentMethods.find((p) => p.default)?.item_no || null
   );
-    const [menuOpen, setMenuOpen] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);
   const [formData, setFormData] = useState({
     company_name: null,
     billing_address: null,
@@ -76,8 +76,7 @@ const FinancialSettings = () => {
     // You can add logic to reset to initial state if needed.
   };
 
-
-    const handleDelete = () => {
+  const handleDelete = () => {
     alert("Delected successfully.");
     // You can add logic to reset to initial state if needed.
   };
@@ -137,56 +136,62 @@ const FinancialSettings = () => {
       <div className="grid md:grid-cols-2 gap-4 mb-4 py-6">
         <div className="bg-white p-4 rounded-lg shadow space-y-4">
           <h2 className="text-lg font-semibold">Payment Methods</h2>
-           <div className="space-y-2 relative">
-      {paymentMethods.map((method) => (
-        <div
-          key={method.item_no}
-          className={`border p-4 rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-50 ${
-            selectedPaymentMethod === method.item_no ? "ring-2 ring-green-500" : ""
-          }`}
-          onClick={() => handleSetDefault(method.item_no)}
-        >
-          <div>
-            <p className="font-medium">{method.type}</p>
-            <p className="text-sm text-gray-500">{method.details}</p>
-          </div>
+          <div className="space-y-2 relative">
+            {paymentMethods.map((method) => (
+              <div
+                key={method.item_no}
+                className={`border p-4 rounded-lg flex justify-between items-center cursor-pointer hover:bg-gray-50 ${
+                  selectedPaymentMethod === method.item_no
+                    ? "ring-2 ring-green-500"
+                    : ""
+                }`}
+                onClick={() => handleSetDefault(method.item_no)}
+              >
+                <div>
+                  <p className="font-medium">{method.type}</p>
+                  <p className="text-sm text-gray-500">{method.details}</p>
+                </div>
 
-          <div className="relative" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={() => setMenuOpen(menuOpen === method.item_no ? null : method.item_no)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              ⋮
-            </button>
-  {method.default && (
-            <span className="text-green-600 font-medium ml-4">Default</span>
-          )}
-            {menuOpen === method.item_no && (
-              <div className="absolute right-0 mt-2 w-24 bg-white border rounded shadow z-10">
-                <button
-                  onClick={() => {
-                    handleDelete(method.item_no);
-                    setMenuOpen(null);
-                  }}
-                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                >
-                  Delete
-                </button>
+                <div className="relative" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={() =>
+                      setMenuOpen(
+                        menuOpen === method.item_no ? null : method.item_no
+                      )
+                    }
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    ⋮
+                  </button>
+                  {method.default && (
+                    <span className="text-green-600 font-medium ml-4">
+                      Default
+                    </span>
+                  )}
+                  {menuOpen === method.item_no && (
+                    <div className="absolute right-0 mt-2 w-24 bg-white border rounded shadow z-10">
+                      <button
+                        onClick={() => {
+                          handleDelete(method.item_no);
+                          setMenuOpen(null);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
+            ))}
+
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="text-green-600 hover:underline text-sm"
+            >
+              + Add Payment Method
+            </button>
           </div>
-
-        
-        </div>
-      ))}
-
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="text-green-600 hover:underline text-sm"
-      >
-        + Add Payment Method
-      </button>
-    </div>
         </div>
 
         {/* Billing Information */}
@@ -246,8 +251,8 @@ const FinancialSettings = () => {
                 handleChange(e);
               }}
             >
-              <option>United States</option>
-              <option>Canada</option>
+              <option>Ghana</option>
+              {/* <option>Canada</option> */}
             </select>
           </div>
         </div>

@@ -47,6 +47,9 @@ const ActiveContracts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [contractData, setContractData] = useState([]);
+  const [countCompletedProject, setCountCompletedProject] = useState(0);
+  const [countProgressProject, setCountProgressProject] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,27 +57,45 @@ const ActiveContracts = () => {
   }, []);
 
   useEffect(() => {
-    // console.log(freelanceProjectList);
-    let newArr = [];
-    if (freelanceProjectList?.length > 0) {
-      freelanceProjectList?.map((item) =>
-        newArr.push({
+    if (
+      !Array.isArray(freelanceProjectList) ||
+      freelanceProjectList.length === 0
+    ) {
+      // reset if list is empty
+      setContractData([]);
+      setCountCompletedProject(0);
+      setCountProgressProject(0);
+      return;
+    }
+
+    const { rows, complete, progress } = freelanceProjectList.reduce(
+      (acc, item) => {
+        acc.rows.push({
           id: item.id,
           projectName: item.project_name,
           client: item.company_name,
-          completionDate: item.start_date,
+          completionDate: item.start_date, // or item.end_date if that’s what you meant
           daysRemaining: getDaysLeft(item.start_date, item.end_date),
-          status: "ongoing",
+          status: item.status,
           totalValue: item.total_budget,
           actions: ["View", "Message"],
-        })
-      );
-      setContractData(newArr);
-    }
+        });
+
+        if (item.status === "complete") acc.complete += 1;
+        else acc.progress += 1;
+
+        return acc;
+      },
+      { rows: [], complete: 0, progress: 0 }
+    );
+
+    setContractData(rows);
+    setCountCompletedProject(complete);
+    setCountProgressProject(progress);
   }, [freelanceProjectList]);
 
   const itemsPerPage = 10;
-  const totalItems = freelanceProjectList.length;
+  const totalItems = freelanceProjectList?.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -97,14 +118,14 @@ const ActiveContracts = () => {
     },
     {
       title: "Completed Projects",
-      count: 0,
+      count: countCompletedProject,
       icon: <FaDollarSign size={18} />,
       bgColor: "bg-green-100",
       iconColor: "text-green-700",
     },
     {
       title: "In Progress",
-      count: freelanceProjectList?.length,
+      count: countProgressProject,
       icon: <FaClock size={18} />,
       bgColor: "bg-yellow-100",
       iconColor: "text-yellow-700",

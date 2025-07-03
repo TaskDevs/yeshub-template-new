@@ -31,11 +31,12 @@ const ClientProfile = () => {
   console.log(clientProfileData);
   console.log(authInfo);
 
-  useEffect(async () => {
+  useEffect(() => {
     const userId = sessionStorage.getItem("userId");
-    // userId && (await processEmployerProfile(userId));
-    processEmployerProfile(userId);
-  }, []);
+    if (userId) {
+      processEmployerProfile(userId); // assume it returns a promise, ignore result
+    }
+  }, [processEmployerProfile]);
 
   // Close modal handler
   const handleCloseModal = () => {

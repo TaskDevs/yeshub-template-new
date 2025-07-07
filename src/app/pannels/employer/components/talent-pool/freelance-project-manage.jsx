@@ -44,7 +44,7 @@ export const FreelanceProjectManage = () => {
   const [proposalId, setProposalId] = useState();
   const [taskTeamName, setTaskTeamName] = useState("");
    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-   cont [isDesktopView, setIsDesktopView] = useState(true);
+   const [isDesktopView, setIsDesktopView] = useState(true);
   const [projectStats, setProjectStats] = useState({
     budget_used: 0,
     budget_used_percentage: 0,

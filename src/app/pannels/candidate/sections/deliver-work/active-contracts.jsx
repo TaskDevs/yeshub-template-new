@@ -74,7 +74,7 @@ const ActiveContracts = () => {
   }, [freelanceProjectList]);
 
   const itemsPerPage = 10;
-  const totalItems = freelanceProjectList.length;
+  const totalItems = freelanceProjectList?.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
@@ -174,7 +174,7 @@ const ActiveContracts = () => {
     <div className="tw-css mx-auto p-6">
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid md:grid-cols-3 gap-4 mb-6">
           {statsData.map((stat, index) => (
             <ContractStatCard
               key={index}
@@ -186,28 +186,33 @@ const ActiveContracts = () => {
             />
           ))}
         </div>
-        <div className="flex flex-col bg-white rounded-lg shadow border-top-1 overflow-hidden pt-5">
+        <div className="flex flex-col bg-white rounded-lg shadow border overflow-hidden pt-5">
           <TableTop
             label="Projects History"
             searchValue={searchValue}
             handleSearch={handleSearch}
             setSearchValue={setSearchValue}
           />
-          <Table
-            data={contractData}
-            columns={columns}
-            isGeneral={true}
-            bgColor="bg-white"
-            headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
-            headerRowStyles=""
-          />
+
+          {/* Scrollable table wrapper for small screens */}
+          <div className="w-full overflow-x-auto">
+            <Table
+              data={contractData}
+              columns={columns}
+              isGeneral={true}
+              bgColor="bg-white"
+              headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
+              headerRowStyles=""
+            />
+          </div>
+
           <Pagination
             currentPage={currentPage}
             totalPages={Math.min(5, totalPages)} // Limit to 5 pages for the example
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
             onPageChange={handlePageChange}
-            showLabel={true} // Set to false to hide the "Showing X to Y of Z results" label
+            showLabel={true}
           />
         </div>
       </div>

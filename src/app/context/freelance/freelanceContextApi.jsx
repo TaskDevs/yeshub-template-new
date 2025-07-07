@@ -121,39 +121,52 @@ const FreelanceApiDataProvider = (props) => {
     }
   };
 
-  const processFreelanceProfile = async (id) => {
+const processFreelanceProfile = async (id) => {
+  try {
     const res = await freelanceProfile(id);
+    console.log("freelanceProfile", res);
+
     if (res) {
       let newData = [];
       let employmentData = [];
+
       res.freelance_info?.[0]?.skills_id?.split(",").map((item) =>
         newData.push({
           name: item,
           level: "Advanced (6+ years)",
-          percentage: 80,
+          percent: 80,
         })
       );
 
-      res?.employment_history_info.map((item) =>
+      res?.employment_history_info?.forEach((item) =>
         employmentData.push({
-          title: item.job_title + " at " + item.company_name,
-          date: item.start_date + " " + item.end_date,
+          title: `${item.job_title} at ${item.company_name}`,
+          date: `${item.start_date} — ${item.end_date || "Present"}`,
           description: item.duty,
           price: 0,
-          ratings: 0,
+          rating: 0,
           tags: [],
         })
       );
 
-      setLanguagesData(JSON.parse(res?.freelance_info?.[0]?.languages));
+      setLanguagesData(
+        res.freelance_info?.[0]?.languages
+          ? JSON.parse(res.freelance_info[0].languages)
+          : []
+      );
       setEmploymentHistoryInfo(employmentData);
       setFreelanceSkillInfo(newData);
       setViewFreelanceProfile(res);
-      //return res.data;
     } else {
+      console.warn("freelanceProfile returned false or empty");
       return false;
     }
-  };
+  } catch (error) {
+    console.error("Error fetching freelance profile:", error);
+    return false;
+  }
+};
+
 
   const processGetJobsAppliedTo = async () => {
     try {

@@ -97,7 +97,7 @@ const MilestoneApiDataProvider = (props) => {
     try {
       const res = await processGetAllMilestone(userId);
       const data = res.data.data;
-      // console.log("all-milestones-mctx", data);
+      console.log("all-milestones-mctx", data);
 
       const uniqueJobsMap = data.reduce((acc, current) => {
         const existingJob = acc.get(current.job_id);

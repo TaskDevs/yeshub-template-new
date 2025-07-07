@@ -9,6 +9,7 @@ import AddTaskFreelance from "./add-task-freelance";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import AvatarGroup from "@mui/material/AvatarGroup";
+import { Bot } from "lucide-react";
 import { getDaysLeft } from "../../../../../utils/dateUtils";
 import { userId } from "../../../../../globals/constants";
 
@@ -42,6 +43,8 @@ export const FreelanceProjectManage = () => {
   const [payoutStats, setPayoutStats] = useState([]);
   const [proposalId, setProposalId] = useState();
   const [taskTeamName, setTaskTeamName] = useState("");
+   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+   cont [isDesktopView, setIsDesktopView] = useState(true);
   const [projectStats, setProjectStats] = useState({
     budget_used: 0,
     budget_used_percentage: 0,
@@ -52,25 +55,34 @@ export const FreelanceProjectManage = () => {
 
   const projectId = id;
 
-  useEffect(() => {
-    let newTeam = [];
-    let data = freelanceProjectList?.find((item) => item.id == id);
-    //console.log(data);
-    data?.team?.map((item) => {
-      item.user_id == userId && setProposalId(item.id);
-      newTeam.push({
-        id: item.id,
-        user_id: item.user_id,
-        name: item.firstname + " " + item.lastname,
-      });
-    });
+useEffect(() => {
+  if (!freelanceProjectList || freelanceProjectList.length === 0) return;
 
-    let memberName = newTeam.filter((item) => item.user_id == userId)[0];
-    setTaskTeamName(memberName.name);
-    //setTeamMembers(newTeam);
-    setProjectDetails(data);
-    processGetProjectChat(id);
-  }, []);
+  let data = freelanceProjectList.find(item => item.id == id);
+  if (!data) return;
+
+  let newTeam = [];
+
+  data.team?.forEach(item => {
+    if (item.user_id == userId) {
+      setProposalId(item.id);
+    }
+    newTeam.push({
+      id: item.id,
+      user_id: item.user_id,
+      name: `${item.firstname} ${item.lastname}`,
+    });
+  });
+
+  const memberName = newTeam.find(item => item.user_id == userId);
+  setTaskTeamName(memberName?.name || "");
+
+  setProjectDetails(data);
+  processGetProjectChat(id);
+}, [freelanceProjectList, id, userId]);
+
+
+
 
   useEffect(() => {
     processGetDeliverables(id);
@@ -242,6 +254,22 @@ export const FreelanceProjectManage = () => {
     }
   };
 
+   const filteredMembers = projectDetails?.team?.filter((member) =>
+    `${member.firstname} ${member.lastname}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  useEffect(() => {
+  const handleResize = () => {
+    setIsDesktopView(window.innerWidth >= 1024); // Tailwind 'lg' breakpoint
+  };
+
+  handleResize(); // Initial check
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
   return (
     <div className="tw-css bg-gray-300 min-h-screen">
       <div className="max-w-6xl mx-auto">
@@ -253,26 +281,104 @@ export const FreelanceProjectManage = () => {
             </span>
           </div>
           <div className="flex flex-row">
-            {/* <button className="border bg-green-600 rounded px-4 py-2 text-sm text-white hover:bg-green-700">
-              + Create New Project
-            </button>
-            <button className="bg-gray-300 text-white rounded px-4 py-2 text-sm hover:bg-gray-200">
-              Filters
-            </button> */}
           </div>
         </div>
 
         <div className="flex flex-row w-full items-start">
-          <div className="w-1/3">
-            <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4">
-              <div className="flex justify-between items-center px-4 py-2 mb-4">
+           <>
+      {/* Desktop sidebar */}
+      {isDesktopView && (
+  <div className="w-1/3">
+    <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4">
+      <div className="flex justify-between items-center px-4 py-2 mb-4">
+        <h4 className="font-semibold text-md">
+          Team Members ({projectDetails?.team?.length})
+        </h4>
+      </div>
+      <div className="relative mb-4">
+        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          type="text"
+          placeholder="Search members"
+          className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        />
+      </div>
+
+      {filteredMembers?.map((item, index) => (
+        <div
+          className="bg-green-100 rounded-xl border border-green-500 p-4 mb-4"
+          key={index}
+        >
+          <div className="flex items-start gap-4 mb-4">
+            <img
+              src={item.profile_image || "https://placehold.co/600x400"}
+              alt="Avatar"
+              className="w-12 h-12 rounded-full object-cover"
+            />
+            <div className="flex-1">
+              <h4 className="text-gray-600 font-semibold">
+                {item.firstname + " " + item.lastname}
+              </h4>
+              <span className="text-sm text-gray-600 block">{item.role}</span>
+              <span className="text-sm text-gray-600 block">Last active: Today</span>
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600">
+              Current Tasks:{" "}
+              <span className="text-green-800">
+                {
+                  projectInfo?.assignments?.filter(
+                    (idx) => idx.teamMemberId === item.id
+                  ).length || 0
+                }
+              </span>
+            </span>
+            <span>:</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
+      {/* Mobile View Button */}
+      <div className="md:hidden px-4 mb-4">
+        <button
+          onClick={() => setIsDrawerOpen(true)}
+          className="fixed bottom-10 right-4 bg-blue-600 hover:bg-green-700 text-white w-14 h-14 rounded-full shadow-lg z-50 animate-pulse hover:scale-105 active:scale-95 transition-transform duration-200 flex items-center justify-center"
+        >
+          <Bot size={24} />
+        </button>
+      </div>
+
+        {/* Drawer Overlay */}
+        {isDrawerOpen && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black bg-opacity-40 z-40"
+              onClick={() => setIsDrawerOpen(false)}
+            ></div>
+
+            {/* Drawer Panel */}
+            <div className="fixed bottom-0 left-0 right-0 bg-white z-50 rounded-t-xl p-4 max-h-[90vh] overflow-y-auto transition-transform duration-300 translate-y-0">
+              <div className="flex justify-between items-center mb-4">
                 <h4 className="font-semibold text-md">
                   Team Members ({projectDetails?.team?.length})
                 </h4>
-                {/* <span className="text-sm text-green-600 cursor-pointer">
-                  + Add Member
-                </span> */}
+                <button
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="text-gray-500 text-sm"
+                >
+                  Close
+                </button>
               </div>
+
               <div className="relative mb-4">
                 <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -283,43 +389,36 @@ export const FreelanceProjectManage = () => {
                   className="w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                 />
               </div>
-              {projectDetails?.team?.map((item, index) => (
+
+              {filteredMembers?.map((item, index) => (
                 <div
-                  className="bg-green-100 rounded-xl border border-green-500 h-50 p-4 mb-4"
+                  className="bg-green-100 rounded-xl border border-green-500 p-4 mb-4"
                   key={index}
                 >
                   <div className="flex items-start gap-4 mb-4">
                     <img
                       src={item.profile_image || "https://placehold.co/600x400"}
-                      alt="Freelancer Avatar"
+                      alt="Avatar"
                       className="w-12 h-12 rounded-full object-cover"
                     />
                     <div className="flex-1">
                       <h4 className="text-gray-600 font-semibold">
                         {item.firstname + " " + item.lastname}
                       </h4>
-                      <span className="text-sm text-gray-600 block">
-                        {item.role}
-                      </span>
-                      <span className="text-sm text-gray-600 block">
-                        Last active: Today
-                      </span>
-                      {/* <span className="text-sm text-gray-600 block">
-                        $45/hour
-                      </span> */}
+                      <span className="text-sm text-gray-600 block">{item.role}</span>
+                      <span className="text-sm text-gray-600 block">Last active: Today</span>
                     </div>
-                    {/* <span className="p-1 px-2 rounded-full bg-green-300 text-green-800 font-semibold text-sm ml-auto">
-                      Active
-                    </span> */}
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">
                       Current Tasks:{" "}
                       <span className="text-green-800">
-                        {projectInfo?.assignments?.filter(
-                          (idx) => idx.teamMemberId == item.id
-                        ).length || 0}
+                        {
+                          projectInfo?.assignments?.filter(
+                            (idx) => idx.teamMemberId === item.id
+                          ).length || 0
+                        }
                       </span>
                     </span>
                     <span>:</span>
@@ -327,7 +426,9 @@ export const FreelanceProjectManage = () => {
                 </div>
               ))}
             </div>
-          </div>
+          </>
+        )}
+        </>
           <div className="w-2/3">
             <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4 mb-6">
               <div className="mb-6">

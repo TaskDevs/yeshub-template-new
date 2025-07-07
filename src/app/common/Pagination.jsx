@@ -51,9 +51,9 @@ const Pagination = ({
           <button
             key={number}
             onClick={() => onPageChange(number)}
-            className={`border-t border-b border-r px-3 py-1 ${
+            className={`border-t border-b border-r px-3 py-1 text-white ${
               currentPage === number
-                ? " text-gray-800 font-medium bg-[#305718]"
+                ? " text-gray-800 font-medium bg-[#305715]"
                 : "text-gray-600 hover:bg-gray-100"
             }`}
           >

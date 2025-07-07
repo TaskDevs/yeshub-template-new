@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer className="tw-css bg-white max-w-7xl mx-auto justify-center">
       {/* Trusted Brands Section */}
-          <div className="max-w-7xl mx-auto justify-center px-4 py-10">
+          <div className="max-w-7xl mx-auto justify-center px-4 py-5 sm:px-6 lg:px-8">
       <h3 className="text-lg font-semibold mb-6">
         Trusted by leading brands and startups
       </h3>

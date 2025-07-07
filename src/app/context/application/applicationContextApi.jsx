@@ -50,7 +50,7 @@ const ApplicationApiDataProvider = (props) => {
 
     try {
       const res = await processApplicationProfile(userId);
-      const data = res.data.data;
+      const data = res?.data?.data;
       // console.log("data-applied-ctx", data);
 
       const uniqueJobsMap = data.reduce((acc, current) => {

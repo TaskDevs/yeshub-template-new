@@ -43,7 +43,7 @@ const JobDetailsPage = () => {
   };
 
   return (
-    <div className="tw-css flex flex-col lg:flex-row gap-6 p-6 bg-gray-50 min-h-screen">
+    <div className="tw-css flex flex-col-3 grid grid-col-3 lg:flex-row gap-6 p-4 bg-gray-50 min-h-screen">
       {/* Left Column */}
       <div className="flex-[2] space-y-6">
         <div className="bg-white rounded-lg p-6 shadow-sm">
@@ -65,7 +65,7 @@ const JobDetailsPage = () => {
 
               {/* Title & Meta */}
               <div>
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl sm:font-semibold">
                   {jobProfileData?.title}
                 </h2>
                 <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">

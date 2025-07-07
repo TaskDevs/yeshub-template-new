@@ -826,7 +826,7 @@ export const Header = ({ isDashboard = true }) => {
                       alt={username}
                       onClick={() => toggleNav()}
                       sx={{
-                        bgcolor: stringToColor(username),
+                        bgcolor: 'thistle',
                         width: 40,
                         height: 40,
                         fontSize: "1.2rem",

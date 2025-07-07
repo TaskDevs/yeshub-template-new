@@ -125,7 +125,7 @@ function FindWorkPage() {
               jobType={job?.job_type}
               isMobile={true}
               jobLocation={job?.location || "Accra"}
-              datePosted={job?.created_at || "2025-04-14T16:43:24.000000Z"}
+              datePosted={job?.created_at}
               salaryRange={job?.fixed_rate || job?.budget}
               image={
                 job?.employer?.logo || "https://placehold.co/80x80?text=Logo"

@@ -8,39 +8,6 @@ import { ContractStatCard } from "../../components/can-contract-stat-card";
 //import { TaskApiData } from "../../../../context/task/taskContextApi";
 import { FreelanceApiData } from "../../../../context/freelance/freelanceContextApi";
 import { useNavigate } from "react-router-dom";
-
-// Sample data
-// const contractsData = [
-//   {
-//     contractName: "Website Redesign Project",
-//     client: "Tech Solutions Inc.",
-//     completionDate: "Dec 31, 2024",
-//     daysRemaining: 14,
-//     status: "In Progress",
-//     totalValue: 4500,
-//     actions: ["Submit Work", "Message"]
-//   },
-//   {
-//     contractName: "Mobile App Development",
-//     client: "Innovation Labs",
-//     completionDate: "Jan 15, 2024",
-//     daysRemaining: 30,
-//     status: "Under Review",
-//     totalValue: 8250,
-//     actions: ["View Details", "Message"]
-//   },
-//   {
-//     contractName: "Brand Identity Design",
-//     client: "Creative Studios",
-//     completionDate: "Feb 28, 2024",
-//     daysRemaining: 45,
-//     status: "Just Started",
-//     totalValue: 3750,
-//     actions: ["Submit Work", "Message"]
-//   }
-// ];
-
-// Status Tag Component
 const StatusTag = ({ status }) => {
   let bgColor = "bg-green-100 text-green-800";
 
@@ -77,7 +44,7 @@ const ContractsHistory = () => {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const itemsPerPage = 10;
-  const totalItems = freelanceProjectList.length;
+  const totalItems = freelanceProjectList?.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   useEffect(() => {
@@ -208,42 +175,49 @@ const ContractsHistory = () => {
     <div className="tw-css mx-auto p-6">
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          {statsData.map((stat, index) => (
-            <ContractStatCard
-              key={index}
-              title={stat.title}
-              count={stat.count}
-              icon={stat.icon}
-              bgColor={stat.bgColor}
-              iconColor={stat.iconColor}
-            />
-          ))}
-        </div>
-        <div className="flex flex-col bg-white rounded-lg shadow border-top-1 overflow-hidden pt-5">
-          <TableTop
-            label="Contracts History"
-            searchValue={searchValue}
-            handleSearch={handleSearch}
-            setSearchValue={setSearchValue}
-          />
-          <Table
-            data={contractData}
-            columns={columns}
-            isGeneral={true}
-            bgColor="bg-white"
-            headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
-            headerRowStyles=""
-          />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={Math.min(5, totalPages)} // Limit to 5 pages for the example
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            onPageChange={handlePageChange}
-            showLabel={true} // Set to false to hide the "Showing X to Y of Z results" label
-          />
-        </div>
+      <div className="grid md:grid-cols-4 gap-4 mb-6">
+      {statsData.map((stat, index) => (
+        <ContractStatCard
+          key={index}
+          title={stat.title}
+          count={stat.count}
+          icon={stat.icon}
+          bgColor={stat.bgColor}
+          iconColor={stat.iconColor}
+        />
+      ))}
+    </div>
+
+      <div className="flex flex-col bg-white rounded-lg shadow border overflow-hidden pt-5">
+  <TableTop
+    label="Contracts History"
+    searchValue={searchValue}
+    handleSearch={handleSearch}
+    setSearchValue={setSearchValue}
+  />
+
+  {/* Scrollable wrapper for the table on small screens */}
+  <div className="w-full overflow-x-auto">
+    <Table
+      data={contractData}
+      columns={columns}
+      isGeneral={true}
+      bgColor="bg-white"
+      headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right whitespace-nowrap"
+      headerRowStyles=""
+    />
+  </div>
+
+  <Pagination
+    currentPage={currentPage}
+    totalPages={Math.min(5, totalPages)} // Limit to 5 pages for the example
+    totalItems={totalItems}
+    itemsPerPage={itemsPerPage}
+    onPageChange={handlePageChange}
+    showLabel={true}
+  />
+</div>
+
       </div>
     </div>
   );

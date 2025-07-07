@@ -10,7 +10,7 @@ export const ContractStatCard = ({ title, count, icon, bgColor, iconColor }) => 
         {/* Right side - Content */}
         <div className="flex items-start flex-col justify-start -space-y-4">
           <h3 className=" text-gray-500 text-base">{title}</h3>
-          <p className="text-2xl font-bold">{count}</p>
+          <p className="text-2xl font-bold sm:text-lg">{count}</p>
         </div>
       </div>
     </div>

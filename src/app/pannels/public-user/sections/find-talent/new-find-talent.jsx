@@ -164,7 +164,7 @@ export default function FreelancerSearch() {
 
   return (
     <div className="tw-css px-10 py-6 my-5">
-      <div className="mb-6 p-4 m-4 my-5">
+      <div className="p-4 m-4 my-5">
         <h1 className="text-xl font-semibold">Find Talented Freelancers</h1>
         <div className="flex items-center border rounded-full px-4 py-2 mt-4 shadow-sm">
           <input
@@ -174,9 +174,7 @@ export default function FreelancerSearch() {
             placeholder="Search by skill, expertise or keyword..."
             className="flex-grow outline-none px-2"
           />
-          <button className="bg-green-600 text-white px-6 py-2 rounded-full ml-2 ">
-            Search
-          </button>
+         
         </div>
         <div className="filter-bar flex flex-wrap items-center mt-4 gap-2">
           <span className="font-semibold text-gray-700 search-label">
@@ -318,7 +316,7 @@ export default function FreelancerSearch() {
 
         {/* Freelancer Cards Section */}
         <div className="max-w-7xl mx-auto px-4 py-2 cards">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2 text-gray-700 text-sm p-3 border bg-white shadow w-full sm:w-auto rounded-md">
               <div>
                 <div className="text-lg font-semibold text-gray-900">
@@ -358,7 +356,7 @@ export default function FreelancerSearch() {
                   <div
                     key={freelancer.id}
                     className="bg-white rounded-xl border border-gray-200 p-6 text-center shadow-sm hover:shadow-md transition duration-300 cursor-pointer"
-                    onClick={() => navigate(`/freelancers/${freelancer.id}`)}
+                    onClick={() => navigate(`/freelancers/${freelancer.user_id}`)}
                   >
                     <img
                       src={freelancer.avatar || "https://placehold.co/400"}
@@ -391,7 +389,7 @@ export default function FreelancerSearch() {
                     <div className="flex justify-center items-center text-yellow-500 text-sm mt-1 mb-4">
                       <span>★ {freelancer.rating}</span>
                       <span className="text-gray-500 ml-1">
-                        [{freelancer.experience}]
+                        [{freelancer.experience || "Entery Level"}]
                       </span>
                     </div>
 

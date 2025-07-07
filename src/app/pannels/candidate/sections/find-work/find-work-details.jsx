@@ -69,7 +69,7 @@ function FindWorkDetails() {
   if (!jobProfile?.id) return <Loader />;
 
   return (
-    <div className=" tw-css mx-auto size-full ">
+    <div className="tw-css mx-auto size-full ">
       <div className=" mx-auto  max-w-7xl p-6 ">
         <div className="flex flex-col">
           <div className=" w-full details-job-section">

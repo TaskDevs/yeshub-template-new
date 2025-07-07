@@ -149,18 +149,21 @@ export const jobsAppliedTo = async (user_id, page_no) => {
 // VIEW Freelance
 export const freelanceProfile = async (id) => {
   try {
-    let responseOnFreelanceProfile = await axios.get(
-      `${REACT_BASE_URL}get-freelance/${id}`
-    );
-    console.log(responseOnFreelanceProfile);
-    if (responseOnFreelanceProfile.status == 200) {
-      console.log(responseOnFreelanceProfile);
-      return responseOnFreelanceProfile.data.data;
+    const response = await axios.get(`${REACT_BASE_URL}get-freelance/${id}`);
+    console.log("API Response:", response);
+
+    if (
+      response.status === 200 &&
+      response.data &&
+      response.data.data
+    ) {
+      return response.data.data;
     } else {
+      console.warn("Unexpected API response structure", response);
       return false;
     }
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error("Error fetching freelance profile:", error);
     return false;
   }
 };

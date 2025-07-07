@@ -74,38 +74,11 @@ export default function FreelancerDetail() {
     setCurrentDate(newDate);
   };
 
-  // const quickActions = [
-  //   {
-  //     label: "View Contract",
-  //     icon: FileText,
-  //     bgColor: "bg-blue-100",
-  //     iconColor: "text-blue-600",
-  //   },
-  //   {
-  //     label: "Edit Project",
-  //     icon: Pencil,
-  //     bgColor: "bg-green-100",
-  //     iconColor: "text-green-600",
-  //   },
-  //   {
-  //     label: "Schedule Meeting",
-  //     icon: Calendar,
-  //     bgColor: "bg-purple-100",
-  //     iconColor: "text-purple-600",
-  //     onClick: () => setShowModal(true),
-  //   },
-  //   {
-  //     label: "Generate Report",
-  //     icon: FileBarChart,
-  //     bgColor: "bg-orange-100",
-  //     iconColor: "text-orange-600",
-  //   },
-  // ];
   return (
-    <div className="tw-css max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 p-6 ">
+    <div className="tw-css max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
       {/* Left Column */}
-      <div className="freelancer-layout">
-        <div className="max-w-7xl mx-auto px-4 py-6 ">
+   
+        <div className="space-y-6 p">
           {/* Profile Header */}
           <div className="bg-white p-6 rounded-xl shadow mb-4">
             <div className="flex gap-6">
@@ -133,10 +106,7 @@ export default function FreelancerDetail() {
                         " " +
                         viewFreelanceProfile?.freelance_info?.[0]?.address}
                     </div>
-                    {/* <div className="flex items-center gap-1 text-yellow-500 text-sm mt-1">
-                             <Star className="w-4 h-4" />
-                             5.0 (84 reviews)
-                           </div> */}
+                   
                   </div>
                   <div className="text-right">
                     <p className="text-lg font-semibold">
@@ -170,28 +140,6 @@ export default function FreelancerDetail() {
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="border-b border-gray-200 bg-white p-6 rounded-xl shadow-sm mb-4 sticky top-0 z-10">
-            <nav className="flex space-x-4 text-sm font-medium text-gray-600">
-              {[
-                { label: "Overview", id: "overview" },
-                { label: "Portfolio", id: "portfolio" },
-                { label: "Work History", id: "work-history" },
-                { label: "Skills", id: "skills" },
-                { label: "Reviews", id: "reviews" },
-              ].map((tab) => (
-                <a
-                  key={tab.id}
-                  href={`#${tab.id}`}
-                  className="pb-2 hover:border-b-2 hover:border-green-500 transition"
-                >
-                  {tab.label}
-                </a>
-              ))}
-            </nav>
-          </div>
-
-          {/* Overview Section */}
           {/* Overview Section */}
           <div
             id="overview"
@@ -397,8 +345,6 @@ export default function FreelancerDetail() {
               View More Projects
             </a>
           </div>
-
-          {/* Reviews Section */}
           {/* Reviews Section */}
           <div
             id="reviews"
@@ -412,94 +358,6 @@ export default function FreelancerDetail() {
                 <span>(0 reviews)</span>
               </div>
             </div>
-
-            {/* <div className="space-y-6">
-                     {/* Review 1 
-                     <div className="border-b pb-6">
-                       <div className="flex justify-between items-start">
-                         <div className="flex items-start gap-4">
-                           <img
-                             src="https://randomuser.me/api/portraits/men/32.jpg"
-                             alt="Jennifer Lawson"
-                             className="w-10 h-10 rounded-full"
-                           />
-                           <div>
-                             <h3 className="font-semibold">Jennifer Lawson</h3>
-                             <p className="text-sm text-gray-500">
-                               CEO, StyleTrend E-commerce
-                             </p>
-                           </div>
-                         </div>
-                         <div className="text-yellow-500 text-sm">★★★★★ 5.0</div>
-                       </div>
-                       <p className="mt-3 text-gray-700">
-                         David completely transformed our e-commerce platform. His
-                         understanding of user behavior and attention to detail
-                         resulted in a beautiful, intuitive interface that our
-                         customers love. The redesign led to a significant increase in
-                         sales and customer satisfaction. I highly recommend David for
-                         any UI/UX project.
-                       </p>
-                       <p className="text-sm text-gray-400 mt-2">Apr 2023</p>
-                     </div>
-       
-                     {/* Review 2 
-                     <div className="border-b pb-6">
-                       <div className="flex justify-between items-start">
-                         <div className="flex items-start gap-4">
-                           <img
-                             src="https://randomuser.me/api/portraits/men/32.jpg"
-                             alt="Michael Rodriguez"
-                             className="w-10 h-10 rounded-full"
-                           />
-                           <div>
-                             <h3 className="font-semibold">Michael Rodriguez</h3>
-                             <p className="text-sm text-gray-500">Founder, FinTrack</p>
-                           </div>
-                         </div>
-                         <div className="text-yellow-500 text-sm">★★★★★ 5.0</div>
-                       </div>
-                       <p className="mt-3 text-gray-700">
-                         Working with David on our fintech app was an incredible
-                         experience. He took the time to understand our users needs and
-                         created a design that perfectly balances functionality with
-                         visual appeal. His research-driven approach and attention to
-                         detail made all the difference. The app has received
-                         overwhelmingly positive feedback from our users and investors.
-                       </p>
-                       <p className="text-sm text-gray-400 mt-2">Mar 2023</p>
-                     </div>
-       
-                     {/* Review 3 *
-                     <div>
-                       <div className="flex justify-between items-start">
-                         <div className="flex items-start gap-4">
-                           <img
-                             src="https://randomuser.me/api/portraits/men/32.jpg"
-                             alt="Sarah Thompson"
-                             className="w-10 h-10 rounded-full"
-                           />
-                           <div>
-                             <h3 className="font-semibold">Sarah Thompson</h3>
-                             <p className="text-sm text-gray-500">
-                               Product Manager, AnalyticsPro
-                             </p>
-                           </div>
-                         </div>
-                         <div className="text-yellow-500 text-sm">★★★★★ 5.0</div>
-                       </div>
-                       <p className="mt-3 text-gray-700">
-                         David redesigned our SaaS dashboard, transforming a complex
-                         and cluttered interface into a clean, intuitive experience.
-                         His design system has made our development process much more
-                         efficient, and our users are thrilled with how easy it is to
-                         navigate and extract insights. David is not just a designer
-                         but a strategic partner who understands business goals.
-                       </p>
-                       <p className="text-sm text-gray-400 mt-2">Oct 2022</p>
-                     </div>
-                   </div> */}
-
             <div className="text-green-600 text-sm font-medium hover:underline cursor-pointer">
               View All 0 Reviews
             </div>
@@ -507,9 +365,9 @@ export default function FreelancerDetail() {
         </div>
 
         {/* Right Sidebar */}
-        <div className="space-y-6 sidebar-right pt-4 my-4">
+        <div className="space-y-6">
           {/* Action Buttons */}
-          <div className="bg-white p-4 rounded-xl shadow space-y-3">
+          <div className="bg-white px-4 rounded-xl shadow">
             <button
               onClick={() => navigate("/login")}
               className="w-full bg-green-600 text-white py-2 
@@ -585,65 +443,8 @@ export default function FreelancerDetail() {
               within 2 hours
             </p>
           </div>
-          {/* Pricing */}
-          {/* <div className="bg-white p-4 rounded-xl shadow w-full sm:w-[320px]"> */}
-          {/* Pricing & Services Header *
-                   <h3 className="text-sm font-semibold mb-2">Pricing & Services</h3>
-       
-                   {/* Hourly Rate */}
-          {/* <div className="mb-4">
-                     <p className="text-gray-700 text-sm">Hourly Rate</p>
-                     <p className="font-semibold text-lg">GH75/hr</p>
-                     <p className="text-xs text-gray-500 mt-1">
-                       Ideal for ongoing projects and revisions
-                     </p>
-                   </div>
-       
-                   <hr className="my-4" /> */}
-
-          {/* UI Design Package */}
-          {/* <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                     <h4 className="font-semibold text-sm mb-1">UI Design Package</h4>
-                     <p className="text-lg font-bold mb-2">$2,500</p>
-                     <p className="text-sm text-gray-700 mb-4">
-                       Complete UI design for up to 10 screens, including style guide
-                       and design system components.
-                     </p> */}
-
-          {/* Package features */}
-          {/* <ul className="space-y-1 mb-4 text-sm text-gray-700">
-                       {[
-                         "High-fidelity mockups",
-                         "Design system",
-                         "Source files included",
-                         "2 rounds of revisions",
-                       ].map((item) => (
-                         <li key={item} className="flex items-center">
-                           <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
-                           {item}
-                         </li>
-                       ))}
-                     </ul> */}
-
-          {/* <button className="w-full bg-green-100 text-green-700 font-semibold py-2 rounded-md hover:bg-green-200 transition">
-                       Select Package
-                     </button>
-                   </div> */}
-          {/* </div> */}
         </div>
-      </div>
-
-      {/* <HireTalentModal
-               isOpen={isModalOpen}
-               onClose={() => setIsModalOpen(false)}
-               jobOptions={[
-                 "Senior Frontend Developer (React)",
-                 "Backend Engineer (Node.js)",
-                 "UX/UI Designer",
-                 "Others",
-               ]}
-               onSend={handleHire}
-             /> */}
+  
     </div>
   );
 }

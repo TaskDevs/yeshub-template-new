@@ -1,6 +1,6 @@
 export const ContractStatCard = ({ title, count, icon, bgColor, iconColor }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm px-6 py-4 border">
+    <div className="bg-white rounded-lg shadow-sm px-6 py-4 border sm:w-full">
       <div className="flex justify-start">
         {/* Left side - Icon */}
         <div className={`${bgColor} rounded py-3 px-2.5 flex items-center justify-center`}>

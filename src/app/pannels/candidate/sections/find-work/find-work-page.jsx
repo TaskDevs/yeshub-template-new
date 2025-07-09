@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CiBookmark } from "react-icons/ci";
+import BeatLoader from "react-spinners/BeatLoader";
 import { experienceLevel, jobTypes, sort } from "./filter-data";
 import CanSelectField from "../../components/can-select-field";
 import CanSlider from "../../components/can-slider";
@@ -111,28 +112,39 @@ function FindWorkPage() {
   return (
     <div className="tw-css mx-auto">
       <div className={`${styles.mobileFindWork} min-h-screen p-4`}>
-        <MobileFindSavedWork
-          jobs={currentJobs}
-          renderJob={(job) => (
-            <CanJobCard
-              key={job.id}
-              id={job?.id}
-              role={job?.job_title}
-              ratings="4.9"
-              reviews="23k"
-              skills={job?.skills}
-              companyName={job?.company_name}
-              jobType={job?.job_type}
-              isMobile={true}
-              jobLocation={job?.location || "Accra"}
-              datePosted={job?.created_at}
-              salaryRange={job?.fixed_rate || job?.budget}
-              image={
-                job?.employer?.logo || "https://placehold.co/80x80?text=Logo"
-              }
-            />
-          )}
-        ></MobileFindSavedWork>
+        {isLoading ? (
+          <>
+            <div className="flex items-center justify-center h-screen">
+              <span className="text-gray-500 text-sm text-center">
+               <BeatLoader />
+              </span>
+            </div>
+          </>
+        ) : (
+          <MobileFindSavedWork
+            jobs={currentJobs}
+            renderJob={(job) => (
+              <CanJobCard
+                key={job.id}
+                id={job?.id}
+                role={job?.job_title}
+                ratings="4.9"
+                reviews="23k"
+                skills={job?.skills}
+                companyName={job?.company_name}
+                jobType={job?.job_type}
+                isMobile={true}
+                jobLocation={job?.location || "Accra"}
+                datePosted={job?.created_at}
+                salaryRange={job?.fixed_rate || job?.budget}
+                image={
+                  job?.employer?.logo || "https://placehold.co/80x80?text=Logo"
+                }
+              />
+            )}
+          />
+        )}
+
         <div className="flex justify-center mt-6">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button

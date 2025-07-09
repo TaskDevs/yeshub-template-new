@@ -113,7 +113,7 @@ const ActiveContracts = () => {
       title: "Total Projects",
       count: freelanceProjectList?.length,
       icon: <FaBriefcase size={18} />,
-      bgColor: "bg-gray-100",
+      bgColor: "bg-white",
       iconColor: "text-gray-700",
     },
     {
@@ -193,9 +193,9 @@ const ActiveContracts = () => {
 
   return (
     <div className="tw-css mx-auto p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto sm:w-full">
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-6">
+        <div className="grid md:grid-cols-3 gap-4 mb-6 sm:w-full">
           {statsData.map((stat, index) => (
             <ContractStatCard
               key={index}
@@ -207,7 +207,7 @@ const ActiveContracts = () => {
             />
           ))}
         </div>
-        <div className="flex flex-col bg-white rounded-lg shadow border overflow-hidden pt-5">
+        <div className="flex flex-col bg-white rounded-lg border overflow-hidden pt-5">
           <TableTop
             label="Projects History"
             searchValue={searchValue}

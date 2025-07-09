@@ -72,21 +72,18 @@ const JobApiDataProvider = (props) => {
   };
 
   const processGetAllJob = async (pageNo, userId) => {
-    setJobLoad(false);
+    setJobLoad(true);
     let response = await jobList(pageNo, userId);
     if (response) {
       console.log('res jobs',response);
       setJobListData(response.data);
       setPaginationData({
-        // total: response.pagination.total,
-        // link: response.pagination.links,
-        // current: response.pagination.current_page,
         total: response?.total,
         link: response?.links,
         current: response?.current_page,
       });
     }
-    setJobLoad(true);
+    setJobLoad(false);
   };
 
   const processJobCompanyInfo = async (id) => {

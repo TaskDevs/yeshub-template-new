@@ -20,7 +20,7 @@ const SubmitWork = () => {
   return (
     <div className="tw-css">
       <div
-        className={`bg-white w-[60%]
+        className={`bg-white w-[90%]
         mx-auto rounded-md flex-col justify-center items-center border mb-4`}
       >
         <div className="flex justify-between items-center px-6 p-5 w-full">

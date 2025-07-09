@@ -187,7 +187,7 @@ function NewSavedJobsPage() {
                           numberOfProposals="23"
                           salaryRange={data?.job?.fixed_rate || "400"}
                           jobType={data?.job?.job_type}
-                          
+                          datePosted={data?.created_at}
                           status={
                             calculateDaysLeft(
                               data?.job?.created_at,

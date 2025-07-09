@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Table Header Component
-function TableHeader({ columns, headerRowStyles="bg-[#F9FAFB]", headerCellStyles }) {
+function TableHeader({ columns, headerRowStyles="bg-gray-200", headerCellStyles }) {
   return (
     <thead className="bg-gray-100">
       <tr className={headerRowStyles}>
@@ -74,7 +74,7 @@ function Table({
       <tbody className={bgColor}>
         {isGeneral
           ? data.map((item, index) => (
-            <tr key={index} className="border-b border-gray-200">
+            <tr key={index} className="border-gray-200">
               {columns.map((column, colIndex) => (
                 <td key={colIndex} className="py-4 px-6">
                   {renderCellContent(item, column)}

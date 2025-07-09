@@ -6,6 +6,7 @@ import { FreelanceApiData } from "../../../../context/freelance/freelanceContext
 import { useNavigate, useParams } from "react-router-dom";
 import SubmittedDataInfoModal from "./view-description-modal";
 import { formatDate } from "../../../../../utils/dateUtils";
+import { Download } from "lucide-react";
 
 // Stats data based on the image
 
@@ -29,7 +30,7 @@ const FreelanceSubmissions = () => {
     let newData = {
       project_id: id,
     };
-    setProjectName(data.project_name);
+    setProjectName(data?.project_name);
     processGetProjectSubmissions(newData);
   }, []);
 
@@ -53,6 +54,31 @@ const FreelanceSubmissions = () => {
     setOpenModal(true);
   };
 
+
+  const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
+  try {
+    const response = await fetch(fileUrl, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok.");
+    }
+
+    const blob = await response.blob();
+
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (error) {
+    console.error("Download failed:", error);
+  }
+};
   // Table column configuration
   const columns = [
     {
@@ -69,7 +95,7 @@ const FreelanceSubmissions = () => {
       header: "Title",
       render: (item) => (
         <div>
-          <div className="font-medium">{item.title}</div>
+          <div className="font-normal text-sm">{item.title}</div>
         </div>
       ),
     },
@@ -109,13 +135,14 @@ const FreelanceSubmissions = () => {
         <div>
           {item.work_file ? (
             <a
-              href={item.work_file}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline"
+             
+              onClick={() => {
+              const fileName = item.work_file.split("/").pop();
+              forceDownload(item.work_file, fileName);
+            }}
+              className="text-green-600 transition text-sm font-medium bg-green-100 px-2 py-1 rounded hover:bg-green-200 transition text-center"
             >
-              Download&nbsp;Work
+              <Download size={14} className="inline" /> <span className="inline hidden lg:block"> Download </span>
             </a>
           ) : (
             <span className="text-gray-500">No work file</span>
@@ -129,28 +156,28 @@ const FreelanceSubmissions = () => {
       header: "Info",
       render: (item) => (
         <div
-          className="cursor-pointer text-blue-500"
+          className="cursor-pointer text-blue-500 bg-blue-100 px-2 py-1 rounded hover:bg-blue-200 transition text-sm text-center font-medium"
           onClick={() => handleShowDescription(item.description)}
         >
-          View Info
+          View
         </div>
       ),
     },
   ];
 
   return (
-    <div className="tw-css mx-auto p-6">
+    <div className="tw-css mx-auto p-6 site-bg-gray">
       <div className="max-w-7xl mx-auto">
         {/* Stats Cards */}
-        <div className="flex items-center justify-between bg-white p-4 rounded shadow mb-8">
+        <div className="flex items-center justify-between bg-white p-4 rounded shadow-sm mb-8">
           {/* Project Name */}
-          <div className="w-1/3 text-gray-800 font-medium">
+          <div className="w-1/3 text-gray-800 font-medium tex-sm lg:text-lg">
             Project Name - {projectName}
           </div>
 
           {/* Total Submissions */}
           <div className="w-1/3 text-gray-600 text-center">
-            {projectSubmissionsList.length} Submissions
+            ({projectSubmissionsList.length}) Total
           </div>
 
           {/* Submit Work Button */}
@@ -158,34 +185,39 @@ const FreelanceSubmissions = () => {
             className="w-1/3 text-right"
             onClick={() => navigate(`/dashboard-candidate/submit-work/${id}`)}
           >
-            <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            <button className="bg-green-600 sm:border-radius-full text-white px-4 py-2 rounded hover:bg-green-700 transition">
               Submit Work
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col bg-white rounded-lg shadow border-top-1 overflow-hidden pt-5">
+        <div className="flex flex-col bg-white rounded-lg shadow-sm border overflow-hidden pt-5">
           <TableTop
             label="Submissions"
             searchValue={searchValue}
             handleSearch={handleSearch}
             setSearchValue={setSearchValue}
           />
-          <Table
-            data={projectSubmissionsList}
-            columns={columns}
-            isGeneral={true}
-            bgColor="bg-white"
-            headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
-            headerRowStyles=""
-          />
+
+          {/* Scrollable table container */}
+          <div className="w-full overflow-x-auto">
+            <Table
+              data={projectSubmissionsList}
+              columns={columns}
+              isGeneral={true}
+              bgColor="bg-white"
+              headerCellStyles="text-[#6B7280] bg-[#F9FAFB] text-base font-normal last:text-right"
+              headerRowStyles=""
+            />
+          </div>
+
           <Pagination
             currentPage={currentPage}
-            totalPages={Math.min(5, totalPages)} // Limit to 5 pages for the example
+            totalPages={Math.min(5, totalPages)}
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
             onPageChange={handlePageChange}
-            showLabel={true} // Set to false to hide the "Showing X to Y of Z results" label
+            showLabel={true}
           />
         </div>
       </div>

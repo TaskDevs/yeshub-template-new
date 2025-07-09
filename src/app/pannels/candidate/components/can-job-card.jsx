@@ -33,8 +33,6 @@ const CanJobCard = ({
     useContext(SavedJobsApiData);
   const navigate = useNavigate();
   const isSaved = savedjobsData?.some((item) => parseInt(item.job_id) === id);
-
-  console.log("mobile logo", image);
   // Skeleton for desktop
   if (loading && !isMobile) {
     return (
@@ -58,21 +56,11 @@ const CanJobCard = ({
     );
   }
 
-  // Skeleton for mobile
+
   if (loading && isMobile) {
     return (
       <div className="tw-css border rounded-lg shadow-md p-2 bg-white animate-pulse">
-        <div className="flex justify-between">
-          <div className="space-y-2">
-            <div className="h-4 bg-gray-300 rounded w-2/3"></div>
-            <div className="h-4 bg-gray-300 rounded w-1/3"></div>
-          </div>
-          <div className="h-6 w-6 bg-gray-300 rounded-full"></div>
-        </div>
-        <div className="flex justify-between mt-4">
-          <div className="h-4 w-20 bg-gray-300 rounded"></div>
-          <div className="h-8 w-20 bg-gray-300 rounded"></div>
-        </div>
+         Loading...
       </div>
     );
   }
@@ -200,7 +188,7 @@ const CanJobCard = ({
                   <p className="text-gray-700">{companyName}</p>
                   <FaStar className="h-5 w-5 text-[#FACC15]" />
                   <span>{ratings}</span>
-                  <span className="text-gray-500">({reviews} reviews)</span>
+                  <span className="text-gray-500">( {calculateDaysSincePosted(datePosted)})</span>
                 </div>
 
                 <div className="flex items-center flex-wrap gap-2 mt-1 text-sm">

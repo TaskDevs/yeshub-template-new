@@ -19,7 +19,7 @@ export default function ManageProjects() {
   // 🔽 Filters and pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All Jobs");
+  const [statusFilter, setStatusFilter] = useState("");
   const [sortBy, setSortBy] = useState("Newest First");
   const [loading, setLoading] = useState(true);
   const [openMenu, setOpenMenu] = useState(null);
@@ -57,28 +57,22 @@ export default function ManageProjects() {
 
   // 🔽 Apply filters and sorting first
   let filteredProjects = userProjects || [];
+  if (!loading) {
+    const normalisedStatus = statusFilter.trim().toLowerCase(); // "all projects", "complete", etc.
 
-  //   if (!loading) {
-  //     filteredProjects = userProjects
-  //       .filter((project) => {
-  //         const matchesStatus =
-  //           statusFilter === "All Projects" ||
-  //           project.project_category === statusFilter;
+    filteredProjects = userProjects.filter((project) => {
+      const matchesStatus =
+        !normalisedStatus || // no filter chosen
+        normalisedStatus === "all projects" || // explicit “All Projects”
+        project.status.toLowerCase() === normalisedStatus;
 
-  //         const matchesSearch = project.project_name
-  //           .toLowerCase()
-  //           .includes(searchTerm.toLowerCase());
+      const matchesSearch = project.project_name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-  //         return matchesStatus && matchesSearch;
-  //       })
-  //       .sort((a, b) => {
-  //         if (sortBy === "Newest First") {
-  //           return new Date(b.start_date) - new Date(a.end_date);
-  //         } else {
-  //           return new Date(a.end_date) - new Date(b.start_date);
-  //         }
-  //       });
-  //   }
+      return matchesStatus && matchesSearch;
+    });
+  }
 
   const navigate = useNavigate();
 
@@ -192,8 +186,8 @@ export default function ManageProjects() {
               onChange={(e) => setStatusFilter(e.target.value)}
             >
               <option>All Projects</option>
-              <option>Active</option>
-              <option>Closed</option>
+              <option>Ongoing</option>
+              <option>Complete</option>
             </select>
           </div>
 

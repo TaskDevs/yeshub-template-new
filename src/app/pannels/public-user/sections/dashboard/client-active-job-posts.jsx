@@ -84,7 +84,7 @@ export const ClientActiveJobPostings = ({
               key={item.id}
               icon={<FaCode className="h-4 w-4 text-[#305718]" />}
               title={item.title}
-              desc="12 proposals received"
+              desc=""
               createdAt={item.created_at}
               fixed={item.fixed_rate}
               budget={item.fixed_rate}

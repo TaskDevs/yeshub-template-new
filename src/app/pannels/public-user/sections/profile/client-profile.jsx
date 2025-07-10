@@ -5,8 +5,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { ClientProfileSectionsManager } from "./client-profile-sections-manager";
 import { CompanyOverviewFormSection } from "./client-profile-forms";
 import { ProfileSectionModal } from "../../../candidate/sections/new-profile/profile-components";
-import { useProfileForm } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
-import { clientProfileData, profileSections } from "./data";
+//import { useProfileForm } from "../../../candidate/sections/new-profile/hooks/useProfileForm";
+import {
+  //clientProfileData,
+  profileSections,
+} from "./data";
 import {
   BusinessInfoFormSection,
   CertificationsFormSection,
@@ -16,27 +19,27 @@ import {
   AboutMeFormSection,
 } from "./client-profile-forms";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
-import { AuthApiData } from "../../../../context/auth/authContextApi";
+//import { AuthApiData } from "../../../../context/auth/authContextApi";
 
 const ClientProfile = () => {
-  const { authInfo } = useContext(AuthApiData);
+  //const { authInfo } = useContext(AuthApiData);
   const { employerProfiles, processEmployerProfile } =
     useContext(EmployerApiData);
   const [modalOpen, setModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
 
-  const { formData } = useProfileForm();
+  //const { formData } = useProfileForm();
 
-  console.log(formData);
-  console.log(clientProfileData);
-  console.log(authInfo);
+  // console.log(formData);
+  // console.log(clientProfileData);
+  // console.log(authInfo);
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     if (userId) {
       processEmployerProfile(userId); // assume it returns a promise, ignore result
     }
-  }, [processEmployerProfile]);
+  }, []);
 
   // Close modal handler
   const handleCloseModal = () => {

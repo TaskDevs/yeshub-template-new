@@ -37,7 +37,7 @@ export default function JobApplicant() {
   const [selected, setSelected] = useState("all");
   const [candidateData, setCandidateData] = useState({});
   const [candidateSalaryData, setCandidateSalaryData] = useState({});
-  const [value, setValue] = useState(50);
+  const [stageFilter, setStageFilter] = useState("all");
   const [openMenu, setOpenMenu] = useState(null);
   const [interviewStatus, setInterviewStatus] = useState(null);
   const [isInterviewOpen, setIsInterviewOpen] = useState(false);
@@ -55,6 +55,23 @@ export default function JobApplicant() {
     { label: "Medium Match (70–89%)", value: "medium" },
     { label: "Low Match (<70%)", value: "low" },
   ];
+
+  const filteredApplicants = applicants.filter((item) => {
+    const score = parseInt(item.auto_score) || 0;
+
+    let scorePass = true;
+    if (selected === "high") {
+      scorePass = score >= 90;
+    } else if (selected === "medium") {
+      scorePass = score >= 70 && score < 90;
+    } else if (selected === "low") {
+      scorePass = score < 70;
+    }
+
+    const stagePass = stageFilter === "all" || item.stage === stageFilter;
+
+    return scorePass && stagePass;
+  });
 
   const getStatusClasses = (status) => {
     switch (status?.toLowerCase()) {
@@ -369,22 +386,21 @@ export default function JobApplicant() {
               <div className="flex w-full mt-2">
                 <div className="flex w-full text-left px-4 space-y-4">
                   {/* Experience Level */}
-                  <div className="w-full px-4">
+                  <div className="w-full px-4 mt-4">
                     <label className="text-sm text-gray-500 font-semibold block mb-2">
-                      Experience Level
+                      Applicant Stage
                     </label>
-                    <div className="flex justify-between text-sm text-gray-500 mb-1">
-                      <span>Years of Experience: 5+</span>
-                      <span>10+</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
+                    <select
+                      value={stageFilter}
+                      onChange={(e) => setStageFilter(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                      <option value="all">All Stages</option>
+                      <option value="pending">Pending</option>
+                      <option value="interview">Interview</option>
+                      <option value="hired">Hired</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
                   </div>
 
                   {/* Match Score (as select) */}
@@ -405,9 +421,9 @@ export default function JobApplicant() {
                     </select>
                   </div>
 
-                  <button className="border bg-green-600 text-white rounded-md px-4 py-2 text-sm hover:bg-green-700 w-fit">
+                  {/* <button className="border bg-green-600 text-white rounded-md px-4 py-2 text-sm hover:bg-green-700 w-fit">
                     Export
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
@@ -421,7 +437,7 @@ export default function JobApplicant() {
                 </div>
               </div>
               <div className="mb-4">
-                {applicants.map((item, index) => (
+                {filteredApplicants.map((item, index) => (
                   <div
                     className="w-full rounded-xl p-4 border flex items-start mb-4"
                     key={index}
@@ -475,8 +491,8 @@ export default function JobApplicant() {
                           Key Skills
                         </label>
                         <div>
-                          {item.skills_id ? (
-                            item.skills_id.split(",").map((i) => (
+                          {item?.user?.skills_id ? (
+                            item?.user?.skills_id.split(",").map((i) => (
                               <span
                                 className="text-sm p-1 bg-gray-200 rounded-xl mr-2"
                                 key={i}

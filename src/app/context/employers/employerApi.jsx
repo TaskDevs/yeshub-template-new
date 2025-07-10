@@ -499,8 +499,12 @@ export const companyInfo = async (id) => {
 
 // UPDATE Employer
 export const updateEmployer = async (id, data) => {
+  console.log("FormData entries:");
+  for (let pair of data.entries()) {
+    console.log(pair[0] + ": ", pair[1]);
+  }
   try {
-    let responseOnUpdateEmployer = await axios.put(
+    let responseOnUpdateEmployer = await axios.post(
       `${REACT_BASE_URL}employers/${id}`,
       data
     );

@@ -1196,60 +1196,42 @@ export const AboutMeFormSection = ({ onClose }) => {
 
   // Save changes
   const handleSave = () => {
-    // Compress and convert to base64
-    const getCompressedBase64 = (file) => {
-      return new Promise((resolve, reject) => {
-        new Compressor(file, {
-          quality: 0.6,
-          success: (compressedResult) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result); // base64 string
-            reader.onerror = reject;
-            reader.readAsDataURL(compressedResult);
-          },
-          error(err) {
-            reject(err);
-          },
-        });
-      });
-    };
-
     // Async handling
     const processAndSubmit = async () => {
+      console.log(formData);
+
+      const form = new FormData();
+      form.append("status", "info");
+      form.append("company_name", formData.companyName);
+      form.append("headline", formData.headline);
+      form.append("city", formData.city);
+      form.append("region", formData.region);
+      form.append("country", formData.country);
+      form.append("timezone", formData.timezone);
+      form.append("email", formData.email);
+      form.append("description", formData.about);
+      form.append("logo", logoFiles[0]?.file ?? null);
+      form.append("coverImage", coverFiles[0]?.file ?? null);
+
+      // const payload = {
+      //   status: "info",
+      //   company_name: formData.companyName,
+      //   headline: formData.headline,
+      //   city: formData.city,
+      //   region: formData.region,
+      //   country: formData.country,
+      //   timezone: formData.timezone,
+      //   email: formData.email,
+      //   description: formData.about,
+      //   logo: logoFiles[0]?.file ?? null,
+      //   coverImage: coverFiles[0]?.file ?? null,
+      // };
+
       try {
-        const compressedLogoBase64 =
-          logoFiles.length > 0
-            ? await getCompressedBase64(logoFiles[0].file)
-            : null;
+        console.log(employerProfiles.id);
+        processUpdateEmployer(employerProfiles.id, form);
 
-        const compressedBannerBase64 =
-          coverFiles.length > 0
-            ? await getCompressedBase64(coverFiles[0].file)
-            : null;
-
-        const profileData = {
-          ...formData,
-          logo: compressedLogoBase64,
-          coverImage: compressedBannerBase64,
-        };
-
-        let newData = {
-          status: "info",
-          company_name: profileData.companyName,
-          headline: profileData.headline,
-          city: profileData.city,
-          region: profileData.region,
-          country: profileData.country,
-          timezone: profileData.timezone,
-          email: profileData.email,
-          description: profileData.description,
-          logo: profileData.logo || employerProfiles.logo,
-          banner: profileData.coverImage || employerProfiles.banner,
-        };
-
-        processUpdateEmployer(employerProfiles.id, newData);
-
-        console.log("Saving company profile data:", profileData);
+        //console.log("Saving company profile data:", formData);
 
         setTimeout(() => {
           onClose();

@@ -13,9 +13,9 @@ const JobDetailsPage = () => {
   const { processGetCheckProposalAlreadySent, proposalAlreadySent } =
     useContext(ProposalApiData);
   const {
-    processAJobProfile,
+    // processAJobProfile,
     jobListData,
-    jobProfileData,
+    //jobProfileData,
     // processJobCompanyInfo,
   } = useContext(JobApiData);
   const { savedjobsData, toggleSavedJob } = useContext(SavedJobsApiData);
@@ -30,7 +30,6 @@ const JobDetailsPage = () => {
   console.log("job list", aProfile);
 
   useEffect(() => {
-    processAJobProfile(id);
     processGetCheckProposalAlreadySent({ user_id: userId, job_id: id });
   }, [id]);
 
@@ -51,9 +50,9 @@ const JobDetailsPage = () => {
             {/* Left Section: Logo + Title + Meta */}
             <div className="flex items-start gap-4">
               {/* Logo */}
-              {jobProfileData?.employer?.logo && (
+              {aProfile?.employer?.logo && (
                 <img
-                  src={jobProfileData?.employer?.logo}
+                  src={aProfile?.employer?.logo}
                   alt="Company Logo"
                   className="size-24 object-cover rounded-md border"
                   onError={(e) => {
@@ -66,16 +65,15 @@ const JobDetailsPage = () => {
               {/* Title & Meta */}
               <div>
                 <h2 className="text-2xl sm:font-semibold">
-                  {jobProfileData?.title}
+                  {aProfile?.job_title}
                 </h2>
                 <div className="text-sm text-gray-500 flex items-center gap-2 mt-1">
                   <span>
-                    Posted{" "}
-                    {calculateDaysSincePosted(jobProfileData?.created_at)}
+                    Posted {calculateDaysSincePosted(aProfile?.created_at)}
                   </span>
                   <span className="flex items-center gap-1">
                     <Star className="text-yellow-500 w-4 h-4 fill-yellow-400" />
-                    <span>4.8 (2.3k reviews)</span>
+                    <span>0 (0 reviews)</span>
                   </span>
                 </div>
               </div>
@@ -107,22 +105,22 @@ const JobDetailsPage = () => {
                   "0"}
               </p>
             </div>
-            <div>
+            {/* <div>
               <p className="font-semibold">Experience</p>
               <p>
                 {jobProfileData?.experience
                   ? `${jobProfileData?.experience} Level`
                   : "Not Available"}
               </p>
-            </div>
+            </div> */}
 
             <div>
-              <p className="font-semibold">Job Type</p>
-              <p>{jobProfileData?.job_type || "Not Available"}</p>
+              <p className="font-semibold">Job Category</p>
+              <p>{aProfile?.category || "Not Available"}</p>
             </div>
             <div>
               <p className="font-semibold">Proposals</p>
-              <p>{jobProfileData?.proposal_count} received</p>
+              <p>{aProfile?.count_proposal} sent</p>
             </div>
           </div>
 
@@ -131,7 +129,7 @@ const JobDetailsPage = () => {
             <p
               className="text-gray-700 text-sm"
               dangerouslySetInnerHTML={{
-                __html: jobProfileData?.description,
+                __html: aProfile?.description,
               }}
             />
           </div>
@@ -192,22 +190,22 @@ const JobDetailsPage = () => {
             Job Requirements
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-700">
-            <div className="">
+            {/* <div className="">
               <p className="text-gray-500 font-medium">📈 Experience Level</p>
               <p className="text-gray-800 mx-3 text-semibold capitalize">
                 {jobProfileData?.experience || "Not Available"}
               </p>
-            </div>
+            </div> */}
             <div className="">
               <p className="text-gray-500 font-medium">📂 Project Type</p>
               <p className="text-gray-800 mx-3 text-semibold capitalize">
-                {jobProfileData?.job_type || "Not Available"}
+                {aProfile?.job_type || "Not Available"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm">
+        {/* <div className="bg-white rounded-lg p-6 shadow-sm">
           <div className="text-sm text-gray-600">
             <p className="font-semibold">Recent Reviews</p>
             <p className="mt-1 text-gray-800 font-medium">
@@ -218,7 +216,7 @@ const JobDetailsPage = () => {
               timely feedback. &quot;new&quot;
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Right Sidebar */}
@@ -229,7 +227,7 @@ const JobDetailsPage = () => {
           <div className="h-40 w-full bg-gray-100">
             <img
               src={
-                jobProfileData?.employer?.banner ||
+                aProfile?.employer?.banner ||
                 "https://placehold.co/800x200?text=Company+Banner"
               }
               alt="company_banner"
@@ -253,27 +251,24 @@ const JobDetailsPage = () => {
               <div className="space-y-1">
                 <p className="font-medium text-gray-500">Client Name</p>
                 <p className="text-gray-800">
-                  {jobProfileData?.employer?.company_name}
+                  {aProfile?.employer?.company_name}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-gray-500">📧 Email</p>
-                <p className="text-gray-800">
-                  {jobProfileData?.employer?.email}
-                </p>
+                <p className="text-gray-800">{aProfile?.employer?.email}</p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-gray-500">📍 Location</p>
                 <p className="text-gray-800">
-                  {jobProfileData?.employer?.country},{" "}
-                  {jobProfileData?.employer?.region},{" "}
-                  {jobProfileData?.employer?.city}
+                  {aProfile?.employer?.country}, {aProfile?.employer?.region},{" "}
+                  {aProfile?.employer?.city}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-gray-500">📅 Member Since</p>
                 <p className="text-gray-800">
-                  {jobProfileData?.employer?.est_date || "Not Available"}
+                  {aProfile?.employer?.est_date || "Not Available"}
                 </p>
               </div>
             </div>

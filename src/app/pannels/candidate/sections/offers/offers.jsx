@@ -82,8 +82,7 @@ export default function Offers() {
       })
     : [];
 
-  console.log("mapped, data:", mappedJobs);
-
+ 
   const userId = sessionStorage.getItem("userId");
   const isMobile = window.innerWidth < 640; // Or use `react-responsive`
   const loadMoreRef = useRef(null);

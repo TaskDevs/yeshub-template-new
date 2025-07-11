@@ -488,17 +488,19 @@ export default function FreelancerDetailTwo() {
         {/* Right Sidebar */}
         <div className="space-y-6 sidebar-right pt-4 my-4">
           {/* Action Buttons */}
-          <div className="bg-white p-4 rounded-xl shadow space-y-3">
-            <button
-              className="w-full bg-green-600 text-white py-2 rounded-md font-semibold"
-              onClick={() => handleViewProposal()}
-            >
-              View Proposal
-            </button>
-            {/* <button className="w-full border py-2 rounded-md font-medium">
-              Contact
-            </button> */}
-          </div>
+          {proposal_id !== "invitee" && (
+            <div className="bg-white p-4 rounded-xl shadow space-y-3">
+              <button
+                className="w-full bg-green-600 text-white py-2 rounded-md font-semibold"
+                onClick={() => handleViewProposal()}
+              >
+                View Proposal
+              </button>
+              {/* <button className="w-full border py-2 rounded-md font-medium">
+               Contact
+             </button> */}
+            </div>
+          )}
 
           {/* Availability */}
           <div className="bg-white p-4 rounded-xl shadow w-full sm:w-[320px]">

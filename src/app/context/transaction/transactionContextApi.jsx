@@ -51,6 +51,7 @@ const TransactionApiDataProvider = (props) => {
   const processGetTransactionOfFreelance = async () => {
     let response = await getTransactionFreelancer();
     if (response) {
+      console.log(response.data);
       let new_list = [];
       response.data.wallet_transactions.data.map((item) =>
         new_list.push({

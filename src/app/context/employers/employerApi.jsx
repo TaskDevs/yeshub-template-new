@@ -281,6 +281,23 @@ export const setInterview = async (data) => {
   }
 };
 
+export const setInterviewForInvitee = async (data) => {
+  try {
+    console.log(data);
+    let responseOnInterviewForInvitee = await axios.post(
+      `${REACT_BASE_URL}create-invitee-interview`,
+      data
+    );
+    if (responseOnInterviewForInvitee.status == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getInterviewInfo = async (id) => {
   try {
     let responseOnGetInterviewInfo = await axios.get(
@@ -288,6 +305,19 @@ export const getInterviewInfo = async (id) => {
     );
     if (responseOnGetInterviewInfo.status == 200) {
       return responseOnGetInterviewInfo.data;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getInviteeInterviewInfo = async (id) => {
+  try {
+    let responseOnGetInviteeInterviewInfo = await axios.get(
+      `${REACT_BASE_URL}get-invitee-interview-info?id=${id}`
+    );
+    if (responseOnGetInviteeInterviewInfo.status == 200) {
+      return responseOnGetInviteeInterviewInfo.data;
     }
   } catch (err) {
     console.log(err);
@@ -325,6 +355,23 @@ export const changeCandidateStatus = async (data, id) => {
   }
 };
 
+export const changeInviteeStatus = async (data, id) => {
+  try {
+    let responseOnChangeInviteeStatus = await axios.put(
+      `${REACT_BASE_URL}update-invitee-status/${id}`,
+      data
+    );
+    console.log(responseOnChangeInviteeStatus);
+    if (responseOnChangeInviteeStatus.status == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const hireCandidate = async (data, id) => {
   try {
     let responseOnHireCandidate = await axios.post(
@@ -332,6 +379,23 @@ export const hireCandidate = async (data, id) => {
       data
     );
     if (responseOnHireCandidate.status == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+///hire-invitee/{id}
+export const hireInvitee = async (data, id) => {
+  try {
+    let responseOnHireInvitee = await axios.post(
+      `${REACT_BASE_URL}hire-invitee/${id}`,
+      data
+    );
+    if (responseOnHireInvitee.status == 200) {
       return true;
     } else {
       return false;
@@ -451,6 +515,24 @@ export const getJobAppliedToCompany = async (id, page) => {
     //console.log(responseOnJobApplyToCompany);
     if (responseOnJobApplyToCompany.status == 201) {
       return responseOnJobApplyToCompany;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+export const getInvitedApplicants = async (id, page) => {
+  try {
+    let responseOnGetInvitedApplicants = await axios.get(
+      `${REACT_BASE_URL}get-employer-invites?user_id=${id}&per_page=${
+        page || 1
+      }`
+    );
+    if (responseOnGetInvitedApplicants.status == 200) {
+      return responseOnGetInvitedApplicants;
     } else {
       return false;
     }

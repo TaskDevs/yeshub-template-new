@@ -12,6 +12,7 @@ import {
   getInvoiceDetails,
   editInvoice,
   deleteInvoice,
+  deletePaymentMethod,
 } from "./paymentApi";
 
 export const PaymentApiData = createContext();
@@ -241,6 +242,20 @@ const PaymentApiDataProvider = (props) => {
     }
   };
 
+  const processDeletePaymentMethod = async (data) => {
+    try {
+      let response = await deletePaymentMethod(data);
+      console.log(response);
+      if (response.status == "success") {
+        processGetFinanceSettingInfo();
+      }
+      return response;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
   const processGetAllPayment = async () => {};
 
   const processPaymentProfile = async () => {};
@@ -276,6 +291,7 @@ const PaymentApiDataProvider = (props) => {
         previewData,
         setPreviewData,
         processGetInvoiceOfUser,
+        processDeletePaymentMethod,
         totalInvoice,
         setTotalInvoice,
         invoiceDetailInfo,

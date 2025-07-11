@@ -15,7 +15,11 @@ const SalaryModal = ({ onClose, candidateData, action }) => {
       payment_type: paymentType,
     };
 
-    action({ ...candidateData, ...salaryData }); // Callback to parent
+    if (candidateData.job_id == 0) {
+      action[1]({ ...candidateData, ...salaryData }); // Callback to parent
+    } else {
+      action[0]({ ...candidateData, ...salaryData }); // Callback to parent
+    }
     onClose(); // Close modal
   };
 

@@ -1,5 +1,6 @@
 // if issues arise with axios import basic_url and import axios from original source from constant
-import axios from "../../../utils/axios.config";
+//import axios from "../../../utils/axios.config";
+import axios from "axios";
 import {
   SUCCESS_STATUS,
   REACT_BASE_URL,
@@ -277,13 +278,15 @@ export const updatePayment = async () => {
 };
 
 // DELETE Payment
-export const deletePayment = async () => {
+export const deletePaymentMethod = async (data) => {
+  console.log(data);
   try {
-    let responseOnDeletePayment = await axios.delete({
-      /**Add Delete Payment API URL here like  `/api/deleteHistory/${data}` **/
-    });
-    if (responseOnDeletePayment.status === SUCCESS_STATUS) {
-      return responseOnDeletePayment.data;
+    let responseOnDeletePaymentMethod = await axios.delete(
+      `${REACT_BASE_URL}delete-payment-method?user_id=${data.user_id}`,
+      { data }
+    );
+    if (responseOnDeletePaymentMethod.status == 200) {
+      return responseOnDeletePaymentMethod.data;
     } else {
       return false;
     }

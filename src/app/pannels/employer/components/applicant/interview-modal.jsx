@@ -30,7 +30,7 @@ export default function InterviewModal({
       setLocation(interviewInfo.location);
       setDuration(interviewInfo.duration);
       setInterviewers(interviewInfo.inteviewers);
-      setInterviewers(interviewInfo.notes);
+      setNotes(interviewInfo.notes);
     }
   }, [interviewInfo]);
 

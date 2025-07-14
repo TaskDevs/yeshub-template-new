@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { CiBookmark } from "react-icons/ci";
-import { FaStar } from "react-icons/fa";
+
 import { IoIosPeople } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { calculateDaysSincePosted } from "../../../../utils/readableDate";
 import { FaBookmark } from "react-icons/fa6";
 import { SavedJobsApiData } from "../../../context/saved-jobs/savedJobsContextApi";
 import { userId } from "../../../../globals/constants";
@@ -13,8 +12,6 @@ const CanJobCard = ({
   role,
   id,
   companyName,
-  reviews,
-  ratings,
   skills,
   salaryRange,
   image,
@@ -25,9 +22,9 @@ const CanJobCard = ({
   jobType,
   isMobile = false,
   jobLocation,
-  datePosted,
   proposal,
   loading = false,
+  days_left,
 }) => {
   const { savedjobsData, handleDeleteSavedJobs, toggleSavedJob } =
     useContext(SavedJobsApiData);
@@ -56,11 +53,10 @@ const CanJobCard = ({
     );
   }
 
-
   if (loading && isMobile) {
     return (
       <div className="tw-css border rounded-lg shadow-md p-2 bg-white animate-pulse">
-         Loading...
+        Loading...
       </div>
     );
   }
@@ -84,12 +80,21 @@ const CanJobCard = ({
                   />
                 </div>
                 <div className="job-card-wrapper">
-                  <h3 className="text-xl font-medium mb-0">{role}</h3>
+                  <h3 className="text-md font-medium mb-0 flex items-center gap-2 flex-wrap">
+                    {role}
+                    <span
+                      className={`text-xs font-medium px-2 py-1 rounded-full ${
+                        days_left === 0
+                          ? "bg-red-100 text-red-600"
+                          : "bg-green-100 text-gray-700"
+                      }`}
+                    >
+                      {days_left === 0 ? "Expired" : `${days_left} days left`}
+                    </span>
+                  </h3>
+
                   <div className="flex">
                     <p className="text-gray-700 mb-0">{companyName.trim()}</p>
-                    <FaStar className="h-5 w-5 text-[#FACC15]" />
-                    <span>{ratings}</span>
-                    <span className="text-gray-500">({reviews} reviews)</span>
                   </div>
 
                   <div className="flex flex-wrap gap-2 mt-2">
@@ -135,7 +140,9 @@ const CanJobCard = ({
                   <span>{isSaved ? "Saved" : "Save"}</span>
                 </button>
 
-                <p className="text-[#374151]">{`GHS ${salaryRange || 0}`}</p>
+                <p className="text-gray-700 font-medium">
+                  GHS {Number(salaryRange || 0).toLocaleString()}
+                </p>
 
                 <button
                   className="bg-green-800 text-white px-4 py-2 rounded capitalize text-center h-10"
@@ -186,9 +193,16 @@ const CanJobCard = ({
 
                 <div className="flex items-center gap-2">
                   <p className="text-gray-700">{companyName}</p>
-                  <FaStar className="h-5 w-5 text-[#FACC15]" />
-                  <span>{ratings}</span>
-                  <span className="text-gray-500">( {calculateDaysSincePosted(datePosted)})</span>
+
+                  <span
+                    className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      days_left === 0
+                        ? "bg-red-100 text-red-600"
+                        : "bg-green-100 text-gray-700"
+                    }`}
+                  >
+                    {days_left === 0 ? "Expired" : `${days_left} days left`}
+                  </span>
                 </div>
 
                 <div className="flex items-center flex-wrap gap-2 mt-1 text-sm">
@@ -206,9 +220,10 @@ const CanJobCard = ({
                     {jobType}
                   </span>
 
-                  <span className="text-gray-800 font-semibold ">
-                    GHS {salaryRange}
+                  <span className="text-gray-700 font-medium">
+                    GHS {Number(salaryRange || 0).toLocaleString()}
                   </span>
+
                   <span className="text-gray-500 text-sm flex">
                     {dateSaved}
                   </span>
@@ -280,15 +295,24 @@ const CanJobCard = ({
                   )}
                 </button>
               )}
-              <p className="text-[10px] text-gray-400">
-                {calculateDaysSincePosted(datePosted)}
-              </p>
+              <span
+                className={`text-xs font-medium px-2 py-1 rounded-full ${
+                  days_left === 0
+                    ? "bg-red-100 text-red-600"
+                    : "bg-green-100 text-gray-700"
+                }`}
+              >
+                {days_left === 0 ? "Expired" : `${days_left} days left`}
+              </span>
             </div>
           </div>
 
           {/* Bottom Row */}
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-800 font-sm">GHS {salaryRange}</p>
+            <p className="text-gray-700 font-medium">
+              GHS {Number(salaryRange || 0).toLocaleString()}
+            </p>
+
             <button
               className="bg-green-700 hover:bg-green-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
               onClick={() => navigate(`/dashboard-candidate/job-details/${id}`)}

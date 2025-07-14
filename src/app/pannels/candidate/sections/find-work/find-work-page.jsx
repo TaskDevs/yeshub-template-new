@@ -109,6 +109,27 @@ function FindWorkPage() {
     setSelectedSalaryRange(null);
   };
 
+  const calculateDaysLeft = (start_date, end_date) => {
+  const startDate = new Date(start_date);
+  const endDate = new Date(end_date);
+  const today = new Date();
+
+  // If today is before the job starts, return full duration
+  if (today < startDate) {
+    const timeDiff = endDate.getTime() - startDate.getTime();
+    return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  }
+
+  // If job has already ended
+  if (today > endDate) {
+    return 0;
+  }
+
+  // Job is ongoing; calculate remaining days
+  const timeDiff = endDate.getTime() - today.getTime();
+  return Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+};
+
   return (
     <div className="tw-css mx-auto">
       <div className={`${styles.mobileFindWork} min-h-screen p-4`}>
@@ -128,14 +149,12 @@ function FindWorkPage() {
                 key={job.id}
                 id={job?.id}
                 role={job?.job_title}
-                ratings="4.9"
-                reviews="23k"
                 skills={job?.skills}
                 companyName={job?.company_name}
                 jobType={job?.job_type}
                 isMobile={true}
                 jobLocation={job?.location || "Accra"}
-                datePosted={job?.created_at}
+                days_left={calculateDaysLeft(job?.created_at, job?.end_date)}
                 salaryRange={job?.fixed_rate || job?.budget}
                 image={
                   job?.employer?.logo || "https://placehold.co/80x80?text=Logo"
@@ -256,7 +275,7 @@ function FindWorkPage() {
                           job?.employer?.logo ||
                           "https://placehold.co/80x80?text=Logo"
                         }
-                        reviews={job?.company_review}
+                       
                         companyName={job?.job_category}
                         description={job?.description}
                         skills={job?.skills}
@@ -268,6 +287,8 @@ function FindWorkPage() {
                         numberOfProposals="23"
                         salaryRange={job?.fixed_rate || job?.budget}
                         jobType={job?.job_type}
+                        datePosted={job?.created_at}
+                        days_left={calculateDaysLeft(job?.created_at, job?.end_date)}
                       />
                     ))
                   ) : (

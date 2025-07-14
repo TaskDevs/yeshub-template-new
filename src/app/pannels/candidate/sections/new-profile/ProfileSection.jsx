@@ -222,6 +222,7 @@ export const ProfileSection = ({
         <ShareProfileModal
           onClose={closeShareModal}
           profileName={data.firstname}
+          id={data?.id}
         />
       )}
     </div>

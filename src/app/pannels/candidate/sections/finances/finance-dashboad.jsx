@@ -187,32 +187,7 @@ const contractColumns = [
 ];
 
 // Data definition
-const contractData = [
-  // {
-  //   project: "Website Redesign Project",
-  //   client: "Tech Solutions Inc.",
-  //   deadline: "May 31, 2025",
-  //   daysRemaining: 25,
-  //   budget: "$4,500",
-  //   status: "In Progress",
-  // },
-  // {
-  //   project: "Mobile App Development",
-  //   client: "Innovation Labs",
-  //   deadline: "Jun 15, 2025",
-  //   daysRemaining: 40,
-  //   budget: "$6,250",
-  //   status: "Pending",
-  // },
-  // {
-  //   project: "Brand Identity Design",
-  //   client: "Creative Studios",
-  //   deadline: "Jun 28, 2025",
-  //   daysRemaining: 53,
-  //   budget: "$3,750",
-  //   status: "Just Started",
-  // },
-];
+const contractData = [];
 
 export default function FinancialDashboard() {
   const {
@@ -244,6 +219,8 @@ export default function FinancialDashboard() {
   useEffect(() => {
     setPaymentMethods(paymentMethodList);
   }, [financeSettingInfo, paymentMethodList]);
+
+
 
   // Doughnut Chart Data
   const doughnutData = {

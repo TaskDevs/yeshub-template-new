@@ -65,33 +65,7 @@ export default function ClientfreelancerDetail() {
     setCurrentDate(newDate);
   };
 
-  // const quickActions = [
-  //   {
-  //     label: "View Contract",
-  //     icon: FileText,
-  //     bgColor: "bg-blue-100",
-  //     iconColor: "text-blue-600",
-  //   },
-  //   {
-  //     label: "Edit Project",
-  //     icon: Pencil,
-  //     bgColor: "bg-green-100",
-  //     iconColor: "text-green-600",
-  //   },
-  //   {
-  //     label: "Schedule Meeting",
-  //     icon: Calendar,
-  //     bgColor: "bg-purple-100",
-  //     iconColor: "text-purple-600",
-  //     onClick: () => setShowModal(true),
-  //   },
-  //   {
-  //     label: "Generate Report",
-  //     icon: FileBarChart,
-  //     bgColor: "bg-orange-100",
-  //     iconColor: "text-orange-600",
-  //   },
-  // ];
+
   return (
     <div className="tw-css max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8 p-6 ">
       {/* Left Column */}
@@ -619,18 +593,6 @@ export default function ClientfreelancerDetail() {
           {/* </div> */}
         </div>
       </div>
-
-      {/* <HireTalentModal
-           isOpen={isModalOpen}
-           onClose={() => setIsModalOpen(false)}
-           jobOptions={[
-             "Senior Frontend Developer (React)",
-             "Backend Engineer (Node.js)",
-             "UX/UI Designer",
-             "Others",
-           ]}
-           onSend={handleHire}
-         /> */}
     </div>
   );
 }

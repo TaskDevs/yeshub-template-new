@@ -23,7 +23,7 @@ import { useChat } from "../../context/chat/chatContext";
 import NotificationModal from "./notification-modal";
 import MessageModal from "./message-modal";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
-
+// import { PaymentApiData } from "../../context/payment/paymentContextApi";
 export const Header = ({ isDashboard = true }) => {
   const { processGetMessagesOfReceiver, unreadCount, setUnreadCount } =
     useChat();
@@ -33,6 +33,7 @@ export const Header = ({ isDashboard = true }) => {
     setProjectChats,
     clientProjectStatus,
   } = useContext(EmployerApiData);
+  // const { paymentMethodList } = useContext(PaymentApiData);
   const { freelanceProjectStatus } = useContext(FreelanceApiData);
   const menuRef = useRef(null);
   const profileRef = useRef(null);
@@ -53,6 +54,7 @@ export const Header = ({ isDashboard = true }) => {
   const [messagesData, setMessageData] = useState([]);
   const [chatId, setChatId] = useState();
   const [openMenus, setOpenMenus] = useState({});
+  // const [message, setMessage] = useState("");
 
   const {
     firstname,
@@ -66,6 +68,12 @@ export const Header = ({ isDashboard = true }) => {
   const role = sessionStorage.getItem("userRole");
 
   const popSound = new Audio("./assets/sound/pop.mp3"); // from public/sounds
+
+  // useEffect(() => {
+  //   if (paymentMethodList.length === 0) {
+  //     setMessage("Please add a payment method to continue.");
+  //   }
+  // }, []);
 
   useEffect(() => {
     let data = JSON.parse(sessionStorage.getItem("project_ids"));
@@ -629,17 +637,18 @@ export const Header = ({ isDashboard = true }) => {
           {/* Right Section */}
           <div className="flex items-center space-x-2 justify-end flex-1">
             {/* Search Box - Only show on dashboard */}
-            {isDashboard && (
-              <SearchInput
-                className="w-full flex-1 search-input"
-                rightIcon={null}
-                value={searchValue}
-                onSearch={handleSearch}
-                onChange={setSearchValue}
-                placeholder="Search here..."
-                leftIcon={<IoSearch size={18} />}
-              />
-            )}
+            {isDashboard &&
+              
+                <SearchInput
+                  className="w-full flex-1 search-input"
+                  rightIcon={null}
+                  value={searchValue}
+                  onSearch={handleSearch}
+                  onChange={setSearchValue}
+                  placeholder="Search here..."
+                  leftIcon={<IoSearch size={18} />}
+                />
+        }
 
             {!isDashboard && (
               <div className="flex space-x-2">
@@ -826,7 +835,7 @@ export const Header = ({ isDashboard = true }) => {
                       alt={username}
                       onClick={() => toggleNav()}
                       sx={{
-                        bgcolor: 'thistle',
+                        bgcolor: "thistle",
                         width: 40,
                         height: 40,
                         fontSize: "1.2rem",

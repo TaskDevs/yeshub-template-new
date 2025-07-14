@@ -34,7 +34,6 @@ import FreelanceSubmissions from "../app/pannels/candidate/sections/deliver-work
 import FinancialSettings from "../app/pannels/candidate/sections/finances/finance-settings";
 import JobDetailsPage from "../app/pannels/public-user/components/jobs/new-job-details";
 import { FreelanceProjectManage } from "../app/pannels/employer/components/talent-pool/freelance-project-manage";
-
 import { isAuthenticated } from "./auth";
 import SupportCenter from "../app/pannels/candidate/support/SupportCenter";
 import SubmitDispute from "../app/pannels/candidate/support/SubmitDispute";

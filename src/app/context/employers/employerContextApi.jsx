@@ -4,6 +4,7 @@ import {
   addEmployer,
   addCertification,
   getInterviewInfo,
+  getInviteeInterviewInfo,
   getProposalInfo,
   addExperience,
   addJobPost,
@@ -14,6 +15,7 @@ import {
   getReceipt,
   createProject,
   changeCandidateStatus,
+  changeInviteeStatus,
   getClientDashboardStats,
   getProjects,
   getProjectPayments,
@@ -26,11 +28,14 @@ import {
   getCompanyInfoForInvoice,
   getHiredApplicants,
   getDeliverables,
+  getInvitedApplicants,
   getCompanyPostedJobs,
   projectInfoData,
   checkIfCompanyExist,
   hireCandidate,
+  hireInvitee,
   setInterview,
+  setInterviewForInvitee,
   sendGroupChat,
   companyInfo,
   updateEmployerLogo,
@@ -53,6 +58,7 @@ const EmployerApiDataProvider = (props) => {
   const [companyInfoData, setCompanyInfoData] = useState([]);
   const [appliedJobList, setAppliedJobList] = useState([]);
   const [applicants, setApplicants] = useState([]);
+  const [invitedApplicants, setInvitedApplicants] = useState([]);
   const [userProjects, setUserProjects] = useState([]);
   const [projectInfo, setProjectInfo] = useState([]);
   const [hiredApplicants, setHiredApplicants] = useState([]);
@@ -328,8 +334,32 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processSetInterviewForInvitee = async (data) => {
+    let response = await setInterviewForInvitee(data);
+
+    if (response === true) {
+      setInvitedApplicants((prev) =>
+        prev.map((item) =>
+          item.invitation_id == data.id
+            ? { ...item, status: "interview" }
+            : item
+        )
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const processGetInterviewInfo = async (id) => {
     let response = await getInterviewInfo(id);
+    if (response) {
+      setInterviewInfo(response.data);
+    }
+  };
+
+  const processGetInviteeInterviewInfo = async (id) => {
+    let response = await getInviteeInterviewInfo(id);
     if (response) {
       setInterviewInfo(response.data);
     }
@@ -341,6 +371,14 @@ const EmployerApiDataProvider = (props) => {
       console.log(response.data);
       setProcessHiredApplicants(response.data);
       setHiredApplicants(response.data);
+    }
+  };
+
+  const processGetInvitedApplicants = async () => {
+    let response = await getInvitedApplicants(userId);
+    if (response) {
+      console.log(response.data.data.data);
+      setInvitedApplicants(response.data.data.data);
     }
   };
 
@@ -358,11 +396,39 @@ const EmployerApiDataProvider = (props) => {
     }
   };
 
+  const processChangeInviteeStatus = async (data, id) => {
+    let response = await changeInviteeStatus(data, id);
+    if (response) {
+      setInvitedApplicants((prev) =>
+        prev.map((item) =>
+          item.invitation_id == id ? { ...item, status: data.status } : item
+        )
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const processHireCandidate = async (data, id) => {
     let response = await hireCandidate(data, id);
     if (response) {
       setApplicants((prev) =>
         prev.map((item) => (item.id == id ? { ...item, stage: "hired" } : item))
+      );
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const processHireInvitee = async (data, id) => {
+    let response = await hireInvitee(data, id);
+    if (response) {
+      setInvitedApplicants((prev) =>
+        prev.map((item) =>
+          item.invitation_id == id ? { ...item, status: "hired" } : item
+        )
       );
       return true;
     } else {
@@ -523,7 +589,6 @@ const EmployerApiDataProvider = (props) => {
 
   const processUpdateEmployer = async (id, data) => {
     //const userId = sessionStorage.getItem("user_id");
-    console.log(data);
     let response = await updateEmployer(id, data);
     // console.log(userId);
     console.log(response);
@@ -597,6 +662,7 @@ const EmployerApiDataProvider = (props) => {
         processGetCompanyInfoForInvoice,
         processGetApplicantsLogs,
         processGetInterviewInfo,
+        processGetInviteeInterviewInfo,
         processEmployerProfile,
         processChangeCandidateStatus,
         processGetJobAppliedToCompany,
@@ -605,6 +671,7 @@ const EmployerApiDataProvider = (props) => {
         projectSubmissionData,
         processGetUserProjects,
         processGetDeliverables,
+        processGetInvitedApplicants,
         processCheckIfCompanyExist,
         processSearchEmployer,
         processAddJobPost,
@@ -624,6 +691,7 @@ const EmployerApiDataProvider = (props) => {
         companyInfoData,
         deliverables,
         setDeliverables,
+        invitedApplicants,
         employerStats,
         employerProfiles,
         processGetCompanyPostedJobs,
@@ -637,6 +705,8 @@ const EmployerApiDataProvider = (props) => {
         applicantLogs,
         totalApplicants,
         processSetInterview,
+        processSetInterviewForInvitee,
+        processChangeInviteeStatus,
         interviewInfo,
         userProjects,
         processHiredApplicants,
@@ -655,6 +725,7 @@ const EmployerApiDataProvider = (props) => {
         processSendGroupChat,
         processGetClientProjects,
         processHireCandidate,
+        processHireInvitee,
         clientProjectStatus,
         processGetProposalInfo,
         proposalInfo,

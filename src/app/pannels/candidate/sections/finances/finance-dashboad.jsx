@@ -199,10 +199,10 @@ export default function FinancialDashboard() {
     processCreateWalletOfUser,
     transactionList,
     monthEarnings,
-    newPendAmount,
   } = useContext(TransactionApiData);
   const { freelanceProjectList } = useContext(FreelanceApiData);
-  const { paymentMethodList, financeSettingInfo } = useContext(PaymentApiData);
+  const { paymentMethodList, financeSettingInfo, processDeletePaymentMethod } =
+    useContext(PaymentApiData);
   const [createWalletLoad, setCreateWalletLoad] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showNoteModal, setShowNoteModal] = useState(false);
@@ -283,6 +283,8 @@ export default function FinancialDashboard() {
       payment_item_no: selectedMethod.item_no,
     };
 
+    console.log(newData);
+
     let response = await processMakeWithdrawal(newData);
     if (response.status == "success") {
       Swal.fire({
@@ -346,6 +348,30 @@ export default function FinancialDashboard() {
     });
   }, [searchTerm, transactionList]);
 
+  const handleDeletePaymentMethod = async (data) => {
+    let new_data = {
+      user_id: userId,
+      type: data.type,
+      item_no: data.item_no,
+    };
+    let response = await processDeletePaymentMethod(new_data);
+    if (response.status == "success") {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: response.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops",
+        text: response.message || "An issue occured, try again",
+      });
+    }
+  };
+
   return (
     <div className="tw-css bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -408,7 +434,7 @@ export default function FinancialDashboard() {
             <div>
               <p className="text-gray-500">Pending Earnings</p>
               <p className="text-3xl font-bold text-GRAY-600">
-                ₵{newPendAmount}
+                ₵{freelanceEarnings.pending}
               </p>
               {/* <p className="text-sm text-gray-500 mt-1">Processing this week</p> */}
             </div>
@@ -569,10 +595,7 @@ export default function FinancialDashboard() {
                       </span>
                     )}
                     <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // handleRemoveMethod(method.id);
-                      }}
+                      onClick={() => handleDeletePaymentMethod(method)}
                       // onClick={(e) => {
                       //   e.stopPropagation();
                       //   handleRemoveMethod(method.id);

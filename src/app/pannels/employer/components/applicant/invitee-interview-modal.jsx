@@ -3,13 +3,14 @@ import Swal from "sweetalert2";
 import { userId } from "../../../../../globals/constants";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 
-export default function InterviewModal({
+export default function InviteeInterviewModal({
   isOpen,
   onClose,
   candidateData,
   status,
 }) {
-  const { processSetInterview, interviewInfo } = useContext(EmployerApiData);
+  const { processSetInterviewForInvitee, interviewInfo } =
+    useContext(EmployerApiData);
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [format, setFormat] = useState("WhatsApp video call");
@@ -30,7 +31,7 @@ export default function InterviewModal({
       setLocation(interviewInfo.location);
       setDuration(interviewInfo.duration);
       setInterviewers(interviewInfo.inteviewers);
-      setNotes(interviewInfo.notes);
+      setInterviewers(interviewInfo.notes);
     }
   }, [interviewInfo]);
 
@@ -38,9 +39,9 @@ export default function InterviewModal({
     setLoading(true);
     try {
       let newData = {
-        employer_id: userId,
-        proposal_id: candidateData.proposal_id,
-        user_id: candidateData.user_id,
+        id: candidateData.id,
+        company_id: userId,
+        candidate_id: candidateData.user_id,
         date: date,
         time: time,
         format: format,
@@ -50,7 +51,9 @@ export default function InterviewModal({
         notes: notes,
       };
 
-      let response = await processSetInterview(newData);
+      console.log(newData);
+
+      let response = await processSetInterviewForInvitee(newData);
       if (response) {
         Swal.fire({
           position: "center",

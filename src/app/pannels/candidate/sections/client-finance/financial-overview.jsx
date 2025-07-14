@@ -58,6 +58,7 @@ const FinancialOverview = () => {
   const [showModal, setShowModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All Projects");
   const [page, setPage] = useState(1);
+  const [completeProjects, setCompleteProjects] = useState(0);
   const perPage = 5;
   const navigate = useNavigate(); // Initialize useNavigate hook
   const handleView = (id) => {
@@ -87,6 +88,14 @@ const FinancialOverview = () => {
   useEffect(() => {
     console.log(invoiceListData);
   }, [invoiceListData]);
+
+  useEffect(() => {
+    let complete = userProjects?.filter(
+      (item) => item.status == "complete"
+    )?.length;
+
+    setCompleteProjects(complete);
+  }, [userProjects]);
 
   const handleAddFunds = (data) => {
     console.log("Funds Added:", data);
@@ -266,8 +275,11 @@ const FinancialOverview = () => {
             </div>
             <p className="text-xl font-semibold">
               ₵
-              {parseFloat(allEarnings.escrow) -
-                parseFloat(billingData.paid_total)}
+              {Math.max(
+                0,
+                parseFloat(allEarnings.escrow) -
+                  parseFloat(billingData.paid_total)
+              )}
             </p>
             <p className="text-sm text-red-600 mt-1">↑ 12.5% from April</p>
             <div className="mt-3 space-y-1 text-sm">
@@ -301,7 +313,12 @@ const FinancialOverview = () => {
             <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
               <div
                 className="bg-blue-500 h-2 rounded-full"
-                style={{ width: "71%" }}
+                style={{
+                  width:
+                    userProjects.length > 0
+                      ? `${(completeProjects / userProjects.length) * 100}%`
+                      : "0%",
+                }}
               ></div>
             </div>
             <p className="text-xs text-gray-500 mt-1">{userProjects.length}</p>

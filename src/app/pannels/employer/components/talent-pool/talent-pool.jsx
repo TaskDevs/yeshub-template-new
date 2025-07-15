@@ -545,7 +545,7 @@ export const TalentPool = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-row space-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold">Talent Pool</h2>
+            <h2 className="text-2xl font-bold">Project Management</h2>
             <span className="text-sm text-gray-500">
               Manage your team of freelancers accross projects
             </span>

@@ -373,6 +373,78 @@ export const FileUpload = ({
   );
 };
 
+export const WorkFileUpload = ({
+  files,
+  onFileSelect,
+  onFileDrop,
+  onFileRemove,
+  error,
+  isCoverImage = false,
+}) => {
+  const fileInputRef = useRef(null);
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+  return (
+    <div className="mt-4">
+      <div
+        className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer "
+        onClick={() => fileInputRef.current?.click()}
+        onDragOver={handleDragOver}
+        onDrop={onFileDrop}
+      >
+        <div className="flex flex-col items-center">
+          <div className="text-gray-400 mb-2">
+            <LuImagePlus className="mx-auto h-7 w-7 text-[#9CA3AF]" />
+          </div>
+          <p className="flex items-center justify-center gap-1 mb-2 text-sm text-gray-500">
+            <span className="text-[#305718]">Upload images</span> or drag and
+            drop
+          </p>
+          <p className="text-xs text-gray-400">PNG, JPG, GIF up to 10MB</p>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*,.zip,.psd,application/zip,image/vnd.adobe.photoshop"
+          multiple
+          className="hidden"
+          onChange={(e) => {
+            onFileSelect(e.target.files);
+            e.target.value = ""; // Reset input value after selection
+          }}
+        />
+      </div>
+
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+      {files.length > 0 && (
+        <div
+          className={`mt-4 grid ${
+            isCoverImage ? "grid-cols-1" : "grid-cols-2 sm:grid-cols-3"
+          }  gap-4`}
+        >
+          {files.map((file, index) => (
+            <div key={index} className="relative">
+              <img
+                src={file.preview}
+                alt={file.name}
+                className="w-full h-64 object-cover rounded-md"
+              />
+              <button
+                className="absolute top-1 right-1 bg-white bg-opacity-70 rounded-full p-1 hover:bg-opacity-100"
+                onClick={() => onFileRemove(index)}
+              >
+                <MdClose size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 /**
  * Skills Selection Components
  */

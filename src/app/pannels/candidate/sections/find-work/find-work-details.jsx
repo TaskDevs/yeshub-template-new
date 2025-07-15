@@ -257,35 +257,7 @@ function FindWorkDetails() {
               </div>
             </div>
           </div>
-          {/* <div className="w-full py-4">
-            <h4 className="capitalize font-bold text-xl text-center mb-2 tracking-wide my-4">
-              similar jobs
-            </h4>
-            <div className="details-job-section justify-between">
-              {jobListData.map((job, i) => (
-                <CanJobCard
-                  key={i}
-                  role={job?.title}
-                  id={job?.id}
-                  companyName={job?.employer?.company_name}
-                  reviews={job?.reviews || "400"}
-                  ratings={job?.ratings || "4.8"}
-                  description={job?.description}
-                  skills={job?.skills}
-                  numberOfProposals={job?.number_of_proposals}
-                  salaryRange={job?.salary_range || "4000"}
-                  image={job?.image}
-                  newTag={job?.new_tag}
-                  isFindWork={false}
-                  status={job?.status}
-                  dateSaved={job?.date_saved}
-                  jobType={job?.job_type}
-                  jobLocation={job?.job_location}
-                  isMobile={false}
-                />
-              ))}
-            </div>
-          </div> */}
+         
         </div>
       </div>
 

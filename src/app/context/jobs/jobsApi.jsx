@@ -91,7 +91,7 @@ export const jobList = async (pageNo, userId) => {
       }&perPage=${LIST_ON_PAGES}&user_id=${userId}`
     );
     if (responseOnJobList.status == 200) {
-      console.log(responseOnJobList);
+      console.log("job data", responseOnJobList);
       return responseOnJobList.data;
     } else {
       return false;

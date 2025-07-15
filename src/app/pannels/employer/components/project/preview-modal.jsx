@@ -56,7 +56,7 @@ export default function PreviewModal({ isOpen, onClose, projectData }) {
       Swal.fire({
         icon: "error",
         title: "Oops",
-        text: "Failed to create a project",
+        text: "This may be due to insufficient balance, kindly top up",
       });
     }
     onClose();

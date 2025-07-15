@@ -4,6 +4,7 @@ import { Doughnut } from "react-chartjs-2";
 import { EmployerApiData } from "../../../../context/employers/employerContextApi";
 import PreviewModal from "./preview-modal";
 import CautionModal from "./caution-modal";
+import { useNavigate } from "react-router-dom";
 //import { set } from "react-hook-form";
 
 const steps = [
@@ -43,6 +44,8 @@ export default function CreateProject() {
       paid: false,
     },
   ]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     processGetHiredApplicants();
@@ -190,7 +193,8 @@ export default function CreateProject() {
   });
 
   const handleTopUpRedirect = () => {
-    console.log("We are doing great staff");
+    navigate("/dashboard-client/client-finance-overview");
+    //console.log("We are doing great staff");
   };
 
   const handleViewPreview = () => {

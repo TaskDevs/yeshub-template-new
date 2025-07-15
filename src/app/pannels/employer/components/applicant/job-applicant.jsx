@@ -366,7 +366,7 @@ export default function JobApplicant() {
       Swal.fire({
         icon: "error",
         title: "Oops",
-        text: "Failed to change status",
+        text: "Candidate may already be in your talent pool",
       });
     }
   };
@@ -387,7 +387,7 @@ export default function JobApplicant() {
       Swal.fire({
         icon: "error",
         title: "Oops",
-        text: "Failed to change status",
+        text: "Candidate may already be in your talent pool",
       });
     }
   };

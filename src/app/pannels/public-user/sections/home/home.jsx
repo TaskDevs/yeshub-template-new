@@ -48,11 +48,10 @@ export default function YesHubLandingPage() {
     return () => clearInterval(interval);
   }, []);
   return (
-   <div className="tw-css min-h-screen bg-white text-gray-900 py-5 mt-6 sm:mt-5">
-
+    <div className="tw-css min-h-screen bg-white text-gray-900 py-5 mt-6 sm:mt-5 p-5">
       {/* Hero Section */}
 
-      <div className="grid md:grid-cols-2 gap-4 px-4 sm:px-5 lg:px-20 py-10 items-center">
+      <div className="grid md:grid-cols-2 gap-4 px-6 sm:px-5 lg:px-20 py-10 items-center">
         <div>
           <p className="text-sm text-gray-600 mb-2">
             An Initiative By H.E. President John Dramani Mahama
@@ -138,7 +137,7 @@ export default function YesHubLandingPage() {
                 </li>
                 <li className="items-start">
                   <span className="text-green-400 text-lg">✔</span>
-                  Higher productivity:
+                  Higher productivity
                 </li>
                 <li className="items-start">
                   <span className="text-green-400 text-lg">✔</span>
@@ -205,9 +204,9 @@ export default function YesHubLandingPage() {
                 <img
                   src="https://i.postimg.cc/9FJ9k5JD/Untitled-2.jpg"
                   alt="Client working"
-                  className="w-full object-cover"
+                  className="w-full h-full object-cover object-right md:object-center"
                 />
-                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute inset-0 bg-black/30" />
               </div>
 
               {/* Content */}

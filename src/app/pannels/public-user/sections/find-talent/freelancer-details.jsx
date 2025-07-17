@@ -83,11 +83,16 @@ export default function FreelancerDetail() {
       {/* Profile Header */}
       <div className="bg-white p-6 rounded-xl shadow">
         <div className="flex flex-col sm:flex-row gap-6">
-          <img
-            src={viewFreelanceProfile?.freelance_info?.[0]?.profile_image}
-            alt="Profile"
-            className="w-24 h-24 rounded-full object-cover mx-auto sm:mx-0"
-          />
+        <img
+          src={viewFreelanceProfile?.freelance_info?.[0]?.profile_image || "https://placehold.co/600x400"}
+          alt="Profile"
+          className="w-24 h-24 rounded-full object-cover mx-auto sm:mx-0"
+          onError={(e) => {
+            e.target.onerror = null; // prevents infinite loop
+            e.target.src = "https://placehold.co/600x400";
+          }}
+        />
+
           <div className="flex-1 space-y-3">
             <div className="flex flex-col sm:flex-row justify-between gap-2">
               <div>

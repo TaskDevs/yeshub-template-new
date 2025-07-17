@@ -90,11 +90,12 @@ export default function NotificationList() {
               </div>
 
               {/* Message Content */}
-              {expandedId === msg.id && (
-                <div className="mt-3 text-sm text-gray-700 border-t pt-3">
-                  {msg.message}
-                </div>
-              )}
+             {expandedId === msg.id && (
+  <div className="mt-3 pt-3 border-t text-sm text-gray-700">
+    {msg.message}
+  </div>
+)}
+
 
               {/* Unread Indicator */}
               {!msg.status && (

@@ -351,7 +351,7 @@ export const FreelanceProjectManage = () => {
             <div className="md:hidden px-4 mb-4">
               <button
                 onClick={() => setIsDrawerOpen(true)}
-                className="fixed bottom-10 right-4 bg-blue-600 hover:bg-green-700 text-white w-14 h-14 rounded-full shadow-lg z-50 animate-pulse hover:scale-105 active:scale-95 transition-transform duration-200 flex items-center justify-center"
+                className="fixed bottom-20 right-4 bg-green-600 hover:bg-green-700 text-white w-14 h-14 rounded-full shadow-lg z-50 animate-pulse hover:scale-105 active:scale-95 transition-transform duration-200 flex items-center justify-center"
               >
                 <User size={24} />
               </button>
@@ -451,7 +451,7 @@ export const FreelanceProjectManage = () => {
               </>
             )}
           </>
-          <div className="w-2/3 w-full">
+          <div className="w-full px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             <div className="w-full h-full border border-gray-300 bg-white rounded-xl p-4 mb-6">
               <div className="mb-6">
                 <div></div>
@@ -1024,25 +1024,96 @@ export const FreelanceProjectManage = () => {
                         <p className="text-xs text-gray-500 mb-1 font-medium">
                           {item.sender_name || "Unknown User"}
                         </p>
-                        <div className="bg-gray-100 rounded-lg p-3 max-w-xs">
-                          {item.attachment_path && (
-                            <a
-                              href={item.attachment_path} // Replace with the actual file URL
-                              download
-                              className="no-underline"
-                            >
-                              <div className="my-3 w-40 h-20 rounded-lg border border-gray-300 flex items-center justify-between px-3 py-2 bg-gray-50 shadow-sm">
-                                <div className="flex items-center gap-2 overflow-hidden">
-                                  <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white text-xs">
-                                    📎
+                        <div className="p-3 max-w-xs">
+                          {item.attachment_path &&
+                            (() => {
+                              const fileUrl = item.attachment_path;
+                              const fileName = fileUrl.split("/").pop();
+                              const fileExt = fileName
+                                .split(".")
+                                .pop()
+                                .toLowerCase();
+
+                              const isImage = [
+                                "jpg",
+                                "jpeg",
+                                "png",
+                                "gif",
+                                "webp",
+                              ].includes(fileExt);
+                              const isVideo = ["mp4", "webm", "ogg"].includes(
+                                fileExt
+                              );
+                              const isPDF = fileExt === "pdf";
+
+                              const handleDownload = () => {
+                                const link = document.createElement("a");
+                                link.href = fileUrl;
+                                link.download = fileName;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                              };
+
+                              return (
+                                <div
+                                  onClick={handleDownload}
+                                  className="cursor-pointer w-full max-w-sm rounded-xl border border-gray-200 bg-white shadow-md hover:shadow-lg transition duration-200 overflow-hidden"
+                                >
+                                  {/* Preview Area */}
+                                  <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
+                                    {isImage ? (
+                                      <img
+                                        src={fileUrl}
+                                        alt={fileName}
+                                        className="h-full w-full object-cover"
+                                      />
+                                    ) : isVideo ? (
+                                      <video
+                                        src={fileUrl}
+                                        className="h-full w-full object-cover"
+                                        muted
+                                        preload="metadata"
+                                      />
+                                    ) : isPDF ? (
+                                      <div className="flex flex-col items-center justify-center text-gray-500">
+                                        <span className="text-4xl">📄</span>
+                                        <span className="text-sm">
+                                          PDF File
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <div className="flex flex-col items-center justify-center text-gray-500">
+                                        <span className="text-4xl">📎</span>
+                                        <span className="text-sm">
+                                          File Preview
+                                        </span>
+                                      </div>
+                                    )}
                                   </div>
-                                  <span className="text-sm text-gray-700 truncate max-w-[100px]">
-                                    file
-                                  </span>
+
+                                  {/* Footer Info */}
+                                  <div className="p-3 border-t">
+                                    <p className="text-sm font-medium text-gray-800 truncate">
+                                      {item?.created_at
+                                        ? new Date(
+                                            item.created_at
+                                          ).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                          })
+                                        : ""}
+                                    </p>
+
+                                    <p className="text-xs text-gray-500 mt-1">
+                                      Click to download
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            </a>
-                          )}
+                              );
+                            })()}
+
                           <p className="text-sm text-gray-800">
                             {item.message}
                           </p>

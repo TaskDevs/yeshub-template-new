@@ -514,7 +514,7 @@ export default function FinancialDashboard() {
 
         <section className="grid md:grid-cols-5 gap-6">
           {/* Withdraw Funds */}
-          <div className="col-span-2 bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div className="w-full col-span-2 bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               Withdraw Funds
             </h2>
@@ -547,7 +547,7 @@ export default function FinancialDashboard() {
               />
             </div>
             <p className="text-sm text-gray-500 mb-4">
-              Available: ${freelanceEarnings.available}
+              Available: ₵{freelanceEarnings.available}
             </p>
 
             <button
@@ -613,63 +613,62 @@ export default function FinancialDashboard() {
 
         {/* Data Tables */}
         <section className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-700">
-              Transaction History
-            </h2>
-            <div className="flex space-x-2 ">
-              <input
-                type="text"
-                placeholder="Search transactions..."
-                className="border border-gray-300 rounded-md px-3 py-1 text-sm w-48 focus:outline-none"
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button
-                className="border border-gray-300 rounded-md px-3 py-1 text-sm hover:bg-gray-100"
-                onClick={() => setSearchTerm("")}
-              >
-                Clear
-              </button>
-              <button
-                className="border border-gray-300 rounded-md px-3 py-1 text-sm hover:bg-gray-100"
-                onClick={() => {
-                  const csv = [
-                    ["Date", "Description", "Note", "Type", "Amount", "Status"],
-                    ...filteredData.map((row) => [
-                      row.date,
-                      row.description,
-                      row.note,
-                      row.type,
-                      row.amount,
-                      row.status,
-                    ]),
-                  ]
-                    .map((row) =>
-                      row
-                        .map(
-                          (field) => `"${String(field).replace(/"/g, '""')}"`
-                        )
-                        .join(",")
-                    )
-                    .join("\n");
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+  <h2 className="text-lg font-semibold text-gray-700">
+    Transaction History
+  </h2>
+  <div className="flex flex-wrap gap-2">
+    <input
+      type="text"
+      placeholder="Search transactions..."
+      className="border border-gray-300 rounded-md px-3 py-1 text-sm w-full sm:w-48 focus:outline-none"
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+    <button
+      className="border border-gray-300 rounded-md px-3 py-1 text-sm hover:bg-gray-100"
+      onClick={() => setSearchTerm("")}
+    >
+      Clear
+    </button>
+    <button
+      className="border border-gray-300 rounded-md px-3 py-1 text-sm hover:bg-gray-100"
+      onClick={() => {
+        const csv = [
+          ["Date", "Description", "Note", "Type", "Amount", "Status"],
+          ...filteredData.map((row) => [
+            row.date,
+            row.description,
+            row.note,
+            row.type,
+            row.amount,
+            row.status,
+          ]),
+        ]
+          .map((row) =>
+            row
+              .map((field) => `"${String(field).replace(/"/g, '""')}"`)
+              .join(",")
+          )
+          .join("\n");
 
-                  const blob = new Blob([csv], {
-                    type: "text/csv;charset=utf-8;",
-                  });
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.setAttribute("hidden", "");
-                  a.setAttribute("href", url);
-                  a.setAttribute("download", "transactions.csv");
-                  document.body.appendChild(a);
-                  a.click();
-                  document.body.removeChild(a);
-                }}
-              >
-                Export
-              </button>
-            </div>
-          </div>
+        const blob = new Blob([csv], {
+          type: "text/csv;charset=utf-8;",
+        });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("hidden", "");
+        a.setAttribute("href", url);
+        a.setAttribute("download", "transactions.csv");
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }}
+    >
+      Export
+    </button>
+  </div>
+</div>
+
           <DataTable
             columns={transactionColumns}
             data={filteredData}

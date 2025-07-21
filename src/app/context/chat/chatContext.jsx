@@ -23,7 +23,7 @@ export const ChatProvider = ({ children }) => {
     try {
       const fetchedMessages = await getMessages(senderId, receiverId);
       setMessages(fetchedMessages);
-      console.log("mes", fetchedMessages);
+     
     } catch (error) {
       console.error("Error loading messages:", error);
     }
@@ -35,7 +35,7 @@ export const ChatProvider = ({ children }) => {
     try {
       const fetchedChatUsers = await getChatUsers(userId);
       setMessages(fetchedChatUsers);
-      console.log("mes", fetchedChatUsers);
+     
     } catch (error) {
       console.error("Error loading messages:", error);
     }

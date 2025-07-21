@@ -50,11 +50,10 @@ export default function NotificationList() {
           {paginatedMessages.map((msg) => (
             <div
               key={msg.id}
-              className={`relative border-l-4 ${
-                !msg.status
-                  ? "border-yellow-400 bg-yellow-50"
-                  : "border-gray-300 bg-white"
-              } rounded-md shadow-sm mb-4 p-4 transition-all duration-200`}
+              className={`relative border-l-4 ${!msg.status
+                ? "border-yellow-400 bg-yellow-50"
+                : "border-gray-300 bg-white"
+                } rounded-md shadow-sm mb-4 p-4 transition-all duration-200`}
             >
               <div className="flex items-start justify-between gap-4">
                 {/* Employer Info */}
@@ -90,11 +89,15 @@ export default function NotificationList() {
               </div>
 
               {/* Message Content */}
-             {expandedId === msg.id && (
-  <div className="mt-3 pt-3 border-t text-sm text-gray-700">
-    {msg.message}
-  </div>
-)}
+              {expandedId === msg.id && (
+                <div
+                  className="mt-3 pt-3 border-t text-sm text-gray-700"
+                  dangerouslySetInnerHTML={{
+                    __html: msg.message.replace(/\n/g, '<br />'),
+                  }}
+                ></div>
+
+              )}
 
 
               {/* Unread Indicator */}

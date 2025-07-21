@@ -10,44 +10,6 @@ import {
 } from "lucide-react";
 import { TransactionApiData } from "../../../../context/transaction/transactionContextApi";
 
-// const transactionsData = [
-//   {
-//     date: "2025-05-12",
-//     description: "Payment from TechCorp Solutions",
-//     type: "Payment",
-//     amount: "+$2,450.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "2025-05-10",
-//     description: "Withdrawal to Bank Account",
-//     type: "Withdrawal",
-//     amount: "-$1,800.00",
-//     status: "Pending",
-//   },
-//   {
-//     date: "2025-05-08",
-//     description: "Payment from DataFlow Inc",
-//     type: "Payment",
-//     amount: "+$3,200.00",
-//     status: "Completed",
-//   },
-//   {
-//     date: "2025-05-05",
-//     description: "Service Fee",
-//     type: "Fee",
-//     amount: "-$320.00",
-//     status: "Completed",
-//   },
-//   // Add more entries to demonstrate pagination
-//   ...Array.from({ length: 20 }, (_, i) => ({
-//     date: "2025-04-20",
-//     description: `Test Transaction ${i + 1}`,
-//     type: "Fee",
-//     amount: "-$100.00",
-//     status: "Completed",
-//   })),
-// ];
 
 const TransactionsPage = () => {
   const { transactionList } = useContext(TransactionApiData);
@@ -109,8 +71,8 @@ const TransactionsPage = () => {
       status === "Completed"
         ? "bg-green-100 text-green-600"
         : status === "Pending"
-        ? "bg-yellow-100 text-yellow-600"
-        : "bg-gray-100 text-gray-600";
+          ? "bg-yellow-100 text-yellow-600"
+          : "bg-gray-100 text-gray-600";
     return (
       <span className={`px-2 py-1 rounded text-sm font-medium ${color}`}>
         {status}
@@ -123,8 +85,8 @@ const TransactionsPage = () => {
       type === "Payment"
         ? "bg-green-100 text-green-600"
         : type === "Withdrawal"
-        ? "bg-blue-100 text-blue-600"
-        : "bg-red-100 text-red-600";
+          ? "bg-blue-100 text-blue-600"
+          : "bg-red-100 text-red-600";
     return (
       <span className={`px-2 py-1 rounded text-sm font-medium ${color}`}>
         {type}
@@ -165,7 +127,7 @@ const TransactionsPage = () => {
 
       <div className="bg-white p-4 rounded-xl shadow space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-row items-center gap-2 hidden lg:block">
             <input
               type="date"
               value={startDate}
@@ -185,7 +147,7 @@ const TransactionsPage = () => {
               placeholder="Search transactions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="border px-2 py-1 rounded w-64"
+              className="border px-2 py-1 rounded w-64 max-w-full"
             />
             <button className="border rounded px-4 py-1 bg-white hover:bg-gray-100">
               Filter
@@ -199,49 +161,49 @@ const TransactionsPage = () => {
           </div>
         </div>
 
-        <table className="w-full table-auto text-sm">
-          <thead>
-            <tr className="border-b text-left text-gray-600">
-              <th className="py-2">Date</th>
-              <th>Description</th>
-              <th>Type</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedTransactions.map((t, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="py-2">
-                  {new Date(t.date).toLocaleDateString()}
-                </td>
-                <td>{t.description}</td>
-                <td>{renderType(t.type)}</td>
-                <td>{t.amount}</td>
-                <td>{renderStatus(t.status)}</td>
-                <td className="relative">
-                  <button
-                    className="text-gray-500 hover:text-gray-700"
-                    onClick={() =>
-                      setOpenActionIndex(
-                        openActionIndex === index ? null : index
-                      )
-                    }
-                  >
-                    <MoreVertical className="w-5 h-5" />
-                  </button>
-                  {renderActions(index)}
-                </td>
+        {/* Responsive Table Wrapper */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto text-sm">
+            <thead>
+              <tr className="border-b text-left text-gray-600 whitespace-nowrap">
+                <th className="py-2">Date</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paginatedTransactions.map((t, index) => (
+                <tr key={index} className="border-b hover:bg-gray-50 whitespace-nowrap">
+                  <td className="py-2">
+                    {new Date(t.date).toLocaleDateString()}
+                  </td>
+                  <td>{t.description}</td>
+                  <td>{renderType(t.type)}</td>
+                  <td>₵{t.amount}</td>
+                  <td>{renderStatus(t.status)}</td>
+                  <td className="relative">
+                    <button
+                      className="text-gray-500 hover:text-gray-700"
+                      onClick={() =>
+                        setOpenActionIndex(openActionIndex === index ? null : index)
+                      }
+                    >
+                      <MoreVertical className="w-5 h-5" />
+                    </button>
+                    {renderActions(index)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-        <div className="flex justify-between items-center pt-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center pt-4 gap-2">
           <span className="text-sm text-gray-500">
-            Showing {paginatedTransactions.length} of{" "}
-            {filteredTransactions.length} entries
+            Showing {paginatedTransactions.length} of {filteredTransactions.length} entries
           </span>
           <div className="flex items-center gap-1">
             <button
@@ -254,9 +216,8 @@ const TransactionsPage = () => {
               <button
                 key={i}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`${
-                  currentPage === i + 1 ? "bg-green-600 text-white" : "border"
-                } px-3 py-1 rounded`}
+                className={`${currentPage === i + 1 ? "bg-green-600 text-white" : "border"
+                  } px-3 py-1 rounded`}
               >
                 {i + 1}
               </button>
@@ -272,6 +233,7 @@ const TransactionsPage = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };

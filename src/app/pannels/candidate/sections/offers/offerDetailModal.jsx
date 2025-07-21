@@ -10,41 +10,41 @@ import {
 
 } from 'lucide-react';
 
-const ProposalModal = ({ isOpen, onClose,  proposal }) => {
+const ProposalModal = ({ isOpen, onClose, proposal }) => {
   if (!isOpen) return null;
 
- const getFileNameFromUrl = (url) => {
-  try {
-    return decodeURIComponent(url.split('/').pop());
-  } catch {
-    return 'Attachment';
-  }
-};
-
-const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
-  try {
-    const response = await fetch(fileUrl, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok.");
+  const getFileNameFromUrl = (url) => {
+    try {
+      return decodeURIComponent(url.split('/').pop());
+    } catch {
+      return 'Attachment';
     }
+  };
 
-    const blob = await response.blob();
+  const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
+    try {
+      const response = await fetch(fileUrl, {
+        method: "GET",
+      });
 
-    const blobUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(blobUrl);
-  } catch (error) {
-    console.error("Download failed:", error);
-  }
-};
+      if (!response.ok) {
+        throw new Error("Network response was not ok.");
+      }
+
+      const blob = await response.blob();
+
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
 
   return (
@@ -90,7 +90,7 @@ const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
             <p className="font-semibold text-gray-800 text-capitalize">{proposal.user_name}</p>
             <p className="text-sm text-gray-600 text-capitalize">{proposal.profession}</p>
             <p className="text-xs text-gray-500 flex items-center gap-1 text-capitalize">
-              <MapPin size={12} /> 
+              <MapPin size={12} />
               {proposal.country}, {proposal.region}, {proposal.city}
             </p>
             <div className="flex gap-2 mt-1">
@@ -109,15 +109,20 @@ const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
           <div>
             <p className="text-gray-500">Your Bid</p>
             <p className="font-semibold"> ₵{proposal?.proposal?.fix_rate ?? proposal?.proposal?.hourly_rate}
-</p>
+            </p>
           </div>
           <div>
             <p className="text-gray-500">Client Budget</p>
-            <p className="font-semibold">₵{proposal?.budget}</p>
+            {proposal?.budget ? (
+              <p className="font-semibold">₵{proposal?.budget}</p>
+            ) : (
+              <p className="font-semibold">₵{proposal?.hourly_rate}</p>
+            )}
+
           </div>
           <div>
             <p className="text-gray-500">Project Length</p>
-            <p className="font-semibold text-capitalize">{proposal.job_type}<br/>({proposal.proposal.completion_day}/{proposal.proposal.completion})</p>
+            <p className="font-semibold text-capitalize">{proposal.job_type}<br />({proposal.proposal.completion_day}/{proposal.proposal.completion})</p>
           </div>
           <div>
             <p className="text-gray-500">Proposal Status</p>
@@ -154,7 +159,7 @@ const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
               <p className="font-medium">{proposal.experience}</p>
             </div>
           </div>
-        
+
         </div>
 
         {/* Additional Information */}
@@ -172,20 +177,20 @@ const forceDownload = async (fileUrl, filename = "attachment.pdf") => {
         <div className="mb-6">
           <h3 className="text-base font-semibold text-gray-800 mb-2">Attachments</h3>
           {proposal?.proposal.attachment && (
-          <div className="flex items-center justify-between bg-gray-50 border p-3 rounded">
-            <div className="flex items-center gap-2 text-sm text-gray-800">
-              <FileText size={16} />
-               {getFileNameFromUrl(proposal?.proposal.attachment)}
+            <div className="flex items-center justify-between bg-gray-50 border p-3 rounded">
+              <div className="flex items-center gap-2 text-sm text-gray-800">
+                <FileText size={16} />
+                {getFileNameFromUrl(proposal?.proposal.attachment)}
+              </div>
+              <button
+                onClick={() => {
+                  const fileName = proposal?.proposal?.attachment.split("/").pop();
+                  forceDownload(proposal?.proposal?.attachment, fileName);
+                }}
+                className="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded flex items-center gap-1">
+                <Download size={14} /> Download
+              </button>
             </div>
-            <button 
-             onClick={() => {
-              const fileName = proposal?.proposal?.attachment.split("/").pop();
-              forceDownload(proposal?.proposal?.attachment, fileName);
-            }}
-             className="text-sm bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded flex items-center gap-1">
-              <Download size={14} /> Download
-            </button>
-          </div>
           )}
 
         </div>

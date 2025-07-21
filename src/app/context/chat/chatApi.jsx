@@ -66,7 +66,9 @@ export const getMessages = async (senderId, receiverId) => {
     const response = await axios.get(
       `${REACT_BASE_URL}chat/${senderId}/${receiverId}`
     );
+    console.log(response.data.messages)
     return response.data.messages;
+    
   } catch (err) {
     console.error("Error fetching messages:", err);
     throw err;

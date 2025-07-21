@@ -228,6 +228,7 @@ export default function Offers() {
     try {
       const response = await getProposalsById(id);
       if (response?.status === "success") {
+        console.log("pro details", response.data)
         setSelectedProposal(response.data); // set proposal data
         setShowModal(true);
       }

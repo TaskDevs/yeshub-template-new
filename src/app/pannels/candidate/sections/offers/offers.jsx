@@ -26,7 +26,7 @@ const statusColors = {
 
 export default function Offers() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [proposals, setProposals] = useState(null);
+  const [proposals, setProposals] = useState();
   const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState(null);
@@ -36,7 +36,6 @@ export default function Offers() {
   const mappedJobs = proposals
     ? proposals.data.map((proposal) => {
         const userProposal = proposal.proposal || {}; // Avoid undefined errors
-
         const daysRemaining = proposal.end_date
           ? Math.max(
               0,
@@ -82,7 +81,6 @@ export default function Offers() {
       })
     : [];
 
- 
   const userId = sessionStorage.getItem("userId");
   const isMobile = window.innerWidth < 640; // Or use `react-responsive`
   const loadMoreRef = useRef(null);
@@ -127,6 +125,7 @@ export default function Offers() {
       try {
         const res = await getUserProposals(userId);
         if (res) {
+          //console.log(res);
           setProposals(res);
         } else {
           console.error("API responded with error:", res.message);
@@ -155,16 +154,17 @@ export default function Offers() {
     setCurrentPage(1);
   };
 
-  const salaryValueMatches = (value) => {
-    return value <= filters.salaryValue;
-  };
+  // const salaryValueMatches = (value) => {
+  //   return value <= filters.salaryValue;
+  // };
 
   const filteredJobs = mappedJobs.filter(
     (job) =>
       (filters.jobType.length === 0 || filters.jobType.includes(job.type)) &&
-      (filters.status.length === 0 || filters.status.includes(job.status)) &&
-      salaryValueMatches(job.salaryValue)
+      (filters.status.length === 0 || filters.status.includes(job.status))
   );
+
+  console.log(filteredJobs);
 
   const totalPages = Math.ceil(filteredJobs.length / pageSize);
   const paginatedJobs = filteredJobs.slice(

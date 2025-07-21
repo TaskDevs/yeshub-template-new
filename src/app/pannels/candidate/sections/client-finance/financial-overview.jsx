@@ -68,9 +68,9 @@ const FinancialOverview = () => {
   //console.log(walletStatus);
 
   const chartData = {
-    monthly: employerStats.chart_data.last_30_days,
-    quarterly: employerStats.chart_data.last_90_days,
-    yearly: employerStats.chart_data.this_year,
+    monthly: employerStats?.chart_data?.last_30_days,
+    quarterly: employerStats?.chart_data?.last_90_days,
+    yearly: employerStats?.chart_data?.this_year,
   };
 
   const TABS = [

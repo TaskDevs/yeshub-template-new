@@ -6,6 +6,7 @@ import {
   FormTextarea,
   TertiaryButton,
   FileUpload,
+  WorkFileUpload,
   DateInput,
 } from "../../../candidate/sections/new-profile/profile-components";
 import { CustomDropdown } from "../../../../common/Dropdown";
@@ -148,7 +149,7 @@ export const SubmitWorkSection = ({ id, milestones }) => {
           </div>
           <div className="space-y-2">
             <label className="block text-sm text-gray-700">File</label>
-            <FileUpload
+            <WorkFileUpload
               isCoverImage={true}
               files={coverFiles}
               onFileSelect={handleCoverSelect}
@@ -261,166 +262,171 @@ export const SubmitProposalSection = ({ job_id, companyInfo }) => {
   };
 
   return (
-  <div className="flex flex-col h-full bg-white z-50 w-full px-4 py-6">
-  <div className="space-y-6 w-full max-w-5xl mx-auto">
-    <div className="space-y-4">
-      {/* Textareas */}
-      <FormTextarea
-        field="cover_letter"
-        label="Cover Letter"
-        required
-        value={formData.description}
-        onChange={handleInputChange}
-        placeholder="Introduce yourself..."
-        rows={4}
-      />
-      <FormTextarea
-        field="project_understanding"
-        label="Project Understanding"
-        required
-        value={formData.project_understanding}
-        onChange={handleInputChange}
-        placeholder="Describe your understanding..."
-        rows={4}
-      />
-
-      {/* Attachment */}
-      <div className="space-y-2">
-        <label className="block text-sm text-gray-700">Attachment</label>
-        <FileUpload
-          files={files}
-          onFileSelect={handleFileSelect}
-          onFileDrop={handleFileDrop}
-          onFileRemove={removeFile}
-          error={uploadError}
-        />
-      </div>
-
-      {/* Pricing */}
-      <div>
-        <h2 className="text-xl font-bold capitalize">Pricing</h2>
-        <div className="bg-gray-100 w-full rounded-md p-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <FormInput
-              field="hourly_rate"
-              label="Hourly Rate (GH)"
-              required
-              value={formData.hourly_rate}
-              onChange={handleInputChange}
-              placeholder="Enter your rate"
-            />
-            <span className="text-gray-600 text-sm hidden md:inline">or</span>
-            <FormInput
-              field="fix_rate"
-              label="Fixed Price (GH)"
-              required
-              value={formData.fixed_rate}
-              onChange={handleInputChange}
-              placeholder="Enter fixed price"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Timeline & Availability */}
-      <div>
-        <h2 className="text-xl font-bold capitalize">Timeline & Availability</h2>
-        <div className="flex flex-col md:flex-row gap-4 w-full mt-4">
-          <div className="w-full">
-            <DateInput
-              name="start_date"
-              label="When can you start?"
-              value={formData.start_date}
-              onChange={(name, value) => handleDateChange(name, value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col md:flex-row gap-4 w-full">
-            <FormInput
-              field="completion_day"
-              label="Estimated Completion Time"
-              required
-              value={formData.days}
-              onChange={handleInputChange}
-              placeholder="2"
-            />
-            <CustomDropdown
-              selected={formData.completion}
-              styles="w-full py-3"
-              options={completion_list}
-              onChange={(value) => handleInputChange("completion", value)}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">
-          <FormInput
-            field="week_available"
-            label="Weekly availability"
+    <div className="flex flex-col h-full bg-white z-50 w-full px-4 py-6">
+      <div className="space-y-6 w-full max-w-5xl mx-auto">
+        <div className="space-y-4">
+          {/* Textareas */}
+          <FormTextarea
+            field="cover_letter"
+            label="Cover Letter"
             required
-            value={formData.week_available}
+            value={formData.description}
             onChange={handleInputChange}
-            placeholder="2"
+            placeholder="Introduce yourself..."
+            rows={4}
           />
-          <span className="text-gray-500 text-sm">hours per week</span>
-        </div>
-      </div>
+          <FormTextarea
+            field="project_understanding"
+            label="Project Understanding"
+            required
+            value={formData.project_understanding}
+            onChange={handleInputChange}
+            placeholder="Describe your understanding..."
+            rows={4}
+          />
 
-      {/* Skills & Experience */}
-      <div>
-        <h2 className="text-xl font-bold capitalize mb-2">
-          Skills & Qualifications
-        </h2>
-        <div className="bg-gray-100 w-full rounded-md p-6">
-          <h3 className="text-black font-bold text-md mb-3">Relevant Skills</h3>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {companyInfo?.skills?.map((item, index) => (
-              <span
-                className="bg-gray-300 rounded-full px-3 py-1 text-sm text-gray-700"
-                key={index}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-
-          <div className="w-full mt-6">
-            <label className="block text-sm font-bold mb-2">
-              Experience Level
-            </label>
-            <CustomDropdown
-              selected={formData.experience_level}
-              styles="w-full py-2.5"
-              options={experience_level_list}
-              onChange={(value) =>
-                handleInputChange("experience_level", value)
-              }
+          {/* Attachment */}
+          <div className="space-y-2">
+            <label className="block text-sm text-gray-700">Attachment</label>
+            <FileUpload
+              files={files}
+              onFileSelect={handleFileSelect}
+              onFileDrop={handleFileDrop}
+              onFileRemove={removeFile}
+              error={uploadError}
             />
           </div>
+
+          {/* Pricing */}
+          <div>
+            <h2 className="text-xl font-bold capitalize">Pricing</h2>
+            <div className="bg-gray-100 w-full rounded-md p-6">
+              <div className="flex flex-col md:flex-row gap-4 items-center">
+                <FormInput
+                  field="hourly_rate"
+                  label="Hourly Rate (GH)"
+                  required
+                  value={formData.hourly_rate}
+                  onChange={handleInputChange}
+                  placeholder="Enter your rate"
+                />
+                <span className="text-gray-600 text-sm hidden md:inline">
+                  or
+                </span>
+                <FormInput
+                  field="fix_rate"
+                  label="Fixed Price (GH)"
+                  required
+                  value={formData.fixed_rate}
+                  onChange={handleInputChange}
+                  placeholder="Enter fixed price"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Timeline & Availability */}
+          <div>
+            <h2 className="text-xl font-bold capitalize">
+              Timeline & Availability
+            </h2>
+            <div className="flex flex-col md:flex-row gap-4 w-full mt-4">
+              <div className="w-full">
+                <DateInput
+                  name="start_date"
+                  label="When can you start?"
+                  value={formData.start_date}
+                  onChange={(name, value) => handleDateChange(name, value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col md:flex-row gap-4 w-full">
+                <FormInput
+                  field="completion_day"
+                  label="Estimated Completion Time"
+                  required
+                  value={formData.days}
+                  onChange={handleInputChange}
+                  placeholder="2"
+                />
+                <CustomDropdown
+                  selected={formData.completion}
+                  styles="w-full py-3"
+                  options={completion_list}
+                  onChange={(value) => handleInputChange("completion", value)}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">
+              <FormInput
+                field="week_available"
+                label="Weekly availability"
+                required
+                value={formData.week_available}
+                onChange={handleInputChange}
+                placeholder="2"
+              />
+              <span className="text-gray-500 text-sm">hours per week</span>
+            </div>
+          </div>
+
+          {/* Skills & Experience */}
+          <div>
+            <h2 className="text-xl font-bold capitalize mb-2">
+              Skills & Qualifications
+            </h2>
+            <div className="bg-gray-100 w-full rounded-md p-6">
+              <h3 className="text-black font-bold text-md mb-3">
+                Relevant Skills
+              </h3>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {companyInfo?.skills?.map((item, index) => (
+                  <span
+                    className="bg-gray-300 rounded-full px-3 py-1 text-sm text-gray-700"
+                    key={index}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              <div className="w-full mt-6">
+                <label className="block text-sm font-bold mb-2">
+                  Experience Level
+                </label>
+                <CustomDropdown
+                  selected={formData.experience_level}
+                  styles="w-full py-2.5"
+                  options={experience_level_list}
+                  onChange={(value) =>
+                    handleInputChange("experience_level", value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t gap-4">
+          <TertiaryButton onClick={clearAll}>Cancel</TertiaryButton>
+          <div className="flex flex-wrap items-center justify-start gap-3">
+            <button
+              className="border text-gray-500 px-4 py-2 rounded"
+              onClick={handleSave}
+            >
+              Preview
+            </button>
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded"
+              onClick={handleSave}
+            >
+              Submit Proposal
+            </button>
+          </div>
         </div>
       </div>
     </div>
-
-    {/* Actions */}
-    <div className="flex flex-col sm:flex-row items-center justify-between pt-6 border-t gap-4">
-      <TertiaryButton onClick={clearAll}>Cancel</TertiaryButton>
-      <div className="flex flex-wrap items-center justify-start gap-3">
-        <button
-          className="border text-gray-500 px-4 py-2 rounded"
-          onClick={handleSave}
-        >
-          Preview
-        </button>
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
-          onClick={handleSave}
-        >
-          Submit Proposal
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
   );
 };

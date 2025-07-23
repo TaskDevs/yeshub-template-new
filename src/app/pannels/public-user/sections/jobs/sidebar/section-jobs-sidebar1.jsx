@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { publicUser, employer } from "../../../../../../globals/route-names";
-import SectionSideAdvert from "./section-side-advert";
+import { NavLink } from "react-router-dom";
+import { publicUser } from "../../../../../../globals/route-names";
+
 import { CategoryApiData } from "../../../../../context/category/categoryContextApi";
 import { SEARCHFORMFIELD } from "../../../../../../globals/search-form-data";
 import SearchSelectField from "../../../../../common/search-select-field";
 
 function SectionJobsSidebar1({ processDataActionControls }) {
-  const location = useLocation();
-  const pathname = location.pathname;
   const { allCategories } = useContext(CategoryApiData);
   const [selectedExperience, setSelectedExperience] = useState("");
   const [processCategoryList, setProcessCategoryList] = useState([]);
@@ -200,21 +198,7 @@ function SectionJobsSidebar1({ processDataActionControls }) {
           </div>
         </div>
       </div>
-      {pathname === "/job-list" ? (
-        <SectionSideAdvert
-          title="Claim Your Dream Job"
-          description="Stand out from the crowd—apply now and showcase your skills "
-          link={`${publicUser.jobs.APPLY}`}
-          action="Bid Now"
-        />
-      ) : (
-        <SectionSideAdvert
-          title="Find Top Talent, Faster"
-          description="Connect with skilled professionals who are ready to bring your vision to life. Post your job today and discover the perfect match for your team"
-          link={`/dashboard-employer${employer.POST_A_JOB}`} //post job form
-          action="Post a Job Now"
-        />
-      )}
+
     </>
   );
 }

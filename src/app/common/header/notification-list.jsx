@@ -59,10 +59,15 @@ export default function NotificationList() {
                 {/* Employer Info */}
                 <div className="flex gap-3 items-center">
                   <img
-                    src={msg.employer_logo}
+                    src={msg.employer_logo || 'https://placehold.co/800?text=Hello+World&font=roboto'}
                     alt="Logo"
                     className="w-8 h-8 rounded-full border"
+                    onError={(e) => {
+                      e.target.onerror = null; // prevent infinite loop if fallback also fails
+                      e.target.src = 'https://placehold.co/600x400'; // change this to your actual fallback image path
+                    }}
                   />
+
                   <div>
                     <p className="font-semibold text-sm text-gray-800">
                       {msg.employer_name}

@@ -1,11 +1,10 @@
-import { Star, Bookmark, BookmarkCheck } from "lucide-react";
+import {Bookmark, BookmarkCheck } from "lucide-react";
 import { JobApiData } from "../../../../context/jobs/jobsContextApi";
 import { ProposalApiData } from "../../../../context/proposal/proposalContextApi";
 import { SavedJobsApiData } from "../../../../context/saved-jobs/savedJobsContextApi";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { calculateDaysSincePosted } from "../../../../../utils/readableDate";
-//import { userId } from "../../../../../globals/constants";
 
 const JobDetailsPage = () => {
   const [loading, setLoading] = useState(false);
@@ -71,10 +70,10 @@ const JobDetailsPage = () => {
                   <span>
                     Posted {calculateDaysSincePosted(aProfile?.created_at)}
                   </span>
-                  <span className="flex items-center gap-1">
+                  {/* <span className="flex items-center gap-1">
                     <Star className="text-yellow-500 w-4 h-4 fill-yellow-400" />
                     <span>0 (0 reviews)</span>
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>
@@ -178,7 +177,7 @@ const JobDetailsPage = () => {
                 Loading…
               </>
             ) : proposalAlreadySent ? (
-              "Proposal Already Submitted"
+              "Applied"
             ) : (
               "Submit Proposal"
             )}
@@ -205,18 +204,7 @@ const JobDetailsPage = () => {
           </div>
         </div>
 
-        {/* <div className="bg-white rounded-lg p-6 shadow-sm">
-          <div className="text-sm text-gray-600">
-            <p className="font-semibold">Recent Reviews</p>
-            <p className="mt-1 text-gray-800 font-medium">
-              Michael Chen ⭐⭐⭐⭐⭐
-            </p>
-            <p className="text-gray-600 text-xs">
-              &quot;new&quot;Great client to work with. Clear requirements and
-              timely feedback. &quot;new&quot;
-            </p>
-          </div>
-        </div> */}
+       
       </div>
 
       {/* Right Sidebar */}

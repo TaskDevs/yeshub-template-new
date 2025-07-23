@@ -260,7 +260,7 @@ const NewAuthForm = ({ currentState }) => {
           <>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IoMdMail className="h-5 w-5 text-green-700" />
+                <IoMdMail className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -278,7 +278,7 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-green-700" />
+                <FaLock className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -309,7 +309,7 @@ const NewAuthForm = ({ currentState }) => {
           <>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaUser className="h-5 w-5 text-green-700" />
+                <FaUser className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 className="w-full pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -327,7 +327,7 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <IoMdMail className="h-5 w-5 text-green-700" />
+                <IoMdMail className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 className="w-full pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -345,7 +345,7 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-green-700" />
+                <FaLock className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -362,7 +362,7 @@ const NewAuthForm = ({ currentState }) => {
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <AiOutlineEye className="h-5 w-5 text-green-700" />
+                  <AiOutlineEye className="h-5 w-5 text-gray-500" />
                 ) : (
                   <AiOutlineEyeInvisible className="h-5 w-5 text-gray-500" />
                 )}
@@ -373,7 +373,7 @@ const NewAuthForm = ({ currentState }) => {
             )}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <FaLock className="h-5 w-5 text-green-700" />
+                <FaLock className="h-5 w-5 text-gray-500" />
               </div>
               <input
                 className="w-full  pl-10 pr-3 px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"

@@ -138,8 +138,8 @@ const testimonials = [
     industry: "Software Development",
     quote:
       "We needed to scale our development team quickly to meet project deadlines. YesHub connected us with skilled developers who integrated seamlessly with our team. The quality of talent exceeded our expectations.",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    name: "Emily Chen",
+    avatar: "https://i.postimg.cc/T3Z80ZTf/Sofia-Rodriguez.jpg",
+    name: "Sofia Rodriguez",
     title: "CTO, TechNova Solutions",
     iconBg: "bg-blue-100",
     icon: "💻",
@@ -149,8 +149,8 @@ const testimonials = [
     industry: "E-commerce",
     quote:
       "As a growing e-commerce business, we needed specialized marketing talent. YesHub's platform helped us find the perfect professionals who understood our niche and delivered outstanding results.",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    name: "Marcus Johnson",
+    avatar: "https://i.postimg.cc/wMWZmrWK/Emmanuel-Oto.jpg",
+    name: "Emmanuel Oto",
     title: "Founder, GrowthMarket",
     iconBg: "bg-green-100",
     icon: "🛒",
@@ -160,8 +160,8 @@ const testimonials = [
     industry: "Media Production",
     quote:
       "Finding specialized creative talent used to be a challenge until we discovered YesHub. The platform's matching algorithm connected us with exceptional designers and video editors who elevated our productions.",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    name: "Sofia Rodriguez",
+    avatar: "https://i.postimg.cc/1zpdHXWr/Rita-Osei.jpg",
+    name: "Rita Osei",
     title: "Creative Director, VisualCraft",
     iconBg: "bg-purple-100",
     icon: "🎬",

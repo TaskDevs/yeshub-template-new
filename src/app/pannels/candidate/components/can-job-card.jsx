@@ -241,9 +241,13 @@ const CanJobCard = ({
             {/* Logo */}
             <div className="w-10 h-10 rounded-full overflow-hidden bg-white shrink-0">
               <img
-                src={image}
+                src={image || "https://placehold.co/600x400"}
                 alt={companyName}
                 className="w-full h-full object-cover"
+                 onError={(e) => {
+                      e.target.onerror = null; // prevent infinite loop if fallback also fails
+                      e.target.src = 'https://placehold.co/600x400'; // change this to your actual fallback image path
+                    }}
               />
             </div>
 
@@ -258,7 +262,7 @@ const CanJobCard = ({
                 <span className="bg-gray-100 text-gray-700 text-[10px] font-medium px-2 py-[2px] rounded-full">
                   {isFindWork ? jobLocation : status}
                 </span>
-                <span className="bg-green-100 text-red-700 text-[10px] font-medium px-2 py-[2px] rounded-full">
+                <span className="bg-green-100 text-gray-700 text-[10px] font-medium px-2 py-[2px] rounded-full">
                   {jobType}
                 </span>
               </div>

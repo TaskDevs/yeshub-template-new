@@ -84,7 +84,7 @@ function NewSavedJobsPage() {
                 id={data?.job_id}
                 role={data?.job?.title}
                 proposal={data?.job?.proposals_count}
-                 image={data?.job?.employer?.logo}
+                image={data?.job?.employer?.logo || 'https://placehold.co/800?text=Hello+World&font=roboto'}
                 ratings="4.9"
                 reviews="23k"
                 companyName={data?.job?.category}
@@ -176,7 +176,7 @@ function NewSavedJobsPage() {
                         <CanJobCard
                           key={data.id}
                           id={data.job_id}
-                          image={data?.job?.employer?.logo}
+                          image={data?.job?.employer?.logo || 'https://placehold.co/800?text=Hello+World&font=roboto'}
                           role={data?.job?.title}
                           proposal={data?.job?.proposals_count}
                           ratings="4.8"

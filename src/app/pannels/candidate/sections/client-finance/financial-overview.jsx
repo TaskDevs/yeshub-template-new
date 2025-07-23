@@ -248,19 +248,18 @@ const FinancialOverview = () => {
                   width:
                     (parseFloat(billingData.paid_total) /
                       parseFloat(allEarnings.escrow)) *
-                      100 +
+                    100 +
                     "%",
                 }}
               ></div>
             </div>
             <p className="text-xs text-gray-500 mt-1">
               ₵{parseFloat(billingData.paid_total)} (
-              {`${
-                (
+              {`${(
                   parseFloat(billingData.paid_total) /
                   parseFloat(allEarnings.escrow)
                 ).toFixed(2) * 100
-              }`}
+                }`}
               %)
             </p>
           </div>
@@ -278,7 +277,7 @@ const FinancialOverview = () => {
               {Math.max(
                 0,
                 parseFloat(allEarnings.escrow) -
-                  parseFloat(billingData.paid_total)
+                parseFloat(billingData.paid_total)
               )}
             </p>
             <p className="text-sm text-red-600 mt-1">↑ 12.5% from April</p>
@@ -360,11 +359,10 @@ const FinancialOverview = () => {
                 <button
                   key={type}
                   onClick={() => setSelectedFilter(type)}
-                  className={`px-3 py-1 rounded text-sm ${
-                    selectedFilter === type
+                  className={`px-3 py-1 rounded text-sm ${selectedFilter === type
                       ? "bg-green-100 text-green-800"
                       : "text-gray-600 hover:text-gray-800"
-                  }`}
+                    }`}
                 >
                   {type.charAt(0).toUpperCase() + type.slice(1)}
                 </button>
@@ -413,11 +411,10 @@ const FinancialOverview = () => {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-2 border-b-2 text-sm font-medium transition-all ${
-                  activeTab === tab
+                className={`pb-2 border-b-2 text-sm font-medium transition-all ${activeTab === tab
                     ? "border-green-500 text-green-600"
                     : "border-transparent text-gray-500"
-                }`}
+                  }`}
               >
                 {tab}
               </button>
@@ -492,13 +489,12 @@ const FinancialOverview = () => {
 
                       <td>
                         <span
-                          className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            project.projectStatus === "In Progress"
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${project.projectStatus === "In Progress"
                               ? "bg-green-100 text-green-700"
                               : project.projectStatus === "On Hold"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
                         >
                           {project.projectStatus}
                         </span>
@@ -506,13 +502,12 @@ const FinancialOverview = () => {
 
                       <td>
                         <span
-                          className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            project.paymentStatus === "Funded"
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${project.paymentStatus === "Funded"
                               ? "bg-green-100 text-green-700"
                               : project.paymentStatus === "Partial"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
                         >
                           {project.paymentStatus}
                         </span>
@@ -542,11 +537,10 @@ const FinancialOverview = () => {
                 {[...Array(totalPages)].map((_, i) => (
                   <button
                     key={i}
-                    className={`px-3 py-1 border rounded ${
-                      page === i + 1
+                    className={`px-3 py-1 border rounded ${page === i + 1
                         ? "bg-green-500 text-white"
                         : "bg-white text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setPage(i + 1)}
                   >
                     {i + 1}
@@ -628,13 +622,12 @@ const FinancialOverview = () => {
 
                       <td>
                         <span
-                          className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            invoice.payment_status === "Paid"
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${invoice.payment_status === "Paid"
                               ? "bg-green-100 text-green-700"
                               : invoice.payment_status === "On Hold"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
                         >
                           {invoice.payment_status}
                         </span>
@@ -655,11 +648,10 @@ const FinancialOverview = () => {
                 {[...Array(totalPages)].map((_, i) => (
                   <button
                     key={i}
-                    className={`px-3 py-1 border rounded ${
-                      page === i + 1
+                    className={`px-3 py-1 border rounded ${page === i + 1
                         ? "bg-green-500 text-white"
                         : "bg-white text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setPage(i + 1)}
                   >
                     {i + 1}
@@ -720,7 +712,7 @@ const FinancialOverview = () => {
                         </div>
                       </td>
                       <td>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3"> 
                           <div className="flex flex-col">
                             <span className="font-medium text-black">
                               {transaction.description}
@@ -734,20 +726,23 @@ const FinancialOverview = () => {
                         </div>
                       </td>
                       <td>
-                        <div className="font-semibold text-gray-400">
-                          {`GH ${transaction.amount}`}
+                        <div
+                          className={`font-semibold ${transaction.type === "payment" ? "text-green-500" : "text-red-600"
+                            }`}
+                        >
+                          {transaction.type === "payment" ? "+" : "-"} GH {transaction.amount}
                         </div>
+
                       </td>
 
                       <td>
                         <span
-                          className={`text-xs px-2 py-1 rounded-full font-medium ${
-                            transaction.status === "Paid"
+                          className={`text-xs px-2 py-1 rounded-full font-medium ${transaction.status === "Paid"
                               ? "bg-green-100 text-green-700"
                               : transaction.status === "On Hold"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-gray-100 text-gray-700"
+                            }`}
                         >
                           {transaction.status}
                         </span>
@@ -768,11 +763,10 @@ const FinancialOverview = () => {
                 {[...Array(totalPages)].map((_, i) => (
                   <button
                     key={i}
-                    className={`px-3 py-1 border rounded ${
-                      page === i + 1
+                    className={`px-3 py-1 border rounded ${page === i + 1
                         ? "bg-green-500 text-white"
                         : "bg-white text-gray-700"
-                    }`}
+                      }`}
                     onClick={() => setPage(i + 1)}
                   >
                     {i + 1}

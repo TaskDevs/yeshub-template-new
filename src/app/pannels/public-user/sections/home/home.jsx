@@ -48,7 +48,7 @@ export default function YesHubLandingPage() {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="tw-css min-h-screen bg-white text-gray-900 py-5 mt-6 sm:mt-5 p-5">
+    <div className="tw-css min-h-screen bg-white text-gray-900 py-5 mt-6 sm:mt-5 p-5 sm:p-2 ">
       {/* Hero Section */}
 
       <div className="grid md:grid-cols-2 gap-4 px-6 sm:px-5 lg:px-20 py-10 items-center">
@@ -89,9 +89,9 @@ export default function YesHubLandingPage() {
 
       <section>
         {/* Browse Categories Section */}
-        <div className="px-4 sm:px-6 lg:px-20">
+        <div className="px-4 sm:px-4 lg:px-20">
           <div className="bg-white px-2 py-10 lg:px-20">
-            <div className="max-w-6xl mx-auto flex flex-wrap justify-center gap-4">
+            <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-4 screen-830">
               {categories.map((cat, index) => (
                 <div
                   key={index}

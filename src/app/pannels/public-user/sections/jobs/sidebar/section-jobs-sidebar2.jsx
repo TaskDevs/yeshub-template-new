@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import { publicUser } from "../../../../../../globals/route-names";
-import SectionSideAdvert from "./section-side-advert";
 
-function SectionJobsSidebar2({ _config, showAdvert = true }) {
+function SectionJobsSidebar2({ _config }) {
   // Debug mount/unmount
   useEffect(() => {
     console.log("Sidebar mounted");
@@ -135,15 +133,7 @@ function SectionJobsSidebar2({ _config, showAdvert = true }) {
         </div>
       </div>
 
-      {/* Advert Section */}
-      {showAdvert && (
-        <SectionSideAdvert
-          title="Claim Your Dream Job"
-          description="Stand out from the crowd—apply now and showcase your skills"
-          link={publicUser.jobs.APPLY}
-          action="Bid Now"
-        />
-      )}
+  
     </>
   );
 }

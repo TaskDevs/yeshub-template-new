@@ -27,7 +27,7 @@ const statusColors = {
 export default function Offers() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [proposals, setProposals] = useState();
-  const [expanded, setExpanded] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState(null);
   const [pendingInvitations, setPendingInvitations] = useState([]);
@@ -568,7 +568,7 @@ export default function Offers() {
                       </span>
                     </h2>
                     <div className="text-sm text-gray-600 mb-2">
-                      {job.company} • ⭐ 4.8 • 289 reviews
+                      {job.company} 
                     </div>
                     <div className="flex gap-2 mb-2 text-xs ">
                       {(() => {
@@ -610,7 +610,7 @@ export default function Offers() {
                       </span>
                     </div>
                     <div>
-                      <p
+                      {/* <p
                         className={`text-sm text-gray-700 mb-2 max-w-md ${
                           expanded
                             ? ""
@@ -619,13 +619,13 @@ export default function Offers() {
                         dangerouslySetInnerHTML={{
                           __html: job.description,
                         }}
-                      />
-                      <button
+                      /> */}
+                      {/* <button
                         onClick={() => setExpanded(!expanded)}
                         className="text-blue-500 text-sm focus:outline-none"
                       >
                         {expanded ? "View Less" : "View More"}
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                   <button

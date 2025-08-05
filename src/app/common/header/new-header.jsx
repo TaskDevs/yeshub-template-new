@@ -69,11 +69,6 @@ export const Header = ({ isDashboard = true }) => {
 
   const popSound = new Audio("./assets/sound/pop.mp3"); // from public/sounds
 
-  // useEffect(() => {
-  //   if (paymentMethodList.length === 0) {
-  //     setMessage("Please add a payment method to continue.");
-  //   }
-  // }, []);
 
   useEffect(() => {
     let data = JSON.parse(sessionStorage.getItem("project_ids"));
@@ -510,23 +505,23 @@ export const Header = ({ isDashboard = true }) => {
       navItems.filter((item) => allowedIds.includes(normalize(item.id)));
 
     if (!role || !token) {
-      console.log("Guest user detected");
+      
       return getFilteredItems(guestItemIds);
     }
 
     const normalizedRole = normalize(role);
 
     if (normalizedRole === "freelancer") {
-      console.log("Freelancer user detected");
+   
       return getFilteredItems(freelancerItemIds);
     }
 
     if (normalizedRole === "client") {
-      console.log("Client user detected");
+    
       return getFilteredItems(clientItemIds);
     }
 
-    console.warn("Unhandled role or missing token:", role);
+
     return [];
   };
 

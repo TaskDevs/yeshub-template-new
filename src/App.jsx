@@ -1,5 +1,4 @@
 import RootLayout from "./layouts/root-layout";
-import MaintenancePage from "./app/pannels/public-user/components/pages/maintenance";
 import Loader from "./app/common/loader";
 import ScrollToTop from "./globals/scroll-to-top";
 import React, { useEffect, useState } from "react";
@@ -32,7 +31,6 @@ import SavedJobsApiDataProvider from "./app/context/saved-jobs/savedJobsContextA
 
 function App() {
   const [isLoading, setLoading] = useState(true);
-  const [isInMaintenance, setIsInMaintenance] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -44,36 +42,12 @@ function App() {
     return () => clearTimeout(timer);
   }, [location]);
 
- 
-useEffect(() => {
-  const now = new Date();
-
-  // Retrieve stored launch date or set it
-  let launchDate = localStorage.getItem('launchDate');
-
-  if (!launchDate) {
-    localStorage.setItem('launchDate', now.toISOString());
-    launchDate = now;
-  } else {
-    launchDate = new Date(launchDate);
-  }
-
-  // Calculate difference in months
-  const monthsDiff = (now.getFullYear() - launchDate.getFullYear()) * 12 +
-                     (now.getMonth() - launchDate.getMonth());
-
-  if (monthsDiff >= 8) {
-    setIsInMaintenance(true);
-  }
-}, []);
 
 
 
 
   return (
-    isInMaintenance ? (
-      <MaintenancePage />
-    ) : (
+    
 
     <GlobalApiDataProvider>
       <AuthApiDataProvider>
@@ -125,7 +99,7 @@ useEffect(() => {
         </ChatProvider>
       </AuthApiDataProvider>
     </GlobalApiDataProvider>
-    )
+    
   );
 }
 

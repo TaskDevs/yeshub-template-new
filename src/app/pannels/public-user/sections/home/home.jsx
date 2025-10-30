@@ -54,7 +54,7 @@ export default function YesHubLandingPage() {
       <div className="grid md:grid-cols-2 gap-4 px-6 sm:px-5 lg:px-20 py-10 items-center">
         <div>
           <p className="text-sm text-gray-600 mb-2">
-            An Initiative By H.E. President John Dramani Mahama
+            An Initiative By H.E. President John Dramani Mahama, Ghana
           </p>
           <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
             <span className="text-gray-900">YesHub,</span>
